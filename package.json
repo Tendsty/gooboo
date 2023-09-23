@@ -1,0 +1,77 @@
+{
+  "name": "gooboo",
+  "version": "1.0.0",
+  "description": "An idle game",
+  "author": "Tendsty",
+  "main": "main.js",
+  "private": false,
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test:unit": "jest test/unit --verbose --coverage",
+    "test:unit-custom": "jest --verbose",
+    "test:e2e": "cypress open",
+    "electron:start": "electron .",
+    "forge:start": "electron-forge start",
+    "forge:package": "electron-forge package",
+    "forge:make": "electron-forge make"
+  },
+  "dependencies": {
+    "@fontsource/caveat": "^4.5.9",
+    "@fontsource/roboto": "^4.5.8",
+    "@fontsource/roboto-mono": "^5.0.3",
+    "@mdi/font": "^7.1.96",
+    "color": "^4.2.3",
+    "core-js": "^3.15.1",
+    "electron-squirrel-startup": "^1.0.0",
+    "semver": "^7.3.8",
+    "v-snackbars": "^3.2.4",
+    "vue": "^2.6.14",
+    "vuetify": "^2.5.5",
+    "vuex": "^3.5.1"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.4.0",
+    "@electron-forge/maker-deb": "^6.4.0",
+    "@electron-forge/maker-rpm": "^6.4.0",
+    "@electron-forge/maker-squirrel": "^6.4.0",
+    "@electron-forge/maker-zip": "^6.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.4.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "cypress": "^9.7.0",
+    "electron": "^26.0.0",
+    "electron-winstaller": "^5.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "jest": "^27.4.5",
+    "sass": "^1.35.1",
+    "sass-loader": "^8.0.0",
+    "vue-cli-plugin-vuetify": "~2.0.7",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify-loader": "^1.3.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

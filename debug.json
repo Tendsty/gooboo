@@ -1,0 +1,14 @@
+{
+    "version": "1.0.0",
+    "timestamp": 0,
+    "theme": "default",
+    "unlock": {
+        "debugFeature": {"see": true, "use": true}
+    },
+    "settings": {
+        "general": {
+            "pause": true,
+            "autosaveTimer": null
+        }
+    }
+}

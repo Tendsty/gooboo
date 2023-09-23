@@ -1,0 +1,16 @@
+root = true
+
+[*.{js,vue}]
+insert_final_newline = true
+charset = utf-8
+indent_style = space
+trim_trailing_whitespace = true
+
+[*.vue]
+indent_size = 2
+
+[*.js]
+indent_size = 4
+
+[src/lang/**.js]
+indent_size = 2

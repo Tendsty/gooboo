@@ -1,0 +1,30 @@
+<template>
+  <inventory-template :currencies="currencies" :prestige-stones="prestigeStone" :disabled="isFrozen">
+    <heirloom-list></heirloom-list>
+  </inventory-template>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+import InventoryTemplate from '../prestige/InventoryTemplate.vue';
+import HeirloomList from './HeirloomList.vue';
+
+export default {
+  components: { InventoryTemplate, HeirloomList },
+  data: () => ({
+    currencies: ['horde_soulEmpowered']
+  }),
+  computed: {
+    ...mapState({
+      isFrozen: state => state.cryolab.horde.active
+    }),
+    prestigeStone() {
+      let arr = [];
+      if (this.$store.state.stat.horde_maxZone.total >= 40) {
+        arr.push({currency: 'horde_soulEmpowered', stat: 'horde_bestPrestige'});
+      }
+      return arr;
+    }
+  }
+}
+</script>
