@@ -9,10 +9,11 @@
       runs-on: ubuntu-latest
       steps:
           - uses: actions/checkout@v2
+            with:
+              token: ${{ secrets.PAGES_TOKEN }}
           - uses: actions/setup-node@v2
             with:
               node-version: '16'
-              token: ${{ secrets.PAGES_TOKEN }}
           - name: Install packages
             run: npm i
           - name: Set Creds
