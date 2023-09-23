@@ -10,7 +10,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "node scripts/gh-pages-deploy.js",
+    "deploy": "node scripts/gh-pages-deploy.mjs",
     "test:unit": "jest test/unit --verbose --coverage",
     "test:unit-custom": "jest --verbose",
     "test:e2e": "cypress open",
