@@ -2,7 +2,7 @@
 // WEB has auto-updates and shows support links
 // DESKTOP hides auto-updates and shows support links
 // STEAM hides auto-updates and hides support links
-export const APP_ENV = 'DESKTOP';
+export const APP_ENV = 'WEB';
 
 // time conversion
 export const SECONDS_PER_MINUTE = 60;
