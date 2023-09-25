@@ -7,6 +7,9 @@ export default {
   cannotFind: 'Diese Karte kann aktuell in keinen Paketen gefunden werden',
   active: 'Aktive Karten',
   equipped: 'Karten angelegt',
+  onActive: 'wenn aktiv',
+  onDuplicate: 'bei Doppelten',
+  activeDescription: 'Doppelte Karten können ausgerüstet werden und werden beim nächsten Prestige verbraucht, um deren Effekte zu aktivieren. Diese Effekte bleiben bis zum folgenden Prestige erhalten.',
   card: {
     'MI-0001': 'Grundlegende Ausrüstung',
     'MI-0002': 'Unbenutzte Spitzhacke',

@@ -15,8 +15,8 @@
   <div>
     <div class="text-center question-text" :class="{'question-text-mobile': $vuetify.breakpoint.xsOnly}">{{ question }}</div>
     <div class="d-flex justify-center align-center flex-wrap">
-      <v-text-field class="answer-input ma-1" type="number" @keydown.enter.prevent="giveAnswer" outlined hide-details autofocus v-model="answer"></v-text-field>
-      <v-btn class="ma-1" :large="$vuetify.breakpoint.smAndAbove" color="primary" @click="giveAnswer">{{ $vuetify.lang.t(`$vuetify.school.answer`) }}</v-btn>
+      <v-text-field id="answer-input-math" class="answer-input ma-1" type="number" @keydown.enter.prevent="giveAnswer" outlined hide-details autofocus v-model="answer"></v-text-field>
+      <v-btn class="ma-1" :large="$vuetify.breakpoint.smAndAbove" color="primary" @click="giveAnswerOnButton">{{ $vuetify.lang.t(`$vuetify.school.answer`) }}</v-btn>
     </div>
   </div>
 </template>
@@ -123,6 +123,10 @@ export default {
         this.answer = null;
         this.newQuestion();
       }
+    },
+    giveAnswerOnButton() {
+      this.giveAnswer();
+      document.getElementById('answer-input-math').focus();
     }
   }
 }

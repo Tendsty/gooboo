@@ -35,8 +35,15 @@ export default {
     }
   },
   data: () => ({
-    page: 1
+    page: 1,
+    cacheKey: 'nighthunt_potion'
   }),
+  mounted() {
+    const cachePage = this.$store.state.system.cachePage[this.cacheKey];
+    if (cachePage !== undefined) {
+      this.page = Math.min(Math.max(cachePage, 1), this.pages);
+    }
+  },
   computed: {
     items() {
       let arr = [];
@@ -61,6 +68,9 @@ export default {
     }
   },
   watch: {
+    page(newVal) {
+      this.$store.commit('system/updateCachePageKey', {key: this.cacheKey, value: newVal});
+    },
     pages(newVal) {
       if (this.page > newVal) {
         this.page = Math.max(newVal, 1);

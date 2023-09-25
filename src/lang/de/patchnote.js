@@ -10,6 +10,7 @@ export default {
     bugfix: 'Fehlerbehebung',
     balance: 'Balancing',
     qol: 'Bequemlichkeit',
+    clarity: 'Klarheit',
     new: 'Neu',
     remove: 'Entfernt'
   },

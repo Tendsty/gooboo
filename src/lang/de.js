@@ -1165,6 +1165,7 @@ export default {
       obsidian: 'Kann ab {0}m oder tiefer gefunden werden, wenn die Spitzhacke nicht aufgewertet ist'
     },
     rareEarthNotAffected: 'Dieser Rohstoff wird nicht durch Bodenschatz-Einkommen beeinflusst',
+    scrapGainHint: 'Du erhältst keinen Schrott für Steine, die du noch nie zerbrochen hast. Manchmal ist es klüger auf der aktuellen Tiefe zu bleiben, um mehr Schrott zu sammeln, anstatt direkt tiefer zu graben.',
     oreCrafting: 'Klicke auf Erze, um sie in Herstellplätze zu setzen',
     crafting: {
       power: 'Stärke',

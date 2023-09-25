@@ -6,7 +6,7 @@ import { simpleHash } from "../js/utils/random";
 export default {
     namespaced: true,
     state: {
-        version: '1.0.0',
+        version: '1.0.1',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -340,7 +340,8 @@ export default {
         oldSavefile: null,
         timeMult: 1,
         noteHint: [],
-        tutorial: {}
+        tutorial: {},
+        cachePage: {}
     },
     getters: {
         mainFeatures: (state, getters, rootState) => {
@@ -518,6 +519,9 @@ export default {
         },
         updateTutorialKey(state, o) {
             Vue.set(state.tutorial[o.name], o.key, o.value);
+        },
+        updateCachePageKey(state, o) {
+            Vue.set(state.cachePage, o.key, o.value);
         },
         updateSubfeature(state, o) {
             Vue.set(state.features[o.key], 'currentSubfeature', o.value);

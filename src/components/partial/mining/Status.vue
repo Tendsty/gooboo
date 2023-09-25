@@ -137,6 +137,7 @@
         </template>
       </template>
     </div>
+    <alert-text v-if="showScrapHint" class="ma-1" type="info">{{ $vuetify.lang.t('$vuetify.mining.scrapGainHint') }}</alert-text>
     <div class="d-flex justify-space-around mt-8 mt-lg-12">
       <gb-tooltip v-if="unlock.miningPickaxeCrafting.see" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
@@ -300,6 +301,10 @@ export default {
         }
       }
       return obj;
+    },
+    showScrapHint() {
+      const maxDepth = this.$store.state.stat.mining_maxDepth0.total;
+      return maxDepth >= 5 && maxDepth <= 10;
     }
   },
   methods: {

@@ -1165,6 +1165,7 @@ export default {
       obsidian: 'Can be found at {0}m or below if your pickaxe is not enhanced'
     },
     rareEarthNotAffected: 'This resource is not affected by rare earth gain',
+    scrapGainHint: 'You do not get scrap when hitting rocks you have never broken before. Sometimes it is smarter to stay on your current depth to collect more scrap instead of digging down immediately.',
     oreCrafting: 'Click on ores to add them to crafting slots',
     crafting: {
       power: 'Power',

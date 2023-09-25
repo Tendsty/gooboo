@@ -42,9 +42,18 @@ export default {
   data: () => ({
     page: 1
   }),
+  mounted() {
+    const cachePage = this.$store.state.system.cachePage[this.cacheKey];
+    if (cachePage !== undefined) {
+      this.page = Math.min(Math.max(cachePage, 1), this.pages);
+    }
+  },
   computed: {
+    cacheKey() {
+      return this.pool === 'merchant' ? 'shop_merchant' : 'shop_big';
+    },
     items() {
-      return this.$store.state.event[this.pool === 'merchant' ? 'shop_merchant' : 'shop_big'].map((e, key) => key);
+      return this.$store.state.event[this.cacheKey].map((e, key) => key);
     },
     finalItems() {
       if (this.upgradeLimit === null) {
@@ -60,6 +69,9 @@ export default {
     }
   },
   watch: {
+    page(newVal) {
+      this.$store.commit('system/updateCachePageKey', {key: this.cacheKey, value: newVal});
+    },
     pages(newVal) {
       if (this.page > newVal) {
         this.page = Math.max(newVal, 1);

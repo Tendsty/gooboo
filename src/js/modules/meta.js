@@ -4,6 +4,7 @@ import themes from "../theme/themes";
 import { buildArray } from "../utils/array";
 import { getSequence } from "../utils/math";
 import v1_0_0 from "./patchnote/v1_0_0";
+import v1_0_1 from "./patchnote/v1_0_1";
 
 export default {
     name: 'meta',
@@ -39,6 +40,7 @@ export default {
             store.commit('system/initTheme', {name: key, ...elem});
         }
         for (const [key, elem] of Object.entries({
+            '1.0.1': v1_0_1,
             '1.0.0': v1_0_0,
         })) {
             store.commit('system/initPatchnote', {name: key, ...elem});

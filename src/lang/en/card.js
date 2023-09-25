@@ -7,6 +7,9 @@ export default {
   cannotFind: 'This card cannot be found in your currently available packs',
   active: 'Active cards',
   equipped: 'cards equipped',
+  onActive: 'when active',
+  onDuplicate: 'on duplicate',
+  activeDescription: 'Duplicate cards can be equipped, and will be consumed on next prestige to activate their effects. These effects stay active until you prestige again.',
   card: {
     'MI-0001': 'Basic equipment',
     'MI-0002': 'Unused pickaxe',

@@ -18,7 +18,7 @@
               <v-icon v-else-if="versionType === 'minor'" class="mr-2" v-bind="attrs" v-on="on">mdi-star</v-icon>
               <v-icon v-else class="mr-2 patch-icon" v-bind="attrs" v-on="on">mdi-bandage</v-icon>
             </template>
-            <div>{{ $vuetify.lang.t(`$vuetify.patchnote.versionType.${ versionType }`) }}</div>
+            <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.patchnote.versionType.${ versionType }`) }}</div>
           </gb-tooltip>
           <span>{{ version }}</span>
           <span v-if="versionType !== 'patch'"><v-icon>mdi-circle-small</v-icon>{{ $vuetify.lang.t(`$vuetify.patchnote.v.${version.slice(0, -2)}`) }}</span>
