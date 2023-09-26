@@ -709,7 +709,7 @@ export default {
       xhttp.send();
     },
     intervalStart() {
-      this.intervalId = setInterval(this.updateCheck, 60000);
+      this.intervalId = setInterval(this.updateCheck, 600000);
     },
     intervalStop() {
       if (this.intervalId !== null) {

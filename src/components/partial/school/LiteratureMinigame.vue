@@ -119,6 +119,9 @@ export default {
     answer: {
       immediate: false,
       handler(newVal) {
+        if (newVal === null) {
+          this.answer = '';
+        }
         if (newVal === this.words[0]) {
           this.score++;
           this.$emit('score', this.score);

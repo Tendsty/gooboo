@@ -4,6 +4,7 @@ import themes from "../theme/themes";
 import { buildArray } from "../utils/array";
 import { getSequence } from "../utils/math";
 import v1_0_0 from "./patchnote/v1_0_0";
+import v1_0_1 from "./patchnote/v1_0_1";
 
 export default {
     name: 'meta',
@@ -30,7 +31,7 @@ export default {
             milestones: lvl => getSequence(5, lvl + 1) * 10,
             relic: {0: 'excavator', 1: 'redCard', 2: 'briefcase', 3: 'strangePlant', 4: 'beneficialVirus'}
         },
-        highestGrade: {value: () => store.state.stat.school_highestGrade.total, display: 'grade', cap: 5, milestones: lvl => (lvl + 1) * 500},
+        highestGrade: {value: () => store.state.stat.school_highestGrade.total, secret: true, display: 'grade', cap: 5, milestones: lvl => (lvl + 1) * 500},
         longestOfflineTime: {value: () => store.state.stat.meta_longestOfflineTime.total, secret: true, display: 'time', cap: 3, milestones: lvl => [SECONDS_PER_DAY * 7, SECONDS_PER_DAY * 30, SECONDS_PER_DAY * 365][lvl]}
     },
     note: buildArray(6).map(() => 'g'),
@@ -39,6 +40,7 @@ export default {
             store.commit('system/initTheme', {name: key, ...elem});
         }
         for (const [key, elem] of Object.entries({
+            '1.0.1': v1_0_1,
             '1.0.0': v1_0_0,
         })) {
             store.commit('system/initPatchnote', {name: key, ...elem});

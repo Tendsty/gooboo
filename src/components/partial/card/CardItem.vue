@@ -122,7 +122,7 @@
       </div>
     </template>
     <div v-if="card.amount > 0" class="mb-2">
-      <div>{{ $vuetify.lang.t(`$vuetify.gooboo.effects`) }}:</div>
+      <div>{{ $vuetify.lang.t(`$vuetify.gooboo.effects`) }} ({{ $vuetify.lang.t(`$vuetify.card.${ card.instant ? 'onDuplicate' : 'onActive' }`) }}):</div>
       <ul>
         <li v-for="(reward, rkey) in card.reward" :key="rkey">
           <span v-if="reward.type === 'currency'">+{{ $formatNum(reward.useMult ? multGet(gainMult(...reward.name.split('_')), reward.value) : reward.value) }} {{ $vuetify.lang.t(`$vuetify.currency.${ reward.name }.name`) }}</span>

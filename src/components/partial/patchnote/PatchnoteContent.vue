@@ -18,7 +18,7 @@
               <v-icon v-else-if="versionType === 'minor'" class="mr-2" v-bind="attrs" v-on="on">mdi-star</v-icon>
               <v-icon v-else class="mr-2 patch-icon" v-bind="attrs" v-on="on">mdi-bandage</v-icon>
             </template>
-            <div>{{ $vuetify.lang.t(`$vuetify.patchnote.versionType.${ versionType }`) }}</div>
+            <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.patchnote.versionType.${ versionType }`) }}</div>
           </gb-tooltip>
           <span>{{ version }}</span>
           <span v-if="versionType !== 'patch'"><v-icon>mdi-circle-small</v-icon>{{ $vuetify.lang.t(`$vuetify.patchnote.v.${version.slice(0, -2)}`) }}</span>
@@ -82,7 +82,10 @@ export default {
         const subfeature = keySplit.length > 1 ? parseInt(keySplit[1]) : 0;
         const unlock = this.features[feature] ? (subfeature > 0 ? this.features[feature].subfeatures[subfeature - 1] : this.features[feature].unlock) : null;
         if (unlock === null || this.unlock[unlock].see) {
-          obj[key] = elem.filter(el => el.unlock === undefined || this.unlock[el.unlock].see);
+          const itemList = elem.filter(el => el.unlock === undefined || this.unlock[el.unlock].see);
+          if (itemList.length > 0) {
+            obj[key] = itemList;
+          }
         }
       }
       return obj;

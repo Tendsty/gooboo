@@ -293,6 +293,10 @@ export default {
   note,
   school: {
     school: 'School',
+    beginner: {
+      title: 'Still learning',
+      description: 'You are new to this school, reducing your golden dust reward to {0}%. Reach a higher global level to reduce this penalty, and remove it entirely by reaching global level 250.'
+    },
     library: 'Library',
     play: 'Play',
     answer: 'Answer',
@@ -1135,6 +1139,12 @@ export default {
     gainSummaryHit: 'Gain {0} on hit',
     gainSummaryBreak: 'Gain {0} on break',
     depthDweller: 'Depth dweller',
+    dweller: {
+      title: 'Current / highest possible dweller depth',
+      description1: 'For each completed meter of current depth, your prestige reward increases.',
+      description2: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
+      description3: 'Maximum dweller depth'
+    },
     pickaxePower: 'This is the power of your pickaxe and your base damage. Increase it by crafting a better pickaxe.',
     damage: 'Damage',
     timeToBreak: 'Time needed to break the current rock',
@@ -1165,6 +1175,7 @@ export default {
       obsidian: 'Can be found at {0}m or below if your pickaxe is not enhanced'
     },
     rareEarthNotAffected: 'This resource is not affected by rare earth gain',
+    scrapGainHint: 'You do not get scrap when hitting rocks you have never broken before. Sometimes it is smarter to stay on your current depth to collect more scrap instead of digging down immediately.',
     oreCrafting: 'Click on ores to add them to crafting slots',
     crafting: {
       power: 'Power',
@@ -1249,6 +1260,7 @@ export default {
     zone: 'Zone',
     player: 'Player',
     enemy: 'Enemy',
+    monsterPartHint: 'Go to zone 10+ and reach enemy #101 to discover a new currency! That currency is essential to progess further, as it helps you raise your bone capacity.',
     enemyDescription: 'Each enemy in the same zone has x{0} attack, x{1} health and +{2}% bones compared to the previous enemy. This is enemy #{3} and has x{4} attack, x{5} health and +{6}% bones. All of these effects reset when you die.',
     enemySigil1: {
       s: 'Enemies in this zone have {0} sigil',
@@ -1633,6 +1645,7 @@ export default {
     newGemsTimeAchievement: 'Gain new gems every time the bar fills. Each achievement increases generation speed by +{0}%. Your {1} achievements increase generation speed by +{2}%, from {3} to {4}.'
   },
   achievement: {
+    relicReward: 'This relic is given as a reward when completing the next level of this achievement.',
     secret: 'This achievement is secret and does not give any bonuses.'
   },
   treasure: {

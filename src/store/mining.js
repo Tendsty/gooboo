@@ -43,7 +43,7 @@ export default {
             return rootGetters['mult/get']('miningToughness', (getters.depthBaseToughness(depth)));
         },
         depthBaseScrap: () => (depth) => {
-            return Math.ceil(Math.pow(1.2, depth) * Math.pow(depth * 0.2 + 1, 2) * 2);
+            return Math.ceil(Math.pow(1.2, depth) * Math.pow(depth * 0.2 + 1.2, 2) * 2);
         },
         depthScrap: (state, getters, rootState, rootGetters) => (depth) => {
             return rootGetters['mult/get']('currencyMiningScrapGain', getters.depthBaseScrap(depth));

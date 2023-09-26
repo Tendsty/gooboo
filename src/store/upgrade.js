@@ -149,7 +149,7 @@ export default {
                 if (state.cache[cacheKey] === undefined) {
                     Vue.set(state.cache, cacheKey, []);
                 }
-                if (elem.cap === null || elem.bought < elem.cap) {
+                if (elem.cap === null || elem.level < elem.cap) {
                     state.cache[cacheKey].push(key);
                 }
             }
@@ -159,7 +159,7 @@ export default {
             if (state.cache[cacheKey] !== undefined) {
                 Vue.set(state.cache, cacheKey, []);
                 for (const [key, elem] of Object.entries(state.item)) {
-                    if (elem.feature === o.feature && elem.subfeature === o.subfeature && elem.type === o.type && (elem.cap === null || elem.bought < elem.cap)) {
+                    if (elem.feature === o.feature && elem.subfeature === o.subfeature && elem.type === o.type && (elem.cap === null || elem.level < elem.cap)) {
                         state.cache[cacheKey].push(key);
                     }
                 }
@@ -254,7 +254,7 @@ export default {
                 }
 
                 // Update cache if needed
-                if (updateCache && upgrade.cap !== null && upgrade.bought >= upgrade.cap) {
+                if (updateCache && upgrade.cap !== null && upgrade.level >= upgrade.cap) {
                     commit('removeFromCache', name);
                 }
             }
@@ -340,6 +340,7 @@ export default {
         tickQueue({ state, commit, dispatch }, o) {
             let seconds = o.seconds ?? 0;
             let updateCache = false;
+            let lastUpgrade = null;
 
             while (seconds > 0 && state.queue[o.key].length > 0) {
                 const upgradeName = state.queue[o.key][0];
@@ -359,11 +360,17 @@ export default {
                     dispatch('apply', {name: upgradeName, onBuy: true});
                     commit('updateKey', {name: upgradeName, key: 'timeProgress', value: 0});
                     updateCache = true;
+                    lastUpgrade = upgrade;
                     seconds -= timeNeeded;
                     if (upgrade.note !== null) {
                         dispatch('note/find', upgrade.note, {root: true});
                     }
                 }
+            }
+
+            // Reset cache
+            if (updateCache) {
+                commit('updateCacheKey', lastUpgrade);
             }
 
             // Handle village specific stats

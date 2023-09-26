@@ -43,6 +43,7 @@
         <enemy-status class="ma-1"></enemy-status>
       </v-col>
     </v-row>
+    <alert-text v-if="showMonsterPartHint" class="ma-1" type="info">{{ $vuetify.lang.t('$vuetify.horde.monsterPartHint') }}</alert-text>
     <div class="d-flex flex-wrap justify-center">
       <currency large class="ma-1" name="horde_bone"></currency>
       <currency class="ma-1" name="horde_monsterPart"></currency>
@@ -57,12 +58,13 @@
 import { mapGetters, mapState } from 'vuex';
 import Currency from '../../render/Currency.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import AlertText from '../render/AlertText.vue';
 import Active from './Active.vue';
 import EnemyStatus from './EnemyStatus.vue';
 import PlayerStatus from './PlayerStatus.vue';
 
 export default {
-  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown },
+  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText },
   computed: {
     ...mapState({
       combo: state => state.horde.combo,
@@ -95,6 +97,9 @@ export default {
       } else {
         return 'reachBoss';
       }
+    },
+    showMonsterPartHint() {
+      return this.$store.state.stat.horde_maxZone.total >= 15 && this.$store.state.stat.horde_monsterPart.total <= 0;
     }
   },
   methods: {

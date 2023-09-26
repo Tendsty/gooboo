@@ -19,8 +19,8 @@
         <v-icon class="mr-2" large>{{ icons[dates[question].id] }}</v-icon>
         <span>{{ $vuetify.lang.t(`$vuetify.school.history.year`, '???') }}</span>
       </div>
-      <v-text-field class="answer-input ma-1" type="number" @keydown.enter.prevent="giveAnswer" outlined hide-details autofocus v-model="answer" :disabled="answersGiven >= 5"></v-text-field>
-      <v-btn class="ma-1" :large="$vuetify.breakpoint.smAndAbove" color="primary" @click="giveAnswer" :disabled="answersGiven >= 5">{{ $vuetify.lang.t(`$vuetify.school.answer`) }}</v-btn>
+      <v-text-field id="answer-input-history" class="answer-input ma-1" type="number" @keydown.enter.prevent="giveAnswer" outlined hide-details autofocus v-model="answer" :disabled="answersGiven >= 5"></v-text-field>
+      <v-btn class="ma-1" :large="$vuetify.breakpoint.smAndAbove" color="primary" @click="giveAnswerOnButton" :disabled="answersGiven >= 5">{{ $vuetify.lang.t(`$vuetify.school.answer`) }}</v-btn>
     </div>
   </div>
   <div v-else>
@@ -78,6 +78,10 @@ export default {
         this.answersGiven++;
         this.newQuestion();
       }
+    },
+    giveAnswerOnButton() {
+      this.giveAnswer();
+      document.getElementById('answer-input-history').focus();
     },
     newQuestion() {
       if (this.answersGiven < 5) {

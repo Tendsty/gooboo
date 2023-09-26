@@ -3,7 +3,11 @@ import Vue from "vue";
 export default {
     namespaced: true,
     state: {},
-    getters: {},
+    getters: {
+        dustMult: (state, getters, rootState) => {
+            return Math.min(1, rootState.meta.globalLevel / 250);
+        }
+    },
     mutations: {
         init(state, o) {
             Vue.set(state, o.name, {

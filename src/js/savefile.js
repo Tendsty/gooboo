@@ -196,6 +196,11 @@ function loadFile(file) {
             }
         }
     }
+    if (save.cachePage) {
+        for (const [key, elem] of Object.entries(save.cachePage)) {
+            store.commit('system/updateCachePageKey', {key, value: elem});
+        }
+    }
 
     // Load feature specific things
     modules.forEach(module => {
@@ -258,7 +263,8 @@ function getSavefile() {
         keybinds: {},
         note: [],
         consumable: {},
-        rng: {}
+        rng: {},
+        cachePage: {}
     };
 
     // Generic systems
@@ -343,6 +349,11 @@ function getSavefile() {
     }
     for (const [key, elem] of Object.entries(store.state.system.rng)) {
         save.rng[key] = elem.next;
+    }
+    for (const [key, elem] of Object.entries(store.state.system.cachePage)) {
+        if (elem > 1) {
+            save.cachePage[key] = elem;
+        }
     }
 
     // Save feature specific things
