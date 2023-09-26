@@ -82,7 +82,10 @@ export default {
         const subfeature = keySplit.length > 1 ? parseInt(keySplit[1]) : 0;
         const unlock = this.features[feature] ? (subfeature > 0 ? this.features[feature].subfeatures[subfeature - 1] : this.features[feature].unlock) : null;
         if (unlock === null || this.unlock[unlock].see) {
-          obj[key] = elem.filter(el => el.unlock === undefined || this.unlock[el.unlock].see);
+          const itemList = elem.filter(el => el.unlock === undefined || this.unlock[el.unlock].see);
+          if (itemList.length > 0) {
+            obj[key] = itemList;
+          }
         }
       }
       return obj;

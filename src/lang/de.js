@@ -293,6 +293,10 @@ export default {
   note,
   school: {
     school: 'Schule',
+    beginner: {
+      title: 'Noch am Lernen',
+      description: 'Diese Schule ist neu für dich, was deine Goldstaub-Belohnung auf {0}% reduziert. Erreiche eine höhere globale Stufe, um diese Strafe zu reduzieren, und entferne sie ganz, indem du globale Stufe 250 erreichst.'
+    },
     library: 'Bücherei',
     play: 'Spielen',
     answer: 'Antworten',
@@ -1135,6 +1139,12 @@ export default {
     gainSummaryHit: 'Erhalte {0} pro Treffer',
     gainSummaryBreak: 'Erhalte {0} pro Zerbrechen',
     depthDweller: 'Tiefengräber',
+    dweller: {
+      title: 'Aktuelle / höchstmögliche Gräbertiefe',
+      description1: 'Für jeden abgeschlossenen Meter aktueller Gräbertiefe erhöht sich die Prestigebelohnung.',
+      description2: 'Die höchstmögliche Gräbertiefe beträgt {0}% der maximalen Tiefe im Bergwerk.',
+      description3: 'Maximale Gräbertiefe'
+    },
     pickaxePower: 'Dies ist die Kraft deiner Spitzhacke und dein Grundschaden. Erhöhe es, indem du eine bessere Spitzhacke herstellst.',
     damage: 'Schaden',
     timeToBreak: 'Zeit benötigt, um den aktuellen Stein zu zerbrechen',
@@ -1250,6 +1260,7 @@ export default {
     zone: 'Zone',
     player: 'Spieler',
     enemy: 'Gegner',
+    monsterPartHint: 'Gehe zu Zone 10+ und erreiche Gegner #101, um eine neue Währung zu entdecken! Diese Währung ist essentiell, um weiter fortzuschreiten, da sie beim Erhöhen der Knochen-Kapazität hilft.',
     enemyDescription: 'Jeder Gegner in der selben Zone hat x{0} Angriff, x{1} Leben und +{2}% Knochen im Vergleich zum vorherigen Gegner. Dies ist Gegner #{3} und dieser hat x{4} Angriff, x{5} Leben und +{6}% Knochen. All diese Effekte werden bei deinem Tod zurückgesetzt.',
     enemySigil1: {
       s: 'Gegner in dieser Zone haben {0} Zeichen',
@@ -1634,6 +1645,7 @@ export default {
     newGemsTimeAchievement: 'Erhalte neue Edelsteine, wenn sich die Leiste füllt. Jeder Erfolg beschleunigt den Generator um +{0}%. Deine {1} Erfolge beschleunigen den Generator um +{2}%, von {3} auf {4}.'
   },
   achievement: {
+    relicReward: 'Dieses Relikt wird als Belohnung vergeben, wenn die nächste Stufe dieses Erfolgs erreicht wird.',
     secret: 'Dieser Erfolg ist geheim und gewährt keine Boni.'
   },
   treasure: {

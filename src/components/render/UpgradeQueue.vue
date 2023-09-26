@@ -95,7 +95,7 @@ export default {
       if (upgradeName.length <= 0) {
         return 0;
       }
-      const upgrade = this.$store.state.upgrade.item[upgradeName];
+      const upgrade = this.$store.state.upgrade.item[upgradeName[0]];
       const queueSpeed = this.$store.getters['mult/get']('queueSpeed' + capitalize(upgrade.feature) + capitalize(upgrade.type));
       const timeNeededCurrent = Math.ceil((upgrade.timeNeeded(upgrade.level)) / queueSpeed);
       const timeLeftCurrent = Math.ceil((upgrade.timeNeeded(upgrade.level) - upgrade.timeProgress) / queueSpeed);

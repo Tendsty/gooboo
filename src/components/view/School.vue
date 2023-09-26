@@ -85,6 +85,7 @@ import SubjectList from '../partial/school/SubjectList.vue';
 import TabIconText from '../partial/render/TabIconText.vue';
 import HistoryMinigame from '../partial/school/HistoryMinigame.vue';
 import ArtMinigame from '../partial/school/ArtMinigame.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: { MathMinigame, LiteratureMinigame, BookUpgrades, SubjectList, TabIconText, HistoryMinigame, ArtMinigame },
@@ -95,6 +96,11 @@ export default {
     score: 0,
     tab: 'school'
   }),
+  computed: {
+    ...mapGetters({
+      dustMult: 'school/dustMult'
+    })
+  },
   methods: {
     startPlaying(name) {
       this.timer = 31;
@@ -128,7 +134,7 @@ export default {
           this.$store.commit('stat/increaseTo', {feature: 'school', name: 'highestGrade', value: newGrade});
         }
 
-        const dustGain = Math.round(Math.pow(score + 1, 0.5) * (elo * 0.0008 + 1) * 70);
+        const dustGain = Math.round(Math.pow(score + 1, 0.5) * (elo * 0.0008 + 1) * this.dustMult * 70);
         if (dustGain > 0) {
           this.$store.dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: dustGain});
           this.$store.dispatch('note/find', 'school_1');

@@ -17,20 +17,27 @@
       </v-chip>
     </template>
     <display-row class="mt-0" v-for="(item, key) in relic.effect" :key="key" :name="item.name" :type="item.type" :after="item.value"></display-row>
+    <alert-text v-if="isAchievementReward" type="info">{{ $vuetify.lang.t(`$vuetify.achievement.relicReward`) }}</alert-text>
   </gb-tooltip>
 </template>
 
 <script>
+import AlertText from '../render/AlertText.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
 
 export default {
-  components: { DisplayRow },
+  components: { DisplayRow, AlertText },
   props: {
     name: {
       type: String,
       required: true
     },
     large: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isAchievementReward: {
       type: Boolean,
       required: false,
       default: false

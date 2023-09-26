@@ -21,7 +21,7 @@
           <span v-if="achievement.cap === null || achievement.cap > 1">{{ achievement.level }}</span>
           <v-icon v-else>mdi-check</v-icon>
         </v-chip>
-        <mini v-if="relicName" :name="relicName"></mini>
+        <mini v-if="relicName" :name="relicName" is-achievement-reward></mini>
         <v-spacer></v-spacer>
         <gb-tooltip v-if="achievement.secret">
           <template v-slot:activator="{ on, attrs }">
