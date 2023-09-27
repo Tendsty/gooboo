@@ -118,8 +118,11 @@ export default {
     },
     school: {
       get: 'Schulschluss!',
+      getExam: 'Prüfungsschluss!',
       score: 'Punktzahl: {0}',
+      perfectScore: '(PERFEKT!)',
       grade: '+{0}% Note',
+      gradePlus: 'Deine Note hat sich verbessert!',
       dust: '+{0} Goldstaub'
     },
     update: {
@@ -295,22 +298,17 @@ export default {
     school: 'Schule',
     beginner: {
       title: 'Noch am Lernen',
-      description: 'Diese Schule ist neu für dich, was deine Goldstaub-Belohnung auf {0}% reduziert. Erreiche eine höhere globale Stufe, um diese Strafe zu reduzieren, und entferne sie ganz, indem du globale Stufe 250 erreichst.'
+      description: 'Diese Schule ist neu für dich, was deine Goldstaub-Belohnung auf {0}% reduziert. Erreiche eine höhere globale Stufe, um diese Strafe zu reduzieren, und entferne sie ganz, indem du globale Stufe 175 erreichst.'
     },
     library: 'Bücherei',
-    play: 'Spielen',
+    practice: 'Üben',
+    study: 'Lernen',
+    takeExam: 'Prüfung',
     answer: 'Antworten',
     begin: 'Der Unterricht beginnt!',
+    beginExam: 'Die Prüfung beginnt!',
     grade: 'Noten und Elo',
     gradeDescription: 'Schneide in einem Fach gut ab, um deine Elo zu erhöhen, oder senke die Elo durch schlechte Ergebnisse. Deine Elo ist versteckt und beeinflusst deinen Notenfortschritt und die Goldstaubbelohnung. Außerdem erschwert Elo das Fach.',
-    bookDescription: 'Jede Stunde wird die Note um {0}% reduziert, um {1} Bücher zu erhalten. Höhere Noten geben mehr Bücher.',
-    elo: {
-      farBelow: 'Deine Elo ist deutlich unter deiner Note, wodurch kein Notenfortschritt stattfindet.',
-      below: 'Deine Elo ist unter deiner Note, was den Notenfortschritt verlangsamt.',
-      equal: 'Deine Elo entspricht etwa deiner Note, der Notenfortschritt ist durchschnittlich.',
-      above: 'Deine Elo ist über deiner Note, was den Notenfortschritt beschleunigt.',
-      farAbove: 'Deine Elo ist deutlich über deiner Note, was den Notenfortschritt extrem beschleunigt.'
-    },
     math: {
       name: 'Mathe',
       subtitle: 'Gleichungen lösen',
@@ -319,7 +317,7 @@ export default {
     },
     literature: {
       name: 'Literatur',
-      subtitle: 'Texte schreiben',
+      subtitle: 'Sätze schreiben',
       description: 'Tippe das angezeigte Wort ab, um Punkte zu sammeln. Erhalte 1 Punkt für jedes getippte Wort. Das Wort bleibt, bis es richtig getippt wurde, und die nächsten 2 Wörter sind auch sichtbar. Mit steigender Elo werden die Wörter länger und enthalten neue Buchstaben und Zeichen.',
       grade: 'Erreiche eine Punktzahl von 5, um deine Elo zu bewahren.'
     },
@@ -1110,6 +1108,7 @@ export default {
     base: 'Grundwert',
     min: 'Mindestwert',
     max: 'Höchstwert',
+    globalLevel: 'Globale Stufe',
     prestige: 'Prestige',
     graniteBreaksMult: 'Log10 Zerbrechungen',
     miningTemperature: 'Temperatur',

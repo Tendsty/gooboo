@@ -44,48 +44,48 @@ export default {
     answer: ''
   }),
   mounted() {
-    this.elo = this.$store.state.school.literature.elo;
-    this.wordLength = this.elo / 250 + 3.5;
-    if (this.elo >= 100) {
+    this.elo = this.$store.state.school.literature.currentGrade;
+    this.wordLength = this.elo / 1.5 + 3.5;
+    if (this.elo >= 0.6) {
       this.characters += 'jkl';
     }
-    if (this.elo >= 200) {
+    if (this.elo >= 1.2) {
       this.characters += 'gh';
     }
-    if (this.elo >= 300) {
+    if (this.elo >= 1.8) {
       this.characters += 'qweruiop';
     }
-    if (this.elo >= 400) {
+    if (this.elo >= 2.4) {
       this.characters += 'xcvm';
     }
-    if (this.elo >= 500) {
+    if (this.elo >= 3) {
       this.characters += 'ztybn';
     }
-    if (this.elo >= 600) {
+    if (this.elo >= 3.6) {
       this.characters += 'ASDFJKLGH';
     }
-    if (this.elo >= 700) {
+    if (this.elo >= 4.2) {
       this.characters += 'QWERUIOP';
     }
-    if (this.elo >= 800) {
+    if (this.elo >= 4.8) {
       this.characters += 'XCVMZTYBN';
     }
-    if (this.elo >= 1000) {
+    if (this.elo >= 6) {
       this.characters += '1234567890';
     }
-    if (this.elo >= 1200) {
+    if (this.elo >= 7.2) {
       this.characters += '<>,;.:';
     }
-    if (this.elo >= 1400) {
+    if (this.elo >= 8.4) {
       this.characters += '!@#$&*';
     }
-    if (this.elo >= 1600) {
+    if (this.elo >= 9.6) {
       this.characters += '\'"?|/\\';
     }
-    if (this.elo >= 1800) {
+    if (this.elo >= 10.8) {
       this.characters += '()[]{}';
     }
-    if (this.elo >= 2000) {
+    if (this.elo >= 12) {
       this.characters += '-_+=';
     }
     this.newWords();

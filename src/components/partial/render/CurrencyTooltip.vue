@@ -24,9 +24,9 @@
     <template v-if="currency.value > 0">
       <display-row class="mt-0" v-for="(item, key) in currencyMult" :key="key" :name="key" :type="item.type" :after="item.value"></display-row>
     </template>
-    <template v-if="!hideDetails && currency.showGainMult && gainAmount > 0">
+    <template v-if="!hideDetails && currency.showGainMult && (gainBase !== null || gainAmount > 0)">
       <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
-      <stat-breakdown :name="gainName"></stat-breakdown>
+      <stat-breakdown :name="gainName" :base="gainBase"></stat-breakdown>
     </template>
     <template v-if="!hideDetails && currency.cap !== null">
       <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.capacity') }}</div>
@@ -62,6 +62,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    gainBase: {
+      type: Number,
+      required: false,
+      default: null
     }
   },
   computed: {

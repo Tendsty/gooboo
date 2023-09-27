@@ -33,20 +33,20 @@ export default {
     answer: ''
   }),
   mounted() {
-    this.elo = this.$store.state.school.math.elo;
-    if (this.elo >= 200) {
+    this.elo = this.$store.state.school.math.currentGrade;
+    if (this.elo >= 2) {
       this.operators.push('-');
     }
-    if (this.elo >= 500) {
+    if (this.elo >= 4) {
       this.operators.push('*');
     }
-    if (this.elo >= 1000) {
+    if (this.elo >= 7) {
       this.operators.push('/');
     }
-    if (this.elo >= 1500) {
+    if (this.elo >= 10) {
       this.operators.push('r');
     }
-    if (this.elo >= 2000) {
+    if (this.elo >= 13) {
       this.operators.push('^');
     }
     this.newQuestion();
@@ -56,8 +56,8 @@ export default {
       const operator = randomElem(this.operators);
       switch (operator) {
         case '+': {
-          const minNum = Math.round(Math.pow(8, this.elo / 500));
-          const maxNum = Math.round(Math.pow(10, this.elo / 500) * 5);
+          const minNum = Math.round(Math.pow(8, this.elo / 3));
+          const maxNum = Math.round(Math.pow(10, this.elo / 3) * 5);
           const num1 = randomInt(minNum, maxNum);
           const num2 = randomInt(minNum, maxNum);
           this.question = `${ num1 } + ${ num2 }`;
@@ -65,8 +65,8 @@ export default {
           break;
         }
         case '-': {
-          const minNum = Math.round(Math.pow(8, this.elo / 500 - 0.2));
-          const maxNum = Math.round(Math.pow(10, this.elo / 500 - 0.2) * 5);
+          const minNum = Math.round(Math.pow(8, this.elo / 3 - 0.2));
+          const maxNum = Math.round(Math.pow(10, this.elo / 3 - 0.2) * 5);
           const num1 = randomInt(minNum, maxNum);
           const num2 = randomInt(minNum, maxNum);
           this.question = `${ num1 + num2 } - ${ num2 }`;
@@ -74,8 +74,8 @@ export default {
           break;
         }
         case '*': {
-          const minNum = Math.round(Math.pow(1.9, this.elo / 500) * 2.5);
-          const maxNum = Math.round(Math.pow(2, this.elo / 500) * 4.5);
+          const minNum = Math.round(Math.pow(1.9, this.elo / 3) * 2.5);
+          const maxNum = Math.round(Math.pow(2, this.elo / 3) * 4.5);
           const num1 = randomInt(minNum, maxNum);
           const num2 = randomInt(minNum, maxNum);
           this.question = `${ num1 } * ${ num2 }`;
@@ -83,8 +83,8 @@ export default {
           break;
         }
         case '/': {
-          const minNum = Math.round(Math.pow(1.9, this.elo / 500 - 0.2) * 2.5);
-          const maxNum = Math.round(Math.pow(2, this.elo / 500 - 0.2) * 4.5);
+          const minNum = Math.round(Math.pow(1.9, this.elo / 3 - 0.2) * 2.5);
+          const maxNum = Math.round(Math.pow(2, this.elo / 3 - 0.2) * 4.5);
           const num1 = randomInt(minNum, maxNum);
           const num2 = randomInt(minNum, maxNum);
           this.question = `${ num1 * num2 } / ${ num2 }`;
@@ -92,18 +92,18 @@ export default {
           break;
         }
         case 'r': {
-          const minNum = Math.round(Math.pow(1.9, this.elo / 500 - 0.3) * 2.5);
-          const maxNum = Math.round(Math.pow(2, this.elo / 500 - 0.3) * 4.5);
+          const minNum = Math.round(Math.pow(1.9, this.elo / 3 - 0.3) * 2.5);
+          const maxNum = Math.round(Math.pow(2, this.elo / 3 - 0.3) * 4.5);
           const num = randomInt(minNum, maxNum);
           this.question = `√${ Math.pow(num, 2) }`;
           this.solution = num;
           break;
         }
         case '^': {
-          const minNum = Math.round(Math.pow(3.1, this.elo / 500) * 7.5);
-          const maxNum = Math.round(Math.pow(3.25, this.elo / 500) * 40);
+          const minNum = Math.round(Math.pow(3.1, this.elo / 3) * 7.5);
+          const maxNum = Math.round(Math.pow(3.25, this.elo / 3) * 40);
           const target = randomInt(minNum, maxNum);
-          const exponent = randomInt(3, Math.floor(this.elo / 500));
+          const exponent = randomInt(3, Math.floor(this.elo / 3));
           const base = Math.round(Math.pow(target, 1 / exponent));
           this.question = `${ base } ^ ${ exponent }`;
           this.solution = Math.pow(base, exponent);
@@ -112,7 +112,7 @@ export default {
       }
     },
     giveAnswer() {
-      if (this.answer !== '') {
+      if (this.answer !== '' && this.answer !== null) {
         const answer = parseInt(this.answer);
         if (answer === this.solution) {
           this.score++;

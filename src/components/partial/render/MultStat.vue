@@ -5,6 +5,7 @@
     <span v-else-if="display === 'percent'">{{ $formatNum(value * 100, true) }}%</span>
     <span v-else-if="display === 'time'">{{ $formatTime(value) }}</span>
     <span v-else-if="display === 'perSecond'">{{ $formatNum(value, !round) }}/s</span>
+    <span v-else-if="display === 'perHour'">{{ $formatNum(value, !round) }}/h</span>
     <span v-else-if="display === 'temperature'">{{ $formatNum(value, !round) }}°C</span>
     <span v-else-if="display === 'mult'">{{ $formatNum(value, !round) }}x</span>
     <span v-else>{{ $formatNum(value, !round) }}</span>

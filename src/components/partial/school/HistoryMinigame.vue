@@ -53,10 +53,10 @@ export default {
     intervalId: null
   }),
   mounted() {
-    this.elo = this.$store.state.school.history.elo;
-    const minYear = Math.round(Math.pow(5, this.elo / 500));
-    const maxYear = Math.round(Math.pow(6, this.elo / 500) * 7.5);
-    for (let i = 0, n = Math.floor(Math.min(10, this.elo / 500 + 3)); i < n; i++) {
+    this.elo = this.$store.state.school.history.currentGrade;
+    const minYear = Math.round(Math.pow(5, this.elo / 3));
+    const maxYear = Math.round(Math.pow(6, this.elo / 3) * 7.5);
+    for (let i = 0, n = Math.floor(Math.min(10, this.elo / 3 + 3)); i < n; i++) {
       this.dates.push({id: i, year: randomInt(minYear, maxYear)});
     }
     this.dates = shuffleArray(this.dates);

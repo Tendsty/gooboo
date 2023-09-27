@@ -37,6 +37,7 @@ function cleanStore() {
         store.dispatch(`${ module }/cleanState`);
     });
     store.commit('upgrade/initCache');
+    store.dispatch('meta/updatePassCap');
     store.commit('mining/updateKey', {key: 'durability', value: store.getters['mining/currentDurability']});
     store.dispatch('horde/updatePlayerStats');
     store.dispatch('horde/updateEnemyStats');
