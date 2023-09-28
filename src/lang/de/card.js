@@ -10,6 +10,14 @@ export default {
   onActive: 'wenn aktiv',
   onDuplicate: 'bei Doppelten',
   activeDescription: 'Doppelte Karten können ausgerüstet werden und werden beim nächsten Prestige verbraucht, um deren Effekte zu aktivieren. Diese Effekte bleiben bis zum folgenden Prestige erhalten.',
+  equipTutorial: {
+    description: 'Du hast deine ersten Karten gesammelt! Die meisten Karten haben einen Effekt, wenn sie aktiv sind, welcher auf folgende Art genutzt werden kann:',
+    1: 'Erhalte eine doppelte Karte',
+    2: 'Schalte Prestige für eine deiner Hauptfunktionen frei',
+    3: 'Gehe ins Prestigemenü und lege die doppelte Karte an (muss die gleiche Funktion sein wie unten rechts auf der Karte)',
+    4: 'Führe einen Prestige mit der angelegten Karte durch',
+    5: 'Die Karte wird verbraucht und die Effekt sind bis zum nächsten Prestige aktiv'
+  },
   card: {
     'MI-0001': 'Grundlegende Ausrüstung',
     'MI-0002': 'Unbenutzte Spitzhacke',

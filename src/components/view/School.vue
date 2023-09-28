@@ -54,7 +54,7 @@
     <template v-if="canSeeMinigame">
       <math-minigame v-if="playing === 'math'" @score="updateScore"></math-minigame>
       <literature-minigame v-else-if="playing === 'literature'" @score="updateScore"></literature-minigame>
-      <history-minigame v-else-if="playing === 'history'" @score="updateScore"></history-minigame>
+      <history-minigame v-else-if="playing === 'history'" :school-mode="mode" @score="updateScore" @stop="finishSchool"></history-minigame>
       <art-minigame v-else-if="playing === 'art'" @score="updateScore"></art-minigame>
     </template>
     <div v-else class="text-center scoreboard-text">{{ $vuetify.lang.t(`$vuetify.school.${ mode === 'exam' ? 'beginExam' : 'begin' }`) }}</div>
@@ -148,45 +148,48 @@ export default {
         this.timer--;
       }
       if (this.timer <= 0) {
-        // Calculate elo and rewards
-        const score = (this.mode === 'exam' ? 1 : 2) * this.score / this.currentSubject.scoreGoal - ((this.mode === 'exam' || this.currentSubject.currentGrade <= 0) ? 0 : 1);
-
-        let gradeGain = 0;
-        let gradePlus = false;
-        let dustGain = 0;
-
-        if (this.mode === 'study' && this.currentSubject.currentGrade >= this.currentSubject.grade) {
-          const newProgress = Math.max(score * 0.2 + this.currentSubject.progress, 0);
-          if (newProgress >= 1) {
-            gradePlus = true;
-            const newGrade = this.currentSubject.grade + 1;
-            this.$store.commit('stat/increaseTo', {feature: 'school', name: 'highestGrade', value: newGrade});
-            this.$store.commit('school/updateKey', {name: this.playing, key: 'grade', value: newGrade});
-            this.$store.commit('school/updateKey', {name: this.playing, key: 'currentGrade', value: newGrade});
-            this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: 0});
-          } else {
-            gradeGain = newProgress - this.currentSubject.progress;
-            this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: newProgress});
-          }
-        }
-        if (this.mode === 'exam') {
-          dustGain = this.$store.getters['school/examReward'](score, this.currentSubject.currentGrade);
-          this.$store.dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: dustGain});
-          this.$store.dispatch('note/find', 'school_1');
-        }
-
-        this.$store.commit('system/addNotification', {color: 'success', timeout: 5000, message: {
-          type: 'school',
-          isExam: this.mode === 'exam',
-          score: this.score,
-          perfectScore: false,
-          grade: gradeGain,
-          gradePlus,
-          dust: dustGain
-        }});
-
-        this.leaveSchool();
+        this.finishSchool();
       }
+    },
+    finishSchool() {
+      // Calculate elo and rewards
+      const score = (this.mode === 'exam' ? 1 : 2) * this.score / this.currentSubject.scoreGoal - ((this.mode === 'exam' || this.currentSubject.currentGrade <= 0) ? 0 : 1);
+
+      let gradeGain = 0;
+      let gradePlus = false;
+      let dustGain = 0;
+
+      if (this.mode === 'study' && this.currentSubject.currentGrade >= this.currentSubject.grade) {
+        const newProgress = Math.max(score * 0.2 + this.currentSubject.progress, 0);
+        if (newProgress >= 1) {
+          gradePlus = true;
+          const newGrade = this.currentSubject.grade + 1;
+          this.$store.commit('stat/increaseTo', {feature: 'school', name: 'highestGrade', value: newGrade});
+          this.$store.commit('school/updateKey', {name: this.playing, key: 'grade', value: newGrade});
+          this.$store.commit('school/updateKey', {name: this.playing, key: 'currentGrade', value: newGrade});
+          this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: 0});
+        } else {
+          gradeGain = newProgress - this.currentSubject.progress;
+          this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: newProgress});
+        }
+      }
+      if (this.mode === 'exam') {
+        dustGain = this.$store.getters['school/examReward'](score, this.currentSubject.currentGrade);
+        this.$store.dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: dustGain});
+        this.$store.dispatch('note/find', 'school_1');
+      }
+
+      this.$store.commit('system/addNotification', {color: 'success', timeout: 5000, message: {
+        type: 'school',
+        isExam: this.mode === 'exam',
+        score: this.score,
+        perfectScore: false,
+        grade: gradeGain,
+        gradePlus,
+        dust: dustGain
+      }});
+
+      this.leaveSchool();
     },
     intervalStop() {
       if (this.intervalId !== null) {

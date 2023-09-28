@@ -14,8 +14,11 @@ import treasure from "./modules/treasure";
 import general from "./modules/general";
 import event from "./modules/event";
 import cryolab from "./modules/cryolab";
+import v1_1_0 from "./modules/migration/v1_1_0";
 
-const migrations = {};
+const migrations = {
+    '1.1.0': v1_1_0
+};
 
 export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile }
 
@@ -154,6 +157,7 @@ function loadFile(file) {
                 store.commit('unlock/unlock', key);
             }
         }
+        store.dispatch('meta/updatePassCap');
     }
     if (save.settings) {
         for (const [key, elem] of Object.entries(save.settings)) {

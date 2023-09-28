@@ -62,7 +62,6 @@ function loadGame(file, runPrepare = true) {
     }
 
     store.commit('upgrade/initCache');
-    store.dispatch('meta/updatePassCap');
     store.commit('system/resetAutosaveTimer');
 }
 

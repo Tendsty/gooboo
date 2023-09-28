@@ -41,6 +41,8 @@ export default {
           return 'mdi-plus-thick';
         case 'remove':
           return 'mdi-delete';
+        case 'change':
+          return 'mdi-cached';
       }
       return null;
     },
@@ -62,6 +64,8 @@ export default {
           return 'green';
         case 'remove':
           return 'red';
+        case 'change':
+          return 'pale-light-green';
       }
       return null;
     }

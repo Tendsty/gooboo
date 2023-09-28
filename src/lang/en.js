@@ -121,7 +121,7 @@ export default {
       getExam: 'Exam complete!',
       score: 'Score: {0}',
       perfectScore: '(PERFECT!)',
-      grade: '+{0}% grade',
+      grade: '{0}% grade',
       gradePlus: 'Your grade improved!',
       dust: '+{0} Golden dust'
     },
@@ -156,6 +156,7 @@ export default {
     summerFestivalCellBuy: 'You are about to buy a new island cell, which costs rare currency. Are you sure you want to buy this?',
     farmCrop: 'You are about to plant crops that cost rare currency. Are you sure you want to buy this?',
     treasure: 'You are about to buy a new treasure, which costs rare currency. Are you sure you want to buy this?',
+    schoolExamPass: 'You are about to buy an exam pass, which cost rare currency. Are you sure you want to buy this?',
     treasureFragment: 'You are about to buy fragments, which cost rare currency. Are you sure you want to buy this?',
     treasureDelete: 'You are about to destroy a treasure, which will give fragments in return. Are you sure you want to buy this?',
     casinoBingoBuy: 'You are about to buy a bingo card, which costs rare currency. Are you sure you want to buy this?',
@@ -303,6 +304,7 @@ export default {
     subjectBookGain: 'Each unlocked subject gives 10 books per hour, no matter the grade.',
     passCapGain: 'Every 10 global levels, you get a free exam pass and raise the capacity by 1.',
     passAutoconvert: 'Receiving an exam pass when your capacity is full automatically converts it to {0} golden dust.',
+    buyPass: 'Buy an exam pass for',
     library: 'Library',
     practice: 'Practice',
     practiceDescription: 'Practice this subject without time pressure, but gain no rewards or grades',
@@ -327,15 +329,14 @@ export default {
     literature: {
       name: 'Literature',
       subtitle: 'Write sentences',
-      description: 'Type the displayed word to raise your score. Gain 1 score for each word typed. The word will stay until it is typed correctly, and you can see the next 2 words. As your grade increases, words get longer and new letters and characters are introduced.',
+      description: 'Type the displayed sentence to raise your score. Gain 1 score for each sentence typed. The same sentence will stay until it is typed correctly, and you can see the beginning of the next sentence. As your grade increases, sentences and words get longer and new special characters are introduced.',
     },
     history: {
       name: 'History',
       subtitle: 'Remember dates',
-      description: 'Remember the displayed dates and enter them correctly to raise your score. At the start you can see all dates. When you have remembered them, you can continue to the questions, which makes the dates disappear. You will be asked 5 questions about the dates you just saw, and gain 1 score for each correct date. If you manage to answer all 5 questions correctly, you get 1 bonus score for each 3 seconds remaining. As your grade increases, years get larger and more dates get introduced.',
+      description: 'Remember the displayed dates and enter them correctly to raise your score. At the start you can see all dates. When you have remembered them, you can continue to the questions, which makes the dates disappear. You will be asked 5 questions about the dates you just saw, and gain 1 score for each correct date. As your grade increases, years get larger and more dates get introduced.',
       year: 'Year {0}',
-      perfectScore: 'You answered all 5 questions correctly! You\'ll receive 1 bonus score for every 3 seconds left.',
-      imperfectScore: 'You answered all 5 questions. Wait until the lesson is over.'
+      examInfo: 'In exams, you get two chances to remember dates. After your first answers are done, you get a new set of dates and questions'
     },
     art: {
       name: 'Art',
@@ -1146,9 +1147,10 @@ export default {
     depthDweller: 'Depth dweller',
     dweller: {
       title: 'Current / highest possible dweller depth',
-      description1: 'For each completed meter of current depth, your prestige reward increases.',
-      description2: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
-      description3: 'Maximum dweller depth'
+      description1: 'The dweller starts fast and gets slower the closer it gets to its limit.',
+      description2: 'For each completed meter of current depth, your prestige reward increases.',
+      description3: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
+      description4: 'Maximum dweller depth'
     },
     pickaxePower: 'This is the power of your pickaxe and your base damage. Increase it by crafting a better pickaxe.',
     damage: 'Damage',

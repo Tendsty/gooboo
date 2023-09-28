@@ -10,6 +10,14 @@ export default {
   onActive: 'when active',
   onDuplicate: 'on duplicate',
   activeDescription: 'Duplicate cards can be equipped, and will be consumed on next prestige to activate their effects. These effects stay active until you prestige again.',
+  equipTutorial: {
+    description: 'You collected your first cards! Most cards have an effect when active, to enable it you have to do the following:',
+    1: 'Collect a duplicate of a card',
+    2: 'Unlock prestige for one of your main features',
+    3: 'Go to the prestige menu and equip the duplicate card (must be the same feature as seen at the bottom right of the card)',
+    4: 'Perform a prestige with the card equipped',
+    5: 'The card will get consumed and its effects are active until you prestige again'
+  },
   card: {
     'MI-0001': 'Basic equipment',
     'MI-0002': 'Unused pickaxe',

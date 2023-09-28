@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { SCHOOL_BOOK_BASE_GAIN, SCHOOL_EXAM_DUST_MIN } from "../js/constants";
+import { SCHOOL_BOOK_BASE_GAIN, SCHOOL_EXAM_DUST_MIN, SCHOOL_EXAM_PASS_PRICE } from "../js/constants";
 
 export default {
     namespaced: true,
@@ -45,6 +45,12 @@ export default {
                 commit('updateKey', {name: key, key: 'grade', value: 0});
                 commit('updateKey', {name: key, key: 'currentGrade', value: 0});
                 commit('updateKey', {name: key, key: 'progress', value: 0});
+            }
+        },
+        buyPass({ rootGetters, dispatch }) {
+            if (rootGetters['currency/value']('gem_sapphire') >= SCHOOL_EXAM_PASS_PRICE) {
+                dispatch('currency/gain', {feature: 'school', name: 'examPass', amount: 1}, {root: true});
+                dispatch('currency/spend', {feature: 'gem', name: 'sapphire', amount: SCHOOL_EXAM_PASS_PRICE}, {root: true});
             }
         }
     }

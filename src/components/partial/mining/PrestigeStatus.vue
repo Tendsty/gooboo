@@ -11,7 +11,8 @@
             </v-chip>
           </template>
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description1') }}</div>
-          <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description2', $formatNum(dwellerPercent)) }}</div>
+          <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description2') }}</div>
+          <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description3', $formatNum(dwellerPercent)) }}</div>
         </gb-tooltip>
         <gb-tooltip v-if="maxDweller0 > 0" :min-width="0">
           <template v-slot:activator="{ on, attrs }">
@@ -20,7 +21,7 @@
               {{ Math.round(maxDweller0 * 100) / 100 }}m
             </v-chip>
           </template>
-          <div class="mt-0">{{ $vuetify.lang.t('$vuetify.mining.dweller.description3') }}</div>
+          <div class="mt-0">{{ $vuetify.lang.t('$vuetify.mining.dweller.description4') }}</div>
         </gb-tooltip>
         <gb-tooltip v-if="maxDweller1 > 0" :min-width="0">
           <template v-slot:activator="{ on, attrs }">
@@ -29,7 +30,7 @@
               {{ Math.round(maxDweller1 * 100) / 100 }}m
             </v-chip>
           </template>
-          <div class="mt-0">{{ $vuetify.lang.t('$vuetify.mining.dweller.description3') }}</div>
+          <div class="mt-0">{{ $vuetify.lang.t('$vuetify.mining.dweller.description4') }}</div>
         </gb-tooltip>
       </div>
     </template>

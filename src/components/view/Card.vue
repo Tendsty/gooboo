@@ -35,6 +35,16 @@
         <display-row class="mt-0" v-for="subitem in item.reward" :key="`stat-${ key }-${ subitem.name }`" :name="subitem.name" :type="subitem.type" :after="subitem.value(item.amount)"></display-row>
       </gb-tooltip>
     </div>
+    <div v-if="canSeeTutorial" class="d-flex justify-center ma-2">
+      <alert-text type="info" style="max-width: 600px;">
+        <div>
+          <div class="mb-2">{{ $vuetify.lang.t(`$vuetify.card.equipTutorial.description`) }}</div>
+          <ol>
+            <li v-for="i in 5" :key="`equip-tutorial-${ i }`">{{ $vuetify.lang.t(`$vuetify.card.equipTutorial.${ i }`) }}</li>
+          </ol>
+        </div>
+      </alert-text>
+    </div>
     <div class="ma-2">
       <v-expansion-panels accordion>
         <v-expansion-panel v-for="(coll, key) in collection" :key="'collection-' + key">
@@ -64,12 +74,13 @@
 import { mapState } from 'vuex';
 import CardItem from '../partial/card/CardItem.vue';
 import CardPack from '../partial/card/CardPack.vue';
+import AlertText from '../partial/render/AlertText.vue';
 import MultStat from '../partial/render/MultStat.vue';
 import DisplayRow from '../partial/upgrade/DisplayRow.vue';
 import MultName from '../render/MultName.vue';
 
 export default {
-  components: { CardItem, MultStat, CardPack, MultName, DisplayRow },
+  components: { CardItem, MultStat, CardPack, MultName, DisplayRow, AlertText },
   data: () => ({
     selectedPack: null
   }),
@@ -77,7 +88,8 @@ export default {
     ...mapState({
       feature: state => state.card.feature,
       unlock: state => state.unlock,
-      packList: state => state.card.pack
+      packList: state => state.card.pack,
+      stat: state => state.stat
     }),
     collection() {
       let obj = {};
@@ -112,6 +124,15 @@ export default {
         }
       }
       return obj;
+    },
+    canSeeTutorial() {
+      let hasCards = false;
+      for (const [, elem] of Object.entries(this.unlockedFeature)) {
+        if (elem.amount > 0) {
+          hasCards = true;
+        }
+      }
+      return hasCards && this.stat.mining_prestigeCount.total <= 0 && this.stat.village_prestigeCount.total <= 0 && this.stat.horde_prestigeCount.total <= 0;
     }
   },
   methods: {

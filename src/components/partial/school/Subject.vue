@@ -58,8 +58,10 @@
           <span>{{ $vuetify.lang.t(`$vuetify.school.takeExamCost`) }}&nbsp;</span>
           <price-tag currency="school_examPass" :amount="1"></price-tag>
         </div>
+        <alert-text type="info" v-if="name === 'history'">{{ $vuetify.lang.t(`$vuetify.school.history.examInfo`) }}</alert-text>
         <alert-text type="error" v-if="subject.currentGrade <= 0">
           <span>{{ $vuetify.lang.t(`$vuetify.school.takeExamNoF`) }}</span>
+          <span v-if="subject.grade <= 0">&nbsp;{{ $vuetify.lang.t(`$vuetify.school.takeExamNoFStudy`) }}</span>
           <span v-if="subject.grade <= 0">&nbsp;{{ $vuetify.lang.t(`$vuetify.school.takeExamNoFStudy`) }}</span>
         </alert-text>
       </gb-tooltip>
