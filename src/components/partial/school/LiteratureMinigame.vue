@@ -1,30 +1,51 @@
 <style scoped>
 .question-text {
-  font-size: 52px;
+  font-size: 32px;
+  line-height: 1.25;
   font-family: "Roboto Mono";
 }
 .question-text-mobile {
-  font-size: 40px;
+  font-size: 24px;
+  line-height: 1.1;
 }
 .answer-input {
   width: 300px;
   max-width: 300px;
 }
-.question-0 {
-  opacity: 0.4;
-}
-.question-1 {
+.question-hint {
   opacity: 0.25;
+}
+.question-blur-0 {
+  opacity: 0.2;
+}
+.question-blur-1 {
+  opacity: 0.15;
+}
+.question-blur-2 {
+  opacity: 0.1;
+}
+.question-blur-3 {
+  opacity: 0.05;
 }
 </style>
 
 <template>
   <div>
-    <div class="d-flex justify-center question-text flex-wrap my-2" :class="{'question-text-mobile': $vuetify.breakpoint.xsOnly}">
+    <div class="d-flex flex-column align-center question-text text-center flex-wrap my-2" :class="{'question-text-mobile': $vuetify.breakpoint.xsOnly}">
       <div class="mx-2">
-        <span v-for="(letter, key) in currentWord" :key="`letter-${ key }`" :class="{'success--text': letter.status === 1, 'error--text': letter.status === 2}">{{ letter.char }}</span>
+        <span
+          v-for="(letter, key) in currentWord"
+          :key="`letter-${ key }`"
+          :class="{'success--text': letter.status === 1, 'error--text': letter.status === 2}"
+        >{{ (letter.status === 2 && letter.char === ' ') ? '_' : letter.char }}</span>
       </div>
-      <div class="mx-2" :class="`question-${ key }`" v-for="(word, key) in words.slice(1)" :key="`word-${ key }`">{{ word }}</div>
+      <div class="mx-2" v-for="(word, key) in words.slice(1)" :key="`word-${ key }`">
+        <span class="question-hint">{{ word.slice(0, 25) }}</span>
+        <span class="question-blur-0" v-if="word.length > 25">{{ word.charAt(25) }}</span>
+        <span class="question-blur-1" v-if="word.length > 26">{{ word.charAt(26) }}</span>
+        <span class="question-blur-2" v-if="word.length > 27">{{ word.charAt(27) }}</span>
+        <span class="question-blur-3" v-if="word.length > 28">{{ word.charAt(28) }}</span>
+      </div>
     </div>
     <div class="d-flex justify-center align-center">
       <v-text-field class="answer-input ma-1" clearable outlined hide-details autofocus v-model="answer"></v-text-field>
@@ -33,61 +54,17 @@
 </template>
 
 <script>
-import { randomInt, randomRound } from '../../../js/utils/random';
+import { generateSentence } from '../../../js/utils/words';
+
 export default {
   data: () => ({
     score: 0,
     elo: 0,
-    characters: 'asdf',
     words: [],
-    wordLength: 0,
     answer: ''
   }),
   mounted() {
-    this.elo = this.$store.state.school.literature.elo;
-    this.wordLength = this.elo / 250 + 3.5;
-    if (this.elo >= 100) {
-      this.characters += 'jkl';
-    }
-    if (this.elo >= 200) {
-      this.characters += 'gh';
-    }
-    if (this.elo >= 300) {
-      this.characters += 'qweruiop';
-    }
-    if (this.elo >= 400) {
-      this.characters += 'xcvm';
-    }
-    if (this.elo >= 500) {
-      this.characters += 'ztybn';
-    }
-    if (this.elo >= 600) {
-      this.characters += 'ASDFJKLGH';
-    }
-    if (this.elo >= 700) {
-      this.characters += 'QWERUIOP';
-    }
-    if (this.elo >= 800) {
-      this.characters += 'XCVMZTYBN';
-    }
-    if (this.elo >= 1000) {
-      this.characters += '1234567890';
-    }
-    if (this.elo >= 1200) {
-      this.characters += '<>,;.:';
-    }
-    if (this.elo >= 1400) {
-      this.characters += '!@#$&*';
-    }
-    if (this.elo >= 1600) {
-      this.characters += '\'"?|/\\';
-    }
-    if (this.elo >= 1800) {
-      this.characters += '()[]{}';
-    }
-    if (this.elo >= 2000) {
-      this.characters += '-_+=';
-    }
+    this.elo = this.$store.state.school.literature.currentGrade;
     this.newWords();
   },
   computed: {
@@ -105,13 +82,8 @@ export default {
   },
   methods: {
     newWords() {
-      while (this.words.length < 3) {
-        let answer = '';
-        for (let i = 0, n = randomRound(this.wordLength); i < n; i++) {
-          const chosenChar = randomInt(0, this.characters.length - 1);
-          answer += this.characters.substring(chosenChar, chosenChar + 1);
-        }
-        this.words.push(answer);
+      while (this.words.length < 2) {
+        this.words.push(generateSentence(this.elo));
       }
     }
   },

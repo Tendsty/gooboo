@@ -692,6 +692,10 @@ export default {
     name: 'Goldstaub',
     description: 'Er strahlt eine seltsame Energie aus, als ob er die Zeit selbst verändern könnte'
   },
+  school_examPass: {
+    name: 'Prüfungspass',
+    description: 'Seltsam, bei unserer alten Schule haben wir sowas nicht gebraucht. Hier sind sie nötig, um eine Prüfung zu schreiben, und jeden Tag bekommst du einen neuen'
+  },
   treasure_fragment: {
     name: 'Fragment',
     description: 'Zerbrochenes Stück eines Schatzes'

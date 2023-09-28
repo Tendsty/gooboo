@@ -692,6 +692,10 @@ export default {
     name: 'Golden dust',
     description: 'It emits a strange energy, as if it could change time itself'
   },
+  school_examPass: {
+    name: 'Exam pass',
+    description: 'Strange, we didn\'t need them at our old school. Here they are needed to take an exam, and you get a new one every day'
+  },
   treasure_fragment: {
     name: 'Fragment',
     description: 'Broken pieces of treasure'

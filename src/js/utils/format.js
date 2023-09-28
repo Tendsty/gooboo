@@ -97,35 +97,35 @@ function formatTime(seconds, minimumUnit = 's') {
 }
 
 /**
- * Converts an elo number to a readable grade
- * @param {Number} elo Elo to convert
+ * Converts a grade number to a readable grade
+ * @param {Number} grade Grade to convert
  * @returns A string with the grade name
  */
-function formatGrade(elo) {
-    const eloTier = Math.floor(elo / 100);
-    if (eloTier >= 30) {
-        return 'S+' + (eloTier - 27);
+function formatGrade(grade) {
+    if (grade <= 0) {
+        return 'F';
+    }
+    if (grade >= 16) {
+        return 'S+' + (grade - 14);
     }
     let eloString = '';
-    const gradeTier = Math.floor(eloTier / 5);
-    const gradeModifier = eloTier % 5;
+    const newGrade = grade - 1;
+    const gradeTier = Math.floor(newGrade / 3);
+    const gradeModifier = newGrade % 3;
     switch (gradeTier) {
         case 0:
-            eloString = 'F';
-            break;
-        case 1:
             eloString = 'D';
             break;
-        case 2:
+        case 1:
             eloString = 'C';
             break;
-        case 3:
+        case 2:
             eloString = 'B';
             break;
-        case 4:
+        case 3:
             eloString = 'A';
             break;
-        case 5:
+        case 4:
             eloString = 'S';
             break;
         default:
@@ -134,18 +134,12 @@ function formatGrade(elo) {
     }
     switch (gradeModifier) {
         case 0:
-            eloString += '--';
-            break;
-        case 1:
             eloString += '-';
             break;
+        case 1:
+            break;
         case 2:
-            break;
-        case 3:
             eloString += '+';
-            break;
-        case 4:
-            eloString += '++';
             break;
     }
     return eloString;

@@ -21,7 +21,10 @@
             <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.patchnote.versionType.${ versionType }`) }}</div>
           </gb-tooltip>
           <span>{{ version }}</span>
-          <span v-if="versionType !== 'patch'"><v-icon>mdi-circle-small</v-icon>{{ $vuetify.lang.t(`$vuetify.patchnote.v.${version.slice(0, -2)}`) }}</span>
+          <template v-if="versionType !== 'patch'">
+            <v-icon>mdi-circle-small</v-icon>
+            <span>{{ $vuetify.lang.t(`$vuetify.patchnote.v.${version.slice(0, -2)}`) }}</span>
+          </template>
         </span>
         <span class="text-right mr-2">{{ $vuetify.lang.t(`$vuetify.patchnote.releasedOn`) }} {{ dayDisplay }}</span>
       </span>

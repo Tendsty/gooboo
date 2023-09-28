@@ -37,6 +37,9 @@ export default {
     }),
     gemShopFeatures() {
       let arr = [...this.mainFeatures];
+      if (this.$store.state.unlock.schoolFeature.use) {
+        arr.push({...this.$store.state.system.features.school, name: 'school'});
+      }
       if (this.$store.state.unlock.eventFeature.use) {
         arr.push({...this.$store.state.system.features.gem, name: 'gem'});
       }

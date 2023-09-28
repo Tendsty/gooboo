@@ -68,7 +68,7 @@
         </div>
       </div>
     </template>
-    <currency-tooltip :name="name">
+    <currency-tooltip :name="name" :gain-base="gainBase">
       <slot></slot>
     </currency-tooltip>
   </gb-tooltip>
@@ -111,6 +111,11 @@ export default {
       default: null
     },
     customPercent: {
+      type: Number,
+      required: false,
+      default: null
+    },
+    gainBase: {
       type: Number,
       required: false,
       default: null

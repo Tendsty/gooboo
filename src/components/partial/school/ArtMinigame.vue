@@ -69,9 +69,9 @@ export default {
     solution: null
   }),
   mounted() {
-    this.elo = this.$store.state.school.art.elo;
-    this.answerCount = Math.floor(this.elo / 200 + 4);
-    this.changeAmount = 100000 / (this.elo + 1000);
+    this.elo = this.$store.state.school.art.currentGrade;
+    this.answerCount = Math.floor(this.elo / 1.2 + 4);
+    this.changeAmount = 100000 / (this.elo * 3 / 500 + 1000);
     this.newQuestion();
   },
   methods: {

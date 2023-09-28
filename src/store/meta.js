@@ -86,6 +86,7 @@ export default {
             commit('updateKey', {key: 'globalLevelParts', value: {}});
         },
         globalLevelPart({ state, rootState, rootGetters, commit, dispatch }, o) {
+            const oldGlobalLevel = state.globalLevel;
             if (state.globalLevelParts[o.key] === undefined || state.globalLevelParts[o.key] < o.amount) {
                 commit('updateSubkey', {name: 'globalLevelParts', key: o.key, value: o.amount});
                 commit('updateGlobalLevel');
@@ -128,7 +129,17 @@ export default {
                 if (state.globalLevel >= 40 && !rootState.relic.friendlyBat.found) {
                     dispatch('relic/find', 'friendlyBat', {root: true});
                 }
+
+                // Update exam passes
+                const globalLevelDiff = Math.floor(state.globalLevel / 10) - Math.floor(oldGlobalLevel / 10);
+                if (globalLevelDiff > 0) {
+                    dispatch('updatePassCap');
+                    dispatch('currency/gain', {feature: 'school', name: 'examPass', amount: globalLevelDiff}, {root: true});
+                }
             }
+        },
+        updatePassCap({ state, dispatch }) {
+            dispatch('mult/setBase', {name: 'currencySchoolExamPassCap', key: 'globalLevel', value: Math.max(Math.floor(state.globalLevel / 10), 1)}, {root: true});
         }
     }
 }

@@ -118,8 +118,11 @@ export default {
     },
     school: {
       get: 'Lesson complete!',
+      getExam: 'Exam complete!',
       score: 'Score: {0}',
-      grade: '+{0}% grade',
+      perfectScore: '(PERFECT!)',
+      grade: '{0}% grade',
+      gradePlus: 'Your grade improved!',
       dust: '+{0} Golden dust'
     },
     update: {
@@ -153,6 +156,7 @@ export default {
     summerFestivalCellBuy: 'You are about to buy a new island cell, which costs rare currency. Are you sure you want to buy this?',
     farmCrop: 'You are about to plant crops that cost rare currency. Are you sure you want to buy this?',
     treasure: 'You are about to buy a new treasure, which costs rare currency. Are you sure you want to buy this?',
+    schoolExamPass: 'You are about to buy an exam pass, which cost rare currency. Are you sure you want to buy this?',
     treasureFragment: 'You are about to buy fragments, which cost rare currency. Are you sure you want to buy this?',
     treasureDelete: 'You are about to destroy a treasure, which will give fragments in return. Are you sure you want to buy this?',
     casinoBingoBuy: 'You are about to buy a bingo card, which costs rare currency. Are you sure you want to buy this?',
@@ -295,48 +299,49 @@ export default {
     school: 'School',
     beginner: {
       title: 'Still learning',
-      description: 'You are new to this school, reducing your golden dust reward to {0}%. Reach a higher global level to reduce this penalty, and remove it entirely by reaching global level 250.'
+      description: 'You are new to this school, reducing your golden dust reward to {0}%. Reach a higher global level to reduce this penalty, and remove it entirely by reaching global level 175.'
     },
+    subjectBookGain: 'Each unlocked subject gives 10 books per hour, no matter the grade.',
+    passCapGain: 'Every 10 global levels, you get a free exam pass and raise the capacity by 1.',
+    passAutoconvert: 'Receiving an exam pass when your capacity is full automatically converts it to {0} golden dust.',
+    buyPass: 'Buy an exam pass for',
     library: 'Library',
-    play: 'Play',
+    practice: 'Practice',
+    practiceDescription: 'Practice this subject without time pressure, but gain no rewards or grades',
+    study: 'Study',
+    studyDescription: 'Get the highest possible score in {0}, and get a chance to improve your grade if you study on your best grade. Depending on your score, you gain (or lose) progress to the next grade. An average score of {1} is expected.',
+    studyNoF: 'You cannot lose grade progress at F grade.',
+    takeExam: 'Take exam',
+    takeExamDescription: 'Take an exam, where you have {0} to get the highest possible score. You will receive golden dust as reward ({1} - {2}, based on your performance and chosen grade). If you achieve a score of {3}, the exam is rated as perfect and you unlock the next grade.',
+    takeExamNoF: 'You cannot take exams at F grade.',
+    takeExamNoFStudy: 'Study a bit first!',
+    takeExamCost: 'Requires',
     answer: 'Answer',
     begin: 'The lesson begins!',
-    grade: 'Grade and elo',
-    gradeDescription: 'Perform well in a subject to raise your elo, or lower it if you perform bad. Your elo is hidden and influences your grade progression and golden dust gain. It also makes this subject harder.',
-    bookDescription: 'Each hour, lose {0}% grade to gain {1} books. Higher grades yield more books.',
-    elo: {
-      farBelow: 'Your elo is far below your grade, resulting in no grade progression at all.',
-      below: 'Your elo is below your grade, resulting in a slower grade progression.',
-      equal: 'Your elo roughly matches your grade, resulting in an average grade progression.',
-      above: 'Your elo is above your grade, resulting in an accelerated grade progression.',
-      farAbove: 'Your elo is far above your grade, resulting in an extremely fast grade progression.'
-    },
+    beginExam: 'The exam begins!',
+    grade: 'Grades',
+    gradeDescription: 'Grades determine the difficulty of this subject. You can switch between grades at any time and unlock better grades by studying enough or getting a perfect exam score.',
     math: {
       name: 'Math',
       subtitle: 'Solve equations',
-      description: 'Answer various equations to raise your score. Gain 1 score for each correct answer, and lose 1 score for each wrong answer (cannot go below 0). As your elo increases, numbers get bigger and new operators are introduced.',
-      grade: 'To maintain your elo in this subject, reach a score of 5.'
+      description: 'Answer various equations to raise your score. Gain 1 score for each correct answer, and lose 1 score for each wrong answer (cannot go below 0). As your grade increases, numbers get bigger and new operators are introduced.',
     },
     literature: {
       name: 'Literature',
-      subtitle: 'Write texts',
-      description: 'Type the displayed word to raise your score. Gain 1 score for each word typed. The word will stay until it is typed correctly, and you can see the next 2 words. As your elo increases, words get longer and new letters and characters are introduced.',
-      grade: 'To maintain your elo in this subject, reach a score of 5.'
+      subtitle: 'Write sentences',
+      description: 'Type the displayed sentence to raise your score. Gain 1 score for each sentence typed. The same sentence will stay until it is typed correctly, and you can see the beginning of the next sentence. As your grade increases, sentences and words get longer and new special characters are introduced.',
     },
     history: {
       name: 'History',
       subtitle: 'Remember dates',
-      description: 'Remember the displayed dates and enter them correctly to raise your score. At the start you can see all dates. When you have remembered them, you can continue to the questions, which makes the dates disappear. You will be asked 5 questions about the dates you just saw, and gain 1 score for each correct date. If you manage to answer all 5 questions correctly, you get 1 bonus score for each 3 seconds remaining. As your elo increases, years get larger and more dates get introduced.',
-      grade: 'To maintain your elo in this subject, reach a score of 2.5.',
+      description: 'Remember the displayed dates and enter them correctly to raise your score. At the start you can see all dates. When you have remembered them, you can continue to the questions, which makes the dates disappear. You will be asked 5 questions about the dates you just saw, and gain 1 score for each correct date. As your grade increases, years get larger and more dates get introduced.',
       year: 'Year {0}',
-      perfectScore: 'You answered all 5 questions correctly! You\'ll receive 1 bonus score for every 3 seconds left.',
-      imperfectScore: 'You answered all 5 questions. Wait until the lesson is over.'
+      examInfo: 'In exams, you get two chances to remember dates. After your first answers are done, you get a new set of dates and questions'
     },
     art: {
       name: 'Art',
       subtitle: 'Mix colors',
-      description: 'Guess colors correctly to raise your score. Two colors will be displayed, guess the result from mixing them. Gain 1 score for each correct answer, and lose 1 score for each wrong answer (cannot go below 0). As your elo increases, more answers get added and the answers get more sililar.',
-      grade: 'To maintain your elo in this subject, reach a score of 5.'
+      description: 'Guess colors correctly to raise your score. Two colors will be displayed, guess the result from mixing them. Gain 1 score for each correct answer, and lose 1 score for each wrong answer (cannot go below 0). As your grade increases, more answers get added and the answers get more sililar.',
     }
   },
   hourglass: {
@@ -1110,6 +1115,7 @@ export default {
     base: 'Base value',
     min: 'Minimum value',
     max: 'Maximum value',
+    globalLevel: 'Global level',
     prestige: 'Prestige',
     graniteBreaksMult: 'Log10 breaks',
     miningTemperature: 'Temperature',
@@ -1141,9 +1147,10 @@ export default {
     depthDweller: 'Depth dweller',
     dweller: {
       title: 'Current / highest possible dweller depth',
-      description1: 'For each completed meter of current depth, your prestige reward increases.',
-      description2: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
-      description3: 'Maximum dweller depth'
+      description1: 'The dweller starts fast and gets slower the closer it gets to its limit.',
+      description2: 'For each completed meter of current depth, your prestige reward increases.',
+      description3: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
+      description4: 'Maximum dweller depth'
     },
     pickaxePower: 'This is the power of your pickaxe and your base damage. Increase it by crafting a better pickaxe.',
     damage: 'Damage',

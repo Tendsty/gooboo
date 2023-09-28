@@ -54,8 +54,11 @@ export const TREASURE_FRAGMENT_BUY_GAIN = 4;
 export const GEM_SPEED_BASE = 3600;
 export const GEM_SPEED_PER_ACHIEVEMENT = 0.01;
 
-export const SCHOOL_BOOK_BASE_GAIN = 5;
-export const SCHOOL_GRADE_DECAY = 1;
+export const SCHOOL_BOOK_BASE_GAIN = 10;
+export const SCHOOL_STUDY_TIME = 40;
+export const SCHOOL_EXAM_TIME = 75;
+export const SCHOOL_EXAM_DUST_MIN = 600;
+export const SCHOOL_EXAM_PASS_PRICE = 35;
 
 export const CASINO_BINGO_CARD_COST = 75;
 export const CASINO_WHEEL_COST = 50;

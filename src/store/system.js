@@ -6,7 +6,7 @@ import { simpleHash } from "../js/utils/random";
 export default {
     namespaced: true,
     state: {
-        version: '1.0.1',
+        version: '1.1.0',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -793,6 +793,10 @@ export default {
                             dispatch('farm/replantAll', null, {root: true});
                             break;
                     }
+                    break;
+                }
+                case 'schoolExamPass': {
+                    dispatch('school/buyPass', null, {root: true});
                     break;
                 }
                 case 'treasure': {

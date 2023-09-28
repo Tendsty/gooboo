@@ -14,8 +14,11 @@ import treasure from "./modules/treasure";
 import general from "./modules/general";
 import event from "./modules/event";
 import cryolab from "./modules/cryolab";
+import v1_1_0 from "./modules/migration/v1_1_0";
 
-const migrations = {};
+const migrations = {
+    '1.1.0': v1_1_0
+};
 
 export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile }
 
@@ -37,6 +40,7 @@ function cleanStore() {
         store.dispatch(`${ module }/cleanState`);
     });
     store.commit('upgrade/initCache');
+    store.dispatch('meta/updatePassCap');
     store.commit('mining/updateKey', {key: 'durability', value: store.getters['mining/currentDurability']});
     store.dispatch('horde/updatePlayerStats');
     store.dispatch('horde/updateEnemyStats');
@@ -153,6 +157,7 @@ function loadFile(file) {
                 store.commit('unlock/unlock', key);
             }
         }
+        store.dispatch('meta/updatePassCap');
     }
     if (save.settings) {
         for (const [key, elem] of Object.entries(save.settings)) {

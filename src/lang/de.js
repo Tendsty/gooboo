@@ -118,8 +118,11 @@ export default {
     },
     school: {
       get: 'Schulschluss!',
+      getExam: 'Prüfungsschluss!',
       score: 'Punktzahl: {0}',
-      grade: '+{0}% Note',
+      perfectScore: '(PERFEKT!)',
+      grade: '{0}% Note',
+      gradePlus: 'Deine Note hat sich verbessert!',
       dust: '+{0} Goldstaub'
     },
     update: {
@@ -153,6 +156,7 @@ export default {
     summerFestivalCellBuy: 'Ein neues Inselfeld kostet seltene Währung. Möchtest du das wirklich kaufen?',
     farmCrop: 'Die ausgewählten Pflanzen kosten seltene Währung. Möchtest du das wirklich kaufen?',
     treasure: 'Ein neuer Schatz kostet seltene Währung. Möchtest du das wirklich kaufen?',
+    schoolExamPass: 'Ein Prüfungspass kostet seltene Währung. Möchtest du das wirklich kaufen?',
     treasureFragment: 'Fragmente kosten seltene Währung. Möchtest du das wirklich kaufen?',
     treasureDelete: 'Möchtest du den Schatz wirklich zerstören und in Fragmente umwandeln?',
     casinoBingoBuy: 'Eine Bingokarte kostet seltene Währung. Möchtest du das wirklich kaufen?',
@@ -295,48 +299,49 @@ export default {
     school: 'Schule',
     beginner: {
       title: 'Noch am Lernen',
-      description: 'Diese Schule ist neu für dich, was deine Goldstaub-Belohnung auf {0}% reduziert. Erreiche eine höhere globale Stufe, um diese Strafe zu reduzieren, und entferne sie ganz, indem du globale Stufe 250 erreichst.'
+      description: 'Diese Schule ist neu für dich, was deine Goldstaub-Belohnung auf {0}% reduziert. Erreiche eine höhere globale Stufe, um diese Strafe zu reduzieren, und entferne sie ganz, indem du globale Stufe 175 erreichst.'
     },
+    subjectBookGain: 'Jedes freigeschaltete Fach bringt 10 Bücher pro Stunde, egal welche Note.',
+    passCapGain: 'Alle 10 globale Stufen erhältst du einen Prüfungspass und die Kapazität erhöht sich um 1.',
+    passAutoconvert: 'Solltest du einen Prüfungspass bei voller Kapazität erhalten, wird er automatisch in {0} Goldstaub umgewandelt.',
+    buyPass: 'Kaufe einen Prüfungspass für',
     library: 'Bücherei',
-    play: 'Spielen',
+    practice: 'Üben',
+    practiceDescription: 'Übe dieses Fach ohne Zeitdruck, aber erhalte keine Belohnung oder Noten',
+    study: 'Lernen',
+    studyDescription: 'Erhalte die höchstmögliche Punktzahl in {0}, und erhalte die Chance, deine Note zu verbessern, wenn du auf deiner besten Note lernst. Abhängig von der Punktzahl erhältst (oder verlierst) du Fortschritt zur nächsten Note. Es wird eine Durchschnittspunktzahl von {1} erwartet.',
+    studyNoF: 'Du kannst auf der Note F keinen Fortschritt verlieren.',
+    takeExam: 'Prüfung',
+    takeExamDescription: 'Lege eine Prüfung ab, wo du {0} Zeit hast, um die höchstmögliche Punktzahl zu erreichen. Du erhältst Goldstaub als Belohnung ({1} - {2}, abhängig von der Punktzahl und der ausgewählten Note). Solltest du eine Punktzahl von {3} erreichen, wird die Prüfung als perfekt bewertet und du schaltest die nächste Note frei.',
+    takeExamNoF: 'Du kannst auf der Note F keine Prüfung ablegen.',
+    takeExamNoFStudy: 'Lerne erst mal etwas!',
+    takeExamCost: 'Benötigt',
     answer: 'Antworten',
     begin: 'Der Unterricht beginnt!',
-    grade: 'Noten und Elo',
-    gradeDescription: 'Schneide in einem Fach gut ab, um deine Elo zu erhöhen, oder senke die Elo durch schlechte Ergebnisse. Deine Elo ist versteckt und beeinflusst deinen Notenfortschritt und die Goldstaubbelohnung. Außerdem erschwert Elo das Fach.',
-    bookDescription: 'Jede Stunde wird die Note um {0}% reduziert, um {1} Bücher zu erhalten. Höhere Noten geben mehr Bücher.',
-    elo: {
-      farBelow: 'Deine Elo ist deutlich unter deiner Note, wodurch kein Notenfortschritt stattfindet.',
-      below: 'Deine Elo ist unter deiner Note, was den Notenfortschritt verlangsamt.',
-      equal: 'Deine Elo entspricht etwa deiner Note, der Notenfortschritt ist durchschnittlich.',
-      above: 'Deine Elo ist über deiner Note, was den Notenfortschritt beschleunigt.',
-      farAbove: 'Deine Elo ist deutlich über deiner Note, was den Notenfortschritt extrem beschleunigt.'
-    },
+    beginExam: 'Die Prüfung beginnt!',
+    grade: 'Noten',
+    gradeDescription: 'Noten bestimmen die Schwierigkeit vom Fach. Du kannst jederzeit zwischen den Noten wechseln und schaltest neue Noten frei, indem du genug lernst oder eine perfekte Prüfung ablegst.',
     math: {
       name: 'Mathe',
       subtitle: 'Gleichungen lösen',
-      description: 'Löse verschiedene Gleichungen, um Punkte zu sammeln. Erhalte 1 Punkt für jede richtige Antwort, und verliere 1 Punkt für jede falsche Antwort (Punkte können nicht unter 0 fallen). Mit steigender Elo werden die Zahlen größer und neue Rechenarten werden eingeführt.',
-      grade: 'Erreiche eine Punktzahl von 5, um deine Elo zu bewahren.'
+      description: 'Löse verschiedene Gleichungen, um Punkte zu sammeln. Erhalte 1 Punkt für jede richtige Antwort, und verliere 1 Punkt für jede falsche Antwort (Punkte können nicht unter 0 fallen). Mit steigender Note werden die Zahlen größer und neue Rechenarten werden eingeführt.'
     },
     literature: {
       name: 'Literatur',
-      subtitle: 'Texte schreiben',
-      description: 'Tippe das angezeigte Wort ab, um Punkte zu sammeln. Erhalte 1 Punkt für jedes getippte Wort. Das Wort bleibt, bis es richtig getippt wurde, und die nächsten 2 Wörter sind auch sichtbar. Mit steigender Elo werden die Wörter länger und enthalten neue Buchstaben und Zeichen.',
-      grade: 'Erreiche eine Punktzahl von 5, um deine Elo zu bewahren.'
+      subtitle: 'Sätze schreiben',
+      description: 'Tippe den angezeigten Satz ab, um Punkte zu sammeln. Erhalte 1 Punkt für jeden getippten Satz. Der Satz bleibt, bis er richtig getippt wurde, und der Anfang vom nächsten Satz ist auch sichtbar. Mit steigender Note werden die Sätze und Wörter länger und enthalten neue Sonderzeichen.'
     },
     history: {
       name: 'Geschichte',
       subtitle: 'Daten merken',
-      description: 'Merke dir die angezeigten Jahreszahlen und gebe sie korrekt wieder, um Punkte zu sammeln. Am Anfang sind alle Jahreszahlen sichtbar. Wenn du dir sie gemerkt hast, kannst du zu den Fragen gehen, wodurch die Jahreszahlen verschwinden. Dir werden 5 Fragen zu den Jahreszahlen gestellt, und für jede richtige Antwort gibt es 1 Punkt. Solltest du alle 5 Fragen richtig beantworten, bekommst du 1 Bonuspunkt je 3 übrige Sekunden. Mit steigender Elo werden die Jahreszahlen größer und es tauchen mehr Jahreszahlen auf.',
-      grade: 'Erreiche eine Punktzahl von 2,5, um deine Elo zu bewahren.',
+      description: 'Merke dir die angezeigten Jahreszahlen und gebe sie korrekt wieder, um Punkte zu sammeln. Am Anfang sind alle Jahreszahlen sichtbar. Wenn du dir sie gemerkt hast, kannst du zu den Fragen gehen, wodurch die Jahreszahlen verschwinden. Dir werden 5 Fragen zu den Jahreszahlen gestellt, und für jede richtige Antwort gibt es 1 Punkt. Solltest du alle 5 Fragen richtig beantworten, bekommst du 1 Bonuspunkt je 3 übrige Sekunden. Mit steigender Note werden die Jahreszahlen größer und es tauchen mehr Jahreszahlen auf.',
       year: 'Jahr {0}',
-      perfectScore: 'Du hast alle 5 Fragen richtig beantwortet! Dafür gibt es 1 Bonuspunkt je 3 übrige Sekunden.',
-      imperfectScore: 'Du hast alle 5 Fragen beantwortet. Warte, bis der Unterricht vorbei ist.'
+      examInfo: 'In Prüfungen bekommst du zwei Chancen, dir Jahreszahlen zu merken. Nachdem du mit den ersten Antworten fertig bist, kommt eine neue Liste mit Jahreszahlen und Fragen'
     },
     art: {
       name: 'Kunst',
       subtitle: 'Mische Farben',
-      description: 'Errate Farben, um Punkte zu sammeln. Zwei Farben werden angezeigt, errate das Ergebnis, was beim Mischen entsteht. Erhalte 1 Punkt für jede richtige Antwort, und verliere 1 Punkt für jede falsche Antwort (Punkte können nicht unter 0 fallen). Mit steigender Elo werden mehr Antworten hinzugefügt und die Antworten sehen sich ähnlicher.',
-      grade: 'Erreiche eine Punktzahl von 5, um deine Elo zu bewahren.'
+      description: 'Errate Farben, um Punkte zu sammeln. Zwei Farben werden angezeigt, errate das Ergebnis, was beim Mischen entsteht. Erhalte 1 Punkt für jede richtige Antwort, und verliere 1 Punkt für jede falsche Antwort (Punkte können nicht unter 0 fallen). Mit steigender Note werden mehr Antworten hinzugefügt und die Antworten sehen sich ähnlicher.'
     }
   },
   hourglass: {
@@ -1110,6 +1115,7 @@ export default {
     base: 'Grundwert',
     min: 'Mindestwert',
     max: 'Höchstwert',
+    globalLevel: 'Globale Stufe',
     prestige: 'Prestige',
     graniteBreaksMult: 'Log10 Zerbrechungen',
     miningTemperature: 'Temperatur',
@@ -1141,9 +1147,10 @@ export default {
     depthDweller: 'Tiefengräber',
     dweller: {
       title: 'Aktuelle / höchstmögliche Gräbertiefe',
-      description1: 'Für jeden abgeschlossenen Meter aktueller Gräbertiefe erhöht sich die Prestigebelohnung.',
-      description2: 'Die höchstmögliche Gräbertiefe beträgt {0}% der maximalen Tiefe im Bergwerk.',
-      description3: 'Maximale Gräbertiefe'
+      description1: 'Der Gräber startet schnell und wird langsamer, je näher er an sein Limit kommt.',
+      description2: 'Für jeden abgeschlossenen Meter aktueller Gräbertiefe erhöht sich die Prestigebelohnung.',
+      description3: 'Die höchstmögliche Gräbertiefe beträgt {0}% der maximalen Tiefe im Bergwerk.',
+      description4: 'Maximale Gräbertiefe'
     },
     pickaxePower: 'Dies ist die Kraft deiner Spitzhacke und dein Grundschaden. Erhöhe es, indem du eine bessere Spitzhacke herstellst.',
     damage: 'Schaden',

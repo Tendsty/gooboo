@@ -49,6 +49,9 @@
         <v-btn class="ma-1" @click="causeError">
           <v-icon>mdi-close</v-icon>
         </v-btn>
+        <v-btn class="ma-1" @click="maxSchool">
+          <v-icon>mdi-school</v-icon>
+        </v-btn>
         <div class="ma-1">Total time spent: {{ $formatTime(totalTime) }}</div>
         <div>Today is {{ currentDay }}</div>
       </div>
@@ -544,6 +547,13 @@ export default {
     },
     setToCurrentDate() {
       this.testingDate = this.$store.state.system.timestamp * 1000;
+    },
+    maxSchool() {
+      for (const [key, elem] of Object.entries(this.$store.state.school)) {
+        if (elem.unlock === null || this.$store.state.unlock[elem.unlock].see) {
+          this.$store.commit('school/updateKey', {name: key, key: 'grade', value: 100});
+        }
+      }
     }
   },
   watch: {

@@ -497,6 +497,22 @@ export default {
         },
         pool: gemPool
     },
+    school_examPass: {
+        type: 'currency',
+        item: 'school_examPass',
+        weight: 1,
+        requirement() {
+            return store.state.unlock.schoolFeature.see;
+        },
+        roundAmount: true,
+        pool: {
+            merchant: {cap: 5, price: {gem_topaz: 90}},
+            bingo1: {amount: 2},
+            bingo2: {amount: 8},
+            wheelOfFortune1: {amount: 2},
+            wheelOfFortune2: {amount: 8}
+        }
+    },
     treasure_fragment: {
         type: 'currency',
         item: 'treasure_fragment',

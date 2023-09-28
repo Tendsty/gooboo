@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { capitalize } from "../js/utils/format";
+import { SCHOOL_EXAM_DUST_MIN } from "../js/constants";
 
 const typeList = {
     gem: [
@@ -164,6 +165,9 @@ export default {
             }
             if (name === 'gem_topaz' && gained < amount && rootState.event.bank_loan > 0) {
                 commit('event/updateKey', {key: 'bank_loan', value: Math.max(0, rootState.event.bank_loan + gained - amount)}, {root: true});
+            }
+            if (name === 'school_examPass' && gained < amount) {
+                dispatch('gain', {feature: 'school', name: 'goldenDust', amount: (amount - gained) * SCHOOL_EXAM_DUST_MIN * rootGetters['school/dustMult']});
             }
             commit('stat/increaseTo', {feature, name: o.name + 'Max', value: state[name].value}, {root: true});
             dispatch('updateCurrencyMult', name);

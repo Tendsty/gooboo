@@ -477,6 +477,9 @@ export default {
   // Gem premium upgrades
   gem_topazBag: 'Topaz bag',
 
+  // School premium upgrades
+  school_student: 'Student',
+
   // Treasure premium upgrades
   treasure_moreSlots: 'More slots',
   treasure_moreFragments: 'More fragments',

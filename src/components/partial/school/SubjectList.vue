@@ -1,7 +1,24 @@
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-center ma-1">
-      <currency class="ma-1" name="school_book"></currency>
+    <div class="d-flex flex-wrap justify-center align-center ma-1">
+      <currency class="ma-1" name="school_book" :gain-base="subjectsBookGain">
+        <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.subjectBookGain`) }}</alert-text>
+      </currency>
+      <currency class="ma-1" name="school_examPass">
+        <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.passCapGain`) }}</alert-text>
+        <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.passAutoconvert`, $formatNum(goldenDustAuto)) }}</alert-text>
+      </currency>
+      <gb-tooltip v-if="canBuyPass" :min-width="0">
+        <template v-slot:activator="{ on, attrs }">
+          <div v-bind="attrs" v-on="on">
+            <v-btn small class="ma-1 pa-1" color="success" min-width="32" min-height="32" :disabled="!canAffordPass" @click="buyPass"><v-icon>mdi-plus</v-icon></v-btn>
+          </div>
+        </template>
+        <div class="d-flex align-center mt-0">
+          <span>{{ $vuetify.lang.t(`$vuetify.school.buyPass`) }}</span>
+          <price-tag class="ml-1" currency="gem_sapphire" :amount="passPrice"></price-tag>
+        </div>
+      </gb-tooltip>
       <gb-tooltip v-if="dustMult < 1" :title-text="$vuetify.lang.t(`$vuetify.school.beginner.title`)">
         <template v-slot:activator="{ on, attrs }">
           <v-icon large class="ml-2" v-bind="attrs" v-on="on">mdi-head-question</v-icon>
@@ -11,7 +28,13 @@
     </div>
     <v-row no-gutters>
       <v-col v-for="subject in subjects" :key="subject" cols="12" lg="6" xl="4">
-        <subject :name="subject" class="ma-1" @play="play(subject)"></subject>
+        <subject
+          :name="subject"
+          class="ma-1"
+          @practice="practice(subject)"
+          @study="study(subject)"
+          @exam="exam(subject)"
+        ></subject>
       </v-col>
     </v-row>
   </div>
@@ -19,14 +42,18 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { SCHOOL_EXAM_DUST_MIN, SCHOOL_EXAM_PASS_PRICE } from '../../../js/constants';
 import Currency from '../../render/Currency.vue';
+import PriceTag from '../../render/PriceTag.vue';
+import AlertText from '../render/AlertText.vue';
 import Subject from './Subject.vue';
 
 export default {
-  components: { Subject, Currency },
+  components: { Subject, Currency, AlertText, PriceTag },
   computed: {
     ...mapGetters({
-      dustMult: 'school/dustMult'
+      dustMult: 'school/dustMult',
+      subjectsBookGain: 'school/subjectsBookGain'
     }),
     subjects() {
       let arr = [];
@@ -36,11 +63,40 @@ export default {
         }
       }
       return arr;
+    },
+    goldenDustAuto() {
+      return Math.round(SCHOOL_EXAM_DUST_MIN * this.$store.getters['school/dustMult']);
+    },
+    canBuyPass() {
+      return this.$store.getters['currency/value']('school_examPass') <= 0;
+    },
+    canAffordPass() {
+      return this.$store.getters['currency/value']('gem_sapphire') >= SCHOOL_EXAM_PASS_PRICE;
+    },
+    passPrice() {
+      return SCHOOL_EXAM_PASS_PRICE;
     }
   },
   methods: {
-    play(name) {
-      this.$emit('play', name);
+    practice(name) {
+      this.$emit('practice', name);
+    },
+    study(name) {
+      this.$emit('study', name);
+    },
+    exam(name) {
+      this.$emit('exam', name);
+    },
+    buyPass() {
+      if (this.$store.state.system.settings.confirm.items.gem.value) {
+        this.$store.commit('system/updateKey', {key: 'confirm', value: {
+          type: 'schoolExamPass',
+          price: {gem_sapphire: SCHOOL_EXAM_PASS_PRICE},
+          gain: {school_examPass: 1},
+        }});
+      } else {
+        this.$store.dispatch('school/buyPass', this.name);
+      }
     }
   }
 }
