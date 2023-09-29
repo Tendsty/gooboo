@@ -33,7 +33,6 @@ function newGame(startTick = true) {
     });
 
     store.commit('upgrade/initCache');
-    store.dispatch('meta/updatePassCap');
     store.dispatch('system/updateCurrentDay');
 
     if (startTick) {

@@ -302,8 +302,7 @@ export default {
       description: 'You are new to this school, reducing your golden dust reward to {0}%. Reach a higher global level to reduce this penalty, and remove it entirely by reaching global level 175.'
     },
     subjectBookGain: 'Each unlocked subject gives 10 books per hour, no matter the grade.',
-    passCapGain: 'Every 10 global levels, you get a free exam pass and raise the capacity by 1.',
-    passAutoconvert: 'Receiving an exam pass when your capacity is full automatically converts it to {0} golden dust.',
+    passCapGain: 'Every 10 global levels, you get an extra exam pass.',
     buyPass: 'Buy an exam pass for',
     library: 'Library',
     practice: 'Practice',

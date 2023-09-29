@@ -65,6 +65,11 @@ export default {
     39: 'Sollten die Prüfungspässe ausgehen, kannst du einen für 35 Saphire kaufen',
     40: 'Prüfungspässe wurden zu den möglichen Belohnungen von einigen kleinen Events hinzugefügt',
     41: 'Einstellungen wurden für kleine - mittelgroße Displays auf dem "Neues Spiel"-Bildschirm zentriert',
+
+    // v1.1.1
+    42: 'Bonus-Goldstaub-Belohnung bei Prüfungen pro Note',
+    43: 'Perfekte Prüfungsergebnisse schalten nur noch die nächste Note frei, wenn die Prüfung auf der besten Note abgelegt wurde',
+    44: 'Prüfungspass-Kapazität entfernt',
   },
   v: {
     1: {

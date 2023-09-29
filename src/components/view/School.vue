@@ -219,18 +219,21 @@ export default {
         this.$store.dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: dustGain});
         this.$store.dispatch('note/find', 'school_1');
 
-        const newGrade = this.currentSubject.grade + 1;
-        this.$store.commit('stat/increaseTo', {feature: 'school', name: 'highestGrade', value: newGrade});
-        this.$store.commit('school/updateKey', {name: this.playing, key: 'grade', value: newGrade});
-        this.$store.commit('school/updateKey', {name: this.playing, key: 'currentGrade', value: newGrade});
-        this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: 0});
+        const gradePlus = this.currentSubject.currentGrade >= this.currentSubject.grade;
+        if (gradePlus) {
+          const newGrade = this.currentSubject.grade + 1;
+          this.$store.commit('stat/increaseTo', {feature: 'school', name: 'highestGrade', value: newGrade});
+          this.$store.commit('school/updateKey', {name: this.playing, key: 'grade', value: newGrade});
+          this.$store.commit('school/updateKey', {name: this.playing, key: 'currentGrade', value: newGrade});
+          this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: 0});
+        }
 
         this.$store.commit('system/addNotification', {color: 'success', timeout: 5000, message: {
           type: 'school',
           isExam: true,
           score: value,
           perfectScore: true,
-          gradePlus: true,
+          gradePlus,
           dust: dustGain
         }});
 

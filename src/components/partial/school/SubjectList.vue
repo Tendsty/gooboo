@@ -6,7 +6,6 @@
       </currency>
       <currency class="ma-1" name="school_examPass">
         <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.passCapGain`) }}</alert-text>
-        <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.passAutoconvert`, $formatNum(goldenDustAuto)) }}</alert-text>
       </currency>
       <gb-tooltip v-if="canBuyPass" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
@@ -42,7 +41,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { SCHOOL_EXAM_DUST_MIN, SCHOOL_EXAM_PASS_PRICE } from '../../../js/constants';
+import { SCHOOL_EXAM_PASS_PRICE } from '../../../js/constants';
 import Currency from '../../render/Currency.vue';
 import PriceTag from '../../render/PriceTag.vue';
 import AlertText from '../render/AlertText.vue';
@@ -63,9 +62,6 @@ export default {
         }
       }
       return arr;
-    },
-    goldenDustAuto() {
-      return Math.round(SCHOOL_EXAM_DUST_MIN * this.$store.getters['school/dustMult']);
     },
     canBuyPass() {
       return this.$store.getters['currency/value']('school_examPass') <= 0;

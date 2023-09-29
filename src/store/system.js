@@ -6,7 +6,7 @@ import { simpleHash } from "../js/utils/random";
 export default {
     namespaced: true,
     state: {
-        version: '1.1.0',
+        version: '1.1.1',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
