@@ -23,7 +23,7 @@ export default {
     currency: {
         book: {color: 'brown', icon: 'mdi-book', gainMult: {display: 'perHour'}, showGainMult: true},
         goldenDust: {color: 'amber', icon: 'mdi-timer-sand', overcapMult: 0, capMult: {baseValue: buildNum(10, 'K')}},
-        examPass: {color: 'pale-blue', icon: 'mdi-ticket-account', overcapMult: 0, capMult: {}}
+        examPass: {color: 'pale-blue', icon: 'mdi-ticket-account'}
     },
     upgrade: upgradePremium,
     note: buildArray(5).map(() => 'g'),

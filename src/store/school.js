@@ -18,7 +18,7 @@ export default {
             return Math.min(1, (rootState.meta.globalLevel + 25) / 200);
         },
         examReward: (state, getters) => (score, grade) => {
-            let dustBase = SCHOOL_EXAM_DUST_MIN + SCHOOL_EXAM_DUST_MIN * 0.5 * ((grade - 1) * 0.15 + score) * Math.min(score * 2, 1);
+            let dustBase = SCHOOL_EXAM_DUST_MIN + SCHOOL_EXAM_DUST_MIN * 0.5 * ((grade - 1) * 0.35 + score) * Math.min(score * 2, 1);
             if (dustBase > 1000) {
                 dustBase = Math.pow((dustBase - 900) / 100, 0.8) * 100 + 900;
             }

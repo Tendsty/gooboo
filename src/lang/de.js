@@ -302,8 +302,7 @@ export default {
       description: 'Diese Schule ist neu für dich, was deine Goldstaub-Belohnung auf {0}% reduziert. Erreiche eine höhere globale Stufe, um diese Strafe zu reduzieren, und entferne sie ganz, indem du globale Stufe 175 erreichst.'
     },
     subjectBookGain: 'Jedes freigeschaltete Fach bringt 10 Bücher pro Stunde, egal welche Note.',
-    passCapGain: 'Alle 10 globale Stufen erhältst du einen Prüfungspass und die Kapazität erhöht sich um 1.',
-    passAutoconvert: 'Solltest du einen Prüfungspass bei voller Kapazität erhalten, wird er automatisch in {0} Goldstaub umgewandelt.',
+    passCapGain: 'Alle 10 globale Stufen erhältst du einen zusätzlichen Prüfungspass.',
     buyPass: 'Kaufe einen Prüfungspass für',
     library: 'Bücherei',
     practice: 'Üben',

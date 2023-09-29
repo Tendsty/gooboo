@@ -40,7 +40,6 @@ function cleanStore() {
         store.dispatch(`${ module }/cleanState`);
     });
     store.commit('upgrade/initCache');
-    store.dispatch('meta/updatePassCap');
     store.commit('mining/updateKey', {key: 'durability', value: store.getters['mining/currentDurability']});
     store.dispatch('horde/updatePlayerStats');
     store.dispatch('horde/updateEnemyStats');
@@ -157,7 +156,6 @@ function loadFile(file) {
                 store.commit('unlock/unlock', key);
             }
         }
-        store.dispatch('meta/updatePassCap');
     }
     if (save.settings) {
         for (const [key, elem] of Object.entries(save.settings)) {

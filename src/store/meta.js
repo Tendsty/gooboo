@@ -133,13 +133,9 @@ export default {
                 // Update exam passes
                 const globalLevelDiff = Math.floor(state.globalLevel / 10) - Math.floor(oldGlobalLevel / 10);
                 if (globalLevelDiff > 0) {
-                    dispatch('updatePassCap');
                     dispatch('currency/gain', {feature: 'school', name: 'examPass', amount: globalLevelDiff}, {root: true});
                 }
             }
-        },
-        updatePassCap({ state, dispatch }) {
-            dispatch('mult/setBase', {name: 'currencySchoolExamPassCap', key: 'globalLevel', value: Math.max(Math.floor(state.globalLevel / 10), 1)}, {root: true});
         }
     }
 }

@@ -62,7 +62,6 @@
         <alert-text type="error" v-if="subject.currentGrade <= 0">
           <span>{{ $vuetify.lang.t(`$vuetify.school.takeExamNoF`) }}</span>
           <span v-if="subject.grade <= 0">&nbsp;{{ $vuetify.lang.t(`$vuetify.school.takeExamNoFStudy`) }}</span>
-          <span v-if="subject.grade <= 0">&nbsp;{{ $vuetify.lang.t(`$vuetify.school.takeExamNoFStudy`) }}</span>
         </alert-text>
       </gb-tooltip>
     </v-card-actions>

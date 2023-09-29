@@ -65,6 +65,11 @@ export default {
     39: 'When out of exam passes, you can buy one for 35 sapphires',
     40: 'Added exam passes to the reward pool of some small events',
     41: 'Centered settings on the new game screen for smaller - medium display sizes',
+
+    // v1.1.1
+    42: 'Bonus exam golden dust reward per grade',
+    43: 'Getting a perfect exam now only unlocks the next grade if you did it on your best grade',
+    44: 'Exam pass capacity removed',
   },
   v: {
     1: {
