@@ -22,6 +22,7 @@ export default {
     capTooLow: 'Capacity too low',
     equip: 'Equip',
     unequip: 'Unequip',
+    unequipAll: 'Unequip all',
     max: 'Max',
     free: 'Free',
     capacity: 'Capacity',
@@ -59,6 +60,7 @@ export default {
     inventory: 'Inventory',
     newGame: 'New game',
     levelSuffix: 'level',
+    delete: 'Delete',
     playedBefore: {
       0: 'Already played before? Load your savefile ',
       1: 'here'
@@ -1021,12 +1023,17 @@ export default {
         icon: 'Icon only',
         text: 'Text only',
         both: 'Icon and text'
+      },
+      relativeUpgradeStats: {
+        name: 'Relative upgrade stats',
+        description: 'Shows the difference instead of before / after values'
       }
     },
     automation: {
       name: 'Automation',
       progressMining: {
-        name: 'Mining autoprogress limit'
+        name: 'Mining autoprogress limit',
+        description: 'When breaking a rock for the first time, you automatically advance to the next depth if breaking it takes X seconds or less'
       },
       fightHordeBoss: {
         name: 'Autofight horde boss'
@@ -1089,6 +1096,9 @@ export default {
       },
       cardPackContent: {
         name: 'Card pack content'
+      },
+      cropReady: {
+        name: 'Crop ready'
       }
     },
     confirm: {
@@ -1147,7 +1157,7 @@ export default {
     dweller: {
       title: 'Current / highest possible dweller depth',
       description1: 'The dweller starts fast and gets slower the closer it gets to its limit.',
-      description2: 'For each completed meter of current depth, your prestige reward increases.',
+      description2: 'For each completed meter of current dweller depth, your prestige reward increases.',
       description3: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
       description4: 'Maximum dweller depth'
     },
@@ -1266,6 +1276,9 @@ export default {
     zone: 'Zone',
     player: 'Player',
     enemy: 'Enemy',
+    loadoutName: 'Loadout name',
+    newLoadout: 'New loadout',
+    noLoadouts: 'No loadouts',
     monsterPartHint: 'Go to zone 10+ and reach enemy #101 to discover a new currency! That currency is essential to progess further, as it helps you raise your bone capacity.',
     enemyDescription: 'Each enemy in the same zone has x{0} attack, x{1} health and +{2}% bones compared to the previous enemy. This is enemy #{3} and has x{4} attack, x{5} health and +{6}% bones. All of these effects reset when you die.',
     enemySigil1: {
@@ -1297,7 +1310,7 @@ export default {
     respawnDescription: 'How much time you need to recover from dying',
     reviveDescription: 'Instead of dying, use a revive to get healed to full health',
     critDescription: 'Regular attacks have a chance to deal increased damage. Crit chance can reach values over 100%, in which case the attack damage gets multiplied multiple times',
-    toxicDescription: 'Deals poison damage equal to a percentage of damage this deals on attack',
+    toxicDescription: 'Deals poison damage (biological) equal to a percentage of damage this deals on attack',
     divisionShieldDescription: 'Divide all damage you take by (Division shield + 1) and lose 1 division shield after being attacked',
     firstStrikeDescription: 'Deal bonus magical damage if this is your first attack',
     spellbladeDescription: 'Deal bonus magical damage after using an equipment effect. For equipment effects with a cooldown of below 10 seconds, this does not always work',
@@ -1364,6 +1377,7 @@ export default {
     fighting: 'Fighting',
     items: {
       name: 'Equipment',
+      inactive: 'Inactive equipment effects recover their cooldown at {0}% of the usual rate',
       dagger: 'Dagger',
       shirt: 'Shirt',
       guardianAngel: 'Guardian angel',
@@ -1440,7 +1454,7 @@ export default {
         1: 'highest zone bones'
       },
       stun: {
-        0: 'Stun the enemy',
+        0: 'Stun this enemy',
         1: 'times'
       },
       revive: {
@@ -1449,7 +1463,7 @@ export default {
       },
       removeAttack: {
         0: 'Remove',
-        1: 'enemy attack'
+        1: 'attack from this enemy'
       },
       poison: {
         0: 'Apply',
@@ -1461,11 +1475,11 @@ export default {
       },
       permanentAttack: {
         0: 'Increase attack by',
-        1: ''
+        1: '(until prestige)'
       },
       permanentHealth: {
         0: 'Increase health by',
-        1: ''
+        1: '(until prestige)'
       }
     },
     heirloom: {

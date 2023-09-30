@@ -22,6 +22,7 @@ export default {
     capTooLow: 'Kapazität zu gering',
     equip: 'Ausrüsten',
     unequip: 'Ablegen',
+    unequipAll: 'Alle ablegen',
     max: 'Max',
     free: 'Kostenlos',
     capacity: 'Kapazität',
@@ -59,6 +60,7 @@ export default {
     inventory: 'Inventar',
     newGame: 'Neues Spiel',
     levelSuffix: 'Stufe',
+    delete: 'Löschen',
     playedBefore: {
       0: 'Schon mal gespielt? Lade deinen Spielstand ',
       1: 'hier'
@@ -1021,12 +1023,17 @@ export default {
         icon: 'Nur Symbol',
         text: 'Nur Text',
         both: 'Symbol und Text'
+      },
+      relativeUpgradeStats: {
+        name: 'Relative Verbesserungswerte',
+        description: 'Zeigt den Unterschied anstatt vorher / nacher Werte'
       }
     },
     automation: {
       name: 'Automatisierung',
       progressMining: {
-        name: 'Bergbau: Autofortschritt-Limit'
+        name: 'Bergbau: Autofortschritt-Limit',
+        description: 'Wenn ein Stein das erste Mal zerbrochen wird, gehst du automatisch zur nächsten Tiefe, wenn der Stein in X Sekunden oder weniger zerbrochen wird'
       },
       fightHordeBoss: {
         name: 'Horde: Boss automatisch bekämpfen'
@@ -1089,6 +1096,9 @@ export default {
       },
       cardPackContent: {
         name: 'Kartenpaket-Inhalt'
+      },
+      cropReady: {
+        name: 'Pflanze reif'
       }
     },
     confirm: {
@@ -1266,6 +1276,9 @@ export default {
     zone: 'Zone',
     player: 'Spieler',
     enemy: 'Gegner',
+    loadoutName: 'Set-Name',
+    newLoadout: 'Neues Set',
+    noLoadouts: 'Keine Sets vorhanden',
     monsterPartHint: 'Gehe zu Zone 10+ und erreiche Gegner #101, um eine neue Währung zu entdecken! Diese Währung ist essentiell, um weiter fortzuschreiten, da sie beim Erhöhen der Knochen-Kapazität hilft.',
     enemyDescription: 'Jeder Gegner in der selben Zone hat x{0} Angriff, x{1} Leben und +{2}% Knochen im Vergleich zum vorherigen Gegner. Dies ist Gegner #{3} und dieser hat x{4} Angriff, x{5} Leben und +{6}% Knochen. All diese Effekte werden bei deinem Tod zurückgesetzt.',
     enemySigil1: {
@@ -1297,7 +1310,7 @@ export default {
     respawnDescription: 'Wie viel Zeit du benötigst, um dich vom Tod zu erholen',
     reviveDescription: 'Anstatt zu sterben, wird eine Wiederbelebung benutzt, um die Leben voll aufzufüllen',
     critDescription: 'Normale Angriffe haben eine Chance, zusätzlichen Schaden anzurichten. Die Kritische Chance kann über 100% hinausgehen, dann wird der Angriffswert mehrfach multipliziert',
-    toxicDescription: 'Richtet Giftschaden abhängig vom verursachten Schaden pro Angriff an',
+    toxicDescription: 'Richtet Giftschaden (biologisch) abhängig vom verursachten Schaden pro Angriff an',
     divisionShieldDescription: 'Teile jeden erlittenen Schaden durch (Teilungsschild + 1) und verliere 1 Teilungsschild nach eingehenden Angriffen',
     firstStrikeDescription: 'Richte zusätzlichen magischen Schaden an, wenn das dein erster Angriff ist',
     spellbladeDescription: 'Richte zusätzlichen magischen Schaden an, nachdem du einen Ausrüstungseffekt benutzt hast. Das funktioniert bei Ausrüstungseffekten mit einer Abklingszeit von unter 10 Sekunden nicht immer',
@@ -1364,6 +1377,7 @@ export default {
     fighting: 'Im Kampf',
     items: {
       name: 'Ausrüstung',
+      inactive: 'Inaktive Gegenstandseffekte erholen sich von der Abklingzeit mit {0}% der normalen Geschwindigkeit',
       dagger: 'Dolch',
       shirt: 'Hemd',
       guardianAngel: 'Schutzengel',
@@ -1440,7 +1454,7 @@ export default {
         1: 'Knochen der höchsten Zone'
       },
       stun: {
-        0: 'Betäube den Gegner',
+        0: 'Betäube diesen Gegner',
         1: 'Mal'
       },
       revive: {
@@ -1449,7 +1463,7 @@ export default {
       },
       removeAttack: {
         0: 'Entferne',
-        1: 'Angriff des Gegners'
+        1: 'Angriff dieses Gegners'
       },
       poison: {
         0: 'Verursache',
@@ -1461,11 +1475,11 @@ export default {
       },
       permanentAttack: {
         0: 'Erhöhe den Angriff um',
-        1: ''
+        1: '(bis zum Prestige)'
       },
       permanentHealth: {
         0: 'Erhöhe die Leben um',
-        1: ''
+        1: '(bis zum Prestige)'
       }
     },
     heirloom: {

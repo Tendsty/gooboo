@@ -161,6 +161,7 @@ export default {
             for (const [key] of Object.entries(state.items)) {
                 commit('resetMult', key);
             }
+            commit('clearCache');
         },
         addToGroup({ state, rootState, rootGetters, commit }, o) {
             let group = [...state.items[o.mult].group];

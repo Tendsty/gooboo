@@ -75,6 +75,7 @@ export default {
     1: {
       0: 'Ein explosiver Anfang',
       1: 'Direktor ersetzt!',
+      2: '???',
     }
   }
 }

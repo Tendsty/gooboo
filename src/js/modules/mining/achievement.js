@@ -29,5 +29,6 @@ export default {
     coal: {value: () => store.state.stat.mining_coal.total, milestones: lvl => Math.pow(2.5, lvl) * 100, relic: {2: 'coalBrick'}},
     resin: {value: () => store.state.stat.mining_resin.total, milestones: lvl => Math.pow(2, lvl) * 50, relic: {3: 'honeyPot'}},
     craftingWasted: {value: () => store.state.stat.mining_craftingWasted.total, secret: true, display: 'boolean', cap: 1, milestones: () => 1},
+    dwellerCapHit: {value: () => store.state.stat.mining_dwellerCapHit.total, secret: true, display: 'boolean', cap: 1, milestones: () => 1},
     craftingLuck: {value: () => store.state.stat.mining_craftingLuck.total, default: 1, secret: true, cap: 1, milestones: () => buildNum(1, 'M')},
 }

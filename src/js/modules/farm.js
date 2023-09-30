@@ -102,6 +102,7 @@ export default {
                 }
             });
         });
+        store.dispatch('farm/updateGrownHint');
     },
     unlock: ['farmFeature', 'farmCropExp', 'farmFertilizer', 'farmAdvancedCardPack', 'farmLuxuryCardPack'],
     stat: {
@@ -228,5 +229,6 @@ export default {
         store.commit('farm/calculateCropUpgradeCaches');
         store.commit('farm/calculateCropBuildingCaches');
         store.dispatch('farm/applyCropPrestige');
+        store.dispatch('farm/updateGrownHint');
     }
 }

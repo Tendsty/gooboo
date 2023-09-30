@@ -23,6 +23,10 @@ export default {
     village_workstation: 'Dieses Gebäude zählt als Arbeitsplatz'
   },
 
+  description: {
+    mining_premiumCraftingSlots: 'Wertet einen deiner Herstellplätze zur Premium-Qualität auf, wodurch Unreinheit halbiert und Reinheit verdoppelt wird'
+  },
+
   // Mining upgrades
   mining_damageUp: 'Schaden +',
   mining_scrapGainUp: 'Schrott-Einkommen +',

@@ -35,7 +35,7 @@ export default {
         {name: 'currencyMiningResinGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
         {name: 'currencyMiningResinCap', type: 'base', value: lvl => lvl}
     ]},
-    premiumCraftingSlots: {type: 'premium', requirement() {
+    premiumCraftingSlots: {type: 'premium', hasDescription: true, requirement() {
         return store.state.unlock.miningPickaxeCrafting.see;
     }, price(lvl) {
         return {gem_ruby: Math.pow(2, lvl) * 30};

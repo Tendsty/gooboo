@@ -9,7 +9,12 @@
   <div class="d-flex align-center">
     <v-icon class="mr-2" :color="status">{{ status === 'success' ? 'mdi-check' : 'mdi-alert' }}</v-icon>
     <v-progress-linear :color="status" :value="percent" rounded height="24">
-      <div class="text-center" :class="{'small-quest-task': $vuetify.breakpoint.xsOnly}">
+      <div class="d-flex justify-center align-center text-center" :class="{'small-quest-task': $vuetify.breakpoint.xsOnly}">
+        <template v-if="feature">
+          <v-icon small class="mr-1">{{ featureIcon }}</v-icon>
+          <span>{{ $vuetify.lang.t(`$vuetify.feature.${ feature }`) }}</span>
+          <v-icon>mdi-circle-small</v-icon>
+        </template>
         <template v-if="task.type === 'stat'">
           <span v-if="currency[task.name]">{{ $vuetify.lang.t(`$vuetify.general.questGained`, $vuetify.lang.t(`$vuetify.currency.${task.name}.name`)) }}</span>
           <span v-else>{{ $vuetify.lang.t(`$vuetify.stat.${task.name}.description`) }}</span>
@@ -95,6 +100,29 @@ export default {
         return 'warning';
       }
       return 'success';
+    },
+    feature() {
+      switch (this.task.type) {
+        case 'stat': {
+          return this.$store.state.stat[this.task.name].feature;
+        }
+        case 'unlock': {
+          return this.task.feature;
+        }
+        case 'upgrade': {
+          return this.$store.state.upgrade.item[this.task.name].feature;
+        }
+        case 'cropLevel': {
+          return 'farm';
+        }
+        case 'equipmentMastery': {
+          return 'horde';
+        }
+      }
+      return null;
+    },
+    featureIcon() {
+      return this.feature ? this.$store.state.system.features[this.feature].icon : null;
     }
   }
 }

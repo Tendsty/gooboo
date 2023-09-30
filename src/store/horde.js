@@ -55,7 +55,9 @@ export default {
         itemAttackMult: 0,
         itemHealthMult: 0,
         fightTime: 0,
-        fightRampage: 0
+        fightRampage: 0,
+        loadout: [],
+        nextLoadoutId: 1
     },
     getters: {
         enemyStats: () => (zone, combo = 0) => {
@@ -305,6 +307,19 @@ export default {
         },
         addSigilZone(state, value) {
             state.sigilZones.push(value);
+        },
+        addEmptyLoadout(state) {
+            state.loadout.push({id: state.nextLoadoutId, name: '#' + (state.loadout.length + 1), content: []});
+            Vue.set(state, 'nextLoadoutId', state.nextLoadoutId + 1);
+        },
+        addExistingLoadout(state, o) {
+            state.loadout.push(o);
+        },
+        updateLoadoutKey(state, o) {
+            Vue.set(state.loadout[o.id], o.key, o.value);
+        },
+        deleteLoadout(state, index) {
+            state.loadout.splice(index, 1);
         }
     },
     actions: {
@@ -322,6 +337,8 @@ export default {
             commit('updateKey', {key: 'itemHealthMult', value: 0});
             commit('updateKey', {key: 'fightTime', value: 0});
             commit('updateKey', {key: 'fightRampage', value: 0});
+            commit('updateKey', {key: 'loadout', value: []});
+            commit('updateKey', {key: 'nextLoadoutId', value: 1});
 
             commit('updateKey', {key: 'player', value: {}});
             commit('updateKey', {key: 'enemy', value: {}});
@@ -447,7 +464,7 @@ export default {
             dispatch('resetStats');
         },
         equipItem({ state, getters, rootGetters, commit, dispatch }, name) {
-            if (!state.items[name].equipped && getters.itemsEquipped < rootGetters['mult/get']('hordeMaxItems')) {
+            if (state.items[name] && !state.items[name].equipped && getters.itemsEquipped < rootGetters['mult/get']('hordeMaxItems')) {
                 commit('updateItemKey', {name, key: 'equipped', value: true});
                 dispatch('applyItemEffects', name);
                 dispatch('resetStats');
@@ -455,7 +472,7 @@ export default {
             }
         },
         unequipItem({ state, commit, dispatch }, name) {
-            if (state.items[name].equipped) {
+            if (state.items[name]?.equipped) {
                 commit('updateItemKey', {name, key: 'equipped', value: false});
 
                 state.items[name].stats(state.items[name].level).forEach(elem => {
@@ -812,6 +829,34 @@ export default {
                 dispatch('system/applyEffect', {type: 'mult', name: 'hordeHealth', multKey: `hordeItemPermanent`, value: state.itemHealthMult + 1}, {root: true});
             } else {
                 dispatch('system/resetEffect', {type: 'mult', name: 'hordeHealth', multKey: `hordeItemPermanent`}, {root: true});
+            }
+        },
+        unequipAll({ state, dispatch }) {
+            for (const [key, elem] of Object.entries(state.items)) {
+                if (elem.equipped) {
+                    dispatch('unequipItem', key);
+                }
+            }
+        },
+        equipLoadout({ state, getters, rootGetters, dispatch }, index) {
+            const loadout = state.loadout[index];
+            let freeSlots = rootGetters['mult/get']('hordeMaxItems') - getters.itemsEquipped;
+            if (loadout) {
+                loadout.content.forEach(name => {
+                    const item = state.items[name];
+                    if (freeSlots > 0 && item && !item.equipped) {
+                        dispatch('equipItem', name);
+                        freeSlots--;
+                    }
+                });
+            }
+        },
+        unequipLoadout({ state, dispatch }, index) {
+            const loadout = state.loadout[index];
+            if (loadout) {
+                loadout.content.forEach(name => {
+                    dispatch('unequipItem', name);
+                });
             }
         }
     }

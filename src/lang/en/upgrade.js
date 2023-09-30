@@ -23,6 +23,10 @@ export default {
     village_workstation: 'This building counts as a workstation'
   },
 
+  description: {
+    mining_premiumCraftingSlots: 'Upgrades one of your crafting slots to premium, which halves impurity and doubles purity'
+  },
+
   // Mining upgrades
   mining_damageUp: 'Damage +',
   mining_scrapGainUp: 'Scrap gain +',

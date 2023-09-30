@@ -42,7 +42,7 @@ export default {
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 48}
                 ]},
                 {note: 'general_10', tasks: [
-                    {type: 'unlock', name: 'villageBuildings4'}
+                    {type: 'unlock', name: 'villageBuildings4', feature: 'village'}
                 ]},
                 {note: 'general_11', tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_soulCorrupted', operator: '>=', value: 1000}

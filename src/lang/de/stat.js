@@ -10,7 +10,7 @@ export default {
   },
   mining_maxDepthSpeedrun: {
     achievement: 'Tieflauf',
-    description: 'Maximale Tiefe in unter 15m'
+    description: 'Maximale Tiefe in unter 15 Minuten'
   },
   mining_depthDweller0: {
     achievement: 'Gerade nach unten',
@@ -57,6 +57,10 @@ export default {
   mining_craftingWasted: {
     achievement: 'Verschwendet',
     description: 'Stelle eine Spitzhacke her, die nicht besser als die aktuelle sein kann'
+  },
+  mining_dwellerCapHit: {
+    achievement: 'Grundgestein',
+    description: 'Erreiche die maximale Gräbertiefe'
   },
   mining_craftingLuck: {
     achievement: 'Millionentreffer',
@@ -118,7 +122,7 @@ export default {
   },
   horde_maxZoneSpeedrun: {
     achievement: 'Schnelle Schläge',
-    description: 'Maximale Zone in unter 30m'
+    description: 'Maximale Zone in unter 30 Minuten'
   },
   horde_totalDamage: {
     achievement: 'Krieger',
@@ -218,6 +222,9 @@ export default {
   gallery_cash: {
     achievement: 'Reich',
     description: 'Geld erhalten'
+  },
+  gallery_bestPrestige: {
+    description: 'Meistes Geld in einem Prestige'
   },
   gallery_highestTierIdea: {
     achievement: 'Großhirn',

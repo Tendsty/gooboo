@@ -108,6 +108,7 @@ export default {
                 subtype: o.subtype ?? null,
                 icon: o.icon ?? null,
                 mode,
+                hasDescription: o.hasDescription ?? false,
                 level: 0,
                 bought: 0,
                 highestLevel: 0,

@@ -6,8 +6,12 @@
           <template v-slot:activator="{ on, attrs }">
             <v-chip label small class="ma-1 px-2" v-bind="attrs" v-on="on">
               <v-icon class="mr-2">mdi-pickaxe</v-icon>
-              <span v-if="unlock.miningDepthDweller.use">{{ Math.round(dweller * 100) / 100 }}m / {{ Math.round(dwellerLimit * 100) / 100 }}m</span>
+              <span v-if="unlock.miningDepthDweller.use">
+                <span>{{ Math.round(dweller * 100) / 100 }}m</span>
+                <span v-if="dweller < dwellerLimit">&nbsp;/&nbsp;{{ Math.round(dwellerLimit * 100) / 100 }}m</span>
+              </span>
               <v-icon v-else>mdi-lock</v-icon>
+              <v-icon class="ml-1" v-if="dweller >= dwellerLimit">mdi-check</v-icon>
             </v-chip>
           </template>
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description1') }}</div>

@@ -6,7 +6,7 @@ import { simpleHash } from "../js/utils/random";
 export default {
     namespaced: true,
     state: {
-        version: '1.1.1',
+        version: '1.2.0',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -126,18 +126,21 @@ export default {
                 items: {
                     pause: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     dark: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'switch',
                         value: false,
                         defaultValue: false
                     },
                     autosaveTimer: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'number',
                         min: 10,
                         max: 3600,
@@ -149,6 +152,7 @@ export default {
                     },
                     lang: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'select',
                         items: ['en', 'de'],
                         value: 'en',
@@ -156,6 +160,7 @@ export default {
                     },
                     tabDisplayDesktop: {
                         unlock: null,
+                        hasDescription: false,
                         mobile: false,
                         type: 'select',
                         items: ['icon', 'text', 'both'],
@@ -164,11 +169,19 @@ export default {
                     },
                     tabDisplayMobile: {
                         unlock: null,
+                        hasDescription: false,
                         mobile: true,
                         type: 'select',
                         items: ['icon', 'text', 'both'],
                         value: 'icon',
                         defaultValue: 'icon'
+                    },
+                    relativeUpgradeStats: {
+                        unlock: null,
+                        hasDescription: true,
+                        type: 'switch',
+                        value: false,
+                        defaultValue: false
                     },
                 }
             },
@@ -177,6 +190,7 @@ export default {
                 items: {
                     progressMining: {
                         unlock: null,
+                        hasDescription: true,
                         type: 'number',
                         min: 1,
                         max: 86400,
@@ -188,6 +202,7 @@ export default {
                     },
                     fightHordeBoss: {
                         unlock: 'hordeFeature',
+                        hasDescription: false,
                         type: 'switch',
                         value: false,
                         defaultValue: false
@@ -199,6 +214,7 @@ export default {
                 items: {
                     upgradeListItems: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'number',
                         min: 1,
                         value: 5,
@@ -207,6 +223,7 @@ export default {
                     },
                     cssShadows: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'select',
                         items: [0, 1, 2],
                         value: 2,
@@ -214,6 +231,7 @@ export default {
                     },
                     particleAmount: {
                         unlock: 'gemFeature',
+                        hasDescription: false,
                         type: 'select',
                         items: [0, 1, 2, 3],
                         value: 2,
@@ -221,6 +239,7 @@ export default {
                     },
                     recordAutoplay: {
                         unlock: 'debugFeature',
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
@@ -232,6 +251,7 @@ export default {
                 items: {
                     position: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'select',
                         items: [0, 1, 2, 3, 4, 5],
                         value: 3,
@@ -239,12 +259,14 @@ export default {
                     },
                     autosave: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     backupHint: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'select',
                         items: [0, 1, 2, 3],
                         value: 2,
@@ -252,30 +274,42 @@ export default {
                     },
                     updateCheck: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     note: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     achievement: {
                         unlock: 'achievementFeature',
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     heirloom: {
                         unlock: 'hordeHeirlooms',
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     cardPackContent: {
                         unlock: 'cardFeature',
+                        hasDescription: false,
+                        type: 'switch',
+                        value: true,
+                        defaultValue: true
+                    },
+                    cropReady: {
+                        unlock: 'farmFeature',
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
@@ -287,30 +321,35 @@ export default {
                 items: {
                     prestige: {
                         unlock: null,
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     gem: {
                         unlock: 'gemFeature',
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     eventToken: {
                         unlock: 'eventFeature',
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     farmRareResources: {
                         unlock: 'farmFeature',
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
                     },
                     treasureDelete: {
                         unlock: 'treasureFeature',
+                        hasDescription: false,
                         type: 'switch',
                         value: true,
                         defaultValue: true
@@ -340,6 +379,7 @@ export default {
         oldSavefile: null,
         timeMult: 1,
         noteHint: [],
+        farmHint: false,
         tutorial: {},
         cachePage: {}
     },
@@ -569,6 +609,7 @@ export default {
             commit('updateKey', {key: 'oldSavefile', value: null});
             commit('updateKey', {key: 'timeMult', value: 1});
             commit('updateKey', {key: 'noteHint', value: []});
+            commit('updateKey', {key: 'farmHint', value: false});
 
             for (const [key, elem] of Object.entries(state.features)) {
                 if (elem.currentSubfeature !== undefined) {
@@ -730,13 +771,19 @@ export default {
                 }
             }
         },
-        updateSetting({ commit }, o) {
+        updateSetting({ commit, dispatch }, o) {
             commit('updateSetting', o);
             if (o.category === 'general' && o.name === 'autosaveTimer') {
                 commit('resetAutosaveTimer');
             }
             if (o.category === 'general' && o.name === 'lang') {
                 commit('mult/clearCache', null, {root: true});
+            }
+            if (o.category === 'notification' && o.name === 'note') {
+                commit('updateKey', {key: 'noteHint', value: []});
+            }
+            if (o.category === 'notification' && o.name === 'cropReady') {
+                dispatch('farm/updateGrownHint', null, {root: true});
             }
         },
         updateCurrentDay({ state, rootState, commit, dispatch }) {

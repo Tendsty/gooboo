@@ -75,6 +75,7 @@ export default {
     1: {
       0: 'An explosive beginning',
       1: 'Principal replaced!',
+      2: '???',
     }
   }
 }

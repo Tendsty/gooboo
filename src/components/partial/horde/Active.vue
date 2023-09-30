@@ -28,7 +28,11 @@
         </v-btn>
       </span>
     </template>
-    <div class="text-center mt-0"><v-icon small class="mr-1">mdi-timer</v-icon>{{ $formatTime(cooldown) }}</div>
+    <div class="text-center mt-0">
+      <v-icon small class="mr-1">mdi-timer</v-icon>
+      <span>{{ $formatTime(cooldown) }}</span>
+      <span v-if="item.cooldownLeft > 0">&nbsp;({{ $formatTime(Math.ceil(item.cooldownLeft)) }})</span>
+    </div>
     <div class="mt-0" v-for="(elem, key) in effect" :key="key">
       <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${elem.type}.0`) }} </span>
       <span v-if="['stun', 'revive'].includes(elem.type)">{{ $formatNum(elem.value) }} </span>
@@ -38,13 +42,17 @@
       <span v-else-if="elem.type === 'bone'"> ({{ $formatNum(elem.value * highestBone) }}) </span>
       <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${elem.type}.1`) }}</span>
     </div>
+    <alert-text v-if="item.cooldownLeft > 0 && (!item.equipped || item.passive)" type="info">{{ $vuetify.lang.t(`$vuetify.horde.items.inactive`, $formatNum(cooldownRecover * 100)) }}</alert-text>
   </gb-tooltip>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { HORDE_INACTIVE_ITEM_COOLDOWN } from '../../../js/constants';
+import AlertText from '../render/AlertText.vue';
 
 export default {
+  components: { AlertText },
   props: {
     name: {
       type: String,
@@ -83,6 +91,9 @@ export default {
     },
     playerAttack() {
       return this.$store.getters['mult/get']('hordeAttack');
+    },
+    cooldownRecover() {
+      return HORDE_INACTIVE_ITEM_COOLDOWN;
     }
   },
   methods: {

@@ -91,7 +91,8 @@ export default {
   },
   computed: {
     hasBadge() {
-      return this.name === 'note' && this.$store.state.system.noteHint.length > 0;
+      return (this.name === 'note' && this.$store.state.system.noteHint.length > 0) ||
+             (this.name === 'farm' && this.$store.state.system.farmHint);
     },
     isFrozen() {
       return !!this.$store.state.cryolab[this.name] && this.$store.state.cryolab[this.name].active;
