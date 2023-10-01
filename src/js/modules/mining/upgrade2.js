@@ -25,7 +25,7 @@ export default {
         return {mining_helium: 250};
     }, effect: [
         {name: 'miningDepthDweller', type: 'unlock', value: lvl => lvl >= 1},
-        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(3, lvl)}
+        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
     piston: {subfeature: 1, requirementBase, requirementStat, requirementValue: 20, price(lvl) {
         return {mining_helium: Math.round(Math.pow(1.35, lvl) * 50)};

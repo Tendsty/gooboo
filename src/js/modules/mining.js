@@ -214,7 +214,7 @@ export default {
         // Depth dweller
         if (store.state.unlock.miningDepthDweller.use) {
             const dwellerLimit = store.getters['mining/dwellerLimit'];
-            const dwellerSpeed = store.getters['mult/get']('miningDepthDwellerSpeed', 0.00015) / dwellerLimit;
+            const dwellerSpeed = store.getters['mult/get']('miningDepthDwellerSpeed') / dwellerLimit;
             const newDweller = Math.min(
                 0.1 + dwellerLimit -
                 (0.1 + dwellerLimit - store.state.stat[`mining_depthDweller${subfeature}`].value) *
@@ -254,7 +254,7 @@ export default {
         miningPickaxeCraftingPower: {},
         miningPickaxeCraftingQuality: {},
         miningOreQuality: {baseValue: 1},
-        miningDepthDwellerSpeed: {},
+        miningDepthDwellerSpeed: {baseValue: 0.0001},
         miningDepthDwellerMax: {display: 'percent', baseValue: 0.1},
         miningResinMax: {round: true, baseValue: 1},
         currencyMiningHeliumIncrement: {display: 'percent'},

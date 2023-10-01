@@ -16,8 +16,10 @@ import event from "./modules/event";
 import cryolab from "./modules/cryolab";
 import v1_1_0 from "./modules/migration/v1_1_0";
 import { getDay } from "./utils/date";
+import v1_1_2 from "./modules/migration/v1_1_2";
 
 const migrations = {
+    '1.1.2': v1_1_2,
     '1.1.0': v1_1_0
 };
 

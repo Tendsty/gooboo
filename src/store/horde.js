@@ -109,7 +109,7 @@ export default {
             if (zoneBase < 0) {
                 return 0;
             } else {
-                const baseValue = Math.pow(1.16, zoneBase);
+                const baseValue = Math.pow(1.16, zoneBase) * 1.5;
                 if (isBase) {
                     return baseValue;
                 }

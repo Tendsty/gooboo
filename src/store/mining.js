@@ -300,7 +300,7 @@ export default {
             if (amount > dwellerLimit) {
                 return null;
             }
-            const dwellerSpeed = rootGetters['mult/get']('miningDepthDwellerSpeed', 0.00015) / dwellerLimit;
+            const dwellerSpeed = rootGetters['mult/get']('miningDepthDwellerSpeed') / dwellerLimit;
             return logBase((amount - 0.1 - dwellerLimit) / -(0.1 + dwellerLimit - rootState.stat[`mining_depthDweller${rootState.system.features.mining.currentSubfeature}`].value), 1 - dwellerSpeed);
         }
     },
