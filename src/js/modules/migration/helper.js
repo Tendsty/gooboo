@@ -24,7 +24,7 @@ function addCurrencyToSave(save, currency, amount) {
 }
 
 function raiseUpgradeLevel(save, name, amount) {
-    if (save.upgrade[name] !== undefined) {
+    if (save.upgrade && save.upgrade[name] !== undefined) {
         save.upgrade[name].level += amount;
         save.upgrade[name].highestLevel = Math.max(save.upgrade[name].level, save.upgrade[name].highestLevel);
     }
