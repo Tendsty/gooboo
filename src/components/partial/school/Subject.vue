@@ -59,6 +59,8 @@
           <price-tag currency="school_examPass" :amount="1"></price-tag>
         </div>
         <alert-text type="info" v-if="name === 'history'">{{ $vuetify.lang.t(`$vuetify.school.history.examInfo`) }}</alert-text>
+        <alert-text type="error" v-if="goldenDust.value >= goldenDust.cap">{{ $vuetify.lang.t(`$vuetify.school.examDustFull`) }}</alert-text>
+        <alert-text type="warning" v-else-if="(goldenDust.value + goldenDustMax) > goldenDust.cap">{{ $vuetify.lang.t(`$vuetify.school.examDustOvercap`) }}</alert-text>
         <alert-text type="error" v-if="subject.currentGrade <= 0">
           <span>{{ $vuetify.lang.t(`$vuetify.school.takeExamNoF`) }}</span>
           <span v-if="subject.grade <= 0">&nbsp;{{ $vuetify.lang.t(`$vuetify.school.takeExamNoFStudy`) }}</span>
@@ -91,7 +93,8 @@ export default {
   },
   computed: {
     ...mapState({
-      curr: state => state.currency.school_book
+      curr: state => state.currency.school_book,
+      goldenDust: state => state.currency.school_goldenDust
     }),
     subject() {
       return this.$store.state.school[this.name];

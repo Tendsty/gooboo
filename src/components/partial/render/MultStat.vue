@@ -2,13 +2,13 @@
   <span>
     <span v-if="!hidePrefix">{{ ['mult', 'summerFestivalBuildingMult'].includes(type) ? (isDividing ? '/' : 'x') : (value >= 0 ? '+' : '') }}</span>
     <span v-if="['mult', 'summerFestivalBuildingMult'].includes(type)">{{ $formatNum(isDividing ? (1 / value) : value, true) }}</span>
-    <span v-else-if="display === 'percent'">{{ $formatNum(value * 100, true) }}%</span>
+    <span v-else-if="display === 'percent'">{{ $formatNum(baseValue * 100, true) }}%</span>
     <span v-else-if="display === 'time'">{{ $formatTime(value) }}</span>
-    <span v-else-if="display === 'perSecond'">{{ $formatNum(value, !round) }}/s</span>
-    <span v-else-if="display === 'perHour'">{{ $formatNum(value, !round) }}/h</span>
-    <span v-else-if="display === 'temperature'">{{ $formatNum(value, !round) }}°C</span>
-    <span v-else-if="display === 'mult'">{{ $formatNum(value, !round) }}x</span>
-    <span v-else>{{ $formatNum(value, !round) }}</span>
+    <span v-else-if="display === 'perSecond'">{{ $formatNum(baseValue, !round) }}/s</span>
+    <span v-else-if="display === 'perHour'">{{ $formatNum(baseValue, !round) }}/h</span>
+    <span v-else-if="display === 'temperature'">{{ $formatNum(baseValue, !round) }}°C</span>
+    <span v-else-if="display === 'mult'">{{ $formatNum(baseValue, !round) }}x</span>
+    <span v-else>{{ $formatNum(baseValue, !round) }}</span>
     <span v-if="type === 'bonus' && !hideBonusStar">*</span>
   </span>
 </template>
@@ -60,6 +60,12 @@ export default {
     },
     isDividing() {
       return this.value > 0 && this.value < 1;
+    },
+    roundNearZero() {
+      return this.multItem && this.multItem.roundNearZero;
+    },
+    baseValue() {
+      return (this.roundNearZero && this.value < 0.000000001 && this.value > -0.000000001) ? 0 : this.value;
     }
   }
 }

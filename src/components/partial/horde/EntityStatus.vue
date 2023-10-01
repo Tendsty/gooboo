@@ -131,6 +131,7 @@
             </tr>
           </tbody>
         </v-simple-table>
+        <alert-text v-if="!isPlayer && bossFight" type="info">{{ $vuetify.lang.t(`$vuetify.horde.bossBioResist`) }}</alert-text>
       </gb-tooltip>
     </div>
   </div>

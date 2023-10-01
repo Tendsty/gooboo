@@ -611,7 +611,7 @@ export default {
       return [5, 0].includes(this.snackbarPosition);
     },
     canSeeHourglass() {
-      return this.$store.state.stat.school_goldenDust.total > 0 && (this.screen === 'school' || (this.isOnMainFeature && !this.featureIsFrozen));
+      return this.screen === 'school' || (this.$store.state.stat.school_goldenDust.total > 0 && this.isOnMainFeature && !this.featureIsFrozen);
     },
     canSeeUpdates() {
       return APP_ENV === 'WEB';
@@ -730,9 +730,7 @@ export default {
       }
     },
     openDustDialog() {
-      if (this.isOnMainFeature) {
-        this.dialogDust = true;
-      }
+      this.dialogDust = true;
     }
   },
   watch: {

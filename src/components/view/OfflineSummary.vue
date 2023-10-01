@@ -27,6 +27,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import { getSavefileName } from '../../js/savefile';
 import { getDay } from '../../js/utils/date';
 import { download } from '../../js/utils/file';
 import OfflineFeature from '../render/OfflineFeature.vue';
@@ -65,7 +66,7 @@ export default {
   },
   methods: {
     downloadBackup() {
-      download(JSON.stringify(this.oldSavefile), 'Gooboo_Savefile.json', 'application/json');
+      download(JSON.stringify(this.oldSavefile), getSavefileName(), 'application/json');
     },
     calculateStats() {
       const oldDate = new Date(this.oldSavefile.timestamp * 1000);

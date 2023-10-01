@@ -61,7 +61,8 @@ export default {
     score: 0,
     elo: 0,
     words: [],
-    answer: ''
+    answer: '',
+    highestCorrectChars: 0
   }),
   mounted() {
     this.elo = this.$store.state.school.literature.currentGrade;
@@ -75,9 +76,23 @@ export default {
       let arr = [];
       for (let i = 0, n = this.words[0].length; i < n; i++) {
         const char = this.words[0].charAt(i);
-        arr.push({char, status: this.answer.length > i ? (char === this.answer.charAt(i) ? 1 : 2) : 0});
+        arr.push({char, status: this.currentAnswer.length > i ? (char === this.currentAnswer.charAt(i) ? 1 : 2) : 0});
       }
       return arr;
+    },
+    currentAnswer() {
+      return this.answer.slice(0, 1) === ' ' ? this.answer.slice(1) : this.answer;
+    },
+    correctChars() {
+      let num = 0;
+      for (let i = 0, n = this.words[0].length; i < n; i++) {
+        if (this.words[0].charAt(i) === this.currentAnswer.charAt(i)) {
+          num++;
+        } else {
+          break;
+        }
+      }
+      return num;
     }
   },
   methods: {
@@ -94,12 +109,15 @@ export default {
         if (newVal === null) {
           this.answer = '';
         }
-        if (newVal === this.words[0]) {
+        if (this.currentAnswer === this.words[0]) {
           this.score++;
           this.$emit('score', this.score);
           this.answer = '';
+          this.highestCorrectChars = 0;
           this.words.splice(0, 1);
           this.newWords();
+        } else if (this.correctChars > this.highestCorrectChars) {
+          this.$emit('score', this.score + (this.correctChars / this.words[0].length));
         }
       }
     }

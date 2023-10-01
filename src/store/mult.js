@@ -71,6 +71,7 @@ export default {
                 baseValue: o.baseValue ?? 0,
                 baseCache: o.baseValue ?? 0,
                 group: o.group ?? [],
+                roundNearZero: o.roundNearZero ?? false,
                 multCache: 1,
                 bonusCache: 0,
                 baseValues: {},

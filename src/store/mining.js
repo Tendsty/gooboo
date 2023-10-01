@@ -294,6 +294,14 @@ export default {
             const base = rootGetters['mult/get']('miningEnhancementChanceBase');
             const increment = rootGetters['mult/get']('miningEnhancementChanceIncrement');
             return base * Math.pow(1 / (increment + 1), getters.enhancementLevel);
+        },
+        timeUntilNext: (state, getters, rootState, rootGetters) => (amount) => {
+            const dwellerLimit = getters.dwellerLimit;
+            if (amount > dwellerLimit) {
+                return null;
+            }
+            const dwellerSpeed = rootGetters['mult/get']('miningDepthDwellerSpeed', 0.00015) / dwellerLimit;
+            return logBase((amount - 0.1 - dwellerLimit) / -(0.1 + dwellerLimit - rootState.stat[`mining_depthDweller${rootState.system.features.mining.currentSubfeature}`].value), 1 - dwellerSpeed);
         }
     },
     mutations: {

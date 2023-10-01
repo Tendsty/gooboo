@@ -66,6 +66,7 @@ export default {
     ],
     stat: {
         maxBuilding: {},
+        maxHousing: {},
         timeSpent: {display: 'time'},
         bestPrestige: {},
         prestigeCount: {},

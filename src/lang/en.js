@@ -61,6 +61,7 @@ export default {
     newGame: 'New game',
     levelSuffix: 'level',
     delete: 'Delete',
+    convert: 'Convert',
     playedBefore: {
       0: 'Already played before? Load your savefile ',
       1: 'here'
@@ -110,7 +111,8 @@ export default {
       read: 'Read'
     },
     save: {
-      success: 'Game saved'
+      success: 'Game saved',
+      error: 'Autosave failed'
     },
     prize: {
       get: 'You won a prize!',
@@ -304,7 +306,7 @@ export default {
       description: 'You are new to this school, reducing your golden dust reward to {0}%. Reach a higher global level to reduce this penalty, and remove it entirely by reaching global level 175.'
     },
     subjectBookGain: 'Each unlocked subject gives 10 books per hour, no matter the grade.',
-    passCapGain: 'Every 10 global levels, you get an extra exam pass.',
+    passCapGain: 'You get a new exam pass every day (next one in {0}) and every 10 global levels.',
     buyPass: 'Buy an exam pass for',
     library: 'Library',
     practice: 'Practice',
@@ -317,6 +319,8 @@ export default {
     takeExamNoF: 'You cannot take exams at F grade.',
     takeExamNoFStudy: 'Study a bit first!',
     takeExamCost: 'Requires',
+    examDustFull: 'Your ancient hourglass is full! All golden dust gained in this exam will be lost!',
+    examDustOvercap: 'Your ancient hourglass is almost full. Some golden dust gained from this exam could get lost due to overcap.',
     answer: 'Answer',
     begin: 'The lesson begins!',
     beginExam: 'The exam begins!',
@@ -348,6 +352,7 @@ export default {
   hourglass: {
     title: 'Ancient hourglass',
     subtitle: 'Skip time for this feature',
+    subtitleSchool: 'Convert exam passes to golden dust',
     timeInMinutes: 'Time (in minutes)'
   },
   cryolab: {
@@ -1157,9 +1162,10 @@ export default {
     dweller: {
       title: 'Current / highest possible dweller depth',
       description1: 'The dweller starts fast and gets slower the closer it gets to its limit.',
-      description2: 'For each completed meter of current dweller depth, your prestige reward increases.',
+      description2: 'For each completed half meter of current dweller depth, your prestige reward increases.',
       description3: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
-      description4: 'Maximum dweller depth'
+      description4: 'Maximum dweller depth',
+      nextTime: 'You reach {0}m in {1}'
     },
     pickaxePower: 'This is the power of your pickaxe and your base damage. Increase it by crafting a better pickaxe.',
     damage: 'Damage',
@@ -1257,6 +1263,8 @@ export default {
     taxpayers: 'Taxpayers',
     taxpayersDescription1: 'All working citizens consume up to {0} of each food per second and pay taxes equal to {1} ',
     taxpayersDescription2: ' per food item consumed.',
+    buildingStat: 'Total buildings constructed',
+    housingStat: 'Total housing constructed (first 25 per building)',
     offering: {
       name: 'Offerings',
       description: {
@@ -1280,6 +1288,7 @@ export default {
     newLoadout: 'New loadout',
     noLoadouts: 'No loadouts',
     monsterPartHint: 'Go to zone 10+ and reach enemy #101 to discover a new currency! That currency is essential to progess further, as it helps you raise your bone capacity.',
+    earlyPrestige: 'Trying to save these souls is a risky process that needs more time to be done safely. You could convert these now with a prestige, but only keep {0}% of them due to ritual instability',
     enemyDescription: 'Each enemy in the same zone has x{0} attack, x{1} health and +{2}% bones compared to the previous enemy. This is enemy #{3} and has x{4} attack, x{5} health and +{6}% bones. All of these effects reset when you die.',
     enemySigil1: {
       s: 'Enemies in this zone have {0} sigil',
@@ -1322,6 +1331,7 @@ export default {
     stunPlayer: 'You are stunned and cannot attack',
     stunEnemy: 'This enemy is stunned and cannot attack',
     stunBoss: 'Bosses recover twice as fast from stuns',
+    bossBioResist: 'Bosses only take 10% biological damage',
     reachBoss: {
       title: 'Reach the boss',
       description: 'To challenge the boss of this zone, you need to defeat {0} enemies without dying'
@@ -1485,9 +1495,8 @@ export default {
     heirloom: {
       name: 'Heirloom',
       min: 'Appears at zone {0} or higher',
-      description: 'You have {0} of nostalgia. This increases your chance of finding a heirloom, up to +50%. Defeating a boss removes {1}% of your nostalgia',
+      description: 'You have {0} of nostalgia. This increases your chance of finding a heirloom. Defeating a boss removes {1}% of your nostalgia',
       description2: 'The heirloom with the lowest amount is twice as likely to be given. If you have multiple heirlooms tied in lowest amount, this does not apply.',
-      guaranteed: 'Because this zone is divisible by 10, you are guaranteed to find a heirloom',
       power: 'Power',
       fortitude: 'Fortitude',
       wealth: 'Wealth',
@@ -1630,7 +1639,6 @@ export default {
     auction: 'Auction',
     colorSuffix: 'color',
     openPackage: 'Open',
-    convert: 'Convert',
     idea: {
       tier: 'Tier {0} idea',
       unlock: 'Unlock idea',

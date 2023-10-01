@@ -1,17 +1,18 @@
 import store from "../../../store";
+import { fallbackArray } from "../../utils/array";
 import { getSequence } from "../../utils/math";
 
 export default {
     moreDamage: {type: 'premium', price(lvl) {
-        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 75};
+        return {gem_ruby: fallbackArray([15, 80], [2, 3][(lvl - 2) % 2] * Math.pow(2, Math.floor((lvl - 2) / 2)) * 75, lvl)};
     }, effect: [
-        {name: 'miningDamage', type: 'mult', value: lvl => getSequence(3, lvl) * 0.25 + 1}
+        {name: 'miningDamage', type: 'mult', value: lvl => fallbackArray([1, 1.25, 1.5], getSequence(3, lvl - 2) * 0.25 + 1, lvl) }
     ]},
     moreScrap: {type: 'premium', price(lvl) {
-        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 75};
+        return {gem_ruby: fallbackArray([10, 40], [2, 3][(lvl - 2) % 2] * Math.pow(2, Math.floor((lvl - 2) / 2)) * 75, lvl)};
     }, effect: [
-        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => getSequence(1, lvl) + 1},
-        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => getSequence(1, lvl) + 1}
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => fallbackArray([1, 1.25, 1.5], getSequence(1, lvl - 2) + 1, lvl)},
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => fallbackArray([1, 1.25, 1.5], getSequence(1, lvl - 2) + 1, lvl)}
     ]},
     moreGreenCrystal: {type: 'premium', requirement() {
         return store.state.unlock.miningDepthDweller.see;

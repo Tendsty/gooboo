@@ -15,12 +15,13 @@ import general from "./modules/general";
 import event from "./modules/event";
 import cryolab from "./modules/cryolab";
 import v1_1_0 from "./modules/migration/v1_1_0";
+import { getDay } from "./utils/date";
 
 const migrations = {
     '1.1.0': v1_1_0
 };
 
-export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile }
+export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName }
 
 /**
  * An array of modules that save and load data to the savefile
@@ -240,7 +241,15 @@ function exportFile(file) {
     if (!file) {
         file = getSavefile();
     }
-    download(file, 'Gooboo_Savefile.json', 'application/json');
+    download(file, getSavefileName(), 'application/json');
+}
+
+function getSavefileName() {
+    const now = getDay();
+    let year = now.slice(2, 4);
+    let month = now.slice(5, 7);
+    let day = now.slice(8, 10);
+    return `Gooboo_${ year }${ month }${ day }.json`;
 }
 
 function getSavefile() {

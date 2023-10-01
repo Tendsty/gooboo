@@ -38,7 +38,7 @@
       <gb-tooltip :min-width="200">
         <template v-slot:activator="{ on, attrs }">
           <div class="ma-1" v-bind="attrs" v-on="on">
-            <v-btn color="primary" :disabled="maxAfford < 1 || disabled" @click="convertOne">{{ $vuetify.lang.t('$vuetify.gallery.convert') }}</v-btn>
+            <v-btn color="primary" :disabled="maxAfford < 1 || disabled" @click="convertOne">{{ $vuetify.lang.t('$vuetify.gooboo.convert') }}</v-btn>
           </div>
         </template>
         <div class="d-flex align-center mt-0">

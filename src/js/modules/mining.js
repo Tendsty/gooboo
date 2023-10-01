@@ -214,7 +214,7 @@ export default {
         // Depth dweller
         if (store.state.unlock.miningDepthDweller.use) {
             const dwellerLimit = store.getters['mining/dwellerLimit'];
-            const dwellerSpeed = store.getters['mult/get']('miningDepthDwellerSpeed', 0.00015) / store.getters['mining/dwellerLimit'];
+            const dwellerSpeed = store.getters['mult/get']('miningDepthDwellerSpeed', 0.00015) / dwellerLimit;
             const newDweller = Math.min(
                 0.1 + dwellerLimit -
                 (0.1 + dwellerLimit - store.state.stat[`mining_depthDweller${subfeature}`].value) *

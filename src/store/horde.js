@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_NOSTALGIA_REMOVE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from "../js/constants";
+import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_NOSTALGIA_REMOVE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP, SECONDS_PER_HOUR } from "../js/constants";
 import { buildNum, capitalize, decapitalize } from "../js/utils/format";
 import { chance, randomElem, randomInt } from "../js/utils/random";
 
@@ -96,10 +96,8 @@ export default {
         enemySoulChance: (state, getters, rootState, rootGetters) => (zone, isBase = false) => {
             if (zone < 20) {
                 return 0;
-            } else if (zone === 20) {
-                return 1;
             } else {
-                const baseValue = 0.45 - zone * 0.005;
+                const baseValue = 0.7 - zone * 0.005;
                 if (isBase) {
                     return baseValue;
                 }
@@ -107,12 +105,11 @@ export default {
             }
         },
         enemySoulAmount: (state, getters, rootState, rootGetters) => (zone, isBase = false) => {
-            if (zone < 20) {
+            const zoneBase = zone - 20;
+            if (zoneBase < 0) {
                 return 0;
-            } else if (zone === 20) {
-                return 35;
             } else {
-                const baseValue = Math.pow(1.14, zone - 20) * 2;
+                const baseValue = Math.pow(1.16, zoneBase);
                 if (isBase) {
                     return baseValue;
                 }
@@ -122,17 +119,15 @@ export default {
         enemyHeirloomChance: (state, getters, rootState, rootGetters) => (zone) => {
             if (zone < 30) {
                 return 0;
-            } else if ((zone % 10) === 0) {
-                return 1;
             } else {
                 return rootGetters['mult/get']('hordeHeirloomChance', getters.enemyHeirloomChanceNostalgia + getters.enemyHeirloomChanceBase(zone));
             }
         },
         enemyHeirloomChanceNostalgia: (state) => {
-            return Math.min(0.5, state.nostalgia / buildNum(100, 'K'));
+            return Math.min(state.nostalgia / buildNum(100, 'K'));
         },
         enemyHeirloomChanceBase: () => (zone) => {
-            return 0.27 + ((zone % 10) * 0.02) - Math.floor(zone / 10) * 0.05;
+            return 0.08 - zone * 0.001;
         },
         enemyCorruption: (state, getters, rootState, rootGetters) => (zone) => {
             return rootGetters['mult/get']('hordeCorruption', getters.enemyCorruptionBase(zone));
@@ -157,6 +152,9 @@ export default {
         },
         currentSoulAmountBase: (state, getters) => {
             return getters.enemySoulAmount(state.zone, true);
+        },
+        currentSoulMult: (state, getters, rootState) => {
+            return Math.min(Math.pow(rootState.stat.horde_timeSpent.value / SECONDS_PER_HOUR + 1, 0.5) * 0.45 - 0.35, 1);
         },
         currentHeirloomChance: (state, getters) => {
             return getters.enemyHeirloomChance(state.zone);
@@ -719,8 +717,8 @@ export default {
                 }
             }
         },
-        prestige({ state, rootGetters, commit, dispatch }) {
-            const prestigeGain = rootGetters['currency/value']('horde_soulCorrupted');
+        prestige({ state, getters, rootGetters, commit, dispatch }) {
+            const prestigeGain = rootGetters['currency/value']('horde_soulCorrupted') * getters.currentSoulMult;
             commit('stat/increaseTo', {feature: 'horde', name: 'bestPrestige', value: prestigeGain}, {root: true});
             commit('stat/add', {feature: 'horde', name: 'prestigeCount', value: 1}, {root: true});
             dispatch('currency/gain', {feature: 'horde', name: 'soulEmpowered', amount: prestigeGain}, {root: true});

@@ -5,7 +5,7 @@
         <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.subjectBookGain`) }}</alert-text>
       </currency>
       <currency class="ma-1" name="school_examPass">
-        <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.passCapGain`) }}</alert-text>
+        <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.passCapGain`, $formatTime(secondsUntilDailyReset)) }}</alert-text>
       </currency>
       <gb-tooltip v-if="canBuyPass" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
@@ -41,7 +41,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { SCHOOL_EXAM_PASS_PRICE } from '../../../js/constants';
+import { SCHOOL_EXAM_PASS_PRICE, SECONDS_PER_DAY } from '../../../js/constants';
 import Currency from '../../render/Currency.vue';
 import PriceTag from '../../render/PriceTag.vue';
 import AlertText from '../render/AlertText.vue';
@@ -71,6 +71,9 @@ export default {
     },
     passPrice() {
       return SCHOOL_EXAM_PASS_PRICE;
+    },
+    secondsUntilDailyReset() {
+      return SECONDS_PER_DAY - (this.$store.state.system.timestamp % SECONDS_PER_DAY);
     }
   },
   methods: {

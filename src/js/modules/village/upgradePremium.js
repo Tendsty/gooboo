@@ -1,16 +1,17 @@
 import store from "../../../store";
+import { fallbackArray } from "../../utils/array";
 import { getSequence } from "../../utils/math";
 
 export default {
     overtime: {type: 'premium', price(lvl) {
-        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 100};
+        return {gem_ruby: fallbackArray([70], [2, 3][(lvl - 1) % 2] * Math.pow(2, Math.floor((lvl - 1) / 2)) * 100, lvl)};
     }, effect: [
-        {name: 'villageMaterialGain', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
+        {name: 'villageMaterialGain', type: 'mult', value: lvl => fallbackArray([1, 1.1], Math.pow(1.25, lvl - 1), lvl)}
     ]},
     goldenThrone: {type: 'premium', price(lvl) {
-        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 60};
+        return {gem_ruby: fallbackArray([30], [2, 3][(lvl - 1) % 2] * Math.pow(2, Math.floor((lvl - 1) / 2)) * 60, lvl)};
     }, effect: [
-        {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => getSequence(2, lvl) * 0.5 + 1}
+        {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => fallbackArray([1, 1.5], getSequence(2, lvl - 1) * 0.5 + 1, lvl)}
     ]},
     fasterBuilding: {type: 'premium', price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 75};
