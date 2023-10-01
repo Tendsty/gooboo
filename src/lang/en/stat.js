@@ -10,7 +10,7 @@ export default {
   },
   mining_maxDepthSpeedrun: {
     achievement: 'Deeprun',
-    description: 'Maximum depth in under 15m'
+    description: 'Maximum depth in under 15 minutes'
   },
   mining_depthDweller0: {
     achievement: 'Drilling straight down',
@@ -57,6 +57,10 @@ export default {
   mining_craftingWasted: {
     achievement: 'Wasted',
     description: 'Craft a pickaxe that cannot be better than your current one'
+  },
+  mining_dwellerCapHit: {
+    achievement: 'Rock bottom',
+    description: 'Reach maximum dweller depth'
   },
   mining_craftingLuck: {
     achievement: 'One in a million',
@@ -118,7 +122,7 @@ export default {
   },
   horde_maxZoneSpeedrun: {
     achievement: 'Swift strikes',
-    description: 'Maximum zone in under 30m'
+    description: 'Maximum zone in under 30 minutes'
   },
   horde_totalDamage: {
     achievement: 'Slayer',
@@ -218,6 +222,9 @@ export default {
   gallery_cash: {
     achievement: 'Rich',
     description: 'Cash gained'
+  },
+  gallery_bestPrestige: {
+    description: 'Highest cash in one prestige'
   },
   gallery_highestTierIdea: {
     achievement: 'Big brain',

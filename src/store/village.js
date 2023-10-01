@@ -137,6 +137,7 @@ export default {
             dispatch('card/activateCards', 'village', {root: true});
 
             dispatch('applyOfferingEffect');
+            dispatch('upgrade/updateVillageStats', null, {root: true});
         },
         buyOffering({ state, rootGetters, commit, dispatch }, o) {
             const offering = state.offering[o.name];

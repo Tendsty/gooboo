@@ -1,5 +1,5 @@
 import store from "../../store"
-import { HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME } from "../constants";
+import { HORDE_INACTIVE_ITEM_COOLDOWN, HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME } from "../constants";
 import { buildArray } from "../utils/array";
 import { buildNum } from "../utils/format";
 import { randomRound } from "../utils/random";
@@ -54,8 +54,12 @@ export default {
         }
 
         for (const [key, elem] of Object.entries(store.state.horde.items)) {
-            if (elem.equipped && !elem.passive && elem.cooldownLeft > 0) {
-                store.commit('horde/updateItemKey', {name: key, key: 'cooldownLeft', value: Math.max(0, elem.cooldownLeft - seconds)});
+            if (elem.cooldownLeft > 0) {
+                store.commit('horde/updateItemKey', {
+                    name: key,
+                    key: 'cooldownLeft',
+                    value: Math.max(0, elem.cooldownLeft - seconds * ((elem.equipped && !elem.passive) ? 1 : HORDE_INACTIVE_ITEM_COOLDOWN))
+                });
             }
         }
 
@@ -318,15 +322,15 @@ export default {
 
         hordeMaxItems: {round: true, baseValue: 1},
         hordeItemChance: {display: 'percent'},
-        hordeBossRequirement: {round: true, min: 10},
+        hordeBossRequirement: {round: true, min: 1},
         hordeRespawn: {display: 'time', round: true, min: 1},
-        hordeSoulChance: {display: 'percent', min: 0, max: 1},
+        hordeSoulChance: {display: 'percent', min: 0, max: 1, roundNearZero: true},
         hordeSoulGain: {},
-        hordeHeirloomChance: {display: 'percent'},
+        hordeHeirloomChance: {display: 'percent', max: 1, roundNearZero: true},
         hordeHeirloomAmount: {baseValue: 1, round: true},
         hordeHeirloomEffect: {},
         hordeNostalgia: {},
-        hordeCorruption: {display: 'percent', min: 0},
+        hordeCorruption: {display: 'percent', min: 0, roundNearZero: true},
         hordeItemMasteryGain: {},
         hordeShardChance: {display: 'percent', baseValue: 0.001},
     },
@@ -407,6 +411,12 @@ export default {
             }
         }
 
+        if (store.state.horde.loadout.length > 0) {
+            obj.loadout = store.state.horde.loadout.map(elem => {
+                return {name: elem.name, content: elem.content};
+            });
+        }
+
         for (const [key, elem] of Object.entries(store.state.horde.heirloom)) {
             if (elem.amount > 0) {
                 if (obj.heirloom === undefined) {
@@ -479,6 +489,18 @@ export default {
                     }
                 }
             }
+        }
+        if (data.loadout) {
+            let nextId = 1;
+            data.loadout.forEach(elem => {
+                store.commit('horde/addExistingLoadout', {
+                    id: nextId,
+                    name: elem.name,
+                    content: elem.content
+                });
+                nextId++;
+            });
+            store.commit('horde/updateKey', {key: 'nextLoadoutId', value: nextId});
         }
         if (data.heirloom) {
             for (const [key, elem] of Object.entries(data.heirloom)) {

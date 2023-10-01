@@ -46,11 +46,24 @@ function advance() {
                     store.commit('system/updateKey', {key: 'autosaveTimer', value: newTimer});
                 } else {
                     store.commit('system/resetAutosaveTimer');
-                    saveLocal();
-                    if (store.state.system.settings.notification.items.autosave.value && store.state.system.notification.findIndex(elem => elem.message.type === 'save') === -1) {
-                        store.commit('system/addNotification', {color: 'info', timeout: 2000, message: {
+                    let saveError = null;
+                    try {
+                        saveLocal();
+                    } catch (error) {
+                        saveError = error;
+                    }
+                    if (saveError === null) {
+                        if (store.state.system.settings.notification.items.autosave.value && store.state.system.notification.findIndex(elem => elem.message.type === 'save') === -1) {
+                            store.commit('system/addNotification', {color: 'info', timeout: 2000, message: {
+                                type: 'save',
+                                name: 'auto'
+                            }});
+                        }
+                    } else {
+                        store.commit('system/addNotification', {color: 'error', timeout: 5000, message: {
                             type: 'save',
-                            name: 'auto'
+                            name: 'auto',
+                            error: saveError
                         }});
                     }
                 }

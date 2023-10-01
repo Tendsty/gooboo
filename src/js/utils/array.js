@@ -33,5 +33,5 @@ function shuffleArray(array) {
  * @returns An array element or the fallback value
  */
 function fallbackArray(array = [], fallback = null, index = 0) {
-    return index < array.length ? array[index] : fallback;
+    return (index >= 0 && index < array.length) ? array[index] : fallback;
 }

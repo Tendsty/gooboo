@@ -49,7 +49,9 @@
       <currency class="ma-1" name="horde_monsterPart"></currency>
       <currency class="ma-1" name="horde_corruptedFlesh"></currency>
       <currency class="ma-1" name="horde_mysticalShard" :customCap="maxMysticalShards > 0 ? maxMysticalShards : undefined"></currency>
-      <currency class="ma-1" name="horde_soulCorrupted"></currency>
+      <currency class="ma-1" name="horde_soulCorrupted">
+        <alert-text v-if="currentSoulMult < 1" type="warning">{{ $vuetify.lang.t('$vuetify.horde.earlyPrestige', $formatNum(currentSoulMult * 100, true)) }}</alert-text>
+      </currency>
     </div>
   </div>
 </template>
@@ -79,7 +81,8 @@ export default {
       comboRequired: 'horde/comboRequired',
       comboRequiredBase: 'horde/comboRequiredBase',
       itemsActiveList: 'horde/itemsActiveList',
-      maxMysticalShards: 'horde/maxMysticalShards'
+      maxMysticalShards: 'horde/maxMysticalShards',
+      currentSoulMult: 'horde/currentSoulMult'
     }),
     isMaxZone() {
       return this.zone >= this.maxZone;

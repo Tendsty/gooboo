@@ -44,7 +44,7 @@ export default {
     ritualTome: {type: 'prestige', cap: 10, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.6, lvl) * 14};
     }, effect: [
-        {name: 'hordeSoulChance', type: 'base', value: lvl => lvl * 0.05}
+        {name: 'hordeSoulChance', type: 'base', value: lvl => lvl * 0.025}
     ]},
     beginnerLuck: {type: 'prestige', requirementBase, requirementStat, requirementValue: 26, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.9, lvl) * 40};
@@ -61,7 +61,7 @@ export default {
         return {horde_soulEmpowered: Math.pow(1.9, lvl) * 80};
     }, effect: [
         {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.15 + 1},
-        {name: 'hordeHeirloomChance', type: 'base', value: lvl => lvl * 0.01}
+        {name: 'hordeHeirloomChance', type: 'base', value: lvl => lvl * 0.004}
     ]},
     offenseBook: {type: 'prestige', cap: 50, requirementBase, requirementStat, requirementValue: 41, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * 140};

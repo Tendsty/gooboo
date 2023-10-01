@@ -22,6 +22,7 @@ export default {
     capTooLow: 'Kapazität zu gering',
     equip: 'Ausrüsten',
     unequip: 'Ablegen',
+    unequipAll: 'Alle ablegen',
     max: 'Max',
     free: 'Kostenlos',
     capacity: 'Kapazität',
@@ -59,6 +60,8 @@ export default {
     inventory: 'Inventar',
     newGame: 'Neues Spiel',
     levelSuffix: 'Stufe',
+    delete: 'Löschen',
+    convert: 'Umwandeln',
     playedBefore: {
       0: 'Schon mal gespielt? Lade deinen Spielstand ',
       1: 'hier'
@@ -108,7 +111,8 @@ export default {
       read: 'Lesen'
     },
     save: {
-      success: 'Spiel gespeichert'
+      success: 'Spiel gespeichert',
+      error: 'Speichern fehlgeschlagen'
     },
     prize: {
       get: 'Du hast einen Preis gewonnen!',
@@ -302,7 +306,7 @@ export default {
       description: 'Diese Schule ist neu für dich, was deine Goldstaub-Belohnung auf {0}% reduziert. Erreiche eine höhere globale Stufe, um diese Strafe zu reduzieren, und entferne sie ganz, indem du globale Stufe 175 erreichst.'
     },
     subjectBookGain: 'Jedes freigeschaltete Fach bringt 10 Bücher pro Stunde, egal welche Note.',
-    passCapGain: 'Alle 10 globale Stufen erhältst du einen zusätzlichen Prüfungspass.',
+    passCapGain: 'Du erhältst jeden Tag einen neuen Prüfungspass (der Nächste in {0}) und alle 10 globale Stufen.',
     buyPass: 'Kaufe einen Prüfungspass für',
     library: 'Bücherei',
     practice: 'Üben',
@@ -315,6 +319,8 @@ export default {
     takeExamNoF: 'Du kannst auf der Note F keine Prüfung ablegen.',
     takeExamNoFStudy: 'Lerne erst mal etwas!',
     takeExamCost: 'Benötigt',
+    examDustFull: 'Dein antikes Stundenglas ist voll! Sämtlicher Goldstaub aus der Prüfung wird verloren gehen!',
+    examDustOvercap: 'Dein antikes Stundenglas ist fast voll. Goldstaub aus der Prüfung könnte durch Überkapazität verloren gehen.',
     answer: 'Antworten',
     begin: 'Der Unterricht beginnt!',
     beginExam: 'Die Prüfung beginnt!',
@@ -346,6 +352,7 @@ export default {
   hourglass: {
     title: 'Antikes Stundenglas',
     subtitle: 'Überspringe Zeit in dieser Funktion',
+    subtitleSchool: 'Wandle Prüfungspässe in Goldstaub um',
     timeInMinutes: 'Zeit (in Minuten)'
   },
   cryolab: {
@@ -1021,12 +1028,17 @@ export default {
         icon: 'Nur Symbol',
         text: 'Nur Text',
         both: 'Symbol und Text'
+      },
+      relativeUpgradeStats: {
+        name: 'Relative Verbesserungswerte',
+        description: 'Zeigt den Unterschied anstatt vorher / nacher Werte'
       }
     },
     automation: {
       name: 'Automatisierung',
       progressMining: {
-        name: 'Bergbau: Autofortschritt-Limit'
+        name: 'Bergbau: Autofortschritt-Limit',
+        description: 'Wenn ein Stein das erste Mal zerbrochen wird, gehst du automatisch zur nächsten Tiefe, wenn der Stein in X Sekunden oder weniger zerbrochen wird'
       },
       fightHordeBoss: {
         name: 'Horde: Boss automatisch bekämpfen'
@@ -1089,6 +1101,9 @@ export default {
       },
       cardPackContent: {
         name: 'Kartenpaket-Inhalt'
+      },
+      cropReady: {
+        name: 'Pflanze reif'
       }
     },
     confirm: {
@@ -1147,9 +1162,10 @@ export default {
     dweller: {
       title: 'Aktuelle / höchstmögliche Gräbertiefe',
       description1: 'Der Gräber startet schnell und wird langsamer, je näher er an sein Limit kommt.',
-      description2: 'Für jeden abgeschlossenen Meter aktueller Gräbertiefe erhöht sich die Prestigebelohnung.',
+      description2: 'Für jeden abgeschlossenen halben Meter aktueller Gräbertiefe erhöht sich die Prestigebelohnung.',
       description3: 'Die höchstmögliche Gräbertiefe beträgt {0}% der maximalen Tiefe im Bergwerk.',
-      description4: 'Maximale Gräbertiefe'
+      description4: 'Maximale Gräbertiefe',
+      nextTime: 'Du erreichst {0}m in {1}'
     },
     pickaxePower: 'Dies ist die Kraft deiner Spitzhacke und dein Grundschaden. Erhöhe es, indem du eine bessere Spitzhacke herstellst.',
     damage: 'Schaden',
@@ -1247,6 +1263,8 @@ export default {
     taxpayers: 'Steuerzahler',
     taxpayersDescription1: 'Die arbeitende Bevölkerung konsumiert bis zu {0} von jedem Nahrungsmittel pro Sekunde und zahlt {1} ',
     taxpayersDescription2: ' Steuern pro verbrauchtem Lebensmittel.',
+    buildingStat: 'Gesamte Gebäudezahl',
+    housingStat: 'Gesamte Wohnungszahl (erste 25 pro Gebäude)',
     offering: {
       name: 'Opfergaben',
       description: {
@@ -1266,7 +1284,11 @@ export default {
     zone: 'Zone',
     player: 'Spieler',
     enemy: 'Gegner',
+    loadoutName: 'Set-Name',
+    newLoadout: 'Neues Set',
+    noLoadouts: 'Keine Sets vorhanden',
     monsterPartHint: 'Gehe zu Zone 10+ und erreiche Gegner #101, um eine neue Währung zu entdecken! Diese Währung ist essentiell, um weiter fortzuschreiten, da sie beim Erhöhen der Knochen-Kapazität hilft.',
+    earlyPrestige: 'Die Seelen zu retten ist ein riskanter Prozess, der mehr Zeit benötigt, um sicher durchgeführt zu werden. Du könntest sie jetzt mit einem Prestige umwandeln, würdest aber nur {0}% durch rituelle Instabilität behalten',
     enemyDescription: 'Jeder Gegner in der selben Zone hat x{0} Angriff, x{1} Leben und +{2}% Knochen im Vergleich zum vorherigen Gegner. Dies ist Gegner #{3} und dieser hat x{4} Angriff, x{5} Leben und +{6}% Knochen. All diese Effekte werden bei deinem Tod zurückgesetzt.',
     enemySigil1: {
       s: 'Gegner in dieser Zone haben {0} Zeichen',
@@ -1297,7 +1319,7 @@ export default {
     respawnDescription: 'Wie viel Zeit du benötigst, um dich vom Tod zu erholen',
     reviveDescription: 'Anstatt zu sterben, wird eine Wiederbelebung benutzt, um die Leben voll aufzufüllen',
     critDescription: 'Normale Angriffe haben eine Chance, zusätzlichen Schaden anzurichten. Die Kritische Chance kann über 100% hinausgehen, dann wird der Angriffswert mehrfach multipliziert',
-    toxicDescription: 'Richtet Giftschaden abhängig vom verursachten Schaden pro Angriff an',
+    toxicDescription: 'Richtet Giftschaden (biologisch) abhängig vom verursachten Schaden pro Angriff an',
     divisionShieldDescription: 'Teile jeden erlittenen Schaden durch (Teilungsschild + 1) und verliere 1 Teilungsschild nach eingehenden Angriffen',
     firstStrikeDescription: 'Richte zusätzlichen magischen Schaden an, wenn das dein erster Angriff ist',
     spellbladeDescription: 'Richte zusätzlichen magischen Schaden an, nachdem du einen Ausrüstungseffekt benutzt hast. Das funktioniert bei Ausrüstungseffekten mit einer Abklingszeit von unter 10 Sekunden nicht immer',
@@ -1309,6 +1331,7 @@ export default {
     stunPlayer: 'Du bist betäubt und kannst nicht angreifen',
     stunEnemy: 'Dieser Gegner ist betäubt und kann nicht angreifen',
     stunBoss: 'Bosse erholen sich doppelt so schnell von Betäubungen',
+    bossBioResist: 'Bosse erleiden nur 10% biologischen Schaden',
     reachBoss: {
       title: 'Erreiche den Boss',
       description: 'Um den Boss dieser Zone herauszufordern, musst du {0} Gegner in Folge besiegen, ohne zu sterben'
@@ -1364,6 +1387,7 @@ export default {
     fighting: 'Im Kampf',
     items: {
       name: 'Ausrüstung',
+      inactive: 'Inaktive Gegenstandseffekte erholen sich von der Abklingzeit mit {0}% der normalen Geschwindigkeit',
       dagger: 'Dolch',
       shirt: 'Hemd',
       guardianAngel: 'Schutzengel',
@@ -1440,7 +1464,7 @@ export default {
         1: 'Knochen der höchsten Zone'
       },
       stun: {
-        0: 'Betäube den Gegner',
+        0: 'Betäube diesen Gegner',
         1: 'Mal'
       },
       revive: {
@@ -1449,7 +1473,7 @@ export default {
       },
       removeAttack: {
         0: 'Entferne',
-        1: 'Angriff des Gegners'
+        1: 'Angriff dieses Gegners'
       },
       poison: {
         0: 'Verursache',
@@ -1461,19 +1485,18 @@ export default {
       },
       permanentAttack: {
         0: 'Erhöhe den Angriff um',
-        1: ''
+        1: '(bis zum Prestige)'
       },
       permanentHealth: {
         0: 'Erhöhe die Leben um',
-        1: ''
+        1: '(bis zum Prestige)'
       }
     },
     heirloom: {
       name: 'Erbstück',
       min: 'Kann ab Zone {0} gefunden werden',
-      description: 'Du hast {0} Nostalgie. Dies erhöht deine Chance, ein Erbstück zu finden, um bis zu +50%. Einen Boss zu besiegen entfernt {1}% der Nostalgie',
+      description: 'Du hast {0} Nostalgie. Dies erhöht deine Chance, ein Erbstück zu finden. Einen Boss zu besiegen entfernt {1}% der Nostalgie',
       description2: 'Das Erbstück mit der niedrigsten Menge hat die doppelte Chance, zu erscheinen. Wenn mehrere Erbstücke sich die niedrigste Menge teilen, wird diese Regel nicht angewendet.',
-      guaranteed: 'Weil diese Zone durch 10 teilbar ist, findest du garantiert ein Erbstück',
       power: 'Kraft',
       fortitude: 'Resistenz',
       wealth: 'Reichtum',
@@ -1616,7 +1639,6 @@ export default {
     auction: 'Auktion',
     colorSuffix: 'Farbe',
     openPackage: 'Öffnen',
-    convert: 'Umwandeln',
     idea: {
       tier: 'Stufe-{0}-Idee',
       unlock: 'Idee freischalten',

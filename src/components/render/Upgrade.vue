@@ -57,6 +57,7 @@
     </v-card-title>
     <v-card-text class="pb-0">
       <display-row v-for="(item, key) in display" :key="`${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
+      <alert-text v-if="upgrade.hasDescription" type="info">{{ $vuetify.lang.t(`$vuetify.upgrade.description.${ name }`) }}</alert-text>
       <div class="mx-n1 mt-2" v-if="!isMax">
         <price-tag class="ma-1" v-for="(amount, currency, index) in price" :key="currency + '-' + index" :currency="currency" :amount="amount"></price-tag>
       </div>
@@ -115,11 +116,12 @@
 
 <script>
 import { capitalize } from '../../js/utils/format';
+import AlertText from '../partial/render/AlertText.vue';
 import DisplayRow from '../partial/upgrade/DisplayRow.vue';
 import PriceTag from './PriceTag.vue';
 
 export default {
-  components: { PriceTag, DisplayRow },
+  components: { PriceTag, DisplayRow, AlertText },
   props: {
     name: {
       type: String,

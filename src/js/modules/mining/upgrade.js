@@ -132,7 +132,7 @@ export default {
     drillFuel: {requirementBase, requirementStat, requirementValue: 50, price(lvl) {
         return {mining_scrap: Math.pow(lvl * 0.1 + 2.4, lvl) * buildNum(35, 'B')};
     }, effect: [
-        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(1.12, lvl)}
+        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)}
     ]},
     graniteHardening: {cap: 6, requirementBase, requirementStat, requirementValue: 55, price(lvl) {
         return {mining_granite: Math.pow(2.5, lvl) * 1600, mining_oreTin: lvl + 2};

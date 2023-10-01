@@ -108,6 +108,7 @@ export default {
                 subtype: o.subtype ?? null,
                 icon: o.icon ?? null,
                 mode,
+                hasDescription: o.hasDescription ?? false,
                 level: 0,
                 bought: 0,
                 highestLevel: 0,
@@ -375,21 +376,25 @@ export default {
 
             // Handle village specific stats
             if (updateCache && o.key === 'village_building') {
-                let totalBuilding = 0;
-                let totalHousing = 0;
-                for (const [, elem] of Object.entries(state.item)) {
-                    if (elem.feature === 'village' && elem.type === 'building') {
-                        totalBuilding += elem.level;
-                        if (elem.subtype === 'housing') {
-                            totalHousing += Math.min(25, elem.level);
-                        }
+                dispatch('updateVillageStats');
+            }
+        },
+        updateVillageStats({ state, commit, dispatch }) {
+            let totalBuilding = 0;
+            let totalHousing = 0;
+            for (const [, elem] of Object.entries(state.item)) {
+                if (elem.feature === 'village' && elem.type === 'building') {
+                    totalBuilding += elem.level;
+                    if (elem.subtype === 'housing') {
+                        totalHousing += Math.min(25, elem.level);
                     }
                 }
-                commit('stat/increaseTo', {feature: 'village', name: 'maxBuilding', value: totalBuilding}, {root: true});
-
-                // Update global level for housing
-                dispatch('meta/globalLevelPart', {key: 'village_0', amount: totalHousing}, {root: true});
             }
+            commit('stat/increaseTo', {feature: 'village', name: 'maxBuilding', value: totalBuilding}, {root: true});
+            commit('stat/increaseTo', {feature: 'village', name: 'maxHousing', value: totalHousing}, {root: true});
+
+            // Update global level for housing
+            dispatch('meta/globalLevelPart', {key: 'village_0', amount: totalHousing}, {root: true});
         },
         tickDelay({ state, commit, dispatch }, o) {
             let seconds = o.seconds ?? 0;

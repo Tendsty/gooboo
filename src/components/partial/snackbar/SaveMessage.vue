@@ -1,6 +1,13 @@
 <template>
   <v-card color="transparent" flat>
-    {{ $vuetify.lang.t(`$vuetify.message.save.success`) }}
+    <template v-if="message.error">
+      <div>
+        <v-icon>mdi-alert</v-icon>
+        {{ $vuetify.lang.t(`$vuetify.message.save.error`) }}
+      </div>
+      <div>{{ message.error.message }}</div>
+    </template>
+    <div v-else>{{ $vuetify.lang.t(`$vuetify.message.save.success`) }}</div>
   </v-card>
 </template>
 

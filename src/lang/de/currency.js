@@ -694,7 +694,7 @@ export default {
   },
   school_examPass: {
     name: 'Prüfungspass',
-    description: 'Seltsam, bei unserer alten Schule haben wir sowas nicht gebraucht. Hier sind sie nötig, um eine Prüfung zu schreiben, und jeden Tag bekommst du einen neuen'
+    description: 'Seltsam, bei unserer alten Schule haben wir sowas nicht gebraucht. Hier sind sie nötig, um eine Prüfung zu schreiben'
   },
   treasure_fragment: {
     name: 'Fragment',

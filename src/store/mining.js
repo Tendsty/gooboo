@@ -251,12 +251,12 @@ export default {
             return rootState.stat[`mining_maxDepth${rootState.system.features.mining.currentSubfeature}`].value * rootGetters['mult/get']('miningDepthDwellerMax');
         },
         dwellerGreenCrystal: (state, getters, rootState, rootGetters) => {
-            const dweller = Math.floor(rootState.stat.mining_depthDweller0.value);
-            return rootGetters['mult/get']('currencyMiningCrystalGreenGain', Math.pow(1.15, dweller) * dweller * 10);
+            const dweller = Math.floor(rootState.stat.mining_depthDweller0.value * 2);
+            return rootGetters['mult/get']('currencyMiningCrystalGreenGain', Math.pow(1.15, dweller / 2) * dweller * 5);
         },
         dwellerYellowCrystal: (state, getters, rootState, rootGetters) => {
-            const dweller = Math.floor(rootState.stat.mining_depthDweller1.value);
-            return rootGetters['mult/get']('currencyMiningCrystalYellowGain', Math.pow(1.15, dweller) * dweller * 10);
+            const dweller = Math.floor(rootState.stat.mining_depthDweller1.value * 2);
+            return rootGetters['mult/get']('currencyMiningCrystalYellowGain', Math.pow(1.15, dweller / 2) * dweller * 5);
         },
         currentBreaks: (state) => {
             return state.breaks.length >= state.depth ? state.breaks[state.depth - 1] : 0;
@@ -294,6 +294,14 @@ export default {
             const base = rootGetters['mult/get']('miningEnhancementChanceBase');
             const increment = rootGetters['mult/get']('miningEnhancementChanceIncrement');
             return base * Math.pow(1 / (increment + 1), getters.enhancementLevel);
+        },
+        timeUntilNext: (state, getters, rootState, rootGetters) => (amount) => {
+            const dwellerLimit = getters.dwellerLimit;
+            if (amount > dwellerLimit) {
+                return null;
+            }
+            const dwellerSpeed = rootGetters['mult/get']('miningDepthDwellerSpeed') / dwellerLimit;
+            return logBase((amount - 0.1 - dwellerLimit) / -(0.1 + dwellerLimit - rootState.stat[`mining_depthDweller${rootState.system.features.mining.currentSubfeature}`].value), 1 - dwellerSpeed);
         }
     },
     mutations: {

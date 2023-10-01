@@ -46,7 +46,7 @@
       <v-icon>mdi-circle-small</v-icon>
       <v-chip class="px-4" large>
         <v-icon id="score-marker" class="large-label-icon mr-2" large>mdi-marker-check</v-icon>
-        <span class="scoreboard-text">{{ score }}</span>
+        <span class="scoreboard-text">{{ Math.floor(score) }}</span>
         <span v-if="mode === 'exam'" class="scoreboard-text">&nbsp;/&nbsp;{{ currentSubject.scoreGoal }}</span>
       </v-chip>
       <v-btn class="ma-2" v-if="mode === 'practice'" color="error" @click="leaveSchool">Leave</v-btn>
@@ -198,7 +198,7 @@ export default {
       }
     },
     updateScore(value) {
-      const diff = value - this.score;
+      const diff = Math.floor(value) - Math.floor(this.score);
       this.score = value;
       const element = document.getElementById('score-marker');
       if (element) {
@@ -206,7 +206,7 @@ export default {
           element.classList.remove('score-add-dark', 'score-add-light', 'score-remove-dark', 'score-remove-light');
           void element.offsetWidth;
           element.classList.add(`score-add-${ this.$vuetify.theme.dark ? 'dark' : 'light' }`);
-        } else {
+        } else if (diff < 0 || value === 0) {
           element.classList.remove('score-add-dark', 'score-add-light', 'score-remove-dark', 'score-remove-light');
           void element.offsetWidth;
           element.classList.add(`score-remove-${ this.$vuetify.theme.dark ? 'dark' : 'light' }`);

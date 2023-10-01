@@ -260,7 +260,7 @@ export default [
         {"x": 0.6, "y": -0.15, "rotate": 160, "size": 1, "icon": "mdi-motion"}
     ]},
     {id: 28, collection: 'supplyAndSupport', reward: [
-        {name: 'hordeHeirloomChance', type: 'base', value: 0.1},
+        {name: 'hordeHeirloomChance', type: 'base', value: 0.04},
         {name: 'hordeNostalgia', type: 'mult', value: 1.5}
     ], color: 'yellow', icons: [
         {"x": 0, "y": 0.25, "rotate": 180, "size": 5, "icon": "mdi-dome-light"},
@@ -277,7 +277,7 @@ export default [
     ]},
     {id: 30, collection: 'supplyAndSupport', reward: [
         {name: 'hordeSoulChance', type: 'base', value: 0.1},
-        {name: 'hordeHeirloomChance', type: 'base', value: 0.1}
+        {name: 'hordeHeirloomChance', type: 'base', value: 0.04}
     ], color: 'dark-grey', icons: [
         {"x": -0.15, "y": 0.5, "rotate": 0, "size": 2.5, "icon": "mdi-human-handsdown"},
         {"x": -0.15, "y": -0.2, "rotate": 0, "size": 1.75, "icon": "mdi-incognito"},
@@ -374,7 +374,7 @@ export default [
         {"x": 0.6, "y": 0.65, "rotate": 150, "size": 1, "icon": "mdi-liquid-spot"}
     ]},
     {id: 40, collection: 'againstTheCorruption', reward: [
-        {name: 'hordeHeirloomChance', type: 'base', value: 0.25},
+        {name: 'hordeHeirloomChance', type: 'base', value: 0.1},
         {name: 'hordeNostalgia', type: 'mult', value: 5},
         {name: 'hordeCorruption', type: 'bonus', value: 0.2}
     ], color: 'light-green', icons: [

@@ -92,7 +92,7 @@ const wordList = [
  */
 function generateSentence(grade = 0) {
     let sentence = '';
-    const maxLength = Math.round(Math.pow(grade * 3, 1.2) + 10);
+    const maxLength = Math.round(Math.pow(grade * 2.75, 1.16) + 8);
 
     // Generate weight lists
     const lengthWeights = [

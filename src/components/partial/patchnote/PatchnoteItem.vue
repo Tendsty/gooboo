@@ -6,11 +6,11 @@
     </v-chip>
     <a class="mr-1" v-if="item.issue" :href="`/issue/${ item.issue }`">#{{ item.issue }}</a>
     <span class="d-flex" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}" v-if="item.type === 'balance' && item.before !== undefined">
-      <span>{{ $vuetify.lang.t(`$vuetify.patchnote.text.${ item.text }`) }}: {{ item.before }}</span>
+      <span>{{ $vuetify.lang.t(`$vuetify.patchnote.text.${ item.text }`, ...params) }}: {{ item.before }}</span>
       <v-icon class="mx-1" small>mdi-transfer-right</v-icon>
       <span :class="{'success--text': item.balance === 'buff', 'warning--text': item.balance === 'change', 'error--text': item.balance === 'nerf'}">{{ item.after }}</span>
     </span>
-    <span v-else>{{ $vuetify.lang.t(`$vuetify.patchnote.text.${ item.text }`) }}</span>
+    <span v-else>{{ $vuetify.lang.t(`$vuetify.patchnote.text.${ item.text }`, ...params) }}</span>
   </span>
 </template>
 
@@ -68,6 +68,9 @@ export default {
           return 'pale-light-green';
       }
       return null;
+    },
+    params() {
+      return this.item.params ?? [];
     }
   }
 }

@@ -494,7 +494,7 @@ export default {
             return [
                 {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.1},
                 {isPositive: true, type: 'mult', name: 'hordeItemChance', value: 1.5},
-                {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: 0.05}
+                {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: 0.01}
             ];
         },
         active() {
@@ -903,7 +903,7 @@ export default {
         stats() {
             return [
                 {isPositive: true, type: 'base', name: 'hordeSoulChance', value: 0.1},
-                {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: 0.1},
+                {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: 0.04},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
             ];
         },

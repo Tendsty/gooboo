@@ -2,7 +2,10 @@
   <div v-if="isSimple" class="text-center">{{ text }}</div>
   <div v-else class="d-flex">
     <div class="flex-grow-1">{{ text }}{{ showStar ? '*' : '' }}:</div>
-    <div class="flex-grow-1 d-flex" :class="(before !== null && after !== null) ? 'justify-space-between' : 'justify-end'">
+    <div v-if="showRelative">
+      <mult-stat :mult="name" :type="type" :value="relativeValue"></mult-stat>
+    </div>
+    <div v-else class="flex-grow-1 d-flex" :class="(before !== null && after !== null) ? 'justify-space-between' : 'justify-end'">
       <div class="px-1" v-if="before !== null">
         <mult-stat :hide-prefix="hidePrefix" :mult="name" :type="type" :value="before"></mult-stat>
       </div>
@@ -28,6 +31,12 @@ export default {
     },
     hidePrefix() {
       return ['hordeActive', 'hordeCooldown'].includes(this.type);
+    },
+    showRelative() {
+      return this.$store.state.system.settings.general.items.relativeUpgradeStats.value;
+    },
+    relativeValue() {
+      return this.before === null ? this.after : (this.after === null ? this.before : (this.type === 'mult' ? (this.after / this.before) : (this.after - this.before)));
     }
   },
   props: {

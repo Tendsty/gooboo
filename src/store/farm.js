@@ -454,6 +454,7 @@ export default {
 
                 // Clear field
                 commit('updateField', {x: o.x, y: o.y, value: {...emptyField, color: field.color}});
+                dispatch('updateGrownHint');
             }
         },
         getCropExp({ state, getters, commit, dispatch }, o) {
@@ -482,7 +483,7 @@ export default {
                 commit('updateKey', {key: 'selectedBuildingName', value: null});
             }
         },
-        deleteTile({ state, commit }, o) {
+        deleteTile({ state, commit, dispatch }, o) {
             const field = state.field[o.y][o.x];
             if (field !== null && field.type !== null) {
                 if (field.type === 'building') {
@@ -493,6 +494,7 @@ export default {
                 }
                 commit('updateField', {x: o.x, y: o.y, value: {...emptyField, color: field.color}});
             }
+            dispatch('updateGrownHint');
         },
         plantAll({ state, dispatch }, o) {
             state.field.forEach((row, y) => {
@@ -598,6 +600,19 @@ export default {
             if (!rootState.unlock.farmLuxuryCardPack.use && name === 'goldenPetal') {
                 commit('unlock/unlock', 'farmLuxuryCardPack', {root: true});
             }
+        },
+        updateGrownHint({ state, rootState, commit }) {
+            let hasGrown = false;
+            if (rootState.system.settings.notification.items.cropReady.value) {
+                state.field.forEach(row => {
+                    row.forEach(cell => {
+                        if (cell !== null && cell.type === 'crop' && cell.grow >= cell.growMax) {
+                            hasGrown = true;
+                        }
+                    });
+                });
+            }
+            commit('system/updateKey', {key: 'farmHint', value: hasGrown}, {root: true});
         }
     }
 }

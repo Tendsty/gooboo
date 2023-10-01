@@ -15,6 +15,7 @@
       </v-col>
       <v-col class="scroll-container-tab" cols="3">
         <upgrade-queue feature="village" type="building" :disabled="isFrozen"></upgrade-queue>
+        <building-stat-bar></building-stat-bar>
         <upgrade-list feature="village" type="building" key="village-building"></upgrade-list>
       </v-col>
       <v-col class="scroll-container-tab" cols="3">
@@ -61,6 +62,7 @@
     <v-row v-else-if="tab === 'upgrades'" no-gutters>
       <v-col class="scroll-container-tab" cols="6">
         <upgrade-queue feature="village" type="building" :disabled="isFrozen"></upgrade-queue>
+        <building-stat-bar></building-stat-bar>
         <upgrade-list feature="village" type="building" key="village-building"></upgrade-list>
       </v-col>
       <v-col class="scroll-container-tab" cols="6">
@@ -101,6 +103,7 @@
     <job-list v-else-if="tab === 'jobs'"></job-list>
     <div v-else-if="tab === 'buildings'">
       <upgrade-queue feature="village" type="building" :disabled="isFrozen"></upgrade-queue>
+      <building-stat-bar></building-stat-bar>
       <upgrade-list feature="village" type="building" key="village-building"></upgrade-list>
     </div>
     <upgrade-list v-else-if="tab === 'upgrades'" feature="village" key="village-regular"></upgrade-list>
@@ -120,6 +123,7 @@
 <script>
 import { mapState } from 'vuex';
 import TabIconText from '../partial/render/TabIconText.vue';
+import BuildingStatBar from '../partial/village/BuildingStatBar.vue';
 import JobList from '../partial/village/JobList.vue';
 import OfferingInventory from '../partial/village/OfferingInventory.vue';
 import OfferingList from '../partial/village/OfferingList.vue';
@@ -131,7 +135,7 @@ import UpgradeList from '../render/UpgradeList.vue';
 import UpgradeQueue from '../render/UpgradeQueue.vue';
 
 export default {
-  components: { UpgradeList, Resources, JobList, PrestigeStatus, PrestigeInventory, UpgradeQueue, OfferingInventory, OfferingList, PolicyList, TabIconText },
+  components: { UpgradeList, Resources, JobList, PrestigeStatus, PrestigeInventory, UpgradeQueue, OfferingInventory, OfferingList, PolicyList, TabIconText, BuildingStatBar },
   data: () => ({
     tab: 'village'
   }),

@@ -32,7 +32,7 @@ export default {
             }
 
             for (const [key, elem] of Object.entries(feature.pack)) {
-                store.commit('card/initPack', {name: key, ...elem});
+                store.commit('card/initPack', {name: key, feature: name, ...elem});
                 store.commit('system/initRng', {name: 'cardPack_' + key, size: elem.amount ?? 1});
             }
 

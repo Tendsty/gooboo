@@ -307,7 +307,9 @@
       <v-menu min-width="296" :max-width="$vuetify.breakpoint.xsOnly ? 296 : 896" open-on-hover offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn class="px-2 ml-n2" text :icon="$vuetify.breakpoint.xsOnly" v-bind="attrs" v-on="on">
-            <v-icon>mdi-apps</v-icon>
+            <v-badge overlap color="secondary" :value="featureBadges > 0" :content="featureBadges">
+              <v-icon>mdi-apps</v-icon>
+            </v-badge>
             <span class="ml-2" v-if="$vuetify.breakpoint.smAndUp">{{ $vuetify.lang.t('$vuetify.gooboo.features') }}</span>
           </v-btn>
         </template>
@@ -352,7 +354,7 @@
       </gb-tooltip>
       <gb-tooltip v-if="canSeeHourglass" key="ancient-hourglass" :title-text="$vuetify.lang.t('$vuetify.hourglass.title')">
         <template v-slot:activator="{ on, attrs }">
-          <div class="hourglass-container mx-2" @click="dialogDust = true" v-bind="attrs" v-on="on">
+          <div class="hourglass-container mx-2" @click="openDustDialog" v-bind="attrs" v-on="on">
             <v-icon color="secondary" class="hourglass-outline">mdi-timer-sand-full</v-icon>
             <div class="hourglass-bg" :style="`top: ${ hourglassShift }px;`">
               <v-icon color="amber" class="hourglass-bg-inner">mdi-timer-sand-full</v-icon>
@@ -360,7 +362,7 @@
             <v-icon class="hourglass-outline">mdi-timer-sand-empty</v-icon>
           </div>
         </template>
-        <div class="text-center">{{ $vuetify.lang.t('$vuetify.hourglass.subtitle') }}</div>
+        <div v-if="isOnMainFeature" class="text-center">{{ $vuetify.lang.t('$vuetify.hourglass.subtitle') }}</div>
         <div class="d-flex justify-center">
           <currency name="school_goldenDust"></currency>
         </div>
@@ -609,7 +611,7 @@ export default {
       return [5, 0].includes(this.snackbarPosition);
     },
     canSeeHourglass() {
-      return this.$store.state.stat.school_goldenDust.total > 0 && this.isOnMainFeature && !this.featureIsFrozen;
+      return this.screen === 'school' || (this.$store.state.stat.school_goldenDust.total > 0 && this.isOnMainFeature && !this.featureIsFrozen);
     },
     canSeeUpdates() {
       return APP_ENV === 'WEB';
@@ -627,6 +629,16 @@ export default {
         }
       }
       return null;
+    },
+    featureBadges() {
+      let badges = 0;
+      if (this.$store.state.system.noteHint.length > 0) {
+        badges++;
+      }
+      if (this.$store.state.system.farmHint) {
+        badges++;
+      }
+      return badges;
     }
   },
   created() {
@@ -716,6 +728,9 @@ export default {
         clearInterval(this.intervalId);
         this.intervalId = null;
       }
+    },
+    openDustDialog() {
+      this.dialogDust = true;
     }
   },
   watch: {

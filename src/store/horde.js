@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_NOSTALGIA_REMOVE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from "../js/constants";
+import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_NOSTALGIA_REMOVE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP, SECONDS_PER_HOUR } from "../js/constants";
 import { buildNum, capitalize, decapitalize } from "../js/utils/format";
 import { chance, randomElem, randomInt } from "../js/utils/random";
 
@@ -55,7 +55,9 @@ export default {
         itemAttackMult: 0,
         itemHealthMult: 0,
         fightTime: 0,
-        fightRampage: 0
+        fightRampage: 0,
+        loadout: [],
+        nextLoadoutId: 1
     },
     getters: {
         enemyStats: () => (zone, combo = 0) => {
@@ -94,10 +96,8 @@ export default {
         enemySoulChance: (state, getters, rootState, rootGetters) => (zone, isBase = false) => {
             if (zone < 20) {
                 return 0;
-            } else if (zone === 20) {
-                return 1;
             } else {
-                const baseValue = 0.45 - zone * 0.005;
+                const baseValue = 0.7 - zone * 0.005;
                 if (isBase) {
                     return baseValue;
                 }
@@ -105,12 +105,11 @@ export default {
             }
         },
         enemySoulAmount: (state, getters, rootState, rootGetters) => (zone, isBase = false) => {
-            if (zone < 20) {
+            const zoneBase = zone - 20;
+            if (zoneBase < 0) {
                 return 0;
-            } else if (zone === 20) {
-                return 35;
             } else {
-                const baseValue = Math.pow(1.14, zone - 20) * 2;
+                const baseValue = Math.pow(1.16, zoneBase) * 1.5;
                 if (isBase) {
                     return baseValue;
                 }
@@ -120,17 +119,15 @@ export default {
         enemyHeirloomChance: (state, getters, rootState, rootGetters) => (zone) => {
             if (zone < 30) {
                 return 0;
-            } else if ((zone % 10) === 0) {
-                return 1;
             } else {
                 return rootGetters['mult/get']('hordeHeirloomChance', getters.enemyHeirloomChanceNostalgia + getters.enemyHeirloomChanceBase(zone));
             }
         },
         enemyHeirloomChanceNostalgia: (state) => {
-            return Math.min(0.5, state.nostalgia / buildNum(100, 'K'));
+            return Math.min(state.nostalgia / buildNum(100, 'K'));
         },
         enemyHeirloomChanceBase: () => (zone) => {
-            return 0.27 + ((zone % 10) * 0.02) - Math.floor(zone / 10) * 0.05;
+            return 0.08 - zone * 0.001;
         },
         enemyCorruption: (state, getters, rootState, rootGetters) => (zone) => {
             return rootGetters['mult/get']('hordeCorruption', getters.enemyCorruptionBase(zone));
@@ -155,6 +152,9 @@ export default {
         },
         currentSoulAmountBase: (state, getters) => {
             return getters.enemySoulAmount(state.zone, true);
+        },
+        currentSoulMult: (state, getters, rootState) => {
+            return Math.min(Math.pow(rootState.stat.horde_timeSpent.value / SECONDS_PER_HOUR + 1, 0.5) * 0.45 - 0.35, 1);
         },
         currentHeirloomChance: (state, getters) => {
             return getters.enemyHeirloomChance(state.zone);
@@ -305,6 +305,19 @@ export default {
         },
         addSigilZone(state, value) {
             state.sigilZones.push(value);
+        },
+        addEmptyLoadout(state) {
+            state.loadout.push({id: state.nextLoadoutId, name: '#' + (state.loadout.length + 1), content: []});
+            Vue.set(state, 'nextLoadoutId', state.nextLoadoutId + 1);
+        },
+        addExistingLoadout(state, o) {
+            state.loadout.push(o);
+        },
+        updateLoadoutKey(state, o) {
+            Vue.set(state.loadout[o.id], o.key, o.value);
+        },
+        deleteLoadout(state, index) {
+            state.loadout.splice(index, 1);
         }
     },
     actions: {
@@ -322,6 +335,8 @@ export default {
             commit('updateKey', {key: 'itemHealthMult', value: 0});
             commit('updateKey', {key: 'fightTime', value: 0});
             commit('updateKey', {key: 'fightRampage', value: 0});
+            commit('updateKey', {key: 'loadout', value: []});
+            commit('updateKey', {key: 'nextLoadoutId', value: 1});
 
             commit('updateKey', {key: 'player', value: {}});
             commit('updateKey', {key: 'enemy', value: {}});
@@ -447,7 +462,7 @@ export default {
             dispatch('resetStats');
         },
         equipItem({ state, getters, rootGetters, commit, dispatch }, name) {
-            if (!state.items[name].equipped && getters.itemsEquipped < rootGetters['mult/get']('hordeMaxItems')) {
+            if (state.items[name] && !state.items[name].equipped && getters.itemsEquipped < rootGetters['mult/get']('hordeMaxItems')) {
                 commit('updateItemKey', {name, key: 'equipped', value: true});
                 dispatch('applyItemEffects', name);
                 dispatch('resetStats');
@@ -455,7 +470,7 @@ export default {
             }
         },
         unequipItem({ state, commit, dispatch }, name) {
-            if (state.items[name].equipped) {
+            if (state.items[name]?.equipped) {
                 commit('updateItemKey', {name, key: 'equipped', value: false});
 
                 state.items[name].stats(state.items[name].level).forEach(elem => {
@@ -702,8 +717,8 @@ export default {
                 }
             }
         },
-        prestige({ state, rootGetters, commit, dispatch }) {
-            const prestigeGain = rootGetters['currency/value']('horde_soulCorrupted');
+        prestige({ state, getters, rootGetters, commit, dispatch }) {
+            const prestigeGain = rootGetters['currency/value']('horde_soulCorrupted') * getters.currentSoulMult;
             commit('stat/increaseTo', {feature: 'horde', name: 'bestPrestige', value: prestigeGain}, {root: true});
             commit('stat/add', {feature: 'horde', name: 'prestigeCount', value: 1}, {root: true});
             dispatch('currency/gain', {feature: 'horde', name: 'soulEmpowered', amount: prestigeGain}, {root: true});
@@ -812,6 +827,34 @@ export default {
                 dispatch('system/applyEffect', {type: 'mult', name: 'hordeHealth', multKey: `hordeItemPermanent`, value: state.itemHealthMult + 1}, {root: true});
             } else {
                 dispatch('system/resetEffect', {type: 'mult', name: 'hordeHealth', multKey: `hordeItemPermanent`}, {root: true});
+            }
+        },
+        unequipAll({ state, dispatch }) {
+            for (const [key, elem] of Object.entries(state.items)) {
+                if (elem.equipped) {
+                    dispatch('unequipItem', key);
+                }
+            }
+        },
+        equipLoadout({ state, getters, rootGetters, dispatch }, index) {
+            const loadout = state.loadout[index];
+            let freeSlots = rootGetters['mult/get']('hordeMaxItems') - getters.itemsEquipped;
+            if (loadout) {
+                loadout.content.forEach(name => {
+                    const item = state.items[name];
+                    if (freeSlots > 0 && item && !item.equipped) {
+                        dispatch('equipItem', name);
+                        freeSlots--;
+                    }
+                });
+            }
+        },
+        unequipLoadout({ state, dispatch }, index) {
+            const loadout = state.loadout[index];
+            if (loadout) {
+                loadout.content.forEach(name => {
+                    dispatch('unequipItem', name);
+                });
             }
         }
     }

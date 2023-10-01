@@ -1,4 +1,4 @@
-export { addCurrencyToSave }
+export { addCurrencyToSave, raiseUpgradeLevel }
 
 function addCurrencyToSave(save, currency, amount) {
     if (save.currency[currency] === undefined) {
@@ -19,6 +19,15 @@ function addCurrencyToSave(save, currency, amount) {
     }
     save.stat[maxStatName].value = Math.max(amount, save.stat[maxStatName].value);
     save.stat[maxStatName].total = Math.max(amount, save.stat[maxStatName].total);
+
+    return save;
+}
+
+function raiseUpgradeLevel(save, name, amount) {
+    if (save.upgrade && save.upgrade[name] !== undefined) {
+        save.upgrade[name].level += amount;
+        save.upgrade[name].highestLevel = Math.max(save.upgrade[name].level, save.upgrade[name].highestLevel);
+    }
 
     return save;
 }

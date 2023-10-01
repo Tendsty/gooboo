@@ -3,7 +3,7 @@
     <v-card-title class="pa-0 justify-center align-center">{{ $vuetify.lang.t(`$vuetify.message.school.${ message.isExam ? 'getExam' : 'get' }`) }}</v-card-title>
     <v-card-text class="pa-0 pb-2">
       <div>
-        <span>{{ $vuetify.lang.t(`$vuetify.message.school.score`, message.score) }}</span>
+        <span>{{ $vuetify.lang.t(`$vuetify.message.school.score`, Math.floor(message.score)) }}</span>
         <span v-if="message.perfectScore">&nbsp;{{ $vuetify.lang.t(`$vuetify.message.school.perfectScore`) }}</span>
       </div>
       <div v-if="message.gradePlus">{{ $vuetify.lang.t(`$vuetify.message.school.gradePlus`) }}</div>

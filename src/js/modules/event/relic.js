@@ -30,7 +30,7 @@ export default {
     // Wheel of fortune
     youngPig: {icon: 'mdi-pig-variant', color: 'pale-pink', effect: [
         {name: 'hordeSoulChance', type: 'base', value: 0.01},
-        {name: 'hordeHeirloomChance', type: 'base', value: 0.01}
+        {name: 'hordeHeirloomChance', type: 'base', value: 0.002}
     ]},
     silverHorseshoe: {icon: 'mdi-horseshoe', color: 'lighter-grey', effect: [
         {name: 'farmRareDrop', type: 'mult', value: 1.05}

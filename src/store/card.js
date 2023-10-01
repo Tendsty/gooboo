@@ -46,6 +46,7 @@ export default {
             }
 
             Vue.set(state.pack, o.name, {
+                feature: o.feature ?? null,
                 price: o.price ?? null,
                 unlock: o.unlock ?? null,
                 amount: o.amount ?? 1,

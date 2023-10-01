@@ -214,22 +214,16 @@ export default {
         // Depth dweller
         if (store.state.unlock.miningDepthDweller.use) {
             const dwellerLimit = store.getters['mining/dwellerLimit'];
-            let dweller = store.state.stat[`mining_depthDweller${subfeature}`].value;
-            secondsLeft = seconds;
-            const dwellerMult = 10 * store.getters['mult/get']('miningDepthDwellerMax');
-            const dwellerSpeed = store.getters['mult/get']('miningDepthDwellerSpeed', 0.00001);
-
-            while (secondsLeft > 0) {
-                let diff = (dwellerLimit - dweller) / dwellerMult;
-                dweller += Math.pow(diff, 2) * Math.pow(1.1, diff) * dwellerSpeed;
-                secondsLeft--;
+            const dwellerSpeed = store.getters['mult/get']('miningDepthDwellerSpeed') / dwellerLimit;
+            const newDweller = Math.min(
+                0.1 + dwellerLimit -
+                (0.1 + dwellerLimit - store.state.stat[`mining_depthDweller${subfeature}`].value) *
+                Math.pow(1 - dwellerSpeed, seconds), dwellerLimit
+            );
+            store.commit('stat/increaseTo', {feature: 'mining', name: 'depthDweller' + subfeature, value: newDweller});
+            if (newDweller >= dwellerLimit) {
+                store.commit('stat/increaseTo', {feature: 'mining', name: 'dwellerCapHit', value: 1});
             }
-
-            if (dweller > dwellerLimit) {
-                dweller = dwellerLimit;
-            }
-
-            store.commit('stat/increaseTo', {feature: 'mining', name: 'depthDweller' + subfeature, value: dweller});
         }
     },
     unlock: ['miningPickaxeCrafting', 'miningDepthDweller', 'miningSmeltery', 'miningEnhancement', 'miningResin', 'miningGasSubfeature', 'miningSmoke'],
@@ -243,6 +237,7 @@ export default {
         craftingCount: {},
         craftingLuck: {value: 1},
         craftingWasted: {},
+        dwellerCapHit: {},
         timeSpent: {display: 'time'},
         bestPrestige0: {},
         bestPrestige1: {},
@@ -259,7 +254,7 @@ export default {
         miningPickaxeCraftingPower: {},
         miningPickaxeCraftingQuality: {},
         miningOreQuality: {baseValue: 1},
-        miningDepthDwellerSpeed: {},
+        miningDepthDwellerSpeed: {baseValue: 0.0001},
         miningDepthDwellerMax: {display: 'percent', baseValue: 0.1},
         miningResinMax: {round: true, baseValue: 1},
         currencyMiningHeliumIncrement: {display: 'percent'},

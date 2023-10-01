@@ -96,12 +96,10 @@
               {{ $formatNum(currentSoulAmount) }}
             </v-chip>
           </template>
-          <template v-if="zone > 20">
-            <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.chance') }}</div>
-            <stat-breakdown name="hordeSoulChance" :base="currentSoulChanceBase"></stat-breakdown>
-            <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
-            <stat-breakdown name="hordeSoulGain" :base="currentSoulAmountBase"></stat-breakdown>
-          </template>
+          <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.chance') }}</div>
+          <stat-breakdown name="hordeSoulChance" :base="currentSoulChanceBase"></stat-breakdown>
+          <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
+          <stat-breakdown name="hordeSoulGain" :base="currentSoulAmountBase"></stat-breakdown>
         </gb-tooltip>
         <gb-tooltip v-if="bossFight && currentHeirloomChance > 0" :title-text="$vuetify.lang.t('$vuetify.horde.heirloom.name')">
           <template v-slot:activator="{ on, attrs }">
@@ -112,11 +110,8 @@
           </template>
           <div>{{ $vuetify.lang.t('$vuetify.horde.heirloom.description', $formatTime(nostalgia), $formatNum(nostalgiaRemovePercent)) }}</div>
           <div>{{ $vuetify.lang.t('$vuetify.horde.heirloom.description2') }}</div>
-          <div v-if="(zone % 10) === 0">{{ $vuetify.lang.t('$vuetify.horde.heirloom.guaranteed') }}</div>
-          <template v-else>
-            <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.chance') }}</div>
-            <stat-breakdown name="hordeHeirloomChance" :base="enemyHeirloomChanceBase" :baseArray="[{name: 'nostalgia', value: enemyHeirloomChanceNostalgia}]"></stat-breakdown>
-          </template>
+          <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.chance') }}</div>
+          <stat-breakdown name="hordeHeirloomChance" :base="enemyHeirloomChanceBase" :baseArray="[{name: 'nostalgia', value: enemyHeirloomChanceNostalgia}]"></stat-breakdown>
           <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
           <stat-breakdown name="hordeHeirloomAmount"></stat-breakdown>
         </gb-tooltip>
