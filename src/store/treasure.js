@@ -308,7 +308,7 @@ export default {
                 dispatch('updateEffectCache');
             }
         },
-        updateEffectCache({ state, commit }) {
+        updateEffectCache({ state, commit, dispatch }) {
             let effects = {};
 
             state.items.forEach(item => {
@@ -330,7 +330,7 @@ export default {
 
             for (const [, group] of Object.entries(effects)) {
                 for (const [key, elem] of Object.entries(group)) {
-                    commit('mult/setMult', {name: key, key: 'treasure', value: elem}, {root: true});
+                    dispatch('mult/setMult', {name: key, key: 'treasure', value: elem}, {root: true});
                 }
             }
         }

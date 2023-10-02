@@ -143,4 +143,27 @@ export default {
         {name: 'currencyVillageJoyGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
         {name: 'villageHappiness', type: 'base', value: lvl => lvl * 0.01}
     ]},
+    holyOil: {type: 'prestige', requirement() {
+        return store.state.unlock.villageBuildings6.see;
+    }, price(lvl) {
+        return {village_blessing: Math.pow(1.65, lvl) * buildNum(75, 'M')};
+    }, effect: [
+        {name: 'currencyVillageOilGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyVillageOilCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
+    ]},
+    holyMarble: {type: 'prestige', requirement() {
+        return store.state.unlock.villageBuildings6.see;
+    }, price(lvl) {
+        return {village_blessing: Math.pow(1.65, lvl) * buildNum(110, 'M')};
+    }, effect: [
+        {name: 'currencyVillageMarbleGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyVillageMarbleCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
+    ]},
+    calmingSpeech: {type: 'prestige', requirement() {
+        return store.state.unlock.villageBuildings6.see;
+    }, price(lvl) {
+        return {village_blessing: Math.pow(0.08 * lvl + 1.8, lvl) * buildNum(150, 'M')};
+    }, effect: [
+        {name: 'villagePollutionTolerance', type: 'base', value: lvl => lvl}
+    ]},
 }

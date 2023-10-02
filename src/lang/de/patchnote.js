@@ -19,6 +19,10 @@ export default {
   },
   text: {
     addedFeature: 'Funktion hinzugefügt',
+    addedUpgrade: '{0} neue Verbesserung(en) hinzugefügt',
+    addedPrestigeUpgrade: '{0} neue Prestige-Verbesserung(en) hinzugefügt',
+    addedBuilding: '{0} neue Stufe-{1}-Gebäude hinzugefügt',
+    addedAchievement: '{0} Erfolg(e) hinzugefügt',
     secretAchievement: '{0} geheime(r) Erfolg(e) hinzugefügt',
 
     // v1.0.1
@@ -123,6 +127,7 @@ export default {
     1: {
       0: 'Ein explosiver Anfang',
       1: 'Direktor ersetzt!',
+      2: 'Der Umwelt zuliebe',
     }
   }
 }

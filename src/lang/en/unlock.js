@@ -16,6 +16,7 @@ export default {
   villageBuildings3: 'Tier 3 buildings',
   villageBuildings4: 'Tier 4 buildings',
   villageBuildings5: 'Tier 5 buildings',
+  villageBuildings6: 'Tier 6 buildings',
   villageCoinUpgrades: 'Gold coin upgrades',
   villageUpgradeScythe: 'Scythe upgrade',
   villageUpgradeHatchet: 'Hatchet upgrade',

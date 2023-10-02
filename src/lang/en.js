@@ -346,7 +346,7 @@ export default {
     art: {
       name: 'Art',
       subtitle: 'Mix colors',
-      description: 'Guess colors correctly to raise your score. Two colors will be displayed, guess the result from mixing them. Gain 1 score for each correct answer, and lose 1 score for each wrong answer (cannot go below 0). As your grade increases, more answers get added and the answers get more sililar.',
+      description: 'Guess colors correctly to raise your score. Two colors will be displayed, guess the result from mixing them. Gain 1 score for each correct answer, and lose 1 score for each wrong answer (cannot go below 0). As your grade increases, more answers get added and the answers get more similar.',
     }
   },
   hourglass: {
@@ -1248,7 +1248,9 @@ export default {
       blastMiner: 'Blast miner',
       fisherman: 'Fisherman',
       scientist: 'Scientist',
-      gardener: 'Gardener'
+      gardener: 'Gardener',
+      oilWorker: 'Oil worker',
+      sculptor: 'Sculptor',
     },
     policy: {
       name: 'Policies',

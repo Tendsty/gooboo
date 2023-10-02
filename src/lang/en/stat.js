@@ -111,6 +111,14 @@ export default {
     achievement: 'Black hole',
     description: 'Maximum offerings in one prestige'
   },
+  village_oil: {
+    achievement: 'Take their oil!',
+    description: 'Highest oil amount'
+  },
+  village_minHappiness: {
+    achievement: 'Living in hell',
+    description: 'Reach minimum happiness'
+  },
   village_timeSpent: {
     description: 'Time spent'
   },

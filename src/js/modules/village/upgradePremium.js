@@ -104,4 +104,20 @@ export default {
     }, effect: [
         {name: 'currencyVillageScienceGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)}
     ]},
+    moreOil: {type: 'premium', cap: 1, requirement() {
+        return store.state.stat.village_oil.total > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 1800};
+    }, effect: [
+        {name: 'currencyVillageOilGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)},
+        {name: 'currencyVillageOilCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
+    ]},
+    moreMarble: {type: 'premium', cap: 1, requirement() {
+        return store.state.stat.village_marble.total > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 2250};
+    }, effect: [
+        {name: 'currencyVillageMarbleGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)},
+        {name: 'currencyVillageMarbleCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
+    ]},
 }

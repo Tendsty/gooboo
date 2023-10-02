@@ -33,7 +33,7 @@ export default {
             const name = currency.split('_')[1];
             const gain = store.getters['mult/get'](store.getters['currency/gainMultName']('village', name));
             if (gain > 0) {
-                store.dispatch('currency/gain', {feature: 'village', name, amount: gain * happiness * seconds});
+                store.dispatch('currency/gain', {feature: 'village', name, amount: gain * seconds});
             }
         });
 
@@ -51,11 +51,14 @@ export default {
         if (happiness > 1.25) {
             store.dispatch('currency/gain', {feature: 'village', name: 'joy', gainMult: true, amount: (happiness - 1.2) * VILLAGE_JOY_PER_HAPPINESS * seconds});
         }
+        if (happiness <= 0.1) {
+            store.commit('stat/increaseTo', {feature: 'village', name: 'minHappiness', value: 1});
+        }
     },
     unlock: [
         'villageFeature',
         'villageCoinUpgrades',
-        ...buildArray(5).map(elem => 'villageBuildings' + (elem + 1)),
+        ...buildArray(6).map(elem => 'villageBuildings' + (elem + 1)),
         ...[
             'Scythe', 'Hatchet', 'Pickaxe', 'WateringCan', 'Investment',
             'Basics', 'Processing', 'Pump', 'Sand', 'Book',
@@ -71,13 +74,17 @@ export default {
         bestPrestige: {},
         prestigeCount: {},
         totalOffering: {},
+        minHappiness: {},
         bestOffering: {},
     },
     mult: {
         villageWorker: {baseValue: 1, round: true},
         queueSpeedVillageBuilding: {baseValue: 1},
         villageTaxRate: {display: 'percent'},
-        villageHappiness: {display: 'percent', baseValue: 1},
+        villageHappiness: {display: 'percent', baseValue: 1, min: 0.1},
+        villagePollution: {round: true},
+        villagePollutionTolerance: {baseValue: 5, round: true},
+        villagePower: {min: 0},
         villageOfferingPower: {},
 
         // Upgrade cap mults
@@ -122,6 +129,8 @@ export default {
         glass: {subtype: 'material', color: 'cyan', icon: 'mdi-mirror', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
         hardwood: {subtype: 'material', color: 'cherry', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
         gem: {subtype: 'material', color: 'pink', icon: 'mdi-diamond', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
+        oil: {subtype: 'material', color: 'pale-green', icon: 'mdi-oil', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 800}},
+        marble: {subtype: 'material', color: 'pale-blue', icon: 'mdi-mirror-rectangle', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 200}},
 
         // FOOD
         grain: {subtype: 'food', color: 'yellow', icon: 'mdi-barley', gainMult: {display: 'perSecond'}, showGainMult: true},

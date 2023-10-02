@@ -152,7 +152,7 @@ export default {
     breakthrough: {requirement() {
         return store.state.unlock.villageUpgradeBreakthrough.use;
     }, price(lvl) {
-        return {village_science: lvl * 10 + 20};
+        return {village_science: Math.round(Math.pow(1.05, Math.max(lvl - 25, 0)) * lvl * 10 + 20)};
     }, effect: [
         {name: 'currencyVillageKnowledgeCap', type: 'base', value: lvl => lvl * 5},
         {name: 'currencyVillageScienceCap', type: 'base', value: lvl => lvl * 2}

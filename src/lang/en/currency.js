@@ -492,6 +492,14 @@ export default {
     name: 'Hardwood',
     description: 'These logs are gained from giant trees that need centuries to grow. Their wood is hard, but still elastic'
   },
+  village_oil: {
+    name: 'Oil',
+    description: 'A flexible and precious resource'
+  },
+  village_marble: {
+    name: 'Marble',
+    description: 'This beautiful piece of stone is a common choice for more luxorious buildings'
+  },
   horde_bone: {
     name: 'Bone',
     description: 'Skeletal remains of the enemies you have slain'

@@ -201,6 +201,21 @@ export default {
   village_festival: 'Festival',
   village_taxOffice: 'Tax office',
   village_cemetery: 'Cemetery',
+  village_mosque: 'Mosque',
+  village_waterTower: 'Water tower',
+  village_outdoorPump: 'Outdoor pump',
+  village_bankVault: 'Bank vault',
+  village_steamEngine: 'Steam engine',
+  village_mansion: 'Mansion',
+  village_oilRig: 'Oil rig',
+  village_generator: 'Generator',
+  village_lobby: 'Lobby',
+  village_oilStorage: 'Oil storage',
+  village_artGallery: 'Art gallery',
+  village_excavator: 'Excavator',
+  village_oilTruck: 'Oil truck',
+  village_immigrationOffice: 'Immigration office',
+  village_marbleStatue: 'Marble statue',
 
   // Village upgrades
   village_wallet: 'Wallet',
@@ -248,6 +263,9 @@ export default {
   village_deeperWorship: 'Deeper worship',
   village_holyLab: 'Holy lab',
   village_charity: 'Charity',
+  village_holyOil: 'Holy oil',
+  village_holyMarble: 'Holy marble',
+  village_calmingSpeech: 'Calming speech',
 
   // Village premium upgrades
   village_overtime: 'Overtime',
@@ -264,6 +282,8 @@ export default {
   village_moreGem: 'More gem',
   village_moreKnowledge: 'More knowledge',
   village_moreScience: 'More science',
+  village_moreOil: 'More oil',
+  village_moreMarble: 'More marble',
 
   // Village books
   village_bookWallet: 'Book: Wallet',

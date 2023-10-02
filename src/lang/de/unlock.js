@@ -16,6 +16,7 @@ export default {
   villageBuildings3: 'Stufe-3-Gebäude',
   villageBuildings4: 'Stufe-4-Gebäude',
   villageBuildings5: 'Stufe-5-Gebäude',
+  villageBuildings6: 'Stufe-6-Gebäude',
   villageCoinUpgrades: 'Goldmünzen-Verbesserungen',
   villageUpgradeScythe: 'Sense-Verbesserung',
   villageUpgradeHatchet: 'Beil-Verbesserung',
