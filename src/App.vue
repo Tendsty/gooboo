@@ -369,7 +369,7 @@
       </gb-tooltip>
       <gb-tooltip v-if="featureIsFrozen" key="frozen-feature" :title-text="$vuetify.lang.t('$vuetify.cryolab.frozenFeature.title')">
         <template v-slot:activator="{ on, attrs }">
-          <v-icon class="ml-2" v-bind="attrs" v-on="on">mdi-snowflake</v-icon>
+          <v-icon class="mx-2" v-bind="attrs" v-on="on">mdi-snowflake</v-icon>
         </template>
         <div class="text-center">{{ $vuetify.lang.t('$vuetify.cryolab.frozenFeature.description') }}</div>
       </gb-tooltip>

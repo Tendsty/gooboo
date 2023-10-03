@@ -33,6 +33,7 @@ export default {
   villageHappiness: 'Zufriedenheit',
   villagePolicyTaxes: 'Steuerverordnung',
   villagePolicyImmigration: 'Einwanderungsverordnung',
+  villagePolicyReligion: 'Religionsverordnung',
   villageHousingCap: 'Maximale Wohnraum-Stufe',
   villageWorkstationCap: 'Maximale Arbeitsplatz-Stufe',
   hordeAttack: 'Angriff',

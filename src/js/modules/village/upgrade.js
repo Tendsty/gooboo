@@ -184,4 +184,23 @@ export default {
         {name: 'currencyVillageGemGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
         {name: 'currencyVillageFishGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
     ]},
+    sprinkler: {cap: 15, requirement() {
+        return store.state.unlock.villageUpgradeSprinkler.use;
+    }, price(lvl) {
+        return {village_coin: Math.ceil(Math.pow(1.65, lvl) * buildNum(2, 'T'))};
+    }, effect: [
+        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
+        {name: 'currencyVillageGrainGain', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageFruitGain', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageVegetableGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
+    ]},
+    greed: {cap: 15, requirement() {
+        return store.state.unlock.villageUpgradeGreed.use;
+    }, price(lvl) {
+        return {village_knowledge: lvl * 160 + 2200, village_science: lvl * 45 + 500};
+    }, effect: [
+        {name: 'villageTaxRate', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
+        {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
+        {name: 'villagePollution', type: 'base', value: lvl => lvl}
+    ]},
 }

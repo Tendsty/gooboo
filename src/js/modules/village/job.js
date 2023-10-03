@@ -111,5 +111,12 @@ export default {
         rewards: [
             {type: 'base', name: 'currencyVillageMarbleGain', amount: 0.001}
         ]
+    },
+    explorer: {
+        max: 0,
+        needed: 600,
+        rewards: [
+            {type: 'base', name: 'villageLootGain', amount: 2}
+        ]
     }
 }

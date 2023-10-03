@@ -500,6 +500,10 @@ export default {
     name: 'Marble',
     description: 'This beautiful piece of stone is a common choice for more luxorious buildings'
   },
+  village_meat: {
+    name: 'Meat',
+    description: 'These cows surely had a wonderful life... right?'
+  },
   horde_bone: {
     name: 'Bone',
     description: 'Skeletal remains of the enemies you have slain'

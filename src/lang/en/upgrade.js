@@ -214,8 +214,15 @@ export default {
   village_artGallery: 'Art gallery',
   village_excavator: 'Excavator',
   village_oilTruck: 'Oil truck',
+  village_oldLibrary: 'Old library',
   village_immigrationOffice: 'Immigration office',
   village_marbleStatue: 'Marble statue',
+  village_darkCult: 'Dark cult',
+  village_slaughterhouse: 'Slaughterhouse',
+  village_ecoCouncil: 'Eco council',
+  village_treehouse: 'Treehouse',
+  village_rainforest: 'Rainforest',
+  village_luxuryStorage: 'Luxury storage',
 
   // Village upgrades
   village_wallet: 'Wallet',
@@ -240,6 +247,8 @@ export default {
   village_modifiedPlants: 'Modified plants',
   village_dopamine: 'Dopamine',
   village_adrenaline: 'Adrenaline',
+  village_sprinkler: 'Sprinkler',
+  village_greed: 'Greed',
 
   // Village prestige upgrades
   village_arch: 'Ark',

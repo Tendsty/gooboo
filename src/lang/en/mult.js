@@ -33,6 +33,7 @@ export default {
   villageHappiness: 'Happiness',
   villagePolicyTaxes: 'Tax policy',
   villagePolicyImmigration: 'Immigration policy',
+  villagePolicyReligion: 'Religion policy',
   villageHousingCap: 'Housing maximum level',
   villageWorkstationCap: 'Workstation maximum level',
   villagePollution: 'Pollution',

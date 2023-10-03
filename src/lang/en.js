@@ -1251,11 +1251,13 @@ export default {
       gardener: 'Gardener',
       oilWorker: 'Oil worker',
       sculptor: 'Sculptor',
+      explorer: 'Explorer',
     },
     policy: {
       name: 'Policies',
       taxes: 'Taxes',
-      immigration: 'Immigration'
+      immigration: 'Immigration',
+      religion: 'Religion',
     },
     buildings: 'Buildings',
     village: 'Village',

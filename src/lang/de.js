@@ -1253,7 +1253,8 @@ export default {
     policy: {
       name: 'Verordnungen',
       taxes: 'Steuern',
-      immigration: 'Einwanderung'
+      immigration: 'Einwanderung',
+      religion: 'Religion',
     },
     buildings: 'Gebäude',
     village: 'Dorf',

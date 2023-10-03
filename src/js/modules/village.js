@@ -58,12 +58,13 @@ export default {
     unlock: [
         'villageFeature',
         'villageCoinUpgrades',
-        ...buildArray(6).map(elem => 'villageBuildings' + (elem + 1)),
+        ...buildArray(7).map(elem => 'villageBuildings' + (elem + 1)),
         ...[
             'Scythe', 'Hatchet', 'Pickaxe', 'WateringCan', 'Investment',
             'Basics', 'Processing', 'Pump', 'Sand', 'Book',
             'Axe', 'Bomb', 'Toll', 'FishingRod', 'HolyBook',
-            'Breakthrough', 'ModifiedPlants', 'Dopamine', 'Adrenaline'
+            'Breakthrough', 'ModifiedPlants', 'Dopamine', 'Adrenaline',
+            'Sprinkler', 'Greed'
         ].map(elem => 'villageUpgrade' + elem),
         ...buildArray(4).map(elem => 'villageOffering' + (elem + 1))
     ],
@@ -103,6 +104,11 @@ export default {
         // Policy limits
         villagePolicyTaxes: {round: true},
         villagePolicyImmigration: {round: true},
+        villagePolicyReligion: {round: true},
+
+        // Loot mults
+        villageLootGain: {display: 'perHour'},
+        villageLootQuality: {display: 'percent'},
     },
     multGroup: [
         {mult: 'villageHousingCap', name: 'upgradeCap', subtype: 'housing'},
@@ -137,12 +143,21 @@ export default {
         fruit: {subtype: 'food', color: 'red', icon: 'mdi-food-apple', gainMult: {display: 'perSecond'}, showGainMult: true},
         fish: {subtype: 'food', color: 'blue-grey', icon: 'mdi-fish', gainMult: {display: 'perSecond'}, showGainMult: true},
         vegetable: {subtype: 'food', color: 'orange', icon: 'mdi-carrot', gainMult: {display: 'perSecond'}, showGainMult: true},
+        meat: {subtype: 'food', color: 'brown', icon: 'mdi-food-steak', gainMult: {display: 'perSecond'}, showGainMult: true},
 
         // Mental resources
         knowledge: {subtype: 'mental', overcapScaling: 0.4, color: 'lime', icon: 'mdi-brain', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 100}},
         faith: {subtype: 'mental', overcapMult: 0.9, overcapScaling: 0.9, color: 'amber', icon: 'mdi-hands-pray', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 50}},
         science: {subtype: 'mental', overcapScaling: 0.4, color: 'light-blue', icon: 'mdi-flask', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 40}},
         joy: {subtype: 'mental', overcapScaling: 0.4, color: 'pink-purple', icon: 'mdi-party-popper', gainMult: {}, capMult: {baseValue: 250}},
+
+        // Loot resources
+        loot0: {subtype: 'loot', color: 'light-grey', icon: 'mdi-trophy-variant'},
+        loot1: {subtype: 'loot', color: 'green', icon: 'mdi-trophy-variant'},
+        loot2: {subtype: 'loot', color: 'indigo', icon: 'mdi-trophy-variant'},
+        loot3: {subtype: 'loot', color: 'purple', icon: 'mdi-trophy-variant'},
+        loot4: {subtype: 'loot', color: 'amber', icon: 'mdi-trophy-variant'},
+        loot5: {subtype: 'loot', color: 'red', icon: 'mdi-trophy-variant'},
 
         // Prestige currency
         blessing: {type: 'prestige', alwaysVisible: true, color: 'yellow', icon: 'mdi-flare'},
