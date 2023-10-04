@@ -18,13 +18,13 @@ export default {
                 unlock: 'villageBuildings7',
                 type: 'new',
                 text: 'addedBuilding',
-                params: [3, 7]
+                params: [7, 7]
             },
             {
                 unlock: 'villageBuildings6',
                 type: 'new',
                 text: 'addedUpgrade',
-                params: [2]
+                params: [5]
             },
             {
                 unlock: 'villageBuildings6',
@@ -55,12 +55,25 @@ export default {
                 unlock: 'hordeItems',
                 type: 'bugfix',
                 text: '91',
+            },
+            {
+                type: 'clarity',
+                text: '93',
+            },
+            {
+                unlock: 'hordeItems',
+                type: 'bugfix',
+                text: '94',
             }
         ],
         treasure: [
             {
                 type: 'bugfix',
                 text: '92',
+            },
+            {
+                type: 'bugfix',
+                text: '95',
             }
         ]
     }

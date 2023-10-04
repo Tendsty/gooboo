@@ -39,6 +39,8 @@ export default {
   villagePollution: 'Pollution',
   villagePollutionTolerance: 'Pollution tolerance',
   villagePower: 'Power',
+  villageLootGain: 'Loot gain',
+  villageLootQuality: 'Loot quality',
   hordeAttack: 'Attack',
   hordeHealth: 'Health',
   hordeRecovery: 'Recovery',

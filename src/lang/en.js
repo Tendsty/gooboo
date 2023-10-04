@@ -940,7 +940,7 @@ export default {
     mining_0: 'Deepest ore mine rock broken',
     mining_1: 'Deepest gas giant rock broken',
     village_0: 'Maximum housing',
-    horde_0: 'Maximum zone',
+    horde_0: 'Highest zone boss defeated',
     farm_0: 'Sum of all crop levels',
     gallery_0: 'Log5 of total beauty',
     debug: 'Debug'
@@ -1267,6 +1267,11 @@ export default {
     taxpayers: 'Taxpayers',
     taxpayersDescription1: 'All working citizens consume up to {0} of each food per second and pay taxes equal to {1} ',
     taxpayersDescription2: ' per food item consumed.',
+    powerDescription: 'Gain a +50% increase to all material and food gain for each power. Your current power multiplies material and food gain by x{0}',
+    pollutionDescription: 'Reduce happiness by 1% for each point of pollution. If you have more pollution than tolerance, the happiness penalty increases by 1% per pollution over your tolerance. Your next point of pollution would reduce happiness by {0}%',
+    lootDescription: 'Find new loot every time the bar fills',
+    lootRarity: 'Loot quality determines your loot rarity distribution:',
+    lootNeedQuality: 'Needs over {0} quality',
     buildingStat: 'Total buildings constructed',
     housingStat: 'Total housing constructed (first 25 per building)',
     offering: {
@@ -1281,6 +1286,7 @@ export default {
     material: 'Material',
     food: 'Food',
     mental: 'Mental resources',
+    loot: 'Loot',
     foodConsume: 'Consuming up to {0} per second'
   },
   horde: {

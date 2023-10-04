@@ -940,7 +940,7 @@ export default {
     mining_0: 'Tiefster zerbrochener Erzminen-Stein',
     mining_1: 'Tiefster zerbrochener Gasriesen-Stein',
     village_0: 'Maximaler Wohnraum',
-    horde_0: 'Maximale Zone',
+    horde_0: 'Höchster Zonenboss besiegt',
     farm_0: 'Summe aller Pflanzenstufen',
     gallery_0: 'Log5 der gesamten Schönheit',
     debug: 'Debug'
@@ -1248,7 +1248,10 @@ export default {
       blastMiner: 'Sprengmeister',
       fisherman: 'Angler',
       scientist: 'Wissenschaftler',
-      gardener: 'Gärtner'
+      gardener: 'Gärtner',
+      oilWorker: 'Ölarbeiter',
+      sculptor: 'Bildhauer',
+      explorer: 'Entdecker',
     },
     policy: {
       name: 'Verordnungen',
@@ -1278,6 +1281,7 @@ export default {
     material: 'Material',
     food: 'Nahrung',
     mental: 'Mentale Ressourcen',
+    loot: 'Beute',
     foodConsume: 'Verbrauche bis zu {0} pro Sekunde'
   },
   horde: {

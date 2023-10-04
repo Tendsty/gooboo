@@ -647,7 +647,7 @@ export default {
                 let kill = false;
 
                 state.items[name].active(state.items[name].level).forEach(elem => {
-                    if (state.respawn <= 0 || elem.type === 'bone') {
+                    if (state.respawn <= 0 || elem.type === 'bone' || elem.type === 'permanentAttack' || elem.type === 'permanentHealth') {
                         if (elem.type === 'heal') {
                             commit('updatePlayerKey', {key: 'health', value: Math.min(rootGetters['mult/get']('hordeHealth'), state.player.health + rootGetters['mult/get']('hordeHealth') * elem.value)});
                         } else if (elem.type === 'bone') {

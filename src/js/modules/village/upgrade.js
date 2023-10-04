@@ -149,7 +149,7 @@ export default {
     ]},
 
     // Science upgrades
-    breakthrough: {requirement() {
+    breakthrough: {cap: 50, requirement() {
         return store.state.unlock.villageUpgradeBreakthrough.use;
     }, price(lvl) {
         return {village_science: Math.round(Math.pow(1.05, Math.max(lvl - 25, 0)) * lvl * 10 + 20)};
@@ -184,6 +184,8 @@ export default {
         {name: 'currencyVillageGemGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
         {name: 'currencyVillageFishGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
     ]},
+
+    // Old library upgrades
     sprinkler: {cap: 15, requirement() {
         return store.state.unlock.villageUpgradeSprinkler.use;
     }, price(lvl) {
@@ -202,5 +204,30 @@ export default {
         {name: 'villageTaxRate', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
         {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
         {name: 'villagePollution', type: 'base', value: lvl => lvl}
+    ]},
+
+    // Loot upgrades
+    ambition: {requirement() {
+        return store.state.unlock.villageUpgradeAmbition.use;
+    }, price(lvl) {
+        return {village_loot0: Math.ceil(Math.pow(1.15, lvl) * (lvl * 2 + 6))};
+    }, effect: [
+        {name: 'villageLootGain', type: 'mult', value: lvl => lvl * 0.01 + 1},
+        {name: 'villageLootQuality', type: 'base', value: lvl => lvl * 3}
+    ]},
+    understanding: {cap: 20, requirement() {
+        return store.state.unlock.villageUpgradeUnderstanding.use;
+    }, price(lvl) {
+        return {village_loot0: Math.ceil(Math.pow(1.2, lvl) * 55)};
+    }, effect: [
+        {name: 'currencyVillageKnowledgeCap', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageScienceCap', type: 'mult', value: lvl => lvl * 0.05 + 1}
+    ]},
+    curiosity: {requirement() {
+        return store.state.unlock.villageUpgradeCuriosity.use;
+    }, price(lvl) {
+        return {village_loot1: Math.ceil(Math.pow(1.15, lvl) * (lvl + 4))};
+    }, effect: [
+        {name: 'villageLootGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
     ]},
 }

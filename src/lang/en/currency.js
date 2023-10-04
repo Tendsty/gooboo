@@ -504,6 +504,30 @@ export default {
     name: 'Meat',
     description: 'These cows surely had a wonderful life... right?'
   },
+  village_loot0: {
+    name: 'Common loot',
+    description: 'Has to do for now...'
+  },
+  village_loot1: {
+    name: 'Uncommon loot',
+    description: 'Slightly better, but we can do more!'
+  },
+  village_loot2: {
+    name: 'Rare loot',
+    description: 'Finally something decent'
+  },
+  village_loot3: {
+    name: 'Epic loot',
+    description: 'Now it\'s getting good'
+  },
+  village_loot4: {
+    name: 'Legendary loot',
+    description: 'LEGENDARY!'
+  },
+  village_loot5: {
+    name: 'Mythical loot',
+    description: 'And you thought these were lost forever'
+  },
   horde_bone: {
     name: 'Bone',
     description: 'Skeletal remains of the enemies you have slain'

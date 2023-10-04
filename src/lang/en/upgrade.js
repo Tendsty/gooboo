@@ -223,6 +223,10 @@ export default {
   village_treehouse: 'Treehouse',
   village_rainforest: 'Rainforest',
   village_luxuryStorage: 'Luxury storage',
+  village_pyramid: 'Pyramid',
+  village_trophyCase: 'Trophy case',
+  village_antiquarian: 'Antiquarian',
+  village_windTurbine: 'Wind turbine',
 
   // Village upgrades
   village_wallet: 'Wallet',
@@ -249,6 +253,9 @@ export default {
   village_adrenaline: 'Adrenaline',
   village_sprinkler: 'Sprinkler',
   village_greed: 'Greed',
+  village_ambition: 'Ambition',
+  village_understanding: 'Understanding',
+  village_curiosity: 'Curiosity',
 
   // Village prestige upgrades
   village_arch: 'Ark',
@@ -275,6 +282,8 @@ export default {
   village_holyOil: 'Holy oil',
   village_holyMarble: 'Holy marble',
   village_calmingSpeech: 'Calming speech',
+  village_holyLoot: 'Holy loot',
+  village_holyChisel: 'Holy chisel',
 
   // Village premium upgrades
   village_overtime: 'Overtime',

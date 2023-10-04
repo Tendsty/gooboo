@@ -9,7 +9,7 @@ import relic from "./village/relic";
 import job from "./village/job";
 import offering from "./village/offering";
 import policy from "./village/policy";
-import { VILLAGE_COINS_PER_FOOD, VILLAGE_JOY_PER_HAPPINESS } from "../constants";
+import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD, VILLAGE_JOY_PER_HAPPINESS } from "../constants";
 import bookVillage from "./school/bookVillage";
 
 let upgradeBuilding = {};
@@ -54,6 +54,18 @@ export default {
         if (happiness <= 0.1) {
             store.commit('stat/increaseTo', {feature: 'village', name: 'minHappiness', value: 1});
         }
+
+        const lootGain = store.getters['mult/get']('villageLootGain');
+        if (lootGain > 0) {
+            let newLoot = store.state.village.explorerProgress + seconds * lootGain / SECONDS_PER_HOUR;
+            if (newLoot >= 1) {
+                const lootDrops = Math.floor(newLoot);
+                store.dispatch('village/getLootDrops', lootDrops);
+                newLoot -= lootDrops;
+            }
+            store.commit('village/updateKey', {key: 'explorerProgress', value: newLoot});
+            store.commit('unlock/unlock', 'villageLoot');
+        }
     },
     unlock: [
         'villageFeature',
@@ -64,9 +76,11 @@ export default {
             'Basics', 'Processing', 'Pump', 'Sand', 'Book',
             'Axe', 'Bomb', 'Toll', 'FishingRod', 'HolyBook',
             'Breakthrough', 'ModifiedPlants', 'Dopamine', 'Adrenaline',
-            'Sprinkler', 'Greed'
+            'Sprinkler', 'Greed',
+            'Ambition', 'Understanding', 'Curiosity',
         ].map(elem => 'villageUpgrade' + elem),
-        ...buildArray(4).map(elem => 'villageOffering' + (elem + 1))
+        ...buildArray(4).map(elem => 'villageOffering' + (elem + 1)),
+        'villageLoot'
     ],
     stat: {
         maxBuilding: {},
@@ -108,7 +122,7 @@ export default {
 
         // Loot mults
         villageLootGain: {display: 'perHour'},
-        villageLootQuality: {display: 'percent'},
+        villageLootQuality: {round: true},
     },
     multGroup: [
         {mult: 'villageHousingCap', name: 'upgradeCap', subtype: 'housing'},
@@ -212,6 +226,9 @@ export default {
         if (hasPolicy) {
             obj.policy = policies;
         }
+        if (store.state.village.explorerProgress > 0) {
+            obj.explorerProgress = store.state.village.explorerProgress;
+        }
 
         return obj;
     },
@@ -238,6 +255,9 @@ export default {
                     store.dispatch('village/applyPolicyEffect', key);
                 }
             }
+        }
+        if (data.explorerProgress !== undefined) {
+            store.commit('village/updateKey', {key: 'explorerProgress', value: data.explorerProgress});
         }
         store.dispatch('village/applyAllJobs');
         store.dispatch('village/applyOfferingEffect');

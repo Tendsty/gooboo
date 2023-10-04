@@ -25,6 +25,7 @@
           {{ $formatNum(power) }}
         </v-chip>
       </template>
+      <div>{{ $vuetify.lang.t('$vuetify.village.powerDescription', $formatNum(powerBonus, true)) }}</div>
       <stat-breakdown name="villagePower"></stat-breakdown>
     </gb-tooltip>
     <gb-tooltip v-if="pollution > 0" :title-text="$vuetify.lang.t('$vuetify.mult.villagePollution')">
@@ -34,6 +35,7 @@
           {{ $formatNum(pollution) }}
         </v-chip>
       </template>
+      <div>{{ $vuetify.lang.t('$vuetify.village.pollutionDescription', $formatNum(nextPollutionPenalty)) }}</div>
       <stat-breakdown name="villagePollution"></stat-breakdown>
       <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.villagePollutionTolerance') }}</h3>
       <stat-breakdown name="villagePollutionTolerance"></stat-breakdown>
@@ -74,6 +76,13 @@ export default {
       } else {
         return 'red';
       }
+    },
+    powerBonus() {
+      return this.power * 0.5 + 1;
+    },
+    nextPollutionPenalty() {
+      const tolerance = this.$store.getters['mult/get']('villagePollutionTolerance');
+      return this.pollution < tolerance ? 1 : (2 + this.pollution - tolerance);
     }
   }
 }

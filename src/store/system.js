@@ -443,7 +443,7 @@ export default {
                     break;
                 }
                 case 'village': {
-                    return rootState.upgrade.item.village_treehouse.highestLevel > 0;
+                    return rootState.upgrade.item.village_windTurbine.highestLevel > 0;
                 }
                 case 'horde': {
                     return rootState.stat.horde_maxZone.total > 125;

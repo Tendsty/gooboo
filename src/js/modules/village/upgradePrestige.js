@@ -166,4 +166,18 @@ export default {
     }, effect: [
         {name: 'villagePollutionTolerance', type: 'base', value: lvl => lvl}
     ]},
+    holyLoot: {type: 'prestige', requirement() {
+        return store.state.unlock.villageBuildings7.see;
+    }, price(lvl) {
+        return {village_blessing: Math.pow(1.65, lvl) * buildNum(800, 'M')};
+    }, effect: [
+        {name: 'villageLootGain', type: 'mult', value: lvl => Math.pow(1.15, lvl) * (lvl * 0.15 + 1)}
+    ]},
+    holyChisel: {type: 'prestige', requirement() {
+        return store.state.unlock.villageBuildings7.see;
+    }, price(lvl) {
+        return {village_blessing: Math.pow(0.05 * lvl + 1.5, lvl) * buildNum(2.5, 'B')};
+    }, effect: [
+        {name: 'villageLootQuality', type: 'base', value: lvl => lvl * 2}
+    ]},
 }

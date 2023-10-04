@@ -125,6 +125,9 @@ export default {
     90: 'Fixed a rounding issue with corruption when it is at exactly 0',
     91: 'Fixed a bug where you could use loadouts to equip items you did not find yet',
     92: 'Fixed some treasure bonuses not applying',
+    93: 'Made the global level description more clear',
+    94: 'Fixed some equipment effects not working while dead',
+    95: 'Fixed a bug where upgrading or deleting a treasure sometimes shows an error',
   },
   v: {
     1: {

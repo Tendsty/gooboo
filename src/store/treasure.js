@@ -204,7 +204,7 @@ export default {
             }
         },
         moveItem(state, id) {
-            while (state.items.length < (id - 1)) {
+            while (state.items.length < id) {
                 state.items.push(null);
             }
             Vue.set(state.items, id, state.newItem);
