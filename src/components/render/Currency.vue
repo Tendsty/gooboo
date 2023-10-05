@@ -68,7 +68,7 @@
         </div>
       </div>
     </template>
-    <currency-tooltip :name="name" :gain-base="gainBase">
+    <currency-tooltip :name="name" :gain-base="gainBase" :base-array="baseArray">
       <slot></slot>
     </currency-tooltip>
   </gb-tooltip>
@@ -119,6 +119,11 @@ export default {
       type: Number,
       required: false,
       default: null
+    },
+    baseArray: {
+      type: Array,
+      required: false,
+      default: (() => [])
     }
   },
   data: (() => ({

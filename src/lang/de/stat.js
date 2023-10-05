@@ -111,6 +111,18 @@ export default {
     achievement: 'Schwarzes Loch',
     description: 'Opfergaben in einem Zyklus erhalten'
   },
+  village_oil: {
+    achievement: 'Nehmt ihr Öl!',
+    description: 'Höchste Ölmenge'
+  },
+  village_highestPower: {
+    achievement: 'Licht an',
+    description: 'Höchste Energie'
+  },
+  village_minHappiness: {
+    achievement: 'Leben in der Hölle',
+    description: 'Erreiche minimale Zufriedenheit'
+  },
   village_timeSpent: {
     description: 'Zeit verbracht'
   },

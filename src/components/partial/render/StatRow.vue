@@ -21,6 +21,7 @@
       <span v-else-if="splitName[0] === 'currencyMult'">{{ $vuetify.lang.t(`$vuetify.currency.${splitName[1]}.name`) }}</span>
       <span v-else-if="splitName[0] === 'item'"><v-icon small class="mr-1">mdi-sack</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.items.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'villageJob'">{{ $vuetify.lang.t(`$vuetify.village.job.${splitName[1]}`) }}</span>
+      <span v-else-if="splitName[0] === 'villageFood'"><v-icon small class="mr-1">mdi-cached</v-icon>{{ $vuetify.lang.t(`$vuetify.currency.village_${splitName[1]}.name`) }}</span>
       <span v-else-if="splitName[0] === 'villageHappiness'">{{ $vuetify.lang.t(`$vuetify.mult.villageHappiness`) }}</span>
       <span v-else-if="splitName[0] === 'villagePollution'"><v-icon small class="mr-1">mdi-smoke</v-icon>{{ $vuetify.lang.t(`$vuetify.mult.villagePollution`) }}</span>
       <span v-else-if="splitName[0] === 'villagePower'"><v-icon small class="mr-1">mdi-lightning-bolt</v-icon>{{ $vuetify.lang.t(`$vuetify.mult.villagePower`) }}</span>

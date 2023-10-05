@@ -101,7 +101,7 @@ export default {
     }, effect: [
         {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
     ]},
-    purifier: {persistent: true, cap: 1, note: 'horde_18', requirementBase, requirementStat, requirementValue: 42, price() {
+    purifier: {persistent: true, hasDescription: true, cap: 1, note: 'horde_18', requirementBase, requirementStat, requirementValue: 42, price() {
         return {horde_bone: buildNum(100, 'Sx')};
     }, effect: [
         {name: 'hordeCorruptedFlesh', type: 'unlock', value: lvl => lvl >= 1}

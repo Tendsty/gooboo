@@ -9,7 +9,7 @@ import relic from "./village/relic";
 import job from "./village/job";
 import offering from "./village/offering";
 import policy from "./village/policy";
-import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD, VILLAGE_JOY_PER_HAPPINESS } from "../constants";
+import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD, VILLAGE_JOY_PER_HAPPINESS, VILLAGE_MIN_HAPPINESS } from "../constants";
 import bookVillage from "./school/bookVillage";
 
 let upgradeBuilding = {};
@@ -37,6 +37,10 @@ export default {
             }
         });
 
+        if (store.state.stat.village_faith.total >= 50) {
+            store.commit('unlock/unlock', 'villagePrestige');
+        }
+
         if (taxpayers > 0) {
             store.getters['currency/list']('village', 'regular', 'food').forEach(foodName => {
                 const food = foodName.split('_')[1];
@@ -51,7 +55,7 @@ export default {
         if (happiness > 1.25) {
             store.dispatch('currency/gain', {feature: 'village', name: 'joy', gainMult: true, amount: (happiness - 1.2) * VILLAGE_JOY_PER_HAPPINESS * seconds});
         }
-        if (happiness <= 0.1) {
+        if (happiness <= VILLAGE_MIN_HAPPINESS) {
             store.commit('stat/increaseTo', {feature: 'village', name: 'minHappiness', value: 1});
         }
 
@@ -66,10 +70,14 @@ export default {
             store.commit('village/updateKey', {key: 'explorerProgress', value: newLoot});
             store.commit('unlock/unlock', 'villageLoot');
         }
+
+        store.commit('stat/increaseTo', {feature: 'village', name: 'highestPower', value: store.getters['mult/get']('villagePower')});
+
     },
     unlock: [
         'villageFeature',
         'villageCoinUpgrades',
+        'villagePrestige',
         ...buildArray(7).map(elem => 'villageBuildings' + (elem + 1)),
         ...[
             'Scythe', 'Hatchet', 'Pickaxe', 'WateringCan', 'Investment',
@@ -77,7 +85,8 @@ export default {
             'Axe', 'Bomb', 'Toll', 'FishingRod', 'HolyBook',
             'Breakthrough', 'ModifiedPlants', 'Dopamine', 'Adrenaline',
             'Sprinkler', 'Greed',
-            'Ambition', 'Understanding', 'Curiosity',
+            'Ambition', 'Understanding', 'Curiosity', 'Worship',
+            'Bartering', 'Sparks',
         ].map(elem => 'villageUpgrade' + elem),
         ...buildArray(4).map(elem => 'villageOffering' + (elem + 1)),
         'villageLoot'
@@ -91,12 +100,13 @@ export default {
         totalOffering: {},
         minHappiness: {},
         bestOffering: {},
+        highestPower: {},
     },
     mult: {
         villageWorker: {baseValue: 1, round: true},
         queueSpeedVillageBuilding: {baseValue: 1},
         villageTaxRate: {display: 'percent'},
-        villageHappiness: {display: 'percent', baseValue: 1, min: 0.1},
+        villageHappiness: {display: 'percent', baseValue: 1, min: VILLAGE_MIN_HAPPINESS},
         villagePollution: {round: true},
         villagePollutionTolerance: {baseValue: 5, round: true},
         villagePower: {min: 0},
@@ -119,6 +129,7 @@ export default {
         villagePolicyTaxes: {round: true},
         villagePolicyImmigration: {round: true},
         villagePolicyReligion: {round: true},
+        villagePolicyScanning: {round: true},
 
         // Loot mults
         villageLootGain: {display: 'perHour'},
@@ -138,7 +149,7 @@ export default {
     relic,
     achievement,
     currency: {
-        coin: {overcapMult: 0.5, color: 'amber', icon: 'mdi-circle-multiple', gainMult: {}, capMult: {baseValue: 500}},
+        coin: {overcapMult: 0.5, color: 'amber', icon: 'mdi-circle-multiple', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 500}},
 
         // Basic material
         wood: {subtype: 'material', color: 'wooden', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 2000}},

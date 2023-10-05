@@ -1,48 +1,67 @@
 export default {
     day: '2023-12-31',
     content: {
+        meta: [
+            {
+                type: 'clarity',
+                text: '100',
+            },
+            {
+                type: 'clarity',
+                text: '101',
+            }
+        ],
+        mining: [
+            {
+                unlock: 'miningDepthDweller',
+                type: 'bugfix',
+                text: '97',
+            },
+            {
+                unlock: 'miningDepthDweller',
+                type: 'qol',
+                text: '98',
+            }
+        ],
         village: [
             {
-                unlock: 'villageBuildings5',
                 type: 'new',
                 text: 'addedBuilding',
-                params: [5, 5]
+                params: [30]
             },
             {
-                unlock: 'villageBuildings6',
-                type: 'new',
-                text: 'addedBuilding',
-                params: [14, 6]
-            },
-            {
-                unlock: 'villageBuildings7',
-                type: 'new',
-                text: 'addedBuilding',
-                params: [7, 7]
-            },
-            {
-                unlock: 'villageBuildings6',
+                unlock: 'villageCoinUpgrades',
                 type: 'new',
                 text: 'addedUpgrade',
+                params: [8]
+            },
+            {
+                unlock: 'villagePrestige',
+                type: 'new',
+                text: 'addedPrestigeUpgrade',
                 params: [5]
             },
             {
-                unlock: 'villageBuildings6',
-                type: 'new',
-                text: 'addedPrestigeUpgrade',
-                params: [3]
-            },
-            {
-                unlock: 'villageBuildings6',
+                unlock: 'achievementFeature',
                 type: 'new',
                 text: 'addedAchievement',
                 params: [1]
             },
             {
-                unlock: 'villageBuildings6',
+                unlock: 'achievementFeature',
                 type: 'new',
                 text: 'secretAchievement',
                 params: [1]
+            },
+            {
+                unlock: 'villageBuildings5',
+                type: 'balance',
+                text: '96',
+            },
+            {
+                unlock: 'villageCoinUpgrades',
+                type: 'qol',
+                text: '99',
             }
         ],
         horde: [

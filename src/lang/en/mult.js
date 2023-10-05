@@ -34,6 +34,7 @@ export default {
   villagePolicyTaxes: 'Tax policy',
   villagePolicyImmigration: 'Immigration policy',
   villagePolicyReligion: 'Religion policy',
+  villagePolicyScanning: 'Scanning policy',
   villageHousingCap: 'Housing maximum level',
   villageWorkstationCap: 'Workstation maximum level',
   villagePollution: 'Pollution',

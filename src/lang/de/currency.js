@@ -492,6 +492,42 @@ export default {
     name: 'Hartholz',
     description: 'Diese Holz wird von riesigen Bäumen gewonnen, welche Jahrhunderte zum Wachsen brauchen. Deren Holz ist hart, aber trotzdem noch biegsam'
   },
+  village_oil: {
+    name: 'Öl',
+    description: 'Ein flexibler und wertvoller Rohstoff'
+  },
+  village_marble: {
+    name: 'Marmor',
+    description: 'Dieser wunderschöne Stein ist eine häufige Wahl in gehobenen Luxusbauten'
+  },
+  village_meat: {
+    name: 'Fleisch',
+    description: 'Diese Kühe hatten sicher ein wundervolles Leben... richtig?'
+  },
+  village_loot0: {
+    name: 'Gewöhnliche Beute',
+    description: 'Muss vorerst reichen...'
+  },
+  village_loot1: {
+    name: 'Ungewöhnliche Beute',
+    description: 'Ein wenig besser, da geht aber noch mehr!'
+  },
+  village_loot2: {
+    name: 'Seltene Beute',
+    description: 'Endlich etwas Vernünftiges'
+  },
+  village_loot3: {
+    name: 'Epische Beute',
+    description: 'Jetzt wird es langsam gut'
+  },
+  village_loot4: {
+    name: 'Legendäre Beute',
+    description: 'LEGENDÄR!'
+  },
+  village_loot5: {
+    name: 'Mythische Beute',
+    description: 'Und du dachtest sie wäre für immer verschollen'
+  },
   horde_bone: {
     name: 'Knochen',
     description: 'Knöcherne Reste von besiegten Gegnern'

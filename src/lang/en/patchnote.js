@@ -21,7 +21,7 @@ export default {
     addedFeature: 'Added the feature',
     addedUpgrade: 'Added {0} new upgrade(s)',
     addedPrestigeUpgrade: 'Added {0} new prestige upgrade(s)',
-    addedBuilding: 'Added {0} new tier {1} building(s)',
+    addedBuilding: 'Added {0} new building(s)',
     addedAchievement: 'Added {0} achievement(s)',
     secretAchievement: 'Added {0} secret achievement(s)',
 
@@ -122,12 +122,20 @@ export default {
     87: 'Heirloom chance modifier per zone',
     88: 'Turning off note notifications now clears existing hints',
     89: 'Over the last few days, it became clear that quick 15-minute-prestiges were by far the best strategy to get souls in the horde. Runs that took a day could barely get twice the amount of souls, and existing elements to combat this are clearly not working. This is against the idle-focused philosophy of Gooboo, and while active gameplay should always be the most efficient option, it should not render other options of progress meaningless. These changes aim to reduce the gap between players with very fast prestiges and others who prestige one or two times a day.',
+
+    // v1.2.0
     90: 'Fixed a rounding issue with corruption when it is at exactly 0',
     91: 'Fixed a bug where you could use loadouts to equip items you did not find yet',
     92: 'Fixed some treasure bonuses not applying',
     93: 'Made the global level description more clear',
     94: 'Fixed some equipment effects not working while dead',
     95: 'Fixed a bug where upgrading or deleting a treasure sometimes shows an error',
+    96: 'Adjusted the prices of some endgame buildings for a more seamless transition with the new content',
+    97: 'Fixed a bug in the depth dweller preview showing 0s to reach next depth',
+    98: 'Added prestige currency gain to depth dweller preview',
+    99: 'Gold coins now show their gain from food conversion',
+    100: 'Upgrade descriptions now hide when the first level is bought',
+    101: 'Added upgrade descriptions for most upgrades that unlock new game mechanics',
   },
   v: {
     1: {

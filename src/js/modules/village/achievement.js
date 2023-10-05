@@ -21,5 +21,6 @@ export default {
     totalOffering: {value: () => store.state.stat.village_totalOffering.total, milestones: lvl => Math.pow(4, lvl) * 30},
     bestOffering: {value: () => store.state.stat.village_bestOffering.total, milestones: lvl => Math.round(lvl * 10 * Math.pow(1.4, lvl) + 10)},
     oil: {value: () => store.state.stat.village_oilMax.total, milestones: lvl => Math.pow(10, lvl) * buildNum(100, 'K')},
+    highestPower: {value: () => store.state.stat.village_highestPower.total, milestones: lvl => getSequence(2, lvl + 1) * 10},
     minHappiness: {value: () => store.state.stat.village_minHappiness.total, secret: true, display: 'boolean', cap: 1, milestones: () => 1}
 }

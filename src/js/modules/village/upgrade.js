@@ -1,5 +1,6 @@
 import store from "../../../store";
 import { buildNum } from "../../utils/format";
+import { getSequence } from "../../utils/math";
 
 export default {
     wallet: {cap: 12, capMult: true, requirement() {
@@ -229,5 +230,27 @@ export default {
         return {village_loot1: Math.ceil(Math.pow(1.15, lvl) * (lvl + 4))};
     }, effect: [
         {name: 'villageLootGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
+    ]},
+    worship: {cap: 20, requirement() {
+        return store.state.unlock.villageUpgradeWorship.use;
+    }, price(lvl) {
+        return {village_loot1: Math.ceil(Math.pow(1.18, lvl) * 55)};
+    }, effect: [
+        {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => getSequence(2, lvl) * 0.1 + 1}
+    ]},
+    bartering: {requirement() {
+        return store.state.unlock.villageUpgradeBartering.use;
+    }, price(lvl) {
+        return {village_loot2: Math.ceil(Math.pow(1.15, lvl) * (lvl + 2.5))};
+    }, effect: [
+        {name: 'villageLootQuality', type: 'base', value: lvl => lvl},
+        {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => Math.pow(1.08, lvl)}
+    ]},
+    sparks: {cap: 20, requirement() {
+        return store.state.unlock.villageUpgradeSparks.use;
+    }, price(lvl) {
+        return {village_loot2: Math.ceil(Math.pow(1.16, lvl) * 55)};
+    }, effect: [
+        {name: 'villagePower', type: 'base', value: lvl => lvl}
     ]},
 }

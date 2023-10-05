@@ -157,6 +157,7 @@ export default {
             dispatch('upgrade/reset', {feature: 'village', type: 'building'}, {root: true});
             dispatch('currency/reset', {feature: 'village', type: 'regular'}, {root: true});
             dispatch('stat/reset', {feature: 'village', type: 'regular'}, {root: true});
+            commit('updateKey', {key: 'explorerProgress', value: 0});
             dispatch('card/activateCards', 'village', {root: true});
 
             dispatch('applyOfferingEffect');
@@ -250,6 +251,9 @@ export default {
             if (policy.value < rootGetters['mult/get'](policy.mult)) {
                 commit('updatePolicyKey', {name, key: 'value', value: policy.value + 1});
                 dispatch('applyPolicyEffect', name);
+            }
+            if (name === 'scanning') {
+                commit('updateKey', {key: 'explorerProgress', value: 0});
             }
         },
         removePolicy({ state, rootGetters, commit, dispatch }, name) {

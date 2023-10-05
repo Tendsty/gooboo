@@ -21,7 +21,7 @@ export default {
     addedFeature: 'Funktion hinzugefügt',
     addedUpgrade: '{0} neue Verbesserung(en) hinzugefügt',
     addedPrestigeUpgrade: '{0} neue Prestige-Verbesserung(en) hinzugefügt',
-    addedBuilding: '{0} neue Stufe-{1}-Gebäude hinzugefügt',
+    addedBuilding: '{0} neue Gebäude hinzugefügt',
     addedAchievement: '{0} Erfolg(e) hinzugefügt',
     secretAchievement: '{0} geheime(r) Erfolg(e) hinzugefügt',
 

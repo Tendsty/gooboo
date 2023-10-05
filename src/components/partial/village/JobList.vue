@@ -37,6 +37,7 @@
             <template v-slot:activator="{ on, attrs }">
               <span :class="{'red--text': happinessPercent < 100, 'green--text': happinessPercent > 100}" v-bind="attrs" v-on="on">{{ $formatNum(happinessPercent, true) }}%</span>
             </template>
+            <div>{{ $vuetify.lang.t('$vuetify.village.happinessDescription') }}</div>
             <stat-breakdown name="villageHappiness"></stat-breakdown>
           </gb-tooltip>
         </v-col>

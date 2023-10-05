@@ -32,7 +32,7 @@ export default {
     }, effect: [
         {name: 'miningDamage', type: 'mult', value: lvl => (lvl + 1) * Math.pow(1.5, Math.min(6, lvl))}
     ]},
-    craftingStation: {cap: 1, requirementBase, requirementStat, requirementValue: 20, price() {
+    craftingStation: {cap: 1, hasDescription: true, requirementBase, requirementStat, requirementValue: 20, price() {
         return {mining_scrap: buildNum(1.8, 'M')};
     }, effect: [
         {name: 'miningPickaxeCrafting', type: 'unlock', value: lvl => lvl >= 1}
@@ -59,7 +59,7 @@ export default {
     }, effect: [
         {name: 'miningPickaxeCraftingSlots', type: 'base', value: lvl => lvl}
     ]},
-    compressor: {cap: 6, hideCap: true, requirementBase, requirementStat, requirementValue: 25, requirement(lvl) {
+    compressor: {cap: 6, hasDescription: true, hideCap: true, requirementBase, requirementStat, requirementValue: 25, requirement(lvl) {
         return store.state.stat.mining_maxDepth0.total >= [25, 35, 60, 95, 140, 200][lvl];
     }, price(lvl) {
         return [
@@ -106,7 +106,7 @@ export default {
         {name: 'currencyMiningOreAluminiumCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
         {name: 'currencyMiningOreCopperCap', type: 'base', value: lvl => 4 * lvl}
     ]},
-    depthDweller: {cap: 1, requirementBase, requirementStat, requirementValue: 40, price() {
+    depthDweller: {cap: 1, hasDescription: true, requirementBase, requirementStat, requirementValue: 40, price() {
         return {mining_oreCopper: 24};
     }, effect: [
         {name: 'miningDepthDweller', type: 'unlock', value: lvl => lvl >= 1}
@@ -139,7 +139,7 @@ export default {
     }, effect: [
         {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
     ]},
-    smeltery: {cap: 1, persistent: true, note: 'mining_18', requirementBase, requirementStat, requirementValue: 60, price() {
+    smeltery: {cap: 1, hasDescription: true, persistent: true, note: 'mining_18', requirementBase, requirementStat, requirementValue: 60, price() {
         return {mining_granite: buildNum(50, 'K')};
     }, effect: [
         {name: 'miningSmeltery', type: 'unlock', value: lvl => lvl >= 1}
@@ -220,7 +220,7 @@ export default {
         {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
         {name: 'miningOreGain', type: 'mult', value: lvl => splicedLinear(0.1, 0.05, 10, lvl) + 1}
     ]},
-    enhancingStation: {cap: 1, persistent: true, note: 'mining_25', requirementBase, requirementStat, requirementValue: 105, price() {
+    enhancingStation: {cap: 1, hasDescription: true, persistent: true, note: 'mining_25', requirementBase, requirementStat, requirementValue: 105, price() {
         return {mining_coal: 250};
     }, effect: [
         {name: 'miningEnhancement', type: 'unlock', value: lvl => lvl >= 1}
@@ -250,7 +250,7 @@ export default {
         {name: 'currencyMiningOreIronCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
         {name: 'currencyMiningOreTitaniumCap', type: 'base', value: lvl => lvl}
     ]},
-    emberForge: {requirementBase, requirementStat, requirementValue: 125, price(lvl) {
+    emberForge: {hasDescription: true, requirementBase, requirementStat, requirementValue: 125, price(lvl) {
         return {mining_coal: lvl * 3 + 80};
     }, effect: [
         {name: 'currencyMiningEmberGain', type: 'base', value: lvl => lvl}
@@ -293,7 +293,7 @@ export default {
     }, effect: [
         {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.35, lvl)}
     ]},
-    stickyJar: {cap: 1, persistent: true, note: 'mining_30', requirementBase, requirementStat, requirementValue: 150, price() {
+    stickyJar: {cap: 1, hasDescription: true, persistent: true, note: 'mining_30', requirementBase, requirementStat, requirementValue: 150, price() {
         return {mining_scrap: buildNum(4, 'O')};
     }, effect: [
         {name: 'miningResin', type: 'unlock', value: lvl => lvl >= 1}

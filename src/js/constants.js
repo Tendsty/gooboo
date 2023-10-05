@@ -29,6 +29,7 @@ export const MINING_ENHANCEMENT_CHANCE_EXPONENT = 0.5;
 
 export const VILLAGE_COINS_PER_FOOD = 0.25;
 export const VILLAGE_JOY_PER_HAPPINESS = 0.2;
+export const VILLAGE_MIN_HAPPINESS = 0.01;
 
 export const HORDE_COMBO_ATTACK = 1.025;
 export const HORDE_COMBO_HEALTH = 1.01;

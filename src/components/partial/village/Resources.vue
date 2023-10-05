@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex flex-wrap justify-center ma-1">
-      <currency large class="ma-1" name="village_coin"></currency>
+      <currency large class="ma-1" name="village_coin" :baseArray="foodConversion"></currency>
     </div>
     <div v-if="stat.village_wood.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.material`) }}</div>
     <div class="d-flex flex-wrap justify-center ma-1">
@@ -70,7 +70,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { SECONDS_PER_HOUR } from '../../../js/constants';
+import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD } from '../../../js/constants';
 import Currency from '../../render/Currency.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 
@@ -121,6 +121,17 @@ export default {
         return null;
       }
       return Math.ceil((1 - this.explorerProgress) * SECONDS_PER_HOUR / lootGain);
+    },
+    foodConversion() {
+      const taxpayers = this.$store.getters['mult/get']('villageTaxRate') * this.$store.getters['village/employed'];
+      if (taxpayers <= 0) {
+        return [];
+      }
+      return this.food.map(currencyName => {
+        const food = currencyName.split('_')[1];
+        const nextAmount = this.$store.getters['currency/value']('village_' + food) + this.$store.getters['mult/get'](this.$store.getters['currency/gainMultName']('village', food));
+        return {name: 'villageFood_' + food, value: Math.min(taxpayers, nextAmount) * VILLAGE_COINS_PER_FOOD};
+      }).filter(elem => elem.value > 0);
     }
   }
 }

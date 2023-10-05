@@ -68,12 +68,12 @@ export default {
     }, effect: [
         {name: 'farmTiles', type: 'farmTile', value: lvl => lvl}
     ]},
-    gardenGnome: {cap: 5, requirementBase, requirementStat, requirementValue: 3, price(lvl) {
+    gardenGnome: {cap: 5, hasDescription: true, requirementBase, requirementStat, requirementValue: 3, price(lvl) {
         return {farm_vegetable: 500 * Math.pow(96, lvl), farm_fruit: 500 * Math.pow(96, lvl), farm_flower: 1000 * Math.pow(128, lvl)};
     }, effect: [
         {name: 'gardenGnome', type: 'farmBuilding', value: lvl => lvl}
     ]},
-    learning: {cap: 1, requirementBase, requirementStat, requirementValue: 4, price() {
+    learning: {cap: 1, hasDescription: true, requirementBase, requirementStat, requirementValue: 4, price() {
         return {farm_gold: 3};
     }, effect: [
         {name: 'farmCropExp', type: 'unlock', value: lvl => lvl >= 1}
@@ -101,7 +101,7 @@ export default {
     }, effect: [
         {name: 'currencyFarmSeedHullCap', type: 'base', value: lvl => lvl * 10}
     ]},
-    sprinkler: {cap: 2, note: 'farm_8', requirementBase, requirementStat, requirementValue: 6, price(lvl) {
+    sprinkler: {cap: 2, hasDescription: true, note: 'farm_8', requirementBase, requirementStat, requirementValue: 6, price(lvl) {
         return {farm_vegetable: buildNum(120, 'K') * Math.pow(buildNum(4, 'M'), lvl), farm_seedHull: 50 * Math.pow(10, lvl)};
     }, effect: [
         {name: 'sprinkler', type: 'farmBuilding', value: lvl => lvl}
@@ -129,7 +129,7 @@ export default {
         {name: 'currencyFarmBugCap', type: 'base', value: lvl => lvl * 20},
         {name: 'currencyFarmPetalCap', type: 'base', value: lvl => lvl * 10}
     ]},
-    lectern: {cap: 2, note: 'farm_12', requirementBase, requirementStat, requirementValue: 9, price(lvl) {
+    lectern: {cap: 2, hasDescription: true, note: 'farm_12', requirementBase, requirementStat, requirementValue: 9, price(lvl) {
         return {farm_flower: buildNum(3.5, 'M') * Math.pow(buildNum(3, 'M'), lvl), farm_petal: 75 * Math.pow(5, lvl)};
     }, effect: [
         {name: 'lectern', type: 'farmBuilding', value: lvl => lvl}
@@ -173,7 +173,7 @@ export default {
     }, effect: [
         {name: 'currencyFarmVegetableGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
     ]},
-    pinwheel: {cap: 1, note: 'farm_17', requirementBase, requirementStat, requirementValue: 13, price() {
+    pinwheel: {cap: 1, hasDescription: true, note: 'farm_17', requirementBase, requirementStat, requirementValue: 13, price() {
         return {farm_flower: buildNum(250, 'B'), farm_petal: 150, farm_ladybug: 50};
     }, effect: [
         {name: 'pinwheel', type: 'farmBuilding', value: lvl => lvl}
@@ -213,7 +213,7 @@ export default {
         {name: 'currencyFarmSpiderCap', type: 'base', value: lvl => lvl},
         {name: 'currencyFarmBeeCap', type: 'base', value: lvl => lvl * 200}
     ]},
-    flag: {cap: 1, note: 'farm_20', requirementBase, requirementStat, requirementValue: 18, price() {
+    flag: {cap: 1, hasDescription: true, note: 'farm_20', requirementBase, requirementStat, requirementValue: 18, price() {
         return {farm_spider: 50, farm_bee: 2500, farm_goldenPetal: 10};
     }, effect: [
         {name: 'flag', type: 'farmBuilding', value: lvl => lvl}

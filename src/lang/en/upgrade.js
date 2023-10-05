@@ -24,7 +24,43 @@ export default {
   },
 
   description: {
-    mining_premiumCraftingSlots: 'Upgrades one of your crafting slots to premium, which halves impurity and doubles purity'
+    mining_craftingStation: 'The crafting station allows you to consume ores to raise your pickaxe power and is essential to increase your damage',
+    mining_compressor: 'The compressor allows you to increase the ore amount per slot for higher purity',
+    mining_depthDweller: 'This gives access to the prestige option of the mine',
+    mining_smeltery: 'This allows you to smelt ores and rare earth to create bars',
+    mining_enhancingStation: 'This allows you to spend bars on unique pickaxe modifiers',
+    mining_emberForge: 'Ember increases your smeltery speed',
+    mining_stickyJar: 'Resin can be used for better crafting results, but takes a long time to generate',
+    mining_premiumCraftingSlots: 'Upgrades one of your crafting slots to premium, which halves impurity and doubles purity',
+
+    village_treasury: 'Tax rate causes your working villagers to consume food and pay taxes in return',
+    village_church: 'This gives you access to the prestige option of the village',
+    village_offeringPedestal: 'This allows you to sacrifice resources to permanently increase their capacity',
+    village_court: 'Policies can be enabled to give bonuses in exchange for happiness, or vice versa',
+    village_generator: 'Power increases your resource gain and pollution reduces happiness',
+    village_darkCult: 'The religion policy allows you to prioritize resource or faith gain, at the expense of the other',
+    village_pyramid: 'Explorers find a new resource over time. Hiring one requires 600 villagers, you may need the immigration policy to reach this!',
+    village_radar: 'The scanning policy allows you to prioritize loot gain or quality, at the expense of the other',
+
+    horde_purifier: 'Corrupted flesh is gained slowly over time and allows you to reduce corruption',
+
+    farm_gardenGnome: 'Garden gnomes can be placed on the field for a chance to earn a new currency',
+    farm_learning: 'Crop experience allows you to raise your global level',
+    farm_sprinkler: 'Sprinklers make crops grow faster in one row',
+    farm_lectern: 'Lecterns increase crop experience in one column',
+    farm_pinwheel: 'Pinwheels allow you to increase your rare drop chance',
+    farm_flag: 'Flags increase crop gain based on positioning',
+    farm_premiumGardenGnome: 'Premium garden gnomes provide double the gold chance',
+    farm_premiumSprinkler: 'Premium sprinklers triple growth speed',
+    farm_premiumLectern: 'Premium lecterns quintuple experience',
+    farm_premiumPinwheel: 'Premium pinwheels provide double the drop chance bonus',
+    farm_premiumFlag: 'Premium flags provide double the crop gain bonus',
+
+    gallery_recycling: 'Conversion allows you to create new colors',
+    gallery_redLuck: 'You\'ll need to upgrade luck first before you can find drums in packages',
+    gallery_epiphany: 'Ideas allow you to spend limited inspiration on unique bonuses',
+    gallery_auctionHouse: 'This gives you access to the prestige option of the gallery',
+    gallery_paintDrumStorage: 'This lets you collect packages, which sometimes contain drums',
   },
 
   // Mining upgrades
@@ -209,6 +245,7 @@ export default {
   village_mansion: 'Mansion',
   village_oilRig: 'Oil rig',
   village_generator: 'Generator',
+  village_lighthouse: 'Lighthouse',
   village_lobby: 'Lobby',
   village_oilStorage: 'Oil storage',
   village_artGallery: 'Art gallery',
@@ -227,6 +264,9 @@ export default {
   village_trophyCase: 'Trophy case',
   village_antiquarian: 'Antiquarian',
   village_windTurbine: 'Wind turbine',
+  village_radar: 'Radar',
+  village_waterTurbine: 'Water turbine',
+  village_solarPanel: 'Solar panel',
 
   // Village upgrades
   village_wallet: 'Wallet',
@@ -256,6 +296,9 @@ export default {
   village_ambition: 'Ambition',
   village_understanding: 'Understanding',
   village_curiosity: 'Curiosity',
+  village_worship: 'Worship',
+  village_bartering: 'Bartering',
+  village_sparks: 'Sparks',
 
   // Village prestige upgrades
   village_arch: 'Ark',
