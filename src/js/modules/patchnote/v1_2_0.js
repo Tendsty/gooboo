@@ -1,5 +1,5 @@
 export default {
-    day: '2023-12-31',
+    day: '2023-10-06',
     content: {
         meta: [
             {
@@ -45,7 +45,7 @@ export default {
                 unlock: 'achievementFeature',
                 type: 'new',
                 text: 'addedAchievement',
-                params: [1]
+                params: [2]
             },
             {
                 unlock: 'achievementFeature',
@@ -62,6 +62,13 @@ export default {
                 unlock: 'villageCoinUpgrades',
                 type: 'qol',
                 text: '99',
+            }
+        ],
+        school: [
+            {
+                unlock: 'schoolHistorySubfeature',
+                type: 'accessibility',
+                text: '103',
             }
         ],
         horde: [
@@ -85,6 +92,29 @@ export default {
                 text: '94',
             }
         ],
+        farm: [
+            {
+                type: 'qol',
+                text: '102',
+            }
+        ],
+        event: [
+            {
+                unlock: 'nightHuntEvent',
+                type: 'clarity',
+                text: '104',
+            },
+            {
+                unlock: 'farmFertilizer',
+                type: 'clarity',
+                text: '107',
+            },
+            {
+                unlock: 'nightHuntEvent',
+                type: 'bugfix',
+                text: '108',
+            }
+        ],
         treasure: [
             {
                 type: 'bugfix',
@@ -93,6 +123,14 @@ export default {
             {
                 type: 'bugfix',
                 text: '95',
+            },
+            {
+                type: 'appearance',
+                text: '105',
+            },
+            {
+                type: 'clarity',
+                text: '106',
             }
         ]
     }

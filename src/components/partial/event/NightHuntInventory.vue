@@ -11,10 +11,17 @@
 <template>
   <div>
     <div class="d-flex flex-wrap justify-center pa-1">
-      <currency v-for="item in baseCurrencies" :key="`currency-${item}`" class="ma-1" :name="`event_${item}`"></currency>
+      <currency class="ma-1" name="event_essence" :multArray="essenceMult"></currency>
+      <currency class="ma-1" name="event_magic">
+        <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.ingredientSizeDescription`) }}</alert-text>
+        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.nightHuntIngredientSize') }}</h3>
+        <stat-breakdown name="nightHuntIngredientSize"></stat-breakdown>
+      </currency>
+      <currency class="ma-1" name="event_nightHuntToken"></currency>
     </div>
     <div class="d-flex flex-wrap justify-center mt-4 pa-1">
       <currency v-for="item in ingredientCurrencies" :key="`currency-${item}`" class="ma-1" :name="`event_${item}`" @click="addIngredient(item)">
+        <alert-text v-if="ritualIngredients.length <= 0" type="info">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.clickToAdd`) }}</alert-text>
         <template v-if="hasBonusSlots">
           <div class="text-center">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.asBonusIngredient`) }}:</div>
           <display-row class="mt-0" v-for="(subitem, key) in ingredientStat[item].effect" :key="`${subitem.name}-${subitem.type}-${key}`" :name="subitem.name" :type="subitem.type" :after="subitem.value"></display-row>
@@ -108,8 +115,25 @@
           <price-tag class="ma-1" v-for="(item, key) in ritualCost" :key="'cost-' + key" :currency="`event_${key}`" :amount="item"></price-tag>
         </div>
       </gb-tooltip>
-      <v-icon v-if="ritualIngredients.length > 0 && !ritualPerformed" color="success" large class="ma-1">mdi-new-box</v-icon>
-      <v-icon v-else large class="ma-1 opacity-01">mdi-new-box</v-icon>
+      <gb-tooltip :min-width="0">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            large
+            class="ma-1"
+            :class="{'opacity-01': ritualIngredients.length <= 0 || ritualPerformed}"
+            :color="(ritualIngredients.length <= 0 || ritualPerformed) ? undefined : 'success'"
+            v-bind="attrs"
+            v-on="on"
+          >mdi-new-box</v-icon>
+        </template>
+        <div v-if="ritualIngredients.length <= 0" class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.empty`) }}</div>
+        <template v-else-if="!ritualPerformed">
+          <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.isNew`) }}</div>
+          <div v-if="undiscoveredRituals > 0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.isNewPotion`) }}</div>
+        </template>
+        <div v-else-if="ritualRecipe" class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.discoveredPotion`) }}</div>
+        <div v-else class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.pointless`) }}</div>
+      </gb-tooltip>
       <gb-tooltip :min-width="0">
         <template v-slot:activator="{ on, attrs }">
           <v-badge bottom bordered overlap :content="$formatNum(undiscoveredRituals)" :value="ritualIngredients.length > 0" :color="undiscoveredRituals > 0 ? 'primary' : 'error'">
@@ -134,20 +158,18 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { NIGHT_HUNT_HINT_PENALTY } from '../../../js/constants';
+import { NIGHT_HUNT_GL_BOOST, NIGHT_HUNT_HINT_PENALTY } from '../../../js/constants';
 import { buildArray } from '../../../js/utils/array';
 import Currency from '../../render/Currency.vue';
 import CurrencyIcon from '../../render/CurrencyIcon.vue';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import AlertText from '../render/AlertText.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
 import NightHuntIngredient from './NightHuntIngredient.vue';
 
 export default {
-  components: { Currency, NightHuntIngredient, DisplayRow, CurrencyIcon, StatBreakdown, PriceTag },
-  data: () => ({
-    baseCurrencies: ['essence', 'magic', 'nightHuntToken']
-  }),
+  components: { Currency, NightHuntIngredient, DisplayRow, CurrencyIcon, StatBreakdown, PriceTag, AlertText },
   computed: {
     ...mapState({
       ritualIngredients: state => state.nightHunt.ritualIngredients,
@@ -158,6 +180,7 @@ export default {
       canPerformRitual: 'nightHunt/canPerformRitual',
       ritualBaseStats: 'nightHunt/ritualBaseStats',
       ritualBonusStats: 'nightHunt/ritualBonusStats',
+      ritualRecipe: 'nightHunt/ritualRecipe',
       ritualStats: 'nightHunt/ritualStats',
       ritualPerformed: 'nightHunt/ritualPerformed',
       undiscoveredRituals: 'nightHunt/undiscoveredRituals',
@@ -229,6 +252,9 @@ export default {
     },
     hintPenalty() {
       return NIGHT_HUNT_HINT_PENALTY * 100;
+    },
+    essenceMult() {
+      return [{name: 'globalLevel', value: Math.pow(NIGHT_HUNT_GL_BOOST, this.$store.getters['meta/globalEventLevel'])}];
     }
   },
   methods: {

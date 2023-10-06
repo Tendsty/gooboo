@@ -52,7 +52,7 @@ export default {
   },
   event_magic: {
     name: 'Magie',
-    description: 'Magie wandelt andere Währungen langsam in magische Währungen um. Je mehr Magie du hast, desto schneller der Prozess. Magische Währungen können am ungewöhnlichen Symbol erkannt werden. Um sie zurückzuverwandeln, fahre mit der Maus hinüber, das bringt ebenfalls Zutaten'
+    description: 'Magie wird langsam verbraucht, um andere Währungen in magische Währungen umzuwandeln. Je mehr Magie du hast, desto schneller der Prozess. Magische Währungen können am ungewöhnlichen Symbol erkannt werden. Um sie zurückzuverwandeln, fahre mit der Maus hinüber, das bringt ebenfalls Zutaten'
   },
   event_snowball: {
     name: 'Schneeball',

@@ -14,7 +14,7 @@
 <template>
   <div v-if="answering">
     <div class="d-flex justify-center align-center flex-wrap">
-      <div v-if="question !== null" class="d-flex align-center date-text ma-1 pa-2 rounded" :class="[colors[dates[question].id], {'date-text-mobile': $vuetify.breakpoint.xsOnly}]">
+      <div v-if="question !== null" class="d-flex align-center date-text ma-1 pa-2 rounded balloon-text-dynamic" :class="[colors[dates[question].id], {'date-text-mobile': $vuetify.breakpoint.xsOnly}]">
         <v-icon class="mr-2" large>{{ icons[dates[question].id] }}</v-icon>
         <span>{{ $vuetify.lang.t(`$vuetify.school.history.year`, '???') }}</span>
       </div>
@@ -24,7 +24,7 @@
   </div>
   <div v-else>
     <div class="d-flex justify-center flex-wrap ma-1">
-      <div v-for="(item, key) in dates" class="d-flex align-center date-text ma-1 pa-2 rounded" :class="[colors[item.id], {'date-text-mobile': $vuetify.breakpoint.xsOnly}]" :key="key">
+      <div v-for="(item, key) in dates" class="d-flex align-center date-text ma-1 pa-2 rounded balloon-text-dynamic" :class="[colors[item.id], {'date-text-mobile': $vuetify.breakpoint.xsOnly}]" :key="key">
         <v-icon class="mr-2" large>{{ icons[item.id] }}</v-icon>
         <span>{{ $vuetify.lang.t(`$vuetify.school.history.year`, item.year) }}</span>
       </div>

@@ -1,4 +1,5 @@
 import store from "../../../../store";
+import { NIGHT_HUNT_GL_BOOST } from "../../../constants";
 import { chance } from "../../../utils/random";
 
 export default function(seconds) {
@@ -23,7 +24,7 @@ export default function(seconds) {
         store.dispatch('currency/spend', {feature: 'event', name: 'magic', amount: addAmount});
     }
 
-    const essenceGain = store.getters['mult/get']('currencyEventEssenceGain') * Math.pow(1.01, store.getters['meta/globalEventLevel']);
+    const essenceGain = store.getters['mult/get']('currencyEventEssenceGain') * Math.pow(NIGHT_HUNT_GL_BOOST, store.getters['meta/globalEventLevel']);
     if (essenceGain > 0) {
         store.dispatch('currency/gain', {feature: 'event', name: 'essence', amount: essenceGain * seconds});
     }

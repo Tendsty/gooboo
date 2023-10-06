@@ -694,6 +694,15 @@ export default {
       ritualSuccessDescription: 'A successful ritual will yield night hunt tokens for new rituals, as well as potentially finding a new potion. Successful rituals on known potions increase their level, yield night hunt tokens and make reaching the next level harder for that potion.',
       ritualFamiliarityDescription: 'Raise stability and success chance for this ritual by this amount if it fails. This bonus stacks and resets on ritual success.',
       ritualHintDescription: 'Chance to reveal a hint about either a slot or the amount of an ingredient. Hints are only given on successful new rituals. For each found hint, this chance is reduced by {0}%. Hints and the hint chance penalty reset when the hinted ritual is found.',
+      clickToAdd: 'Click on ingredients to add them to the ritual',
+      ingredientSizeDescription: 'Ingredient size allows you to find more ingredients per magical currency',
+      newDescription: {
+        empty: 'Here you can see if the current recipe is new (not succeeded before) or not',
+        isNew: 'This is a new recipe and you will receive a night hunt token if it succeeds',
+        isNewPotion: 'You could also discover a new potion',
+        discoveredPotion: 'This is a known potion recipe. If this ritual succeeds, you level up the potion and receive night hunt tokens',
+        pointless: 'This is a known recipe, there is no point in performing more rituals on this one'
+      },
       potion: {
         power: 'Potion of power',
         insight: 'Potion of insight',
@@ -1556,6 +1565,10 @@ export default {
     timeDescription: 'Time required to grow',
     overgrowDescription: 'After fully growing, your plants can grow again, but need {0}x (1 / overgrow + 1)x time to grow. Each completed growth cycle counts as an extra harvest with all benefits.',
     fertilizerCostDescription: 'Fertilizer needed per crop',
+    goldChance: 'Gold chance',
+    goldChanceDescription: 'Harvesting plants has a chance to give gold, based on crop grow time and the amount of garden gnomes placed',
+    goldChanceMultiple: 'Gold chances over 100% still increase gold gain, you are guaranteed to find {0} gold and have a {1}% chance to find 1 more',
+    goldChanceWarning: 'Place a garden gnome on the field to start finding gold',
     freeUpgrades: {
       s: 'gene left',
       p: 'genes left'
@@ -1699,6 +1712,11 @@ export default {
       regular: 'Regular effects',
       special: 'Special effects'
     },
+    buyFragment: {
+      0: 'Buy fragments (',
+      1: ') for'
+    },
+    buyTreasure: 'Get a treasure with random tier and effect',
     upgradeDescription: 'Upgrade a treasure using fragments. The fragment cost depends on treasure tier and level.',
     destroyDescription: 'Destroy a treasure to gain fragments based on treasure tier. All fragments spent on upgrading that treasure will also be returned.'
   },

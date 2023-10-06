@@ -15,7 +15,9 @@ export default {
     context: 'Context',
     new: 'New',
     remove: 'Removed',
-    change: 'Change'
+    change: 'Change',
+    accessibility: 'Accessibility',
+    appearance: 'Appearance'
   },
   text: {
     addedFeature: 'Added the feature',
@@ -136,6 +138,13 @@ export default {
     99: 'Gold coins now show their gain from food conversion',
     100: 'Upgrade descriptions now hide when the first level is bought',
     101: 'Added upgrade descriptions for most upgrades that unlock new game mechanics',
+    102: 'Added a gold chance breakdown for crops',
+    103: 'History dates now have text shadows for better readability',
+    104: 'Reworded some tooltips and added a few new ones to the night hunt event',
+    105: 'Slightly changed the UI',
+    106: 'Added tooltips for buying treasure and fragments',
+    107: 'Farm fertilizers now show their effect when shown as prize',
+    108: 'The essence gain multiplier from your global level is now shown in the essence tooltip',
   },
   v: {
     1: {

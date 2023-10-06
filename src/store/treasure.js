@@ -256,11 +256,10 @@ export default {
                 dispatch('gain', type);
             }
         },
-        buyFragments({ getters, rootGetters, dispatch }, max = false) {
-            const amount = Math.min(Math.floor(rootGetters['currency/value']('gem_emerald') / TREASURE_FRAGMENT_BUY_COST), max ? Infinity : 1);
-            if (amount >= 1) {
-                dispatch('currency/gain', {feature: 'treasure', name: 'fragment', amount: amount * getters.fragmentGain}, {root: true});
-                dispatch('currency/spend', {feature: 'gem', name: 'emerald', amount: amount * TREASURE_FRAGMENT_BUY_COST}, {root: true});
+        buyFragments({ getters, rootGetters, dispatch }) {
+            if (rootGetters['currency/value']('gem_emerald') >= TREASURE_FRAGMENT_BUY_COST) {
+                dispatch('currency/gain', {feature: 'treasure', name: 'fragment', amount: getters.fragmentGain}, {root: true});
+                dispatch('currency/spend', {feature: 'gem', name: 'emerald', amount: TREASURE_FRAGMENT_BUY_COST}, {root: true});
             }
         },
         upgradeItem({ state, getters, rootGetters, commit, dispatch }, id) {

@@ -29,7 +29,7 @@ export default {
     mining_depthDweller: 'This gives access to the prestige option of the mine',
     mining_smeltery: 'This allows you to smelt ores and rare earth to create bars',
     mining_enhancingStation: 'This allows you to spend bars on unique pickaxe modifiers',
-    mining_emberForge: 'Ember increases your smeltery speed',
+    mining_emberForge: 'Ember is gained on prestige and increases your smeltery speed',
     mining_stickyJar: 'Resin can be used for better crafting results, but takes a long time to generate',
     mining_premiumCraftingSlots: 'Upgrades one of your crafting slots to premium, which halves impurity and doubles purity',
 

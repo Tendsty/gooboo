@@ -112,6 +112,7 @@ export default {
     },
     mult: {
         farmExperience: {baseValue: 1},
+        farmGoldChance: {display: 'percent'}, // Not functional, just here to make the stat breakdown work
         farmOvergrow: {display: 'percent'},
         farmRareDrop: {display: 'percent'},
         farmCropGain: {group: ['currencyFarmVegetableGain', 'currencyFarmFruitGain', 'currencyFarmGrainGain', 'currencyFarmFlowerGain']}

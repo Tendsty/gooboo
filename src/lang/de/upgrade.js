@@ -24,7 +24,43 @@ export default {
   },
 
   description: {
-    mining_premiumCraftingSlots: 'Wertet einen deiner Herstellplätze zur Premium-Qualität auf, wodurch Unreinheit halbiert und Reinheit verdoppelt wird'
+    mining_craftingStation: 'Die Werkbank erlaubt es dir, Orze zu verbrauchen, um deine Spitzhackenkraft zu erhöhen. Sie ist essentiell, um deinen Schaden zu steigern',
+    mining_compressor: 'Mit dem Kompressor kannst du die Erzmenge pro Herstellplatz erhöhen, um die Reinheit der Spitzhacke zu verbessern',
+    mining_depthDweller: 'Dies gewährt dir Zugang zur Prestige-Möglichkeit vom Bergbau',
+    mining_smeltery: 'Hiermit kannst du Erze und Bodenschätze zu Barren schmelzen',
+    mining_enhancingStation: 'Dies erlaubt es dir, Barren zu benutzen, um einzigartige Spitzhackeneffekte zu erhalten',
+    mining_emberForge: 'Glut wird beim Prestige erhalten und erhöht das Tempo vom Hochofen',
+    mining_stickyJar: 'Harz verbessert die Ergebnisse von hergestellten Spitzhacken, braucht aber lange zum Erzeugen',
+    mining_premiumCraftingSlots: 'Wertet einen deiner Herstellplätze zur Premium-Qualität auf, wodurch Unreinheit halbiert und Reinheit verdoppelt wird',
+
+    village_treasury: 'Der Steuersatz sorgt dafür, dass arbeitende Dorfbewohner Nahrung verbrauchen und im Gegenzug Steuern zahlen',
+    village_church: 'Dies gewährt dir Zugang zur Prestige-Möglichkeit vom Dorf',
+    village_offeringPedestal: 'Dies erlaubt es dir, Ressourcen zu opfern, um ihre Kapazität dauerhaft zu erhöhen',
+    village_court: 'Verordnungen können aktiviert werden, um Boni im Austausch für Zufriedenheit zu erhalten, oder umgekehrt',
+    village_generator: 'Energie erhöht dein Rohstoffeinkommen und Verschmutzung senkt die Zufriedenheit',
+    village_darkCult: 'Die Religionsverordnung erlaubt es dir, Rohstoffe oder Glaube zu priorisieren, auf Kosten des Anderen',
+    village_pyramid: 'Entdecker finden einen neuen Rohstoff mit der Zeit. Die Einstellung benötigt 600 Dorfbewohner, vielleich brauchst du hierfür die Einwanderungsverordnung!',
+    village_radar: 'Die Scanverordnung erlaubt es dir, Beuteeinkommen oder Beutequalität zu priorisieren, auf Kosten des Anderen',
+
+    horde_purifier: 'Erhalte langsam korruptes Fleisch und nutze es, um die Korruption zu senken',
+
+    farm_gardenGnome: 'Gartenzwerge können auf das Feld gesetzt werden, um eine Chance auf eine neue Währung zu erhalten',
+    farm_learning: 'Mit Pflanzenerfahrung kann die globale Stufe erhöht werden',
+    farm_sprinkler: 'Rasensprenger lassen Pflanzen in einer Zeile schneller wachsen',
+    farm_lectern: 'Rednerpulte erhöhen die Pflanzenerfahrung in einer Spalte',
+    farm_pinwheel: 'Windräder erlauben es dir, mehr seltenen Ertrag zu finden',
+    farm_flag: 'Flaggen erhöhen den Ertrag abhängig von der Position',
+    farm_premiumGardenGnome: 'Premium-Gartenzwerge bieten die doppelte Goldchance',
+    farm_premiumSprinkler: 'Premium-Rasensprenger verdreifachen das Wachstumstempo',
+    farm_premiumLectern: 'Premium-Rednerpulte verfünffachen die Erfahrung',
+    farm_premiumPinwheel: 'Premium-Windräder bieten den doppelten Bonus auf seltenen Ertrag',
+    farm_premiumFlag: 'Premium-Flaggen bieten den doppelten Ertragsbonus',
+
+    gallery_recycling: 'Durch Konversion können neue Farben erzeugt werden',
+    gallery_redLuck: 'Du brauchst Glücksverbesserungen, bevor du Farbtrommeln in Paketen finden kannst',
+    gallery_epiphany: 'Durch Ideen kannst du begrenzte Inspiration für einzigartige Boni nutzen',
+    gallery_auctionHouse: 'Dies gewährt dir Zugang zur Prestige-Möglichkeit von der Gallerie',
+    gallery_paintDrumStorage: 'Dies erlaubt das Sammeln von Paketen, welche manchmal Farbtrommeln enthalten',
   },
 
   // Mining upgrades

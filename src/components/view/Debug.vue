@@ -52,6 +52,9 @@
         <v-btn class="ma-1" @click="maxSchool">
           <v-icon>mdi-school</v-icon>
         </v-btn>
+        <v-btn class="ma-1" @click="maxCrop">
+          <v-icon>mdi-sprout</v-icon>
+        </v-btn>
         <div class="ma-1">Total time spent: {{ $formatTime(totalTime) }}</div>
         <div>Today is {{ currentDay }}</div>
       </div>
@@ -216,7 +219,7 @@ import AutoplayGraph from '../partial/debug/AutoplayGraph.vue';
 import { randomFloat, randomInt } from '../../js/utils/random';
 import colors from '../../js/theme/colors';
 import CardItem from '../partial/card/CardItem.vue';
-import { capitalize } from '../../js/utils/format';
+import { buildNum, capitalize } from '../../js/utils/format';
 import { getDay, getWeek } from '../../js/utils/date';
 import { mapState } from 'vuex';
 
@@ -552,6 +555,13 @@ export default {
       for (const [key, elem] of Object.entries(this.$store.state.school)) {
         if (elem.unlock === null || this.$store.state.unlock[elem.unlock].see) {
           this.$store.commit('school/updateKey', {name: key, key: 'grade', value: 100});
+        }
+      }
+    },
+    maxCrop() {
+      for (const [key, elem] of Object.entries(this.$store.state.farm.crop)) {
+        if (elem.found) {
+          this.$store.dispatch('farm/getCropExp', {crop: key, value: buildNum(1, 'M')});
         }
       }
     }

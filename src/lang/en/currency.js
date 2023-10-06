@@ -52,7 +52,7 @@ export default {
   },
   event_magic: {
     name: 'Magic',
-    description: 'Magic slowly converts your other currencies into magical currencies. The more magic you have, the faster the conversion process. Magical currencies can be identified by their unusual icon. To return them to their regular version, just hover over them and you\'ll get ingredients in return'
+    description: 'Magic is slowly consumed to convert your other currencies into magical currencies. The more magic you have, the faster the conversion process. Magical currencies can be identified by their unusual icon. To return them to their regular version, just hover over them and you\'ll get ingredients in return'
   },
   event_snowball: {
     name: 'Snowball',

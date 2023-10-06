@@ -80,3 +80,5 @@ export const NIGHT_HUNT_HINT_PENALTY = 0.1;
 export const SNOWDOWN_FIGHT_COST = 5;
 export const SNOWDOWN_REROLL_COST = 50;
 export const SNOWDOWN_BOOST_COST = 140;
+
+export const NIGHT_HUNT_GL_BOOST = 1.01;

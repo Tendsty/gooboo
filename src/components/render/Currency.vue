@@ -68,7 +68,7 @@
         </div>
       </div>
     </template>
-    <currency-tooltip :name="name" :gain-base="gainBase" :base-array="baseArray">
+    <currency-tooltip :name="name" :gain-base="gainBase" :base-array="baseArray" :mult-array="multArray">
       <slot></slot>
     </currency-tooltip>
   </gb-tooltip>
@@ -121,6 +121,11 @@ export default {
       default: null
     },
     baseArray: {
+      type: Array,
+      required: false,
+      default: (() => [])
+    },
+    multArray: {
       type: Array,
       required: false,
       default: (() => [])

@@ -32,6 +32,25 @@
             <div>{{ $vuetify.lang.t('$vuetify.farm.overgrowDescription', $formatNum(cropOvergrow, true)) }}</div>
           </gb-tooltip>
         </template>
+        <template v-if="hasGnome">
+          <v-icon class="mx-2">mdi-circle-small</v-icon>
+          <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.farm.goldChance')">
+            <template v-slot:activator="{ on, attrs }">
+              <div class="d-flex justify-center align-center" v-bind="attrs" v-on="on">
+                <div>{{ $formatNum(cropGoldChance * gnomeAmount * 100, true) }}%</div>
+                <v-icon class="ml-1" small>mdi-gold</v-icon>
+              </div>
+            </template>
+            <stat-breakdown name="farmGoldChance" :base="cropGoldChanceBase * 0.01" :multArray="goldChanceMult"></stat-breakdown>
+            <div>{{ $vuetify.lang.t('$vuetify.farm.goldChanceDescription') }}</div>
+            <alert-text v-if="(cropGoldChance * gnomeAmount) > 1" type="info">{{ $vuetify.lang.t(
+              '$vuetify.farm.goldChanceMultiple',
+              $formatNum(Math.floor(cropGoldChance * gnomeAmount)),
+              $formatNum(((cropGoldChance * gnomeAmount) - Math.floor(cropGoldChance * gnomeAmount)) * 100, true)
+            ) }}</alert-text>
+            <alert-text v-if="gnomeAmount <= 0" type="error">{{ $vuetify.lang.t('$vuetify.farm.goldChanceWarning') }}</alert-text>
+          </gb-tooltip>
+        </template>
         <v-icon class="mx-2">mdi-circle-small</v-icon>
         <price-tag v-if="cropCost > 0" currency="farm_gold" :amount="cropCost"></price-tag>
         <span v-else>{{ $vuetify.lang.t('$vuetify.gooboo.free') }}</span>
@@ -106,11 +125,12 @@ import { mapGetters, mapState } from 'vuex';
 import { capitalize } from '../../../js/utils/format';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import AlertText from '../render/AlertText.vue';
 import CropRareDrop from './CropRareDrop.vue';
 import CropUpgrade from './CropUpgrade.vue';
 
 export default {
-  components: { CropUpgrade, StatBreakdown, CropRareDrop, PriceTag },
+  components: { CropUpgrade, StatBreakdown, CropRareDrop, PriceTag, AlertText },
   props: {
     name: {
       type: String,
@@ -247,6 +267,31 @@ export default {
     },
     cropLevelGain() {
       return this.crop.level - this.crop.levelMax;
+    },
+    gnomeAmount() {
+      return this.$store.state.farm.building.gardenGnome.cacheAmount + this.$store.state.farm.building.gardenGnome.cachePremium;
+    },
+    cropGoldChanceBase() {
+      return Math.pow(this.crop.grow, 0.5);
+    },
+    cropGoldChance() {
+      return this.cropGoldChanceBase * this.$store.getters['farm/cropGoldChance'](this.name);
+    },
+    hasGnome() {
+      return this.$store.state.farm.building.gardenGnome.max >= 1;
+    },
+    goldChanceMult() {
+      let arr = [];
+
+      if (this.crop.upgrades.gold) {
+        arr.push({name: 'farmUpgrade_gold', value: Math.pow(1.12, this.crop.upgrades.gold)});
+      }
+      if (this.crop.upgrades.double) {
+        arr.push({name: 'farmUpgrade_double', value: Math.pow(1.5, this.crop.upgrades.double)});
+      }
+      arr.push({name: 'farmGardenGnome', value: this.gnomeAmount});
+
+      return arr;
     }
   },
   methods: {

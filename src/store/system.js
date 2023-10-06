@@ -851,7 +851,7 @@ export default {
                     break;
                 }
                 case 'treasureFragment': {
-                    dispatch('treasure/buyFragments', state.confirm.max, {root: true});
+                    dispatch('treasure/buyFragments', null, {root: true});
                     break;
                 }
                 case 'treasureDelete': {
