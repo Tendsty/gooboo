@@ -1,5 +1,6 @@
 import store from "../../../store";
 import { buildNum } from "../../utils/format";
+import { getSequence } from "../../utils/math";
 
 export default {
     wallet: {cap: 12, capMult: true, requirement() {
@@ -149,10 +150,10 @@ export default {
     ]},
 
     // Science upgrades
-    breakthrough: {requirement() {
+    breakthrough: {cap: 50, requirement() {
         return store.state.unlock.villageUpgradeBreakthrough.use;
     }, price(lvl) {
-        return {village_science: lvl * 10 + 20};
+        return {village_science: Math.round(Math.pow(1.05, Math.max(lvl - 25, 0)) * lvl * 10 + 20)};
     }, effect: [
         {name: 'currencyVillageKnowledgeCap', type: 'base', value: lvl => lvl * 5},
         {name: 'currencyVillageScienceCap', type: 'base', value: lvl => lvl * 2}
@@ -183,5 +184,73 @@ export default {
         {name: 'currencyVillageHardwoodGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
         {name: 'currencyVillageGemGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
         {name: 'currencyVillageFishGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+    ]},
+
+    // Old library upgrades
+    sprinkler: {cap: 15, requirement() {
+        return store.state.unlock.villageUpgradeSprinkler.use;
+    }, price(lvl) {
+        return {village_coin: Math.ceil(Math.pow(1.65, lvl) * buildNum(2, 'T'))};
+    }, effect: [
+        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
+        {name: 'currencyVillageGrainGain', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageFruitGain', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageVegetableGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
+    ]},
+    greed: {cap: 15, requirement() {
+        return store.state.unlock.villageUpgradeGreed.use;
+    }, price(lvl) {
+        return {village_knowledge: lvl * 160 + 2200, village_science: lvl * 45 + 500};
+    }, effect: [
+        {name: 'villageTaxRate', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
+        {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
+        {name: 'villagePollution', type: 'base', value: lvl => lvl}
+    ]},
+
+    // Loot upgrades
+    ambition: {requirement() {
+        return store.state.unlock.villageUpgradeAmbition.use;
+    }, price(lvl) {
+        return {village_loot0: Math.ceil(Math.pow(1.15, lvl) * (lvl * 2 + 6))};
+    }, effect: [
+        {name: 'villageLootGain', type: 'mult', value: lvl => lvl * 0.01 + 1},
+        {name: 'villageLootQuality', type: 'base', value: lvl => lvl * 3}
+    ]},
+    understanding: {cap: 20, requirement() {
+        return store.state.unlock.villageUpgradeUnderstanding.use;
+    }, price(lvl) {
+        return {village_loot0: Math.ceil(Math.pow(1.2, lvl) * 55)};
+    }, effect: [
+        {name: 'currencyVillageKnowledgeCap', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageScienceCap', type: 'mult', value: lvl => lvl * 0.05 + 1}
+    ]},
+    curiosity: {requirement() {
+        return store.state.unlock.villageUpgradeCuriosity.use;
+    }, price(lvl) {
+        return {village_loot1: Math.ceil(Math.pow(1.15, lvl) * (lvl + 4))};
+    }, effect: [
+        {name: 'villageLootGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
+    ]},
+    worship: {cap: 20, requirement() {
+        return store.state.unlock.villageUpgradeWorship.use;
+    }, price(lvl) {
+        return {village_loot1: Math.ceil(Math.pow(1.18, lvl) * 55)};
+    }, effect: [
+        {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => getSequence(2, lvl) * 0.1 + 1}
+    ]},
+    bartering: {requirement() {
+        return store.state.unlock.villageUpgradeBartering.use;
+    }, price(lvl) {
+        return {village_loot2: Math.ceil(Math.pow(1.15, lvl) * (lvl + 2.5))};
+    }, effect: [
+        {name: 'villageLootQuality', type: 'base', value: lvl => lvl},
+        {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => Math.pow(1.08, lvl)}
+    ]},
+    sparks: {cap: 20, requirement() {
+        return store.state.unlock.villageUpgradeSparks.use;
+    }, price(lvl) {
+        return {village_loot2: Math.ceil(Math.pow(1.16, lvl) * 55)};
+    }, effect: [
+        {name: 'villagePower', type: 'base', value: lvl => lvl}
     ]},
 }

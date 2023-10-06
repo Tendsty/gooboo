@@ -52,7 +52,7 @@ export default {
   },
   event_magic: {
     name: 'Magie',
-    description: 'Magie wandelt andere Währungen langsam in magische Währungen um. Je mehr Magie du hast, desto schneller der Prozess. Magische Währungen können am ungewöhnlichen Symbol erkannt werden. Um sie zurückzuverwandeln, fahre mit der Maus hinüber, das bringt ebenfalls Zutaten'
+    description: 'Magie wird langsam verbraucht, um andere Währungen in magische Währungen umzuwandeln. Je mehr Magie du hast, desto schneller der Prozess. Magische Währungen können am ungewöhnlichen Symbol erkannt werden. Um sie zurückzuverwandeln, fahre mit der Maus hinüber, das bringt ebenfalls Zutaten'
   },
   event_snowball: {
     name: 'Schneeball',
@@ -491,6 +491,42 @@ export default {
   village_hardwood: {
     name: 'Hartholz',
     description: 'Diese Holz wird von riesigen Bäumen gewonnen, welche Jahrhunderte zum Wachsen brauchen. Deren Holz ist hart, aber trotzdem noch biegsam'
+  },
+  village_oil: {
+    name: 'Öl',
+    description: 'Ein flexibler und wertvoller Rohstoff'
+  },
+  village_marble: {
+    name: 'Marmor',
+    description: 'Dieser wunderschöne Stein ist eine häufige Wahl in gehobenen Luxusbauten'
+  },
+  village_meat: {
+    name: 'Fleisch',
+    description: 'Diese Kühe hatten sicher ein wundervolles Leben... richtig?'
+  },
+  village_loot0: {
+    name: 'Gewöhnliche Beute',
+    description: 'Muss vorerst reichen...'
+  },
+  village_loot1: {
+    name: 'Ungewöhnliche Beute',
+    description: 'Ein wenig besser, da geht aber noch mehr!'
+  },
+  village_loot2: {
+    name: 'Seltene Beute',
+    description: 'Endlich etwas Vernünftiges'
+  },
+  village_loot3: {
+    name: 'Epische Beute',
+    description: 'Jetzt wird es langsam gut'
+  },
+  village_loot4: {
+    name: 'Legendäre Beute',
+    description: 'LEGENDÄR!'
+  },
+  village_loot5: {
+    name: 'Mythische Beute',
+    description: 'Und du dachtest sie wäre für immer verschollen'
   },
   horde_bone: {
     name: 'Knochen',

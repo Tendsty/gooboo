@@ -81,7 +81,7 @@ export default {
     }, effect: [
         {name: 'queueSpeedVillageBuilding', type: 'base', value: lvl => lvl}
     ]},
-    treasury: {cap: 10, capMult: true, icon: 'mdi-treasure-chest', note: 'village_9', requirement() {
+    treasury: {cap: 10, hasDescription: true, capMult: true, icon: 'mdi-treasure-chest', note: 'village_9', requirement() {
         return store.state.unlock.villageBuildings2.use;
     }, price(lvl) {
         let obj = {village_plantFiber: Math.pow(1.25, Math.max(0, lvl - 9)) * Math.pow(1.5, lvl) * 2600};
@@ -242,7 +242,7 @@ export default {
         {name: 'glassblower', type: 'villageJob', value: lvl => lvl},
         {name: 'currencyVillageGlassCap', type: 'base', value: lvl => lvl > 1 ? (250 * (lvl - 1)) : null}
     ]},
-    knowledgeTower: {icon: 'mdi-wizard-hat', note: 'village_19', requirement() {
+    knowledgeTower: {cap: 50, icon: 'mdi-wizard-hat', note: 'village_19', requirement() {
         return store.state.unlock.villageBuildings3.use;
     }, price(lvl) {
         return {
@@ -272,7 +272,7 @@ export default {
         {name: 'currencyVillageMetalGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
         {name: 'villageWorker', type: 'base', value: lvl => lvl > 4 ? Math.floor(lvl / 5) : null}
     ]},
-    church: {cap: 25, icon: 'mdi-church', note: 'village_18', requirement() {
+    church: {cap: 25, hasDescription: true, icon: 'mdi-church', note: 'village_18', requirement() {
         return store.state.unlock.villageBuildings3.use;
     }, price(lvl) {
         return {
@@ -289,10 +289,10 @@ export default {
         return store.state.unlock.villageBuildings3.use;
     }, price(lvl) {
         return {
-            village_plantFiber: Math.ceil(Math.pow(2.25, lvl) * buildNum(400, 'K')),
-            village_metal: Math.ceil(Math.pow(2.25, lvl) * buildNum(45, 'K')),
-            village_glass: Math.ceil(Math.pow(2.1, lvl) * 4800),
-            village_coin: Math.ceil(Math.pow(1.85, lvl) * buildNum(70, 'K'))
+            village_plantFiber: Math.pow(2.25, lvl) * buildNum(400, 'K'),
+            village_metal: Math.pow(2.25, lvl) * buildNum(45, 'K'),
+            village_glass: Math.pow(2.1, lvl) * 4800,
+            village_coin: Math.pow(1.85, lvl) * buildNum(70, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.6, lvl) * 3600);
@@ -346,14 +346,14 @@ export default {
     obelisk: {cap: 0, capMult: true, icon: 'mdi-tower-fire', requirement() {
         return store.state.unlock.villageBuildings4.use;
     }, price(lvl) {
-        return {village_coin: Math.ceil(Math.pow(4.5, lvl) * buildNum(50, 'K'))};
+        return {village_coin: Math.pow(4.5, lvl) * buildNum(50, 'K')};
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.45, lvl) * buildNum(50, 'K'));
     }, effect: [
         {name: 'currencyVillageCoinCap', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'villageMaterialCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
     ]},
-    offeringPedestal: {cap: 4, note: 'village_23', icon: 'mdi-table-furniture', requirement() {
+    offeringPedestal: {cap: 4, hasDescription: true, note: 'village_23', icon: 'mdi-table-furniture', requirement() {
         return store.state.unlock.villageBuildings4.use;
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(3, lvl) * buildNum(32.5, 'K'));
@@ -362,7 +362,7 @@ export default {
             {village_wood: buildNum(2, 'M'), village_plantFiber: buildNum(2, 'M'), village_stone: buildNum(2, 'M')},
             {village_coin: buildNum(10, 'M'), village_metal: buildNum(3, 'M'), village_water: buildNum(5, 'M')},
             {village_glass: buildNum(120, 'K'), village_hardwood: buildNum(40, 'K'), village_gem: buildNum(40, 'K')},
-            {village_knowledge: 250, village_science: 100, village_joy: 750}
+            {village_knowledge: 600, village_science: 200, village_joy: 750}
         ][lvl];
     }, effect: [
         {name: 'villageOffering1', type: 'unlock', value: lvl => lvl >= 1},
@@ -389,7 +389,7 @@ export default {
     lumberjackHut: {cap: 10, capMult: true, note: 'village_25', subtype: 'workstation', icon: 'mdi-axe', requirement() {
         return store.state.unlock.villageBuildings4.use;
     }, price(lvl) {
-        return {village_plantFiber: Math.pow(1.85, lvl) * buildNum(7.7, 'M'), village_metal: Math.ceil(Math.pow(1.85, lvl) * buildNum(1.35, 'M'))};
+        return {village_plantFiber: Math.pow(1.85, lvl) * buildNum(7.7, 'M'), village_metal: Math.pow(1.85, lvl) * buildNum(1.35, 'M')};
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(10, 'K'));
     }, effect: [
@@ -400,7 +400,7 @@ export default {
         return store.state.unlock.villageBuildings4.use;
     }, price(lvl) {
         return {
-            village_wood: Math.ceil(Math.pow(1.85, lvl) * buildNum(13, 'M')),
+            village_wood: Math.pow(1.85, lvl) * buildNum(13, 'M'),
             village_knowledge: lvl * 10 + 165,
             village_hardwood: Math.pow(1.65, lvl) * 500
         };
@@ -413,7 +413,7 @@ export default {
     bigStorage: {cap: 20, capMult: true, icon: 'mdi-database-settings', requirement() {
         return store.state.unlock.villageBuildings4.use;
     }, price(lvl) {
-        return {village_hardwood: Math.ceil(Math.pow(lvl * 0.03 + 1.25, lvl) * 900), village_gem: Math.ceil(Math.pow(lvl * 0.03 + 1.25, lvl) * 900)};
+        return {village_hardwood: Math.pow(lvl * 0.03 + 1.25, lvl) * 900, village_gem: Math.pow(lvl * 0.03 + 1.25, lvl) * 900};
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.15, lvl) * buildNum(15, 'K'));
     }, effect: [
@@ -428,7 +428,7 @@ export default {
             village_metal: Math.pow(1.65, lvl) * buildNum(7, 'M'),
             village_hardwood: Math.pow(1.35, lvl) * 4000,
             village_gem: Math.pow(1.3, lvl) * 9200,
-            village_coin: Math.ceil(Math.pow(2.15, lvl) * buildNum(25, 'M'))
+            village_coin: Math.pow(2.15, lvl) * buildNum(25, 'M')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.25, lvl) * buildNum(18, 'K'));
@@ -440,7 +440,7 @@ export default {
         return store.state.unlock.villageBuildings4.use;
     }, price(lvl) {
         return {
-            village_water: Math.ceil(Math.pow(2.25, lvl) * buildNum(50, 'M')),
+            village_water: Math.pow(2.25, lvl) * buildNum(50, 'M'),
             village_glass: Math.pow(1.65, lvl) * buildNum(60, 'K'),
             village_gem: Math.pow(1.65, lvl) * buildNum(11, 'K')
         };
@@ -497,7 +497,7 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.15, lvl) * buildNum(140, 'K'));
     }, price(lvl) {
-        return {village_water: Math.pow(4, lvl) * buildNum(250, 'M'), village_coin: Math.ceil(Math.pow(3, lvl) * buildNum(50, 'M'))};
+        return {village_water: Math.pow(4, lvl) * buildNum(250, 'M'), village_coin: Math.pow(3, lvl) * buildNum(50, 'M')};
     }, effect: [
         {name: 'villageHappiness', type: 'base', value: lvl => lvl * 0.01}
     ]},
@@ -535,7 +535,7 @@ export default {
             village_stone: Math.pow(1.65, lvl) * buildNum(875, 'M'),
             village_plantFiber: Math.pow(1.65, lvl) * buildNum(1.1, 'B'),
             village_metal: Math.pow(1.65, lvl) * buildNum(180, 'M'),
-            village_coin: Math.ceil(Math.pow(1.85, lvl) * buildNum(400, 'M'))
+            village_coin: Math.pow(1.85, lvl) * buildNum(400, 'M')
         };
     }, effect: [
         {name: 'currencyVillageWaterGain', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
@@ -546,8 +546,8 @@ export default {
     }, price(lvl) {
         return {
             village_metal: Math.pow(1.85, lvl) * buildNum(40, 'M'),
-            village_glass: Math.ceil(Math.pow(1.85, lvl) * buildNum(275, 'K')),
-            village_gem: Math.ceil(Math.pow(1.85, lvl) * buildNum(77.5, 'K'))
+            village_glass: Math.pow(1.85, lvl) * buildNum(275, 'K'),
+            village_gem: Math.pow(1.85, lvl) * buildNum(77.5, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.33, lvl) * buildNum(300, 'K'));
@@ -556,7 +556,7 @@ export default {
         {name: 'currencyVillageScienceCap', type: 'base', value: lvl => lvl > 2 ? ((lvl - 2) * 5) : null},
         {name: 'villageUpgradeBreakthrough', type: 'unlock', value: lvl => lvl >= 2}
     ]},
-    court: {cap: 2, icon: 'mdi-gavel', requirement() {
+    court: {cap: 2, hasDescription: true, icon: 'mdi-gavel', requirement() {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
@@ -573,7 +573,7 @@ export default {
     greenhouse: {cap: 10, capMult: true, subtype: 'workstation', icon: 'mdi-greenhouse', requirement() {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
-        return {village_plantFiber: Math.ceil(Math.pow(1.85, lvl) * buildNum(500, 'M')), village_glass: Math.ceil(Math.pow(1.85, lvl) * buildNum(400, 'K'))};
+        return {village_plantFiber: Math.pow(1.85, lvl) * buildNum(500, 'M'), village_glass: Math.pow(1.85, lvl) * buildNum(400, 'K')};
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.33, lvl) * buildNum(550, 'K'));
     }, effect: [
@@ -589,10 +589,10 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.75, lvl) * buildNum(1.5, 'M'));
     }, effect: [
-        {name: 'villageFoodGain', type: 'mult', value: lvl => lvl * 0.25 + 1},
+        {name: 'villageFoodGain', type: 'mult', value: lvl => Math.pow(1.2, lvl) * (lvl * 0.25 + 1)},
         {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 8}
     ]},
-    storageHall: {icon: 'mdi-warehouse', requirement() {
+    storageHall: {cap: 20, icon: 'mdi-warehouse', requirement() {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
@@ -613,7 +613,7 @@ export default {
     }, price(lvl) {
         return {
             village_metal: Math.pow(2.3, lvl) * buildNum(200, 'M'),
-            village_gem: Math.ceil(Math.pow(1.85, lvl) * buildNum(260, 'K'))
+            village_gem: Math.pow(1.85, lvl) * buildNum(260, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.75, lvl) * buildNum(1, 'M'));
@@ -623,14 +623,14 @@ export default {
         {name: 'villageUpgradeDopamine', type: 'unlock', value: lvl => lvl >= 3},
         {name: 'villageUpgradeAdrenaline', type: 'unlock', value: lvl => lvl >= 5}
     ]},
-    taxOffice: {cap: 3, icon: 'mdi-office', requirement() {
+    taxOffice: {cap: 3, icon: 'mdi-office-building', requirement() {
         return store.state.unlock.villageBuildings5.use && store.state.upgrade.item.village_court.level >= 1;
     }, price(lvl) {
         return {
             village_stone: Math.pow(6, lvl) * buildNum(3.5, 'B'),
             village_water: Math.pow(15, lvl) * buildNum(25, 'B'),
             village_knowledge: lvl * 75 + 300,
-            village_coin: Math.ceil(Math.pow(3.5, lvl) * buildNum(2, 'B'))
+            village_coin: Math.pow(3.5, lvl) * buildNum(2, 'B')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(2.5, lvl) * buildNum(1.2, 'M'));
@@ -652,11 +652,409 @@ export default {
     cemetery: {cap: 10, icon: 'mdi-grave-stone', requirement() {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
-        return {village_wood: Math.ceil(Math.pow(1.85, lvl) * buildNum(6, 'B')), village_stone: Math.ceil(Math.pow(1.85, lvl) * buildNum(8.5, 'B'))};
+        return {village_wood: Math.pow(1.85, lvl) * buildNum(6, 'B'), village_stone: Math.pow(1.85, lvl) * buildNum(8.5, 'B')};
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(1.5, 'M'));
     }, effect: [
         {name: 'villageOfferingPower', type: 'mult', value: lvl => lvl * 0.5 + 1},
         {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 8}
+    ]},
+    mosque: {cap: 25, icon: 'mdi-mosque', requirement() {
+        return store.state.unlock.villageBuildings5.use;
+    }, price(lvl) {
+        return {
+            village_stone: Math.pow(2.12, lvl) * buildNum(42, 'B'),
+            village_glass: Math.pow(1.9, lvl) * buildNum(11, 'M'),
+            village_gem: Math.pow(1.55, lvl) * buildNum(4.5, 'M')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.3, lvl) * buildNum(3.2, 'M'));
+    }, effect: [
+        {name: 'currencyVillageFaithGain', type: 'base', value: lvl => getSequence(2, lvl) * 2}
+    ]},
+    waterTower: {cap: 12, icon: 'mdi-tower-beach', requirement() {
+        return store.state.unlock.villageBuildings5.use;
+    }, price(lvl) {
+        return {
+            village_plantFiber: Math.pow(2.45, lvl) * buildNum(65, 'B'),
+            village_knowledge: lvl * 125 + 625
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.65, lvl) * buildNum(8, 'M'));
+    }, effect: [
+        {name: 'currencyVillageWaterGain', type: 'mult', value: lvl => Math.pow(1.2, lvl) * (lvl * 0.5 + 1)}
+    ]},
+    outdoorPump: {cap: 5, icon: 'mdi-water-pump', requirement() {
+        return store.state.unlock.villageBuildings5.use;
+    }, price(lvl) {
+        return {
+            village_water: Math.pow(3.3, lvl) * buildNum(360, 'B'),
+            village_joy: lvl * 180 + 600
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.65, lvl) * buildNum(18.5, 'M'));
+    }, effect: [
+        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.4 + 1}
+    ]},
+    bankVault: {cap: 12, icon: 'mdi-safe-square', requirement() {
+        return store.state.unlock.villageBuildings5.use;
+    }, price(lvl) {
+        return {
+            village_metal: Math.pow(1.85, lvl) * buildNum(1.6, 'B'),
+            village_science: lvl * 45 + 225
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.65, lvl) * buildNum(40, 'M'));
+    }, effect: [
+        {name: 'currencyVillageCoinCap', type: 'mult', value: lvl => Math.pow(1.6, lvl)}
+    ]},
+    steamEngine: {cap: 1, persistent: true, icon: 'mdi-turbine', requirement() {
+        return store.state.unlock.villageBuildings5.use;
+    }, timeNeeded() {
+        return buildNum(600, 'M');
+    }, price() {
+        return {village_metal: buildNum(5.76, 'B'), village_water: buildNum(9, 'T'), village_hardwood: buildNum(35, 'M'), village_coin: buildNum(700, 'B'), village_science: 360, village_joy: 1200};
+    }, effect: [
+        {name: 'villageBuildings6', type: 'unlock', value: lvl => lvl >= 1}
+    ]},
+
+    // Tier 6 buildings
+    mansion: {cap: 25, capMult: true, subtype: 'housing', icon: 'mdi-balcony', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_plantFiber: Math.pow(1.65, lvl) * buildNum(10.5, 'T'),
+            village_marble: Math.pow(1.35, lvl) * 600
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.25, lvl) * buildNum(140, 'M'));
+    }, effect: [
+        {name: 'villageWorker', type: 'base', value: lvl => lvl * 4}
+    ]},
+    oilRig: {cap: 10, capMult: true, subtype: 'workstation', icon: 'mdi-tower-fire', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_stone: Math.pow(2.35, lvl) * buildNum(220, 'B'),
+            village_water: Math.pow(4.1, lvl) * buildNum(15, 'T'),
+            village_knowledge: lvl * 500 + 1250
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.33, lvl) * buildNum(320, 'M'));
+    }, effect: [
+        {name: 'oilWorker', type: 'villageJob', value: lvl => lvl},
+        {name: 'currencyVillageOilCap', type: 'base', value: lvl => lvl > 1 ? ((lvl - 1) * 400) : null}
+    ]},
+    generator: {hasDescription: true, icon: 'mdi-engine', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_wood: Math.pow(1.45, lvl) * buildNum(275, 'B'),
+            village_metal: Math.pow(1.2, lvl) * buildNum(12, 'B'),
+            village_oil: Math.pow(1.25, lvl) * 1400
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.2, lvl) * buildNum(550, 'M'));
+    }, effect: [
+        {name: 'villagePower', type: 'base', value: lvl => lvl * 3},
+        {name: 'villagePollution', type: 'base', value: lvl => lvl * 2}
+    ]},
+    lighthouse: {cap: 25, icon: 'mdi-lighthouse', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_plantFiber: Math.pow(lvl * 0.06 + 1.6, lvl) * buildNum(460, 'B'),
+            village_gem: Math.pow(lvl * 0.04 + 1.4, lvl) * buildNum(60, 'M'),
+            village_oil: Math.pow(lvl * 0.05 + 1.5, lvl) * 2200
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.3, lvl) * buildNum(650, 'M'));
+    }, effect: [
+        {name: 'currencyVillageFaithGain', type: 'mult', value: lvl => Math.pow(1.225, lvl)}
+    ]},
+    lobby: {icon: 'mdi-account-group', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_coin: Math.pow(lvl * 0.05 + 1.35, lvl) * buildNum(1.5, 'T')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.3, lvl) * buildNum(750, 'M'));
+    }, effect: [
+        {name: 'villagePollutionTolerance', type: 'base', value: lvl => lvl}
+    ]},
+    oilStorage: {cap: 20, icon: 'mdi-barrel', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_hardwood: Math.pow(1.55, lvl) * buildNum(105, 'M'),
+            village_glass: Math.pow(1.6, lvl) * buildNum(225, 'M')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.3, lvl) * buildNum(1.1, 'B'));
+    }, effect: [
+        {name: 'currencyVillageMetalGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
+        {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
+        {name: 'currencyVillageOilCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)}
+    ]},
+    artGallery: {cap: 10, capMult: true, subtype: 'workstation', icon: 'mdi-palette-advanced', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_plantFiber: Math.pow(2.9, lvl) * buildNum(18, 'T'),
+            village_oil: Math.pow(2.2, lvl) * buildNum(24, 'K'),
+            village_joy: lvl * 400 + 1800
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.33, lvl) * buildNum(1.6, 'B'));
+    }, effect: [
+        {name: 'sculptor', type: 'villageJob', value: lvl => lvl},
+        {name: 'currencyVillageMarbleCap', type: 'base', value: lvl => lvl > 1 ? ((lvl - 1) * 100) : null}
+    ]},
+    excavator: {icon: 'mdi-excavator', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_hardwood: Math.pow(1.35, lvl) * buildNum(440, 'M'),
+            village_oil: Math.pow(1.6, lvl) * buildNum(30, 'K')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.3, lvl) * buildNum(2.2, 'B'));
+    }, effect: [
+        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => Math.pow(1.25, lvl) * (0.25 * lvl + 1)},
+        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => Math.pow(1.25, lvl) * (0.25 * lvl + 1)},
+        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => Math.pow(1.25, lvl) * (0.25 * lvl + 1)},
+        {name: 'villagePollution', type: 'base', value: lvl => lvl}
+    ]},
+    oilTruck: {icon: 'mdi-tanker-truck', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_gem: Math.pow(1.45, lvl) * buildNum(600, 'M')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.3, lvl) * buildNum(3, 'B'));
+    }, effect: [
+        {name: 'currencyVillageOilCap', type: 'mult', value: lvl => Math.pow(2, lvl)},
+        {name: 'villagePollution', type: 'base', value: lvl => lvl}
+    ]},
+    oldLibrary: {icon: 'mdi-book-clock', cap: 2, requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_wood: Math.pow(7.1, lvl) * buildNum(120, 'T'),
+            village_marble: Math.pow(4.5, lvl) * 3000,
+            village_knowledge: lvl * 600 + 1800
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(10, lvl) * buildNum(4, 'B'));
+    }, effect: [
+        {name: 'currencyVillageScienceCap', type: 'base', value: lvl => lvl * 20},
+        {name: 'villageUpgradeSprinkler', type: 'unlock', value: lvl => lvl >= 1},
+        {name: 'villageUpgradeGreed', type: 'unlock', value: lvl => lvl >= 2}
+    ]},
+    immigrationOffice: {cap: 3, icon: 'mdi-office-building', requirement() {
+        return store.state.unlock.villageBuildings6.use && store.state.upgrade.item.village_court.level >= 2;
+    }, price(lvl) {
+        return {
+            village_knowledge: lvl * 2000 + 3000,
+            village_science: lvl * 750 + 1000,
+            village_coin: Math.pow(10, lvl) * buildNum(100, 'T')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(8, lvl) * buildNum(5, 'B'));
+    }, effect: [
+        {name: 'villagePolicyImmigration', type: 'base', value: lvl => lvl}
+    ]},
+    marbleStatue: {cap: 10, icon: 'mdi-human-female-dance', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_marble: Math.pow(1.65, lvl) * 2250
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.75, lvl) * buildNum(7.5, 'B'));
+    }, effect: [
+        {name: 'villageHappiness', type: 'base', value: lvl => lvl * 0.004},
+        {name: 'currencyVillageMarbleCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageKnowledgeCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
+    ]},
+    darkCult: {cap: 4, hasDescription: true, icon: 'mdi-pentagram', requirement() {
+        return store.state.unlock.villageBuildings6.use && store.state.upgrade.item.village_court.level >= 2;
+    }, price(lvl) {
+        return {
+            village_gem: Math.pow(6.25, lvl) * buildNum(4.75, 'B'),
+            village_oil: Math.pow(5.5, lvl) * buildNum(3, 'M'),
+            village_marble: Math.pow(2.5, lvl) * buildNum(10, 'K')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(6, lvl) * buildNum(11, 'B'));
+    }, effect: [
+        {name: 'villagePolicyReligion', type: 'base', value: lvl => lvl}
+    ]},
+    slaughterhouse: {icon: 'mdi-cow', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, price(lvl) {
+        return {
+            village_wood: Math.pow(1.5, lvl) * buildNum(630, 'T'),
+            village_plantFiber: Math.pow(1.5, lvl) * buildNum(810, 'T'),
+            village_hardwood: Math.pow(1.35, lvl) * buildNum(7.4, 'B'),
+            village_water: Math.pow(1.9, lvl) * buildNum(500, 'Qa')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.25, lvl) * buildNum(16, 'B'));
+    }, effect: [
+        {name: 'currencyVillageMeatGain', type: 'base', value: lvl => getSequence(4, lvl) * 100},
+        {name: 'villagePollution', type: 'base', value: lvl => lvl}
+    ]},
+    ecoCouncil: {cap: 1, persistent: true, icon: 'mdi-earth', requirement() {
+        return store.state.unlock.villageBuildings6.use;
+    }, timeNeeded() {
+        return buildNum(250, 'B');
+    }, price() {
+        return {village_oil: buildNum(4.8, 'M'), village_marble: buildNum(25, 'K'), village_coin: buildNum(700, 'T'), village_science: 1000, village_joy: 3000};
+    }, effect: [
+        {name: 'villageBuildings7', type: 'unlock', value: lvl => lvl >= 1}
+    ]},
+
+    // Tier 7 buildings
+    treehouse: {cap: 25, capMult: true, subtype: 'housing', icon: 'mdi-tree-outline', requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        return {
+            village_hardwood: Math.pow(1.45, lvl) * buildNum(6.5, 'B'),
+            village_loot0: Math.ceil(Math.pow(1.2, lvl) * 5)
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.25, lvl) * buildNum(45, 'B'));
+    }, effect: [
+        {name: 'villageWorker', type: 'base', value: lvl => lvl * 6}
+    ]},
+    rainforest: {icon: 'mdi-forest', requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        return {
+            village_hardwood: Math.pow(1.35, lvl) * buildNum(7.4, 'B'),
+            village_water: Math.pow(1.9, lvl) * buildNum(500, 'Qa')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.25, lvl) * buildNum(250, 'B'));
+    }, effect: [
+        {name: 'villagePollution', type: 'base', value: lvl => lvl * -1}
+    ]},
+    luxuryStorage: {cap: 20, icon: 'mdi-warehouse', requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        return {
+            village_wood: Math.pow(1.85, lvl) * buildNum(4.4, 'Qa'),
+            village_stone: Math.pow(1.85, lvl) * buildNum(5.2, 'Qa'),
+            village_oil: Math.pow(1.6, lvl) * buildNum(8.5, 'M')
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.3, lvl) * buildNum(60, 'B'));
+    }, effect: [
+        {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
+        {name: 'currencyVillageGlassCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
+        {name: 'currencyVillageHardwoodCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
+        {name: 'currencyVillageGemCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
+        {name: 'currencyVillageMarbleCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
+    ]},
+    pyramid: {cap: 10, hasDescription: true, capMult: true, subtype: 'workstation', icon: 'mdi-pyramid', requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        return {
+            village_stone: Math.pow(3.75, lvl) * buildNum(12.5, 'Qa'),
+            village_marble: Math.pow(2.45, lvl) * buildNum(95, 'K'),
+            village_joy: lvl * 4000 + 7500
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.45, lvl) * buildNum(100, 'B'));
+    }, effect: [
+        {name: 'explorer', type: 'villageJob', value: lvl => lvl},
+        {name: 'villageLootQuality', type: 'base', value: lvl => lvl > 1 ? ((lvl - 1) * 2) : null}
+    ]},
+    trophyCase: {cap: 6, icon: 'mdi-gradient-vertical', requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        let obj = {};
+        obj[`village_loot${ lvl }`] = 1;
+        return obj;
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(2.5, lvl) * buildNum(150, 'B'));
+    }, effect: [
+        {name: 'villageMaterialGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
+        {name: 'villageMaterialCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)}
+    ]},
+    antiquarian: {icon: 'mdi-store', cap: 12, requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        let obj = {
+            village_coin: Math.pow(2.5, lvl) * buildNum(1, 'Qa')
+        };
+        obj[`village_loot${ Math.floor(lvl / 2) }`] = Math.pow(10, lvl % 2) * 10;
+        return obj;
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(3, lvl) * buildNum(200, 'B'));
+    }, effect: [
+        {name: 'currencyVillageCoinCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
+        {name: 'villageUpgradeAmbition', type: 'unlock', value: lvl => lvl >= 1},
+        {name: 'villageUpgradeUnderstanding', type: 'unlock', value: lvl => lvl >= 2},
+        {name: 'villageUpgradeCuriosity', type: 'unlock', value: lvl => lvl >= 3},
+        {name: 'villageUpgradeWorship', type: 'unlock', value: lvl => lvl >= 4},
+        {name: 'villageUpgradeBartering', type: 'unlock', value: lvl => lvl >= 5},
+        {name: 'villageUpgradeSparks', type: 'unlock', value: lvl => lvl >= 6},
+    ]},
+    windTurbine: {cap: 20, icon: 'mdi-wind-turbine', requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        return {
+            village_metal: Math.pow(1.65, lvl) * buildNum(35, 'T'),
+            village_loot1: Math.ceil(Math.pow(1.15, lvl) * (3 + lvl))
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.25, lvl) * buildNum(240, 'B'));
+    }, effect: [
+        {name: 'villagePower', type: 'base', value: lvl => lvl},
+        {name: 'villageLootGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+    ]},
+    radar: {cap: 10, hasDescription: true, icon: 'mdi-satellite-uplink', requirement() {
+        return store.state.unlock.villageBuildings7.use && store.state.upgrade.item.village_court.level >= 2;
+    }, price(lvl) {
+        return {
+            village_metal: Math.pow(3.15, lvl) * buildNum(175, 'T'),
+            village_marble: Math.pow(2.4, lvl) * buildNum(1.1, 'M'),
+            village_science: lvl * 650 + 2200
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(3, lvl) * buildNum(333, 'B'));
+    }, effect: [
+        {name: 'villagePolicyScanning', type: 'base', value: lvl => lvl}
+    ]},
+    waterTurbine: {cap: 20, icon: 'mdi-hydro-power', requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        return {
+            village_water: Math.pow(2.2, lvl) * buildNum(5, 'Qi'),
+            village_glass: Math.pow(1.65, lvl) * buildNum(170, 'B'),
+            village_loot2: Math.ceil(Math.pow(1.14, lvl) * (2 + lvl))
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.25, lvl) * buildNum(420, 'B'));
+    }, effect: [
+        {name: 'villagePower', type: 'base', value: lvl => lvl},
+        {name: 'currencyVillageWaterGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
+    ]},
+    solarPanel: {cap: 20, icon: 'mdi-solar-panel', requirement() {
+        return store.state.unlock.villageBuildings7.use;
+    }, price(lvl) {
+        return {
+            village_gem: Math.pow(1.55, lvl) * buildNum(200, 'B'),
+            village_oil: Math.pow(1.8, lvl) * buildNum(675, 'M'),
+            village_loot3: Math.ceil(Math.pow(1.13, lvl) * (1 + lvl))
+        };
+    }, timeNeeded(lvl) {
+        return Math.ceil(Math.pow(1.25, lvl) * buildNum(550, 'B'));
+    }, effect: [
+        {name: 'villagePower', type: 'base', value: lvl => lvl * 2}
     ]},
 }

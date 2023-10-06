@@ -15,10 +15,16 @@ export default {
     context: 'Kontext',
     new: 'Neu',
     remove: 'Entfernt',
-    change: 'Änderung'
+    change: 'Änderung',
+    accessibility: 'Barrierefreiheit',
+    appearance: 'Optik'
   },
   text: {
     addedFeature: 'Funktion hinzugefügt',
+    addedUpgrade: '{0} neue Verbesserung(en) hinzugefügt',
+    addedPrestigeUpgrade: '{0} neue Prestige-Verbesserung(en) hinzugefügt',
+    addedBuilding: '{0} neue Gebäude hinzugefügt',
+    addedAchievement: '{0} Erfolg(e) hinzugefügt',
     secretAchievement: '{0} geheime(r) Erfolg(e) hinzugefügt',
 
     // v1.0.1
@@ -118,11 +124,33 @@ export default {
     87: 'Erbstücks-Chance-Modifikator pro Zone',
     88: 'Benachrichtigungen für Notizen auszustellen entfernt jetzt bereits vorhandene Hinweise',
     89: 'Über die letzten Tage ist es klar geworden, dass schnelle 15-Minuten-Prestiges mit Abstand die beste Strategie sind, um Seelen in der Horde zu sammeln. Durchläufe mit einem Tag Dauer konnten kaum die doppelte Seelenmenge sammeln, und vorhandene Elemente, um das zu verhindern, haben eindeutig versagt. Das widerspricht der Idle-fokussierten Philosophie von Gooboo, und obwohl aktives Spielen immer die effizienteste Option sein sollte, darf das niemals andere Arten des Fortschritts verdrängen. Diese Änderungen sollen den Unterschied zwischen Spielern mit schnellen Prestiges und anderen Spielern, die 1-2 Mal am Tag einen Prestige durchführen, senken',
+
+    // v1.2.0
+    90: 'Ein Rundungsfehler wurde behoben, wenn die Korruption bei genau 0 liegt',
+    91: 'Ausrüstung, die noch nicht gefunden wurde, kann nicht mehr über Sets ausgerüstet werden',
+    92: 'Ein Fehler wurde behoben, der nicht alle Schatzeffekte angewendet hat',
+    93: 'Die Beschreibung zur globalen Stufe ist nun eindeutiger',
+    94: 'Alle Ausrüstungseffekte werden jetzt korrekt angewendet, wenn der Spieler tot ist',
+    95: 'Das Verbessern oder Löschen von Schätzen zeigt jetzt keine Fehlermeldung mehr an',
+    96: 'Die Preise einiger später Gebäude wurden angepasst, um einen nahtlosen Übergang zu den neuen Inhalten zu gewährleisten',
+    97: 'Der Tiefengräber zeigt jetzt nicht mehr 0s bis zur nächsten Tiefe an',
+    98: 'Das Einkommen der Prestigewährung wird jetzt auch im Tiefengräber-Tooltip angezeigt',
+    99: 'Goldmünzen zeigen nun deren Einkommen aus Nahrungsumwandlung an',
+    100: 'Beschreibungen von Verbesserungen werden jetzt nach der ersten Stufe versteckt',
+    101: 'Neue Beschreibungen für Verbesserungen wurden hinzugefügt, welche neue Spielelemente beinhalten',
+    102: 'Die Goldchance wird jetzt wie andere Werte aufgelistet',
+    103: 'Daten im Geschichte-Minispiel haben jetzt Textschatten für bessere Lesbarkeit',
+    104: 'Ein paar Tooltips wurden umgeschrieben oder ergänzt, um die Nachtjagd besser zu erklären',
+    105: 'Die Benutzeroberfläche wurde leicht angepasst',
+    106: 'Tooltips für das Kaufen von Schätzen und Fragmenten wurden ergänzt',
+    107: 'Bauernhof-Dünger zeigen jetzt ihre Effekte, wenn sie als Preis auftauchen',
+    108: 'Der Essenz-Multiplikator durch die globale Stufe wird jetzt im Tooltip angezeigt',
   },
   v: {
     1: {
       0: 'Ein explosiver Anfang',
       1: 'Direktor ersetzt!',
+      2: 'Der Umwelt zuliebe',
     }
   }
 }

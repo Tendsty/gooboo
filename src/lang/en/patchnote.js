@@ -15,10 +15,16 @@ export default {
     context: 'Context',
     new: 'New',
     remove: 'Removed',
-    change: 'Change'
+    change: 'Change',
+    accessibility: 'Accessibility',
+    appearance: 'Appearance'
   },
   text: {
     addedFeature: 'Added the feature',
+    addedUpgrade: 'Added {0} new upgrade(s)',
+    addedPrestigeUpgrade: 'Added {0} new prestige upgrade(s)',
+    addedBuilding: 'Added {0} new building(s)',
+    addedAchievement: 'Added {0} achievement(s)',
     secretAchievement: 'Added {0} secret achievement(s)',
 
     // v1.0.1
@@ -118,11 +124,33 @@ export default {
     87: 'Heirloom chance modifier per zone',
     88: 'Turning off note notifications now clears existing hints',
     89: 'Over the last few days, it became clear that quick 15-minute-prestiges were by far the best strategy to get souls in the horde. Runs that took a day could barely get twice the amount of souls, and existing elements to combat this are clearly not working. This is against the idle-focused philosophy of Gooboo, and while active gameplay should always be the most efficient option, it should not render other options of progress meaningless. These changes aim to reduce the gap between players with very fast prestiges and others who prestige one or two times a day.',
+
+    // v1.2.0
+    90: 'Fixed a rounding issue with corruption when it is at exactly 0',
+    91: 'Fixed a bug where you could use loadouts to equip items you did not find yet',
+    92: 'Fixed some treasure bonuses not applying',
+    93: 'Made the global level description more clear',
+    94: 'Fixed some equipment effects not working while dead',
+    95: 'Fixed a bug where upgrading or deleting a treasure sometimes shows an error',
+    96: 'Adjusted the prices of some endgame buildings for a more seamless transition with the new content',
+    97: 'Fixed a bug in the depth dweller preview showing 0s to reach next depth',
+    98: 'Added prestige currency gain to depth dweller preview',
+    99: 'Gold coins now show their gain from food conversion',
+    100: 'Upgrade descriptions now hide when the first level is bought',
+    101: 'Added upgrade descriptions for most upgrades that unlock new game mechanics',
+    102: 'Added a gold chance breakdown for crops',
+    103: 'History dates now have text shadows for better readability',
+    104: 'Reworded some tooltips and added a few new ones to the night hunt event',
+    105: 'Slightly changed the UI',
+    106: 'Added tooltips for buying treasure and fragments',
+    107: 'Farm fertilizers now show their effect when shown as prize',
+    108: 'The essence gain multiplier from your global level is now shown in the essence tooltip',
   },
   v: {
     1: {
       0: 'An explosive beginning',
       1: 'Principal replaced!',
+      2: 'Eco-friendly',
     }
   }
 }

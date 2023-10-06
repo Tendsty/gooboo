@@ -1,7 +1,7 @@
 <template>
   <price-tag v-if="prize.type === 'currency'" add :currency="prize.item" :amount="amount"></price-tag>
   <div v-else-if="prize.type === 'consumable'" class="d-flex align-center">
-    <consumable :name="prize.item"></consumable>
+    <consumable :name="prize.item" show-details></consumable>
     <div class="ml-2" v-if="amount > 1"><v-icon size="10">mdi-close</v-icon>{{ amount }}</div>
   </div>
   <div v-else-if="prize.type === 'cardPack'" class="d-flex align-center">

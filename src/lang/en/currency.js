@@ -52,7 +52,7 @@ export default {
   },
   event_magic: {
     name: 'Magic',
-    description: 'Magic slowly converts your other currencies into magical currencies. The more magic you have, the faster the conversion process. Magical currencies can be identified by their unusual icon. To return them to their regular version, just hover over them and you\'ll get ingredients in return'
+    description: 'Magic is slowly consumed to convert your other currencies into magical currencies. The more magic you have, the faster the conversion process. Magical currencies can be identified by their unusual icon. To return them to their regular version, just hover over them and you\'ll get ingredients in return'
   },
   event_snowball: {
     name: 'Snowball',
@@ -491,6 +491,42 @@ export default {
   village_hardwood: {
     name: 'Hardwood',
     description: 'These logs are gained from giant trees that need centuries to grow. Their wood is hard, but still elastic'
+  },
+  village_oil: {
+    name: 'Oil',
+    description: 'A flexible and precious resource'
+  },
+  village_marble: {
+    name: 'Marble',
+    description: 'This beautiful piece of stone is a common choice for more luxorious buildings'
+  },
+  village_meat: {
+    name: 'Meat',
+    description: 'These cows surely had a wonderful life... right?'
+  },
+  village_loot0: {
+    name: 'Common loot',
+    description: 'Has to do for now...'
+  },
+  village_loot1: {
+    name: 'Uncommon loot',
+    description: 'Slightly better, but we can do more!'
+  },
+  village_loot2: {
+    name: 'Rare loot',
+    description: 'Finally something decent'
+  },
+  village_loot3: {
+    name: 'Epic loot',
+    description: 'Now it\'s getting good'
+  },
+  village_loot4: {
+    name: 'Legendary loot',
+    description: 'LEGENDARY!'
+  },
+  village_loot5: {
+    name: 'Mythical loot',
+    description: 'And you thought these were lost forever'
   },
   horde_bone: {
     name: 'Bone',

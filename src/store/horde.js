@@ -462,7 +462,7 @@ export default {
             dispatch('resetStats');
         },
         equipItem({ state, getters, rootGetters, commit, dispatch }, name) {
-            if (state.items[name] && !state.items[name].equipped && getters.itemsEquipped < rootGetters['mult/get']('hordeMaxItems')) {
+            if (state.items[name] && !state.items[name].equipped && state.items[name].found && getters.itemsEquipped < rootGetters['mult/get']('hordeMaxItems')) {
                 commit('updateItemKey', {name, key: 'equipped', value: true});
                 dispatch('applyItemEffects', name);
                 dispatch('resetStats');
@@ -647,7 +647,7 @@ export default {
                 let kill = false;
 
                 state.items[name].active(state.items[name].level).forEach(elem => {
-                    if (state.respawn <= 0 || elem.type === 'bone') {
+                    if (state.respawn <= 0 || elem.type === 'bone' || elem.type === 'permanentAttack' || elem.type === 'permanentHealth') {
                         if (elem.type === 'heal') {
                             commit('updatePlayerKey', {key: 'health', value: Math.min(rootGetters['mult/get']('hordeHealth'), state.player.health + rootGetters['mult/get']('hordeHealth') * elem.value)});
                         } else if (elem.type === 'bone') {
@@ -842,7 +842,7 @@ export default {
             if (loadout) {
                 loadout.content.forEach(name => {
                     const item = state.items[name];
-                    if (freeSlots > 0 && item && !item.equipped) {
+                    if (freeSlots > 0 && item && !item.equipped && item.found) {
                         dispatch('equipItem', name);
                         freeSlots--;
                     }

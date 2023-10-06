@@ -17,7 +17,10 @@
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description1') }}</div>
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description2') }}</div>
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description3', $formatNum(dwellerPercent)) }}</div>
-          <div v-for="(nextTime, key) in timesUntilNext" :key="`next-time-${ key }`">{{ $vuetify.lang.t('$vuetify.mining.dweller.nextTime', Math.round(nextTime.depth * 100) / 100, $formatTime(nextTime.time)) }}</div>
+          <div v-for="(nextTime, key) in timesUntilNext" :key="`next-time-${ key }`">
+            <price-tag v-if="nextTime.gain !== null" class="mr-1" add :currency="`mining_crystal${ crystalColor }`" :amount="nextTime.gain"></price-tag>
+            <span>{{ $vuetify.lang.t('$vuetify.mining.dweller.nextTime', Math.round(nextTime.depth * 100) / 100, $formatTime(nextTime.time)) }}</span>
+          </div>
         </gb-tooltip>
         <gb-tooltip v-if="maxDweller0 > 0" :min-width="0">
           <template v-slot:activator="{ on, attrs }">
@@ -44,10 +47,11 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import PriceTag from '../../render/PriceTag.vue';
 import StatusTemplate from '../prestige/StatusTemplate.vue';
 
 export default {
-  components: { StatusTemplate },
+  components: { StatusTemplate, PriceTag },
   computed: {
     ...mapState({
       maxDweller0: state => state.stat.mining_depthDweller0.total,
@@ -95,15 +99,26 @@ export default {
       let arr = [];
       for (let i = 0; i < 3; i++) {
         current += 0.5;
-        if (current <= (Math.ceil(max * 2) / 2)) {
+        if (current < (Math.ceil(max * 2) / 2)) {
           const currentFloored = Math.floor(current * 2) / 2;
-          arr.push({depth: currentFloored, time: this.$store.getters['mining/timeUntilNext'](currentFloored)});
+          arr.push({
+            depth: currentFloored,
+            time: this.$store.getters['mining/timeUntilNext'](currentFloored),
+            gain: this.$store.getters['mining/dwellerGain'](Math.floor(current * 2), this.subfeature)
+          });
         }
       }
       if (this.dweller < max && (arr.length <= 0 || arr[arr.length - 1].depth < max)) {
-        arr.push({depth: max, time: this.$store.getters['mining/timeUntilNext'](max)});
+        arr.push({
+          depth: max,
+          time: this.$store.getters['mining/timeUntilNext'](max),
+          gain: this.$store.getters['mining/dwellerGain'](Math.floor(max * 2), this.subfeature)
+        });
       }
       return arr;
+    },
+    crystalColor() {
+      return this.$store.getters['mining/crystalColor'](this.subfeature);
     }
   }
 }

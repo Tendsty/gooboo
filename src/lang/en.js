@@ -346,7 +346,7 @@ export default {
     art: {
       name: 'Art',
       subtitle: 'Mix colors',
-      description: 'Guess colors correctly to raise your score. Two colors will be displayed, guess the result from mixing them. Gain 1 score for each correct answer, and lose 1 score for each wrong answer (cannot go below 0). As your grade increases, more answers get added and the answers get more sililar.',
+      description: 'Guess colors correctly to raise your score. Two colors will be displayed, guess the result from mixing them. Gain 1 score for each correct answer, and lose 1 score for each wrong answer (cannot go below 0). As your grade increases, more answers get added and the answers get more similar.',
     }
   },
   hourglass: {
@@ -694,6 +694,15 @@ export default {
       ritualSuccessDescription: 'A successful ritual will yield night hunt tokens for new rituals, as well as potentially finding a new potion. Successful rituals on known potions increase their level, yield night hunt tokens and make reaching the next level harder for that potion.',
       ritualFamiliarityDescription: 'Raise stability and success chance for this ritual by this amount if it fails. This bonus stacks and resets on ritual success.',
       ritualHintDescription: 'Chance to reveal a hint about either a slot or the amount of an ingredient. Hints are only given on successful new rituals. For each found hint, this chance is reduced by {0}%. Hints and the hint chance penalty reset when the hinted ritual is found.',
+      clickToAdd: 'Click on ingredients to add them to the ritual',
+      ingredientSizeDescription: 'Ingredient size allows you to find more ingredients per magical currency',
+      newDescription: {
+        empty: 'Here you can see if the current recipe is new (not succeeded before) or not',
+        isNew: 'This is a new recipe and you will receive a night hunt token if it succeeds',
+        isNewPotion: 'You could also discover a new potion',
+        discoveredPotion: 'This is a known potion recipe. If this ritual succeeds, you level up the potion and receive night hunt tokens',
+        pointless: 'This is a known recipe, there is no point in performing more rituals on this one'
+      },
       potion: {
         power: 'Potion of power',
         insight: 'Potion of insight',
@@ -940,7 +949,7 @@ export default {
     mining_0: 'Deepest ore mine rock broken',
     mining_1: 'Deepest gas giant rock broken',
     village_0: 'Maximum housing',
-    horde_0: 'Maximum zone',
+    horde_0: 'Highest zone boss defeated',
     farm_0: 'Sum of all crop levels',
     gallery_0: 'Log5 of total beauty',
     debug: 'Debug'
@@ -1248,12 +1257,17 @@ export default {
       blastMiner: 'Blast miner',
       fisherman: 'Fisherman',
       scientist: 'Scientist',
-      gardener: 'Gardener'
+      gardener: 'Gardener',
+      oilWorker: 'Oil worker',
+      sculptor: 'Sculptor',
+      explorer: 'Explorer',
     },
     policy: {
       name: 'Policies',
       taxes: 'Taxes',
-      immigration: 'Immigration'
+      immigration: 'Immigration',
+      religion: 'Religion',
+      scanning: 'Scanning',
     },
     buildings: 'Buildings',
     village: 'Village',
@@ -1263,6 +1277,12 @@ export default {
     taxpayers: 'Taxpayers',
     taxpayersDescription1: 'All working citizens consume up to {0} of each food per second and pay taxes equal to {1} ',
     taxpayersDescription2: ' per food item consumed.',
+    happinessDescription: 'Happiness modifies all resource gain (except gold coins and faith)',
+    powerDescription: 'Gain a +50% increase to all material and food gain for each power. Your current power multiplies material and food gain by x{0}',
+    pollutionDescription: 'Reduce happiness by 1% for each point of pollution. If you have more pollution than tolerance, the happiness penalty increases by 1% per pollution over your tolerance. Your next point of pollution would reduce happiness by {0}%',
+    lootDescription: 'Find new loot every time the bar fills',
+    lootRarity: 'Loot quality determines your loot rarity distribution:',
+    lootNeedQuality: 'Needs over {0} quality',
     buildingStat: 'Total buildings constructed',
     housingStat: 'Total housing constructed (first 25 per building)',
     offering: {
@@ -1277,6 +1297,7 @@ export default {
     material: 'Material',
     food: 'Food',
     mental: 'Mental resources',
+    loot: 'Loot',
     foodConsume: 'Consuming up to {0} per second'
   },
   horde: {
@@ -1544,6 +1565,10 @@ export default {
     timeDescription: 'Time required to grow',
     overgrowDescription: 'After fully growing, your plants can grow again, but need {0}x (1 / overgrow + 1)x time to grow. Each completed growth cycle counts as an extra harvest with all benefits.',
     fertilizerCostDescription: 'Fertilizer needed per crop',
+    goldChance: 'Gold chance',
+    goldChanceDescription: 'Harvesting plants has a chance to give gold, based on crop grow time and the amount of garden gnomes placed',
+    goldChanceMultiple: 'Gold chances over 100% still increase gold gain, you are guaranteed to find {0} gold and have a {1}% chance to find 1 more',
+    goldChanceWarning: 'Place a garden gnome on the field to start finding gold',
     freeUpgrades: {
       s: 'gene left',
       p: 'genes left'
@@ -1687,6 +1712,11 @@ export default {
       regular: 'Regular effects',
       special: 'Special effects'
     },
+    buyFragment: {
+      0: 'Buy fragments (',
+      1: ') for'
+    },
+    buyTreasure: 'Get a treasure with random tier and effect',
     upgradeDescription: 'Upgrade a treasure using fragments. The fragment cost depends on treasure tier and level.',
     destroyDescription: 'Destroy a treasure to gain fragments based on treasure tier. All fragments spent on upgrading that treasure will also be returned.'
   },

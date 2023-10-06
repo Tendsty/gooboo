@@ -9,7 +9,7 @@ import relic from "./village/relic";
 import job from "./village/job";
 import offering from "./village/offering";
 import policy from "./village/policy";
-import { VILLAGE_COINS_PER_FOOD, VILLAGE_JOY_PER_HAPPINESS } from "../constants";
+import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD, VILLAGE_JOY_PER_HAPPINESS, VILLAGE_MIN_HAPPINESS } from "../constants";
 import bookVillage from "./school/bookVillage";
 
 let upgradeBuilding = {};
@@ -33,9 +33,13 @@ export default {
             const name = currency.split('_')[1];
             const gain = store.getters['mult/get'](store.getters['currency/gainMultName']('village', name));
             if (gain > 0) {
-                store.dispatch('currency/gain', {feature: 'village', name, amount: gain * happiness * seconds});
+                store.dispatch('currency/gain', {feature: 'village', name, amount: gain * seconds});
             }
         });
+
+        if (store.state.stat.village_faith.total >= 50) {
+            store.commit('unlock/unlock', 'villagePrestige');
+        }
 
         if (taxpayers > 0) {
             store.getters['currency/list']('village', 'regular', 'food').forEach(foodName => {
@@ -51,18 +55,41 @@ export default {
         if (happiness > 1.25) {
             store.dispatch('currency/gain', {feature: 'village', name: 'joy', gainMult: true, amount: (happiness - 1.2) * VILLAGE_JOY_PER_HAPPINESS * seconds});
         }
+        if (happiness <= VILLAGE_MIN_HAPPINESS) {
+            store.commit('stat/increaseTo', {feature: 'village', name: 'minHappiness', value: 1});
+        }
+
+        const lootGain = store.getters['mult/get']('villageLootGain');
+        if (lootGain > 0) {
+            let newLoot = store.state.village.explorerProgress + seconds * lootGain / SECONDS_PER_HOUR;
+            if (newLoot >= 1) {
+                const lootDrops = Math.floor(newLoot);
+                store.dispatch('village/getLootDrops', lootDrops);
+                newLoot -= lootDrops;
+            }
+            store.commit('village/updateKey', {key: 'explorerProgress', value: newLoot});
+            store.commit('unlock/unlock', 'villageLoot');
+        }
+
+        store.commit('stat/increaseTo', {feature: 'village', name: 'highestPower', value: store.getters['mult/get']('villagePower')});
+
     },
     unlock: [
         'villageFeature',
         'villageCoinUpgrades',
-        ...buildArray(5).map(elem => 'villageBuildings' + (elem + 1)),
+        'villagePrestige',
+        ...buildArray(7).map(elem => 'villageBuildings' + (elem + 1)),
         ...[
             'Scythe', 'Hatchet', 'Pickaxe', 'WateringCan', 'Investment',
             'Basics', 'Processing', 'Pump', 'Sand', 'Book',
             'Axe', 'Bomb', 'Toll', 'FishingRod', 'HolyBook',
-            'Breakthrough', 'ModifiedPlants', 'Dopamine', 'Adrenaline'
+            'Breakthrough', 'ModifiedPlants', 'Dopamine', 'Adrenaline',
+            'Sprinkler', 'Greed',
+            'Ambition', 'Understanding', 'Curiosity', 'Worship',
+            'Bartering', 'Sparks',
         ].map(elem => 'villageUpgrade' + elem),
-        ...buildArray(4).map(elem => 'villageOffering' + (elem + 1))
+        ...buildArray(4).map(elem => 'villageOffering' + (elem + 1)),
+        'villageLoot'
     ],
     stat: {
         maxBuilding: {},
@@ -71,13 +98,18 @@ export default {
         bestPrestige: {},
         prestigeCount: {},
         totalOffering: {},
+        minHappiness: {},
         bestOffering: {},
+        highestPower: {},
     },
     mult: {
         villageWorker: {baseValue: 1, round: true},
         queueSpeedVillageBuilding: {baseValue: 1},
         villageTaxRate: {display: 'percent'},
-        villageHappiness: {display: 'percent', baseValue: 1},
+        villageHappiness: {display: 'percent', baseValue: 1, min: VILLAGE_MIN_HAPPINESS},
+        villagePollution: {round: true},
+        villagePollutionTolerance: {baseValue: 5, round: true},
+        villagePower: {min: 0},
         villageOfferingPower: {},
 
         // Upgrade cap mults
@@ -96,6 +128,12 @@ export default {
         // Policy limits
         villagePolicyTaxes: {round: true},
         villagePolicyImmigration: {round: true},
+        villagePolicyReligion: {round: true},
+        villagePolicyScanning: {round: true},
+
+        // Loot mults
+        villageLootGain: {display: 'perHour'},
+        villageLootQuality: {round: true},
     },
     multGroup: [
         {mult: 'villageHousingCap', name: 'upgradeCap', subtype: 'housing'},
@@ -111,7 +149,7 @@ export default {
     relic,
     achievement,
     currency: {
-        coin: {overcapMult: 0.5, color: 'amber', icon: 'mdi-circle-multiple', gainMult: {}, capMult: {baseValue: 500}},
+        coin: {overcapMult: 0.5, color: 'amber', icon: 'mdi-circle-multiple', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 500}},
 
         // Basic material
         wood: {subtype: 'material', color: 'wooden', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 2000}},
@@ -122,18 +160,29 @@ export default {
         glass: {subtype: 'material', color: 'cyan', icon: 'mdi-mirror', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
         hardwood: {subtype: 'material', color: 'cherry', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
         gem: {subtype: 'material', color: 'pink', icon: 'mdi-diamond', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
+        oil: {subtype: 'material', color: 'pale-green', icon: 'mdi-oil', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 800}},
+        marble: {subtype: 'material', color: 'pale-blue', icon: 'mdi-mirror-rectangle', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 200}},
 
         // FOOD
         grain: {subtype: 'food', color: 'yellow', icon: 'mdi-barley', gainMult: {display: 'perSecond'}, showGainMult: true},
         fruit: {subtype: 'food', color: 'red', icon: 'mdi-food-apple', gainMult: {display: 'perSecond'}, showGainMult: true},
         fish: {subtype: 'food', color: 'blue-grey', icon: 'mdi-fish', gainMult: {display: 'perSecond'}, showGainMult: true},
         vegetable: {subtype: 'food', color: 'orange', icon: 'mdi-carrot', gainMult: {display: 'perSecond'}, showGainMult: true},
+        meat: {subtype: 'food', color: 'brown', icon: 'mdi-food-steak', gainMult: {display: 'perSecond'}, showGainMult: true},
 
         // Mental resources
         knowledge: {subtype: 'mental', overcapScaling: 0.4, color: 'lime', icon: 'mdi-brain', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 100}},
         faith: {subtype: 'mental', overcapMult: 0.9, overcapScaling: 0.9, color: 'amber', icon: 'mdi-hands-pray', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 50}},
         science: {subtype: 'mental', overcapScaling: 0.4, color: 'light-blue', icon: 'mdi-flask', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 40}},
         joy: {subtype: 'mental', overcapScaling: 0.4, color: 'pink-purple', icon: 'mdi-party-popper', gainMult: {}, capMult: {baseValue: 250}},
+
+        // Loot resources
+        loot0: {subtype: 'loot', color: 'light-grey', icon: 'mdi-trophy-variant'},
+        loot1: {subtype: 'loot', color: 'green', icon: 'mdi-trophy-variant'},
+        loot2: {subtype: 'loot', color: 'indigo', icon: 'mdi-trophy-variant'},
+        loot3: {subtype: 'loot', color: 'purple', icon: 'mdi-trophy-variant'},
+        loot4: {subtype: 'loot', color: 'amber', icon: 'mdi-trophy-variant'},
+        loot5: {subtype: 'loot', color: 'red', icon: 'mdi-trophy-variant'},
 
         // Prestige currency
         blessing: {type: 'prestige', alwaysVisible: true, color: 'yellow', icon: 'mdi-flare'},
@@ -188,6 +237,9 @@ export default {
         if (hasPolicy) {
             obj.policy = policies;
         }
+        if (store.state.village.explorerProgress > 0) {
+            obj.explorerProgress = store.state.village.explorerProgress;
+        }
 
         return obj;
     },
@@ -214,6 +266,9 @@ export default {
                     store.dispatch('village/applyPolicyEffect', key);
                 }
             }
+        }
+        if (data.explorerProgress !== undefined) {
+            store.commit('village/updateKey', {key: 'explorerProgress', value: data.explorerProgress});
         }
         store.dispatch('village/applyAllJobs');
         store.dispatch('village/applyOfferingEffect');

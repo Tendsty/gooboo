@@ -6,7 +6,7 @@ import { simpleHash } from "../js/utils/random";
 export default {
     namespaced: true,
     state: {
-        version: '1.1.2',
+        version: '1.2.0',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -443,7 +443,7 @@ export default {
                     break;
                 }
                 case 'village': {
-                    return rootState.upgrade.item.village_cemetery.highestLevel > 0;
+                    return rootState.upgrade.item.village_windTurbine.highestLevel > 0;
                 }
                 case 'horde': {
                     return rootState.stat.horde_maxZone.total > 125;
@@ -851,7 +851,7 @@ export default {
                     break;
                 }
                 case 'treasureFragment': {
-                    dispatch('treasure/buyFragments', state.confirm.max, {root: true});
+                    dispatch('treasure/buyFragments', null, {root: true});
                     break;
                 }
                 case 'treasureDelete': {

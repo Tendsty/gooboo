@@ -14,15 +14,20 @@
     <div v-if="consumable.price !== null" class="d-flex flex-wrap mx-n1 mb-n1">
       <price-tag class="ma-1" v-for="(amount, currency) in consumable.price" :key="currency" :currency="currency" :amount="amount"></price-tag>
     </div>
+    <template v-if="showDetails && hasFertilizer">
+      <div class="text-center">{{ $vuetify.lang.t(`$vuetify.unlock.farmFertilizer`) }}</div>
+      <fertilizer-card :name="name.slice(5)"></fertilizer-card>
+    </template>
     <slot></slot>
   </gb-tooltip>
 </template>
 
 <script>
+import FertilizerCard from '../partial/farm/FertilizerCard.vue';
 import PriceTag from './PriceTag.vue';
 
 export default {
-  components: { PriceTag },
+  components: { PriceTag, FertilizerCard },
   props: {
     name: {
       type: String,
@@ -37,11 +42,19 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    showDetails: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
     consumable() {
       return this.$store.state.consumable[this.name];
+    },
+    hasFertilizer() {
+      return !!this.$store.state.farm.fertilizer[this.name.slice(5)];
     }
   }
 }

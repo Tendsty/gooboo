@@ -8,7 +8,7 @@ export default {
     }, effect: [
         {name: 'currencyGalleryBeautyGain', type: 'base', value: lvl => Math.pow(2, lvl) - 1}
     ]},
-    recycling: {cap: 1, note: 'gallery_2', price() {
+    recycling: {cap: 1, hasDescription: true, note: 'gallery_2', price() {
         return {gallery_beauty: 2000};
     }, effect: [
         {name: 'galleryConversion', type: 'unlock', value: lvl => lvl >= 1}
@@ -43,14 +43,14 @@ export default {
     }, effect: [
         {name: 'currencyGalleryRedGain', type: 'mult', value: lvl => splicedPow(1.25, 1.1, 15, lvl)}
     ]},
-    redLuck: {cap: 40, requirement() {
+    redLuck: {cap: 40, hasDescription: true, requirement() {
         return store.state.stat.gallery_orange.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
         return {gallery_orange: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(1, 'M')};
     }, effect: [
         {name: 'galleryRedDrumChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
-    epiphany: {note: 'gallery_5', cap: 1, requirement() {
+    epiphany: {note: 'gallery_5', cap: 1, hasDescription: true, requirement() {
         return store.state.stat.gallery_orange.total > 0;
     }, price() {
         return {gallery_beauty: buildNum(17.5, 'M')};
@@ -78,7 +78,7 @@ export default {
     }, effect: [
         {name: 'galleryColorGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)}
     ]},
-    auctionHouse: {persistent: true, cap: 1, note: 'gallery_8', requirement() {
+    auctionHouse: {persistent: true, cap: 1, hasDescription: true, note: 'gallery_8', requirement() {
         return store.state.stat.gallery_orange.total > 0;
     }, price() {
         return {gallery_beauty: buildNum(1, 'T')};
@@ -107,7 +107,7 @@ export default {
     }, effect: [
         {name: 'galleryYellowConversion', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    paintDrumStorage: {note: 'gallery_9', cap: 1, requirement() {
+    paintDrumStorage: {note: 'gallery_9', cap: 1, hasDescription: true, requirement() {
         return store.state.stat.gallery_yellow.total > 0;
     }, price() {
         return {gallery_beauty: buildNum(1, 'Qa')};

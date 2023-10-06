@@ -1,5 +1,6 @@
 import Vue from "vue"
 import { decapitalize } from "../js/utils/format";
+import { getSequence } from "../js/utils/math";
 
 export default {
     namespaced: true,
@@ -25,6 +26,9 @@ export default {
             }
             if (item.round) {
                 val = Math.round(val);
+            }
+            if (item.roundNearZero && val < 0.000000001 && val > -0.000000001) {
+                val = 0;
             }
 
             return val;
@@ -265,6 +269,36 @@ export default {
                 dispatch('horde/applyHeirloomEffects', name.slice(0, -14), {root: true});
             } else if (name === 'villageOfferingPower') {
                 dispatch('village/applyOfferingEffect', null, {root: true});
+            } else if (name === 'villagePollution' || name === 'villagePollutionTolerance') {
+                // Calculate village pollution effect on happiness
+                const pollution = getters.get('villagePollution');
+                const tolerance = getters.get('villagePollutionTolerance');
+                let total = Math.min(pollution, tolerance);
+                if (pollution > tolerance) {
+                    total += getSequence(2, pollution - tolerance);
+                }
+                if (total > 0) {
+                    dispatch('setBonus', {name: 'villageHappiness', key: 'villagePollution', value: 0 - total / 100});
+                } else {
+                    dispatch('removeKey', {name: 'villageHappiness', type: 'bonus', key: 'villagePollution'});
+                }
+            } else if (name === 'villagePower') {
+                const power = getters.get('villagePower');
+                const value = power * 0.5 + 1;
+                if (value > 1) {
+                    dispatch('setMult', {name: 'villageMaterialGain', key: 'villagePower', value});
+                    dispatch('setMult', {name: 'villageFoodGain', key: 'villagePower', value});
+                } else {
+                    dispatch('removeKey', {name: 'villageMaterialGain', type: 'mult', key: 'villagePower'});
+                    dispatch('removeKey', {name: 'villageFoodGain', type: 'mult', key: 'villagePower'});
+                }
+            } else if (name === 'villageHappiness') {
+                const value = getters.get('villageHappiness');
+                if (value === 1) {
+                    dispatch('removeKey', {name: 'villageResourceGain', type: 'mult', key: 'villageHappiness'});
+                } else {
+                    dispatch('setMult', {name: 'villageResourceGain', key: 'villageHappiness', value});
+                }
             }
         },
         updateTriggerCaches({ getters, dispatch }, o) {

@@ -43,6 +43,10 @@ export default {
           return 'mdi-delete';
         case 'change':
           return 'mdi-cached';
+        case 'accessibility':
+          return 'mdi-glasses';
+        case 'appearance':
+          return 'mdi-flower';
       }
       return null;
     },
@@ -66,6 +70,10 @@ export default {
           return 'red';
         case 'change':
           return 'pale-light-green';
+        case 'accessibility':
+          return 'pale-purple';
+        case 'appearance':
+          return 'deep-purple';
       }
       return null;
     },

@@ -68,7 +68,7 @@ export default {
           before: elem.value(lvl),
           after: isMax ? null : elem.value(lvl + 1)
         };
-      });
+      }).filter(elem => elem.before !== elem.after);
     },
     displayRemove() {
       return this.policy.effect.map(elem => {
@@ -79,7 +79,7 @@ export default {
           before: elem.value(lvl),
           after: isMax ? null : elem.value(lvl - 1)
         };
-      });
+      }).filter(elem => elem.before !== elem.after);
     },
     canRemove() {
       // Disabled if you don't have enough unemployed workers

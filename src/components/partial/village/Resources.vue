@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex flex-wrap justify-center ma-1">
-      <currency large class="ma-1" name="village_coin"></currency>
+      <currency large class="ma-1" name="village_coin" :baseArray="foodConversion"></currency>
     </div>
     <div v-if="stat.village_wood.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.material`) }}</div>
     <div class="d-flex flex-wrap justify-center ma-1">
@@ -21,25 +21,74 @@
         <currency :key="item" class="ma-1" :class="{'premium-glow': mental_premium.includes(item) && upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}" :name="item"></currency>
       </template>
     </div>
+    <template v-if="canSeeLoot">
+      <div class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.loot`) }}</div>
+      <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.village.loot')">
+        <template v-slot:activator="{ on, attrs }">
+          <div class="mx-4 my-1" v-bind="attrs" v-on="on">
+            <v-progress-linear class="rounded" height="24" :value="explorerProgress * 100">
+              <span v-if="lootSecondsLeft !== null">{{ $formatTime(lootSecondsLeft) }}</span>
+            </v-progress-linear>
+          </div>
+        </template>
+        <div>{{ $vuetify.lang.t(`$vuetify.village.lootDescription`) }}</div>
+        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.villageLootGain') }}</h3>
+        <stat-breakdown name="villageLootGain"></stat-breakdown>
+        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.villageLootQuality') }}</h3>
+        <stat-breakdown name="villageLootQuality"></stat-breakdown>
+        <div>{{ $vuetify.lang.t(`$vuetify.village.lootRarity`) }}</div>
+        <div
+          v-for="(weight, key) in lootWeights"
+          :key="`loot-weight-${ key }`"
+          class="d-flex align-center rounded mt-1 pa-1 pr-2"
+          :class="[currency[`village_loot${ key }`].color, $vuetify.theme.dark ? 'darken-2' : 'lighten-2']"
+        >
+          <v-icon class="mr-1">{{ currency[`village_loot${ key }`].icon }}</v-icon>
+          <div>{{ $vuetify.lang.t(`$vuetify.currency.village_loot${ key }.name`) }}</div>
+          <v-spacer></v-spacer>
+          <div>{{ $formatNum(100 * weight / lootTotalWeight, true) }}%</div>
+        </div>
+        <div
+          v-if="lootWeights.length < 6"
+          class="d-flex align-center rounded mt-1 pa-1 pr-2"
+          :class="[currency[`village_loot${ lootWeights.length }`].color, $vuetify.theme.dark ? 'darken-2' : 'lighten-2']"
+        >
+          <v-icon class="mr-1">{{ currency[`village_loot${ lootWeights.length }`].icon }}</v-icon>
+          <div>???</div>
+          <v-spacer></v-spacer>
+          <div>{{ $vuetify.lang.t(`$vuetify.village.lootNeedQuality`, $formatNum((lootWeights.length - 1) * 50)) }}</div>
+        </div>
+      </gb-tooltip>
+      <div class="d-flex flex-wrap justify-center ma-1">
+        <template v-for="item in loot">
+          <currency :key="item" class="ma-1" :name="item"></currency>
+        </template>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD } from '../../../js/constants';
 import Currency from '../../render/Currency.vue';
+import StatBreakdown from '../../render/StatBreakdown.vue';
 
 export default {
-  components: { Currency },
+  components: { Currency, StatBreakdown },
   data: () => ({
     mental_premium: ['village_knowledge', 'village_science']
   }),
   computed: {
     ...mapState({
       stat: state => state.stat,
-      upgrade: state => state.upgrade.item
+      upgrade: state => state.upgrade.item,
+      currency: state => state.currency,
+      explorerProgress: state => state.village.explorerProgress
     }),
     ...mapGetters({
-      list: 'currency/list'
+      list: 'currency/list',
+      lootWeights: 'village/lootWeights'
     }),
     foodConsumption() {
       return this.$store.getters['mult/get']('villageTaxRate') * this.$store.getters['village/employed'];
@@ -52,6 +101,37 @@ export default {
     },
     mental() {
       return this.list('village', 'regular', 'mental');
+    },
+    loot() {
+      return this.list('village', 'regular', 'loot');
+    },
+    canSeeLoot() {
+      return this.$store.state.unlock.villageLoot.see;
+    },
+    lootTotalWeight() {
+      let total = 0;
+      for (const [, elem] of Object.entries(this.lootWeights)) {
+        total += elem;
+      }
+      return total;
+    },
+    lootSecondsLeft() {
+      const lootGain = this.$store.getters['mult/get']('villageLootGain');
+      if (lootGain <= 0) {
+        return null;
+      }
+      return Math.ceil((1 - this.explorerProgress) * SECONDS_PER_HOUR / lootGain);
+    },
+    foodConversion() {
+      const taxpayers = this.$store.getters['mult/get']('villageTaxRate') * this.$store.getters['village/employed'];
+      if (taxpayers <= 0) {
+        return [];
+      }
+      return this.food.map(currencyName => {
+        const food = currencyName.split('_')[1];
+        const nextAmount = this.$store.getters['currency/value']('village_' + food) + this.$store.getters['mult/get'](this.$store.getters['currency/gainMultName']('village', food));
+        return {name: 'villageFood_' + food, value: Math.min(taxpayers, nextAmount) * VILLAGE_COINS_PER_FOOD};
+      }).filter(elem => elem.value > 0);
     }
   }
 }

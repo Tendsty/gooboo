@@ -694,6 +694,15 @@ export default {
       ritualSuccessDescription: 'Ein erfolgreiches neues Ritual bringt Nachtjagd-Chips, und kann eventuell einen neuen Trank freischalten. Erfolgreiche Rituale auf bekannten Tränken erhöhen deren Stufe, bringen Nachtjagd-Chips und erschweren die nächste Stufe für diesen Trank.',
       ritualFamiliarityDescription: 'Erhöht die Stabilität und Erfolgschance für dieses Ritual, wenn es fehlschlägt. Dieser Effekt kann mehrfach wirken und wird beim erfolgreichen Ritual zurückgesetzt.',
       ritualHintDescription: 'Chance, einen Hinweis auf eine Position oder Zutat zu erhalten. Hinweise werden nur bei erfolgreichen neuen Ritualen gegeben. Für jeden gefundenen Hinweis sinkt die Chance um {0}%. Hinweise und die reduzierte Chance werden zurückgesetzt, wenn das Ritual aus dem Hinweis gefunden wird.',
+      clickToAdd: 'Klicke auf Zutaten, um sie dem Ritual hinzuzufügen',
+      ingredientSizeDescription: 'Zutatengröße erlaubt es dir, mehrere Zutaten pro magischer Währung zu finden',
+      newDescription: {
+        empty: 'Hier kannst du sehen, ob das aktuelle Rezept neu ist (noch nie erfolgreich) oder nicht',
+        isNew: 'Das ist ein neues Rezept und du erhältst beim Erfolg einen Nachtjagd-Chip',
+        isNewPotion: 'Du könntest auch einen neuen Trank entdecken',
+        discoveredPotion: 'Dies ist ein bekanntes Trankrezept. Beim Erfolg steigt die Trankstufe und du erhältst Nachtjagd-Chips',
+        pointless: 'Dies ist ein bekanntes Rezept, weitere Rituale wären hier sinnlos'
+      },
       potion: {
         power: 'Trank der Kraft',
         insight: 'Trank der Einsicht',
@@ -940,7 +949,7 @@ export default {
     mining_0: 'Tiefster zerbrochener Erzminen-Stein',
     mining_1: 'Tiefster zerbrochener Gasriesen-Stein',
     village_0: 'Maximaler Wohnraum',
-    horde_0: 'Maximale Zone',
+    horde_0: 'Höchster Zonenboss besiegt',
     farm_0: 'Summe aller Pflanzenstufen',
     gallery_0: 'Log5 der gesamten Schönheit',
     debug: 'Debug'
@@ -1248,12 +1257,17 @@ export default {
       blastMiner: 'Sprengmeister',
       fisherman: 'Angler',
       scientist: 'Wissenschaftler',
-      gardener: 'Gärtner'
+      gardener: 'Gärtner',
+      oilWorker: 'Ölarbeiter',
+      sculptor: 'Bildhauer',
+      explorer: 'Entdecker',
     },
     policy: {
       name: 'Verordnungen',
       taxes: 'Steuern',
-      immigration: 'Einwanderung'
+      immigration: 'Einwanderung',
+      religion: 'Religion',
+      scanning: 'Scannen',
     },
     buildings: 'Gebäude',
     village: 'Dorf',
@@ -1263,6 +1277,12 @@ export default {
     taxpayers: 'Steuerzahler',
     taxpayersDescription1: 'Die arbeitende Bevölkerung konsumiert bis zu {0} von jedem Nahrungsmittel pro Sekunde und zahlt {1} ',
     taxpayersDescription2: ' Steuern pro verbrauchtem Lebensmittel.',
+    happinessDescription: 'Zufriedenheit beeinflusst das Einkommen aller Rohstoffe (außer Goldmünzen und Glaube)',
+    powerDescription: 'Pro Energie steigt das Einkommen von Material und Nahrung um +50%. Deine aktuelle Energie multipliziert das Material- und Nahrungseinkommen mit x{0}',
+    pollutionDescription: 'Für jeden Punkt Verschmutzung sinkt die Zufriedenheit um 1%. Sollte die Verschmutzung die Toleranz überschreiten, steigt die Zufriedenheitsstrafe um 1% pro überschrittener Toleranz. Der nächste Punkt Verschmutzung würde die Zufriedenheit um {0}% senken',
+    lootDescription: 'Finde jedes Mal neue Beute, wenn die Leiste gefüllt wird',
+    lootRarity: 'Beutequalität beeinflusst die Verteilung der Beuteseltenheit:',
+    lootNeedQuality: 'Benötigt über {0} Qualität',
     buildingStat: 'Gesamte Gebäudezahl',
     housingStat: 'Gesamte Wohnungszahl (erste 25 pro Gebäude)',
     offering: {
@@ -1277,6 +1297,7 @@ export default {
     material: 'Material',
     food: 'Nahrung',
     mental: 'Mentale Ressourcen',
+    loot: 'Beute',
     foodConsume: 'Verbrauche bis zu {0} pro Sekunde'
   },
   horde: {
@@ -1544,6 +1565,10 @@ export default {
     timeDescription: 'Benötigte Zeit zum Wachsen',
     overgrowDescription: 'Nach dem Wachsen können Pflanzen erneut wachsen, brauchen aber {0}x (1 / Überwuchern + 1)x so viel Zeit. Jede abgeschlossene Wachstumsphase zählt als zusätzliche Ernte mit sämtlichen Vorteilen.',
     fertilizerCostDescription: 'Benötigte Düngermenge pro Pflanze',
+    goldChance: 'Goldchance',
+    goldChanceDescription: 'Das Ernten von Pflanzen hat eine Chance, Gold zu geben. Die Wahrscheinlichkeit hängt von der Wachstumszeit der Pflanze und von der Anzahl der platzierten Gartenzwerge ab',
+    goldChanceMultiple: 'Goldchancen über 100% erhöhen auch den Goldertrag, du findest garantiert {0} Gold und hast eine Chance von {1}%, 1 weiteres Gold zu finden',
+    goldChanceWarning: 'Platziere einen Gartenzwerg auf dem Feld, um Gold zu finden',
     freeUpgrades: {
       s: 'Gen übrig',
       p: 'Gene übrig'
@@ -1596,7 +1621,7 @@ export default {
     },
     fertilizerEffect: {
       yield: 'Ertrag',
-      grow: 'Wachstumszeit',
+      grow: 'Wachstumstempo',
       gold: 'Goldchance',
       drop: 'Chance auf seltenen Ertrag',
       vegetable: 'Nur Gemüse',
@@ -1687,6 +1712,11 @@ export default {
       regular: 'Gewöhnliche Effekte',
       special: 'Besondere Effekte'
     },
+    buyFragment: {
+      0: 'Kaufe Fragmente (',
+      1: ') für'
+    },
+    buyTreasure: 'Erhalte einen Schatz mit zufälliger Ebene und Effekt',
     upgradeDescription: 'Verbessere einen Schatz mit Fragmenten. Die Fragmentkosten hängen von der Ebene und Stufe vom Schatz ab.',
     destroyDescription: 'Zerstöre einen Schatz, um Fragmente abhängig von dessen Ebene zu erhalten. Alle bei Verbesserungen verwendete Fragmente werden ebenfalls erstattet.'
   },

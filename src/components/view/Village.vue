@@ -147,7 +147,7 @@ export default {
       return this.$store.state.unlock.villageCoinUpgrades.see;
     },
     canPrestige() {
-      return this.$store.state.stat.village_faith.total >= 50;
+      return this.$store.state.unlock.villagePrestige.see;
     },
     canSeeOffering() {
       return this.$store.state.unlock.villageOffering1.see;

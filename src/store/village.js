@@ -1,12 +1,14 @@
 import Vue from "vue";
 import { capitalize } from "../js/utils/format";
+import { weightSelect } from "../js/utils/random";
 
 export default {
     namespaced: true,
     state: {
         job: {},
         offering: {},
-        policy: {}
+        policy: {},
+        explorerProgress: 0
     },
     getters: {
         employed: (state) => {
@@ -20,6 +22,26 @@ export default {
         },
         unemployed: (state, getters, rootState, rootGetters) => {
             return rootGetters['mult/get']('villageWorker') - getters.employed;
+        },
+        lootWeights: (state, getters, rootState, rootGetters) => {
+            const quality = rootGetters['mult/get']('villageLootQuality');
+            let arr = [quality + 100];
+            if (quality > 0) {
+                arr.push(quality * 0.75);
+            }
+            if (quality > 50) {
+                arr.push((quality - 50) * Math.pow(0.75, 2));
+            }
+            if (quality > 100) {
+                arr.push((quality - 100) * Math.pow(0.75, 3));
+            }
+            if (quality > 150) {
+                arr.push((quality - 150) * Math.pow(0.75, 4));
+            }
+            if (quality > 200) {
+                arr.push((quality - 200) * Math.pow(0.75, 5));
+            }
+            return arr;
         }
     },
     mutations: {
@@ -74,6 +96,7 @@ export default {
             for (const [key] of Object.entries(state.policy)) {
                 commit('updatePolicyKey', {name: key, key: 'value', value: 0});
             }
+            commit('updateKey', {key: 'explorerProgress', value: 0});
         },
         addWorker({ state, getters, dispatch }, jobName) {
             const job = state.job[jobName];
@@ -134,6 +157,7 @@ export default {
             dispatch('upgrade/reset', {feature: 'village', type: 'building'}, {root: true});
             dispatch('currency/reset', {feature: 'village', type: 'regular'}, {root: true});
             dispatch('stat/reset', {feature: 'village', type: 'regular'}, {root: true});
+            commit('updateKey', {key: 'explorerProgress', value: 0});
             dispatch('card/activateCards', 'village', {root: true});
 
             dispatch('applyOfferingEffect');
@@ -228,12 +252,21 @@ export default {
                 commit('updatePolicyKey', {name, key: 'value', value: policy.value + 1});
                 dispatch('applyPolicyEffect', name);
             }
+            if (name === 'scanning') {
+                commit('updateKey', {key: 'explorerProgress', value: 0});
+            }
         },
         removePolicy({ state, rootGetters, commit, dispatch }, name) {
             const policy = state.policy[name];
             if (policy.value > (0 - rootGetters['mult/get'](policy.mult))) {
                 commit('updatePolicyKey', {name, key: 'value', value: policy.value - 1});
                 dispatch('applyPolicyEffect', name);
+            }
+        },
+        getLootDrops({ getters, dispatch }, amount = 1) {
+            const weights = getters.lootWeights;
+            for (let i = 0; i < amount; i++) {
+                dispatch('currency/gain', {feature: 'village', name: 'loot' + weightSelect(weights), amount: 1}, {root: true});
             }
         }
     }

@@ -97,5 +97,26 @@ export default {
             {type: 'base', name: 'currencyVillagePlantFiberGain', amount: 20},
             {type: 'base', name: 'currencyVillageVegetableGain', amount: 40}
         ]
+    },
+    oilWorker: {
+        max: 0,
+        needed: 11,
+        rewards: [
+            {type: 'base', name: 'currencyVillageOilGain', amount: 0.5}
+        ]
+    },
+    sculptor: {
+        max: 0,
+        needed: 14,
+        rewards: [
+            {type: 'base', name: 'currencyVillageMarbleGain', amount: 0.001}
+        ]
+    },
+    explorer: {
+        max: 0,
+        needed: 600,
+        rewards: [
+            {type: 'base', name: 'villageLootGain', amount: 2}
+        ]
     }
 }
