@@ -44,6 +44,7 @@
         :division-shield="playerStats.divisionShield"
         :max-division-shield="playerDivisionShield"
         :toxic="playerToxic"
+        :stun="playerStats.stun"
         :poison="playerStats.poison"
         :physic-conversion="playerPhysicConversion"
         :physic-attack="playerPhysicAttack"

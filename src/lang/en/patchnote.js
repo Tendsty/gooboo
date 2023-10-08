@@ -145,12 +145,16 @@ export default {
     106: 'Added tooltips for buying treasure and fragments',
     107: 'Farm fertilizers now show their effect when shown as prize',
     108: 'The essence gain multiplier from your global level is now shown in the essence tooltip',
+
+    // v1.3.0
+    109: 'General quests now have text shadows for better readability',
   },
   v: {
     1: {
       0: 'An explosive beginning',
       1: 'Principal replaced!',
       2: 'Eco-friendly',
+      3: 'Neverending bosses',
     }
   }
 }

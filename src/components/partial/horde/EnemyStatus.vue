@@ -9,7 +9,8 @@
 <template>
   <v-card>
     <v-card-title class="pa-2 justify-center">
-      <span v-if="bossFight">{{ $vuetify.lang.t('$vuetify.horde.boss') }}</span>
+      <span v-if="bossFight === 2">{{ $vuetify.lang.t('$vuetify.horde.boss') }}</span>
+      <span v-else-if="bossFight === 1">{{ $vuetify.lang.t('$vuetify.horde.miniboss') }}</span>
       <gb-tooltip v-else>
         <template v-slot:activator="{ on, attrs }">
           <span v-bind="attrs" v-on="on">{{ $vuetify.lang.t('$vuetify.horde.enemy') + ' #' + (combo + 1) }}</span>
@@ -19,6 +20,16 @@
           <span>{{ $vuetify.lang.t(`$vuetify.horde.enemySigil1.${ currentSigils === 1 ? 's' : 'p' }`, currentSigils) }}</span>
           <span>{{ $vuetify.lang.t(`$vuetify.horde.enemySigil2.${ currentSigilVariety === 1 ? 's' : 'p' }`, currentSigilVariety) }}</span>
         </div>
+      </gb-tooltip>
+      <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.mult.hordeMinibossTime`)">
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip label small class="balloon-text-dynamic ma-1 ml-3 px-2" :color="`pale-purple ${ themeModifier }`" v-bind="attrs" v-on="on">
+            <v-icon class="mr-2">mdi-skull</v-icon>
+            <v-icon v-if="minibossTimer >= 1">mdi-check</v-icon>
+            <span v-else>{{ $formatTime(Math.ceil((1 - minibossTimer) * minibossTime)) }}</span>
+          </v-chip>
+        </template>
+        <stat-breakdown name="hordeMinibossTime"></stat-breakdown>
       </gb-tooltip>
     </v-card-title>
     <v-card-text class="pb-2">
@@ -75,19 +86,19 @@
         </gb-tooltip>
       </entity-status>
       <div class="d-flex flex-wrap my-1 mx-n1">
-        <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_bone.name'))">
+        <gb-tooltip key="reward-bone" v-if="bossFight === 0" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_bone.name'))">
           <template v-slot:activator="{ on, attrs }">
             <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_bone.color } ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-bone</v-icon>{{ $formatNum(currentBone) }}</v-chip>
           </template>
           <stat-breakdown name="currencyHordeBoneGain" :base="currentBoneBase" :multArray="basicLootMult"></stat-breakdown>
         </gb-tooltip>
-        <gb-tooltip v-if="zone >= monsterPartMinZone && combo >= monsterPartMinCombo" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_monsterPart.name'))">
+        <gb-tooltip key="reward-monster-part" v-if="bossFight === 0 && zone >= monsterPartMinZone && combo >= monsterPartMinCombo" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_monsterPart.name'))">
           <template v-slot:activator="{ on, attrs }">
             <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_monsterPart.color } ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-stomach</v-icon>{{ $formatNum(currentMonsterPart, true) }}</v-chip>
           </template>
           <stat-breakdown name="currencyHordeMonsterPartGain" :base="currentMonsterPartBase" :multArray="basicLootMult"></stat-breakdown>
         </gb-tooltip>
-        <gb-tooltip v-if="bossFight && currentSoulChance > 0" :title-text="$vuetify.lang.t('$vuetify.currency.horde_soulCorrupted.name')">
+        <gb-tooltip key="reward-soul" v-if="bossFight === 1 && currentSoulChance > 0" :title-text="$vuetify.lang.t('$vuetify.currency.horde_soulCorrupted.name')">
           <template v-slot:activator="{ on, attrs }">
             <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_soulCorrupted.color } ${ themeModifier }`" v-bind="attrs" v-on="on">
               <v-icon class="mr-2">mdi-ghost</v-icon>
@@ -101,7 +112,7 @@
           <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
           <stat-breakdown name="hordeSoulGain" :base="currentSoulAmountBase"></stat-breakdown>
         </gb-tooltip>
-        <gb-tooltip v-if="bossFight && currentHeirloomChance > 0" :title-text="$vuetify.lang.t('$vuetify.horde.heirloom.name')">
+        <gb-tooltip key="reward-heirloom" v-if="bossFight === 1 && currentHeirloomChance > 0" :title-text="$vuetify.lang.t('$vuetify.horde.heirloom.name')">
           <template v-slot:activator="{ on, attrs }">
             <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`cyan ${ themeModifier }`" v-bind="attrs" v-on="on">
               <v-icon class="mr-2">mdi-necklace</v-icon>
@@ -139,7 +150,8 @@ export default {
       nostalgia: state => state.horde.nostalgia,
       currency: state => state.currency,
       fightTime: state => state.horde.fightTime,
-      fightRampage: state => state.horde.fightRampage
+      fightRampage: state => state.horde.fightRampage,
+      minibossTimer: state => state.horde.minibossTimer
     }),
     ...mapGetters({
       currentSoulChance: 'horde/currentSoulChance',
@@ -167,6 +179,9 @@ export default {
     },
     enemyHeirloomChanceBase() {
       return this.$store.getters['horde/enemyHeirloomChanceBase'](this.zone);
+    },
+    minibossTime() {
+      return this.$store.getters['mult/get']('hordeMinibossTime');
     },
     hasSigils() {
       return Object.keys(this.enemyStats.sigil).length > 0;
@@ -205,7 +220,7 @@ export default {
       return this.enemyStats.loot === 1 ? [] : [{name: 'hordeBasicLoot', value: this.enemyStats.loot}];
     },
     enemyRampageTime() {
-      return this.bossFight ? HORDE_RAMPAGE_BOSS_TIME : HORDE_RAMPAGE_ENEMY_TIME;
+      return this.bossFight > 0 ? HORDE_RAMPAGE_BOSS_TIME : HORDE_RAMPAGE_ENEMY_TIME;
     },
     rampageStats() {
       return {

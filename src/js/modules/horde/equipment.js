@@ -17,6 +17,7 @@ export default {
                 {type: 'damagePhysic', value: lvl * 0.15 + 3.45}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 6,
         icon: 'mdi-knife-military',
         activeIcon: 'mdi-knife-military',
@@ -38,6 +39,7 @@ export default {
                 {type: 'heal', value: lvl * 0.005 + 0.145}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 45,
         icon: 'mdi-tshirt-v',
         activeIcon: 'mdi-medical-bag',
@@ -60,6 +62,7 @@ export default {
                 {type: 'revive', value: 1}
             ];
         },
+        activeType: 'combat',
         cooldown: lvl => 390 - lvl * 30,
         icon: 'mdi-cross',
         activeIcon: 'mdi-flare',
@@ -82,6 +85,7 @@ export default {
                 {type: 'bone', value: 4.75 + lvl * 0.25}
             ];
         },
+        activeType: 'utility',
         cooldown: () => 90,
         icon: 'mdi-cup',
         activeIcon: 'mdi-bone',
@@ -103,6 +107,7 @@ export default {
                 {type: 'stun', value: 5}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 25,
         icon: 'mdi-shield-star',
         activeIcon: 'mdi-octagram-outline',
@@ -126,6 +131,7 @@ export default {
                 {type: 'damagePhysic', value: 24 + lvl}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 20,
         icon: 'mdi-sword',
         activeIcon: 'mdi-sword',
@@ -148,6 +154,7 @@ export default {
                 {type: 'heal', value: 0.06}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 33,
         icon: 'mdi-shoe-cleat',
         activeIcon: 'mdi-shoe-cleat',
@@ -169,6 +176,7 @@ export default {
                 {type: 'bone', value: 35}
             ];
         },
+        activeType: 'utility',
         cooldown: () => 1800,
         icon: 'mdi-clover',
         activeIcon: 'mdi-bone',
@@ -191,6 +199,7 @@ export default {
                 {type: 'bone', value: 2.9 + lvl * 0.1}
             ];
         },
+        activeType: 'utility',
         cooldown: () => 45,
         icon: 'mdi-stomach',
         activeIcon: 'mdi-bone',
@@ -215,6 +224,7 @@ export default {
                 {type: 'stun', value: 10}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 78,
         icon: 'mdi-fire-circle',
         activeIcon: 'mdi-fire',
@@ -238,6 +248,7 @@ export default {
                 {type: 'stun', value: 1}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 7,
         icon: 'mdi-campfire',
         activeIcon: 'mdi-campfire',
@@ -262,6 +273,7 @@ export default {
                 {type: 'removeAttack', value: 0.2}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 25,
         icon: 'mdi-snowflake',
         activeIcon: 'mdi-snowflake',
@@ -288,6 +300,7 @@ export default {
                 {type: 'stun', value: 6}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 54,
         icon: 'mdi-food-steak',
         activeIcon: 'mdi-octagram-outline',
@@ -314,6 +327,7 @@ export default {
                 {type: 'poison', value: 0.2}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 30,
         icon: 'mdi-eye',
         activeIcon: 'mdi-laser-pointer',
@@ -336,6 +350,7 @@ export default {
                 {type: 'damageMagic', value: 2 * lvl + 40}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 125,
         icon: 'mdi-wizard-hat',
         activeIcon: 'mdi-shimmer',
@@ -353,12 +368,12 @@ export default {
                 {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.05 + 0.7}
             ];
         },
-        active(lvl) {
+        active() {
             return [
-                {type: 'permanentAttack', value: 0.1},
-                {type: 'damageMagic', value: lvl * 5 + 45}
+                {type: 'permanentAttack', value: 0.1}
             ];
         },
+        activeType: 'utility',
         cooldown: () => 2700,
         icon: 'mdi-magic-staff',
         activeIcon: 'mdi-pentagram',
@@ -384,6 +399,7 @@ export default {
                 {type: 'stun', value: 6}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 44,
         icon: 'mdi-pillar',
         activeIcon: 'mdi-pillar',
@@ -409,6 +425,7 @@ export default {
                 {type: 'damageBio', value: lvl * 0.15 + 4.85}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 25,
         icon: 'mdi-magic-staff',
         activeIcon: 'mdi-looks',
@@ -432,6 +449,7 @@ export default {
                 {type: 'poison', value: lvl * 0.01 + 0.19}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 16,
         icon: 'mdi-bottle-tonic-skull',
         activeIcon: 'mdi-bottle-tonic-skull',
@@ -455,6 +473,7 @@ export default {
                 {type: 'stun', value: 4 + lvl}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 60,
         icon: 'mdi-timer',
         activeIcon: 'mdi-timer',
@@ -478,6 +497,7 @@ export default {
                 {type: 'poison', value: 0.1}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 10,
         icon: 'mdi-sword',
         activeIcon: 'mdi-bottle-tonic-skull',
@@ -503,6 +523,7 @@ export default {
                 {type: 'antidote', value: 1}
             ];
         },
+        activeType: 'combat',
         cooldown: lvl => 390 - lvl * 30,
         icon: 'mdi-necklace',
         activeIcon: 'mdi-flare',
@@ -527,6 +548,7 @@ export default {
                 {type: 'damagePhysic', value: lvl * 2 + 28}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 26,
         icon: 'mdi-mace',
         activeIcon: 'mdi-mace',
@@ -550,6 +572,7 @@ export default {
                 {type: 'damageMagic', value: lvl * 0.5 + 3.5},
             ];
         },
+        activeType: 'combat',
         cooldown: () => 10,
         icon: 'mdi-magic-staff',
         activeIcon: 'mdi-sword',
@@ -574,6 +597,7 @@ export default {
                 {type: 'stun', value: 2}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 18,
         icon: 'mdi-mace',
         activeIcon: 'mdi-mace',
@@ -597,6 +621,7 @@ export default {
                 {type: 'damageBio', value: lvl * 0.1 + 3.4}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 5,
         icon: 'mdi-content-cut',
         activeIcon: 'mdi-content-cut',
@@ -618,10 +643,10 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'damagePhysic', value: lvl * 2 + 28},
                 {type: 'bone', value: 1.95 + lvl * 0.05}
             ];
         },
+        activeType: 'utility',
         cooldown: () => 40,
         icon: 'mdi-cat',
         activeIcon: 'mdi-cat',
@@ -647,6 +672,7 @@ export default {
                 {type: 'stun', value: 4}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 70,
         icon: 'mdi-fruit-cherries',
         activeIcon: 'mdi-fruit-cherries',
@@ -672,6 +698,7 @@ export default {
                 {type: 'heal', value: 0.07 + lvl * 0.01}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 13,
         icon: 'mdi-bird',
         activeIcon: 'mdi-feather',
@@ -695,6 +722,7 @@ export default {
                 {type: 'removeAttack', value: 0.175}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 38,
         icon: 'mdi-pill',
         activeIcon: 'mdi-pill',
@@ -718,6 +746,7 @@ export default {
                 {type: 'heal', value: 0.2}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 65,
         icon: 'mdi-bottle-tonic',
         activeIcon: 'mdi-bottle-tonic',
@@ -744,6 +773,7 @@ export default {
                 {type: 'damagePhysic', value: lvl * 0.5 + 6.5}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 15,
         icon: 'mdi-sword',
         activeIcon: 'mdi-sword',
@@ -766,6 +796,7 @@ export default {
                 {type: 'antidote', value: 1}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 25,
         icon: 'mdi-bottle-tonic-plus',
         activeIcon: 'mdi-bottle-tonic-plus',
@@ -791,6 +822,7 @@ export default {
                 {type: 'bone', value: 11.5 + lvl * 0.5}
             ];
         },
+        activeType: 'utility',
         cooldown: () => 270,
         icon: 'mdi-bone',
         activeIcon: 'mdi-bone',
@@ -813,6 +845,7 @@ export default {
                 {type: 'removeAttack', value: 0.5}
             ];
         },
+        activeType: 'combat',
         cooldown: lvl => 115 - lvl * 5,
         icon: 'mdi-magic-staff',
         activeIcon: 'mdi-flare',
@@ -839,6 +872,7 @@ export default {
                 {type: 'revive', value: 1}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 160,
         icon: 'mdi-shield',
         activeIcon: 'mdi-shield',
@@ -864,6 +898,7 @@ export default {
                 {type: 'stun', value: 1}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 11,
         icon: 'mdi-shield-alert',
         activeIcon: 'mdi-alert-octagram',
@@ -888,6 +923,7 @@ export default {
                 {type: 'poison', value: lvl * 0.04 + 0.16}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 20,
         icon: 'mdi-bottle-tonic-skull',
         activeIcon: 'mdi-bottle-tonic-skull',
@@ -913,6 +949,7 @@ export default {
                 {type: 'damageBio', value: 60 + lvl * 4}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 70,
         icon: 'mdi-eye',
         activeIcon: 'mdi-laser-pointer',
@@ -938,6 +975,7 @@ export default {
                 {type: 'removeAttack', value: 0.07 + lvl * 0.01}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 5,
         icon: 'mdi-needle',
         activeIcon: 'mdi-needle',
@@ -963,6 +1001,7 @@ export default {
                 {type: 'stun', value: 40}
             ];
         },
+        activeType: 'combat',
         cooldown: lvl => 280 - lvl * 10,
         icon: 'mdi-glasses',
         activeIcon: 'mdi-magnify',
@@ -989,6 +1028,7 @@ export default {
                 {type: 'poison', value: 0.45}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 96,
         icon: 'mdi-microscope',
         activeIcon: 'mdi-microscope',
@@ -1009,11 +1049,10 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentHealth', value: 0.15},
-                {type: 'heal', value: 1},
-                {type: 'revive', value: 1}
+                {type: 'permanentHealth', value: 0.15}
             ];
         },
+        activeType: 'utility',
         cooldown: () => 3300,
         icon: 'mdi-shield-half-full',
         activeIcon: 'mdi-sun-wireless',
@@ -1038,6 +1077,7 @@ export default {
                 {type: 'damageBio', value: 0.68 + lvl * 0.02}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 2,
         icon: 'mdi-box-cutter',
         activeIcon: 'mdi-box-cutter',
@@ -1062,6 +1102,7 @@ export default {
                 {type: 'stun', value: 1}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 10,
         icon: 'mdi-book',
         activeIcon: 'mdi-book-alert',
@@ -1086,6 +1127,7 @@ export default {
                 {type: 'damagePhysic', value: lvl * 0.15 + 3.85}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 5,
         icon: 'mdi-chess-pawn',
         activeIcon: 'mdi-chess-pawn',
@@ -1110,6 +1152,7 @@ export default {
                 {type: 'stun', value: 1}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 12,
         icon: 'mdi-chess-knight',
         activeIcon: 'mdi-chess-knight',
@@ -1135,6 +1178,7 @@ export default {
                 {type: 'poison', value: 0.2}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 39,
         icon: 'mdi-chess-bishop',
         activeIcon: 'mdi-chess-bishop',
@@ -1159,6 +1203,7 @@ export default {
                 {type: 'stun', value: 7}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 64,
         icon: 'mdi-chess-rook',
         activeIcon: 'mdi-chess-rook',
@@ -1191,6 +1236,7 @@ export default {
                 {type: 'stun', value: 4}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 70,
         icon: 'mdi-chess-queen',
         activeIcon: 'mdi-chess-queen',
@@ -1217,6 +1263,7 @@ export default {
                 {type: 'stun', value: lvl + 24}
             ];
         },
+        activeType: 'combat',
         cooldown: () => 540,
         icon: 'mdi-chess-king',
         activeIcon: 'mdi-chess-king',

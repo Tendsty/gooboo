@@ -43,12 +43,13 @@ export default {
         respawn: 0,
         maxRespawn: 1,
         bossAvailable: false,
-        bossFight: false,
+        bossFight: 0,
         player: {},
         enemy: {},
         items: {},
         sigil: {},
         sigilZones: [],
+        enemyActive: {},
         heirloom: {},
         heirloomsFound: null,
         nostalgia: 0,
@@ -57,7 +58,8 @@ export default {
         fightTime: 0,
         fightRampage: 0,
         loadout: [],
-        nextLoadoutId: 1
+        nextLoadoutId: 1,
+        minibossTimer: 0
     },
     getters: {
         enemyStats: () => (zone, combo = 0) => {
@@ -253,6 +255,9 @@ export default {
         updateEnemyKey(state, o) {
             Vue.set(state.enemy, o.key, o.value);
         },
+        updateEnemyActive(state, o) {
+            Vue.set(state.enemy.active[o.name], o.key, o.value);
+        },
         updateItemKey(state, o) {
             Vue.set(state.items[o.name], o.key, o.value);
         },
@@ -273,6 +278,7 @@ export default {
                 price: o.price ?? (() => 100),
                 stats: o.stats ?? (() => { return {}; }),
                 active: o.active ?? (() => []),
+                activeType: o.activeType ?? 'combat',
                 cooldown: o.cooldown,
                 cooldownLeft: 0,
                 icon: o.icon ?? 'mdi-sack',
@@ -300,6 +306,7 @@ export default {
                 icon: o.icon ?? 'mdi-circle',
                 color: o.color ?? 'grey',
                 stats: o.stats ?? (() => {return {};}),
+                active: o.active ?? null,
                 exclude: o.exclude ?? []
             });
         },
@@ -327,7 +334,7 @@ export default {
             commit('updateKey', {key: 'respawn', value: 0});
             commit('updateKey', {key: 'maxRespawn', value: 1});
             commit('updateKey', {key: 'bossAvailable', value: false});
-            commit('updateKey', {key: 'bossFight', value: false});
+            commit('updateKey', {key: 'bossFight', value: 0});
             commit('updateKey', {key: 'sigilZones', value: []});
             commit('updateKey', {key: 'heirloomsFound', value: null});
             commit('updateKey', {key: 'nostalgia', value: 0});
@@ -337,6 +344,7 @@ export default {
             commit('updateKey', {key: 'fightRampage', value: 0});
             commit('updateKey', {key: 'loadout', value: []});
             commit('updateKey', {key: 'nextLoadoutId', value: 1});
+            commit('updateKey', {key: 'minibossTimer', value: 0});
 
             commit('updateKey', {key: 'player', value: {}});
             commit('updateKey', {key: 'enemy', value: {}});
@@ -364,6 +372,7 @@ export default {
             commit('updatePlayerKey', {key: 'health', value: rootGetters['mult/get']('hordeHealth')});
             commit('updatePlayerKey', {key: 'revive', value: rootGetters['mult/get']('hordeRevive')});
             commit('updatePlayerKey', {key: 'divisionShield', value: rootGetters['mult/get']('hordeDivisionShield')});
+            commit('updatePlayerKey', {key: 'stun', value: 0});
             commit('updatePlayerKey', {key: 'poison', value: 0});
             commit('updatePlayerKey', {key: 'hits', value: 0});
             commit('updatePlayerKey', {key: 'spells', value: 0});
@@ -415,11 +424,13 @@ export default {
                 }
             }
 
-            if (state.bossFight) {
-                stats.attack *= Math.pow(1.01, state.zone) * 15;
-                stats.health *= Math.pow(1.012, state.zone) * 15;
-                stats.bioTaken /= 10;
+            if (state.bossFight >= 1) {
+                stats.attack *= state.bossFight === 2 ? 15 : 3;
+                stats.health *= state.bossFight === 2 ? 15 : 5;
+                stats.bioTaken /= state.bossFight === 2 ? 10 : 5;
             }
+
+            let active = {};
 
             for (const [key, elem] of Object.entries(sigil)) {
                 for (const [stat, obj] of Object.entries(state.sigil[key].stats(elem))) {
@@ -428,6 +439,9 @@ export default {
                     } else {
                         stats[stat] += obj.amount;
                     }
+                }
+                if (state.sigil[key].active) {
+                    active[key] = {cooldown: state.sigil[key].active.startCooldown(elem), uses: state.sigil[key].active.uses(elem)};
                 }
             }
 
@@ -441,23 +455,29 @@ export default {
             commit('updateEnemyKey', {key: 'poison', value: 0});
             commit('updateEnemyKey', {key: 'hits', value: 0});
             commit('updateEnemyKey', {key: 'sigil', value: sigil});
+            commit('updateEnemyKey', {key: 'active', value: active});
 
             commit('updateKey', {key: 'fightTime', value: 0});
             commit('updateKey', {key: 'fightRampage', value: 0});
         },
         fightBoss({ commit, dispatch }) {
-            commit('updateKey', {key: 'bossFight', value: true});
+            commit('updateKey', {key: 'bossFight', value: 2});
 
             dispatch('resetStats');
         },
+        fightMiniboss({ commit, dispatch }) {
+            commit('updateKey', {key: 'bossFight', value: 1});
+
+            dispatch('updateEnemyStats');
+        },
         stopFightBoss({ commit, dispatch }) {
-            commit('updateKey', {key: 'bossFight', value: false});
+            commit('updateKey', {key: 'bossFight', value: 0});
 
             dispatch('resetStats');
         },
         updateZone({ rootState, commit, dispatch }, zone) {
             commit('updateKey', {key: 'zone', value: Math.min(zone, rootState.stat.horde_maxZone.value)});
-            commit('updateKey', {key: 'bossFight', value: false});
+            commit('updateKey', {key: 'bossFight', value: 0});
 
             dispatch('resetStats');
         },
@@ -525,10 +545,12 @@ export default {
             }
         },
         killEnemy({ state, rootState, getters, rootGetters, commit, dispatch }) {
-            dispatch('currency/gain', {feature: 'horde', name: 'bone', gainMult: true, amount: getters.currentBone * state.enemy.loot}, {root: true});
+            if (state.bossFight === 0) {
+                dispatch('currency/gain', {feature: 'horde', name: 'bone', gainMult: true, amount: getters.currentBone * state.enemy.loot}, {root: true});
 
-            if (state.zone >= HORDE_MONSTER_PART_MIN_ZONE && state.combo >= HORDE_MONSTER_PART_MIN_COMBO) {
-                dispatch('currency/gain', {feature: 'horde', name: 'monsterPart', gainMult: true, amount: getters.currentMonsterPart * state.enemy.loot}, {root: true});
+                if (state.zone >= HORDE_MONSTER_PART_MIN_ZONE && state.combo >= HORDE_MONSTER_PART_MIN_COMBO) {
+                    dispatch('currency/gain', {feature: 'horde', name: 'monsterPart', gainMult: true, amount: getters.currentMonsterPart * state.enemy.loot}, {root: true});
+                }
             }
 
             dispatch('findItems', 1);
@@ -543,12 +565,7 @@ export default {
                 commit('updatePlayerKey', {key: 'health', value: Math.min(rootGetters['mult/get']('hordeHealth'), state.player.health + missingHealth * recovery)});
             }
 
-            if (state.bossFight) {
-                // Find notes based on depth
-                const note = notes[rootState.stat.horde_maxZone.value];
-                if (note !== undefined) {
-                    dispatch('note/find', note, {root: true});
-                }
+            if (state.bossFight === 1) {
                 if (chance(getters.currentSoulChance, rootGetters['system/nextRng']('horde_soul')[0])) {
                     dispatch('currency/gain', {feature: 'horde', name: 'soulCorrupted', amount: getters.currentSoulAmount}, {root: true});
                 } else if (getters.currentSoulChance >= 0.99) {
@@ -566,47 +583,29 @@ export default {
                 commit('system/takeRng', 'horde_heirloom', {root: true});
                 if (state.zone >= 75) {
                     // Add item mastery
-                    let updateMasteryStats = false;
-                    for (const [key, elem] of Object.entries(state.items)) {
-                        const masteryBase = state.zone - elem.findZone - 24;
-                        if (elem.equipped && masteryBase > 0) {
-                            commit('updateItemKey', {name: key, key: 'masteryPoint', value: elem.masteryPoint + rootGetters['mult/get']('hordeItemMasteryGain', masteryBase)});
-                            while (state.items[key].masteryPoint >= getters.masteryRequired(key, state.items[key].masteryLevel)) {
-                                updateMasteryStats = true;
-                                commit('updateItemKey', {name: key, key: 'masteryLevel', value: state.items[key].masteryLevel + 1});
-                                if (state.items[key].masteryLevel === 4) {
-                                    if (elem.equipped && elem.passive) {
-                                        // Update passive bonus from +50% to +100% for equipped passive items
-                                        dispatch('applyItemEffects', key);
-                                    }
-                                    if (elem.cooldownLeft > 0) {
-                                        // Current cooldown gets halved
-                                        commit('updateItemKey', {name: key, key: 'cooldownLeft', value: Math.ceil(elem.cooldownLeft / 2)});
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (updateMasteryStats) {
-                        let maxMastery = 0;
-                        let totalMastery = 0;
-                        for (const [, elem] of Object.entries(state.items)) {
-                            if (elem.masteryLevel > maxMastery) {
-                                maxMastery = elem.masteryLevel;
-                            }
-                            totalMastery += elem.masteryLevel;
-                        }
-                        commit('stat/increaseTo', {feature: 'horde', name: 'maxMastery', value: maxMastery}, {root: true});
-                        commit('stat/increaseTo', {feature: 'horde', name: 'totalMastery', value: totalMastery}, {root: true});
-                    }
+                    dispatch('gainMastery', 0.05);
                 }
-                commit('updateKey', {key: 'bossFight', value: false});
+
+                commit('updateKey', {key: 'minibossTimer', value: state.minibossTimer - 1});
+                commit('updateKey', {key: 'bossFight', value: 0});
+            } else if (state.bossFight === 2) {
+                // Find notes based on depth
+                const note = notes[rootState.stat.horde_maxZone.value];
+                if (note !== undefined) {
+                    dispatch('note/find', note, {root: true});
+                }
+
+                commit('updateKey', {key: 'bossFight', value: 0});
                 commit('updateKey', {key: 'bossAvailable', value: false});
                 commit('stat/increaseTo', {feature: 'horde', name: 'maxZone', value: rootState.stat.horde_maxZone.value + 1}, {root: true});
                 commit('updateKey', {key: 'zone', value: state.zone + 1});
                 // Speedrun stat
                 if (rootState.stat.horde_timeSpent.value <= 1800) {
                     commit('stat/increaseTo', {feature: 'horde', name: 'maxZoneSpeedrun', value: rootState.stat.horde_maxZone.value}, {root: true});
+                }
+                if (state.zone >= 75) {
+                    // Add item mastery
+                    dispatch('gainMastery', 1);
                 }
                 dispatch('updatePlayerStats');
                 dispatch('checkZoneUnlocks');
@@ -621,10 +620,48 @@ export default {
                     skipStats = true;
                     dispatch('fightBoss');
                 }
+            } else if (state.minibossTimer >= 1) {
+                skipStats = true;
+                dispatch('fightMiniboss');
             }
 
             if (!skipStats) {
                 dispatch('updateEnemyStats');
+            }
+        },
+        gainMastery({ state, getters, rootGetters, commit, dispatch }, amount = 1) {
+            let updateMasteryStats = false;
+            for (const [key, elem] of Object.entries(state.items)) {
+                const masteryBase = state.zone - elem.findZone - 24;
+                if (elem.equipped && masteryBase > 0) {
+                    commit('updateItemKey', {name: key, key: 'masteryPoint', value: elem.masteryPoint + rootGetters['mult/get']('hordeItemMasteryGain', masteryBase * amount)});
+                    while (state.items[key].masteryPoint >= getters.masteryRequired(key, state.items[key].masteryLevel)) {
+                        updateMasteryStats = true;
+                        commit('updateItemKey', {name: key, key: 'masteryLevel', value: state.items[key].masteryLevel + 1});
+                        if (state.items[key].masteryLevel === 4) {
+                            if (elem.equipped && elem.passive) {
+                                // Update passive bonus from +50% to +100% for equipped passive items
+                                dispatch('applyItemEffects', key);
+                            }
+                            if (elem.cooldownLeft > 0) {
+                                // Current cooldown gets halved
+                                commit('updateItemKey', {name: key, key: 'cooldownLeft', value: Math.ceil(elem.cooldownLeft / 2)});
+                            }
+                        }
+                    }
+                }
+            }
+            if (updateMasteryStats) {
+                let maxMastery = 0;
+                let totalMastery = 0;
+                for (const [, elem] of Object.entries(state.items)) {
+                    if (elem.masteryLevel > maxMastery) {
+                        maxMastery = elem.masteryLevel;
+                    }
+                    totalMastery += elem.masteryLevel;
+                }
+                commit('stat/increaseTo', {feature: 'horde', name: 'maxMastery', value: maxMastery}, {root: true});
+                commit('stat/increaseTo', {feature: 'horde', name: 'totalMastery', value: totalMastery}, {root: true});
             }
         },
         findItems({ state, rootState, rootGetters, commit }, amount) {
@@ -752,9 +789,10 @@ export default {
             commit('updateKey', {key: 'respawn', value: 0});
             commit('updateKey', {key: 'maxRespawn', value: 1});
             commit('updateKey', {key: 'bossAvailable', value: false});
-            commit('updateKey', {key: 'bossFight', value: false});
+            commit('updateKey', {key: 'bossFight', value: 0});
             commit('updateKey', {key: 'sigilZones', value: []});
             commit('updateKey', {key: 'nostalgia', value: 0});
+            commit('updateKey', {key: 'minibossTimer', value: 0});
 
             dispatch('card/activateCards', 'horde', {root: true});
 

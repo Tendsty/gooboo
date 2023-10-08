@@ -17,6 +17,34 @@ export default {
             };
         }
     },
+    bashing: {
+        icon: 'mdi-hammer',
+        color: 'pale-red',
+        active: {
+            effect() {
+                return [
+                    {type: 'stun', value: 3}
+                ];
+            },
+            cooldown: () => 12,
+            startCooldown: () => 0,
+            uses: lvl => lvl
+        }
+    },
+    recovery: {
+        icon: 'mdi-medical-bag',
+        color: 'green',
+        active: {
+            effect() {
+                return [
+                    {type: 'heal', value: 0.3}
+                ];
+            },
+            cooldown: () => 20,
+            startCooldown: () => 10,
+            uses: lvl => lvl
+        }
+    },
     toughness: {
         minZone: 25,
         icon: 'mdi-shield-sword',
@@ -122,6 +150,19 @@ export default {
             return {
                 toxic: {type: 'base', amount: 0.02 * lvl},
                 bioConversion: {type: 'base', amount: 1.5 * lvl},
+            };
+        }
+    },
+
+    // Fallback sigil
+    generic: {
+        minZone: Infinity,
+        icon: 'mdi-heart-flash',
+        color: 'grey',
+        stats: lvl => {
+            return {
+                attack: {type: 'mult', amount: Math.pow(1.2, lvl)},
+                health: {type: 'mult', amount: Math.pow(1.2, lvl)},
             };
         }
     }

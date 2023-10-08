@@ -9,7 +9,7 @@ export default {
   miningPickaxeCraftingQuality: 'Handwerksreinheit',
   miningOreQuality: 'Erz-Qualität',
   miningDepthDwellerSpeed: 'Tiefengräber-Tempo',
-  miningDepthDwellerMax: 'Maximale Gräbertiefe',
+  miningDepthDwellerMax: 'Höchstmögliche Gräbertiefe',
   miningSmelterySpeed: 'Hochofen-Tempo',
   miningSmelteryTemperature: 'Hochofen-Temperatur',
   miningResinMax: 'Maximales Harz',

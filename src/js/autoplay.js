@@ -516,7 +516,7 @@ function autoplayTicks(newTime, oldTime) {
         }
 
         // Autofight horde boss
-        else if (store.state.horde.bossAvailable && !store.state.horde.bossFight) {
+        else if (store.state.horde.bossAvailable && store.state.horde.bossFight === 0) {
             store.dispatch('horde/updateZone', store.state.stat.horde_maxZone.value);
             store.dispatch('horde/fightBoss');
         }

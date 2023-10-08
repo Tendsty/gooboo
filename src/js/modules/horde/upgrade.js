@@ -52,7 +52,7 @@ export default {
         return {horde_monsterPart: Math.pow(lvl * 0.005 + 1.35, lvl) * 40};
     }, effect: [
         {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(2, lvl)},
-        {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
+        {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => Math.pow(1.18, lvl)},
         {name: 'hordeMaxItems', type: 'base', value: lvl => Math.min(4, Math.floor(Math.sqrt(lvl)))}
     ]},
     thickSkin: {cap: 50, requirementBase, requirementStat, requirementValue: 15, price(lvl) {

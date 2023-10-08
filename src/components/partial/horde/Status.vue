@@ -32,14 +32,19 @@
       <v-btn icon :disabled="isMaxZone || isFrozen" @click="zoneNext"><v-icon>mdi-step-forward</v-icon></v-btn>
       <v-btn icon :disabled="isMaxZone || isFrozen" @click="zoneMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
     </div>
-    <v-card v-if="hasActiveItems" class="d-flex flex-wrap ma-1 pa-1">
-      <active class="ma-1" v-for="(item, key) in itemsActiveList" :key="'active-' + key" :name="key" :pretend="isFrozen"></active>
-    </v-card>
     <v-row no-gutters>
       <v-col cols="12" sm="6">
+        <v-card min-height="52" class="d-flex flex-wrap ma-1 mb-2 pa-1">
+          <active class="ma-1" v-for="(item, key) in itemsActiveCombat" :key="'active-' + key" :name="key" :pretend="isFrozen"></active>
+          <v-spacer></v-spacer>
+          <active class="ma-1" v-for="(item, key) in itemsActiveUtility" :key="'active-' + key" :name="key" :pretend="isFrozen"></active>
+        </v-card>
         <player-status class="ma-1"></player-status>
       </v-col>
       <v-col cols="12" sm="6">
+        <v-card min-height="52" class="d-flex flex-wrap ma-1 mb-2 pa-1">
+          <enemy-active class="ma-1 mr-2" v-for="(item, key) in enemyActive" :key="'active-' + key" :name="key"></enemy-active>
+        </v-card>
         <enemy-status class="ma-1"></enemy-status>
       </v-col>
     </v-row>
@@ -62,11 +67,12 @@ import Currency from '../../render/Currency.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 import Active from './Active.vue';
+import EnemyActive from './EnemyActive.vue';
 import EnemyStatus from './EnemyStatus.vue';
 import PlayerStatus from './PlayerStatus.vue';
 
 export default {
-  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText },
+  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText, EnemyActive },
   computed: {
     ...mapState({
       combo: state => state.horde.combo,
@@ -75,6 +81,7 @@ export default {
       maxZone: state => state.stat.horde_maxZone.value,
       bossFight: state => state.horde.bossFight,
       respawn: state => state.horde.respawn,
+      enemyActive: state => state.horde.enemy.active,
       isFrozen: state => state.cryolab.horde.active
     }),
     ...mapGetters({
@@ -86,9 +93,6 @@ export default {
     }),
     isMaxZone() {
       return this.zone >= this.maxZone;
-    },
-    hasActiveItems() {
-      return Object.keys(this.itemsActiveList).length > 0;
     },
     bossState() {
       if (this.bossFight) {
@@ -103,6 +107,24 @@ export default {
     },
     showMonsterPartHint() {
       return this.$store.state.stat.horde_maxZone.total >= 15 && this.$store.state.stat.horde_monsterPart.total <= 0;
+    },
+    itemsActiveCombat() {
+      let obj = {};
+      for (const [key, elem] of Object.entries(this.itemsActiveList)) {
+        if (elem.activeType !== 'utility') {
+          obj[key] = elem;
+        }
+      }
+      return obj;
+    },
+    itemsActiveUtility() {
+      let obj = {};
+      for (const [key, elem] of Object.entries(this.itemsActiveList)) {
+        if (elem.activeType === 'utility') {
+          obj[key] = elem;
+        }
+      }
+      return obj;
     }
   },
   methods: {

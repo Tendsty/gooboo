@@ -6,7 +6,7 @@
 </style>
 
 <template>
-  <div class="d-flex align-center">
+  <div class="d-flex align-center balloon-text-dynamic">
     <v-icon class="mr-2" :color="status">{{ status === 'success' ? 'mdi-check' : 'mdi-alert' }}</v-icon>
     <v-progress-linear :color="status" :value="percent" rounded height="24">
       <div class="d-flex justify-center align-center text-center" :class="{'small-quest-task': $vuetify.breakpoint.xsOnly}">

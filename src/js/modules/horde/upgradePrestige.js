@@ -8,32 +8,30 @@ const requirementBase = () => store.state.stat[requirementStat].total;
 export default {
     decimate: {type: 'prestige', price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.55, lvl) * 4};
-    }, effect: [
-        {name: 'hordeBossRequirement', type: 'base', value: lvl => lvl * -5}
-    ]},
+    }, effect: []},
     balance: {type: 'prestige', price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * 5};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.09, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.09, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.06, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.06, lvl)}
     ]},
     wrath: {type: 'prestige', cap: 10, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.4, lvl) * 6};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.35 + 1)},
+        {name: 'hordeAttack', type: 'mult', value: lvl => lvl * 0.25 + 1},
         {name: 'hordeCritChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
     peace: {type: 'prestige', cap: 10, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.4, lvl) * 6};
     }, effect: [
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.35 + 1)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.25 + 1},
         {name: 'hordeRespawn', type: 'base', value: lvl => lvl * -5}
     ]},
     milk: {type: 'prestige', price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.4, lvl) * 8};
     }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1.5, lvl)}
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
     ]},
     butcher: {type: 'prestige', cap: 10, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.4, lvl) * 10};
@@ -43,9 +41,7 @@ export default {
     ]},
     ritualTome: {type: 'prestige', cap: 10, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.6, lvl) * 14};
-    }, effect: [
-        {name: 'hordeSoulChance', type: 'base', value: lvl => lvl * 0.025}
-    ]},
+    }, effect: []},
     beginnerLuck: {type: 'prestige', requirementBase, requirementStat, requirementValue: 26, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.9, lvl) * 40};
     }, effect: [
@@ -66,12 +62,12 @@ export default {
     offenseBook: {type: 'prestige', cap: 50, requirementBase, requirementStat, requirementValue: 41, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * 140};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.11, lvl) * (lvl * 0.4 + 1)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => lvl * 0.3 + 1}
     ]},
     defenseBook: {type: 'prestige', cap: 50, requirementBase, requirementStat, requirementValue: 46, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * 280};
     }, effect: [
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.11, lvl) * (lvl * 0.4 + 1)}
+        {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.3 + 1}
     ]},
     ashCircle: {type: 'prestige', requirementBase, requirementStat, requirementValue: 51, price(lvl) {
         return {horde_soulEmpowered: Math.pow(lvl * 0.01 + 1.25, lvl) * 1000};
@@ -116,6 +112,6 @@ export default {
     aggression: {type: 'prestige', cap: 30, requirementBase, requirementStat, requirementValue: 121, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * buildNum(430, 'M')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.14, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.1, lvl)}
     ]},
 }

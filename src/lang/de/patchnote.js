@@ -151,6 +151,7 @@ export default {
       0: 'Ein explosiver Anfang',
       1: 'Direktor ersetzt!',
       2: 'Der Umwelt zuliebe',
+      3: 'Endlose Bosse',
     }
   }
 }
