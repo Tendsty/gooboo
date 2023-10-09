@@ -31,7 +31,7 @@ export default {
     mining_enhancingStation: 'Dies erlaubt es dir, Barren zu benutzen, um einzigartige Spitzhackeneffekte zu erhalten',
     mining_emberForge: 'Glut wird beim Prestige erhalten und erhöht das Tempo vom Hochofen',
     mining_stickyJar: 'Harz verbessert die Ergebnisse von hergestellten Spitzhacken, braucht aber lange zum Erzeugen',
-    mining_premiumCraftingSlots: 'Wertet einen deiner Herstellplätze zur Premium-Qualität auf, wodurch Unreinheit halbiert und Reinheit verdoppelt wird',
+    mining_premiumCraftingSlots: 'Wertet einen deiner Herstellplätze zur Premium-Qualität auf, wodurch Unreinheit über x1 halbiert und Reinheit verdoppelt wird',
 
     village_treasury: 'Der Steuersatz sorgt dafür, dass arbeitende Dorfbewohner Nahrung verbrauchen und im Gegenzug Steuern zahlen',
     village_church: 'Dies gewährt dir Zugang zur Prestige-Möglichkeit vom Dorf',
@@ -393,13 +393,11 @@ export default {
   horde_meditation: 'Meditation',
 
   // Horde prestige upgrades
-  horde_decimate: 'Dezimieren',
   horde_balance: 'Balance',
   horde_wrath: 'Zorn',
   horde_peace: 'Frieden',
   horde_milk: 'Milch',
   horde_butcher: 'Schlachter',
-  horde_ritualTome: 'Ritualwälzer',
   horde_beginnerLuck: 'Anfängerglück',
   horde_backpack: 'Rucksack',
   horde_advancedLuck: 'Fortgeschrittenenglück',

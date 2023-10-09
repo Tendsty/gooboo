@@ -1,3 +1,4 @@
+import { SECONDS_PER_HOUR } from "../../constants";
 import { buildNum } from "../../utils/format";
 
 export default {
@@ -36,11 +37,11 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'heal', value: lvl * 0.005 + 0.145}
+                {type: 'heal', value: lvl * 0.005 + 0.245}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 45,
+        cooldown: () => 80,
         icon: 'mdi-tshirt-v',
         activeIcon: 'mdi-medical-bag',
         activeColor: 'green'
@@ -59,11 +60,11 @@ export default {
         },
         active() {
             return [
-                {type: 'revive', value: 1}
+                {type: 'reviveAll', value: null}
             ];
         },
         activeType: 'combat',
-        cooldown: lvl => 390 - lvl * 30,
+        cooldown: lvl => SECONDS_PER_HOUR * 8 - lvl * 1800,
         icon: 'mdi-cross',
         activeIcon: 'mdi-flare',
         activeColor: 'yellow'
@@ -279,6 +280,29 @@ export default {
         activeIcon: 'mdi-snowflake',
         activeColor: 'light-blue'
     },
+    oppressor: {
+        findZone: 22,
+        findChance: 1 / buildNum(55, 'K'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * 360;
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 22},
+                {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.04 + 0.96}
+            ];
+        },
+        active() {
+            return [
+                {type: 'silence', value: 10}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 55,
+        icon: 'mdi-robot-angry',
+        activeIcon: 'mdi-emoticon-devil',
+        activeColor: 'pale-purple'
+    },
     meatShield: {
         findZone: 23,
         findChance: 1 / buildNum(60, 'K'),
@@ -315,9 +339,8 @@ export default {
         cap: 5,
         stats() {
             return [
-                {isPositive: false, type: 'mult', name: 'hordeAttack', value: 0.7},
-                {isPositive: false, type: 'mult', name: 'hordeHealth', value: 0.7},
-                {isPositive: true, type: 'base', name: 'hordeSoulChance', value: 0.075}
+                {isPositive: false, type: 'mult', name: 'hordeHeirloomChance', value: 0.7},
+                {isPositive: true, type: 'mult', name: 'hordeSoulGain', value: 1.15}
             ];
         },
         masteryBoost: 0.25,
@@ -378,6 +401,31 @@ export default {
         icon: 'mdi-magic-staff',
         activeIcon: 'mdi-pentagram',
         activeColor: 'red'
+    },
+    cleansingSpring: {
+        findZone: 32,
+        findChance: 1 / buildNum(115, 'K'),
+        price(lvl) {
+            return Math.pow(6, lvl - 1) * 3600;
+        },
+        cap: 5,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeStunResist', value: 1}
+            ];
+        },
+        active() {
+            return [
+                {type: 'removeStun', value: null},
+                {type: 'antidote', value: 1}
+            ];
+        },
+        activeType: 'combat',
+        usableInStun: true,
+        cooldown: lvl => 32 - lvl * 2,
+        icon: 'mdi-waterfall',
+        activeIcon: 'mdi-water-opacity',
+        activeColor: 'cyan'
     },
     marblePillar: {
         findZone: 33,
@@ -464,7 +512,7 @@ export default {
         cap: 3,
         stats() {
             return [
-                {isPositive: true, type: 'mult', name: 'hordeNostalgia', value: 2}
+                {isPositive: false, type: 'mult', name: 'hordeNostalgia', value: 0}
             ];
         },
         active(lvl) {
@@ -714,7 +762,7 @@ export default {
         stats(lvl) {
             return [
                 {isPositive: true, type: 'mult', name: 'hordeCorruption', value: 0.955 - lvl * 0.005},
-                {isPositive: true, type: 'mult', name: 'hordeNostalgia', value: 1.25}
+                {isPositive: true, type: 'base', name: 'hordeNostalgia', value: 2}
             ];
         },
         active() {
@@ -938,8 +986,8 @@ export default {
         cap: 10,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeSoulChance', value: 0.1},
-                {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: 0.04},
+                {isPositive: true, type: 'mult', name: 'hordeSoulGain', value: 1.05},
+                {isPositive: true, type: 'mult', name: 'hordeHeirloomChance', value: 1.05},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
             ];
         },

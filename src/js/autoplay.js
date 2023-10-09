@@ -74,13 +74,11 @@ const prestigeUpgradeWeight = {
         charity: 1.2,
     },
     horde: {
-        decimate: 1,
         balance: 1,
         wrath: 1,
         peace: 1,
         milk: 1,
         butcher: 1,
-        ritualTome: 8,
         beginnerLuck: 2,
         backpack: 3,
         advancedLuck: 2,

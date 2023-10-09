@@ -6,9 +6,6 @@ const requirementStat = 'horde_maxZone';
 const requirementBase = () => store.state.stat[requirementStat].total;
 
 export default {
-    decimate: {type: 'prestige', price(lvl) {
-        return {horde_soulEmpowered: Math.pow(1.55, lvl) * 4};
-    }, effect: []},
     balance: {type: 'prestige', price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * 5};
     }, effect: [
@@ -39,25 +36,20 @@ export default {
         {name: 'currencyHordeMonsterPartGain', type: 'base', value: lvl => lvl * 0.05},
         {name: 'currencyHordeMonsterPartCap', type: 'base', value: lvl => lvl * 30}
     ]},
-    ritualTome: {type: 'prestige', cap: 10, price(lvl) {
-        return {horde_soulEmpowered: Math.pow(1.6, lvl) * 14};
-    }, effect: []},
     beginnerLuck: {type: 'prestige', requirementBase, requirementStat, requirementValue: 26, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.9, lvl) * 40};
     }, effect: [
         {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'hordeSoulChance', type: 'base', value: lvl => lvl * 0.01}
+        {name: 'hordeSoulGain', type: 'mult', value: lvl => lvl * 0.03 + 1}
     ]},
     backpack: {type: 'prestige', cap: 4, requirementBase, requirementStat, requirementValue: 31, price(lvl) {
         return {horde_soulEmpowered: Math.pow(10, lvl) * 50};
-    }, effect: [
-        {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
-    ]},
+    }, effect: []},
     advancedLuck: {type: 'prestige', requirementBase, requirementStat, requirementValue: 36, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.9, lvl) * 80};
     }, effect: [
-        {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.15 + 1},
-        {name: 'hordeHeirloomChance', type: 'base', value: lvl => lvl * 0.004}
+        {name: 'hordeHeirloomChance', type: 'mult', value: lvl => lvl * 0.05 + 1},
+        {name: 'hordeNostalgia', type: 'base', value: lvl => lvl}
     ]},
     offenseBook: {type: 'prestige', cap: 50, requirementBase, requirementStat, requirementValue: 41, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * 140};
@@ -83,8 +75,8 @@ export default {
     soulLuck: {type: 'prestige', requirementBase, requirementStat, requirementValue: 71, price(lvl) {
         return {horde_soulEmpowered: Math.pow(2.5, lvl) * 7500};
     }, effect: [
-        {name: 'hordeSoulGain', type: 'mult', value: lvl => Math.pow(1.03, lvl)},
-        {name: 'hordeSoulChance', type: 'base', value: lvl => lvl * 0.01}
+        {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.15 + 1},
+        {name: 'hordeSoulGain', type: 'mult', value: lvl => Math.pow(1.04, lvl)}
     ]},
     containmentChamber: {type: 'prestige', requirementBase, requirementStat, requirementValue: 81, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.45, lvl) * buildNum(30, 'K')};

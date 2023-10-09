@@ -1147,13 +1147,14 @@ export default {
     zone: 'Zone',
     hordeBasicLoot: 'Basic loot',
     hordeItemPermanent: 'Equipment effect',
+    hordeNostalgia: 'Nostalgia',
+    hordeNostalgiaLost: 'Heirlooms found',
     cards: 'Cards',
     treasure: 'Treasure',
     debug: 'Debug',
     bankInvestment: 'Investment',
     alloying: 'Alloying',
     miningResin: 'Resin',
-    nostalgia: 'Nostalgia',
     cryolab: 'Cryolab',
     ritualTier: 'Ritual tier',
     ritualPotionLevel: 'Potion level',
@@ -1214,7 +1215,7 @@ export default {
       impurity: 'Impurity',
       craftPickaxe: 'Craft pickaxe',
       purityDescription: 'To reach 50% minimum quality, your purity needs to match your impurity.',
-      premiumSlot: 'This is a premium crafting slot. Impurity is halved and purity is doubled.'
+      premiumSlot: 'This is a premium crafting slot. Impurity above x1 is halved and purity is doubled.'
     },
     craftingDescription: 'Consume selected ores and create a new pickaxe with a random power value. If it is better than your current pickaxe ({0} power), replace it.',
     resinDescription: 'Each piece of resin adds 30% power and 25% purity. Up to {0} resin may be used per pickaxe craft.',
@@ -1350,10 +1351,14 @@ export default {
     miniboss: 'Miniboss',
     poisonPlayer: 'You are poisoned and take {0} damage per second',
     poisonEnemy: 'This enemy is poisoned and takes {0} damage per second',
+    silencePlayer: 'You are silenced and cannot use actives',
+    silenceEnemy: 'This enemy is silenced and cannot use actives',
     stunPlayer: 'You are stunned and cannot attack',
     stunEnemy: 'This enemy is stunned and cannot attack',
-    stunBoss: 'Bosses recover twice as fast from stuns',
-    bossBioResist: 'Bosses only take 10% biological damage',
+    stunResist: 'Recover faster from stuns',
+    stunBoss: 'Bosses and minibosses receive +1 stun resist',
+    bossBioResist: 'Bosses and minibosses only take 20% biological damage',
+    enemyRespawn: 'Enemies take {0} to respawn and up to {1} enemies can be waiting',
     reachBoss: {
       title: 'Reach the boss',
       description: 'To challenge the boss of this zone, you need to defeat {0} enemies without dying'
@@ -1382,6 +1387,7 @@ export default {
     },
     sigil: {
       name: 'Sigil',
+      hasActive: 'Has active effect',
       min: 'Appears at zone {0} or higher',
       power: 'Power',
       health: 'Health',
@@ -1412,6 +1418,8 @@ export default {
     fighting: 'Fighting',
     items: {
       name: 'Equipment',
+      usableInStun: 'Can be used while stunned',
+      utilityOvertime: 'Utility actives can store multiple charges at half speed of the previous one',
       inactive: 'Inactive equipment effects recover their cooldown at {0}% of the usual rate',
       dagger: 'Dagger',
       shirt: 'Shirt',
@@ -1426,11 +1434,13 @@ export default {
       campfire: 'Campfire',
       clover: 'Clover',
       snowflake: 'Snowflake',
+      oppressor: 'Oppressor',
       toxin: 'Toxin',
       corruptEye: 'Corrupt eye',
       meatShield: 'Meat shield',
       wizardHat: 'Wizard hat',
       redStaff: 'Red staff',
+      cleansingSpring: 'Cleansing spring',
       marblePillar: 'Marble pillar',
       rainbowStaff: 'Rainbow staff',
       antidote: 'Antidote',
@@ -1489,7 +1499,11 @@ export default {
         1: 'highest zone bones'
       },
       stun: {
-        0: 'Stun this enemy',
+        0: 'Stun the opponent',
+        1: 'times'
+      },
+      silence: {
+        0: 'Silence the opponent',
         1: 'times'
       },
       revive: {
@@ -1498,7 +1512,7 @@ export default {
       },
       removeAttack: {
         0: 'Remove',
-        1: 'attack from this enemy'
+        1: 'attack from the opponent'
       },
       poison: {
         0: 'Apply',
@@ -1515,13 +1529,16 @@ export default {
       permanentHealth: {
         0: 'Increase health by',
         1: '(until prestige)'
-      }
+      },
+      reviveAll: 'Refill all revives',
+      removeStun: 'Remove stuns',
     },
     heirloom: {
       name: 'Heirloom',
       min: 'Appears at zone {0} or higher',
-      description: 'You have {0} of nostalgia. This increases your chance of finding a heirloom. Defeating a boss removes {1}% of your nostalgia',
-      description2: 'The heirloom with the lowest amount is twice as likely to be given. If you have multiple heirlooms tied in lowest amount, this does not apply.',
+      description: 'Heirlooms are powerful artifacts that can be found from minibosses and stay forever. Reach higher zones to find more types',
+      descriptionDouble: 'The heirloom with the lowest amount is twice as likely to be given. If you have multiple heirlooms tied in lowest amount, this does not apply.',
+      descriptionNostalgia: 'Nostalgia increases your chance of finding a heirloom. Finding one with the help of nostalgia removes 1 nostalgia until your next prestige',
       power: 'Power',
       fortitude: 'Fortitude',
       wealth: 'Wealth',

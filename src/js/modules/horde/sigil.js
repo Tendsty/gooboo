@@ -21,9 +21,9 @@ export default {
         icon: 'mdi-hammer',
         color: 'pale-red',
         active: {
-            effect() {
+            effect(lvl) {
                 return [
-                    {type: 'stun', value: 3}
+                    {type: 'stun', value: lvl + 2}
                 ];
             },
             cooldown: () => 12,
@@ -34,10 +34,15 @@ export default {
     recovery: {
         icon: 'mdi-medical-bag',
         color: 'green',
+        stats: lvl => {
+            return {
+                health: {type: 'mult', amount: Math.pow(1.12, lvl)},
+            };
+        },
         active: {
-            effect() {
+            effect(lvl) {
                 return [
-                    {type: 'heal', value: 0.3}
+                    {type: 'heal', value: lvl * 0.05 + 0.3}
                 ];
             },
             cooldown: () => 20,

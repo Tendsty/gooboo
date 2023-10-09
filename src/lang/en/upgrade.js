@@ -31,7 +31,7 @@ export default {
     mining_enhancingStation: 'This allows you to spend bars on unique pickaxe modifiers',
     mining_emberForge: 'Ember is gained on prestige and increases your smeltery speed',
     mining_stickyJar: 'Resin can be used for better crafting results, but takes a long time to generate',
-    mining_premiumCraftingSlots: 'Upgrades one of your crafting slots to premium, which halves impurity and doubles purity',
+    mining_premiumCraftingSlots: 'Upgrades one of your crafting slots to premium, which halves impurity above x1 and doubles purity',
 
     village_treasury: 'Tax rate causes your working villagers to consume food and pay taxes in return',
     village_church: 'This gives you access to the prestige option of the village',
@@ -393,13 +393,11 @@ export default {
   horde_meditation: 'Meditation',
 
   // Horde prestige upgrades
-  horde_decimate: 'Decimate',
   horde_balance: 'Balance',
   horde_wrath: 'Wrath',
   horde_peace: 'Peace',
   horde_milk: 'Milk',
   horde_butcher: 'Butcher',
-  horde_ritualTome: 'Ritual tome',
   horde_beginnerLuck: 'Beginner luck',
   horde_backpack: 'Backpack',
   horde_advancedLuck: 'Advanced luck',
