@@ -7,82 +7,87 @@ const requirementBase = () => store.state.stat[requirementStat].total;
 
 export default {
     attack: {price(lvl) {
-        return {horde_bone: Math.pow(lvl * 0.0025 + 1.25, lvl) * 175};
+        return {horde_bone: Math.pow(lvl * 0.002 + 1.25, lvl) * 175};
     }, effect: [
         {name: 'hordeAttack', type: 'base', value: lvl => lvl},
         {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.1, lvl)}
     ]},
     health: {price(lvl) {
-        return {horde_bone: Math.pow(lvl * 0.0025 + 1.25, lvl) * 210};
+        return {horde_bone: Math.pow(lvl * 0.002 + 1.25, lvl) * 210};
     }, effect: [
         {name: 'hordeHealth', type: 'base', value: lvl => lvl * 150},
         {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.12, lvl)}
     ]},
-    training: {cap: 50, capMult: true, requirementBase, requirementStat, requirementValue: 3, price(lvl) {
-        return {horde_bone: splicedPow(1.55, 2.8, 50, lvl) * 6500};
+    training: {cap: 100, capMult: true, requirementBase, requirementStat, requirementValue: 3, price(lvl) {
+        return {horde_bone: splicedPow(1.35, 2.8, 100, lvl) * 2500};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => splicedPow(1.1, 1.05, 50, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => splicedPow(1.1, 1.05, 50, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => splicedPow(1.1, 1.05, 100, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => splicedPow(1.1, 1.05, 100, lvl)}
     ]},
     resilience: {cap: 1, requirementBase, requirementStat, requirementValue: 5, price() {
-        return {horde_bone: buildNum(72, 'K')};
+        return {horde_bone: buildNum(24, 'K')};
     }, effect: [
         {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.5, lvl)},
         {name: 'hordeRevive', type: 'base', value: lvl => lvl}
     ]},
-    boneBag: {cap: 1, requirementBase, requirementStat, requirementValue: 7, price() {
-        return {horde_bone: buildNum(480, 'K')};
+    bones: {requirementBase, requirementStat, requirementValue: 6, price(lvl) {
+        return {horde_bone: Math.pow(lvl * 0.01 + 1.35, lvl) * buildNum(52, 'K')};
     }, effect: [
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(4, lvl)},
-        {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.22, lvl)}
+    ]},
+    boneBag: {cap: 4, requirementBase, requirementStat, requirementValue: 7, price(lvl) {
+        return {horde_bone: Math.pow(10, lvl) * buildNum(480, 'K')};
+    }, effect: [
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(10, lvl)},
+        {name: 'hordeMaxItems', type: 'base', value: lvl => Math.min(1, lvl)}
     ]},
     anger: {cap: 10, requirementBase, requirementStat, requirementValue: 9, price(lvl) {
-        return {horde_bone: Math.pow(1.8, lvl) * buildNum(1.45, 'M')};
+        return {horde_bone: Math.pow(1.65, lvl) * buildNum(145, 'K')};
     }, effect: [
         {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.18, lvl)},
         {name: 'hordeCritChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
     rest: {cap: 2, requirementBase, requirementStat, requirementValue: 11, price(lvl) {
-        return {horde_bone: Math.pow(15.75, lvl) * buildNum(26, 'M')};
+        return {horde_bone: Math.pow(75, lvl) * buildNum(2.6, 'M')};
     }, effect: [
         {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.75 + 1},
         {name: 'hordeRecovery', type: 'base', value: lvl => lvl * 0.01}
     ]},
-    monsterBag: {requirementBase, requirementStat, requirementValue: 13, price(lvl) {
-        return {horde_monsterPart: Math.pow(lvl * 0.005 + 1.35, lvl) * 40};
+    monsterSoup: {cap: 10, requirementBase, requirementStat, requirementValue: 13, price(lvl) {
+        return {horde_monsterPart: Math.pow(1.1, lvl) * (lvl + 10) * 3};
+    }, effect: [
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+        {name: 'currencyHordeMonsterPartCap', type: 'base', value: lvl => lvl * 5}
+    ]},
+    // haste: {cap: 20, requirementBase, requirementStat, requirementValue: 15, price(lvl) {
+    //     return {horde_bone: Math.pow(2.3, lvl) * buildNum(52.5, 'M')};
+    // }, effect: [
+    //     {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.35, lvl)},
+    //     {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.05, lvl)}
+    // ]},
+    // thickSkin: {cap: 50, requirementBase, requirementStat, requirementValue: 17, price(lvl) {
+    //     return {horde_bone: Math.pow(1.45, lvl) * buildNum(240, 'M')};
+    // }, effect: [
+    //     {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.11, lvl)}
+    // ]},
+    // cooling: {cap: 5, capMult: true, requirementBase, requirementStat, requirementValue: 19, price(lvl) {
+    //     return {horde_bone: splicedPow(3.4, 6.5, 5, lvl) * buildNum(133, 'B')};
+    // }, effect: [
+    //     {name: 'hordeHealth', type: 'mult', value: lvl => splicedPow(1.15, 1.075, 5, lvl)},
+    //     {name: 'currencyHordeMonsterPartCap', type: 'base', value: lvl => lvl * 10}
+    // ]},
+    monsterBag: {requirementBase, requirementStat, requirementValue: 17, price(lvl) {
+        return {horde_monsterPart: Math.pow(lvl * 0.005 + 1.35, lvl) * 80};
     }, effect: [
         {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1.6, lvl)},
         {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
-        {name: 'hordeMaxItems', type: 'base', value: lvl => Math.min(4, Math.floor(Math.sqrt(lvl)))}
-    ]},
-    thickSkin: {cap: 50, requirementBase, requirementStat, requirementValue: 15, price(lvl) {
-        return {horde_bone: Math.pow(1.45, lvl) * buildNum(640, 'M')};
-    }, effect: [
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.11, lvl)}
-    ]},
-    haste: {cap: 20, requirementBase, requirementStat, requirementValue: 17, price(lvl) {
-        return {horde_bone: Math.pow(2.3, lvl) * buildNum(8.25, 'B')};
-    }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.35, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.05, lvl)}
-    ]},
-    cooling: {cap: 5, capMult: true, requirementBase, requirementStat, requirementValue: 19, price(lvl) {
-        return {horde_bone: splicedPow(3.4, 6.5, 5, lvl) * buildNum(133, 'B')};
-    }, effect: [
-        {name: 'hordeHealth', type: 'mult', value: lvl => splicedPow(1.15, 1.075, 5, lvl)},
-        {name: 'currencyHordeMonsterPartCap', type: 'base', value: lvl => lvl * 10}
+        {name: 'hordeMaxItems', type: 'base', value: lvl => Math.min(1, lvl)}
     ]},
     luckyStrike: {cap: 15, capMult: true, requirementBase, requirementStat, requirementValue: 21, price(lvl) {
-        return {horde_bone: splicedPow(2.3, 6.6, 15, lvl) * buildNum(300, 'B')};
+        return {horde_bone: splicedPow(1.85, 4.6, 15, lvl) * buildNum(30, 'B')};
     }, effect: [
         {name: 'hordeAttack', type: 'mult', value: lvl => splicedPow(1.14, 1.06, 15, lvl)},
         {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.2 + 1}
-    ]},
-    monsterSoup: {cap: 50, requirementBase, requirementStat, requirementValue: 27, price(lvl) {
-        return {horde_bone: Math.pow(1.85, lvl) * buildNum(250, 'T'), horde_monsterPart: Math.pow(1.1, lvl) * (lvl + 10) * 5};
-    }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
-        {name: 'currencyHordeMonsterPartCap', type: 'base', value: lvl => lvl * 5}
     ]},
     hoarding: {cap: 20, requirementBase, requirementStat, requirementValue: 31, price(lvl) {
         return {horde_bone: Math.pow(2.3, lvl) * buildNum(8.5, 'Qa')};

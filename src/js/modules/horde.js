@@ -1,5 +1,5 @@
 import store from "../../store"
-import { HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_INACTIVE_ITEM_COOLDOWN, HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME } from "../constants";
+import { HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_INACTIVE_ITEM_COOLDOWN, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME } from "../constants";
 import { buildArray } from "../utils/array";
 import { buildNum } from "../utils/format";
 import { chance, randomRound } from "../utils/random";
@@ -20,11 +20,12 @@ function playerDie() {
     } else {
         store.commit('horde/updatePlayerKey', {key: 'health', value: 0});
         store.commit('horde/updateKey', {key: 'combo', value: 0});
+        store.commit('horde/updateKey', {key: 'bossFight', value: 0});
 
-        let respawnTimer = store.getters['mult/get']('hordeRespawn', store.getters['horde/baseRespawnTime']);
+        const respawnTimer = store.getters['mult/get']('hordeRespawn', store.getters['horde/baseRespawnTime']);
         store.commit('horde/updateKey', {key: 'respawn', value: respawnTimer});
         store.commit('horde/updateKey', {key: 'maxRespawn', value: respawnTimer});
-        store.dispatch('horde/updateEnemyStats');
+        store.commit('horde/updateKey', {key: 'enemy', value: null});
     }
 }
 
@@ -121,12 +122,7 @@ export default {
 
                 store.commit('horde/updateKey', {key: 'respawn', value: newRespawn});
                 if (newRespawn <= 0) {
-                    if (store.state.horde.bossFight > 0) {
-                        store.commit('horde/updateKey', {key: 'bossFight', value: 0});
-                        store.dispatch('horde/updateEnemyStats');
-                    }
-
-                    store.dispatch('horde/updatePlayerStats');
+                    store.dispatch('horde/resetStats');
                 }
             } else if (store.state.horde.enemy) {
                 // Tick enemy cooldowns
@@ -257,9 +253,6 @@ export default {
                         if (simulation.dead) {
                             simulation.killed++;
                             simulation.bone += store.getters['horde/currentBone'] * store.state.horde.enemy.loot;
-                            if (store.state.horde.zone >= HORDE_MONSTER_PART_MIN_ZONE && store.state.horde.combo >= HORDE_MONSTER_PART_MIN_COMBO) {
-                                simulation.monsterPart += store.getters['horde/currentMonsterPart'] * store.state.horde.enemy.loot;
-                            }
                         }
                         killEnemy = true;
                     }
@@ -351,14 +344,14 @@ export default {
                     store.commit('horde/updatePlayerKey', {key: 'health', value: playerHealth});
                 }
 
-                if (killEnemy) {
-                    store.dispatch('horde/killEnemy');
-                }
-
                 // Tick respawn timers
                 store.commit('horde/updateKey', {key: 'enemyTimer', value: Math.min(1 + store.state.horde.enemyTimer, HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX)});
-                if (store.state.stat.horde_maxZone.value > 20) {
+                if (store.getters['horde/canSpawnMiniboss']) {
                     store.commit('horde/updateKey', {key: 'minibossTimer', value: Math.min(1 / store.getters['mult/get']('hordeMinibossTime') + store.state.horde.minibossTimer, 2)});
+                }
+
+                if (killEnemy && store.state.horde.enemy) {
+                    store.dispatch('horde/killEnemy');
                 }
 
                 secondsSpent = 1;
@@ -380,8 +373,13 @@ export default {
                 secondsSpent = Math.min(seconds, HORDE_ENEMY_RESPAWN_TIME - store.state.horde.enemyTimer);
                 // Tick respawn timers
                 store.commit('horde/updateKey', {key: 'enemyTimer', value: Math.min(secondsSpent + store.state.horde.enemyTimer, HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX)});
-                if (store.state.stat.horde_maxZone.value > 20) {
+                if (store.getters['horde/canSpawnMiniboss']) {
                     store.commit('horde/updateKey', {key: 'minibossTimer', value: Math.min(secondsSpent / store.getters['mult/get']('hordeMinibossTime') + store.state.horde.minibossTimer, 2)});
+                }
+
+                if (store.state.horde.zone >= HORDE_MONSTER_PART_MIN_ZONE && store.state.horde.combo > 0) {
+                    store.dispatch('currency/gain', {feature: 'horde', name: 'monsterPart', gainMult: true, amount: secondsSpent * store.getters['horde/currentMonsterPart']});
+                    simulation.monsterPart += secondsSpent * store.getters['horde/currentMonsterPart'];
                 }
 
                 store.dispatch('horde/updateEnemyStats');
@@ -450,7 +448,6 @@ export default {
         hordeBossRequirement: {round: true, min: 1, max: 50},
         hordeRespawn: {display: 'time', round: true, min: 1},
         hordeMinibossTime: {display: 'time', round: true, min: 60, baseValue: 300},
-        hordeSoulGain: {},
         hordeHeirloomChance: {display: 'percent', max: 1, roundNearZero: true},
         hordeHeirloomAmount: {baseValue: 1, round: true},
         hordeHeirloomEffect: {},
@@ -463,15 +460,15 @@ export default {
         {mult: 'hordeHeirloomEffect', name: 'multType', type: 'heirloomEffect'}
     ],
     currency: {
-        bone: {color: 'lightest-grey', icon: 'mdi-bone', gainMult: {}, capMult: {baseValue: buildNum(12.5, 'K')}},
-        monsterPart: {color: 'cherry', icon: 'mdi-stomach', gainMult: {}, capMult: {baseValue: 100}},
+        bone: {color: 'lightest-grey', icon: 'mdi-bone', gainMult: {}, capMult: {baseValue: buildNum(500, 'K')}},
+        monsterPart: {color: 'cherry', icon: 'mdi-stomach', gainMult: {display: 'perSecond'}, capMult: {baseValue: 100}},
         corruptedFlesh: {color: 'deep-purple', icon: 'mdi-food-steak', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true},
         mysticalShard: {color: 'teal', icon: 'mdi-billiards-rack', currencyMult: {
             hordeAttack: {type: 'mult', value: val => Math.pow(1.1, val)},
             hordeHealth: {type: 'mult', value: val => Math.pow(1.1, val)},
             currencyHordeBoneGain: {type: 'mult', value: val => Math.pow(1.1, val)}
         }},
-        soulCorrupted: {color: 'purple', icon: 'mdi-ghost'},
+        soulCorrupted: {color: 'purple', icon: 'mdi-ghost', overcapMult: 0.75, overcapScaling: 0.85, gainMult: {}, capMult: {}},
         soulEmpowered: {type: 'prestige', alwaysVisible: true, color: 'pink', icon: 'mdi-ghost'}
     },
     upgrade: {
@@ -512,6 +509,7 @@ export default {
             bossFight: store.state.horde.bossFight,
             player: {...store.state.horde.player},
             sigilZones: [...store.state.horde.sigilZones],
+            enemyTimer: store.state.horde.enemyTimer
         };
 
         if (store.state.horde.enemy) {
@@ -580,7 +578,7 @@ export default {
         return obj;
     },
     loadGame(data) {
-        ['zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'itemAttackMult', 'itemHealthMult', 'fightTime', 'fightRampage', 'minibossTimer', 'nostalgiaLost', 'chosenActive'].forEach(elem => {
+        ['zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'itemAttackMult', 'itemHealthMult', 'fightTime', 'fightRampage', 'enemyTimer', 'minibossTimer', 'nostalgiaLost', 'chosenActive'].forEach(elem => {
             if (data[elem] !== undefined) {
                 store.commit('horde/updateKey', {key: elem, value: data[elem]});
             }

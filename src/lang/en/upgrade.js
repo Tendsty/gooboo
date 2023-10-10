@@ -359,6 +359,7 @@ export default {
   // Horde upgrades
   horde_attack: 'Attack +',
   horde_health: 'Health +',
+  horde_bones: 'Bones +',
   horde_training: 'Training',
   horde_resilience: 'Resilience',
   horde_boneBag: 'Bone bag',

@@ -35,7 +35,6 @@ export const HORDE_COMBO_ATTACK = 1.025;
 export const HORDE_COMBO_HEALTH = 1.01;
 export const HORDE_COMBO_BONE = 0.012;
 export const HORDE_MONSTER_PART_MIN_ZONE = 10;
-export const HORDE_MONSTER_PART_MIN_COMBO = 100;
 export const HORDE_SHARD_PER_EQUIP = 5;
 export const HORDE_SHARD_INCREMENT = 2;
 export const HORDE_RAMPAGE_ENEMY_TIME = 60;
@@ -46,6 +45,8 @@ export const HORDE_RAMPAGE_CRIT_DAMAGE = 0.6;
 export const HORDE_INACTIVE_ITEM_COOLDOWN = 0.05;
 export const HORDE_ENEMY_RESPAWN_TIME = 10;
 export const HORDE_ENEMY_RESPAWN_MAX = 5;
+export const HORDE_MINIBOSS_MIN_ZONE = 21;
+export const HORDE_HEIRLOOM_MIN_ZONE = 31;
 
 export const TREASURE_TIER_UPGRADE_MULT = 5;
 export const TREASURE_TIER_DESTROY_MULT = 4;

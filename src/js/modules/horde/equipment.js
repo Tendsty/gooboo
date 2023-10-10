@@ -10,16 +10,16 @@ export default {
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 5 + 5}
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 4 + 6}
             ];
         },
-        active(lvl) {
+        active() {
             return [
-                {type: 'damagePhysic', value: lvl * 0.15 + 3.45}
+                {type: 'damagePhysic', value: 3.75}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 6,
+        cooldown: () => 8,
         icon: 'mdi-knife-military',
         activeIcon: 'mdi-knife-military',
         activeColor: 'red'
@@ -32,12 +32,12 @@ export default {
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 1000 + 1000}
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 800 + 1200}
             ];
         },
-        active(lvl) {
+        active() {
             return [
-                {type: 'heal', value: lvl * 0.005 + 0.245}
+                {type: 'heal', value: 0.225}
             ];
         },
         activeType: 'combat',
@@ -83,7 +83,7 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'bone', value: 4.75 + lvl * 0.25}
+                {type: 'bone', value: 3.75 + lvl * 0.25}
             ];
         },
         activeType: 'utility',
@@ -105,7 +105,7 @@ export default {
         },
         active() {
             return [
-                {type: 'stun', value: 5}
+                {type: 'stun', value: 8}
             ];
         },
         activeType: 'combat',
@@ -129,11 +129,11 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'damagePhysic', value: 24 + lvl}
+                {type: 'damagePhysic', value: 8 + lvl}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 20,
+        cooldown: () => 35,
         icon: 'mdi-sword',
         activeIcon: 'mdi-sword',
         activeColor: 'orange'
@@ -149,14 +149,14 @@ export default {
                 {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.1 + 2.4}
             ];
         },
-        active(lvl) {
+        active() {
             return [
-                {type: 'damageMagic', value: lvl * 0.6 + 10.4},
-                {type: 'heal', value: 0.06}
+                {type: 'damageMagic', value: 4.5},
+                {type: 'heal', value: 0.03}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 33,
+        cooldown: () => 16,
         icon: 'mdi-shoe-cleat',
         activeIcon: 'mdi-shoe-cleat',
         activeColor: 'light-blue'
@@ -340,7 +340,7 @@ export default {
         stats() {
             return [
                 {isPositive: false, type: 'mult', name: 'hordeHeirloomChance', value: 0.7},
-                {isPositive: true, type: 'mult', name: 'hordeSoulGain', value: 1.15}
+                {isPositive: true, type: 'mult', name: 'currencyHordeSoulCorruptedGain', value: 1.15}
             ];
         },
         masteryBoost: 0.25,
@@ -860,7 +860,7 @@ export default {
         stats() {
             return [
                 {isPositive: true, type: 'mult', name: 'currencyHordeBoneGain', value: 1.75},
-                {isPositive: true, type: 'mult', name: 'hordeSoulGain', value: 1.15},
+                {isPositive: true, type: 'mult', name: 'currencyHordeSoulCorruptedGain', value: 1.15},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
             ];
         },
@@ -986,7 +986,7 @@ export default {
         cap: 10,
         stats() {
             return [
-                {isPositive: true, type: 'mult', name: 'hordeSoulGain', value: 1.05},
+                {isPositive: true, type: 'mult', name: 'currencyHordeSoulCorruptedGain', value: 1.05},
                 {isPositive: true, type: 'mult', name: 'hordeHeirloomChance', value: 1.05},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
             ];

@@ -172,7 +172,7 @@ export default [
     ]},
     {id: 19, collection: 'dangerousWeapons', reward: [
         {name: 'hordeBossRequirement', type: 'base', value: -15},
-        {name: 'hordeSoulGain', type: 'mult', value: 1.12}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.12}
     ], color: 'brown', icons: [
         {"x": -0.7, "y": 0, "rotate": 0, "size": 1, "icon": "mdi-bowl"},
         {"x": -0.2, "y": 0.15, "rotate": 0, "size": 2, "icon": "mdi-minus"},
@@ -186,7 +186,7 @@ export default [
     ]},
     {id: 20, collection: 'dangerousWeapons', reward: [
         {name: 'hordeItemChance', type: 'mult', value: 1.5},
-        {name: 'hordeSoulGain', type: 'mult', value: 1.12}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.12}
     ], color: 'pale-pink', icons: [
         {"x": -0.15, "y": 0.2, "rotate": 0, "size": 2, "icon": "mdi-human"},
         {"x": 0.4, "y": 0, "rotate": 0, "size": 1, "icon": "mdi-pistol"},
@@ -194,7 +194,7 @@ export default [
     ]},
     {id: 21, collection: 'dangerousWeapons', reward: [
         {name: 'currencyHordeMonsterPartGain', type: 'mult', value: 1.2},
-        {name: 'hordeSoulGain', type: 'mult', value: 1.1}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.1}
     ], color: 'amber', icons: [
         {"x": 0.3, "y": -0.85, "rotate": 0, "size": 1.45, "icon": "mdi-white-balance-sunny"},
         {"x": -0.3, "y": -0.25, "rotate": -45, "size": 2, "icon": "mdi-minus"},
@@ -203,7 +203,7 @@ export default [
         {"x": 0.2, "y": 0.55, "rotate": 10, "size": 1, "icon": "mdi-fire"}
     ]},
     {id: 22, collection: 'dangerousWeapons', reward: [
-        {name: 'hordeSoulGain', type: 'mult', value: 1.25}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.25}
     ], color: 'cherry', icons: [
         {"x": -0.85, "y": 0, "rotate": 0, "size": 1.5, "icon": "mdi-logout"},
         {"x": 0, "y": 0, "rotate": 0, "size": 1.25, "icon": "mdi-saw-blade"},
@@ -240,7 +240,7 @@ export default [
         {"x": 0.4, "y": 0.75, "rotate": 0, "size": 0.75, "icon": "mdi-grass"}
     ]},
     {id: 26, collection: 'supplyAndSupport', reward: [
-        {name: 'hordeSoulGain', type: 'mult', value: 1.08},
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.08},
         {name: 'currencyHordeBoneCap', type: 'mult', value: 2.25}
     ], color: 'light-grey', icons: [
         {"x": 0, "y": 0, "rotate": 0, "size": 2, "icon": "mdi-human-handsdown"},
@@ -275,7 +275,7 @@ export default [
         {"x": 0.25, "y": -0.6, "rotate": 0, "size": 1.25, "icon": "mdi-antenna"}
     ]},
     {id: 30, collection: 'supplyAndSupport', reward: [
-        {name: 'hordeSoulGain', type: 'mult', value: 1.18},
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.18},
         {name: 'hordeHeirloomChance', type: 'base', value: 0.04}
     ], color: 'dark-grey', icons: [
         {"x": -0.15, "y": 0.5, "rotate": 0, "size": 2.5, "icon": "mdi-human-handsdown"},
@@ -291,7 +291,7 @@ export default [
         {"x": 0, "y": -0.5, "rotate": 0, "size": 2.5, "icon": "mdi-cancel"}
     ]},
     {id: 32, collection: 'againstTheCorruption', reward: [
-        {name: 'hordeSoulGain', type: 'mult', value: 1.15},
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.15},
         {name: 'hordeCorruption', type: 'mult', value: 1 / 1.1}
     ], color: 'pale-green', icons: [
         {"x": 0, "y": 0, "rotate": 0, "size": 2, "icon": "mdi-filter"},
@@ -322,7 +322,7 @@ export default [
         {"x": -0.6, "y": 0.25, "rotate": 30, "size": 1.95, "icon": "mdi-torch"}
     ]},
     {id: 35, collection: 'againstTheCorruption', reward: [
-        {name: 'hordeSoulGain', type: 'mult', value: 1.75},
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.75},
         {name: 'hordeCorruption', type: 'bonus', value: 0.2}
     ], color: 'pink', icons: [
         {"x": -0.65, "y": 0.4, "rotate": 180, "size": 3, "icon": "mdi-alpha-t"},

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP, SECONDS_PER_HOUR } from "../js/constants";
+import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_HEIRLOOM_MIN_ZONE, HORDE_MINIBOSS_MIN_ZONE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP, SECONDS_PER_HOUR } from "../js/constants";
 import { buildNum, capitalize } from "../js/utils/format";
 import { chance, randomElem, randomInt } from "../js/utils/random";
 import { logBase } from "../js/utils/math";
@@ -94,7 +94,7 @@ export default {
             };
         },
         enemyBone: () => (zone, combo = 0) => {
-            return Math.pow(2.5, zone) * (combo * HORDE_COMBO_BONE + 1) * 30;
+            return Math.pow(1.6, zone) * (combo * HORDE_COMBO_BONE + 1) * 90;
         },
         enemyMonsterPart: () => (zone) => {
             return Math.pow(1.1, zone - 10) * 0.2;
@@ -196,6 +196,12 @@ export default {
                 }
             }
             return i;
+        },
+        canSpawnMiniboss: (state, getters, rootState) => {
+            return rootState.stat.horde_maxZone.value >= HORDE_MINIBOSS_MIN_ZONE;
+        },
+        canFindHeirloom: (state, getters, rootState) => {
+            return rootState.stat.horde_maxZone.value >= HORDE_HEIRLOOM_MIN_ZONE;
         }
     },
     mutations: {
@@ -490,7 +496,6 @@ export default {
             const maxZone = rootState.stat.horde_maxZone.value;
             if (maxZone > 1) {
                 dispatch('meta/globalLevelPart', {key: 'horde_0', amount: maxZone - 1}, {root: true});
-                dispatch('mult/setMult', {name: 'currencyHordeBoneCap', key: 'zoneCleared', value: Math.pow(2, maxZone - 1)}, {root: true});
             }
             if (!rootState.unlock.hordeItems.use && maxZone > 5) {
                 commit('unlock/unlock', 'hordeItems', {root: true});
@@ -511,7 +516,8 @@ export default {
             // Raise miniboss rewards
             if (maxZone > 20) {
                 const zoneBase = maxZone - 20;
-                dispatch('mult/setBase', {name: 'hordeSoulGain', key: 'zoneCleared', value: Math.pow(1.12, zoneBase - 1) * zoneBase}, {root: true});
+                dispatch('mult/setBase', {name: 'currencyHordeSoulCorruptedGain', key: 'zoneCleared', value: Math.pow(1.16, zoneBase - 1) * zoneBase}, {root: true});
+                dispatch('mult/setBase', {name: 'currencyHordeSoulCorruptedCap', key: 'zoneCleared', value: Math.pow(1.16, zoneBase - 1) * zoneBase * 100}, {root: true});
             }
             if (maxZone > 30) {
                 const zoneBase = maxZone - 31;
@@ -521,10 +527,6 @@ export default {
         killEnemy({ state, rootState, getters, rootGetters, commit, dispatch }) {
             if (state.bossFight === 0) {
                 dispatch('currency/gain', {feature: 'horde', name: 'bone', gainMult: true, amount: getters.currentBone * state.enemy.loot}, {root: true});
-
-                if (state.zone >= HORDE_MONSTER_PART_MIN_ZONE && state.combo >= HORDE_MONSTER_PART_MIN_COMBO) {
-                    dispatch('currency/gain', {feature: 'horde', name: 'monsterPart', gainMult: true, amount: getters.currentMonsterPart * state.enemy.loot}, {root: true});
-                }
             }
 
             dispatch('findItems', 1);
@@ -541,10 +543,10 @@ export default {
 
             if (state.bossFight === 1) {
                 // Get souls
-                dispatch('currency/gain', {feature: 'horde', name: 'soulCorrupted', amount: rootGetters['mult/get']('hordeSoulGain')}, {root: true});
+                dispatch('currency/gain', {feature: 'horde', name: 'soulCorrupted', amount: rootGetters['mult/get']('currencyHordeSoulCorruptedGain')}, {root: true});
 
                 // Chance for heirloom
-                if (chance(rootGetters['mult/get']('hordeHeirloomChance'), rootGetters['system/nextRng']('horde_heirloom')[0])) {
+                if (getters.canFindHeirloom && chance(rootGetters['mult/get']('hordeHeirloomChance'), rootGetters['system/nextRng']('horde_heirloom')[0])) {
                     dispatch('findHeirloom', state.zone);
 
                     // Finding a heirloom with help removes 1 nostalgia
@@ -716,7 +718,9 @@ export default {
             dispatch('currency/reset', {feature: 'horde', type: 'regular'}, {root: true});
             dispatch('stat/reset', {feature: 'horde', type: 'regular'}, {root: true});
 
-            dispatch('mult/removeKey', {type: 'mult', name: 'currencyHordeBoneCap', key: 'zoneCleared'}, {root: true});
+            dispatch('mult/removeKey', {name: 'currencyHordeSoulCorruptedGain', type: 'base', key: 'zoneCleared'}, {root: true});
+            dispatch('mult/removeKey', {name: 'currencyHordeSoulCorruptedCap', type: 'base', key: 'zoneCleared'}, {root: true});
+            dispatch('mult/removeKey', {name: 'hordeHeirloomChance', type: 'base', key: 'zoneCleared'}, {root: true});
 
             commit('updateKey', {key: 'zone', value: 1});
             commit('updateKey', {key: 'combo', value: 0});

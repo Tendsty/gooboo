@@ -67,7 +67,6 @@ export default {
   hordeItemChance: 'Ausrüstungs-Chance',
   hordeBossRequirement: 'Boss-Anforderung',
   hordeRespawn: 'Wiedererscheinungszeit',
-  hordeSoulGain: 'Seelen-Einkommen',
   hordeHeirloomChance: 'Erbstück-Chance',
   hordeHeirloomAmount: 'Erbstück-Höchsteinkommen',
   hordeHeirloomEffect: 'Erbstück-Effekt',

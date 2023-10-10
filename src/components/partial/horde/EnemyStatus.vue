@@ -26,6 +26,7 @@
       <div v-if="hasSigils" class="d-flex flex-wrap mx-n1 mt-n1 mb-1">
         <sigil v-for="(item, key) in enemyStats.sigil" :key="'sigil-' + key" class="ma-1" :name="key" :tier="item"></sigil>
       </div>
+      <div v-else-if="zone >= 20" style="height: 48px;"></div>
       <v-progress-linear height="24" color="green" class="balloon-text-dynamic" :value="enemyPercentHealth">
         <v-icon class="health-bar-icon" small>mdi-heart</v-icon>
         <span v-if="enemyStats === null">-</span>
@@ -79,46 +80,53 @@
           <div>{{ $vuetify.lang.t('$vuetify.horde.rampage.effectCurrent', $formatNum(fightRampage), $formatNum(rampageStats.attackNow, true), $formatNum(rampageStats.critChanceNow * 100, true), $formatNum(rampageStats.critDamageNow * 100, true)) }}</div>
         </gb-tooltip>
       </entity-status>
-      <div v-if="enemyStats !== null" class="d-flex flex-wrap my-1 mx-n1">
-        <gb-tooltip key="reward-bone" v-if="bossFight === 0" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_bone.name'))">
+      <div v-else style="height: 60px;"></div>
+      <div class="d-flex flex-wrap my-1 mx-n1">
+        <template v-if="enemyStats !== null">
+          <gb-tooltip key="reward-bone" v-if="bossFight === 0" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_bone.name'))">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_bone.color } ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-bone</v-icon>{{ $formatNum(currentBone) }}</v-chip>
+            </template>
+            <stat-breakdown name="currencyHordeBoneGain" :base="currentBoneBase" :multArray="basicLootMult"></stat-breakdown>
+          </gb-tooltip>
+          <gb-tooltip key="reward-soul" v-if="bossFight === 1" :title-text="$vuetify.lang.t('$vuetify.currency.horde_soulCorrupted.name')">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_soulCorrupted.color } ${ themeModifier }`" v-bind="attrs" v-on="on">
+                <v-icon class="mr-2">mdi-ghost</v-icon>
+                {{ $formatNum(hordeSoulGain) }}
+              </v-chip>
+            </template>
+            <stat-breakdown name="currencyHordeSoulCorruptedGain"></stat-breakdown>
+          </gb-tooltip>
+          <gb-tooltip key="reward-heirloom" v-if="bossFight === 1 && canFindHeirloom && hordeHeirloomChance > 0" :title-text="$vuetify.lang.t('$vuetify.horde.heirloom.name')">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`cyan ${ themeModifier }`" v-bind="attrs" v-on="on">
+                <v-icon class="mr-2">mdi-necklace</v-icon>
+                {{ $formatNum(hordeHeirloomChance * 100, true) }}%
+              </v-chip>
+            </template>
+            <div>{{ $vuetify.lang.t('$vuetify.horde.heirloom.description') }}</div>
+            <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.chance') }}</h3>
+            <stat-breakdown name="hordeHeirloomChance"></stat-breakdown>
+            <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</h3>
+            <stat-breakdown name="hordeHeirloomAmount"></stat-breakdown>
+            <alert-text class="mt-2" type="info">{{ $vuetify.lang.t('$vuetify.horde.heirloom.descriptionDouble') }}</alert-text>
+            <template v-if="hordeNostalgia > 0">
+              <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.hordeNostalgia') }}</h3>
+              <stat-breakdown name="hordeNostalgia"></stat-breakdown>
+              <div>{{ $vuetify.lang.t('$vuetify.horde.heirloom.descriptionNostalgia') }}</div>
+            </template>
+          </gb-tooltip>
+        </template>
+        <gb-tooltip
+          key="reward-monster-part"
+          v-else-if="respawn <= 0 && zone >= monsterPartMinZone && combo > 0"
+          :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_monsterPart.name'))"
+        >
           <template v-slot:activator="{ on, attrs }">
-            <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_bone.color } ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-bone</v-icon>{{ $formatNum(currentBone) }}</v-chip>
-          </template>
-          <stat-breakdown name="currencyHordeBoneGain" :base="currentBoneBase" :multArray="basicLootMult"></stat-breakdown>
-        </gb-tooltip>
-        <gb-tooltip key="reward-monster-part" v-if="bossFight === 0 && zone >= monsterPartMinZone && combo >= monsterPartMinCombo" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_monsterPart.name'))">
-          <template v-slot:activator="{ on, attrs }">
-            <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_monsterPart.color } ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-stomach</v-icon>{{ $formatNum(currentMonsterPart, true) }}</v-chip>
+            <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_monsterPart.color } ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-stomach</v-icon>{{ $formatNum(currentMonsterPart, true) }}/s</v-chip>
           </template>
           <stat-breakdown name="currencyHordeMonsterPartGain" :base="currentMonsterPartBase" :multArray="basicLootMult"></stat-breakdown>
-        </gb-tooltip>
-        <gb-tooltip key="reward-soul" v-if="bossFight === 1" :title-text="$vuetify.lang.t('$vuetify.currency.horde_soulCorrupted.name')">
-          <template v-slot:activator="{ on, attrs }">
-            <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_soulCorrupted.color } ${ themeModifier }`" v-bind="attrs" v-on="on">
-              <v-icon class="mr-2">mdi-ghost</v-icon>
-              {{ $formatNum(hordeSoulGain) }}
-            </v-chip>
-          </template>
-          <stat-breakdown name="hordeSoulGain"></stat-breakdown>
-        </gb-tooltip>
-        <gb-tooltip key="reward-heirloom" v-if="bossFight === 1 && hordeHeirloomChance > 0" :title-text="$vuetify.lang.t('$vuetify.horde.heirloom.name')">
-          <template v-slot:activator="{ on, attrs }">
-            <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`cyan ${ themeModifier }`" v-bind="attrs" v-on="on">
-              <v-icon class="mr-2">mdi-necklace</v-icon>
-              {{ $formatNum(hordeHeirloomChance * 100, true) }}%
-            </v-chip>
-          </template>
-          <div>{{ $vuetify.lang.t('$vuetify.horde.heirloom.description') }}</div>
-          <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.chance') }}</h3>
-          <stat-breakdown name="hordeHeirloomChance"></stat-breakdown>
-          <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</h3>
-          <stat-breakdown name="hordeHeirloomAmount"></stat-breakdown>
-          <alert-text class="mt-2" type="info">{{ $vuetify.lang.t('$vuetify.horde.heirloom.descriptionDouble') }}</alert-text>
-          <template v-if="hordeNostalgia > 0">
-            <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.hordeNostalgia') }}</h3>
-            <stat-breakdown name="hordeNostalgia"></stat-breakdown>
-            <div>{{ $vuetify.lang.t('$vuetify.horde.heirloom.descriptionNostalgia') }}</div>
-          </template>
         </gb-tooltip>
       </div>
     </v-card-text>
@@ -127,7 +135,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_MONSTER_PART_MIN_COMBO, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME } from '../../../js/constants';
+import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME } from '../../../js/constants';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 import EntityStatus from './EntityStatus.vue';
@@ -144,7 +152,8 @@ export default {
       unlock: state => state.unlock,
       currency: state => state.currency,
       fightTime: state => state.horde.fightTime,
-      fightRampage: state => state.horde.fightRampage
+      fightRampage: state => state.horde.fightRampage,
+      respawn: state => state.horde.respawn
     }),
     ...mapGetters({
       currentCorruption: 'horde/currentCorruption',
@@ -153,7 +162,8 @@ export default {
       corruptionStats: 'horde/currentCorruptionStats',
       corruptionBase: 'horde/currentCorruptionBase',
       currentSigils: 'horde/currentSigils',
-      currentSigilVariety: 'horde/currentSigilVariety'
+      currentSigilVariety: 'horde/currentSigilVariety',
+      canFindHeirloom: 'horde/canFindHeirloom'
     }),
     enemyPercentHealth() {
       if (this.enemyStats === null) {
@@ -168,13 +178,10 @@ export default {
       return this.$store.getters['mult/get']('currencyHordeBoneGain', this.currentBoneBase, this.enemyStats.loot);
     },
     currentMonsterPart() {
-      if (this.enemyStats === null) {
-        return 0;
-      }
-      return this.$store.getters['mult/get']('currencyHordeMonsterPartGain', this.currentMonsterPartBase, this.enemyStats.loot);
+      return this.$store.getters['mult/get']('currencyHordeMonsterPartGain', this.currentMonsterPartBase);
     },
     hordeSoulGain() {
-      return this.$store.getters['mult/get']('hordeSoulGain');
+      return this.$store.getters['mult/get']('currencyHordeSoulCorruptedGain');
     },
     hordeHeirloomChance() {
       return this.$store.getters['mult/get']('hordeHeirloomChance');
@@ -208,9 +215,6 @@ export default {
     },
     monsterPartMinZone() {
       return HORDE_MONSTER_PART_MIN_ZONE;
-    },
-    monsterPartMinCombo() {
-      return HORDE_MONSTER_PART_MIN_COMBO;
     },
     basicLootMult() {
       return (this.enemyStats === null || this.enemyStats.loot === 1) ? [] : [{name: 'hordeBasicLoot', value: this.enemyStats.loot}];

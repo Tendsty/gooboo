@@ -33,7 +33,8 @@ const effect = {
         ],
     ],
     horde: [
-        [{name: 'hordeSoulGain', type: 'mult', value: lvl => lvl * 0.1 + 1}],
+        [{name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => lvl * 0.1 + 1}],
+        [{name: 'currencyHordeSoulCorruptedCap', type: 'mult', value: lvl => lvl * 0.1 + 1}]
     ],
     farm: [
         [{name: 'farmExperience', type: 'mult', value: lvl => lvl * 0.1 + 1}],

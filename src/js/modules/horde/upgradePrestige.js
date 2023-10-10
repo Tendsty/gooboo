@@ -40,7 +40,7 @@ export default {
         return {horde_soulEmpowered: Math.pow(1.9, lvl) * 40};
     }, effect: [
         {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'hordeSoulGain', type: 'mult', value: lvl => lvl * 0.03 + 1}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => lvl * 0.03 + 1}
     ]},
     backpack: {type: 'prestige', cap: 4, requirementBase, requirementStat, requirementValue: 31, price(lvl) {
         return {horde_soulEmpowered: Math.pow(10, lvl) * 50};
@@ -69,14 +69,14 @@ export default {
     candleCircle: {type: 'prestige', requirementBase, requirementStat, requirementValue: 61, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * 4000};
     }, effect: [
-        {name: 'hordeSoulGain', type: 'mult', value: lvl => Math.pow(1.03, lvl)},
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.03, lvl)},
         {name: 'hordeRespawn', type: 'base', value: lvl => lvl * -5}
     ]},
     soulLuck: {type: 'prestige', requirementBase, requirementStat, requirementValue: 71, price(lvl) {
         return {horde_soulEmpowered: Math.pow(2.5, lvl) * 7500};
     }, effect: [
         {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.15 + 1},
-        {name: 'hordeSoulGain', type: 'mult', value: lvl => Math.pow(1.04, lvl)}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.04, lvl)}
     ]},
     containmentChamber: {type: 'prestige', requirementBase, requirementStat, requirementValue: 81, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.45, lvl) * buildNum(30, 'K')};

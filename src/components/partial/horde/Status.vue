@@ -33,7 +33,7 @@
         </template>
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.enemyRespawn`, $formatTime(enemyRespawn), $formatNum(enemyRespawnMax)) }}</div>
       </gb-tooltip>
-      <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.mult.hordeMinibossTime`)">
+      <gb-tooltip v-if="canSpawnMiniboss" :title-text="$vuetify.lang.t(`$vuetify.mult.hordeMinibossTime`)">
         <template v-slot:activator="{ on, attrs }">
           <v-chip class="mx-1 boss-count-chip" :color="`pale-purple ${ themeModifier }`" v-bind="attrs" v-on="on">
             <v-icon size="18">mdi-skull</v-icon>
@@ -120,7 +120,8 @@ export default {
       comboRequiredBase: 'horde/comboRequiredBase',
       itemsActiveList: 'horde/itemsActiveList',
       maxMysticalShards: 'horde/maxMysticalShards',
-      currentSoulMult: 'horde/currentSoulMult'
+      currentSoulMult: 'horde/currentSoulMult',
+      canSpawnMiniboss: 'horde/canSpawnMiniboss',
     }),
     isMaxZone() {
       return this.zone >= this.maxZone;

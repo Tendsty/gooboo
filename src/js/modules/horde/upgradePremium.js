@@ -26,7 +26,8 @@ export default {
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 110};
     }, effect: [
-        {name: 'hordeSoulGain', type: 'mult', value: lvl => lvl * 0.25 + 1}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => lvl * 0.25 + 1},
+        {name: 'currencyHordeSoulCorruptedCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
     moreMastery: {type: 'premium', requirement() {
         return store.state.stat.horde_maxZone.total > 75;

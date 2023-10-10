@@ -10,7 +10,7 @@ export default {
         {name: 'currencyHordeMonsterPartGain', type: 'mult', value: lvl => lvl * 0.02 + 1}
     ]},
     spirit: {minZone: 40, color: 'purple', icon: 'mdi-ghost', effect: [
-        {name: 'hordeSoulGain', type: 'mult', value: lvl => lvl * 0.03 + 1}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => lvl * 0.03 + 1}
     ]},
     sharpsight: {minZone: 50, color: 'cyan', icon: 'mdi-magnify', effect: [
         {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.05 + 1}

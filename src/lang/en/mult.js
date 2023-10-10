@@ -68,7 +68,6 @@ export default {
   hordeItemChance: 'Equipment chance',
   hordeBossRequirement: 'Boss requirement',
   hordeRespawn: 'Respawn time',
-  hordeSoulGain: 'Soul gain',
   hordeHeirloomChance: 'Heirloom chance',
   hordeHeirloomAmount: 'Maximum heirloom gain',
   hordeHeirloomEffect: 'Heirloom effect',

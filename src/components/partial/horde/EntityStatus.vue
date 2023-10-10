@@ -6,7 +6,7 @@
 
 <template>
   <div>
-    <div v-if="maxDivisionShield > 0 || divisionShield > 0 || maxRevive > 0" class="d-flex justify-end mb-1 mt-n2">
+    <div class="d-flex justify-end mb-1 mt-n2" style="min-height: 32px;">
       <gb-tooltip key="status-division-shield" v-if="maxDivisionShield > 0 || divisionShield > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeDivisionShield')">
         <template v-slot:activator="{ on, attrs }">
           <v-chip label small :color="`pale-blue ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-circle-half-full</v-icon>{{ $formatNum(divisionShield) }}</v-chip>
