@@ -81,7 +81,7 @@
         </gb-tooltip>
       </entity-status>
       <div v-else style="height: 60px;"></div>
-      <div class="d-flex flex-wrap my-1 mx-n1">
+      <div class="d-flex flex-wrap my-1 mx-n1" style="min-height: 32px;">
         <template v-if="enemyStats !== null">
           <gb-tooltip key="reward-bone" v-if="bossFight === 0" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_bone.name'))">
             <template v-slot:activator="{ on, attrs }">

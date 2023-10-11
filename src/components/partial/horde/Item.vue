@@ -200,7 +200,7 @@ export default {
       return this.$store.state.unlock.hordeItemMastery.see;
     },
     isPretend() {
-      return (!this.canUseActive && this.item.cooldownLeft === 0) || this.disabled;
+      return (!this.canUseActive && this.item.cooldownLeft <= 0) || this.disabled;
     },
     shardIncrement() {
       return HORDE_SHARD_INCREMENT;

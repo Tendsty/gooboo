@@ -94,7 +94,8 @@
         </template>
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.stunResist`) }}</div>
         <stat-breakdown v-if="isPlayer" name="hordeStunResist"></stat-breakdown>
-        <alert-text v-if="!isPlayer && bossFight" type="info">{{ $vuetify.lang.t(`$vuetify.horde.stunBoss`) }}</alert-text>
+        <alert-text v-if="!isPlayer && bossFight === 1" type="info">{{ $vuetify.lang.t(`$vuetify.horde.stunMiniboss`) }}</alert-text>
+        <alert-text v-if="!isPlayer && bossFight === 2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.stunBoss`) }}</alert-text>
       </gb-tooltip>
       <gb-tooltip key="status-toxic" v-if="toxic > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeToxic')">
         <template v-slot:activator="{ on, attrs }">
@@ -144,7 +145,8 @@
             </tr>
           </tbody>
         </v-simple-table>
-        <alert-text v-if="!isPlayer && bossFight" type="info">{{ $vuetify.lang.t(`$vuetify.horde.bossBioResist`) }}</alert-text>
+        <alert-text v-if="!isPlayer && bossFight === 1" type="info">{{ $vuetify.lang.t(`$vuetify.horde.minibossBioResist`) }}</alert-text>
+        <alert-text v-if="!isPlayer && bossFight === 2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.bossBioResist`) }}</alert-text>
       </gb-tooltip>
     </div>
   </div>

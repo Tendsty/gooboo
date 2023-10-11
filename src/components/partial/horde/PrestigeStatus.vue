@@ -9,7 +9,7 @@ export default {
   components: { StatusTemplate },
   computed: {
     prestigeGain() {
-      return this.$store.getters['currency/value']('horde_soulCorrupted') > 0 ? {horde_soulEmpowered: this.$store.getters['currency/value']('horde_soulCorrupted') * this.$store.getters['horde/currentSoulMult']} : {};
+      return this.$store.state.currency.horde_soulCorrupted.value > 0 ? {horde_soulEmpowered: this.$store.state.currency.horde_soulCorrupted.value} : {};
     }
   }
 }

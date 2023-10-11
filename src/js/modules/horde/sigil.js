@@ -18,6 +18,7 @@ export default {
         }
     },
     bashing: {
+        minZone: 22,
         icon: 'mdi-hammer',
         color: 'pale-red',
         active: {
@@ -26,12 +27,13 @@ export default {
                     {type: 'stun', value: lvl + 2}
                 ];
             },
-            cooldown: () => 12,
+            cooldown: () => 6,
             startCooldown: () => 0,
             uses: lvl => lvl
         }
     },
     recovery: {
+        minZone: 24,
         icon: 'mdi-medical-bag',
         color: 'green',
         stats: lvl => {
@@ -51,7 +53,7 @@ export default {
         }
     },
     toughness: {
-        minZone: 25,
+        minZone: 26,
         icon: 'mdi-shield-sword',
         color: 'cherry',
         stats: lvl => {

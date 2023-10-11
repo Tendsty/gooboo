@@ -1310,7 +1310,6 @@ export default {
     newLoadout: 'Neues Set',
     noLoadouts: 'Keine Sets vorhanden',
     monsterPartHint: 'Gehe zu Zone 10+ und erreiche Gegner #101, um eine neue Währung zu entdecken! Diese Währung ist essentiell, um weiter fortzuschreiten, da sie beim Erhöhen der Knochen-Kapazität hilft.',
-    earlyPrestige: 'Die Seelen zu retten ist ein riskanter Prozess, der mehr Zeit benötigt, um sicher durchgeführt zu werden. Du könntest sie jetzt mit einem Prestige umwandeln, würdest aber nur {0}% durch rituelle Instabilität behalten',
     enemyDescription: 'Jeder Gegner in der selben Zone hat x{0} Angriff, x{1} Leben und +{2}% Knochen im Vergleich zum vorherigen Gegner. Dies ist Gegner #{3} und dieser hat x{4} Angriff, x{5} Leben und +{6}% Knochen. All diese Effekte werden bei deinem Tod zurückgesetzt.',
     enemySigil1: {
       s: 'Gegner in dieser Zone haben {0} Zeichen',
@@ -1505,12 +1504,8 @@ export default {
         0: 'Entferne',
         1: 'Gift'
       },
-      permanentAttack: {
-        0: 'Erhöhe den Angriff um',
-        1: '(bis zum Prestige)'
-      },
-      permanentHealth: {
-        0: 'Erhöhe die Leben um',
+      permanentStat: {
+        0: 'Erhöhe {0} um',
         1: '(bis zum Prestige)'
       }
     },

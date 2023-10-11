@@ -55,6 +55,7 @@ export default {
   hordeCutting: 'Cutting',
   hordeDivisionShield: 'Division shield',
   hordeStunResist: 'Stun resist',
+  hordeEnemyActiveStart: 'Enemy start cooldown',
   hordePhysicConversion: 'Physical damage conversion',
   hordeMagicConversion: 'Magical damage conversion',
   hordeBioConversion: 'Biological damage conversion',

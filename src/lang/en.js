@@ -1144,6 +1144,7 @@ export default {
     miningTemperature: 'Temperature',
     villageOffering: 'Offerings',
     zoneCleared: 'Zone cleared',
+    zoneClearedTotal: 'Highest zone cleared',
     zone: 'Zone',
     hordeBasicLoot: 'Basic loot',
     hordeItemPermanent: 'Equipment effect',
@@ -1310,7 +1311,6 @@ export default {
     newLoadout: 'New loadout',
     noLoadouts: 'No loadouts',
     monsterPartHint: 'Go to zone 10+ and reach enemy #101 to discover a new currency! That currency is essential to progess further, as it helps you raise your bone capacity.',
-    earlyPrestige: 'Trying to save these souls is a risky process that needs more time to be done safely. You could convert these now with a prestige, but only keep {0}% of them due to ritual instability',
     enemyDescription: 'Each enemy in the same zone has x{0} attack, x{1} health and +{2}% bones compared to the previous enemy. This is enemy #{3} and has x{4} attack, x{5} health and +{6}% bones. All of these effects reset when you die.',
     enemySigil1: {
       s: 'Enemies in this zone have {0} sigil',
@@ -1356,8 +1356,10 @@ export default {
     stunPlayer: 'You are stunned and cannot attack',
     stunEnemy: 'This enemy is stunned and cannot attack',
     stunResist: 'Recover faster from stuns',
-    stunBoss: 'Bosses and minibosses receive +1 stun resist',
-    bossBioResist: 'Bosses and minibosses only take 20% biological damage',
+    stunBoss: 'Bosses receive +2 stun resist',
+    stunMiniboss: 'Minibosses receive +1 stun resist',
+    bossBioResist: 'Bosses only take 10% biological damage',
+    minibossBioResist: 'Minibosses only take 20% biological damage',
     enemyRespawn: 'Enemies take {0} to respawn and up to {1} enemies can be waiting',
     reachBoss: {
       title: 'Reach the boss',
@@ -1498,6 +1500,10 @@ export default {
         0: 'Gain',
         1: 'highest zone bones'
       },
+      monsterPart: {
+        0: 'Gain',
+        1: 'highest zone monster parts'
+      },
       stun: {
         0: 'Stun the opponent',
         1: 'times'
@@ -1522,12 +1528,8 @@ export default {
         0: 'Remove',
         1: 'poison'
       },
-      permanentAttack: {
-        0: 'Increase attack by',
-        1: '(until prestige)'
-      },
-      permanentHealth: {
-        0: 'Increase health by',
+      permanentStat: {
+        0: 'Increase {0} by',
         1: '(until prestige)'
       },
       reviveAll: 'Refill all revives',

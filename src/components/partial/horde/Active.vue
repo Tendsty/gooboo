@@ -46,20 +46,22 @@
       <v-icon small class="mr-1">mdi-timer</v-icon>
       <span>{{ $formatTime(cooldown) }}</span>
       <span v-if="item.cooldownLeft > 0">&nbsp;({{ $formatTime(Math.round(item.cooldownLeft)) }})</span>
-      <span v-else-if="item.activeType === 'utility'">&nbsp;({{ $formatTime(Math.round(nextChargeTime)) }})</span>
+      <span v-else-if="!pretend && item.activeType === 'utility'">&nbsp;({{ $formatTime(Math.round(nextChargeTime)) }})</span>
     </div>
     <div v-if="item.usableInStun" class="text-center mt-0 mb-1">{{ $vuetify.lang.t(`$vuetify.horde.items.usableInStun`) }}</div>
-    <alert-text v-if="item.activeType === 'utility' && item.cooldownLeft <= 0" type="info" style="width: 268px;">{{ $vuetify.lang.t(`$vuetify.horde.items.utilityOvertime`) }}</alert-text>
+    <alert-text v-if="!pretend && item.activeType === 'utility' && item.cooldownLeft <= 0" type="info" class="mb-1" style="width: 268px;">{{ $vuetify.lang.t(`$vuetify.horde.items.utilityOvertime`) }}</alert-text>
     <div class="mt-0" v-for="(elem, key) in effect" :key="key">
-      <span v-if="elem.value === null">{{ $vuetify.lang.t(`$vuetify.horde.active.${elem.type}`) }}</span>
+      <span v-if="elem.value === null">{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }`) }}</span>
       <template v-else>
-        <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${elem.type}.0`) }} </span>
+        <span v-if="elem.stat">{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`, $vuetify.lang.t(`$vuetify.mult.${ elem.stat }`)) }} </span>
+        <span v-else>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`) }} </span>
         <span v-if="['stun', 'silence', 'revive'].includes(elem.type)">{{ $formatNum(elem.value) }} </span>
         <span v-else>{{ $formatNum(elem.value * 100, true) }}% </span>
         <span v-if="elem.type === 'poison' || elem.type.substring(0, 6) === 'damage'">({{ $formatNum(elem.value * playerAttack) }}) </span>
         <span v-else-if="elem.type === 'heal'">({{ $formatNum(elem.value * playerMaxHealth) }}) </span>
         <span v-else-if="elem.type === 'bone'"> ({{ $formatNum(elem.value * highestBone) }}) </span>
-        <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${elem.type}.1`) }}</span>
+        <span v-else-if="elem.type === 'monsterPart'"> ({{ $formatNum(elem.value * highestMonsterPart) }}) </span>
+        <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.1`) }}</span>
       </template>
     </div>
     <alert-text v-if="item.cooldownLeft > 0 && (!item.equipped || item.passive)" type="info">{{ $vuetify.lang.t(`$vuetify.horde.items.inactive`, $formatNum(cooldownRecover * 100)) }}</alert-text>
@@ -104,6 +106,9 @@ export default {
     },
     highestBone() {
       return this.$store.getters['mult/get']('currencyHordeBoneGain', this.$store.getters['horde/enemyBone'](this.$store.state.stat.horde_maxZone.value, 0));
+    },
+    highestMonsterPart() {
+      return this.$store.getters['mult/get']('currencyHordeMonsterPartGain', this.$store.getters['horde/enemyMonsterPart'](this.$store.state.stat.horde_maxZone.value, 0));
     },
     playerMaxHealth() {
       return this.$store.getters['mult/get']('hordeHealth');

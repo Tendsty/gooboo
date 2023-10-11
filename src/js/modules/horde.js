@@ -29,11 +29,30 @@ function playerDie() {
     }
 }
 
+function tickEnemyRespawn(seconds = 1) {
+    store.commit('horde/updateKey', {key: 'enemyTimer', value: Math.min(seconds + store.state.horde.enemyTimer, HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX)});
+    if (store.getters['horde/canSpawnMiniboss']) {
+        store.commit('horde/updateKey', {key: 'minibossTimer', value: Math.min(seconds / store.getters['mult/get']('hordeMinibossTime') + store.state.horde.minibossTimer, 2)});
+    }
+}
+
 function getDamage(amount, type, offender, defender) {
     return amount * offender[type + 'Attack'] * defender[type + 'Taken'];
 }
 
 const damageTypes = ['physic', 'magic', 'bio'];
+const newSimulation = {
+    dead: 0,
+    time: 0,
+    minibossTime: 0,
+    killed: 0,
+    minibossKilled: 0,
+    minibossDead: 0,
+    damage: 0,
+    bone: 0,
+    monsterPartTime: 0,
+    complete: false
+};
 
 export default {
     name: 'horde',
@@ -91,34 +110,41 @@ export default {
             magicTaken: store.getters['mult/get']('hordeMagicTaken'),
             bioTaken: store.getters['mult/get']('hordeBioTaken'),
         };
-        let simulation = {
-            dead: 0,
-            time: 0,
-            killed: 0,
-            damage: 0,
-            bone: 0,
-            monsterPart: 0,
-            complete: false
-        };
+        let simulation = {...newSimulation};
 
         // Run combat
         while (seconds > 0) {
             let respawn = store.state.horde.respawn;
             let secondsSpent = 0;
 
-            if (simulation.dead >= 2 && simulation.killed >= 50 && !simulation.complete) {
+            if (simulation.dead >= 2 && simulation.killed >= 100 && !simulation.complete) {
                 // Combat simulation: gain resources based on average
-                let cycles = Math.floor(seconds / simulation.time);
+                const simTime = simulation.time + simulation.minibossTime + simulation.monsterPartTime;
+                let cycles = Math.floor(seconds / simTime);
+
+                // Regular drops first
                 store.dispatch('currency/gain', {feature: 'horde', name: 'bone', gainMult: true, amount: cycles * simulation.bone});
-                store.dispatch('currency/gain', {feature: 'horde', name: 'monsterPart', gainMult: true, amount: cycles * simulation.monsterPart});
+                store.dispatch('currency/gain', {feature: 'horde', name: 'monsterPart', gainMult: true, amount: cycles * simulation.monsterPartTime * store.getters['horde/currentMonsterPart']});
                 store.commit('stat/add', {feature: 'horde', name: 'totalDamage', value: cycles * simulation.damage});
                 store.dispatch('horde/findItems', cycles * simulation.killed);
-                secondsSpent = simulation.time * cycles;
+
+                // Miniboss stuff after
+                secondsSpent = simTime * cycles;
+                const minibossTimer = secondsSpent / store.getters['mult/get']('hordeMinibossTime') + store.state.horde.minibossTimer;
+                const minibossesKilled = Math.floor(minibossTimer) - (store.state.horde.bossFight === 1 ? 1 : 0);
+                store.commit('horde/updateKey', {key: 'minibossTimer', value: Math.min(minibossTimer - minibossesKilled, 2)});
+                store.dispatch('horde/getMinibossReward', minibossesKilled);
+
                 simulation.complete = true;
             } else if (respawn > 0) {
                 // Wait for the player to respawn
                 secondsSpent = Math.min(respawn, seconds);
                 let newRespawn = respawn - secondsSpent;
+
+                tickEnemyRespawn(secondsSpent);
+                if (simulation.dead) {
+                    simulation.time += secondsSpent;
+                }
 
                 store.commit('horde/updateKey', {key: 'respawn', value: newRespawn});
                 if (newRespawn <= 0) {
@@ -337,20 +363,39 @@ export default {
                     }
                 }
 
+                if (simulation.dead) {
+                    if (store.state.horde.bossFight === 0) {
+                        simulation.time++;
+                    } else if (store.state.horde.bossFight === 1) {
+                        simulation.minibossTime++;
+                    }
+                }
+
                 if (playerHealth <= 0) {
                     simulation.dead++;
+                    if (store.state.horde.bossFight === 1 && simulation.dead) {
+                        simulation.minibossDead++;
+                    }
+                    // Dying to a boss resets the simulation
+                    if (store.state.horde.bossFight === 2 && simulation.dead) {
+                        simulation = {...newSimulation};
+                    }
                     playerDie();
                 } else {
                     store.commit('horde/updatePlayerKey', {key: 'health', value: playerHealth});
                 }
 
                 // Tick respawn timers
-                store.commit('horde/updateKey', {key: 'enemyTimer', value: Math.min(1 + store.state.horde.enemyTimer, HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX)});
-                if (store.getters['horde/canSpawnMiniboss']) {
-                    store.commit('horde/updateKey', {key: 'minibossTimer', value: Math.min(1 / store.getters['mult/get']('hordeMinibossTime') + store.state.horde.minibossTimer, 2)});
-                }
+                tickEnemyRespawn(1);
 
                 if (killEnemy && store.state.horde.enemy) {
+                    if (store.state.horde.bossFight === 1 && simulation.dead) {
+                        simulation.minibossKilled++;
+                    }
+                    // Defeating a boss resets the simulation
+                    if (store.state.horde.bossFight === 2 && simulation.dead) {
+                        simulation = {...newSimulation};
+                    }
                     store.dispatch('horde/killEnemy');
                 }
 
@@ -371,22 +416,19 @@ export default {
                 }
             } else {
                 secondsSpent = Math.min(seconds, HORDE_ENEMY_RESPAWN_TIME - store.state.horde.enemyTimer);
-                // Tick respawn timers
-                store.commit('horde/updateKey', {key: 'enemyTimer', value: Math.min(secondsSpent + store.state.horde.enemyTimer, HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX)});
-                if (store.getters['horde/canSpawnMiniboss']) {
-                    store.commit('horde/updateKey', {key: 'minibossTimer', value: Math.min(secondsSpent / store.getters['mult/get']('hordeMinibossTime') + store.state.horde.minibossTimer, 2)});
+                tickEnemyRespawn(secondsSpent);
+                if (simulation.dead) {
+                    simulation.time += secondsSpent;
                 }
 
                 if (store.state.horde.zone >= HORDE_MONSTER_PART_MIN_ZONE && store.state.horde.combo > 0) {
                     store.dispatch('currency/gain', {feature: 'horde', name: 'monsterPart', gainMult: true, amount: secondsSpent * store.getters['horde/currentMonsterPart']});
-                    simulation.monsterPart += secondsSpent * store.getters['horde/currentMonsterPart'];
+                    if (simulation.dead) {
+                        simulation.monsterPartTime += secondsSpent;
+                    }
                 }
 
                 store.dispatch('horde/updateEnemyStats');
-            }
-
-            if (simulation.dead) {
-                simulation.time += secondsSpent;
             }
 
             seconds -= secondsSpent;
@@ -431,6 +473,7 @@ export default {
         hordeCutting: {display: 'percent', min: 0},
         hordeDivisionShield: {round: true, min: 0},
         hordeStunResist: {round: true, min: 0},
+        hordeEnemyActiveStart: {display: 'percent', min: 0, max: 1},
 
         // Damage type specifics
         hordePhysicConversion: {display: 'percent', baseValue: 1},
@@ -553,12 +596,6 @@ export default {
             }
         }
 
-        if (store.state.horde.itemAttackMult > 0) {
-            obj.itemAttackMult = store.state.horde.itemAttackMult;
-        }
-        if (store.state.horde.itemHealthMult > 0) {
-            obj.itemHealthMult = store.state.horde.itemHealthMult;
-        }
         if (store.state.horde.fightTime > 0) {
             obj.fightTime = store.state.horde.fightTime;
         }
@@ -574,11 +611,14 @@ export default {
         if (store.state.horde.chosenActive !== null) {
             obj.chosenActive = store.state.horde.chosenActive;
         }
+        if (Object.keys(store.state.horde.itemStatMult).length > 0) {
+            obj.itemStatMult = store.state.horde.itemStatMult;
+        }
 
         return obj;
     },
     loadGame(data) {
-        ['zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'itemAttackMult', 'itemHealthMult', 'fightTime', 'fightRampage', 'enemyTimer', 'minibossTimer', 'nostalgiaLost', 'chosenActive'].forEach(elem => {
+        ['zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'fightTime', 'fightRampage', 'enemyTimer', 'minibossTimer', 'nostalgiaLost', 'chosenActive'].forEach(elem => {
             if (data[elem] !== undefined) {
                 store.commit('horde/updateKey', {key: elem, value: data[elem]});
             }
@@ -643,8 +683,13 @@ export default {
                 }
             }
         }
+        if (data.itemStatMult) {
+            for (const [key, elem] of Object.entries(data.itemStatMult)) {
+                store.commit('horde/updateSubkey', {name: 'itemStatMult', key, value: elem});
+                store.dispatch('system/applyEffect', {type: 'mult', name: key, multKey: `hordeItemPermanent`, value: elem + 1});
+            }
+        }
         store.dispatch('horde/checkZoneUnlocks');
-        store.dispatch('horde/applyPermanentEffects');
         store.dispatch('mult/updateExternalCaches', 'hordeNostalgia');
         store.dispatch('horde/updateNostalgia');
     }
