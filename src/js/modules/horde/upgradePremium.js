@@ -78,6 +78,13 @@ export default {
     }, effect: [
         {name: 'reapingHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
     ]},
+    ancientRemembrance: {type: 'premium', cap: 1, requirement() {
+        return store.state.horde.heirloom.remembrance.amount > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 750};
+    }, effect: [
+        {name: 'remembranceHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+    ]},
     ancientHolding: {type: 'premium', cap: 1, requirement() {
         return store.state.horde.heirloom.holding.amount > 0;
     }, price(lvl) {

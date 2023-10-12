@@ -9,7 +9,12 @@
 <template>
   <v-card>
     <v-card-title class="pa-2 justify-center">
-      <span v-if="bossFight === 2">{{ $vuetify.lang.t('$vuetify.horde.boss') }}</span>
+      <span v-if="currentTower !== null">
+        {{ $vuetify.lang.t(`$vuetify.horde.tower.${ currentTower }`) }}
+        <v-icon>mdi-circle-small</v-icon>
+        {{ $vuetify.lang.t(`$vuetify.horde.tower.floor`, towerFloor + 1) }}
+      </span>
+      <span v-else-if="bossFight === 2">{{ $vuetify.lang.t('$vuetify.horde.boss') }}</span>
       <span v-else-if="bossFight === 1">{{ $vuetify.lang.t('$vuetify.horde.miniboss') }}</span>
       <gb-tooltip v-else>
         <template v-slot:activator="{ on, attrs }">
@@ -76,8 +81,8 @@
             </v-chip>
           </template>
           <div>{{ $vuetify.lang.t('$vuetify.horde.rampage.description', $formatTime(fightTime), $formatTime(enemyRampageTime)) }}</div>
-          <div>{{ $vuetify.lang.t('$vuetify.horde.rampage.effect', $formatNum(rampageStats.attack, true), $formatNum(rampageStats.critChance * 100, true), $formatNum(rampageStats.critDamage * 100, true)) }}</div>
-          <div>{{ $vuetify.lang.t('$vuetify.horde.rampage.effectCurrent', $formatNum(fightRampage), $formatNum(rampageStats.attackNow, true), $formatNum(rampageStats.critChanceNow * 100, true), $formatNum(rampageStats.critDamageNow * 100, true)) }}</div>
+          <div>{{ $vuetify.lang.t('$vuetify.horde.rampage.effect', $formatNum(rampageStats.attack, true), $formatNum(rampageStats.critChance * 100, true), $formatNum(rampageStats.critDamage * 100, true), $formatNum(rampageStats.stunResist)) }}</div>
+          <div>{{ $vuetify.lang.t('$vuetify.horde.rampage.effectCurrent', $formatNum(fightRampage), $formatNum(rampageStats.attackNow, true), $formatNum(rampageStats.critChanceNow * 100, true), $formatNum(rampageStats.critDamageNow * 100, true), $formatNum(rampageStats.stunResistNow)) }}</div>
         </gb-tooltip>
       </entity-status>
       <div v-else style="height: 60px;"></div>
@@ -135,7 +140,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME } from '../../../js/constants';
+import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME, HORDE_RAMPAGE_STUN_RESIST } from '../../../js/constants';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 import EntityStatus from './EntityStatus.vue';
@@ -153,7 +158,9 @@ export default {
       currency: state => state.currency,
       fightTime: state => state.horde.fightTime,
       fightRampage: state => state.horde.fightRampage,
-      respawn: state => state.horde.respawn
+      respawn: state => state.horde.respawn,
+      currentTower: state => state.horde.currentTower,
+      towerFloor: state => state.horde.towerFloor
     }),
     ...mapGetters({
       currentCorruption: 'horde/currentCorruption',
@@ -227,9 +234,11 @@ export default {
         attack: HORDE_RAMPAGE_ATTACK,
         critChance: HORDE_RAMPAGE_CRIT_CHANCE,
         critDamage: HORDE_RAMPAGE_CRIT_DAMAGE,
+        stunResist: HORDE_RAMPAGE_STUN_RESIST,
         attackNow: Math.pow(HORDE_RAMPAGE_ATTACK, this.fightRampage),
         critChanceNow: HORDE_RAMPAGE_CRIT_CHANCE * this.fightRampage,
-        critDamageNow: HORDE_RAMPAGE_CRIT_DAMAGE * this.fightRampage
+        critDamageNow: HORDE_RAMPAGE_CRIT_DAMAGE * this.fightRampage,
+        stunResistNow: HORDE_RAMPAGE_STUN_RESIST * this.fightRampage
       };
     }
   }

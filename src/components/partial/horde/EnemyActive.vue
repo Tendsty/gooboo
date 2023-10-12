@@ -37,12 +37,13 @@
       </template>
     </div>
     <div class="mt-0" v-for="(elem, key) in effect" :key="key">
-      <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${elem.type}.0`) }} </span>
-      <span v-if="['stun', 'revive'].includes(elem.type)">{{ $formatNum(elem.value) }} </span>
+      <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`) }} </span>
+      <span v-if="['revive', 'divisionShield'].includes(elem.type)">{{ $formatNum(elem.value) }} </span>
+      <span v-else-if="['stun', 'silence'].includes(elem.type)">{{ $formatTime(elem.value) }} </span>
       <span v-else>{{ $formatNum(elem.value * 100, true) }}% </span>
       <span v-if="elem.type === 'poison' || elem.type.substring(0, 6) === 'damage'">({{ $formatNum(elem.value * enemyAttack) }}) </span>
       <span v-else-if="elem.type === 'heal'">({{ $formatNum(elem.value * enemyMaxHealth) }}) </span>
-      <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${elem.type}.1`) }}</span>
+      <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.1`) }}</span>
     </div>
   </gb-tooltip>
 </template>

@@ -1384,8 +1384,8 @@ export default {
     rampage: {
       name: 'Rampage',
       description: 'Fighting the same enemy for too long makes it angry! You have fought this enemy for {0} and it starts rampaging every {1}.',
-      effect: 'Each time an enemy rampages, it gets x{0} attack, +{1}% crit chance and +{2}% crit damage.',
-      effectCurrent: 'This enemy has rampaged {0} times. It has x{1} attack, +{2}% crit chance and +{3}% crit damage.'
+      effect: 'Each time an enemy rampages, it gets x{0} attack, +{1}% crit chance, +{2}% crit damage, +{3} stun resist and becomes immune to attack reducing effects.',
+      effectCurrent: 'This enemy has rampaged {0} times. It has x{1} attack, +{2}% crit chance, +{3}% crit damage and {4} stun resist.'
     },
     sigil: {
       name: 'Sigil',
@@ -1505,12 +1505,12 @@ export default {
         1: 'highest zone monster parts'
       },
       stun: {
-        0: 'Stun the opponent',
-        1: 'times'
+        0: 'Stun the opponent for',
+        1: ''
       },
       silence: {
-        0: 'Silence the opponent',
-        1: 'times'
+        0: 'Silence the opponent for',
+        1: ''
       },
       revive: {
         0: 'Refill',
@@ -1532,6 +1532,10 @@ export default {
         0: 'Increase {0} by',
         1: '(until prestige)'
       },
+      divisionShield: {
+        0: 'Gain',
+        1: 'division shield'
+      },
       reviveAll: 'Refill all revives',
       removeStun: 'Remove stuns',
     },
@@ -1547,6 +1551,7 @@ export default {
       spirit: 'Spirit',
       sharpsight: 'Sharpsight',
       reaping: 'Reaping',
+      remembrance: 'Remembrance',
       holding: 'Holding',
       expertise: 'Expertise',
     },
@@ -1560,6 +1565,13 @@ export default {
       3: 'Keep the equipment levels after prestige',
       4: 'The active cooldown is halved, and disabling the active gives a +{1}% boost instead of +{0}%',
       5: 'Can collect up to {0} mystical shards. This value is increased by another {1} for each mastery'
+    },
+    tower: {
+      enter: 'Enter',
+      floor: 'Floor {0}',
+      brick: 'Brick tower',
+      fire: 'Fire tower',
+      ice: 'Ice tower',
     }
   },
   farm: {

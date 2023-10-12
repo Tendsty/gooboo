@@ -1520,6 +1520,7 @@ export default {
       spirit: 'Spiritualität',
       sharpsight: 'Adlerauge',
       reaping: 'Sense',
+      remembrance: 'Andenken',
       holding: 'Speicher',
       expertise: 'Expertise',
     },

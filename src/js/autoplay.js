@@ -86,7 +86,6 @@ const prestigeUpgradeWeight = {
         defenseBook: 1,
         candleCircle: 2,
         ashCircle: 2,
-        soulLuck: 7.5,
         containmentChamber: 1,
         mausoleum: 1.5,
         lastWill: 3,

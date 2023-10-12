@@ -61,7 +61,10 @@ export default {
         minibossTimer: 0,
         nostalgiaLost: 0,
         chosenActive: null,
-        itemStatMult: {}
+        itemStatMult: {},
+        tower: {},
+        currentTower: null,
+        towerFloor: 0
     },
     getters: {
         enemyStats: () => (zone, combo = 0) => {
@@ -132,13 +135,17 @@ export default {
 
             return stats;
         },
-        currentSigils: (state) => {
-            return Math.max(0, Math.floor((state.zone - 20) / 30 + 1));
+        currentBaseZone: (state) => {
+            const tower = state.currentTower !== null ? state.tower[state.currentTower] : null;
+            return tower ? (tower.statBase + tower.statScaling * state.towerFloor) : state.zone;
         },
-        currentSigilVariety: (state) => {
+        currentSigils: (state, getters) => {
+            return Math.max(0, Math.floor((getters.currentBaseZone - 20) / 30 + 1));
+        },
+        currentSigilVariety: (state, getters) => {
             let amount = 0;
             [20, 30, 70, 150].forEach(elem => {
-                if (state.zone >= elem) {
+                if (getters.currentBaseZone >= elem) {
                     amount++;
                 }
             });
@@ -224,6 +231,9 @@ export default {
         updateHeirloomKey(state, o) {
             Vue.set(state.heirloom[o.name], o.key, o.value);
         },
+        updateTowerKey(state, o) {
+            Vue.set(state.tower[o.name], o.key, o.value);
+        },
         initItem(state, o) {
             Vue.set(state.items, o.name, {
                 level: 1,
@@ -271,6 +281,18 @@ export default {
                 exclude: o.exclude ?? []
             });
         },
+        initTower(state, o) {
+            Vue.set(state.tower, o.name, {
+                unlock: o.unlock ?? null,
+                sigils: o.sigils ?? ['generic'],
+                statBase: o.statBase ?? 100,
+                statScaling: o.statScaling ?? 1,
+                crowns: o.crowns ?? 1,
+                heirloom: o.heirloom ?? null,
+                reward: o.reward ?? {},
+                highest: 0
+            });
+        },
         addSigilZone(state, value) {
             state.sigilZones.push(value);
         },
@@ -307,6 +329,8 @@ export default {
             commit('updateKey', {key: 'nostalgiaLost', value: 0});
             commit('updateKey', {key: 'chosenActive', value: null});
             commit('updateKey', {key: 'itemStatMult', value: {}});
+            commit('updateKey', {key: 'currentTower', value: null});
+            commit('updateKey', {key: 'towerFloor', value: 0});
 
             commit('updateKey', {key: 'player', value: {}});
             commit('updateKey', {key: 'enemy', value: {}});
@@ -341,12 +365,13 @@ export default {
             commit('updatePlayerKey', {key: 'spells', value: 0});
         },
         updateEnemyStats({ state, getters, rootGetters, commit }) {
-            if (state.minibossTimer >= 1 && state.bossFight === 0) {
+            const inTower = state.currentTower !== null;
+            if (!inTower && state.minibossTimer >= 1 && state.bossFight === 0) {
                 commit('updateKey', {key: 'bossFight', value: 1});
             }
-            if (state.enemyTimer >= HORDE_ENEMY_RESPAWN_TIME || state.bossFight > 0) {
-                let stats = getters.enemyStats(state.zone, state.combo);
-                const corruptionStats = getters.currentCorruptionStats;
+            if (inTower || state.enemyTimer >= HORDE_ENEMY_RESPAWN_TIME || state.bossFight > 0) {
+                let stats = getters.enemyStats(getters.currentBaseZone, inTower ? 0 : state.combo);
+                const corruptionStats = inTower ? {} : getters.currentCorruptionStats;
 
                 if (corruptionStats.power !== undefined) {
                     stats.attack *= corruptionStats.power;
@@ -357,31 +382,34 @@ export default {
                 }
 
                 // update sigil zones
-                while (state.sigilZones.length < state.zone) {
-                    let sigils = [];
-                    let sigilsAvailable = [];
-                    for (const [key, elem] of Object.entries(state.sigil)) {
-                        if (state.zone >= elem.minZone) {
-                            sigilsAvailable.push(key);
+                if (!inTower) {
+                    while (state.sigilZones.length < state.zone) {
+                        let sigils = [];
+                        let sigilsAvailable = [];
+                        for (const [key, elem] of Object.entries(state.sigil)) {
+                            if (state.zone >= elem.minZone) {
+                                sigilsAvailable.push(key);
+                            }
                         }
-                    }
 
-                    let amt = getters.currentSigilVariety;
-                    while (amt > 0 && sigilsAvailable.length > 0) {
-                        const newSigil = randomElem(sigilsAvailable);
-                        sigils.push(newSigil);
-                        sigilsAvailable = sigilsAvailable.filter(sigil => sigil !== newSigil && !state.sigil[newSigil].exclude.includes(sigil));
-                        amt--;
-                    }
+                        let amt = getters.currentSigilVariety;
+                        while (amt > 0 && sigilsAvailable.length > 0) {
+                            const newSigil = randomElem(sigilsAvailable);
+                            sigils.push(newSigil);
+                            sigilsAvailable = sigilsAvailable.filter(sigil => sigil !== newSigil && !state.sigil[newSigil].exclude.includes(sigil));
+                            amt--;
+                        }
 
-                    commit('addSigilZone', sigils);
+                        commit('addSigilZone', sigils);
+                    }
                 }
 
                 let amt = getters.currentSigils + (corruptionStats.sigil ?? 0);
                 let sigil = {};
-                if (state.sigilZones[state.zone - 1].length > 0) {
+                const sigilSource = inTower ? state.tower[state.currentTower].sigils : state.sigilZones[state.zone - 1];
+                if (sigilSource.length > 0) {
                     while (amt > 0) {
-                        const chosen = randomElem(state.sigilZones[state.zone - 1]);
+                        const chosen = randomElem(sigilSource);
                         if (sigil[chosen]) {
                             sigil[chosen]++;
                         } else {
@@ -559,11 +587,10 @@ export default {
             }
         },
         killEnemy({ state, rootState, getters, rootGetters, commit, dispatch }) {
-            if (state.bossFight === 0) {
+            if (state.bossFight === 0 && state.currentTower === null) {
                 dispatch('currency/gain', {feature: 'horde', name: 'bone', gainMult: true, amount: getters.currentBone * state.enemy.loot}, {root: true});
+                dispatch('findItems', 1);
             }
-
-            dispatch('findItems', 1);
 
             // Reset some stats
             commit('updatePlayerKey', {key: 'divisionShield', value: rootGetters['mult/get']('hordeDivisionShield')});
@@ -575,7 +602,16 @@ export default {
                 commit('updatePlayerKey', {key: 'health', value: Math.min(rootGetters['mult/get']('hordeHealth'), state.player.health + missingHealth * recovery)});
             }
 
-            if (state.bossFight === 1) {
+            if (state.currentTower !== null) {
+                // Give tower rewards
+                const tower = state.tower[state.currentTower];
+                dispatch('currency/gain', {feature: 'horde', name: 'crown', amount: tower.crowns}, {root: true});
+                const newFloor = state.towerFloor + 1
+                commit('updateKey', {key: 'towerFloor', value: newFloor});
+                if (newFloor > tower.highest) {
+                    commit('updateTowerKey', {name: state.currentTower, key: 'highest', value: newFloor});
+                }
+            } else if (state.bossFight === 1) {
                 dispatch('getMinibossReward', 1);
 
                 commit('updateKey', {key: 'minibossTimer', value: state.minibossTimer - 1});
@@ -850,6 +886,13 @@ export default {
             } else {
                 dispatch('mult/removeKey', {name: 'hordeNostalgia', type: 'bonus', key: 'hordeNostalgiaLost'}, {root: true});
             }
+        },
+        enterTower({ commit, dispatch }, name) {
+            commit('updateKey', {key: 'combo', value: 0});
+            commit('updateKey', {key: 'bossFight', value: 0});
+            commit('updateKey', {key: 'currentTower', value: name});
+            commit('updateKey', {key: 'towerFloor', value: 0});
+            dispatch('resetStats');
         }
     }
 }

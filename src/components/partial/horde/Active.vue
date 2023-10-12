@@ -55,7 +55,8 @@
       <template v-else>
         <span v-if="elem.stat">{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`, $vuetify.lang.t(`$vuetify.mult.${ elem.stat }`)) }} </span>
         <span v-else>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`) }} </span>
-        <span v-if="['stun', 'silence', 'revive'].includes(elem.type)">{{ $formatNum(elem.value) }} </span>
+        <span v-if="['revive', 'divisionShield'].includes(elem.type)">{{ $formatNum(elem.value) }} </span>
+        <span v-else-if="['stun', 'silence'].includes(elem.type)">{{ $formatTime(elem.value) }} </span>
         <span v-else>{{ $formatNum(elem.value * 100, true) }}% </span>
         <span v-if="elem.type === 'poison' || elem.type.substring(0, 6) === 'damage'">({{ $formatNum(elem.value * playerAttack) }}) </span>
         <span v-else-if="elem.type === 'heal'">({{ $formatNum(elem.value * playerMaxHealth) }}) </span>

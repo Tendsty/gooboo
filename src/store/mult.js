@@ -302,9 +302,9 @@ export default {
             } else if (name === 'hordeNostalgia') {
                 const value = getters.get('hordeNostalgia');
                 if (value > 0) {
-                    dispatch('setBonus', {name: 'hordeHeirloomChance', key: 'hordeNostalgia', value: value * 0.01});
+                    dispatch('setBase', {name: 'hordeHeirloomChance', key: 'hordeNostalgia', value: value * 0.01});
                 } else {
-                    dispatch('removeKey', {name: 'hordeHeirloomChance', type: 'bonus', key: 'hordeNostalgia'});
+                    dispatch('removeKey', {name: 'hordeHeirloomChance', type: 'base', key: 'hordeNostalgia'});
                 }
             }
         },

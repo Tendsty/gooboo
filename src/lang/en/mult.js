@@ -83,6 +83,7 @@ export default {
   sharpsightHeirloomEffect: 'Sharpsight effect',
   holdingHeirloomEffect: 'Holding effect',
   reapingHeirloomEffect: 'Reaping effect',
+  remembranceHeirloomEffect: 'Remembrance effect',
   expertiseHeirloomEffect: 'Expertise effect',
   farmExperience: 'Crop experience',
   farmTiles: 'Farm tiles',

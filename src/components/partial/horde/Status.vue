@@ -7,6 +7,9 @@
   justify-content: space-between;
   width: 100%;
 }
+.tower-btn {
+  width: 200px;
+}
 </style>
 
 <template>
@@ -57,7 +60,47 @@
         <div>{{ $vuetify.lang.t(`$vuetify.horde.${ bossState }.description`, comboRequired) }}</div>
         <stat-breakdown v-if="bossState === 'reachBoss'" name="hordeBossRequirement" :base="comboRequiredBase"></stat-breakdown>
       </gb-tooltip>
+      <gb-tooltip v-if="canSeeTower" :title-text="$vuetify.lang.t(`$vuetify.horde.${ bossState }.title`)">
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip @click="toggleTowers" class="mx-1 boss-count-chip" :color="`pale-orange ${ themeModifier }`" v-bind="attrs" v-on="on">
+            <v-icon size="24">mdi-office-building</v-icon>
+            <v-spacer></v-spacer>
+            <div>-</div>
+          </v-chip>
+        </template>
+        <div>tower</div>
+      </gb-tooltip>
     </div>
+    <v-card v-if="showTowers" class="ma-1 mt-2 pa-1">
+      <div class="d-flex flex-wrap">
+        <currency class="ma-1" name="horde_crown"></currency>
+        <currency class="ma-1" name="horde_towerKey"></currency>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="showTowers = false"><v-icon>mdi-close</v-icon></v-btn>
+      </div>
+      <div class="d-flex flex-wrap">
+        <div
+          v-for="(tower, name) in visibleTowers"
+          :key="`tower-${ name }`"
+          class="tower-btn bg-tile-default rounded elevation-2 ma-1 pa-1"
+        >
+          <div class="text-center pa-1">
+            {{ $vuetify.lang.t(`$vuetify.horde.tower.${ name }`) }}
+            <v-chip class="px-2" small>~{{ Math.round(tower.statBase + tower.highest * tower.statScaling) }}</v-chip>
+          </div>
+          <div class="d-flex justify-space-between align-center">
+            <div class="d-flex align-center ma-1">
+              <v-icon class="mr-1">mdi-trophy-award</v-icon>
+              {{ tower.highest }}
+            </div>
+            <price-tag class="ma-1" currency="horde_crown" :amount="tower.crowns" add></price-tag>
+          </div>
+          <div class="d-flex justify-center">
+            <v-btn @click="enterTower(name)" class="ma-1" small color="primary">{{ $vuetify.lang.t(`$vuetify.horde.tower.enter`) }}</v-btn>
+          </div>
+        </div>
+      </div>
+    </v-card>
     <v-row no-gutters>
       <v-col cols="12" sm="6">
         <v-card min-height="52" class="d-flex flex-wrap ma-1 mb-2 pa-1">
@@ -91,6 +134,7 @@
 import { mapGetters, mapState } from 'vuex';
 import { HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME } from '../../../js/constants';
 import Currency from '../../render/Currency.vue';
+import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 import Active from './Active.vue';
@@ -99,7 +143,10 @@ import EnemyStatus from './EnemyStatus.vue';
 import PlayerStatus from './PlayerStatus.vue';
 
 export default {
-  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText, EnemyActive },
+  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText, EnemyActive, PriceTag },
+  data: () => ({
+    showTowers: false
+  }),
   computed: {
     ...mapState({
       combo: state => state.horde.combo,
@@ -111,7 +158,8 @@ export default {
       enemy: state => state.horde.enemy,
       isFrozen: state => state.cryolab.horde.active,
       enemyTimer: state => state.horde.enemyTimer,
-      minibossTimer: state => state.horde.minibossTimer
+      minibossTimer: state => state.horde.minibossTimer,
+      canSeeTower: state => state.unlock.hordeBrickTower.see
     }),
     ...mapGetters({
       comboRequired: 'horde/comboRequired',
@@ -166,6 +214,15 @@ export default {
     },
     enemyRespawnMax() {
       return HORDE_ENEMY_RESPAWN_MAX;
+    },
+    visibleTowers() {
+      let obj = {};
+      for (const [key, elem] of Object.entries(this.$store.state.horde.tower)) {
+        if (elem.unlock === null || this.$store.state.unlock[elem.unlock].use) {
+          obj[key] = elem;
+        }
+      }
+      return obj;
     }
   },
   methods: {
@@ -199,6 +256,12 @@ export default {
       if (this.zone < this.maxZone) {
         this.$store.dispatch('horde/updateZone', this.maxZone);
       }
+    },
+    toggleTowers() {
+      this.showTowers = !this.showTowers;
+    },
+    enterTower(name) {
+      this.$store.dispatch('horde/enterTower', name);
     }
   }
 }

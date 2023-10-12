@@ -552,6 +552,14 @@ export default {
     name: 'Empowered soul',
     description: 'Formerly corrupted souls that were purified and strengthened by a complex ritual'
   },
+  horde_crown: {
+    name: 'Crown',
+    description: 'They used to rule the towers, but are now dethroned'
+  },
+  horde_towerKey: {
+    name: 'Tower key',
+    description: 'A rare key that allows you to access a tower'
+  },
   farm_vegetable: {
     name: 'Vegetable',
     description: 'Eat your veggies!'

@@ -1,5 +1,5 @@
 import store from "../../store"
-import { HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_INACTIVE_ITEM_COOLDOWN, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME } from "../constants";
+import { HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_INACTIVE_ITEM_COOLDOWN, HORDE_MONSTER_PART_MIN_ZONE, HORDE_RAMPAGE_ATTACK, HORDE_RAMPAGE_BOSS_TIME, HORDE_RAMPAGE_CRIT_CHANCE, HORDE_RAMPAGE_CRIT_DAMAGE, HORDE_RAMPAGE_ENEMY_TIME, HORDE_RAMPAGE_STUN_RESIST, SECONDS_PER_DAY } from "../constants";
 import { buildArray } from "../utils/array";
 import { buildNum } from "../utils/format";
 import { chance, randomRound } from "../utils/random";
@@ -12,6 +12,7 @@ import upgrade from "./horde/upgrade";
 import upgradePremium from "./horde/upgradePremium";
 import upgradePrestige from "./horde/upgradePrestige";
 import bookHorde from "./school/bookHorde";
+import tower from "./horde/tower";
 
 function playerDie() {
     if (store.state.horde.player.revive) {
@@ -26,6 +27,8 @@ function playerDie() {
         store.commit('horde/updateKey', {key: 'respawn', value: respawnTimer});
         store.commit('horde/updateKey', {key: 'maxRespawn', value: respawnTimer});
         store.commit('horde/updateKey', {key: 'enemy', value: null});
+        store.commit('horde/updateKey', {key: 'currentTower', value: null});
+        store.commit('horde/updateKey', {key: 'towerFloor', value: 0});
     }
 }
 
@@ -58,7 +61,7 @@ export default {
     name: 'horde',
     tickspeed: 1,
     unlockNeeded: 'hordeFeature',
-    tick(seconds) {
+    tick(seconds, oldTime, newTime) {
         store.commit('stat/add', {feature: 'horde', name: 'timeSpent', value: seconds});
 
         // Gain mystical shards
@@ -204,8 +207,12 @@ export default {
                                     store.commit('horde/updatePlayerKey', {key: 'revive', value: Math.min(store.getters['mult/get']('hordeRevive'), store.state.horde.player.revive + elem.value)});
                                 } else if (elem.type === 'reviveAll') {
                                     store.commit('horde/updatePlayerKey', {key: 'revive', value: store.getters['mult/get']('hordeRevive')});
+                                } else if (elem.type === 'divisionShield') {
+                                    store.commit('horde/updatePlayerKey', {key: 'divisionShield', value: store.state.horde.player.divisionShield + elem.value});
                                 } else if (elem.type === 'removeAttack') {
-                                    store.commit('horde/updateEnemyKey', {key: 'attack', value: Math.max(0, store.state.horde.enemy.attack * (1 - elem.value))});
+                                    if (store.state.horde.fightRampage <= 0) {
+                                        store.commit('horde/updateEnemyKey', {key: 'attack', value: Math.max(0, store.state.horde.enemy.attack * (1 - elem.value))});
+                                    }
                                 } else if (elem.type === 'poison') {
                                     store.commit('horde/updateEnemyKey', {key: 'poison', value: getDamage(elem.value * playerStats.attack / divisionShieldMult, 'bio', playerStats, enemyStats) + store.state.horde.enemy.poison});
                                     hitShield = true;
@@ -407,11 +414,12 @@ export default {
                 const rampageTime = store.state.horde.bossFight > 0 ? HORDE_RAMPAGE_BOSS_TIME : HORDE_RAMPAGE_ENEMY_TIME;
                 const newRampage = Math.floor(store.state.horde.fightTime / rampageTime);
 
-                if (newRampage > store.state.horde.fightRampage) {
+                if (store.state.horde.enemy && newRampage > store.state.horde.fightRampage) {
                     const rampageDiff = newRampage - store.state.horde.fightRampage;
                     store.commit('horde/updateEnemyKey', {key: 'attack', value: enemyStats.attack * Math.pow(HORDE_RAMPAGE_ATTACK, rampageDiff)});
                     store.commit('horde/updateEnemyKey', {key: 'critChance', value: enemyStats.critChance + HORDE_RAMPAGE_CRIT_CHANCE * rampageDiff});
                     store.commit('horde/updateEnemyKey', {key: 'critMult', value: enemyStats.critMult + HORDE_RAMPAGE_CRIT_DAMAGE * rampageDiff});
+                    store.commit('horde/updateEnemyKey', {key: 'stunResist', value: enemyStats.critMult + HORDE_RAMPAGE_STUN_RESIST * rampageDiff});
                     store.commit('horde/updateKey', {key: 'fightRampage', value: newRampage});
                 }
             } else {
@@ -444,8 +452,19 @@ export default {
             }
             store.commit('horde/updateKey', {key: 'heirloomsFound', value: null});
         }
+
+        // Get tower keys
+        if (store.state.unlock.hordeBrickTower.see) {
+            const dayDiff = Math.floor(newTime / (SECONDS_PER_DAY * 7)) - Math.floor(oldTime / (SECONDS_PER_DAY * 7));
+            if (dayDiff > 0) {
+                store.dispatch('currency/gain', {feature: 'horde', name: 'towerKey', amount: dayDiff}, {root: true});
+            }
+        }
     },
-    unlock: ['hordeFeature', 'hordeItems', 'hordeDamageTypes', 'hordePrestige', 'hordeHeirlooms', 'hordeCorruptedFlesh', 'hordeItemMastery', 'hordeChessItems'],
+    unlock: [
+        'hordeFeature', 'hordeItems', 'hordeDamageTypes', 'hordePrestige', 'hordeHeirlooms', 'hordeCorruptedFlesh', 'hordeItemMastery', 'hordeChessItems',
+        'hordeBrickTower', 'hordeFireTower', 'hordeIceTower',
+    ],
     stat: {
         maxZone: {value: 1},
         totalDamage: {},
@@ -512,7 +531,9 @@ export default {
             currencyHordeBoneGain: {type: 'mult', value: val => Math.pow(1.1, val)}
         }},
         soulCorrupted: {color: 'purple', icon: 'mdi-ghost', overcapMult: 0.75, overcapScaling: 0.85, gainMult: {}, capMult: {}},
-        soulEmpowered: {type: 'prestige', alwaysVisible: true, color: 'pink', icon: 'mdi-ghost'}
+        soulEmpowered: {type: 'prestige', alwaysVisible: true, color: 'pink', icon: 'mdi-ghost'},
+        crown: {type: 'prestige', color: 'amber', icon: 'mdi-crown-circle-outline'},
+        towerKey: {type: 'prestige', color: 'light-grey', icon: 'mdi-key-variant'}
     },
     upgrade: {
         ...upgrade,
@@ -537,6 +558,9 @@ export default {
         }
         for (const [key, elem] of Object.entries(sigil)) {
             store.commit('horde/initSigil', {name: key, ...elem});
+        }
+        for (const [key, elem] of Object.entries(tower)) {
+            store.commit('horde/initTower', {name: key, ...elem});
         }
         store.dispatch('horde/updatePlayerStats');
         store.dispatch('horde/updateEnemyStats');

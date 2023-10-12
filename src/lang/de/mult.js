@@ -80,6 +80,7 @@ export default {
   sharpsightHeirloomEffect: 'Adlerauge-Effekt',
   holdingHeirloomEffect: 'Speicher-Effekt',
   reapingHeirloomEffect: 'Sense-Effekt',
+  remembranceHeirloomEffect: 'Andenken-Effekt',
   expertiseHeirloomEffect: 'Expertise-Effekt',
   farmExperience: 'Pflanzenerfahrung',
   farmTiles: 'Gartenfelder',

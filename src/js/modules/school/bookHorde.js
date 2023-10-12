@@ -8,13 +8,6 @@ export default {
     }, effect: [
         {name: 'upgradeHordeTrainingCap', type: 'base', value: lvl => lvl}
     ]},
-    bookCooling: {type: 'book', requirement() {
-        return store.state.upgrade.item.horde_cooling.highestLevel >= 5;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 70)};
-    }, effect: [
-        {name: 'upgradeHordeCoolingCap', type: 'base', value: lvl => lvl}
-    ]},
     bookLuckyStrike: {type: 'book', requirement() {
         return store.state.upgrade.item.horde_luckyStrike.highestLevel >= 15;
     }, price(lvl) {

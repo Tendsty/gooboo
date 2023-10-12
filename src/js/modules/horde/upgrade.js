@@ -85,30 +85,8 @@ export default {
         {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.17, lvl)},
         {name: 'hordeMaxItems', type: 'base', value: lvl => Math.min(1, lvl)}
     ]},
-    // looting: {cap: 50, capMult: true, requirementBase, requirementStat, requirementValue: 35, price(lvl) {
-    //     return {horde_bone: splicedPow(1.4, 3.3, 50, lvl) * buildNum(220, 'Qa')};
-    // }, effect: [
-    //     {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.09, lvl)},
-    //     {name: 'hordeItemChance', type: 'mult', value: lvl => Math.pow(1.05, lvl)}
-    // ]},
-    // haste: {cap: 50, requirementBase, requirementStat, requirementValue: 17, price(lvl) {
-    //     return {horde_bone: Math.pow(1.45, lvl) * buildNum(240, 'M')};
-    // }, effect: [
-    //     {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.11, lvl)}
-    // ]},
-    // cooling: {cap: 5, capMult: true, requirementBase, requirementStat, requirementValue: 19, price(lvl) {
-    //     return {horde_bone: splicedPow(3.4, 6.5, 5, lvl) * buildNum(133, 'B')};
-    // }, effect: [
-    //     {name: 'hordeHealth', type: 'mult', value: lvl => splicedPow(1.15, 1.075, 5, lvl)},
-    //     {name: 'currencyHordeMonsterPartCap', type: 'base', value: lvl => lvl * 10}
-    // ]},
-    // pockets: {cap: 2, requirementBase, requirementStat, requirementValue: 39, price(lvl) {
-    //     return {horde_bone: Math.pow(buildNum(1.024, 'M'), lvl) * buildNum(640, 'Qi')};
-    // }, effect: [
-    //     {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
-    // ]},
     purifier: {persistent: true, hasDescription: true, cap: 1, note: 'horde_18', requirementBase, requirementStat, requirementValue: 42, price() {
-        return {horde_bone: buildNum(100, 'Sx')};
+        return {horde_bone: buildNum(10, 'Qi')};
     }, effect: [
         {name: 'hordeCorruptedFlesh', type: 'unlock', value: lvl => lvl >= 1}
     ]},
@@ -119,98 +97,98 @@ export default {
     }, effect: [
         {name: 'hordeCorruption', type: 'bonus', value: lvl => -0.08 * lvl}
     ]},
-    stabbingGuide: {cap: 5, requirementBase, requirementStat, requirementValue: 43, price(lvl) {
-        return {horde_bone: Math.pow(16, lvl) * buildNum(70, 'Sx')};
+    stabbingGuide: {cap: 5, requirementBase, requirementStat, requirementValue: 48, price(lvl) {
+        return {horde_bone: Math.pow(7, lvl) * buildNum(130, 'Qi')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.26, lvl)},
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.46, lvl)},
         {name: 'hordeCritChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
-    dodgingGuide: {cap: 15, requirementBase, requirementStat, requirementValue: 46, price(lvl) {
-        return {horde_bone: Math.pow(3.2, lvl) * buildNum(1.8, 'Sp')};
+    plunderSecret: {cap: 1, requirementBase, requirementStat, requirementValue: 53, price() {
+        return {horde_bone: buildNum(25, 'Sx')};
+    }, effect: [
+        {name: 'currencyHordeMonsterPartGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null},
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => lvl >= 1 ? 100 : null},
+        {name: 'hordeMaxItems', type: 'base', value: lvl => Math.min(1, lvl)}
+    ]},
+    dodgingGuide: {cap: 15, requirementBase, requirementStat, requirementValue: 59, price(lvl) {
+        return {horde_bone: Math.pow(2.1, lvl) * buildNum(980, 'Sx')};
     }, effect: [
         {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
     ]},
-    knifePocket: {cap: 20, requirementBase, requirementStat, requirementValue: 51, price(lvl) {
-        return {horde_bone: Math.pow(3.35, lvl) * buildNum(74, 'O')};
+    survivalGuide: {cap: 25, capMult: true, requirementBase, requirementStat, requirementValue: 66, price(lvl) {
+        return {horde_bone: splicedPow(2.25, 4.75, 25, lvl) * buildNum(9.25, 'Oc')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => splicedPow(1.16, 1.05, 25, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => splicedPow(1.15, 1.05, 25, lvl)}
     ]},
-    plunderSecret: {cap: 1, requirementBase, requirementStat, requirementValue: 56, price() {
-        return {horde_bone: buildNum(55, 'N')};
-    }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => lvl >= 1 ? 2 : null},
-        {name: 'currencyHordeMonsterPartGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null},
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => lvl >= 1 ? 5 : null}
-    ]},
-    survivalGuide: {cap: 15, capMult: true, requirementBase, requirementStat, requirementValue: 60, price(lvl) {
-        return {horde_bone: Math.pow(3.2, lvl) * buildNum(925, 'N')};
-    }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => splicedPow(1.1, 1.05, 15, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => splicedPow(1.2, 1.05, 15, lvl)}
-    ]},
-    grindstone: {cap: 8, requirementBase, requirementStat, requirementValue: 64, price(lvl) {
-        return {horde_bone: Math.pow(5, lvl) * buildNum(750, 'D')};
-    }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
-    ]},
-    adaption: {cap: 8, requirementBase, requirementStat, requirementValue: 72, price(lvl) {
-        return {horde_bone: Math.pow(4.75, lvl) * buildNum(2.8, 'DD')};
-    }, effect: [
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.26, lvl)}
-    ]},
-    ferocity: {cap: 20, requirementBase, requirementStat, requirementValue: 76, price(lvl) {
-        return {horde_bone: Math.pow(3.3, lvl) * buildNum(600, 'DD')};
-    }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.18, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
-    ]},
-    carving: {cap: 5, capMult: true, requirementBase, requirementStat, requirementValue: 80, price(lvl) {
-        return {horde_bone: Math.pow(12, lvl) * buildNum(200, 'TD')};
-    }, effect: [
-        {name: 'currencyHordeMonsterPartGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
-        {name: 'currencyHordeCorruptedFleshGain', type: 'base', value: lvl => lvl * 0.1}
-    ]},
-    bloodlust: {cap: 12, requirementBase, requirementStat, requirementValue: 85, price(lvl) {
-        return {horde_bone: Math.pow(5, lvl) * buildNum(80, 'QaD')};
-    }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.32, lvl)},
-        {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => lvl * 0.15 + 1}
-    ]},
-    whitePaint: {cap: 25, capMult: true, requirementBase, requirementStat, requirementValue: 90, price(lvl) {
-        return {horde_bone: Math.pow(2.8, lvl) * buildNum(50, 'QiD')};
-    }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
-    ]},
-    grossBag: {cap: 1, requirementBase, requirementStat, requirementValue: 95, price() {
-        return {horde_bone: buildNum(2.5, 'SpD')};
-    }, effect: [
-        {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => lvl + 1},
-        {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
-    ]},
-    targetDummy: {cap: 40, requirementBase, requirementStat, requirementValue: 100, price(lvl) {
-        return {horde_bone: Math.pow(1.75, lvl) * buildNum(2.5, 'OD')};
-    }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.11, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.11, lvl)}
-    ]},
-    rottenPaint: {cap: 15, requirementBase, requirementStat, requirementValue: 105, price(lvl) {
-        return {horde_monsterPart: Math.pow(2, lvl) * buildNum(1, 'M')};
-    }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
-    ]},
-    milestone: {cap: 4, capMult: true, requirementBase, requirementStat, requirementValue: 110, price(lvl) {
-        return {horde_bone: Math.pow(1000, lvl) * buildNum(1, 'V')};
-    }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(2, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(2, lvl)},
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(4, lvl)},
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(10, lvl)}
-    ]},
-    meditation: {cap: 25, requirementBase, requirementStat, requirementValue: 115, price(lvl) {
-        return {horde_bone: Math.pow(2.2, lvl) * buildNum(35, 'V')};
-    }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.23, lvl)}
-    ]},
+    // looting: {cap: 50, capMult: true, requirementBase, requirementStat, requirementValue: 35, price(lvl) {
+    //     return {horde_bone: splicedPow(1.4, 3.3, 50, lvl) * buildNum(220, 'Qa')};
+    // }, effect: [
+    //     {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.09, lvl)},
+    //     {name: 'hordeItemChance', type: 'mult', value: lvl => Math.pow(1.05, lvl)}
+    // ]},
+    // grindstone: {cap: 8, requirementBase, requirementStat, requirementValue: 64, price(lvl) {
+    //     return {horde_bone: Math.pow(5, lvl) * buildNum(750, 'D')};
+    // }, effect: [
+    //     {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
+    // ]},
+    // adaption: {cap: 8, requirementBase, requirementStat, requirementValue: 72, price(lvl) {
+    //     return {horde_bone: Math.pow(4.75, lvl) * buildNum(2.8, 'DD')};
+    // }, effect: [
+    //     {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.26, lvl)}
+    // ]},
+    // ferocity: {cap: 20, requirementBase, requirementStat, requirementValue: 76, price(lvl) {
+    //     return {horde_bone: Math.pow(3.3, lvl) * buildNum(600, 'DD')};
+    // }, effect: [
+    //     {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.18, lvl)},
+    //     {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
+    // ]},
+    // carving: {cap: 5, capMult: true, requirementBase, requirementStat, requirementValue: 80, price(lvl) {
+    //     return {horde_bone: Math.pow(12, lvl) * buildNum(200, 'TD')};
+    // }, effect: [
+    //     {name: 'currencyHordeMonsterPartGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+    //     {name: 'currencyHordeCorruptedFleshGain', type: 'base', value: lvl => lvl * 0.1}
+    // ]},
+    // bloodlust: {cap: 12, requirementBase, requirementStat, requirementValue: 85, price(lvl) {
+    //     return {horde_bone: Math.pow(5, lvl) * buildNum(80, 'QaD')};
+    // }, effect: [
+    //     {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.32, lvl)},
+    //     {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => lvl * 0.15 + 1}
+    // ]},
+    // whitePaint: {cap: 25, capMult: true, requirementBase, requirementStat, requirementValue: 90, price(lvl) {
+    //     return {horde_bone: Math.pow(2.8, lvl) * buildNum(50, 'QiD')};
+    // }, effect: [
+    //     {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
+    // ]},
+    // grossBag: {cap: 1, requirementBase, requirementStat, requirementValue: 95, price() {
+    //     return {horde_bone: buildNum(2.5, 'SpD')};
+    // }, effect: [
+    //     {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => lvl + 1},
+    //     {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
+    // ]},
+    // targetDummy: {cap: 40, requirementBase, requirementStat, requirementValue: 100, price(lvl) {
+    //     return {horde_bone: Math.pow(1.75, lvl) * buildNum(2.5, 'OD')};
+    // }, effect: [
+    //     {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.11, lvl)},
+    //     {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.11, lvl)}
+    // ]},
+    // rottenPaint: {cap: 15, requirementBase, requirementStat, requirementValue: 105, price(lvl) {
+    //     return {horde_monsterPart: Math.pow(2, lvl) * buildNum(1, 'M')};
+    // }, effect: [
+    //     {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
+    // ]},
+    // milestone: {cap: 4, capMult: true, requirementBase, requirementStat, requirementValue: 110, price(lvl) {
+    //     return {horde_bone: Math.pow(1000, lvl) * buildNum(1, 'V')};
+    // }, effect: [
+    //     {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(2, lvl)},
+    //     {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(2, lvl)},
+    //     {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(4, lvl)},
+    //     {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(10, lvl)}
+    // ]},
+    // meditation: {cap: 25, requirementBase, requirementStat, requirementValue: 115, price(lvl) {
+    //     return {horde_bone: Math.pow(2.2, lvl) * buildNum(35, 'V')};
+    // }, effect: [
+    //     {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+    //     {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.23, lvl)}
+    // ]},
 }
