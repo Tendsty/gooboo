@@ -9,7 +9,8 @@
     </template>
     <display-row class="mt-0" v-for="(item, key) in stats" :key="key" :name="item.name" :type="item.type" :after="item.amount"></display-row>
     <div v-if="sigil.active">{{ $vuetify.lang.t('$vuetify.horde.sigil.hasActive') }}</div>
-    <alert-text v-if="sigil.min > 0" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.min`, sigil.min) }}</alert-text>
+    <alert-text v-if="sigil.minZone === Infinity" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.special`) }}</alert-text>
+    <alert-text v-else-if="sigil.minZone > 0" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.min`, sigil.minZone) }}</alert-text>
   </gb-tooltip>
 </template>
 

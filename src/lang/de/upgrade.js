@@ -375,19 +375,13 @@ export default {
   horde_dodgingGuide: 'Ausweich-Anleitung',
   horde_plunderSecret: 'Plündergeheimnis',
   horde_survivalGuide: 'Überlebens-Anleitung',
-  horde_grindstone: 'Schleifstein',
   horde_purifier: 'Reiniger',
   horde_cleansingRitual: 'Säuberndes Ritual',
-  horde_adaption: 'Anpassung',
-  horde_ferocity: 'Wildheit',
   horde_carving: 'Schnitzen',
-  horde_bloodlust: 'Blutrausch',
   horde_whitePaint: 'Weiße Farbe',
   horde_grossBag: 'Ekelbeutel',
   horde_targetDummy: 'Trainingspuppe',
-  horde_rottenPaint: 'Gammelfarbe',
   horde_milestone: 'Meilenstein',
-  horde_meditation: 'Meditation',
 
   // Horde prestige upgrades
   horde_balance: 'Balance',
@@ -407,7 +401,6 @@ export default {
   horde_mausoleum: 'Mausoleum',
   horde_lastWill: 'Letzter Wille',
   horde_combatStudies: 'Kampf-Studien',
-  horde_aggression: 'Aggression',
 
   // Horde premium upgrades
   horde_morePower: 'Mehr Kampfkraft',

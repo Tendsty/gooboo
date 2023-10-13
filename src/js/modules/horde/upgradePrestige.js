@@ -1,6 +1,5 @@
 import store from "../../../store";
 import { buildNum } from "../../utils/format";
-import { getSequence } from "../../utils/math";
 
 const requirementStat = 'horde_maxZone';
 const requirementBase = () => store.state.stat[requirementStat].total;
@@ -18,7 +17,7 @@ export default {
         {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.25 + 1},
         {name: 'hordeRespawn', type: 'base', value: lvl => lvl * -5}
     ]},
-    milk: {type: 'prestige', price(lvl) {
+    milk: {type: 'prestige', cap: 45, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.65, lvl) * 80};
     }, effect: [
         {name: 'currencyHordeBoneGain', type: 'base', value: lvl => Math.pow(2, lvl) * 50},
@@ -64,49 +63,57 @@ export default {
     offenseBook: {type: 'prestige', cap: 50, requirementBase, requirementStat, requirementValue: 51, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * buildNum(200, 'K')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => lvl * 0.3 + 1}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.15 + 1)}
     ]},
     defenseBook: {type: 'prestige', cap: 50, requirementBase, requirementStat, requirementValue: 56, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.3, lvl) * buildNum(900, 'K')};
     }, effect: [
-        {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.3 + 1}
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.15 + 1)}
     ]},
     ashCircle: {type: 'prestige', requirementBase, requirementStat, requirementValue: 61, price(lvl) {
-        return {horde_soulEmpowered: Math.pow(lvl * 0.01 + 1.25, lvl) * buildNum(5.75, 'M')};
+        return {horde_soulEmpowered: Math.pow(lvl * 0.02 + 1.25, lvl) * buildNum(5.75, 'M')};
     }, effect: [
         {name: 'hordeCorruption', type: 'base', value: lvl => lvl * -0.12}
     ]},
+    lastWill: {type: 'prestige', cap: 15, requirementBase, requirementStat, requirementValue: 66, price(lvl) {
+        return {horde_soulEmpowered: Math.pow(lvl * 0.5 + 3, lvl) * buildNum(15, 'M')};
+    }, effect: [
+        {name: 'hordeHeirloomAmount', type: 'base', value: lvl => lvl}
+    ]},
     candleCircle: {type: 'prestige', requirementBase, requirementStat, requirementValue: 71, price(lvl) {
-        return {horde_soulEmpowered: Math.pow(1.3, lvl) * buildNum(170, 'M')};
+        return {horde_soulEmpowered: Math.pow(1.3, lvl) * buildNum(770, 'M')};
     }, effect: [
         {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.03, lvl)},
         {name: 'hordeRespawn', type: 'base', value: lvl => lvl * -5}
     ]},
     containmentChamber: {type: 'prestige', requirementBase, requirementStat, requirementValue: 81, price(lvl) {
-        return {horde_soulEmpowered: Math.pow(1.45, lvl) * buildNum(30, 'K')};
-    }, effect: [
-        {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
-        {name: 'hordeRespawn', type: 'base', value: lvl => lvl * -10}
-    ]},
-    mausoleum: {type: 'prestige', cap: 100, requirementBase, requirementStat, requirementValue: 91, price(lvl) {
-        return {horde_soulEmpowered: Math.pow(1.3 + lvl * 0.01, lvl) * buildNum(1, 'M')};
+        return {horde_soulEmpowered: Math.pow(1.3 + lvl * 0.01, lvl) * buildNum(100, 'B')};
     }, effect: [
         {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
         {name: 'hordeHeirloomEffect', type: 'mult', value: lvl => lvl * 0.03 + 1}
     ]},
-    lastWill: {type: 'prestige', cap: 15, requirementBase, requirementStat, requirementValue: 101, price(lvl) {
-        return {horde_soulEmpowered: Math.pow(3, getSequence(1, lvl + 1)) * buildNum(15, 'M')};
+    mausoleum: {type: 'prestige', requirementBase, requirementStat, requirementValue: 91, price(lvl) {
+        return {horde_soulEmpowered: Math.pow(lvl * 0.005 + 1.4, lvl) * buildNum(2.4, 'T')};
     }, effect: [
-        {name: 'hordeHeirloomAmount', type: 'base', value: lvl => lvl}
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
+        {name: 'currencyHordeMonsterPartGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.075, lvl)}
     ]},
     combatStudies: {type: 'prestige', requirementBase, requirementStat, requirementValue: 111, price(lvl) {
-        return {horde_soulEmpowered: Math.pow(1.45 + lvl * 0.025, lvl) * buildNum(85, 'M')};
+        return {horde_soulEmpowered: Math.pow(1.45 + lvl * 0.025, lvl) * buildNum(85, 'Qa')};
     }, effect: [
         {name: 'hordeItemMasteryGain', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
     ]},
-    aggression: {type: 'prestige', cap: 30, requirementBase, requirementStat, requirementValue: 121, price(lvl) {
-        return {horde_soulEmpowered: Math.pow(1.3, lvl) * buildNum(430, 'M')};
+
+    // Royal upgrades
+    royalSword: {type: 'prestige', requirementBase, requirementStat, requirementValue: 140, price(lvl) {
+        return {horde_crown: Math.round(Math.pow(1.08, lvl) * (lvl + 1) * 10)};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.1, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (0.1 * lvl + 1)}
+    ]},
+    royalArmor: {type: 'prestige', requirementBase, requirementStat, requirementValue: 140, price(lvl) {
+        return {horde_crown: Math.round(Math.pow(1.08, lvl) * (lvl + 1) * 14)};
+    }, effect: [
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (0.1 * lvl + 1)}
     ]},
 }

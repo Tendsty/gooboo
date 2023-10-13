@@ -23,12 +23,18 @@ function playerDie() {
         store.commit('horde/updateKey', {key: 'combo', value: 0});
         store.commit('horde/updateKey', {key: 'bossFight', value: 0});
 
-        const respawnTimer = store.getters['mult/get']('hordeRespawn', store.getters['horde/baseRespawnTime']);
-        store.commit('horde/updateKey', {key: 'respawn', value: respawnTimer});
-        store.commit('horde/updateKey', {key: 'maxRespawn', value: respawnTimer});
         store.commit('horde/updateKey', {key: 'enemy', value: null});
-        store.commit('horde/updateKey', {key: 'currentTower', value: null});
-        store.commit('horde/updateKey', {key: 'towerFloor', value: 0});
+
+        if (store.state.horde.currentTower === null) {
+            const respawnTimer = store.getters['mult/get']('hordeRespawn', store.getters['horde/baseRespawnTime']);
+            store.commit('horde/updateKey', {key: 'respawn', value: respawnTimer});
+            store.commit('horde/updateKey', {key: 'maxRespawn', value: respawnTimer});
+        } else {
+            // No respawn time for tower deaths
+            store.commit('horde/updateKey', {key: 'currentTower', value: null});
+            store.commit('horde/updateKey', {key: 'towerFloor', value: 0});
+            store.dispatch('horde/resetStats');
+        }
     }
 }
 
@@ -176,7 +182,7 @@ export default {
                     // determine if the chosen attack can be used
                     let usedAttack = null;
                     if (store.state.horde.player.silence > 0) {
-                        store.commit('horde/updateEnemyKey', {key: 'silence', value: Math.max(0, store.state.horde.player.silence - 1)});
+                        store.commit('horde/updatePlayerKey', {key: 'silence', value: Math.max(0, store.state.horde.player.silence - 1)});
                     } else if (store.state.horde.chosenActive) {
                         const item = store.state.horde.items[store.state.horde.chosenActive];
                         if ((!isStunned || item.usableInStun) && item.cooldownLeft <= 0) {
@@ -253,19 +259,18 @@ export default {
                             }
                             store.commit('horde/updatePlayerKey', {key: 'hits', value: store.state.horde.player.hits + 1});
 
+                            if (enemyHealth > damage && playerStats.cutting > 0) {
+                                damage += getDamage((enemyHealth - damage) * playerStats.cutting / divisionShieldMult, 'bio', playerStats, enemyStats);
+                            }
+
+                            if (playerStats.toxic > 0) {
+                                store.commit('horde/updateEnemyKey', {key: 'poison', value: getDamage(baseDamage * playerStats.toxic / divisionShieldMult, 'bio', playerStats, enemyStats) + store.state.horde.enemy.poison});
+                            }
+
                             hitShield = true;
                         }
 
                         enemyHealth = Math.max(0, enemyHealth - damage);
-
-                        if (enemyHealth > 0 && playerStats.cutting > 0) {
-                            enemyHealth = Math.max(0, enemyHealth - getDamage(enemyHealth * playerStats.cutting / divisionShieldMult, 'bio', playerStats, enemyStats));
-                        }
-
-                        if (playerStats.toxic > 0) {
-                            store.commit('horde/updateEnemyKey', {key: 'poison', value: getDamage(baseDamage * playerStats.toxic / divisionShieldMult, 'bio', playerStats, enemyStats) + store.state.horde.enemy.poison});
-                        }
-
                         if (enemyStats.divisionShield > 0 && hitShield) {
                             store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: enemyStats.divisionShield - 1});
                         }
@@ -334,10 +339,9 @@ export default {
                         if (enemyStats.firstStrike > 0 && enemyStats.hits <= 0) {
                             enemyDamage += getDamage(enemyStats.attack * enemyStats.firstStrike / divisionShieldMult, 'magic', enemyStats, playerStats);
                         }
-                        playerHealth = Math.max(0, playerHealth - enemyDamage);
 
-                        if (playerHealth > 0 && enemyStats.cutting > 0) {
-                            playerHealth = Math.max(0, playerHealth - getDamage(playerHealth * enemyStats.cutting / divisionShieldMult, 'bio', enemyStats, playerStats));
+                        if (playerHealth > enemyDamage && enemyStats.cutting > 0) {
+                            enemyDamage += getDamage((playerHealth - enemyDamage) * enemyStats.cutting / divisionShieldMult, 'bio', enemyStats, playerStats);
                         }
 
                         if (enemyStats.toxic > 0) {
@@ -354,6 +358,22 @@ export default {
                                 store.commit('horde/updateEnemyKey', {key: 'health', value: Math.min(enemyStats.maxHealth, store.state.horde.enemy.health + enemyStats.maxHealth * elem.value)});
                             } else if (elem.type === 'stun') {
                                 store.commit('horde/updatePlayerKey', {key: 'stun', value: store.state.horde.player.stun + elem.value});
+                            } else if (elem.type === 'silence') {
+                                store.commit('horde/updatePlayerKey', {key: 'silence', value: store.state.horde.player.silence + elem.value});
+                            } else if (elem.type === 'divisionShield') {
+                                store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: store.state.horde.enemy.divisionShield + elem.value});
+                            } else if (elem.type === 'raiseAttack') {
+                                store.commit('horde/updateEnemyKey', {key: 'attack', value: store.state.horde.enemy.attack * (1 + elem.value)});
+                            } else if (elem.type === 'poison') {
+                                store.commit('horde/updatePlayerKey', {key: 'poison', value: getDamage(elem.value * enemyStats.attack / divisionShieldMult, 'bio', enemyStats, playerStats) + store.state.horde.player.poison});
+                                hitShield = true;
+                            } else if (elem.type === 'antidote') {
+                                store.commit('horde/updateEnemyKey', {key: 'poison', value: store.state.horde.enemy.poison * (1 - elem.value)});
+                            } else if (elem.type === 'removeStun') {
+                                store.commit('horde/updateEnemyKey', {key: 'stun', value: 0});
+                            } else if (elem.type.substring(0, 6) === 'damage') {
+                                enemyDamage += getDamage(elem.value * enemyStats.attack / divisionShieldMult, elem.type.substring(6).toLowerCase(), enemyStats, playerStats);
+                                hitShield = true;
                             }
                         });
 
@@ -364,6 +384,7 @@ export default {
                         }
                     }
 
+                    playerHealth = Math.max(0, playerHealth - enemyDamage);
                     // Only hit shield and count hits if damage was dealt
                     if (store.state.horde.player.divisionShield > 0 && hitShield) {
                         store.commit('horde/updatePlayerKey', {key: 'divisionShield', value: store.state.horde.player.divisionShield - 1});
@@ -419,7 +440,7 @@ export default {
                     store.commit('horde/updateEnemyKey', {key: 'attack', value: enemyStats.attack * Math.pow(HORDE_RAMPAGE_ATTACK, rampageDiff)});
                     store.commit('horde/updateEnemyKey', {key: 'critChance', value: enemyStats.critChance + HORDE_RAMPAGE_CRIT_CHANCE * rampageDiff});
                     store.commit('horde/updateEnemyKey', {key: 'critMult', value: enemyStats.critMult + HORDE_RAMPAGE_CRIT_DAMAGE * rampageDiff});
-                    store.commit('horde/updateEnemyKey', {key: 'stunResist', value: enemyStats.critMult + HORDE_RAMPAGE_STUN_RESIST * rampageDiff});
+                    store.commit('horde/updateEnemyKey', {key: 'stunResist', value: enemyStats.stunResist + HORDE_RAMPAGE_STUN_RESIST * rampageDiff});
                     store.commit('horde/updateKey', {key: 'fightRampage', value: newRampage});
                 }
             } else {
@@ -638,11 +659,26 @@ export default {
         if (Object.keys(store.state.horde.itemStatMult).length > 0) {
             obj.itemStatMult = store.state.horde.itemStatMult;
         }
+        if (store.state.horde.currentTower !== null) {
+            obj.currentTower = store.state.horde.currentTower;
+        }
+        if (store.state.horde.towerFloor > 0) {
+            obj.towerFloor = store.state.horde.towerFloor;
+        }
+
+        for (const [key, elem] of Object.entries(store.state.horde.tower)) {
+            if (elem.highest > 0) {
+                if (obj.tower === undefined) {
+                    obj.tower = {};
+                }
+                obj.tower[key] = elem.highest;
+            }
+        }
 
         return obj;
     },
     loadGame(data) {
-        ['zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'fightTime', 'fightRampage', 'enemyTimer', 'minibossTimer', 'nostalgiaLost', 'chosenActive'].forEach(elem => {
+        ['zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'fightTime', 'fightRampage', 'enemyTimer', 'minibossTimer', 'nostalgiaLost', 'chosenActive', 'currentTower', 'towerFloor'].forEach(elem => {
             if (data[elem] !== undefined) {
                 store.commit('horde/updateKey', {key: elem, value: data[elem]});
             }
@@ -711,6 +747,13 @@ export default {
             for (const [key, elem] of Object.entries(data.itemStatMult)) {
                 store.commit('horde/updateSubkey', {name: 'itemStatMult', key, value: elem});
                 store.dispatch('system/applyEffect', {type: 'mult', name: key, multKey: `hordeItemPermanent`, value: elem + 1});
+            }
+        }
+        if (data.tower) {
+            for (const [key, elem] of Object.entries(data.tower)) {
+                if (store.state.horde.tower[key]) {
+                    store.commit('horde/updateTowerKey', {name: key, key: 'highest', value: elem});
+                }
             }
         }
         store.dispatch('horde/checkZoneUnlocks');

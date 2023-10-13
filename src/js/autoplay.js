@@ -89,8 +89,7 @@ const prestigeUpgradeWeight = {
         containmentChamber: 1,
         mausoleum: 1.5,
         lastWill: 3,
-        combatStudies: 1.5,
-        aggression: 1
+        combatStudies: 1.5
     },
     gallery: {
         artAcademy: 1,

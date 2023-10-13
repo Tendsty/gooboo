@@ -375,19 +375,15 @@ export default {
   horde_dodgingGuide: 'Dodging guide',
   horde_plunderSecret: 'Plunder secret',
   horde_survivalGuide: 'Survival guide',
-  horde_grindstone: 'Grindstone',
   horde_purifier: 'Purifier',
   horde_cleansingRitual: 'Cleansing ritual',
-  horde_adaption: 'Adaption',
-  horde_ferocity: 'Ferocity',
   horde_carving: 'Carving',
-  horde_bloodlust: 'Bloodlust',
   horde_whitePaint: 'White paint',
   horde_grossBag: 'Gross bag',
   horde_targetDummy: 'Target dummy',
-  horde_rottenPaint: 'Rotten paint',
   horde_milestone: 'Milestone',
-  horde_meditation: 'Meditation',
+  horde_royalSword: 'Royal sword',
+  horde_royalArmor: 'Royal armor',
 
   // Horde prestige upgrades
   horde_balance: 'Balance',
@@ -407,7 +403,6 @@ export default {
   horde_mausoleum: 'Mausoleum',
   horde_lastWill: 'Last will',
   horde_combatStudies: 'Combat studies',
-  horde_aggression: 'Aggression',
 
   // Horde premium upgrades
   horde_morePower: 'More power',

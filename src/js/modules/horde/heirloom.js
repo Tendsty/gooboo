@@ -2,7 +2,7 @@ export default {
     power: {color: 'red', icon: 'mdi-sword', effect: [
         {name: 'hordeAttack', type: 'mult', value: lvl => lvl * 0.2 + 1}
     ]},
-    fortitude: {color: 'blue', icon: 'mdi-heart', effect: [
+    fortitude: {color: 'green', icon: 'mdi-heart', effect: [
         {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.2 + 1}
     ]},
     wealth: {color: 'amber', icon: 'mdi-circle-multiple', effect: [
@@ -16,7 +16,7 @@ export default {
         {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.05 + 1}
     ]},
     reaping: {minZone: 60, color: 'pink', icon: 'mdi-skull', effect: [
-        {name: 'currencyHordeCorruptedFleshGain', type: 'base', value: lvl => lvl * 0.05}
+        {name: 'currencyHordeCorruptedFleshGain', type: 'base', value: lvl => lvl * 0.03}
     ]},
     remembrance: {minZone: 70, color: 'deep-purple', icon: 'mdi-grave-stone', effect: [
         {name: 'currencyHordeSoulCorruptedCap', type: 'mult', value: lvl => lvl * 0.05 + 1}
@@ -26,6 +26,20 @@ export default {
         {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => lvl * 0.02 + 1}
     ]},
     expertise: {minZone: 100, color: 'light-blue', icon: 'mdi-book-open-variant', effect: [
-        {name: 'hordeItemMasteryGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+        {name: 'hordeItemMasteryGain', type: 'mult', value: lvl => lvl * 0.01 + 1}
+    ]},
+
+    // Tower-exclusive heirlooms
+    brick: {minZone: Infinity, color: 'cherry', icon: 'mdi-wall', effect: [
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'hordeCritMult', type: 'base', value: lvl => Math.pow(lvl, 0.5) * 0.01}
+    ]},
+    heat: {minZone: Infinity, color: 'orange-red', icon: 'mdi-fire', effect: [
+        {name: 'hordeAttack', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'hordeCritChance', type: 'base', value: lvl => Math.log(lvl + 1) * 0.01}
+    ]},
+    ice: {minZone: Infinity, color: 'skyblue', icon: 'mdi-snowflake-variant', effect: [
+        {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'hordeRecovery', type: 'base', value: lvl => Math.log(lvl + 1) * 0.003}
     ]},
 }

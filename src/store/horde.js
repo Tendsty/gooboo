@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_HEIRLOOM_MIN_ZONE, HORDE_MINIBOSS_MIN_ZONE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from "../js/constants";
+import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_HEIRLOOM_MIN_ZONE, HORDE_KEYS_PER_TOWER, HORDE_MINIBOSS_MIN_ZONE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from "../js/constants";
 import { buildNum, capitalize } from "../js/utils/format";
 import { chance, randomElem, randomInt } from "../js/utils/random";
 import { logBase } from "../js/utils/math";
@@ -276,6 +276,7 @@ export default {
                 minZone: o.minZone ?? 0,
                 icon: o.icon ?? 'mdi-circle',
                 color: o.color ?? 'grey',
+                cap: o.cap ?? null,
                 stats: o.stats ?? (() => {return {};}),
                 active: o.active ?? null,
                 exclude: o.exclude ?? []
@@ -288,7 +289,7 @@ export default {
                 statBase: o.statBase ?? 100,
                 statScaling: o.statScaling ?? 1,
                 crowns: o.crowns ?? 1,
-                heirloom: o.heirloom ?? null,
+                heirlooms: o.heirlooms ?? [],
                 reward: o.reward ?? {},
                 highest: 0
             });
@@ -406,22 +407,27 @@ export default {
 
                 let amt = getters.currentSigils + (corruptionStats.sigil ?? 0);
                 let sigil = {};
-                const sigilSource = inTower ? state.tower[state.currentTower].sigils : state.sigilZones[state.zone - 1];
-                if (sigilSource.length > 0) {
-                    while (amt > 0) {
-                        const chosen = randomElem(sigilSource);
-                        if (sigil[chosen]) {
-                            sigil[chosen]++;
-                        } else {
-                            sigil[chosen] = 1;
-                        }
-                        amt--;
+                let sigilSource = inTower ? [...state.tower[state.currentTower].sigils] : [...state.sigilZones[state.zone - 1]];
+                while (amt > 0) {
+                    let chosen = null;
+                    if (sigilSource.length > 0) {
+                        chosen = randomElem(sigilSource);
+                    } else {
+                        chosen = 'generic';
                     }
+                    if (!sigil[chosen]) {
+                        sigil[chosen] = 0;
+                    }
+                    sigil[chosen]++;
+                    if (state.sigil[chosen].cap !== null && sigil[chosen] >= state.sigil[chosen].cap) {
+                        sigilSource.splice(sigilSource.findIndex(elem => elem === chosen), 1);
+                    }
+                    amt--;
                 }
 
                 if (state.bossFight >= 1) {
-                    stats.attack *= state.bossFight === 2 ? 15 : 3;
-                    stats.health *= state.bossFight === 2 ? 15 : 5;
+                    stats.attack *= state.bossFight === 2 ? 15 : 4;
+                    stats.health *= state.bossFight === 2 ? 15 : 2.5;
                     stats.bioTaken /= state.bossFight === 2 ? 10 : 5;
                     stats.stunResist += state.bossFight;
                 }
@@ -544,6 +550,20 @@ export default {
                 commit('unlock/unlock', 'hordeItemMastery', {root: true});
             }
 
+            // Tower unlocks
+            if (!rootState.unlock.hordeBrickTower.use && maxZoneTotal >= 140) {
+                commit('unlock/unlock', 'hordeBrickTower', {root: true});
+                dispatch('currency/gain', {feature: 'horde', name: 'towerKey', amount: HORDE_KEYS_PER_TOWER}, {root: true});
+            }
+            if (!rootState.unlock.hordeFireTower.use && maxZoneTotal >= 170) {
+                commit('unlock/unlock', 'hordeFireTower', {root: true});
+                dispatch('currency/gain', {feature: 'horde', name: 'towerKey', amount: HORDE_KEYS_PER_TOWER}, {root: true});
+            }
+            if (!rootState.unlock.hordeIceTower.use && maxZoneTotal >= 200) {
+                commit('unlock/unlock', 'hordeIceTower', {root: true});
+                dispatch('currency/gain', {feature: 'horde', name: 'towerKey', amount: HORDE_KEYS_PER_TOWER}, {root: true});
+            }
+
             // Raise miniboss rewards
             if (maxZoneTotal >= HORDE_MINIBOSS_MIN_ZONE) {
                 const zoneBase = maxZoneTotal - HORDE_MINIBOSS_MIN_ZONE;
@@ -567,7 +587,7 @@ export default {
             if (getters.canFindHeirloom) {
                 for (let i = 0; i < amount; i++) {
                     if (chance(rootGetters['mult/get']('hordeHeirloomChance'), rootGetters['system/nextRng']('horde_heirloom')[0])) {
-                        dispatch('findHeirloom', state.zone);
+                        dispatch('findHeirloom', {zone: state.zone});
 
                         // Finding a heirloom with help removes 1 nostalgia
                         if (rootGetters['mult/get']('hordeNostalgia') > 0) {
@@ -595,6 +615,8 @@ export default {
             // Reset some stats
             commit('updatePlayerKey', {key: 'divisionShield', value: rootGetters['mult/get']('hordeDivisionShield')});
             commit('updatePlayerKey', {key: 'hits', value: 0});
+            commit('updatePlayerKey', {key: 'silence', value: 0});
+            commit('updatePlayerKey', {key: 'stun', value: 0});
 
             const recovery = rootGetters['mult/get']('hordeRecovery');
             const missingHealth = rootGetters['mult/get']('hordeHealth') - state.player.health;
@@ -610,6 +632,9 @@ export default {
                 commit('updateKey', {key: 'towerFloor', value: newFloor});
                 if (newFloor > tower.highest) {
                     commit('updateTowerKey', {name: state.currentTower, key: 'highest', value: newFloor});
+                }
+                if (newFloor % 5 === 0) {
+                    dispatch('findHeirloom', {zone: getters.currentBaseZone, heirlooms: tower.heirlooms});
                 }
             } else if (state.bossFight === 1) {
                 dispatch('getMinibossReward', 1);
@@ -791,13 +816,13 @@ export default {
             dispatch('updatePlayerStats');
             dispatch('updateEnemyStats');
         },
-        findHeirloom({ state, rootGetters, commit, dispatch }, zone) {
-            let eligibleHeirlooms = [];
+        findHeirloom({ state, rootGetters, commit, dispatch }, o) {
+            let eligibleHeirlooms = o.heirlooms ? [...o.heirlooms] : [];
             let lowestItem = null;
             let lowestAmount = Infinity;
 
             for (const [key, elem] of Object.entries(state.heirloom)) {
-                if (zone >= elem.minZone) {
+                if (o.zone >= elem.minZone) {
                     eligibleHeirlooms.push(key);
 
                     if (elem.amount < lowestAmount) {
