@@ -29,7 +29,7 @@
           <v-icon class="mr-1">mdi-plus</v-icon>
           {{ $vuetify.lang.t(`$vuetify.horde.newLoadout`) }}
         </v-btn>
-        <v-btn class="ma-1" color="error" :disabled="isFrozen" @click="unequipAll">{{ $vuetify.lang.t(`$vuetify.gooboo.unequipAll`) }}</v-btn>
+        <v-btn class="ma-1" color="error" :disabled="itemsBlocked" @click="unequipAll">{{ $vuetify.lang.t(`$vuetify.gooboo.unequipAll`) }}</v-btn>
         <v-btn icon @click="showLoadouts = false"><v-icon>mdi-close</v-icon></v-btn>
       </div>
       <div v-if="loadouts.length >= 1" class="ma-1 px-1 w-100">
@@ -42,8 +42,8 @@
               </div>
               <v-spacer></v-spacer>
               <div class="flex-grow-0">
-                <v-btn small class="ma-1 pa-1" color="success" min-width="32" min-height="32" :disabled="isFrozen || loadout.content.length <= 0" @click.native.stop="equipLoadout(key)"><v-icon>mdi-plus</v-icon></v-btn>
-                <v-btn small class="ma-1 pa-1" color="error" min-width="32" min-height="32" :disabled="isFrozen || loadout.content.length <= 0" @click.native.stop="unequipLoadout(key)"><v-icon>mdi-minus</v-icon></v-btn>
+                <v-btn small class="ma-1 pa-1" color="success" min-width="32" min-height="32" :disabled="itemsBlocked || loadout.content.length <= 0" @click.native.stop="equipLoadout(key)"><v-icon>mdi-plus</v-icon></v-btn>
+                <v-btn small class="ma-1 pa-1" color="error" min-width="32" min-height="32" :disabled="itemsBlocked || loadout.content.length <= 0" @click.native.stop="unequipLoadout(key)"><v-icon>mdi-minus</v-icon></v-btn>
               </div>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -57,7 +57,7 @@
     <div class="horde-item-pagination text-center bg-tile-default rounded-b elevation-2 mx-2" :class="{'horde-item-pagination-mobile': $vuetify.breakpoint.xsOnly}" v-if="pages > 1">
       <v-pagination v-model="page" :length="pages"></v-pagination>
     </div>
-    <item v-for="item in finalItems" :key="'item-' + item.name" :name="item.name" :disabled="isFrozen" class="ma-2"></item>
+    <item v-for="item in finalItems" :key="'item-' + item.name" :name="item.name" :disabled="itemsBlocked" :active-disabled="isFrozen" class="ma-2"></item>
   </div>
 </template>
 
@@ -110,6 +110,9 @@ export default {
     },
     pages() {
       return this.itemLimit === null ? null : Math.ceil(this.items.length / this.itemLimit);
+    },
+    itemsBlocked() {
+      return this.isFrozen || this.$store.state.horde.currentTower !== null;
     }
   },
   methods: {

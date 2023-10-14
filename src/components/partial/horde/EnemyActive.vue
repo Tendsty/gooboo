@@ -15,7 +15,7 @@
 <template>
   <gb-tooltip>
     <template v-slot:activator="{ on, attrs }">
-      <v-badge overlap bordered :class="$vnode.data.staticClass" :color="hasUsesLeft ? sigil.color : 'grey'">
+      <v-badge class="balloon-text-dynamic" overlap bordered left offset-x="44" :class="$vnode.data.staticClass" :color="hasUsesLeft ? sigil.color : 'grey'">
         <div class="active-container rounded d-flex justify-center align-center" v-bind="attrs" v-on="on">
           <v-progress-linear
             class="active-cooldown rounded"
@@ -74,13 +74,13 @@ export default {
       return this.$store.state.horde.enemy.sigil[this.name];
     },
     cooldown() {
-      return Math.ceil(this.sigil.active.cooldown(this.sigilLevel));
+      return Math.ceil(this.sigil.active.cooldown(this.sigilLevel, this.$store.state.horde.bossFight));
     },
     cooldownPercent() {
       return 100 * (1 - (this.active.cooldown / this.cooldown));
     },
     effect() {
-      return this.sigil.active.effect(this.sigilLevel);
+      return this.sigil.active.effect(this.sigilLevel, this.$store.state.horde.bossFight);
     },
     enemyMaxHealth() {
       return this.$store.state.horde.enemy.maxHealth;
@@ -89,7 +89,7 @@ export default {
       return this.$store.state.horde.enemy.attack;
     },
     maxUses() {
-      return this.sigil.active.uses(this.sigilLevel);
+      return this.sigil.active.uses(this.sigilLevel, this.$store.state.horde.bossFight);
     },
     hasUsesLeft() {
       return this.active.uses === null || this.active.uses > 0;

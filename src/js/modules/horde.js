@@ -248,6 +248,14 @@ export default {
                                     damage += getDamage(baseDamage * conversion / divisionShieldMult, damagetype, playerStats, enemyStats)
                                 }
                             });
+
+                            // Count damage stats (basic attacks only)
+                            store.commit('stat/increaseTo', {feature: 'horde', name: 'maxDamage', value: damage});
+                            store.commit('stat/add', {feature: 'horde', name: 'totalDamage', value: damage});
+                            if (simulation.dead) {
+                                simulation.damage += damage;
+                            }
+
                             if (playerStats.firstStrike > 0 && store.state.horde.player.hits <= 0) {
                                 damage += getDamage(playerStats.attack * playerStats.firstStrike / divisionShieldMult, 'magic', playerStats, enemyStats);
                             }
@@ -259,7 +267,7 @@ export default {
                             }
                             store.commit('horde/updatePlayerKey', {key: 'hits', value: store.state.horde.player.hits + 1});
 
-                            if (enemyHealth > damage && playerStats.cutting > 0) {
+                            if (enemyHealth > damage && playerStats.cutting > 0 && enemyHealth < Infinity) {
                                 damage += getDamage((enemyHealth - damage) * playerStats.cutting / divisionShieldMult, 'bio', playerStats, enemyStats);
                             }
 
@@ -273,13 +281,6 @@ export default {
                         enemyHealth = Math.max(0, enemyHealth - damage);
                         if (enemyStats.divisionShield > 0 && hitShield) {
                             store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: enemyStats.divisionShield - 1});
-                        }
-
-                        // count damage stats
-                        store.commit('stat/increaseTo', {feature: 'horde', name: 'maxDamage', value: damage});
-                        store.commit('stat/add', {feature: 'horde', name: 'totalDamage', value: damage});
-                        if (simulation.dead) {
-                            simulation.damage += damage;
                         }
                     }
                 }
@@ -304,23 +305,54 @@ export default {
                     playerHealth = Math.max(0, playerHealth - store.state.horde.player.poison);
                 }
 
-                if (enemyStats.stun > 0) {
-                    store.commit('horde/updateEnemyKey', {key: 'stun', value: Math.max(0, enemyStats.stun - 1 - enemyStats.stunResist)});
-                } else {
-                    // ENEMY ATTACK
+                const isEnemyStunned = enemyStats.stun > 0;
 
-                    // determine which attack to use (first one with cooldown ready)
-                    let usedAttack = null;
-                    if (enemyStats.silence > 0) {
-                        store.commit('horde/updateEnemyKey', {key: 'silence', value: Math.max(0, enemyStats.silence - 1)});
-                    } else {
-                        for (const [key, elem] of Object.entries(enemyStats.active)) {
-                            if (elem.cooldown <= 0 && (elem.uses === null || elem.uses > 0)) {
+                // determine which attack to use (first one with cooldown ready)
+                let usedAttack = null;
+                if (enemyStats.silence > 0) {
+                    store.commit('horde/updateEnemyKey', {key: 'silence', value: Math.max(0, enemyStats.silence - 1)});
+                } else {
+                    for (const [key, elem] of Object.entries(enemyStats.active)) {
+                        if (elem.cooldown <= 0 && (elem.uses === null || elem.uses > 0)) {
+                            let usePositive = false;
+                            let useNegative = false;
+                            let usableInStun = false;
+                            store.state.horde.sigil[key].active.effect(enemyStats.sigil[key], store.state.horde.bossFight).forEach(elem => {
+                                let condition = null;
+                                if (elem.type === 'heal') {
+                                    condition = (enemyStats.health / enemyStats.maxHealth) <= (1 - elem.value);
+                                } else if (elem.type === 'stun') {
+                                    condition = store.state.horde.player.stun <= 0;
+                                } else if (elem.type === 'silence') {
+                                    condition = store.state.horde.player.silence <= 0;
+                                } else if (elem.type === 'divisionShield') {
+                                    condition = enemyStats.divisionShield <= 0;
+                                } else if (elem.type === 'antidote') {
+                                    condition = enemyStats.poison > 0;
+                                } else if (elem.type === 'removeStun') {
+                                    usableInStun = true;
+                                    condition = enemyStats.stun > 0;
+                                }
+
+                                if (condition === true) {
+                                    usePositive = true;
+                                } else if (condition === false) {
+                                    useNegative = true;
+                                }
+                            });
+                            if ((!isEnemyStunned || usableInStun) && usePositive || !useNegative) {
                                 usedAttack = key;
                                 break;
                             }
                         }
                     }
+                }
+
+                if (isEnemyStunned) {
+                    store.commit('horde/updateEnemyKey', {key: 'stun', value: Math.max(0, enemyStats.stun - 1 - enemyStats.stunResist)});
+                }
+                if (!isEnemyStunned || usedAttack !== null) {
+                    // ENEMY ATTACK
 
                     const enemyBaseDamage = enemyStats.attack * Math.pow(enemyStats.critMult + 1, randomRound(enemyStats.critChance));
                     const divisionShieldMult = store.state.horde.player.divisionShield + 1;
@@ -353,7 +385,7 @@ export default {
                     } else {
                         // Perform an active attack
                         const active = store.state.horde.sigil[usedAttack].active;
-                        active.effect(enemyStats.sigil[usedAttack]).forEach(elem => {
+                        active.effect(enemyStats.sigil[usedAttack], store.state.horde.bossFight).forEach(elem => {
                             if (elem.type === 'heal') {
                                 store.commit('horde/updateEnemyKey', {key: 'health', value: Math.min(enemyStats.maxHealth, store.state.horde.enemy.health + enemyStats.maxHealth * elem.value)});
                             } else if (elem.type === 'stun') {
@@ -378,7 +410,7 @@ export default {
                         });
 
                         // Count use and apply cooldown
-                        store.commit('horde/updateEnemyActive', {name: usedAttack, key: 'cooldown', value: active.cooldown(enemyStats.sigil[usedAttack])});
+                        store.commit('horde/updateEnemyActive', {name: usedAttack, key: 'cooldown', value: active.cooldown(enemyStats.sigil[usedAttack], store.state.horde.bossFight)});
                         if (enemyStats.active[usedAttack].uses !== null) {
                             store.commit('horde/updateEnemyActive', {name: usedAttack, key: 'uses', value: enemyStats.active[usedAttack].uses - 1});
                         }
@@ -485,6 +517,9 @@ export default {
     unlock: [
         'hordeFeature', 'hordeItems', 'hordeDamageTypes', 'hordePrestige', 'hordeHeirlooms', 'hordeCorruptedFlesh', 'hordeItemMastery', 'hordeChessItems',
         'hordeBrickTower', 'hordeFireTower', 'hordeIceTower',
+        ...[
+            'RoyalArmor', 'RoyalStorage', 'RoyalButcher', 'RoyalCrypt',
+        ].map(elem => 'hordeUpgrade' + elem),
     ],
     stat: {
         maxZone: {value: 1},
@@ -537,7 +572,7 @@ export default {
         hordeNostalgia: {baseValue: 5, round: true},
         hordeCorruption: {display: 'percent', min: 0, roundNearZero: true},
         hordeItemMasteryGain: {},
-        hordeShardChance: {display: 'percent', baseValue: 0.001},
+        hordeShardChance: {display: 'percent', baseValue: 0.0001},
     },
     multGroup: [
         {mult: 'hordeHeirloomEffect', name: 'multType', type: 'heirloomEffect'}
@@ -759,5 +794,6 @@ export default {
         store.dispatch('horde/checkZoneUnlocks');
         store.dispatch('mult/updateExternalCaches', 'hordeNostalgia');
         store.dispatch('horde/updateNostalgia');
+        store.dispatch('horde/applyTowerEffects');
     }
 }

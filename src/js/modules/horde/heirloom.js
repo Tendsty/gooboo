@@ -28,6 +28,9 @@ export default {
     expertise: {minZone: 100, color: 'light-blue', icon: 'mdi-book-open-variant', effect: [
         {name: 'hordeItemMasteryGain', type: 'mult', value: lvl => lvl * 0.01 + 1}
     ]},
+    mystery: {minZone: 120, color: 'teal', icon: 'mdi-help-box', effect: [
+        {name: 'hordeShardChance', type: 'mult', value: lvl => lvl * 0.001 + 1}
+    ]},
 
     // Tower-exclusive heirlooms
     brick: {minZone: Infinity, color: 'cherry', icon: 'mdi-wall', effect: [

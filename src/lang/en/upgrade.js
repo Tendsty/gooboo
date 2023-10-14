@@ -382,8 +382,7 @@ export default {
   horde_grossBag: 'Gross bag',
   horde_targetDummy: 'Target dummy',
   horde_milestone: 'Milestone',
-  horde_royalSword: 'Royal sword',
-  horde_royalArmor: 'Royal armor',
+  horde_mysticalBag: 'Mystical bag',
 
   // Horde prestige upgrades
   horde_balance: 'Balance',
@@ -403,6 +402,14 @@ export default {
   horde_mausoleum: 'Mausoleum',
   horde_lastWill: 'Last will',
   horde_combatStudies: 'Combat studies',
+  horde_boneChamber: 'Bone chamber',
+
+  // Horde crown upgrades
+  horde_royalSword: 'Royal sword',
+  horde_royalArmor: 'Royal armor',
+  horde_royalStorage: 'Royal storage',
+  horde_royalButcher: 'Royal butcher',
+  horde_royalCrypt: 'Royal crypt',
 
   // Horde premium upgrades
   horde_morePower: 'More power',
@@ -419,6 +426,7 @@ export default {
   horde_ancientReaping: 'Ancient reaping',
   horde_ancientRemembrance: 'Ancient remembrance',
   horde_ancientExpertise: 'Ancient expertise',
+  horde_ancientMystery: 'Ancient mystery',
 
   // Horde books
   horde_bookTraining: 'Book: Training',

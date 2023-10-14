@@ -82,6 +82,7 @@ export default {
   reapingHeirloomEffect: 'Sense-Effekt',
   remembranceHeirloomEffect: 'Andenken-Effekt',
   expertiseHeirloomEffect: 'Expertise-Effekt',
+  mysteryHeirloomEffect: 'Mysterium-Effekt',
   farmExperience: 'Pflanzenerfahrung',
   farmTiles: 'Gartenfelder',
   farmOvergrow: 'Überwuchern',

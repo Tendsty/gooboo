@@ -417,6 +417,7 @@ export default {
   horde_ancientReaping: 'Antike Sense',
   horde_ancientRemembrance: 'Antikes Andenken',
   horde_ancientExpertise: 'Antike Expertise',
+  horde_ancientMystery: 'Antikes Mysterium',
 
   // Horde books
   horde_bookTraining: 'Buch: Training',

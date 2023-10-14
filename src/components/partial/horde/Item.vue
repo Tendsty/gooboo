@@ -124,6 +124,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    activeDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
@@ -200,13 +205,13 @@ export default {
       return this.$store.state.unlock.hordeItemMastery.see;
     },
     isPretend() {
-      return (!this.canUseActive && this.item.cooldownLeft <= 0) || this.disabled;
+      return (!this.canUseActive && this.item.cooldownLeft <= 0) || this.activeDisabled;
     },
     shardIncrement() {
       return HORDE_SHARD_INCREMENT;
     },
     shardCurrent() {
-      return (this.item.masteryLevel - 5) * HORDE_SHARD_INCREMENT + HORDE_SHARD_PER_EQUIP;
+      return Math.max(this.item.masteryLevel - 5, 0) * HORDE_SHARD_INCREMENT + HORDE_SHARD_PER_EQUIP;
     }
   },
   methods: {

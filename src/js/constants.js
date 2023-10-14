@@ -49,6 +49,7 @@ export const HORDE_ENEMY_RESPAWN_MAX = 5;
 export const HORDE_MINIBOSS_MIN_ZONE = 21;
 export const HORDE_HEIRLOOM_MIN_ZONE = 31;
 export const HORDE_KEYS_PER_TOWER = 3;
+export const HORDE_HEIRLOOM_TOWER_FLOORS = 5;
 
 export const TREASURE_TIER_UPGRADE_MULT = 5;
 export const TREASURE_TIER_DESTROY_MULT = 4;

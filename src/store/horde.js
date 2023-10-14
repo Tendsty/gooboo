@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_HEIRLOOM_MIN_ZONE, HORDE_KEYS_PER_TOWER, HORDE_MINIBOSS_MIN_ZONE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from "../js/constants";
+import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_HEIRLOOM_MIN_ZONE, HORDE_HEIRLOOM_TOWER_FLOORS, HORDE_KEYS_PER_TOWER, HORDE_MINIBOSS_MIN_ZONE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from "../js/constants";
 import { buildNum, capitalize } from "../js/utils/format";
 import { chance, randomElem, randomInt } from "../js/utils/random";
 import { logBase } from "../js/utils/math";
@@ -366,109 +366,111 @@ export default {
             commit('updatePlayerKey', {key: 'spells', value: 0});
         },
         updateEnemyStats({ state, getters, rootGetters, commit }) {
-            const inTower = state.currentTower !== null;
-            if (!inTower && state.minibossTimer >= 1 && state.bossFight === 0) {
-                commit('updateKey', {key: 'bossFight', value: 1});
-            }
-            if (inTower || state.enemyTimer >= HORDE_ENEMY_RESPAWN_TIME || state.bossFight > 0) {
-                let stats = getters.enemyStats(getters.currentBaseZone, inTower ? 0 : state.combo);
-                const corruptionStats = inTower ? {} : getters.currentCorruptionStats;
-
-                if (corruptionStats.power !== undefined) {
-                    stats.attack *= corruptionStats.power;
-                    stats.health *= corruptionStats.power;
+            if (state.respawn <= 0) {
+                const inTower = state.currentTower !== null;
+                if (!inTower && state.minibossTimer >= 1 && state.bossFight === 0) {
+                    commit('updateKey', {key: 'bossFight', value: 1});
                 }
-                if (corruptionStats.revive !== undefined) {
-                    stats.revive += corruptionStats.revive;
-                }
+                if (inTower || state.enemyTimer >= HORDE_ENEMY_RESPAWN_TIME || state.bossFight > 0) {
+                    let stats = getters.enemyStats(getters.currentBaseZone, inTower ? 0 : state.combo);
+                    const corruptionStats = inTower ? {} : getters.currentCorruptionStats;
 
-                // update sigil zones
-                if (!inTower) {
-                    while (state.sigilZones.length < state.zone) {
-                        let sigils = [];
-                        let sigilsAvailable = [];
-                        for (const [key, elem] of Object.entries(state.sigil)) {
-                            if (state.zone >= elem.minZone) {
-                                sigilsAvailable.push(key);
+                    if (corruptionStats.power !== undefined) {
+                        stats.attack *= corruptionStats.power;
+                        stats.health *= corruptionStats.power;
+                    }
+                    if (corruptionStats.revive !== undefined) {
+                        stats.revive += corruptionStats.revive;
+                    }
+
+                    // update sigil zones
+                    if (!inTower) {
+                        while (state.sigilZones.length < state.zone) {
+                            let sigils = [];
+                            let sigilsAvailable = [];
+                            for (const [key, elem] of Object.entries(state.sigil)) {
+                                if (state.zone >= elem.minZone) {
+                                    sigilsAvailable.push(key);
+                                }
+                            }
+
+                            let amt = getters.currentSigilVariety;
+                            while (amt > 0 && sigilsAvailable.length > 0) {
+                                const newSigil = randomElem(sigilsAvailable);
+                                sigils.push(newSigil);
+                                sigilsAvailable = sigilsAvailable.filter(sigil => sigil !== newSigil && !state.sigil[newSigil].exclude.includes(sigil));
+                                amt--;
+                            }
+
+                            commit('addSigilZone', sigils);
+                        }
+                    }
+
+                    let amt = getters.currentSigils + (corruptionStats.sigil ?? 0);
+                    let sigil = {};
+                    let sigilSource = inTower ? [...state.tower[state.currentTower].sigils] : [...state.sigilZones[state.zone - 1]];
+                    while (amt > 0) {
+                        let chosen = null;
+                        if (sigilSource.length > 0) {
+                            chosen = randomElem(sigilSource);
+                        } else {
+                            chosen = 'generic';
+                        }
+                        if (!sigil[chosen]) {
+                            sigil[chosen] = 0;
+                        }
+                        sigil[chosen]++;
+                        if (state.sigil[chosen].cap !== null && sigil[chosen] >= state.sigil[chosen].cap) {
+                            sigilSource.splice(sigilSource.findIndex(elem => elem === chosen), 1);
+                        }
+                        amt--;
+                    }
+
+                    if (state.bossFight >= 1) {
+                        stats.attack *= state.bossFight === 2 ? 15 : 4;
+                        stats.health *= state.bossFight === 2 ? 15 : 2.5;
+                        stats.bioTaken /= state.bossFight === 2 ? 10 : 5;
+                        stats.stunResist += state.bossFight;
+                    }
+
+                    let active = {};
+                    const cooldownStart = rootGetters['mult/get']('hordeEnemyActiveStart');
+
+                    for (const [key, elem] of Object.entries(sigil)) {
+                        for (const [stat, obj] of Object.entries(state.sigil[key].stats(elem, state.bossFight))) {
+                            if (obj.type === 'mult') {
+                                stats[stat] *= obj.amount;
+                            } else {
+                                stats[stat] += obj.amount;
                             }
                         }
-
-                        let amt = getters.currentSigilVariety;
-                        while (amt > 0 && sigilsAvailable.length > 0) {
-                            const newSigil = randomElem(sigilsAvailable);
-                            sigils.push(newSigil);
-                            sigilsAvailable = sigilsAvailable.filter(sigil => sigil !== newSigil && !state.sigil[newSigil].exclude.includes(sigil));
-                            amt--;
-                        }
-
-                        commit('addSigilZone', sigils);
-                    }
-                }
-
-                let amt = getters.currentSigils + (corruptionStats.sigil ?? 0);
-                let sigil = {};
-                let sigilSource = inTower ? [...state.tower[state.currentTower].sigils] : [...state.sigilZones[state.zone - 1]];
-                while (amt > 0) {
-                    let chosen = null;
-                    if (sigilSource.length > 0) {
-                        chosen = randomElem(sigilSource);
-                    } else {
-                        chosen = 'generic';
-                    }
-                    if (!sigil[chosen]) {
-                        sigil[chosen] = 0;
-                    }
-                    sigil[chosen]++;
-                    if (state.sigil[chosen].cap !== null && sigil[chosen] >= state.sigil[chosen].cap) {
-                        sigilSource.splice(sigilSource.findIndex(elem => elem === chosen), 1);
-                    }
-                    amt--;
-                }
-
-                if (state.bossFight >= 1) {
-                    stats.attack *= state.bossFight === 2 ? 15 : 4;
-                    stats.health *= state.bossFight === 2 ? 15 : 2.5;
-                    stats.bioTaken /= state.bossFight === 2 ? 10 : 5;
-                    stats.stunResist += state.bossFight;
-                }
-
-                let active = {};
-                const cooldownStart = rootGetters['mult/get']('hordeEnemyActiveStart');
-
-                for (const [key, elem] of Object.entries(sigil)) {
-                    for (const [stat, obj] of Object.entries(state.sigil[key].stats(elem))) {
-                        if (obj.type === 'mult') {
-                            stats[stat] *= obj.amount;
-                        } else {
-                            stats[stat] += obj.amount;
+                        if (state.sigil[key].active) {
+                            active[key] = {
+                                cooldown: Math.round(state.sigil[key].active.startCooldown(elem, state.bossFight) * (1 - cooldownStart) + state.sigil[key].active.cooldown(elem, state.bossFight) * cooldownStart),
+                                uses: state.sigil[key].active.uses(elem, state.bossFight)
+                            };
                         }
                     }
-                    if (state.sigil[key].active) {
-                        active[key] = {
-                            cooldown: Math.round(state.sigil[key].active.startCooldown(elem) * (1 - cooldownStart) + state.sigil[key].active.cooldown(elem) * cooldownStart),
-                            uses: state.sigil[key].active.uses(elem)
-                        };
+
+                    commit('updateKey', {key: 'enemy', value: {}});
+                    for (const [key, elem] of Object.entries(stats)) {
+                        commit('updateEnemyKey', {key, value: elem});
                     }
-                }
+                    commit('updateEnemyKey', {key: 'maxHealth', value: stats.health});
+                    commit('updateEnemyKey', {key: 'maxRevive', value: stats.revive});
+                    commit('updateEnemyKey', {key: 'maxDivisionShield', value: stats.divisionShield});
+                    commit('updateEnemyKey', {key: 'silence', value: 0});
+                    commit('updateEnemyKey', {key: 'stun', value: 0});
+                    commit('updateEnemyKey', {key: 'poison', value: 0});
+                    commit('updateEnemyKey', {key: 'hits', value: 0});
+                    commit('updateEnemyKey', {key: 'sigil', value: sigil});
+                    commit('updateEnemyKey', {key: 'active', value: active});
 
-                commit('updateKey', {key: 'enemy', value: {}});
-                for (const [key, elem] of Object.entries(stats)) {
-                    commit('updateEnemyKey', {key, value: elem});
+                    commit('updateKey', {key: 'fightTime', value: 0});
+                    commit('updateKey', {key: 'fightRampage', value: 0});
+                } else {
+                    commit('updateKey', {key: 'enemy', value: null});
                 }
-                commit('updateEnemyKey', {key: 'maxHealth', value: stats.health});
-                commit('updateEnemyKey', {key: 'maxRevive', value: stats.revive});
-                commit('updateEnemyKey', {key: 'maxDivisionShield', value: stats.divisionShield});
-                commit('updateEnemyKey', {key: 'silence', value: 0});
-                commit('updateEnemyKey', {key: 'stun', value: 0});
-                commit('updateEnemyKey', {key: 'poison', value: 0});
-                commit('updateEnemyKey', {key: 'hits', value: 0});
-                commit('updateEnemyKey', {key: 'sigil', value: sigil});
-                commit('updateEnemyKey', {key: 'active', value: active});
-
-                commit('updateKey', {key: 'fightTime', value: 0});
-                commit('updateKey', {key: 'fightRampage', value: 0});
-            } else {
-                commit('updateKey', {key: 'enemy', value: null});
             }
         },
         fightBoss({ commit, dispatch }) {
@@ -632,8 +634,9 @@ export default {
                 commit('updateKey', {key: 'towerFloor', value: newFloor});
                 if (newFloor > tower.highest) {
                     commit('updateTowerKey', {name: state.currentTower, key: 'highest', value: newFloor});
+                    dispatch('applyTowerEffects');
                 }
-                if (newFloor % 5 === 0) {
+                if (newFloor % HORDE_HEIRLOOM_TOWER_FLOORS === 0) {
                     dispatch('findHeirloom', {zone: getters.currentBaseZone, heirlooms: tower.heirlooms});
                 }
             } else if (state.bossFight === 1) {
@@ -809,6 +812,8 @@ export default {
             commit('updateKey', {key: 'minibossTimer', value: 0});
             commit('updateKey', {key: 'chosenActive', value: null});
             commit('updateKey', {key: 'nostalgiaLost', value: 0});
+            commit('updateKey', {key: 'currentTower', value: null});
+            commit('updateKey', {key: 'towerFloor', value: 0});
             dispatch('updateNostalgia');
 
             dispatch('card/activateCards', 'horde', {root: true});
@@ -877,6 +882,15 @@ export default {
                 dispatch('system/applyEffect', {type: 'mult', name: key, multKey: `hordeItemPermanent`, value: elem + 1}, {root: true});
             }
         },
+        applyTowerEffects({ state, dispatch }) {
+            for (const [name, tower] of Object.entries(state.tower)) {
+                for (const [floor, reward] of Object.entries(tower.reward)) {
+                    if (tower.highest >= parseInt(floor)) {
+                        dispatch('system/applyEffect', {type: reward.type, name: reward.name, multKey: `hordeTower_${ name }_${ floor }`, value: reward.value, trigger: true}, {root: true});
+                    }
+                }
+            }
+        },
         unequipAll({ state, dispatch }) {
             for (const [key, elem] of Object.entries(state.items)) {
                 if (elem.equipped) {
@@ -912,12 +926,15 @@ export default {
                 dispatch('mult/removeKey', {name: 'hordeNostalgia', type: 'bonus', key: 'hordeNostalgiaLost'}, {root: true});
             }
         },
-        enterTower({ commit, dispatch }, name) {
-            commit('updateKey', {key: 'combo', value: 0});
-            commit('updateKey', {key: 'bossFight', value: 0});
-            commit('updateKey', {key: 'currentTower', value: name});
-            commit('updateKey', {key: 'towerFloor', value: 0});
-            dispatch('resetStats');
+        enterTower({ rootGetters, commit, dispatch }, name) {
+            if (rootGetters['currency/value']('horde_towerKey') >= 1) {
+                dispatch('currency/spend', {feature: 'horde', name: 'towerKey', amount: 1}, {root: true});
+                commit('updateKey', {key: 'combo', value: 0});
+                commit('updateKey', {key: 'bossFight', value: 0});
+                commit('updateKey', {key: 'currentTower', value: name});
+                commit('updateKey', {key: 'towerFloor', value: 0});
+                dispatch('resetStats');
+            }
         }
     }
 }

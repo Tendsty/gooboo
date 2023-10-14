@@ -98,5 +98,12 @@ export default {
         return {gem_ruby: Math.pow(2, lvl) * 1300};
     }, effect: [
         {name: 'expertiseHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+    ]},
+    ancientMystery: {type: 'premium', cap: 1, requirement() {
+        return store.state.horde.heirloom.mystery.amount > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 1800};
+    }, effect: [
+        {name: 'mysteryHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
     ]}
 }

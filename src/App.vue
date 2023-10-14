@@ -67,6 +67,11 @@
   margin-top: 4px;
 }
 
+/** Fix badge color */
+.theme--light .v-badge__badge {
+  color: black;
+}
+
 /** Special effect for premium upgrades */
 @keyframes premium-glow-shadow {
   0%   {box-shadow: 0 1px 6px var(--v-red-base);}

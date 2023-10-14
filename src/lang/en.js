@@ -1349,6 +1349,7 @@ export default {
     recoveryDescription: 'Heal a percentage of your missing health after killing an enemy',
     boss: 'Boss',
     miniboss: 'Miniboss',
+    minibossDescription: 'Minibosses appear in place of regular enemies and are a bit stronger. They hold valuable loot and up to 2 can be waiting at once',
     poisonPlayer: 'You are poisoned and take {0} damage per second',
     poisonEnemy: 'This enemy is poisoned and takes {0} damage per second',
     silencePlayer: 'You are silenced and cannot use actives',
@@ -1392,6 +1393,7 @@ export default {
       hasActive: 'Has active effect',
       min: 'Appears at zone {0} or higher',
       special: 'Only appears under special conditions',
+      inactive: 'inactive',
       power: 'Power',
       health: 'Health',
       bashing: 'Bashing',
@@ -1424,6 +1426,9 @@ export default {
       nuke: 'Nuke',
       rainbow: 'Rainbow',
       drain: 'Drain',
+      shocking: 'Shocking',
+      berserk: 'Berserk',
+      iceGiant: 'Ice giant',
       generic: 'Generic',
     },
     corruption: {
@@ -1489,6 +1494,13 @@ export default {
       moltenShield: 'Molten shield',
       cutter: 'Box cutter',
       book: 'Book',
+      chocolateMilk: 'Chocolate milk',
+      bigHammer: 'Big hammer',
+      spookyPumpkin: 'Spooky pumpkin',
+      strangeChemical: 'Strange chemical',
+      forbiddenHeartShield: 'Forbidden heart-shield',
+      cloudStaff: 'Cloud staff',
+      secretWeapon: 'Secret weapon',
 
       // Chess pieces
       pawn: 'Pawn',
@@ -1552,7 +1564,8 @@ export default {
         1: 'poison'
       },
       permanentStat: {
-        0: 'Increase {0} by',
+        0: 'Increase ',
+        2: ' by',
         1: '(until prestige)'
       },
       divisionShield: {
@@ -1567,6 +1580,7 @@ export default {
       min: 'Appears at zone {0} or higher',
       special: 'Does not appear on regular minibosses',
       description: 'Heirlooms are powerful artifacts that can be found from minibosses and stay forever. Reach higher zones to find more types',
+      descriptionTower: 'Heirlooms are powerful artifacts that can be found every {0} floors and stay forever. Reach higher zones or different towers to find more types',
       descriptionDouble: 'The heirloom with the lowest amount is twice as likely to be given. If you have multiple heirlooms tied in lowest amount, this does not apply.',
       descriptionNostalgia: 'Nostalgia increases your chance of finding a heirloom. Finding one with the help of nostalgia removes 1 nostalgia until your next prestige',
       power: 'Power',
@@ -1578,6 +1592,7 @@ export default {
       remembrance: 'Remembrance',
       holding: 'Holding',
       expertise: 'Expertise',
+      mystery: 'Mystery',
       brick: 'Brick',
       heat: 'Heat',
       ice: 'Ice',
@@ -1594,7 +1609,17 @@ export default {
       5: 'Can collect up to {0} mystical shards. This value is increased by another {1} for each mastery'
     },
     tower: {
+      name: 'Towers',
+      description: 'Towers are special places that require a tower key to enter. You can fight enemies for crowns and unique heirlooms until you die. Reach specific floors to permanently unlock new bonuses',
+      zoneDescription: 'Enemies in this tower on your highest reached floor are about as strong as a zone {0} enemy. They start at the power of a zone {1} enemy and gain {2} zones worth of stats every floor. Corruption is disabled in towers',
+      floorTitle: 'Highest floor defeated',
+      floorDescription: 'Defeat enemies on certain floors to unlock permanent bonuses:',
+      rewardTitle: 'Rewards',
+      rewardDescription1: 'Get {0} crown(s) per defeated enemy',
+      rewardDescription2: 'Enemies give heirlooms every {0} floors, and some heirlooms are exclusive to this tower:',
+      keyDescription: 'Get {0} tower keys when unlocking a new tower, and get 1 tower key every week (next one in {1})',
       enter: 'Enter',
+      enterCost: 'Requires',
       floor: 'Floor {0}',
       brick: 'Brick tower',
       fire: 'Fire tower',

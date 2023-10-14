@@ -1,31 +1,29 @@
 <style scoped>
 .boss-count-chip {
-  width: 120px;
+  min-width: 120px;
 }
 .boss-count-chip >>> .v-chip__content {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-.tower-btn {
-  width: 200px;
-}
 </style>
 
 <template>
   <div class="ma-1">
     <div class="d-flex justify-center align-center ma-1">
-      <v-btn icon :disabled="zone <= 1 || isFrozen" @click="zoneMin"><v-icon>mdi-skip-backward</v-icon></v-btn>
-      <v-btn icon :disabled="zone <= 1 || isFrozen" @click="zonePrev"><v-icon>mdi-step-backward</v-icon></v-btn>
-      <div class="mx-2">{{ $vuetify.lang.t('$vuetify.horde.zone') }} {{ zone }}</div>
-      <v-btn icon :disabled="isMaxZone || isFrozen" @click="zoneNext"><v-icon>mdi-step-forward</v-icon></v-btn>
-      <v-btn icon :disabled="isMaxZone || isFrozen" @click="zoneMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
+      <v-btn icon :disabled="zone <= 1 || isFrozen || currentTower !== null" @click="zoneMin"><v-icon>mdi-skip-backward</v-icon></v-btn>
+      <v-btn icon :disabled="zone <= 1 || isFrozen || currentTower !== null" @click="zonePrev"><v-icon>mdi-step-backward</v-icon></v-btn>
+      <div v-if="currentTower !== null" class="mx-2">{{ $vuetify.lang.t('$vuetify.horde.zone') }} ~{{ zoneEstimation }}</div>
+      <div v-else class="mx-2">{{ $vuetify.lang.t('$vuetify.horde.zone') }} {{ zone }}</div>
+      <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneNext"><v-icon>mdi-step-forward</v-icon></v-btn>
+      <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
     </div>
     <div class="d-flex justify-center align-center ma-1">
       <gb-tooltip :min-width="0">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip class="mx-1 boss-count-chip" :color="`pale-green ${ themeModifier }`" v-bind="attrs" v-on="on">
-            <v-icon size="14">mdi-emoticon-frown</v-icon>
+          <v-chip class="mx-1 boss-count-chip balloon-text-dynamic" :color="`pale-green ${ themeModifier }`" v-bind="attrs" v-on="on">
+            <v-icon class="mr-1" size="14">mdi-emoticon-frown</v-icon>
             <span v-if="enemyTimer < enemyRespawn">{{ $formatTime(enemyRespawn - enemyTimer) }}</span>
             <div v-else class="d-flex align-center">
               <v-icon v-if="enemyTimer >= (enemyRespawn * enemyRespawnMax)" class="mr-1">mdi-check-all</v-icon>
@@ -36,20 +34,22 @@
         </template>
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.enemyRespawn`, $formatTime(enemyRespawn), $formatNum(enemyRespawnMax)) }}</div>
       </gb-tooltip>
-      <gb-tooltip v-if="canSpawnMiniboss" :title-text="$vuetify.lang.t(`$vuetify.mult.hordeMinibossTime`)">
+      <gb-tooltip v-if="canSpawnMiniboss" :title-text="$vuetify.lang.t(`$vuetify.horde.miniboss`)">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip class="mx-1 boss-count-chip" :color="`pale-purple ${ themeModifier }`" v-bind="attrs" v-on="on">
-            <v-icon size="18">mdi-skull</v-icon>
+          <v-chip class="mx-1 boss-count-chip balloon-text-dynamic" :color="`pale-purple ${ themeModifier }`" v-bind="attrs" v-on="on">
+            <v-icon class="mr-1" size="18">mdi-skull</v-icon>
             <v-icon v-if="minibossTimer >= 1">mdi-check</v-icon>
             <span v-else>{{ $formatTime(Math.ceil((1 - minibossTimer) * minibossTime)) }}</span>
           </v-chip>
         </template>
+        <div>{{ $vuetify.lang.t('$vuetify.horde.minibossDescription') }}</div>
+        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.hordeMinibossTime') }}</h3>
         <stat-breakdown name="hordeMinibossTime"></stat-breakdown>
       </gb-tooltip>
       <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.horde.${ bossState }.title`)">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip @click="fightBoss" class="mx-1 boss-count-chip" :color="`dark-grey ${ themeModifier }`" v-bind="attrs" v-on="on">
-            <v-icon size="24">mdi-skull-crossbones</v-icon>
+          <v-chip @click="fightBoss" class="mx-1 boss-count-chip balloon-text-dynamic" :color="`dark-grey ${ themeModifier }`" v-bind="attrs" v-on="on">
+            <v-icon class="mr-1" size="24">mdi-skull-crossbones</v-icon>
             <v-spacer></v-spacer>
             <div v-if="!isMaxZone">{{ $vuetify.lang.t(`$vuetify.horde.cleared`) }}</div>
             <div v-else-if="bossFight === 2">{{ $vuetify.lang.t(`$vuetify.horde.fighting`) }}</div>
@@ -60,45 +60,32 @@
         <div>{{ $vuetify.lang.t(`$vuetify.horde.${ bossState }.description`, comboRequired) }}</div>
         <stat-breakdown v-if="bossState === 'reachBoss'" name="hordeBossRequirement" :base="comboRequiredBase"></stat-breakdown>
       </gb-tooltip>
-      <gb-tooltip v-if="canSeeTower" :title-text="$vuetify.lang.t(`$vuetify.horde.${ bossState }.title`)">
+      <gb-tooltip v-if="canSeeTower" :title-text="$vuetify.lang.t(`$vuetify.horde.tower.name`)">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip @click="toggleTowers" class="mx-1 boss-count-chip" :color="`pale-orange ${ themeModifier }`" v-bind="attrs" v-on="on">
-            <v-icon size="24">mdi-office-building</v-icon>
+          <v-chip @click="toggleTowers" class="mx-1 boss-count-chip balloon-text-dynamic" :color="`pale-orange ${ themeModifier }`" v-bind="attrs" v-on="on">
+            <v-icon class="mr-1" size="24">mdi-office-building</v-icon>
             <v-spacer></v-spacer>
-            <div>-</div>
+            <div v-if="currentTower !== null">{{ $vuetify.lang.t(`$vuetify.horde.tower.${ currentTower }`) }}</div>
+            <div v-else class="d-flex align-center">
+              <v-icon class="mr-1">{{ towerKey.icon }}</v-icon>
+              {{ $formatNum(towerKey.value) }}
+            </div>
           </v-chip>
         </template>
-        <div>tower</div>
+        <div>{{ $vuetify.lang.t(`$vuetify.horde.tower.description`) }}</div>
       </gb-tooltip>
     </div>
     <v-card v-if="showTowers" class="ma-1 mt-2 pa-1">
       <div class="d-flex flex-wrap">
         <currency class="ma-1" name="horde_crown"></currency>
-        <currency class="ma-1" name="horde_towerKey"></currency>
+        <currency class="ma-1" name="horde_towerKey">
+          <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.horde.tower.keyDescription`, $formatNum(keysOnUnlock), $formatTime(secondsUntilWeeklyReset)) }}</alert-text>
+        </currency>
         <v-spacer></v-spacer>
         <v-btn icon @click="showTowers = false"><v-icon>mdi-close</v-icon></v-btn>
       </div>
       <div class="d-flex flex-wrap">
-        <div
-          v-for="(tower, name) in visibleTowers"
-          :key="`tower-${ name }`"
-          class="tower-btn bg-tile-default rounded elevation-2 ma-1 pa-1"
-        >
-          <div class="text-center pa-1">
-            {{ $vuetify.lang.t(`$vuetify.horde.tower.${ name }`) }}
-            <v-chip class="px-2" small>~{{ Math.round(tower.statBase + tower.highest * tower.statScaling) }}</v-chip>
-          </div>
-          <div class="d-flex justify-space-between align-center">
-            <div class="d-flex align-center ma-1">
-              <v-icon class="mr-1">mdi-trophy-award</v-icon>
-              {{ tower.highest }}
-            </div>
-            <price-tag class="ma-1" currency="horde_crown" :amount="tower.crowns" add></price-tag>
-          </div>
-          <div class="d-flex justify-center">
-            <v-btn @click="enterTower(name)" class="ma-1" small color="primary">{{ $vuetify.lang.t(`$vuetify.horde.tower.enter`) }}</v-btn>
-          </div>
-        </div>
+        <tower-tile v-for="tower in visibleTowers" :key="`tower-${ tower }`" :name="tower"></tower-tile>
       </div>
     </v-card>
     <v-row no-gutters>
@@ -132,18 +119,18 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME } from '../../../js/constants';
+import { HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_KEYS_PER_TOWER, SECONDS_PER_DAY } from '../../../js/constants';
 import Currency from '../../render/Currency.vue';
-import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 import Active from './Active.vue';
 import EnemyActive from './EnemyActive.vue';
 import EnemyStatus from './EnemyStatus.vue';
 import PlayerStatus from './PlayerStatus.vue';
+import TowerTile from './TowerTile.vue';
 
 export default {
-  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText, EnemyActive, PriceTag },
+  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText, EnemyActive, TowerTile },
   data: () => ({
     showTowers: false
   }),
@@ -159,7 +146,9 @@ export default {
       isFrozen: state => state.cryolab.horde.active,
       enemyTimer: state => state.horde.enemyTimer,
       minibossTimer: state => state.horde.minibossTimer,
-      canSeeTower: state => state.unlock.hordeBrickTower.see
+      canSeeTower: state => state.unlock.hordeBrickTower.see,
+      currentTower: state => state.horde.currentTower,
+      towerKey: state => state.currency.horde_towerKey
     }),
     ...mapGetters({
       comboRequired: 'horde/comboRequired',
@@ -216,24 +205,35 @@ export default {
       return HORDE_ENEMY_RESPAWN_MAX;
     },
     visibleTowers() {
-      let obj = {};
+      let arr = [];
       for (const [key, elem] of Object.entries(this.$store.state.horde.tower)) {
         if (elem.unlock === null || this.$store.state.unlock[elem.unlock].use) {
-          obj[key] = elem;
+          arr.push(key);
         }
       }
-      return obj;
+      return arr;
+    },
+    keysOnUnlock() {
+      return HORDE_KEYS_PER_TOWER;
+    },
+    secondsUntilWeeklyReset() {
+      return (SECONDS_PER_DAY * 7) - (this.$store.state.system.timestamp % (SECONDS_PER_DAY * 7));
+    },
+    zoneEstimation() {
+      if (this.currentTower === null) {
+        return null;
+      }
+      const tower = this.$store.state.horde.tower[this.currentTower];
+      return Math.round(tower.statBase + this.$store.state.horde.towerFloor * tower.statScaling);
     }
   },
   methods: {
     fightBoss() {
-      if (!this.isFrozen) {
-        if (this.respawn <= 0) {
-          if (this.isMaxZone && this.bossAvailable && !this.bossFight) {
-            this.$store.dispatch('horde/fightBoss');
-          } else if (this.bossFight) {
-            this.$store.dispatch('horde/stopFightBoss');
-          }
+      if (!this.isFrozen && this.currentTower === null && this.respawn <= 0) {
+        if (this.isMaxZone && this.bossAvailable && !this.bossFight) {
+          this.$store.dispatch('horde/fightBoss');
+        } else if (this.bossFight) {
+          this.$store.dispatch('horde/stopFightBoss');
         }
       }
     },
@@ -259,9 +259,6 @@ export default {
     },
     toggleTowers() {
       this.showTowers = !this.showTowers;
-    },
-    enterTower(name) {
-      this.$store.dispatch('horde/enterTower', name);
     }
   }
 }

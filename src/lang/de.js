@@ -1523,6 +1523,10 @@ export default {
       remembrance: 'Andenken',
       holding: 'Speicher',
       expertise: 'Expertise',
+      mystery: 'Mysterium',
+      brick: 'Ziegel',
+      heat: 'Hitze',
+      ice: 'Eis',
     },
     itemMastery: {
       name: 'Meistern',

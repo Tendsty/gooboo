@@ -138,11 +138,11 @@ export default {
   },
   horde_totalDamage: {
     achievement: 'Slayer',
-    description: 'Total damage dealt'
+    description: 'Total basic attack damage dealt'
   },
   horde_maxDamage: {
     achievement: 'Mighty',
-    description: 'Most damage in one hit'
+    description: 'Most damage in one basic attack'
   },
   horde_bone: {
     achievement: 'Dog\'s favourite',

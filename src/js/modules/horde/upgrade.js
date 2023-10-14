@@ -59,7 +59,7 @@ export default {
         {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
         {name: 'currencyHordeMonsterPartCap', type: 'base', value: lvl => lvl * 5}
     ]},
-    monsterBag: {requirementBase, requirementStat, requirementValue: 17, price(lvl) {
+    monsterBag: {cap: 75, requirementBase, requirementStat, requirementValue: 17, price(lvl) {
         return {horde_monsterPart: Math.pow(lvl * 0.005 + 1.35, lvl) * 80};
     }, effect: [
         {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1.6, lvl)},
@@ -159,5 +159,10 @@ export default {
     }, effect: [
         {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(8, lvl)},
         {name: 'currencyHordeCorruptedFleshGain', type: 'mult', value: lvl => lvl * 0.2 + 1}
+    ]},
+    mysticalBag: {cap: 1, requirementBase, requirementStat, requirementValue: 135, price(lvl) {
+        return {horde_mysticalShard: 25 * (lvl + 1)};
+    }, effect: [
+        {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
     ]},
 }

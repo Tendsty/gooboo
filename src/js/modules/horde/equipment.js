@@ -512,7 +512,6 @@ export default {
         cap: 5,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 2},
                 {isPositive: false, type: 'mult', name: 'hordeNostalgia', value: 0}
             ];
         },
@@ -764,7 +763,7 @@ export default {
         cap: 11,
         stats(lvl) {
             return [
-                {isPositive: true, type: 'mult', name: 'hordeCorruption', value: 0.955 - lvl * 0.005},
+                {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.09 - lvl * 0.01},
                 {isPositive: true, type: 'base', name: 'hordeNostalgia', value: 2}
             ];
         },
@@ -786,10 +785,10 @@ export default {
         price(lvl) {
             return Math.pow(2, lvl - 1) * buildNum(120, 'K');
         },
-        cap: 11,
+        cap: 16,
         stats(lvl) {
             return [
-                {isPositive: true, type: 'mult', name: 'hordeCorruption', value: 0.91 - lvl * 0.01}
+                {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.23 - lvl * 0.02}
             ];
         },
         active() {
@@ -1160,6 +1159,193 @@ export default {
         icon: 'mdi-book',
         activeIcon: 'mdi-book-alert',
         activeColor: 'indigo'
+    },
+    chocolateMilk: {
+        findZone: 107,
+        findChance: 1 / buildNum(40, 'M'),
+        price(lvl) {
+            return Math.pow(5, lvl - 1) * buildNum(4, 'M');
+        },
+        cap: 11,
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'mult', name: 'currencyHordeBoneGain', value: lvl * 0.01 + 1.29},
+                {isPositive: false, type: 'mult', name: 'currencyHordeMonsterPartGain', value: 1 / 1.5}
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'permanentStat', stat: 'currencyHordeBoneGain', value: 0.18}
+            ];
+        },
+        activeType: 'utility',
+        cooldown: () => 4200,
+        icon: 'mdi-beer',
+        activeIcon: 'mdi-beer',
+        activeColor: 'brown'
+    },
+    bigHammer: {
+        findZone: 114,
+        findChance: 1 / buildNum(80, 'M'),
+        price(lvl) {
+            return Math.pow(7, lvl - 1) * buildNum(7, 'M');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: false, type: 'mult', name: 'hordeAttack', value: 1 / 1.25},
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.15},
+                {isPositive: true, type: 'base', name: 'hordeCritMult', value: lvl * 0.02 + 1.08}
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'damagePhysic', value: 18.5},
+                {type: 'stun', value: 8},
+                {type: 'silence', value: 25}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 260,
+        icon: 'mdi-hammer',
+        activeIcon: 'mdi-hammer',
+        activeColor: 'pale-blue'
+    },
+    spookyPumpkin: {
+        findZone: 121,
+        findChance: 1 / buildNum(160, 'M'),
+        price(lvl) {
+            return Math.pow(9, lvl - 1) * buildNum(12, 'M');
+        },
+        cap: 6,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeStunResist', value: 4},
+                {isPositive: false, type: 'mult', name: 'hordeHealth', value: 1 / 1.25},
+                {isPositive: false, type: 'base', name: 'hordeMagicTaken', value: 0.75}
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'heal', value: 0.1},
+                {type: 'antidote', value: 1},
+                {type: 'removeStun', value: null}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: lvl => 53 - 3 * lvl,
+        icon: 'mdi-halloween',
+        activeIcon: 'mdi-pumpkin',
+        activeColor: 'orange'
+    },
+    strangeChemical: {
+        findZone: 128,
+        findChance: 1 / buildNum(320, 'M'),
+        price(lvl) {
+            return Math.pow(5, lvl - 1) * buildNum(20, 'M');
+        },
+        cap: 11,
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'mult', name: 'currencyHordeMonsterPartGain', value: lvl * 0.01 + 1.29},
+                {isPositive: false, type: 'mult', name: 'currencyHordeBoneGain', value: 1 / 4},
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'permanentStat', stat: 'currencyHordeMonsterPartGain', value: 0.225}
+            ];
+        },
+        activeType: 'utility',
+        cooldown: () => 18 * SECONDS_PER_HOUR,
+        icon: 'mdi-test-tube',
+        activeIcon: 'mdi-test-tube',
+        activeColor: 'pink-purple'
+    },
+    forbiddenHeartShield: {
+        findZone: 135,
+        findChance: 1 / buildNum(640, 'M'),
+        price(lvl) {
+            return Math.pow(4, lvl - 1) * buildNum(35, 'M');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'mult', name: 'hordePhysicTaken', value: 1 / 1.8},
+                {isPositive: true, type: 'mult', name: 'hordeMagicTaken', value: 1 / 1.8},
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl * 2 + 34},
+                {isPositive: true, type: 'base', name: 'hordeStunResist', value: 12},
+                {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'heal', value: 0.12},
+                {type: 'divisionShield', value: lvl + 11}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 140,
+        icon: 'mdi-heart-half-full',
+        activeIcon: 'mdi-heart-pulse',
+        activeColor: 'deep-purple'
+    },
+    cloudStaff: {
+        findZone: 142,
+        findChance: 1 / buildNum(1.2, 'B'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * buildNum(60, 'M');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.04 + 1.76},
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.02 + 0.78},
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 2}
+            ];
+        },
+        active() {
+            return [
+                {type: 'damageMagic', value: 3.65},
+                {type: 'divisionShield', value: 2}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 12,
+        icon: 'mdi-magic-staff',
+        activeIcon: 'mdi-cloud',
+        activeColor: 'skyblue'
+    },
+    secretWeapon: {
+        findZone: 149,
+        findChance: 1 / buildNum(2.4, 'B'),
+        price(lvl) {
+            return Math.pow(8, lvl - 1) * buildNum(110, 'M');
+        },
+        cap: 21,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.25},
+                {isPositive: true, type: 'base', name: 'hordeCutting', value: 0.1},
+                {isPositive: false, type: 'mult', name: 'hordeRecovery', value: 0},
+                {isPositive: false, type: 'mult', name: 'hordeDivisionShield', value: 0},
+                {isPositive: false, type: 'mult', name: 'hordeRevive', value: 0}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'poison', value: 24},
+                {type: 'silence', value: lvl + 29}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 720,
+        icon: 'mdi-eyedropper',
+        activeIcon: 'mdi-virus',
+        activeColor: 'lime'
     },
 
     pawn: {

@@ -1,5 +1,9 @@
 import { getSequence } from "../../utils/math";
 
+function bossTimeMult(bossFight = 0) {
+    return bossFight === 2 ? 5 : (bossFight === 1 ? 2 : 1);
+}
+
 export default {
     power: {
         icon: 'mdi-dumbbell',
@@ -31,7 +35,7 @@ export default {
             },
             cooldown: () => 5,
             startCooldown: () => 0,
-            uses: lvl => lvl
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
     },
     recovery: {
@@ -89,9 +93,9 @@ export default {
         minZone: 30,
         icon: 'mdi-magic-staff',
         color: 'deep-purple',
-        stats: lvl => {
+        stats: (lvl, boss) => {
             return {
-                firstStrike: {type: 'base', amount: 2.25 * lvl},
+                firstStrike: {type: 'base', amount: 2.25 * lvl * bossTimeMult(boss)},
                 magicConversion: {type: 'base', amount: 1.5 * lvl},
             };
         }
@@ -114,7 +118,7 @@ export default {
             },
             cooldown: () => 13,
             startCooldown: () => 3,
-            uses: lvl => lvl
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
     },
     fireball: {
@@ -136,7 +140,7 @@ export default {
             },
             cooldown: () => 16,
             startCooldown: () => 5,
-            uses: lvl => lvl
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
     },
     incorporeal: {
@@ -164,8 +168,8 @@ export default {
                     {type: 'damagePhysic', value: getSequence(3, lvl) * 10}
                 ];
             },
-            cooldown: () => 28,
-            startCooldown: () => 28,
+            cooldown: (lvl, boss) => 28 * bossTimeMult(boss),
+            startCooldown: (lvl, boss) => 28 * bossTimeMult(boss),
             uses: () => 1
         }
     },
@@ -197,16 +201,16 @@ export default {
             },
             cooldown: () => 5,
             startCooldown: () => 2,
-            uses: lvl => lvl * 3
+            uses: (lvl, boss) => lvl * 3 * bossTimeMult(boss)
         }
     },
     protection: {
         minZone: 44,
         icon: 'mdi-shield',
         color: 'blue',
-        stats: lvl => {
+        stats: (lvl, boss) => {
             return {
-                divisionShield: {type: 'base', amount: 5 * lvl},
+                divisionShield: {type: 'base', amount: 5 * lvl * bossTimeMult(boss)},
             };
         }
     },
@@ -214,9 +218,9 @@ export default {
         minZone: 46,
         icon: 'mdi-circle-slice-8',
         color: 'teal',
-        stats: lvl => {
+        stats: (lvl, boss) => {
             return {
-                divisionShield: {type: 'base', amount: 3 * lvl},
+                divisionShield: {type: 'base', amount: 3 * lvl * bossTimeMult(boss)},
             };
         },
         active: {
@@ -227,7 +231,7 @@ export default {
             },
             cooldown: () => 11,
             startCooldown: () => 9,
-            uses: lvl => lvl + 1
+            uses: (lvl, boss) => (lvl + 1) * bossTimeMult(boss)
         }
     },
     resistance: {
@@ -236,7 +240,7 @@ export default {
         color: 'brown',
         stats: lvl => {
             return {
-                stunResist: {type: 'base', amount: getSequence(2, lvl)},
+                stunResist: {type: 'base', amount: lvl},
             };
         },
         active: {
@@ -247,7 +251,7 @@ export default {
             },
             cooldown: () => 7,
             startCooldown: () => 2,
-            uses: lvl => lvl
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
     },
     precision: {
@@ -273,7 +277,7 @@ export default {
             },
             cooldown: () => 10,
             startCooldown: () => 0,
-            uses: lvl => lvl
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
     },
     cure: {
@@ -295,7 +299,7 @@ export default {
             },
             cooldown: () => 16,
             startCooldown: () => 12,
-            uses: lvl => lvl
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
     },
     sharp: {
@@ -401,7 +405,7 @@ export default {
             },
             cooldown: () => 22,
             startCooldown: () => 14,
-            uses: lvl => lvl
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
     },
     angelic: {
@@ -481,8 +485,8 @@ export default {
                     {type: 'damageBio', value: Math.pow(2, lvl) * 250},
                 ];
             },
-            cooldown: lvl => 75 - lvl * 5,
-            startCooldown: lvl => 75 - lvl * 5,
+            cooldown: (lvl, boss) => (75 - lvl * 5) * bossTimeMult(boss),
+            startCooldown: (lvl, boss) => (75 - lvl * 5) * bossTimeMult(boss),
             uses: () => 1
         }
     },
@@ -502,10 +506,10 @@ export default {
         minZone: 110,
         icon: 'mdi-hvac',
         color: 'lime',
-        stats: lvl => {
+        stats: (lvl, boss) => {
             return {
                 health: {type: 'mult', amount: Math.pow(1.1, lvl)},
-                divisionShield: {type: 'base', amount: 2 * lvl},
+                divisionShield: {type: 'base', amount: 2 * lvl * bossTimeMult(boss)},
             };
         },
         active: {
@@ -518,7 +522,73 @@ export default {
             },
             cooldown: () => 14,
             startCooldown: () => 10,
-            uses: lvl => lvl + 2
+            uses: (lvl, boss) => (lvl + 2) * bossTimeMult(boss)
+        }
+    },
+    shocking: {
+        minZone: 120,
+        icon: 'mdi-heart-flash',
+        color: 'yellow',
+        stats: lvl => {
+            return {
+                attack: {type: 'mult', amount: Math.pow(1.15, lvl)},
+            };
+        },
+        active: {
+            effect(lvl) {
+                return [
+                    {type: 'damageMagic', value: lvl * 1.3 + 2},
+                    {type: 'silence', value: lvl + 2}
+                ];
+            },
+            cooldown: () => 15,
+            startCooldown: () => 9,
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
+        }
+    },
+
+    // Tower-only sigils
+    berserk: {
+        minZone: Infinity,
+        icon: 'mdi-robot-angry',
+        color: 'deep-orange',
+        stats: lvl => {
+            return {
+                attack: {type: 'mult', amount: Math.pow(2, lvl)},
+                health: {type: 'mult', amount: Math.pow(0.75, lvl)},
+            };
+        },
+        active: {
+            effect(lvl) {
+                return [
+                    {type: 'damagePhysic', value: lvl * 0.1 + 0.55},
+                    {type: 'damageMagic', value: lvl * 0.3 + 1.15},
+                ];
+            },
+            cooldown: () => 7,
+            startCooldown: () => 5,
+            uses: () => null
+        }
+    },
+    iceGiant: {
+        minZone: Infinity,
+        icon: 'mdi-human',
+        color: 'skyblue',
+        stats: lvl => {
+            return {
+                attack: {type: 'mult', amount: Math.pow(0.5, lvl)},
+                health: {type: 'mult', amount: Math.pow(3.5, lvl)},
+            };
+        },
+        active: {
+            effect(lvl) {
+                return [
+                    {type: 'stun', value: lvl * 3 + 7}
+                ];
+            },
+            cooldown: () => 25,
+            startCooldown: () => 15,
+            uses: () => null
         }
     },
 

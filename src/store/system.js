@@ -446,7 +446,7 @@ export default {
                     return rootState.upgrade.item.village_windTurbine.highestLevel > 0;
                 }
                 case 'horde': {
-                    return rootState.stat.horde_maxZone.total > 125;
+                    return rootState.stat.horde_maxZone.total > 200;
                 }
                 case 'farm': {
                     return rootState.upgrade.item.farm_seedBox.highestLevel >= 19;

@@ -19,7 +19,7 @@
   <gb-tooltip>
     <template v-slot:activator="{ on, attrs }">
       <span>
-        <div v-if="pretend || item.cooldownLeft > 0" class="active-container rounded d-flex justify-center align-center" :class="[pretend ? item.activeColor : null, $vnode.data.staticClass]" v-bind="attrs" v-on="on">
+        <div v-if="pretend || item.cooldownLeft > 0" class="balloon-text-dynamic active-container rounded d-flex justify-center align-center" :class="[pretend ? item.activeColor : null, $vnode.data.staticClass]" v-bind="attrs" v-on="on">
           <v-progress-linear class="active-cooldown rounded" height="36" :color="item.activeColor + ($vuetify.theme.dark ? ' darken-2' : ' lighten-2')" v-if="!pretend" :value="cooldownPercent"></v-progress-linear>
           <v-icon :class="{'opacity-half': !pretend}">{{ item.activeIcon }}</v-icon>
         </div>
@@ -29,6 +29,7 @@
           bordered
           left
           bottom
+          class="balloon-text-dynamic"
           :class="$vnode.data.staticClass"
           :value="item.activeType === 'utility' && charges > 1"
           :content="'x' + $formatNum(charges)"
@@ -36,7 +37,7 @@
           offset-x="40"
           offset-y="8"
         >
-          <v-btn class="px-0" :class="[item.activeColor, {'selected-primary': chosenActive === name}]" min-width="36" @click="use" v-bind="attrs" v-on="on">
+          <v-btn class="balloon-text-dynamic px-0" :class="[item.activeColor, {'selected-primary': chosenActive === name}]" min-width="36" @click="use" v-bind="attrs" v-on="on">
             <v-icon>{{ item.activeIcon }}</v-icon>
           </v-btn>
         </v-badge>
@@ -53,7 +54,11 @@
     <div class="mt-0" v-for="(elem, key) in effect" :key="key">
       <span v-if="elem.value === null">{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }`) }}</span>
       <template v-else>
-        <span v-if="elem.stat">{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`, $vuetify.lang.t(`$vuetify.mult.${ elem.stat }`)) }} </span>
+        <template v-if="elem.stat">
+          <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`) }}</span>
+          <mult-name :name="elem.stat"></mult-name>
+          <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.2`) }} </span>
+        </template>
         <span v-else>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`) }} </span>
         <span v-if="['revive', 'divisionShield'].includes(elem.type)">{{ $formatNum(elem.value) }} </span>
         <span v-else-if="['stun', 'silence'].includes(elem.type)">{{ $formatTime(elem.value) }} </span>
@@ -73,10 +78,11 @@
 import { mapState } from 'vuex';
 import { HORDE_INACTIVE_ITEM_COOLDOWN } from '../../../js/constants';
 import { logBase } from '../../../js/utils/math';
+import MultName from '../../render/MultName.vue';
 import AlertText from '../render/AlertText.vue';
 
 export default {
-  components: { AlertText },
+  components: { AlertText, MultName },
   props: {
     name: {
       type: String,
