@@ -166,7 +166,7 @@ export default {
   },
   horde_unlucky: {
     achievement: 'Unlucky',
-    description: 'Fail with a 99% soul or heirloom chance'
+    description: 'Fail with a 99% heirloom chance'
   },
   horde_maxItems: {
     description: 'Most items equipped'

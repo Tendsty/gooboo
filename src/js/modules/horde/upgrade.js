@@ -165,4 +165,9 @@ export default {
     }, effect: [
         {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
     ]},
+    collector: {requirementBase, requirementStat, requirementValue: 175, price(lvl) {
+        return {horde_mysticalShard: lvl * 8 + 45};
+    }, effect: [
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)}
+    ]},
 }

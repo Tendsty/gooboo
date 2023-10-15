@@ -365,6 +365,12 @@ export default {
             commit('updatePlayerKey', {key: 'hits', value: 0});
             commit('updatePlayerKey', {key: 'spells', value: 0});
         },
+        checkPlayerHealth({ state, rootGetters, commit }) {
+            const maxHealth = rootGetters['mult/get']('hordeHealth');
+            if (state.respawn <= 0 && state.player.health > maxHealth) {
+                commit('updatePlayerKey', {key: 'health', value: maxHealth});
+            }
+        },
         updateEnemyStats({ state, getters, rootGetters, commit }) {
             if (state.respawn <= 0) {
                 const inTower = state.currentTower !== null;

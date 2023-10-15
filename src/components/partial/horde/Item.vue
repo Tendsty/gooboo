@@ -21,6 +21,18 @@
       </div>
     </gb-tooltip>
     <active class="ma-1" :pretend="isPretend" :name="name"></active>
+    <gb-tooltip key="item-upgrade-collapse" v-if="found && canUpgrade">
+      <template v-slot:activator="{ on, attrs }">
+        <div class="ma-1 rounded" v-bind="attrs" v-on="on">
+          <v-btn small @click="upgradeItem(name)" :disabled="!canBuy || disabled" color="secondary" class="px-2" min-width="36">
+            <v-icon small>mdi-chevron-double-up</v-icon>
+            {{ $formatNum(upgradePrice) }}
+          </v-btn>
+        </div>
+      </template>
+      <display-row class="mt-0" v-for="(item, key) in statDiff" :key="key" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
+      <price-tag currency="horde_monsterPart" :amount="upgradePrice"></price-tag>
+    </gb-tooltip>
     <v-spacer></v-spacer>
     <template v-if="found">
       <v-btn class="ma-1 px-2" v-if="item.masteryLevel >= 2" color="primary" min-width="36" :disabled="disabled" @click="togglePassive"><v-icon>{{ item.passive ? 'mdi-sleep-off' : 'mdi-sleep' }}</v-icon></v-btn>

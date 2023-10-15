@@ -50,7 +50,7 @@ export default {
         ]},
         beneficialVirus: {icon: 'mdi-virus', color: 'pale-green', effect: [
             {name: 'miningToughness', type: 'mult', value: 0.5},
-            {name: 'hordeCorruption', type: 'mult', value: 0.5}
+            {name: 'hordeCorruption', type: 'bonus', value: -0.5}
         ]}
     },
     note: buildArray(1).map(() => 'g'),

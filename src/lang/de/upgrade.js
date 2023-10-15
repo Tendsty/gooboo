@@ -382,6 +382,8 @@ export default {
   horde_grossBag: 'Ekelbeutel',
   horde_targetDummy: 'Trainingspuppe',
   horde_milestone: 'Meilenstein',
+  horde_mysticalBag: 'Mystischer Beutel',
+  horde_collector: 'Sammler',
 
   // Horde prestige upgrades
   horde_balance: 'Balance',
@@ -401,6 +403,14 @@ export default {
   horde_mausoleum: 'Mausoleum',
   horde_lastWill: 'Letzter Wille',
   horde_combatStudies: 'Kampf-Studien',
+  horde_boneChamber: 'Knochenkammer',
+
+  // Horde crown upgrades
+  horde_royalSword: 'Königliches Schwert',
+  horde_royalArmor: 'Königliche Rüstung',
+  horde_royalStorage: 'Königliches Lager',
+  horde_royalButcher: 'Königlicher Schlachter',
+  horde_royalCrypt: 'Königliches Grab',
 
   // Horde premium upgrades
   horde_morePower: 'Mehr Kampfkraft',

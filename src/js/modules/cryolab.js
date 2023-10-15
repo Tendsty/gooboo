@@ -1,5 +1,5 @@
 import store from "../../store";
-import { MINUTES_PER_DAY } from "../constants";
+import { SECONDS_PER_DAY } from "../constants";
 import { buildArray } from "../utils/array";
 
 const data = {
@@ -46,14 +46,14 @@ const effect = {
 
 export default {
     name: 'cryolab',
-    tickspeed: 60,
+    tickspeed: 1,
     unlockNeeded: 'cryolabFeature',
-    tick(minutes) {
+    tick(seconds) {
         for (const [key, elem] of Object.entries(store.state.cryolab)) {
             if (elem.active) {
                 const expGain = store.getters['cryolab/expGain'](key);
                 if (expGain > 0) {
-                    store.dispatch('cryolab/gainExp', {feature: key, amount: expGain * minutes / MINUTES_PER_DAY});
+                    store.dispatch('cryolab/gainExp', {feature: key, amount: expGain * seconds / SECONDS_PER_DAY});
                 }
             }
             const prestigeGain = store.getters['cryolab/prestigeGain'](key);
@@ -62,12 +62,12 @@ export default {
                     // Special handler for farm experience
                     for (const [key, elem] of Object.entries(store.state.farm.crop)) {
                         if (elem.found) {
-                            store.dispatch('farm/getCropExp', {crop: key, value: amount * elem.baseExpMult * minutes / MINUTES_PER_DAY});
+                            store.dispatch('farm/getCropExp', {crop: key, value: amount * elem.baseExpMult * seconds / SECONDS_PER_DAY});
                         }
                     }
                 } else {
                     const split = currency.split('_');
-                    store.dispatch('currency/gain', {feature: split[0], name: split[1], amount: amount * minutes / MINUTES_PER_DAY});
+                    store.dispatch('currency/gain', {feature: split[0], name: split[1], amount: amount * seconds / SECONDS_PER_DAY});
                 }
             }
         }

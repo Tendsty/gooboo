@@ -383,6 +383,7 @@ export default {
   horde_targetDummy: 'Target dummy',
   horde_milestone: 'Milestone',
   horde_mysticalBag: 'Mystical bag',
+  horde_collector: 'Collector',
 
   // Horde prestige upgrades
   horde_balance: 'Balance',

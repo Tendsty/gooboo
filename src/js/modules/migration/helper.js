@@ -1,4 +1,4 @@
-export { addCurrencyToSave, raiseUpgradeLevel }
+export { addCurrencyToSave, raiseUpgradeLevel, removeUpgrade, removeCurrency, refundCurrency }
 
 function addCurrencyToSave(save, currency, amount) {
     if (save.currency[currency] === undefined) {
@@ -24,10 +24,34 @@ function addCurrencyToSave(save, currency, amount) {
 }
 
 function raiseUpgradeLevel(save, name, amount) {
-    if (save.upgrade && save.upgrade[name] !== undefined) {
+    if (save.upgrade[name] !== undefined) {
         save.upgrade[name].level += amount;
         save.upgrade[name].highestLevel = Math.max(save.upgrade[name].level, save.upgrade[name].highestLevel);
     }
 
+    return save;
+}
+
+function removeUpgrade(save, name) {
+    if (save.upgrade[name] !== undefined) {
+        delete save.upgrade[name];
+    }
+    return save;
+}
+
+function removeCurrency(save, name) {
+    if (save.currency[name] !== undefined) {
+        delete save.currency[name];
+    }
+    if (save.stat[name] !== undefined) {
+        delete save.stat[name];
+    }
+    return save;
+}
+
+function refundCurrency(save, name) {
+    if (save.currency[name] !== undefined && save.stat[name] !== undefined) {
+        save.currency[name] = save.stat[name].total;
+    }
     return save;
 }

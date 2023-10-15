@@ -539,6 +539,7 @@ export default {
                 {isPositive: false, type: 'mult', name: 'hordeCritMult', value: 0.8}
             ];
         },
+        masteryBoost: 0.25,
         active() {
             return [
                 {type: 'damageBio', value: 2.6},
@@ -563,6 +564,7 @@ export default {
                 {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: lvl * 0.001 + 0.004}
             ];
         },
+        masteryBoost: 0.25,
         active() {
             return [
                 {type: 'heal', value: 1},
@@ -1327,8 +1329,8 @@ export default {
         cap: 21,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.25},
-                {isPositive: true, type: 'base', name: 'hordeCutting', value: 0.1},
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.175},
+                {isPositive: true, type: 'base', name: 'hordeCutting', value: 0.06},
                 {isPositive: false, type: 'mult', name: 'hordeRecovery', value: 0},
                 {isPositive: false, type: 'mult', name: 'hordeDivisionShield', value: 0},
                 {isPositive: false, type: 'mult', name: 'hordeRevive', value: 0}
@@ -1346,6 +1348,179 @@ export default {
         icon: 'mdi-eyedropper',
         activeIcon: 'mdi-virus',
         activeColor: 'lime'
+    },
+    bomb: {
+        findZone: 156,
+        findChance: 1 / buildNum(4.8, 'B'),
+        price(lvl) {
+            return Math.pow(5, lvl - 1) * buildNum(175, 'M');
+        },
+        cap: 11,
+        stats() {
+            return [
+                {isPositive: true, type: 'mult', name: 'hordeAttack', value: 1.5},
+                {isPositive: true, type: 'mult', name: 'hordeHealth', value: 1.35},
+                {isPositive: false, type: 'mult', name: 'currencyHordeBoneGain', value: 0},
+                {isPositive: false, type: 'mult', name: 'currencyHordeMonsterPartGain', value: 0}
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'damageMagic', value: 38}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: lvl => 3090 - 90 * lvl,
+        icon: 'mdi-bomb',
+        activeIcon: 'mdi-bomb',
+        activeColor: 'red'
+    },
+    leechingStaff: {
+        findZone: 163,
+        findChance: 1 / buildNum(10, 'B'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * buildNum(320, 'M');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 3 + 112},
+                {isPositive: true, type: 'base', name: 'hordeRecovery', value: 0.03}
+            ];
+        },
+        active() {
+            return [
+                {type: 'damageBio', value: 12.5},
+                {type: 'heal', value: 0.125}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 52,
+        icon: 'mdi-magic-staff',
+        activeIcon: 'mdi-swap-horizontal',
+        activeColor: 'light-green'
+    },
+    shatteredGem: {
+        findZone: 170,
+        findChance: 1 / buildNum(20, 'B'),
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(550, 'M');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: false, type: 'mult', name: 'hordeHealth', value: 0.5},
+                {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: lvl * 0.001 + 0.009}
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'permanentStat', stat: 'currencyHordeSoulCorruptedGain', value: 0.03}
+            ];
+        },
+        activeType: 'utility',
+        cooldown: () => 36 * SECONDS_PER_HOUR,
+        icon: 'mdi-rhombus-split',
+        activeIcon: 'mdi-rhombus',
+        activeColor: 'light-blue'
+    },
+    firework: {
+        findZone: 177,
+        findChance: 1 / buildNum(40, 'B'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * buildNum(975, 'M');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 68},
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.2},
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.02}
+            ];
+        },
+        active() {
+            return [
+                {type: 'damageBio', value: 18},
+                {type: 'poison', value: 2.75}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 220,
+        icon: 'mdi-firework',
+        activeIcon: 'mdi-firework',
+        activeColor: 'pink-purple'
+    },
+    bowTie: {
+        findZone: 184,
+        findChance: 1 / buildNum(40, 'B'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * buildNum(975, 'M');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 400 + 8600},
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl + 10},
+                {isPositive: false, type: 'mult', name: 'hordeRecovery', value: 0}
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'heal', value: 0.07},
+                {type: 'divisionShield', value: 10}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 28,
+        icon: 'mdi-bow-tie',
+        activeIcon: 'mdi-bow-tie',
+        activeColor: 'beige'
+    },
+    mysticalAccelerator: {
+        findZone: 191,
+        findChance: 1 / buildNum(80, 'B'),
+        price(lvl) {
+            return Math.pow(14, lvl - 1) * buildNum(1.75, 'B');
+        },
+        cap: 5,
+        stats() {
+            return [
+                {isPositive: true, type: 'mult', name: 'hordeShardChance', value: 1.5}
+            ];
+        },
+        active() {
+            return [
+                {type: 'permanentStat', stat: 'hordeShardChance', value: 0.35}
+            ];
+        },
+        activeType: 'utility',
+        cooldown: lvl => (19 - lvl) * SECONDS_PER_HOUR,
+        icon: 'mdi-rotate-orbit',
+        activeIcon: 'mdi-rotate-orbit',
+        activeColor: 'teal'
+    },
+    blazingStaff: {
+        findZone: 198,
+        findChance: 1 / buildNum(160, 'B'),
+        price(lvl) {
+            return Math.pow(25, lvl - 1) * buildNum(3, 'B');
+        },
+        cap: 4,
+        stats() {
+            return [
+                {isPositive: true, type: 'mult', name: 'hordeAttack', value: 2.5},
+                {isPositive: false, type: 'mult', name: 'hordeHealth', value: 0.5}
+            ];
+        },
+        active(lvl) {
+            return [
+                {type: 'damageMagic', value: lvl * 3 + 25}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: lvl => 85 - lvl * 5,
+        icon: 'mdi-magic-staff',
+        activeIcon: 'mdi-fire-alert',
+        activeColor: 'orange'
     },
 
     pawn: {

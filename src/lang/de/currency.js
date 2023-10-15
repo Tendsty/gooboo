@@ -534,7 +534,7 @@ export default {
   },
   horde_monsterPart: {
     name: 'Monsterteil',
-    description: 'Ein ekelhaftes Organ, was ab Zone 10 nach Gegner #100 gefunden werden kann'
+    description: 'Ein ekelhaftes Organ, was ab Zone 10 gefunden werden kann, wenn Gegner fehlen'
   },
   horde_corruptedFlesh: {
     name: 'Korruptes Fleisch',
@@ -551,6 +551,14 @@ export default {
   horde_soulEmpowered: {
     name: 'Verstärkte Seele',
     description: 'Ehemals verdorbene Seelen, welche durch ein komplexes Ritual gereinigt und bestärkt wurden'
+  },
+  horde_crown: {
+    name: 'Krone',
+    description: 'Sie haben einst über die Türme geherrscht, sind jetzt aber entthront'
+  },
+  horde_towerKey: {
+    name: 'Turmschlüssel',
+    description: 'Ein seltener Schlüssel, der dir Zugang zu einem Turm gewährt'
   },
   farm_vegetable: {
     name: 'Gemüse',

@@ -534,7 +534,7 @@ export default {
   },
   horde_monsterPart: {
     name: 'Monster part',
-    description: 'A disgusting organ that can be found at zone 10 or higher after enemy #100'
+    description: 'A disgusting organ that can be found at zone 10 or higher when enemies stop appearing'
   },
   horde_corruptedFlesh: {
     name: 'Corrupted flesh',

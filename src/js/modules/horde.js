@@ -564,7 +564,7 @@ export default {
         hordeMaxItems: {round: true, baseValue: 1},
         hordeItemChance: {display: 'percent'},
         hordeBossRequirement: {round: true, min: 1, max: 50},
-        hordeRespawn: {display: 'time', round: true, min: 1},
+        hordeRespawn: {display: 'time', round: true, min: 1, max: 300},
         hordeMinibossTime: {display: 'time', round: true, min: 60, baseValue: 300},
         hordeHeirloomChance: {display: 'percent', max: 1, roundNearZero: true},
         hordeHeirloomAmount: {baseValue: 1, round: true},

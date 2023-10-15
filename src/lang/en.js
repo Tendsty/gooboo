@@ -367,7 +367,7 @@ export default {
     expDescription2: 'Experience gain is based on your best prestige.',
     expNext: 'Next level effect:',
     expNoGain: 'To gain experience for this feature, gain some prestige currency first',
-    cropExp: 'Gain experience for each crop',
+    cropExp: 'Gain up to this amount of experience for each crop (base grow time and gold cost reduce experience gained)',
     frozenFeature: {
       title: 'Feature is frozen',
       description: 'This feature is frozen by the cryolab. You will not gain any progress in this feature, but gain prestige currency automatically.'
@@ -1447,6 +1447,7 @@ export default {
       usableInStun: 'Can be used while stunned',
       utilityOvertime: 'Utility actives can store multiple charges at half speed of the previous one',
       inactive: 'Inactive equipment effects recover their cooldown at {0}% of the usual rate',
+      takeEquipped: 'Take equipped',
       dagger: 'Dagger',
       shirt: 'Shirt',
       guardianAngel: 'Guardian angel',
@@ -1501,6 +1502,13 @@ export default {
       forbiddenHeartShield: 'Forbidden heart-shield',
       cloudStaff: 'Cloud staff',
       secretWeapon: 'Secret weapon',
+      bomb: 'Bomb',
+      leechingStaff: 'Leeching staff',
+      shatteredGem: 'Shattered gem',
+      firework: 'Firework',
+      bowTie: 'Bow tie',
+      mysticalAccelerator: 'Mystical accelerator',
+      blazingStaff: 'Blazing staff',
 
       // Chess pieces
       pawn: 'Pawn',
@@ -1599,7 +1607,7 @@ export default {
     },
     itemMastery: {
       name: 'Mastery',
-      description: 'Defeat bosses at zone {0} or higher with this item equipped to earn mastery points. Higher zone bosses earn more mastery points.',
+      description: 'Defeat bosses or minibosses at zone {0} or higher with this item equipped to earn mastery points. Higher zone bosses earn more mastery points.',
       bonuses: 'Raise your mastery level to unlock bonuses for this equipment',
       current: 'This equipment has {0} / {1} mastery points',
       1: 'Keep the equipment after prestige',

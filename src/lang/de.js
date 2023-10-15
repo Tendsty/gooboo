@@ -367,7 +367,7 @@ export default {
     expDescription2: 'Das Erfahrungseinkommen hängt vom besten Prestige ab.',
     expNext: 'Effekte der nächsten Stufe:',
     expNoGain: 'Um Erfahrung für diese Funktion zu sammeln, benötigst du zuerst etwas Prestige-Währung',
-    cropExp: 'Erhalte Erfahrung für jede Pflanze',
+    cropExp: 'Erhalte bis zu diese Menge an Erfahrung für jede Pflanze (Grundwachstumszeit und Goldkosten senken die Erfahrungsmenge)',
     frozenFeature: {
       title: 'Funktion ist eingefroren',
       description: 'Diese Funktion wurde durch das Kryolabor eingefroren. Du erzeugst keinen Fortschritt in dieser Funktion, bekommst aber automatisch Prestige-Währung.'
@@ -1144,6 +1144,7 @@ export default {
     miningTemperature: 'Temperatur',
     villageOffering: 'Opfergaben',
     zoneCleared: 'Zone abgeschlossen',
+    zoneClearedTotal: 'Höchste Zone abgeschlossen',
     zone: 'Zone',
     hordeBasicLoot: 'Einfache Beute',
     hordeItemPermanent: 'Ausrüstungs-Effekt',
@@ -1347,12 +1348,20 @@ export default {
     cuttingDescription: 'Richte einen Prozentwert des aktuellen Lebens deines Ziels als biologischen Schaden an, nachdem du angegriffen hast',
     recoveryDescription: 'Heile einen Prozentwert deines fehlenden Lebens, wenn du einen Gegner besiegst',
     boss: 'Boss',
+    miniboss: 'Miniboss',
+    minibossDescription: 'Minibosse nehmen den Platz regulärer Gegner ein und sind etwas stärker. Sie halten wertvolle Beute und bis zu 2 können auf einmal warten',
     poisonPlayer: 'Du bist vergiftet und erleidest {0} Schaden pro Sekunde',
     poisonEnemy: 'Dieser Gegner ist vergiftet und erleidet {0} Schaden pro Sekunde',
+    silencePlayer: 'Du bist verstummt und kannst keine aktiven Angriffe nutzen',
+    silenceEnemy: 'Dieser Gegner ist verstummt und kann keine aktiven Angriffe nutzen',
     stunPlayer: 'Du bist betäubt und kannst nicht angreifen',
     stunEnemy: 'Dieser Gegner ist betäubt und kann nicht angreifen',
-    stunBoss: 'Bosse erholen sich doppelt so schnell von Betäubungen',
+    stunResist: 'Schnellere Erholung von Betäubungen',
+    stunBoss: 'Bosse erhalten +2 Betäubungsresistenz',
+    stunMiniboss: 'Minibosse erhalten +1 Betäubungsresistenz',
     bossBioResist: 'Bosse erleiden nur 10% biologischen Schaden',
+    minibossBioResist: 'Minibosse erleiden nur 20% biologischen Schaden',
+    enemyRespawn: 'Gegner brauchen {0} zum Erscheinen und bis zu {1} Gegner können warten',
     reachBoss: {
       title: 'Erreiche den Boss',
       description: 'Um den Boss dieser Zone herauszufordern, musst du {0} Gegner in Folge besiegen, ohne zu sterben'
@@ -1376,24 +1385,51 @@ export default {
     rampage: {
       name: 'Toben',
       description: 'Den selben Gegner zu lange zu bekämpfen macht ihn wütend! Du hast diesen Gegner für {0} bekämpft und er fängt alle {1} das Toben an.',
-      effect: 'Jedes Mal wenn ein Gegner tobt, bekommt er x{0} Angriff, +{1}% kritische Chance und +{2}% kritischen Schaden.',
-      effectCurrent: 'Dieser Gegner hat {0} Mal getobt. Er hat x{1} Angriff, +{2}% kritische Chance und +{3}% kritischen Schaden.'
+      effect: 'Jedes Mal wenn ein Gegner tobt, bekommt er x{0} Angriff, +{1}% kritische Chance, +{2}% kritischen Schaden, +{3} Betäubungsresistenz und wird immun gegen Effekte, die den Angriff senken.',
+      effectCurrent: 'Dieser Gegner hat {0} Mal getobt. Er hat x{1} Angriff, +{2}% kritische Chance, +{3}% kritischen Schaden und +{4} Betäubungsresistenz.'
     },
     sigil: {
       name: 'Zeichen',
+      hasActive: 'Hat einen aktiven Angriff',
       min: 'Kann ab Zone {0} auftreten',
+      special: 'Taucht nur unter besonderen Bedingungen auf',
+      inactive: 'inaktiv',
       power: 'Angriff',
       health: 'Leben',
+      bashing: 'Prügel',
+      recovery: 'Erholung',
       toughness: 'Härte',
-      wisdom: 'Weisheit',
-      resilience: 'Widerstand',
-      protection: 'Schutz',
+      strength: 'Stärke',
       magic: 'Magie',
+      magicBolt: 'Magiebolzen',
+      fireball: 'Feuerball',
       incorporeal: 'Körperlos',
-      sharp: 'Spitz',
+      focus: 'Fokus',
+      wisdom: 'Weisheit',
+      sparks: 'Funken',
+      protection: 'Schutz',
+      shielding: 'Schild',
+      resistance: 'Resistenz',
       precision: 'Präzision',
+      screaming: 'Schreien',
+      cure: 'Genesen',
+      sharp: 'Spitz',
+      spitting: 'Spucken',
+      burst: 'Platzen',
+      resilience: 'Widerstand',
+      growing: 'Wachsen',
+      cold: 'Kälte',
+      fury: 'Wut',
       angelic: 'Engelhaft',
       toxic: 'Toxisch',
+      foulBreath: 'Fauler Atem',
+      nuke: 'Vernichten',
+      rainbow: 'Regenbogen',
+      drain: 'Saugen',
+      shocking: 'Schock',
+      berserk: 'Berserker',
+      iceGiant: 'Eisriese',
+      generic: 'Gewöhnlich',
     },
     corruption: {
       name: 'Korruption',
@@ -1408,7 +1444,10 @@ export default {
     fighting: 'Im Kampf',
     items: {
       name: 'Ausrüstung',
+      usableInStun: 'Kann in Betäubung genutzt werden',
+      utilityOvertime: 'Aktive Nützlichkeiten können mehrere Ladungen halten, welche halb so schnell wie die vorherige aufladen',
       inactive: 'Inaktive Gegenstandseffekte erholen sich von der Abklingzeit mit {0}% der normalen Geschwindigkeit',
+      takeEquipped: 'Aktuelle nehmen',
       dagger: 'Dolch',
       shirt: 'Hemd',
       guardianAngel: 'Schutzengel',
@@ -1422,11 +1461,13 @@ export default {
       campfire: 'Lagerfeuer',
       clover: 'Kleeblatt',
       snowflake: 'Schneeflocke',
+      oppressor: 'Unterdrücker',
       toxin: 'Gift',
       corruptEye: 'Korruptes Auge',
       meatShield: 'Fleischschild',
       wizardHat: 'Zauberhut',
       redStaff: 'Roter Stab',
+      cleansingSpring: 'Reinigende Quelle',
       marblePillar: 'Marmorsäule',
       rainbowStaff: 'Regenbogenstab',
       antidote: 'Gegengift',
@@ -1454,6 +1495,20 @@ export default {
       moltenShield: 'Geschmolzener Schild',
       cutter: 'Pappschneider',
       book: 'Buch',
+      chocolateMilk: 'Schokomilch',
+      bigHammer: 'Großer Hammer',
+      spookyPumpkin: 'Gruseliger Kürbis',
+      strangeChemical: 'Seltsame Chemikalie',
+      forbiddenHeartShield: 'Verbotener Herz-Schild',
+      cloudStaff: 'Wolkenstab',
+      secretWeapon: 'Geheimwaffe',
+      bomb: 'Bombe',
+      leechingStaff: 'Aussaugender Stab',
+      shatteredGem: 'Zersprungener Edelstein',
+      firework: 'Feuerwerk',
+      bowTie: 'Fliege',
+      mysticalAccelerator: 'Mystischer Beschleuniger',
+      blazingStaff: 'Lodernder Stab',
 
       // Chess pieces
       pawn: 'Bauer',
@@ -1484,9 +1539,17 @@ export default {
         0: 'Erhalte',
         1: 'Knochen der höchsten Zone'
       },
+      monsterPart: {
+        0: 'Erhalte',
+        1: 'Monsterteile der höchsten Zone'
+      },
       stun: {
-        0: 'Betäube diesen Gegner',
-        1: 'Mal'
+        0: 'Betäube den Gegner für',
+        1: ''
+      },
+      silence: {
+        0: 'Verstumme den Gegner für',
+        1: ''
       },
       revive: {
         0: 'Stelle',
@@ -1494,7 +1557,11 @@ export default {
       },
       removeAttack: {
         0: 'Entferne',
-        1: 'Angriff dieses Gegners'
+        1: 'Angriff vom Gegner'
+      },
+      raiseAttack: {
+        0: 'Erhöhe den Angriff dauerhaft um',
+        1: ''
       },
       poison: {
         0: 'Verursache',
@@ -1505,15 +1572,25 @@ export default {
         1: 'Gift'
       },
       permanentStat: {
-        0: 'Erhöhe {0} um',
+        0: 'Erhöhe ',
+        2: ' um',
         1: '(bis zum Prestige)'
-      }
+      },
+      divisionShield: {
+        0: 'Erhalte',
+        1: 'Teilungsschild'
+      },
+      reviveAll: 'Stelle alle Wiederbelebungen her',
+      removeStun: 'Entferne Betäubungen',
     },
     heirloom: {
       name: 'Erbstück',
       min: 'Kann ab Zone {0} gefunden werden',
-      description: 'Du hast {0} Nostalgie. Dies erhöht deine Chance, ein Erbstück zu finden. Einen Boss zu besiegen entfernt {1}% der Nostalgie',
-      description2: 'Das Erbstück mit der niedrigsten Menge hat die doppelte Chance, zu erscheinen. Wenn mehrere Erbstücke sich die niedrigste Menge teilen, wird diese Regel nicht angewendet.',
+      special: 'Taucht nicht bei gewöhnlichen Minibossen auf',
+      description: 'Erbstücke sind mächtige Artefakte, welche bei Minibossen auftauchen und für immer bleiben. Erreiche höhere Zonen, um mehr Arten zu finden',
+      descriptionTower: 'Erbstücke sind mächtige Artefakte, welche alle {0} Etagen auftauchen und für immer bleiben. Erreiche höhere Zonen oder andere Türme, um mehr Arten zu finden',
+      descriptionDouble: 'Das Erbstück mit der niedrigsten Menge hat die doppelte Chance, zu erscheinen. Wenn mehrere Erbstücke sich die niedrigste Menge teilen, wird diese Regel nicht angewendet.',
+      descriptionNostalgia: 'Nostalgie erhöht die Chance auf Erbstücke. Wird ein Erbstück mit der Hilfe von Nostalgie gefunden, wird 1 Nostalgie bis zum nächsten Prestige entfernt.',
       power: 'Kraft',
       fortitude: 'Resistenz',
       wealth: 'Reichtum',
@@ -1530,7 +1607,7 @@ export default {
     },
     itemMastery: {
       name: 'Meistern',
-      description: 'Besiege Bosse ab Zone {0} mit dieser Ausrüstung, um Meisterungspunkte zu erhalten. Je höher die Zone, desto mehr Punkte.',
+      description: 'Besiege Bosse oder Minibosse ab Zone {0} mit dieser Ausrüstung, um Meisterungspunkte zu erhalten. Je höher die Zone, desto mehr Punkte.',
       bonuses: 'Erhöhe die Meisterungsstufe, um neue Boni für diese Ausrüstung freizuschalten',
       current: 'Diese Ausrüstung hat {0} / {1} Meisterungspunkte',
       1: 'Behalte die Ausrüstung nach dem Prestige',
@@ -1538,6 +1615,23 @@ export default {
       3: 'Behalte die Ausrüstungsstufe nach dem Prestige',
       4: 'Die Effekt-Abklingzeit ist halbiert, und die Effekt-Sperre verstärkt die Ausrüstung um +{1}% statt +{0}%',
       5: 'Kann bis zu {0} mystische Scherben sammeln. Dieser Wert wird für jede Meisterung um weitere {1} erhöht'
+    },
+    tower: {
+      name: 'Türme',
+      description: 'Türme sind besondere Orte, welche einen Schlüssel zum Betreten benötigen. Du kannst Gegner für Kronen und einzigartige Erbstücke bekämpfen, bis du stirbst. Erreiche bestimmte Etagen, um neue Effekte freizuschalten',
+      zoneDescription: 'Gegner in diesem Turm sind auf der höchsten erreichten Etage etwa so stark wie ein Gegner in Zone {0}. Sie starten mit der Kraft eines Zone-{1}-Gegners und werden pro Etage um etwa {2} Zonen stärker. Korruption ist in Türmen nicht vorhanden',
+      floorTitle: 'Höchste Etage besiegt',
+      floorDescription: 'Besiege Gegner auf betimmten Etagen um permanente Effekte freizuschalten:',
+      rewardTitle: 'Belohnungen',
+      rewardDescription1: 'Erhalte {0} Krone(n) pro besiegten Gegner',
+      rewardDescription2: 'Gegner geben alle {0} Etagen Erbstücke, manche Erbstücke können nur in diesem Turm gefunden werden:',
+      keyDescription: 'Erhalte {0} Turmschlüssel, wenn du einen neuen Turm freischaltest, und erhalte jede Woche 1 Turmschlüssel (der Nächste in {1})',
+      enter: 'Betreten',
+      enterCost: 'Benötigt',
+      floor: 'Etage {0}',
+      brick: 'Ziegelturm',
+      fire: 'Feuerturm',
+      ice: 'Eisturm',
     }
   },
   farm: {
