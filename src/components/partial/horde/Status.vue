@@ -19,10 +19,10 @@
       <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneNext"><v-icon>mdi-step-forward</v-icon></v-btn>
       <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
     </div>
-    <div class="d-flex justify-center align-center ma-1">
+    <div class="d-flex flex-wrap justify-center align-center">
       <gb-tooltip :min-width="0">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip class="mx-1 boss-count-chip balloon-text-dynamic" :color="`pale-green ${ themeModifier }`" v-bind="attrs" v-on="on">
+          <v-chip class="ma-1 boss-count-chip balloon-text-dynamic" :color="`pale-green ${ themeModifier }`" v-bind="attrs" v-on="on">
             <v-icon class="mr-1" size="14">mdi-emoticon-frown</v-icon>
             <span v-if="enemyTimer < enemyRespawn">{{ $formatTime(enemyRespawn - enemyTimer) }}</span>
             <div v-else class="d-flex align-center">
@@ -36,7 +36,7 @@
       </gb-tooltip>
       <gb-tooltip v-if="canSpawnMiniboss" :title-text="$vuetify.lang.t(`$vuetify.horde.miniboss`)">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip class="mx-1 boss-count-chip balloon-text-dynamic" :color="`pale-purple ${ themeModifier }`" v-bind="attrs" v-on="on">
+          <v-chip class="ma-1 boss-count-chip balloon-text-dynamic" :color="`pale-purple ${ themeModifier }`" v-bind="attrs" v-on="on">
             <v-icon class="mr-1" size="18">mdi-skull</v-icon>
             <v-icon v-if="minibossTimer >= 1">mdi-check</v-icon>
             <span v-else>{{ $formatTime(Math.ceil((1 - minibossTimer) * minibossTime)) }}</span>
@@ -48,7 +48,7 @@
       </gb-tooltip>
       <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.horde.${ bossState }.title`)">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip @click="fightBoss" class="mx-1 boss-count-chip balloon-text-dynamic" :color="`dark-grey ${ themeModifier }`" v-bind="attrs" v-on="on">
+          <v-chip @click="fightBoss" class="ma-1 boss-count-chip balloon-text-dynamic" :color="`dark-grey ${ themeModifier }`" v-bind="attrs" v-on="on">
             <v-icon class="mr-1" size="24">mdi-skull-crossbones</v-icon>
             <v-spacer></v-spacer>
             <div v-if="!isMaxZone">{{ $vuetify.lang.t(`$vuetify.horde.cleared`) }}</div>
@@ -62,7 +62,7 @@
       </gb-tooltip>
       <gb-tooltip v-if="canSeeTower" :title-text="$vuetify.lang.t(`$vuetify.horde.tower.name`)">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip @click="toggleTowers" class="mx-1 boss-count-chip balloon-text-dynamic" :color="`pale-orange ${ themeModifier }`" v-bind="attrs" v-on="on">
+          <v-chip @click="toggleTowers" class="ma-1 boss-count-chip balloon-text-dynamic" :color="`pale-orange ${ themeModifier }`" v-bind="attrs" v-on="on">
             <v-icon class="mr-1" size="24">mdi-office-building</v-icon>
             <v-spacer></v-spacer>
             <div v-if="currentTower !== null">{{ $vuetify.lang.t(`$vuetify.horde.tower.${ currentTower }`) }}</div>

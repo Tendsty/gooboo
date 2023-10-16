@@ -4,7 +4,9 @@
     <v-card-subtitle class="pa-1 text-center">{{ $vuetify.lang.t('$vuetify.gooboo.level') }} {{ potion.level }}</v-card-subtitle>
     <v-card-text>
       <div class="d-flex justify-center">
-        <currency-icon large class="ma-1" v-for="(item, key) in potion.recipe" :key="`ingredient-${key}`" :name="`event_${item}`"></currency-icon>
+        <div @click="setToRecipe">
+          <currency-icon large class="ma-1" v-for="(item, key) in potion.recipe" :key="`ingredient-${key}`" :name="`event_${item}`"></currency-icon>
+        </div>
       </div>
       <display-row v-for="(item, key) in effect" :key="`${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :after="item.value"></display-row>
     </v-card-text>
@@ -31,6 +33,11 @@ export default {
       return this.potion.effect.map(elem => {
         return {...elem, value: elem.value(this.potion.level)};
       });
+    }
+  },
+  methods: {
+    setToRecipe() {
+      this.$store.dispatch('nightHunt/setToRecipe', this.name);
     }
   }
 }

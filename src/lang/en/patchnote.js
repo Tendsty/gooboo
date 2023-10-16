@@ -193,6 +193,11 @@ export default {
     149: 'Changed some card effects to match the changed horde environment',
     150: 'The cryolab now ticks every second instead of every minute',
     151: 'Crop experience now states it gives less for certain crops',
+    152: 'You can now click on discovered potion recipes to set them as your current ritual',
+    153: 'Most combat actives have been changed to deal less damage and stun for longer',
+    154: 'Achievement notifications now stay until closed if you got a relic',
+    155: 'Because of the big differences between the old and new version of the horde, all upgrade levels were reset and some adjustments to other forms of progression were made. Don\'t forget to re-buy your upgrades!',
+    156: 'Reduced the effect of the "More bones" gem upgrade at level 3+',
   },
   v: {
     1: {

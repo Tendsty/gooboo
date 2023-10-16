@@ -11,8 +11,8 @@ export default {
     moreBones: {type: 'premium', price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 75};
     }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(2, lvl)}
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => getSequence(1, lvl) + 1},
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => getSequence(1, lvl) + 1}
     ]},
     moreMonsterParts: {type: 'premium', requirement() {
         return store.state.stat.horde_monsterPart.total > 0;

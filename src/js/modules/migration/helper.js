@@ -1,4 +1,4 @@
-export { addCurrencyToSave, raiseUpgradeLevel, removeUpgrade, removeCurrency, refundCurrency }
+export { addCurrencyToSave, raiseUpgradeLevel, removeUpgrade, removeCurrency, refundCurrency, replaceTreasureEffect, removeRelic }
 
 function addCurrencyToSave(save, currency, amount) {
     if (save.currency[currency] === undefined) {
@@ -52,6 +52,25 @@ function removeCurrency(save, name) {
 function refundCurrency(save, name) {
     if (save.currency[name] !== undefined && save.stat[name] !== undefined) {
         save.currency[name] = save.stat[name].total;
+    }
+    return save;
+}
+
+function replaceTreasureEffect(save, oldName, newName) {
+    if (save.treasure) {
+        if (save.treasure.newItem) {
+            save.treasure.newItem.effect = save.treasure.newItem.effect.map(effect => effect === oldName ? newName : effect);
+        }
+        save.treasure.items.forEach(treasure => {
+            treasure.effect = treasure.effect.map(effect => effect === oldName ? newName : effect);
+        });
+    }
+    return save;
+}
+
+function removeRelic(save, name) {
+    if (save.relic) {
+        save.relic = save.relic.map(elem => elem !== name);
     }
     return save;
 }

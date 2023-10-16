@@ -1,27 +1,70 @@
 export default {
-    day: '2023-12-31',
+    day: '2023-10-16',
     content: {
         meta: [
             {
                 type: 'appearance',
-                text: '137',
+                text: '137'
             }
         ],
         mining: [
             {
                 unlock: 'miningPickaxeCrafting',
                 type: 'clarity',
-                text: '141',
+                text: '141'
             }
         ],
         village: [
             {
                 unlock: 'achievementFeature',
                 type: 'bugfix',
-                text: '148',
+                text: '148'
+            }
+        ],
+        achievement: [
+            {
+                unlock: 'relicFeature',
+                type: 'qol',
+                text: '154'
             }
         ],
         horde: [
+            {
+                unlock: 'hordeItems',
+                type: 'qol',
+                text: '110'
+            },
+            {
+                unlock: 'hordePrestige',
+                type: 'qol',
+                text: '111'
+            },
+            {
+                unlock: 'hordePrestige',
+                type: 'clarity',
+                text: '134'
+            },
+            {
+                type: 'appearance',
+                text: '112'
+            },
+            {
+                type: 'change',
+                text: '118'
+            },
+            {
+                type: 'bugfix',
+                text: '119'
+            },
+            {
+                unlock: 'hordeItems',
+                type: 'qol',
+                text: '121'
+            },
+            {
+                type: 'accessibility',
+                text: '133',
+            },
             {
                 unlock: 'hordeItems',
                 type: 'new',
@@ -41,22 +84,35 @@ export default {
                 params: [5]
             },
             {
-                unlock: 'hordeItems',
-                type: 'qol',
-                text: '110'
+                unlock: 'hordeBrickTower',
+                type: 'new',
+                text: '135'
             },
             {
-                unlock: 'hordePrestige',
-                type: 'qol',
-                text: '111'
-            },
-            {
-                type: 'appearance',
-                text: '112'
+                type: 'info',
+                text: '155'
             },
             {
                 type: 'new',
                 text: '113'
+            },
+            {
+                type: 'balance',
+                text: '142',
+                balance: 'buff',
+                before: '30',
+                after: '90',
+            },
+            {
+                type: 'balance',
+                text: '143',
+                balance: 'nerf',
+                before: 'x2.5',
+                after: 'x1.6',
+            },
+            {
+                type: 'remove',
+                text: '144'
             },
             {
                 unlock: 'hordeDamageTypes',
@@ -74,9 +130,23 @@ export default {
                 text: '116'
             },
             {
+                type: 'change',
+                text: '145'
+            },
+            {
                 unlock: 'hordePrestige',
                 type: 'remove',
                 text: '117'
+            },
+            {
+                unlock: 'hordePrestige',
+                type: 'remove',
+                text: '120'
+            },
+            {
+                unlock: 'hordePrestige',
+                type: 'new',
+                text: '138'
             },
             {
                 unlock: 'hordeHeirlooms',
@@ -93,24 +163,6 @@ export default {
                 balance: 'buff',
                 before: '-0.1%',
                 after: '+0.1%',
-            },
-            {
-                type: 'change',
-                text: '118'
-            },
-            {
-                type: 'bugfix',
-                text: '119'
-            },
-            {
-                unlock: 'hordePrestige',
-                type: 'remove',
-                text: '120'
-            },
-            {
-                unlock: 'hordeItems',
-                type: 'qol',
-                text: '121'
             },
             {
                 unlock: 'hordePrestige',
@@ -167,28 +219,9 @@ export default {
                 text: '132'
             },
             {
-                type: 'accessibility',
-                text: '133',
-            },
-            {
-                unlock: 'hordePrestige',
-                type: 'clarity',
-                text: '134'
-            },
-            {
-                unlock: 'hordeBrickTower',
-                type: 'new',
-                text: '135'
-            },
-            {
                 unlock: 'hordeHeirlooms',
                 type: 'change',
                 text: '136'
-            },
-            {
-                unlock: 'hordePrestige',
-                type: 'new',
-                text: '138'
             },
             {
                 type: 'change',
@@ -198,28 +231,6 @@ export default {
                 unlock: 'hordeBrickTower',
                 type: 'new',
                 text: '140'
-            },
-            {
-                type: 'balance',
-                text: '142',
-                balance: 'buff',
-                before: '30',
-                after: '90',
-            },
-            {
-                type: 'balance',
-                text: '143',
-                balance: 'nerf',
-                before: 'x2.5',
-                after: 'x1.6',
-            },
-            {
-                type: 'remove',
-                text: '144'
-            },
-            {
-                type: 'change',
-                text: '145'
             },
             {
                 type: 'new',
@@ -233,22 +244,38 @@ export default {
                 unlock: 'cardFeature',
                 type: 'change',
                 text: '149'
+            },
+            {
+                unlock: 'hordeItems',
+                type: 'change',
+                text: '153'
+            },
+            {
+                type: 'balance',
+                text: '156'
             }
         ],
         general: [
             {
                 type: 'accessibility',
-                text: '103',
+                text: '109'
             }
         ],
         cryolab: [
             {
                 type: 'change',
-                text: '150',
+                text: '150'
             },
             {
                 type: 'clarity',
-                text: '151',
+                text: '151'
+            }
+        ],
+        event: [
+            {
+                unlock: 'nightHuntEvent',
+                type: 'qol',
+                text: '152'
             }
         ],
     }

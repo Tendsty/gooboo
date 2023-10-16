@@ -25,7 +25,7 @@ const notes = {
     47: 'horde_19',
     50: 'horde_20',
     54: 'horde_21',
-    59: 'horde_22',
+    60: 'horde_22',
     67: 'horde_23',
     75: 'horde_24',
     78: 'horde_25',
@@ -814,7 +814,7 @@ export default {
             commit('updateKey', {key: 'bossAvailable', value: false});
             commit('updateKey', {key: 'bossFight', value: 0});
             commit('updateKey', {key: 'sigilZones', value: []});
-            commit('updateKey', {key: 'enemyTimer', value: 0});
+            commit('updateKey', {key: 'enemyTimer', value: HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX});
             commit('updateKey', {key: 'minibossTimer', value: 0});
             commit('updateKey', {key: 'chosenActive', value: null});
             commit('updateKey', {key: 'nostalgiaLost', value: 0});

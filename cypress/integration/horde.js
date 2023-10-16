@@ -5,7 +5,7 @@ describe('Horde feature loads properly', () => {
         cy.contains('1m').click();
 
         cy.toFeature('Horde');
-        cy.contains('12.50K');
+        cy.contains('500.0K');
     });
 
     it('prestige option can be unlocked', () => {

@@ -312,8 +312,11 @@
       <v-menu min-width="296" :max-width="$vuetify.breakpoint.xsOnly ? 296 : 896" open-on-hover offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn class="px-2 ml-n2" text :icon="$vuetify.breakpoint.xsOnly" v-bind="attrs" v-on="on">
-            <v-badge overlap color="secondary" :value="featureBadges > 0" :content="featureBadges">
+            <v-badge overlap color="secondary" :value="featureBadges > 0">
               <v-icon>mdi-apps</v-icon>
+              <template v-slot:badge>
+                <span class="balloon-text-dynamic">{{ featureBadges }}</span>
+              </template>
             </v-badge>
             <span class="ml-2" v-if="$vuetify.breakpoint.smAndUp">{{ $vuetify.lang.t('$vuetify.gooboo.features') }}</span>
           </v-btn>
