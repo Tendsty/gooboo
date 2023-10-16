@@ -198,6 +198,7 @@ export default {
     154: 'Der Erfolgshinweis bleibt jetzt bis er geschlossen wird, wenn ein Relikt als Belohnung gegeben wurde',
     155: 'Aufgrund der großen Unterschiede zwichen der alten und neuen Version der Horde wurden Verbesserungen zurückgesetzt und Anpassungen an anderen Fortschrittsformen vorgenommen. Denk\' daran, die Verbesserungen neu zu kaufen!',
     156: 'Der Effekt der "Mehr Knochen"-Edelsteinverbesserung wurde ab Stufe 3 abgeschwächt',
+    157: 'Ein Spielabsturz wurde behoben, wenn Schatzplätze leer waren',
   },
   v: {
     1: {
