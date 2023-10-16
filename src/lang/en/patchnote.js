@@ -198,6 +198,7 @@ export default {
     154: 'Achievement notifications now stay until closed if you got a relic',
     155: 'Because of the big differences between the old and new version of the horde, all upgrade levels were reset and some adjustments to other forms of progression were made. Don\'t forget to re-buy your upgrades!',
     156: 'Reduced the effect of the "More bones" gem upgrade at level 3+',
+    157: 'Fixed a game crash if you had empty treasure slots',
   },
   v: {
     1: {

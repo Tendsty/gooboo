@@ -62,7 +62,9 @@ function replaceTreasureEffect(save, oldName, newName) {
             save.treasure.newItem.effect = save.treasure.newItem.effect.map(effect => effect === oldName ? newName : effect);
         }
         save.treasure.items.forEach(treasure => {
-            treasure.effect = treasure.effect.map(effect => effect === oldName ? newName : effect);
+            if (treasure) {
+                treasure.effect = treasure.effect.map(effect => effect === oldName ? newName : effect);
+            }
         });
     }
     return save;
