@@ -367,7 +367,7 @@ export default {
     expDescription2: 'Experience gain is based on your best prestige.',
     expNext: 'Next level effect:',
     expNoGain: 'To gain experience for this feature, gain some prestige currency first',
-    cropExp: 'Gain experience for each crop',
+    cropExp: 'Gain up to this amount of experience for each crop (base grow time and gold cost reduce experience gained)',
     frozenFeature: {
       title: 'Feature is frozen',
       description: 'This feature is frozen by the cryolab. You will not gain any progress in this feature, but gain prestige currency automatically.'
@@ -1144,16 +1144,18 @@ export default {
     miningTemperature: 'Temperature',
     villageOffering: 'Offerings',
     zoneCleared: 'Zone cleared',
+    zoneClearedTotal: 'Highest zone cleared',
     zone: 'Zone',
     hordeBasicLoot: 'Basic loot',
     hordeItemPermanent: 'Equipment effect',
+    hordeNostalgia: 'Nostalgia',
+    hordeNostalgiaLost: 'Heirlooms found',
     cards: 'Cards',
     treasure: 'Treasure',
     debug: 'Debug',
     bankInvestment: 'Investment',
     alloying: 'Alloying',
     miningResin: 'Resin',
-    nostalgia: 'Nostalgia',
     cryolab: 'Cryolab',
     ritualTier: 'Ritual tier',
     ritualPotionLevel: 'Potion level',
@@ -1214,7 +1216,7 @@ export default {
       impurity: 'Impurity',
       craftPickaxe: 'Craft pickaxe',
       purityDescription: 'To reach 50% minimum quality, your purity needs to match your impurity.',
-      premiumSlot: 'This is a premium crafting slot. Impurity is halved and purity is doubled.'
+      premiumSlot: 'This is a premium crafting slot. Impurity above x1 is halved and purity is doubled.'
     },
     craftingDescription: 'Consume selected ores and create a new pickaxe with a random power value. If it is better than your current pickaxe ({0} power), replace it.',
     resinDescription: 'Each piece of resin adds 30% power and 25% purity. Up to {0} resin may be used per pickaxe craft.',
@@ -1309,7 +1311,6 @@ export default {
     newLoadout: 'New loadout',
     noLoadouts: 'No loadouts',
     monsterPartHint: 'Go to zone 10+ and reach enemy #101 to discover a new currency! That currency is essential to progess further, as it helps you raise your bone capacity.',
-    earlyPrestige: 'Trying to save these souls is a risky process that needs more time to be done safely. You could convert these now with a prestige, but only keep {0}% of them due to ritual instability',
     enemyDescription: 'Each enemy in the same zone has x{0} attack, x{1} health and +{2}% bones compared to the previous enemy. This is enemy #{3} and has x{4} attack, x{5} health and +{6}% bones. All of these effects reset when you die.',
     enemySigil1: {
       s: 'Enemies in this zone have {0} sigil',
@@ -1347,12 +1348,20 @@ export default {
     cuttingDescription: 'Deal a percentage of your targets current health as biological damage after attacking',
     recoveryDescription: 'Heal a percentage of your missing health after killing an enemy',
     boss: 'Boss',
+    miniboss: 'Miniboss',
+    minibossDescription: 'Minibosses appear in place of regular enemies and are a bit stronger. They hold valuable loot and up to 2 can be waiting at once',
     poisonPlayer: 'You are poisoned and take {0} damage per second',
     poisonEnemy: 'This enemy is poisoned and takes {0} damage per second',
+    silencePlayer: 'You are silenced and cannot use actives',
+    silenceEnemy: 'This enemy is silenced and cannot use actives',
     stunPlayer: 'You are stunned and cannot attack',
     stunEnemy: 'This enemy is stunned and cannot attack',
-    stunBoss: 'Bosses recover twice as fast from stuns',
+    stunResist: 'Recover faster from stuns',
+    stunBoss: 'Bosses receive +2 stun resist',
+    stunMiniboss: 'Minibosses receive +1 stun resist',
     bossBioResist: 'Bosses only take 10% biological damage',
+    minibossBioResist: 'Minibosses only take 20% biological damage',
+    enemyRespawn: 'Enemies take {0} to respawn and up to {1} enemies can be waiting',
     reachBoss: {
       title: 'Reach the boss',
       description: 'To challenge the boss of this zone, you need to defeat {0} enemies without dying'
@@ -1376,24 +1385,51 @@ export default {
     rampage: {
       name: 'Rampage',
       description: 'Fighting the same enemy for too long makes it angry! You have fought this enemy for {0} and it starts rampaging every {1}.',
-      effect: 'Each time an enemy rampages, it gets x{0} attack, +{1}% crit chance and +{2}% crit damage.',
-      effectCurrent: 'This enemy has rampaged {0} times. It has x{1} attack, +{2}% crit chance and +{3}% crit damage.'
+      effect: 'Each time an enemy rampages, it gets x{0} attack, +{1}% crit chance, +{2}% crit damage, +{3} stun resist and becomes immune to attack reducing effects.',
+      effectCurrent: 'This enemy has rampaged {0} times. It has x{1} attack, +{2}% crit chance, +{3}% crit damage and {4} stun resist.'
     },
     sigil: {
       name: 'Sigil',
+      hasActive: 'Has active effect',
       min: 'Appears at zone {0} or higher',
+      special: 'Only appears under special conditions',
+      inactive: 'inactive',
       power: 'Power',
       health: 'Health',
+      bashing: 'Bashing',
+      recovery: 'Recovery',
       toughness: 'Toughness',
-      wisdom: 'Wisdom',
-      resilience: 'Resilience',
-      protection: 'Protection',
+      strength: 'Strength',
       magic: 'Magic',
+      magicBolt: 'Magic bolt',
+      fireball: 'Fireball',
       incorporeal: 'Incorporeal',
-      sharp: 'Sharp',
+      focus: 'Focus',
+      wisdom: 'Wisdom',
+      sparks: 'Sparks',
+      protection: 'Protection',
+      shielding: 'Shielding',
+      resistance: 'Resistance',
       precision: 'Precision',
+      screaming: 'Screaming',
+      cure: 'Cure',
+      sharp: 'Sharp',
+      spitting: 'Spitting',
+      burst: 'Burst',
+      resilience: 'Resilience',
+      growing: 'Growing',
+      cold: 'Cold',
+      fury: 'Fury',
       angelic: 'Angelic',
       toxic: 'Toxic',
+      foulBreath: 'Foul breath',
+      nuke: 'Nuke',
+      rainbow: 'Rainbow',
+      drain: 'Drain',
+      shocking: 'Shocking',
+      berserk: 'Berserk',
+      iceGiant: 'Ice giant',
+      generic: 'Generic',
     },
     corruption: {
       name: 'Corruption',
@@ -1408,7 +1444,10 @@ export default {
     fighting: 'Fighting',
     items: {
       name: 'Equipment',
+      usableInStun: 'Can be used while stunned',
+      utilityOvertime: 'Utility actives can store multiple charges at half speed of the previous one',
       inactive: 'Inactive equipment effects recover their cooldown at {0}% of the usual rate',
+      takeEquipped: 'Take equipped',
       dagger: 'Dagger',
       shirt: 'Shirt',
       guardianAngel: 'Guardian angel',
@@ -1422,11 +1461,13 @@ export default {
       campfire: 'Campfire',
       clover: 'Clover',
       snowflake: 'Snowflake',
+      oppressor: 'Oppressor',
       toxin: 'Toxin',
       corruptEye: 'Corrupt eye',
       meatShield: 'Meat shield',
       wizardHat: 'Wizard hat',
       redStaff: 'Red staff',
+      cleansingSpring: 'Cleansing spring',
       marblePillar: 'Marble pillar',
       rainbowStaff: 'Rainbow staff',
       antidote: 'Antidote',
@@ -1454,6 +1495,20 @@ export default {
       moltenShield: 'Molten shield',
       cutter: 'Box cutter',
       book: 'Book',
+      chocolateMilk: 'Chocolate milk',
+      bigHammer: 'Big hammer',
+      spookyPumpkin: 'Spooky pumpkin',
+      strangeChemical: 'Strange chemical',
+      forbiddenHeartShield: 'Forbidden heart-shield',
+      cloudStaff: 'Cloud staff',
+      secretWeapon: 'Secret weapon',
+      bomb: 'Bomb',
+      leechingStaff: 'Leeching staff',
+      shatteredGem: 'Shattered gem',
+      firework: 'Firework',
+      bowTie: 'Bow tie',
+      mysticalAccelerator: 'Mystical accelerator',
+      blazingStaff: 'Blazing staff',
 
       // Chess pieces
       pawn: 'Pawn',
@@ -1484,9 +1539,17 @@ export default {
         0: 'Gain',
         1: 'highest zone bones'
       },
+      monsterPart: {
+        0: 'Gain',
+        1: 'highest zone monster parts'
+      },
       stun: {
-        0: 'Stun this enemy',
-        1: 'times'
+        0: 'Stun the opponent for',
+        1: ''
+      },
+      silence: {
+        0: 'Silence the opponent for',
+        1: ''
       },
       revive: {
         0: 'Refill',
@@ -1494,7 +1557,11 @@ export default {
       },
       removeAttack: {
         0: 'Remove',
-        1: 'attack from this enemy'
+        1: 'attack from the opponent'
+      },
+      raiseAttack: {
+        0: 'Permanently increase attack by',
+        1: ''
       },
       poison: {
         0: 'Apply',
@@ -1504,32 +1571,43 @@ export default {
         0: 'Remove',
         1: 'poison'
       },
-      permanentAttack: {
-        0: 'Increase attack by',
+      permanentStat: {
+        0: 'Increase ',
+        2: ' by',
         1: '(until prestige)'
       },
-      permanentHealth: {
-        0: 'Increase health by',
-        1: '(until prestige)'
-      }
+      divisionShield: {
+        0: 'Gain',
+        1: 'division shield'
+      },
+      reviveAll: 'Refill all revives',
+      removeStun: 'Remove stuns',
     },
     heirloom: {
       name: 'Heirloom',
       min: 'Appears at zone {0} or higher',
-      description: 'You have {0} of nostalgia. This increases your chance of finding a heirloom. Defeating a boss removes {1}% of your nostalgia',
-      description2: 'The heirloom with the lowest amount is twice as likely to be given. If you have multiple heirlooms tied in lowest amount, this does not apply.',
+      special: 'Does not appear on regular minibosses',
+      description: 'Heirlooms are powerful artifacts that can be found from minibosses and stay forever. Reach higher zones to find more types',
+      descriptionTower: 'Heirlooms are powerful artifacts that can be found every {0} floors and stay forever. Reach higher zones or different towers to find more types',
+      descriptionDouble: 'The heirloom with the lowest amount is twice as likely to be given. If you have multiple heirlooms tied in lowest amount, this does not apply.',
+      descriptionNostalgia: 'Nostalgia increases your chance of finding a heirloom. Finding one with the help of nostalgia removes 1 nostalgia until your next prestige',
       power: 'Power',
       fortitude: 'Fortitude',
       wealth: 'Wealth',
       spirit: 'Spirit',
       sharpsight: 'Sharpsight',
       reaping: 'Reaping',
+      remembrance: 'Remembrance',
       holding: 'Holding',
       expertise: 'Expertise',
+      mystery: 'Mystery',
+      brick: 'Brick',
+      heat: 'Heat',
+      ice: 'Ice',
     },
     itemMastery: {
       name: 'Mastery',
-      description: 'Defeat bosses at zone {0} or higher with this item equipped to earn mastery points. Higher zone bosses earn more mastery points.',
+      description: 'Defeat bosses or minibosses at zone {0} or higher with this item equipped to earn mastery points. Higher zone bosses earn more mastery points.',
       bonuses: 'Raise your mastery level to unlock bonuses for this equipment',
       current: 'This equipment has {0} / {1} mastery points',
       1: 'Keep the equipment after prestige',
@@ -1537,6 +1615,23 @@ export default {
       3: 'Keep the equipment levels after prestige',
       4: 'The active cooldown is halved, and disabling the active gives a +{1}% boost instead of +{0}%',
       5: 'Can collect up to {0} mystical shards. This value is increased by another {1} for each mastery'
+    },
+    tower: {
+      name: 'Towers',
+      description: 'Towers are special places that require a tower key to enter. You can fight enemies for crowns and unique heirlooms until you die. Reach specific floors to permanently unlock new bonuses',
+      zoneDescription: 'Enemies in this tower on your highest reached floor are about as strong as a zone {0} enemy. They start at the power of a zone {1} enemy and gain {2} zones worth of stats every floor. Corruption is disabled in towers',
+      floorTitle: 'Highest floor defeated',
+      floorDescription: 'Defeat enemies on certain floors to unlock permanent bonuses:',
+      rewardTitle: 'Rewards',
+      rewardDescription1: 'Get {0} crown(s) per defeated enemy',
+      rewardDescription2: 'Enemies give heirlooms every {0} floors, and some heirlooms are exclusive to this tower:',
+      keyDescription: 'Get {0} tower keys when unlocking a new tower, and get 1 tower key every week (next one in {1})',
+      enter: 'Enter',
+      enterCost: 'Requires',
+      floor: 'Floor {0}',
+      brick: 'Brick tower',
+      fire: 'Fire tower',
+      ice: 'Ice tower',
     }
   },
   farm: {

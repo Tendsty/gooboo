@@ -74,26 +74,22 @@ const prestigeUpgradeWeight = {
         charity: 1.2,
     },
     horde: {
-        decimate: 1,
         balance: 1,
         wrath: 1,
         peace: 1,
         milk: 1,
         butcher: 1,
-        ritualTome: 8,
         beginnerLuck: 2,
-        backpack: 3,
         advancedLuck: 2,
+        soulCage: 3,
         offenseBook: 1,
         defenseBook: 1,
         candleCircle: 2,
         ashCircle: 2,
-        soulLuck: 7.5,
         containmentChamber: 1,
         mausoleum: 1.5,
         lastWill: 3,
-        combatStudies: 1.5,
-        aggression: 1
+        combatStudies: 1.5
     },
     gallery: {
         artAcademy: 1,
@@ -516,7 +512,7 @@ function autoplayTicks(newTime, oldTime) {
         }
 
         // Autofight horde boss
-        else if (store.state.horde.bossAvailable && !store.state.horde.bossFight) {
+        else if (store.state.horde.bossAvailable && store.state.horde.bossFight === 0) {
             store.dispatch('horde/updateZone', store.state.stat.horde_maxZone.value);
             store.dispatch('horde/fightBoss');
         }

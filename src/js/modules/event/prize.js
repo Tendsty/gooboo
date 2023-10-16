@@ -529,6 +529,23 @@ export default {
             wheelOfFortune1: {amount: 4}
         }
     },
+    horde_towerKey: {
+        type: 'currency',
+        item: 'horde_towerKey',
+        requirement() {
+            return store.state.unlock.hordeBrickTower.see;
+        },
+        roundAmount: true,
+        pool: {
+            merchant: {cap: 3, price: {gem_topaz: 450}},
+            bingo2: {amount: 1},
+            bingo3: {amount: 4},
+            bingo4: {amount: 20},
+            wheelOfFortune2: {amount: 1},
+            wheelOfFortune3: {amount: 4},
+            wheelOfFortune4: {amount: 20}
+        }
+    },
 
     // Consumables
     mining_goldenHammer: {

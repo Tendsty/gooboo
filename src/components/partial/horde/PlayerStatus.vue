@@ -43,7 +43,10 @@
         :cutting="playerCutting"
         :division-shield="playerStats.divisionShield"
         :max-division-shield="playerDivisionShield"
+        :stun-resist="playerStunResist"
         :toxic="playerToxic"
+        :silence="playerStats.silence"
+        :stun="playerStats.stun"
         :poison="playerStats.poison"
         :physic-conversion="playerPhysicConversion"
         :physic-attack="playerPhysicAttack"
@@ -115,6 +118,9 @@ export default {
     },
     playerDivisionShield() {
       return this.$store.getters['mult/get']('hordeDivisionShield');
+    },
+    playerStunResist() {
+      return this.$store.getters['mult/get']('hordeStunResist');
     },
     playerPhysicConversion() {
       return this.$store.getters['mult/get']('hordePhysicConversion');

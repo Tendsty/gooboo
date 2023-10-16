@@ -299,6 +299,13 @@ export default {
                 } else {
                     dispatch('setMult', {name: 'villageResourceGain', key: 'villageHappiness', value});
                 }
+            } else if (name === 'hordeNostalgia') {
+                const value = getters.get('hordeNostalgia');
+                if (value > 0) {
+                    dispatch('setBase', {name: 'hordeHeirloomChance', key: 'hordeNostalgia', value: value * 0.01});
+                } else {
+                    dispatch('removeKey', {name: 'hordeHeirloomChance', type: 'base', key: 'hordeNostalgia'});
+                }
             }
         },
         updateTriggerCaches({ getters, dispatch }, o) {

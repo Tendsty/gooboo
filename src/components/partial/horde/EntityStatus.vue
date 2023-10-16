@@ -6,7 +6,7 @@
 
 <template>
   <div>
-    <div v-if="maxDivisionShield > 0 || divisionShield > 0 || maxRevive > 0" class="d-flex justify-end mb-1 mt-n2">
+    <div class="d-flex justify-end mb-1 mt-n2" style="min-height: 32px;">
       <gb-tooltip key="status-division-shield" v-if="maxDivisionShield > 0 || divisionShield > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeDivisionShield')">
         <template v-slot:activator="{ on, attrs }">
           <v-chip label small :color="`pale-blue ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-circle-half-full</v-icon>{{ $formatNum(divisionShield) }}</v-chip>
@@ -88,6 +88,15 @@
         <div>{{ $vuetify.lang.t('$vuetify.horde.cuttingDescription') }}</div>
         <stat-breakdown v-if="isPlayer" name="hordeCutting"></stat-breakdown>
       </gb-tooltip>
+      <gb-tooltip key="status-stun-resist" v-if="stunResist > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeStunResist')">
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip label small :color="`wooden ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-alert-octagram-outline</v-icon>{{ $formatNum(stunResist) }}</v-chip>
+        </template>
+        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.stunResist`) }}</div>
+        <stat-breakdown v-if="isPlayer" name="hordeStunResist"></stat-breakdown>
+        <alert-text v-if="!isPlayer && bossFight === 1" type="info">{{ $vuetify.lang.t(`$vuetify.horde.stunMiniboss`) }}</alert-text>
+        <alert-text v-if="!isPlayer && bossFight === 2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.stunBoss`) }}</alert-text>
+      </gb-tooltip>
       <gb-tooltip key="status-toxic" v-if="toxic > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeToxic')">
         <template v-slot:activator="{ on, attrs }">
           <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`light-green ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-water</v-icon>{{ $formatNum(toxic * 100, true) }}%</v-chip>
@@ -95,12 +104,17 @@
         <div>{{ $vuetify.lang.t('$vuetify.horde.toxicDescription') }}</div>
         <stat-breakdown v-if="isPlayer" name="hordeToxic"></stat-breakdown>
       </gb-tooltip>
+      <gb-tooltip key="status-silence" v-if="silence > 0" :min-width="0">
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip label small :color="`cyan ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-flash-off</v-icon>{{ $formatNum(silence) }}</v-chip>
+        </template>
+        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.silence${ isPlayer ? 'Player' : 'Enemy' }`) }}</div>
+      </gb-tooltip>
       <gb-tooltip key="status-stun" v-if="stun > 0" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
           <v-chip label small :color="`cherry ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-octagram-outline</v-icon>{{ $formatNum(stun) }}</v-chip>
         </template>
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.stun${ isPlayer ? 'Player' : 'Enemy' }`) }}</div>
-        <alert-text v-if="!isPlayer && bossFight">{{ $vuetify.lang.t(`$vuetify.horde.stunBoss`) }}</alert-text>
       </gb-tooltip>
       <gb-tooltip key="status-poison" v-if="poison > 0" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
@@ -131,7 +145,8 @@
             </tr>
           </tbody>
         </v-simple-table>
-        <alert-text v-if="!isPlayer && bossFight" type="info">{{ $vuetify.lang.t(`$vuetify.horde.bossBioResist`) }}</alert-text>
+        <alert-text v-if="!isPlayer && bossFight === 1" type="info">{{ $vuetify.lang.t(`$vuetify.horde.minibossBioResist`) }}</alert-text>
+        <alert-text v-if="!isPlayer && bossFight === 2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.bossBioResist`) }}</alert-text>
       </gb-tooltip>
     </div>
   </div>
@@ -192,6 +207,16 @@ export default {
       default: 0
     },
     maxDivisionShield: {
+      type: Number,
+      required: false,
+      default: 0
+    },
+    stunResist: {
+      type: Number,
+      required: false,
+      default: 0
+    },
+    silence: {
       type: Number,
       required: false,
       default: 0

@@ -10,11 +10,16 @@
       item-value="name"
       :items="itemsList"
       v-model="contentList"
+      clearable
     >
       <template v-slot:selection="{ item, index }">{{ index > 0 ? ', ' : '' }}{{ $vuetify.lang.t(`$vuetify.horde.items.${ item.name }`) }}</template>
       <template v-slot:item="{ item }"><equip-display :name="item.name"></equip-display></template>
     </v-select>
-    <div class="d-flex justify-end">
+    <div class="d-flex flex-wrap justify-end">
+      <v-btn v-if="contentList.length <= 0" color="primary" class="ma-1" @click="takeEquipped">
+        {{ $vuetify.lang.t(`$vuetify.horde.items.takeEquipped`) }}
+      </v-btn>
+      <v-spacer></v-spacer>
       <v-btn color="error" class="ma-1" @click="deleteLoadout">
         <v-icon class="mr-2">mdi-delete</v-icon>
         {{ $vuetify.lang.t(`$vuetify.gooboo.delete`) }}
@@ -25,6 +30,7 @@
 
 <script>
 import EquipDisplay from './EquipDisplay.vue';
+
 export default {
   components: { EquipDisplay },
   props: {
@@ -56,6 +62,15 @@ export default {
   methods: {
     deleteLoadout() {
       this.$store.commit('horde/deleteLoadout', this.name);
+    },
+    takeEquipped() {
+      let equipped = [];
+      for (const [key, elem] of Object.entries(this.$store.state.horde.items)) {
+        if (elem.equipped) {
+          equipped.push(key);
+        }
+      }
+      this.contentList = equipped;
     }
   },
   watch: {

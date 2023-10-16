@@ -14,7 +14,8 @@
     </template>
     <h3 class="text-center mt-0">{{ $vuetify.lang.t('$vuetify.gooboo.effect') }}</h3>
     <stat-breakdown :name="`${ name }HeirloomEffect`" :base="1"></stat-breakdown>
-    <alert-text v-if="heirloom.minZone > 0" class="mt-2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.heirloom.min`, heirloom.minZone) }}</alert-text>
+    <alert-text v-if="heirloom.minZone === Infinity" class="mt-2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.heirloom.special`) }}</alert-text>
+    <alert-text v-else-if="heirloom.minZone > 0" class="mt-2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.heirloom.min`, heirloom.minZone) }}</alert-text>
   </gb-tooltip>
 </template>
 
@@ -45,7 +46,7 @@ export default {
       });
     },
     isPremium() {
-      return this.$store.state.upgrade.item[`horde_ancient${ capitalize(this.name) }`].level >= 1;
+      return this.$store.state.upgrade.item[`horde_ancient${ capitalize(this.name) }`]?.level >= 1;
     }
   }
 }

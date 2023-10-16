@@ -19,7 +19,7 @@ export default {
     currencyHordeBoneGain: {feature: 'horde', value: 0.3},
     currencyHordeMonsterPartGain: {feature: 'horde', value: 0.15},
     hordeItemMasteryGain: {feature: 'horde', unlock: 'hordeItemMastery', value: 0.1},
-    hordeSoulGain: {feature: 'horde', type: 'special', unique: true, value: 0.1},
+    currencyHordeSoulCorruptedGain: {feature: 'horde', type: 'special', unique: true, value: 0.1},
 
     // Farm effects
     currencyFarmVegetableGain: {feature: 'farm', value: 0.35},

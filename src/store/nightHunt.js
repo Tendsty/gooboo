@@ -344,6 +344,12 @@ export default {
                 seedList.push(recipe.join(','));
                 commit('updatePotionKey', {name: key, key: 'recipe', value: recipe});
             }
+        },
+        setToRecipe({ state, rootGetters, commit }, name) {
+            const potion = state.potion[name];
+            if (potion && potion.level >= 1 && potion.recipe && potion.recipe.length <= rootGetters['mult/get']('nightHuntMaxIngredients')) {
+                commit('updateKey', {key: 'ritualIngredients', value: [...potion.recipe]});
+            }
         }
     }
 }

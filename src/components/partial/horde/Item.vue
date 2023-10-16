@@ -21,6 +21,18 @@
       </div>
     </gb-tooltip>
     <active class="ma-1" :pretend="isPretend" :name="name"></active>
+    <gb-tooltip key="item-upgrade-collapse" v-if="found && canUpgrade">
+      <template v-slot:activator="{ on, attrs }">
+        <div class="ma-1 rounded" v-bind="attrs" v-on="on">
+          <v-btn small @click="upgradeItem(name)" :disabled="!canBuy || disabled" color="secondary" class="px-2" min-width="36">
+            <v-icon small>mdi-chevron-double-up</v-icon>
+            {{ $formatNum(upgradePrice) }}
+          </v-btn>
+        </div>
+      </template>
+      <display-row class="mt-0" v-for="(item, key) in statDiff" :key="key" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
+      <price-tag currency="horde_monsterPart" :amount="upgradePrice"></price-tag>
+    </gb-tooltip>
     <v-spacer></v-spacer>
     <template v-if="found">
       <v-btn class="ma-1 px-2" v-if="item.masteryLevel >= 2" color="primary" min-width="36" :disabled="disabled" @click="togglePassive"><v-icon>{{ item.passive ? 'mdi-sleep-off' : 'mdi-sleep' }}</v-icon></v-btn>
@@ -124,6 +136,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    activeDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
@@ -200,13 +217,13 @@ export default {
       return this.$store.state.unlock.hordeItemMastery.see;
     },
     isPretend() {
-      return (!this.canUseActive && this.item.cooldownLeft === 0) || this.disabled;
+      return (!this.canUseActive && this.item.cooldownLeft <= 0) || this.activeDisabled;
     },
     shardIncrement() {
       return HORDE_SHARD_INCREMENT;
     },
     shardCurrent() {
-      return (this.item.masteryLevel - 5) * HORDE_SHARD_INCREMENT + HORDE_SHARD_PER_EQUIP;
+      return Math.max(this.item.masteryLevel - 5, 0) * HORDE_SHARD_INCREMENT + HORDE_SHARD_PER_EQUIP;
     }
   },
   methods: {

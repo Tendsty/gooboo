@@ -11,8 +11,8 @@ export default {
     moreBones: {type: 'premium', price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 75};
     }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(2, lvl)}
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => getSequence(1, lvl) + 1},
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => getSequence(1, lvl) + 1}
     ]},
     moreMonsterParts: {type: 'premium', requirement() {
         return store.state.stat.horde_monsterPart.total > 0;
@@ -26,7 +26,8 @@ export default {
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 110};
     }, effect: [
-        {name: 'hordeSoulGain', type: 'mult', value: lvl => lvl * 0.25 + 1}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => lvl * 0.25 + 1},
+        {name: 'currencyHordeSoulCorruptedCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
     moreMastery: {type: 'premium', requirement() {
         return store.state.stat.horde_maxZone.total > 75;
@@ -77,6 +78,13 @@ export default {
     }, effect: [
         {name: 'reapingHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
     ]},
+    ancientRemembrance: {type: 'premium', cap: 1, requirement() {
+        return store.state.horde.heirloom.remembrance.amount > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 750};
+    }, effect: [
+        {name: 'remembranceHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+    ]},
     ancientHolding: {type: 'premium', cap: 1, requirement() {
         return store.state.horde.heirloom.holding.amount > 0;
     }, price(lvl) {
@@ -90,5 +98,12 @@ export default {
         return {gem_ruby: Math.pow(2, lvl) * 1300};
     }, effect: [
         {name: 'expertiseHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+    ]},
+    ancientMystery: {type: 'premium', cap: 1, requirement() {
+        return store.state.horde.heirloom.mystery.amount > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 1800};
+    }, effect: [
+        {name: 'mysteryHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
     ]}
 }

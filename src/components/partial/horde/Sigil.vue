@@ -1,14 +1,26 @@
+<style scoped>
+.sigil-inactive {
+  opacity: 0.25;
+}
+</style>
+
 <template>
-  <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.horde.sigil.name') + ': ' + $vuetify.lang.t(`$vuetify.horde.sigil.${name}`)">
+  <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.horde.sigil.name') + ': ' + $vuetify.lang.t(`$vuetify.horde.sigil.${name}`) + (tier <= 0 ? (' (' + $vuetify.lang.t('$vuetify.horde.sigil.inactive') + ')') : '')">
     <template v-slot:activator="{ on, attrs }">
-      <v-badge overlap bordered :class="$vnode.data.staticClass" :content="tier" :color="sigil.color" :value="tier > 1">
-        <v-avatar class="elevation-2" size="40" :color="sigil.color" v-bind="attrs" v-on="on">
-          <v-icon>{{ sigil.icon }}</v-icon>
+      <v-badge overlap bordered left offset-x="44" :class="[$vnode.data.staticClass, {'sigil-inactive': tier <= 0, 'balloon-text-dynamic': tier > 0}]" :color="color" :value="tier !== 1">
+        <v-avatar class="elevation-2" :size="small ? 28 : 40" :color="color" v-bind="attrs" v-on="on">
+          <v-icon :small="small">{{ sigil.icon }}</v-icon>
         </v-avatar>
+        <template v-slot:badge>
+          <v-icon v-if="tier <= 0" small>mdi-close</v-icon>
+          <span v-else>{{ tier }}</span>
+        </template>
       </v-badge>
     </template>
     <display-row class="mt-0" v-for="(item, key) in stats" :key="key" :name="item.name" :type="item.type" :after="item.amount"></display-row>
-    <alert-text v-if="sigil.min > 0" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.min`, sigil.min) }}</alert-text>
+    <div v-if="sigil.active">{{ $vuetify.lang.t('$vuetify.horde.sigil.hasActive') }}</div>
+    <alert-text v-if="sigil.minZone === Infinity" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.special`) }}</alert-text>
+    <alert-text v-else-if="sigil.minZone > 0" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.min`, sigil.minZone) }}</alert-text>
   </gb-tooltip>
 </template>
 
@@ -28,15 +40,23 @@ export default {
       type: Number,
       required: false,
       default: 1
+    },
+    small: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
     sigil() {
       return this.$store.state.horde.sigil[this.name];
     },
+    color() {
+      return this.tier >= 1 ? this.sigil.color : 'grey';
+    },
     stats() {
       let obj = {};
-      for (const [key, elem] of Object.entries(this.sigil.stats(this.tier))) {
+      for (const [key, elem] of Object.entries(this.sigil.stats(Math.max(this.tier, 1), this.$store.state.horde.bossFight))) {
         obj[key] = {type: elem.type, name: 'horde' + capitalize(key), amount: elem.amount};
       }
       return obj;

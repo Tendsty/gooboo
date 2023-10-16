@@ -12,7 +12,7 @@ import HeirloomList from './HeirloomList.vue';
 export default {
   components: { InventoryTemplate, HeirloomList },
   data: () => ({
-    currencies: ['horde_soulEmpowered']
+    currencies: ['horde_soulEmpowered', 'horde_crown']
   }),
   computed: {
     ...mapState({

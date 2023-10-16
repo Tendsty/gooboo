@@ -17,8 +17,10 @@ import cryolab from "./modules/cryolab";
 import v1_1_0 from "./modules/migration/v1_1_0";
 import { getDay } from "./utils/date";
 import v1_1_2 from "./modules/migration/v1_1_2";
+import v1_3_0 from "./modules/migration/v1_3_0";
 
 const migrations = {
+    '1.3.0': v1_3_0,
     '1.1.2': v1_1_2,
     '1.1.0': v1_1_0
 };

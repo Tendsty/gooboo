@@ -6,7 +6,7 @@ import { simpleHash } from "../js/utils/random";
 export default {
     namespaced: true,
     state: {
-        version: '1.2.0',
+        version: '1.3.0',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -446,7 +446,7 @@ export default {
                     return rootState.upgrade.item.village_windTurbine.highestLevel > 0;
                 }
                 case 'horde': {
-                    return rootState.stat.horde_maxZone.total > 125;
+                    return rootState.stat.horde_maxZone.total > 200;
                 }
                 case 'farm': {
                     return rootState.upgrade.item.farm_seedBox.highestLevel >= 19;

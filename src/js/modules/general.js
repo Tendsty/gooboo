@@ -69,7 +69,7 @@ export default {
         ]},
         purpleHeart: {icon: 'mdi-heart', color: 'purple', effect: [
             {name: 'hordeHealth', type: 'mult', value: 1.5},
-            {name: 'hordeSoulGain', type: 'mult', value: 1.2}
+            {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.2}
         ]},
         rottenLeaf: {icon: 'mdi-leaf', color: 'brown', effect: [
             {name: 'farmCropGain', type: 'mult', value: 1.75},

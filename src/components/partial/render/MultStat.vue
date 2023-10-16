@@ -45,7 +45,7 @@ export default {
     },
     display() {
       if (this.type === 'hordeActive') {
-        return ['stun', 'revive'].includes(this.mult) ? 'number' : 'percent';
+        return ['revive', 'divisionShield'].includes(this.mult) ? 'number' : (['stun', 'silence'].includes(this.mult) ? 'time' : 'percent');
       } else if (this.type === 'hordeCooldown') {
         return 'time';
       } else if (this.mult === 'pearlChance') {

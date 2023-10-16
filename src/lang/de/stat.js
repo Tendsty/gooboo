@@ -138,11 +138,11 @@ export default {
   },
   horde_totalDamage: {
     achievement: 'Krieger',
-    description: 'Gesamter Schaden verursacht'
+    description: 'Gesamter Schaden durch normale Angriffe verursacht'
   },
   horde_maxDamage: {
     achievement: 'Mächtig',
-    description: 'Meister Schaden in einem Treffer'
+    description: 'Meister Schaden in einem normalen Angriff'
   },
   horde_bone: {
     achievement: 'Hundeliebling',
@@ -166,7 +166,7 @@ export default {
   },
   horde_unlucky: {
     achievement: 'Pechvogel',
-    description: 'Scheitere mit einer 99% Seelen- oder Erbstücks-Chance'
+    description: 'Scheitere mit einer 99% Erbstücks-Chance'
   },
   horde_maxItems: {
     description: 'Meiste Gegenstände ausgerüstet'

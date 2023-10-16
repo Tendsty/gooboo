@@ -10,5 +10,17 @@
             "pause": true,
             "autosaveTimer": null
         }
-    }
+    },
+    "subfeature": {},
+    "currency": {},
+    "stat": {},
+    "upgrade": {},
+    "upgradeQueue": {},
+    "relic": [],
+    "globalLevel": {},
+    "keybinds": {},
+    "note": [],
+    "consumable": {},
+    "rng": {},
+    "cachePage": {}
 }

@@ -10,11 +10,13 @@ export default {
 
             let oldLevel = elem.level;
             const value = elem.value();
+            let gainedRelic = false;
             while ((elem.cap === null || elem.level < elem.cap) && value >= elem.milestones(elem.level)) {
 
                 // Award relic if one is the reward
                 if (elem.relic[elem.level]) {
                     store.dispatch('relic/find', elem.relic[elem.level]);
+                    gainedRelic = true;
                 }
                 store.commit('achievement/updateKey', {name: key, key: 'level', value: elem.level + 1});
                 elem = store.state.achievement[key];
@@ -22,7 +24,7 @@ export default {
 
             // Create a notification if setting is on, also group multiple of the same achievement
             if (store.state.system.settings.notification.items.achievement.value && elem.level > oldLevel) {
-                store.commit('system/addNotification', {color: elem.secret ? 'purple' : 'success', timeout: 5000, message: {
+                store.commit('system/addNotification', {color: elem.secret ? 'purple' : 'success', timeout: gainedRelic ? -1 : 5000, message: {
                     type: 'achievement',
                     name: key,
                     value: elem.level,
@@ -50,7 +52,7 @@ export default {
         ]},
         beneficialVirus: {icon: 'mdi-virus', color: 'pale-green', effect: [
             {name: 'miningToughness', type: 'mult', value: 0.5},
-            {name: 'hordeCorruption', type: 'mult', value: 0.5}
+            {name: 'hordeCorruption', type: 'bonus', value: -0.5}
         ]}
     },
     note: buildArray(1).map(() => 'g'),
