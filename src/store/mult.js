@@ -1,6 +1,7 @@
 import Vue from "vue"
 import { decapitalize } from "../js/utils/format";
 import { getSequence } from "../js/utils/math";
+import { HORDE_HEIRLOOM_CHANCE_PER_NOSTALGIA } from "../js/constants";
 
 export default {
     namespaced: true,
@@ -302,7 +303,7 @@ export default {
             } else if (name === 'hordeNostalgia') {
                 const value = getters.get('hordeNostalgia');
                 if (value > 0) {
-                    dispatch('setBase', {name: 'hordeHeirloomChance', key: 'hordeNostalgia', value: value * 0.01});
+                    dispatch('setBase', {name: 'hordeHeirloomChance', key: 'hordeNostalgia', value: value * HORDE_HEIRLOOM_CHANCE_PER_NOSTALGIA});
                 } else {
                     dispatch('removeKey', {name: 'hordeHeirloomChance', type: 'base', key: 'hordeNostalgia'});
                 }

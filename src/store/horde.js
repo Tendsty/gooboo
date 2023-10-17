@@ -433,9 +433,9 @@ export default {
                     }
 
                     if (state.bossFight >= 1) {
-                        stats.attack *= state.bossFight === 2 ? 15 : 4;
+                        stats.attack *= state.bossFight === 2 ? 15 : 1.5;
                         stats.health *= state.bossFight === 2 ? 15 : 2.5;
-                        stats.bioTaken /= state.bossFight === 2 ? 10 : 5;
+                        stats.bioTaken /= state.bossFight === 2 ? 10 : 2;
                         stats.stunResist += state.bossFight;
                     }
 

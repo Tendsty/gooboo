@@ -34,7 +34,7 @@
       <div v-else-if="zone >= 20" style="height: 48px;"></div>
       <v-progress-linear height="24" color="green" class="balloon-text-dynamic" :value="enemyPercentHealth">
         <v-icon class="health-bar-icon" small>mdi-heart</v-icon>
-        <span v-if="enemyStats === null">-</span>
+        <span v-if="enemyStats === null">({{ $formatNum(nextEnemyStats.health) }})</span>
         <span v-else>{{ $formatNum(enemyStats.health) }} / {{ $formatNum(enemyStats.maxHealth) }}</span>
       </v-progress-linear>
       <entity-status
@@ -85,15 +85,23 @@
           <div>{{ $vuetify.lang.t('$vuetify.horde.rampage.effectCurrent', $formatNum(fightRampage), $formatNum(rampageStats.attackNow, true), $formatNum(rampageStats.critChanceNow * 100, true), $formatNum(rampageStats.critDamageNow * 100, true), $formatNum(rampageStats.stunResistNow)) }}</div>
         </gb-tooltip>
       </entity-status>
-      <div v-else style="height: 60px;"></div>
+      <div v-else style="height: 60px;">
+        <v-chip label small :color="`red ${ themeModifier }`" class="balloon-text-dynamic mt-8 px-2"><v-icon class="mr-2">mdi-sword-cross</v-icon>({{ $formatNum(nextEnemyStats.attack) }})</v-chip>
+        <v-chip v-if="currentCorruption > 0" label small :color="`deep-purple ${ themeModifier }`" class="balloon-text-dynamic mt-8 ml-2 px-2"><v-icon class="mr-2">mdi-skull</v-icon>({{ $formatNum(currentCorruption * 100) }}%)</v-chip>
+      </div>
       <div class="d-flex flex-wrap my-1 mx-n1" style="min-height: 32px;">
+        <gb-tooltip key="reward-bone" v-if="bossFight === 0 && currentTower === null" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_bone.name'))">
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_bone.color } ${ themeModifier }`" v-bind="attrs" v-on="on">
+              <v-icon class="mr-2">mdi-bone</v-icon>
+              <span v-if="enemyStats === null">(</span>
+              <span>{{ $formatNum(currentBone) }}</span>
+              <span v-if="enemyStats === null">)</span>
+            </v-chip>
+          </template>
+          <stat-breakdown name="currencyHordeBoneGain" :base="currentBoneBase" :multArray="basicLootMult"></stat-breakdown>
+        </gb-tooltip>
         <template v-if="enemyStats !== null">
-          <gb-tooltip key="reward-bone" v-if="bossFight === 0 && currentTower === null" :title-text="$vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t('$vuetify.currency.horde_bone.name'))">
-            <template v-slot:activator="{ on, attrs }">
-              <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_bone.color } ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-bone</v-icon>{{ $formatNum(currentBone) }}</v-chip>
-            </template>
-            <stat-breakdown name="currencyHordeBoneGain" :base="currentBoneBase" :multArray="basicLootMult"></stat-breakdown>
-          </gb-tooltip>
           <price-tag key="reward-crown" v-if="currentTower !== null" class="ma-1" currency="horde_crown" :amount="towerStats.crowns" add></price-tag>
           <gb-tooltip key="reward-soul" v-if="bossFight === 1" :title-text="$vuetify.lang.t('$vuetify.currency.horde_soulCorrupted.name')">
             <template v-slot:activator="{ on, attrs }">
@@ -187,10 +195,7 @@ export default {
       return 100 * this.enemyStats.health / this.enemyStats.maxHealth;
     },
     currentBone() {
-      if (this.enemyStats === null) {
-        return 0;
-      }
-      return this.$store.getters['mult/get']('currencyHordeBoneGain', this.currentBoneBase, this.enemyStats.loot);
+      return this.$store.getters['mult/get']('currencyHordeBoneGain', this.currentBoneBase, this.enemyStats === null ? 1 : this.enemyStats.loot);
     },
     currentMonsterPart() {
       return this.$store.getters['mult/get']('currencyHordeMonsterPartGain', this.currentMonsterPartBase);
@@ -266,6 +271,14 @@ export default {
     },
     onHeirloomFloor() {
       return (this.towerFloor + 1) % HORDE_HEIRLOOM_TOWER_FLOORS === 0;
+    },
+    nextEnemyStats() {
+      const baseStats = this.$store.getters['horde/enemyStats'](this.zone, this.combo)
+      const corruptionStats = this.$store.getters['horde/currentCorruptionStats'];
+      return {
+        attack: baseStats.attack * (corruptionStats.power ?? 1),
+        health: baseStats.health * (corruptionStats.power ?? 1),
+      };
     }
   }
 }

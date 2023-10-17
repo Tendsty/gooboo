@@ -126,6 +126,7 @@ export default {
             for (const [gkey, general] of Object.entries(data)) {
                 for (const [qkey, questStage] of Object.entries(general)) {
                     store.commit('general/updateQuestKey', {general: gkey, quest: qkey, key: 'stage', value: questStage});
+                    store.dispatch('general/giveReward', {general: gkey, quest: qkey});
                 }
             }
         }

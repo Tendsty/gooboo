@@ -24,6 +24,7 @@ export default {
     unequip: 'Ablegen',
     unequipAll: 'Alle ablegen',
     max: 'Max',
+    maxed: 'Max',
     free: 'Kostenlos',
     capacity: 'Kapazität',
     multCapacity: '{0}-Kapazität',
@@ -1350,6 +1351,8 @@ export default {
     boss: 'Boss',
     miniboss: 'Miniboss',
     minibossDescription: 'Minibosse nehmen den Platz regulärer Gegner ein und sind etwas stärker. Sie halten wertvolle Beute und bis zu 2 können auf einmal warten',
+    minibossSoul: 'Minibosse halten {0} Seelen',
+    minibossHeirloom: 'Minibosse halten {0} Seelen und haben eine {1}% Erbstück-Chance ({2} Nostalgie)',
     poisonPlayer: 'Du bist vergiftet und erleidest {0} Schaden pro Sekunde',
     poisonEnemy: 'Dieser Gegner ist vergiftet und erleidet {0} Schaden pro Sekunde',
     silencePlayer: 'Du bist verstummt und kannst keine aktiven Angriffe nutzen',
@@ -1360,8 +1363,8 @@ export default {
     stunBoss: 'Bosse erhalten +2 Betäubungsresistenz',
     stunMiniboss: 'Minibosse erhalten +1 Betäubungsresistenz',
     bossBioResist: 'Bosse erleiden nur 10% biologischen Schaden',
-    minibossBioResist: 'Minibosse erleiden nur 20% biologischen Schaden',
-    enemyRespawn: 'Gegner brauchen {0} zum Erscheinen und bis zu {1} Gegner können warten',
+    minibossBioResist: 'Minibosse erleiden nur 50% biologischen Schaden',
+    enemyRespawn: 'Gegner brauchen {0} zum Erscheinen und bis zu {1} Gegner können warten. Wird ein Boss besiegt, erscheinen sofort alle Gegner',
     reachBoss: {
       title: 'Erreiche den Boss',
       description: 'Um den Boss dieser Zone herauszufordern, musst du {0} Gegner in Folge besiegen, ohne zu sterben'

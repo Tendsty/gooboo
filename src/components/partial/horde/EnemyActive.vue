@@ -26,8 +26,10 @@
           <v-icon>{{ sigil.icon }}</v-icon>
         </div>
         <template v-slot:badge>
-          <v-icon class="mb-1" v-if="active.uses === null" x-small>mdi-infinity</v-icon>
-          <span v-else>{{ active.uses }}</span>
+          <span :class="{'black--text': !$vuetify.theme.dark}">
+            <v-icon :color="$vuetify.theme.dark ? 'white' : 'black'" class="mb-1" v-if="active.uses === null" x-small>mdi-infinity</v-icon>
+            <span v-else>{{ active.uses }}</span>
+          </span>
         </template>
       </v-badge>
     </template>

@@ -45,7 +45,7 @@ export default {
                     {type: 'unlock', name: 'villageBuildings4', feature: 'village'}
                 ]},
                 {note: 'general_11', tasks: [
-                    {type: 'stat', subtype: 'current', name: 'horde_soulCorrupted', operator: '>=', value: 1000}
+                    {type: 'stat', subtype: 'current', name: 'horde_soulCorrupted', operator: '>=', value: buildNum(10, 'M')}
                 ]},
             ]
         },
