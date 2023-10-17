@@ -33,6 +33,7 @@
       <display-row class="mt-0" v-for="(item, key) in statDiff" :key="key" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
       <price-tag currency="horde_monsterPart" :amount="upgradePrice"></price-tag>
     </gb-tooltip>
+    <v-chip key="item-max-collapse" disabled label small class="ma-1 px-2" style="text-transform: uppercase;" v-else-if="isMaxed">{{ $vuetify.lang.t('$vuetify.gooboo.maxed') }}</v-chip>
     <v-spacer></v-spacer>
     <template v-if="found">
       <v-btn class="ma-1 px-2" v-if="item.masteryLevel >= 2" color="primary" min-width="36" :disabled="disabled" @click="togglePassive"><v-icon>{{ item.passive ? 'mdi-sleep-off' : 'mdi-sleep' }}</v-icon></v-btn>
@@ -97,6 +98,7 @@
         <display-row class="mt-0" v-for="(item, key) in statDiff" :key="key" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
         <price-tag currency="horde_monsterPart" :amount="upgradePrice"></price-tag>
       </gb-tooltip>
+      <v-chip key="item-max-full" disabled label small class="ml-2 px-2" style="text-transform: uppercase;" v-else-if="isMaxed">{{ $vuetify.lang.t('$vuetify.gooboo.maxed') }}</v-chip>
       <v-spacer></v-spacer>
       <template v-if="found">
         <v-btn v-if="item.masteryLevel >= 2" color="primary" min-width="36" :disabled="disabled" @click="togglePassive"><v-icon>{{ item.passive ? 'mdi-sleep-off' : 'mdi-sleep' }}</v-icon></v-btn>
@@ -185,6 +187,9 @@ export default {
     },
     canUpgrade() {
       return this.$store.state.stat.horde_monsterPart.total > 0 && (this.item.cap === null || this.item.level < this.item.cap);
+    },
+    isMaxed() {
+      return this.item.cap !== null && this.item.level >= this.item.cap;
     },
     canBuy() {
       return this.$store.getters['currency/value']('horde_monsterPart') >= this.upgradePrice;

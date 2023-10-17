@@ -26,7 +26,7 @@ export default {
             for (const [, stat] of Object.entries(state[feature].data[subfeature])) {
                 const statValue = rootState.stat[stat].total;
                 if (statValue > 0) {
-                    const baseValue = stat === 'farm_bestPrestige' ? statValue : logBase(statValue, 3);
+                    const baseValue = stat === 'farm_bestPrestige' ? statValue : logBase(statValue, stat === 'horde_bestPrestige' ? 9 : 3);
                     gain += baseValue * Math.pow(1.1, baseValue) * 40;
                 }
             }

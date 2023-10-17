@@ -72,7 +72,7 @@ function replaceTreasureEffect(save, oldName, newName) {
 
 function removeRelic(save, name) {
     if (save.relic) {
-        save.relic = save.relic.map(elem => elem !== name);
+        save.relic = save.relic.filter(elem => elem !== name);
     }
     return save;
 }

@@ -24,6 +24,7 @@ export default {
     unequip: 'Unequip',
     unequipAll: 'Unequip all',
     max: 'Max',
+    maxed: 'Max',
     free: 'Free',
     capacity: 'Capacity',
     multCapacity: '{0} capacity',
@@ -1350,6 +1351,8 @@ export default {
     boss: 'Boss',
     miniboss: 'Miniboss',
     minibossDescription: 'Minibosses appear in place of regular enemies and are a bit stronger. They hold valuable loot and up to 2 can be waiting at once',
+    minibossSoul: 'Minibosses hold {0} souls',
+    minibossHeirloom: 'Minibosses hold {0} souls and have a {1}% heirloom chance ({2} nostalgia)',
     poisonPlayer: 'You are poisoned and take {0} damage per second',
     poisonEnemy: 'This enemy is poisoned and takes {0} damage per second',
     silencePlayer: 'You are silenced and cannot use actives',
@@ -1360,8 +1363,8 @@ export default {
     stunBoss: 'Bosses receive +2 stun resist',
     stunMiniboss: 'Minibosses receive +1 stun resist',
     bossBioResist: 'Bosses only take 10% biological damage',
-    minibossBioResist: 'Minibosses only take 20% biological damage',
-    enemyRespawn: 'Enemies take {0} to respawn and up to {1} enemies can be waiting',
+    minibossBioResist: 'Minibosses only take 50% biological damage',
+    enemyRespawn: 'Enemies take {0} to respawn and up to {1} enemies can be waiting. Defeating a boss immediately respawns all enemies',
     reachBoss: {
       title: 'Reach the boss',
       description: 'To challenge the boss of this zone, you need to defeat {0} enemies without dying'

@@ -12,8 +12,10 @@
           <v-icon :small="small">{{ sigil.icon }}</v-icon>
         </v-avatar>
         <template v-slot:badge>
-          <v-icon v-if="tier <= 0" small>mdi-close</v-icon>
-          <span v-else>{{ tier }}</span>
+          <span :class="{'black--text': !$vuetify.theme.dark}">
+            <v-icon v-if="tier <= 0" small>mdi-close</v-icon>
+            <span v-else>{{ tier }}</span>
+          </span>
         </template>
       </v-badge>
     </template>

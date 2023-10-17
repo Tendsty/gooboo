@@ -198,7 +198,25 @@ export default {
     154: 'Achievement notifications now stay until closed if you got a relic',
     155: 'Because of the big differences between the old and new version of the horde, all upgrade levels were reset and some adjustments to other forms of progression were made. Don\'t forget to re-buy your upgrades!',
     156: 'Reduced the effect of the "More bones" gem upgrade at level 3+',
+
+    // v1.3.1
     157: 'Fixed a game crash if you had empty treasure slots',
+
+    // v1.3.2
+    158: 'The horde level bonus now affects soul capacity as well',
+    159: 'Restored general relics lost in v1.3.0',
+    160: 'For those who obtained special relics during events, there is no way to trace them back to your savefile. If you have a backup before v1.3.0, you can load it in this version to restore them',
+    161: 'Reduced exp gain for the horde based on souls collected',
+    162: 'Equipment upgrades now show when they reach max level',
+    163: 'Minibosses now show their loot in the miniboss timer tooltip',
+    164: 'Increased the requirement for the final task of "Combat training"',
+    165: 'Heirloom chance per nostalgia',
+    166: 'Next enemy stats can now be seen while waiting for enemies to spawn',
+    167: 'The regular enemy tooltip now states defeating a boss respawns all enemies',
+    168: 'Miniboss attack multiplier',
+    169: 'Miniboss biological damage taken',
+    170: 'Fixed the corrupted soul display showing NaN for some players',
+    171: 'Fixed some badges being hard to read on light mode',
   },
   v: {
     1: {

@@ -43,6 +43,8 @@
           </v-chip>
         </template>
         <div>{{ $vuetify.lang.t('$vuetify.horde.minibossDescription') }}</div>
+        <div v-if="canSeeHeirloom">{{ $vuetify.lang.t('$vuetify.horde.minibossHeirloom', $formatNum(hordeSoulGain), $formatNum(hordeHeirloomChance * 100, true), $formatNum(hordeNostalgia)) }}</div>
+        <div v-else>{{ $vuetify.lang.t('$vuetify.horde.minibossSoul', $formatNum(hordeSoulGain)) }}</div>
         <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.hordeMinibossTime') }}</h3>
         <stat-breakdown name="hordeMinibossTime"></stat-breakdown>
       </gb-tooltip>
@@ -148,7 +150,8 @@ export default {
       minibossTimer: state => state.horde.minibossTimer,
       canSeeTower: state => state.unlock.hordeBrickTower.see,
       currentTower: state => state.horde.currentTower,
-      towerKey: state => state.currency.horde_towerKey
+      towerKey: state => state.currency.horde_towerKey,
+      canSeeHeirloom: state => state.unlock.hordeHeirlooms.see
     }),
     ...mapGetters({
       comboRequired: 'horde/comboRequired',
@@ -225,6 +228,15 @@ export default {
       }
       const tower = this.$store.state.horde.tower[this.currentTower];
       return Math.round(tower.statBase + this.$store.state.horde.towerFloor * tower.statScaling);
+    },
+    hordeSoulGain() {
+      return this.$store.getters['mult/get']('currencyHordeSoulCorruptedGain');
+    },
+    hordeHeirloomChance() {
+      return this.$store.getters['mult/get']('hordeHeirloomChance');
+    },
+    hordeNostalgia() {
+      return this.$store.getters['mult/get']('hordeNostalgia');
     }
   },
   methods: {

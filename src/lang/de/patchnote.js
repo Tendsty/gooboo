@@ -198,7 +198,25 @@ export default {
     154: 'Der Erfolgshinweis bleibt jetzt bis er geschlossen wird, wenn ein Relikt als Belohnung gegeben wurde',
     155: 'Aufgrund der großen Unterschiede zwichen der alten und neuen Version der Horde wurden Verbesserungen zurückgesetzt und Anpassungen an anderen Fortschrittsformen vorgenommen. Denk\' daran, die Verbesserungen neu zu kaufen!',
     156: 'Der Effekt der "Mehr Knochen"-Edelsteinverbesserung wurde ab Stufe 3 abgeschwächt',
+
+    // v1.3.1
     157: 'Ein Spielabsturz wurde behoben, wenn Schatzplätze leer waren',
+
+    // v1.3.2
+    158: 'Der Bonus der Hordenstufe beeinflusst jetzt auch Seelenkapazität',
+    159: 'General-Relikte, die in v1.3.0 verloren gegangen sind, wurden wiederhergestellt',
+    160: 'Für alle, die während der Events besondere Relikte gesammelt haben, gibt es keine Möglichkeit, diese den Spielständen zuzuordnen. Solltest du ein Backup vor Version v1.3.0 haben, kannst du es in dieser Version laden, um die Relikte wiederherzustellen',
+    161: 'Das Erfahrungseinkommen wurde für die Horde gesenkt, abhängig von den gesammelten Seelen',
+    162: 'Ausrüstung zeigt jetzt an, wenn sie auf die höchste Stufe verbessert wurde',
+    163: 'Minibosse zeigen nun deren Beute im Erscheinen-Tooltip',
+    164: 'Die Anforderung für die letzte Aufgabe von "Kampftraining" wurde erhöht',
+    165: 'Erbstück-Chance pro Nostalgie',
+    166: 'Die Werte des nächsten Gegners können jetzt gesehen werden, während auf Gegner gewartet wird',
+    167: 'Der Tooltip normaler Gegner zeigt jetzt, dass beim Besiegen vom Boss alle Gegner neu erscheinen',
+    168: 'Miniboss Angriffs-Multiplikator',
+    169: 'Miniboss biologischer Schaden erlitten',
+    170: 'Ein Fehler wurde behoben, bei dem manchen Spieler NaN bei korrupten Seelen angezeigt wurde',
+    171: 'Abzeichen sollten im hellen Modus wieder gut lesbar sein',
   },
   v: {
     1: {
