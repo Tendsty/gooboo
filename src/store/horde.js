@@ -64,7 +64,8 @@ export default {
         itemStatMult: {},
         tower: {},
         currentTower: null,
-        towerFloor: 0
+        towerFloor: 0,
+        taunt: false
     },
     getters: {
         enemyStats: () => (zone, combo = 0) => {
@@ -332,6 +333,7 @@ export default {
             commit('updateKey', {key: 'itemStatMult', value: {}});
             commit('updateKey', {key: 'currentTower', value: null});
             commit('updateKey', {key: 'towerFloor', value: 0});
+            commit('updateKey', {key: 'taunt', value: false});
 
             commit('updateKey', {key: 'player', value: {}});
             commit('updateKey', {key: 'enemy', value: {}});
@@ -371,13 +373,14 @@ export default {
                 commit('updatePlayerKey', {key: 'health', value: maxHealth});
             }
         },
-        updateEnemyStats({ state, getters, rootGetters, commit }) {
+        updateEnemyStats({ state, rootState, getters, rootGetters, commit }) {
             if (state.respawn <= 0) {
                 const inTower = state.currentTower !== null;
                 if (!inTower && state.minibossTimer >= 1 && state.bossFight === 0) {
                     commit('updateKey', {key: 'bossFight', value: 1});
                 }
-                if (inTower || state.enemyTimer >= HORDE_ENEMY_RESPAWN_TIME || state.bossFight > 0) {
+                const canSpawn = inTower || state.enemyTimer >= HORDE_ENEMY_RESPAWN_TIME || state.bossFight > 0;
+                if (canSpawn || (state.zone === rootState.stat.horde_maxZone.value && !state.bossAvailable && state.taunt)) {
                     let stats = getters.enemyStats(getters.currentBaseZone, inTower ? 0 : state.combo);
                     const corruptionStats = inTower ? {} : getters.currentCorruptionStats;
 
@@ -456,6 +459,11 @@ export default {
                                 uses: state.sigil[key].active.uses(elem, state.bossFight)
                             };
                         }
+                    }
+
+                    // Taunted enemies give no loot
+                    if (!canSpawn) {
+                        stats.loot = 0;
                     }
 
                     commit('updateKey', {key: 'enemy', value: {}});
@@ -616,7 +624,7 @@ export default {
         },
         killEnemy({ state, rootState, getters, rootGetters, commit, dispatch }) {
             if (state.bossFight === 0 && state.currentTower === null) {
-                dispatch('currency/gain', {feature: 'horde', name: 'bone', gainMult: true, amount: getters.currentBone * state.enemy.loot}, {root: true});
+                dispatch('currency/gain', {feature: 'horde', name: 'bone', amount: rootGetters['mult/get']('currencyHordeBoneGain', getters.currentBone, state.enemy.loot)}, {root: true});
                 dispatch('findItems', 1);
             }
 
@@ -646,6 +654,7 @@ export default {
                     dispatch('findHeirloom', {zone: getters.currentBaseZone, heirlooms: tower.heirlooms});
                 }
             } else if (state.bossFight === 1) {
+                commit('updateKey', {key: 'combo', value: state.combo + 4});
                 dispatch('getMinibossReward', 1);
 
                 commit('updateKey', {key: 'minibossTimer', value: state.minibossTimer - 1});
@@ -674,7 +683,9 @@ export default {
                 dispatch('checkZoneUnlocks');
             } else {
                 commit('updateKey', {key: 'combo', value: state.combo + 1});
-                commit('updateKey', {key: 'enemyTimer', value: state.enemyTimer - HORDE_ENEMY_RESPAWN_TIME});
+                if (state.enemy.loot > 0) {
+                    commit('updateKey', {key: 'enemyTimer', value: state.enemyTimer - HORDE_ENEMY_RESPAWN_TIME});
+                }
             }
 
             let skipStats = false;

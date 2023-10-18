@@ -217,6 +217,15 @@ export default {
     169: 'Miniboss biological damage taken',
     170: 'Fixed the corrupted soul display showing NaN for some players',
     171: 'Fixed some badges being hard to read on light mode',
+
+    // v1.3.3
+    172: 'Added taunt mode to speed up reaching the boss',
+    173: 'Minibosses now also count as defeating 4 regular enemies',
+    174: 'Fixed a bug where stacking utility actives caused numbers to be hard to read on light mode',
+    175: 'Changed the required level of one horde relic because of faster progression with taunt mode',
+    176: 'Fixed a bug with bone calculation if you bought the "Milk" prestige upgrade',
+    177: 'Enemy actives are now shown on sigils',
+    178: 'Resources unaffected by "All resource gain" now state it in the currency tooltip',
   },
   v: {
     1: {

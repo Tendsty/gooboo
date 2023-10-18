@@ -217,6 +217,15 @@ export default {
     169: 'Miniboss biologischer Schaden erlitten',
     170: 'Ein Fehler wurde behoben, bei dem manchen Spieler NaN bei korrupten Seelen angezeigt wurde',
     171: 'Abzeichen sollten im hellen Modus wieder gut lesbar sein',
+
+    // v1.3.3
+    172: 'Der Spottmodus wurde hinzugefügt, um das Erreichen vom Boss zu beschleunigen',
+    173: 'Minibosse zählen jetzt als 4 besiegte normale Gegner',
+    174: 'Ein Fehler wurde behoben, wenn aktive Nützlichkeiten mehrere Ladungen hatten. Der Text sollte jetzt im hellen Modus wieder lesbar sein',
+    175: 'Die benötigte Stufe eines Horde-Relikts wurde angehoben, da mit dem Spottmodus schnellerer Fortschritt möglich ist',
+    176: 'Ein Fehler mit der Knochenkalkulation wurde behoben, wenn die Prestige-Verbesserung "Milch" aktiv war',
+    177: 'Aktive Angriffe der Gegner werden jetzt auf Zeichen angezeigt',
+    178: 'Rohstoffe, die nicht vom gesamten Rohstoffeinkommen beeinflusst werden, zeigen das jetzt im Rohstoff-Tooltip an',
   },
   v: {
     1: {

@@ -32,7 +32,6 @@
           class="balloon-text-dynamic"
           :class="$vnode.data.staticClass"
           :value="item.activeType === 'utility' && charges > 1"
-          :content="'x' + $formatNum(charges)"
           :color="item.activeColor"
           offset-x="40"
           offset-y="8"
@@ -40,6 +39,9 @@
           <v-btn class="balloon-text-dynamic px-0" :class="[item.activeColor, {'selected-primary': chosenActive === name}]" min-width="36" @click="use" v-bind="attrs" v-on="on">
             <v-icon>{{ item.activeIcon }}</v-icon>
           </v-btn>
+          <template v-slot:badge>
+            <span :class="{'black--text': !$vuetify.theme.dark}">x{{ $formatNum(charges) }}</span>
+          </template>
         </v-badge>
       </span>
     </template>

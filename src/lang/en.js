@@ -1288,6 +1288,8 @@ export default {
     lootNeedQuality: 'Needs over {0} quality',
     buildingStat: 'Total buildings constructed',
     housingStat: 'Total housing constructed (first 25 per building)',
+    coinNotAffected: 'Coins are not affected by "All resource gain"',
+    faithNotAffected: 'Faith is not affected by "All resource gain" and "Mental resource gain"',
     offering: {
       name: 'Offerings',
       description: {
@@ -1350,7 +1352,7 @@ export default {
     recoveryDescription: 'Heal a percentage of your missing health after killing an enemy',
     boss: 'Boss',
     miniboss: 'Miniboss',
-    minibossDescription: 'Minibosses appear in place of regular enemies and are a bit stronger. They hold valuable loot and up to 2 can be waiting at once',
+    minibossDescription: 'Minibosses appear in place of regular enemies and are a bit stronger. They hold valuable loot and up to 2 can be waiting at once. Defeating one also counts as defeating 4 regular enemies',
     minibossSoul: 'Minibosses hold {0} souls',
     minibossHeirloom: 'Minibosses hold {0} souls and have a {1}% heirloom chance ({2} nostalgia)',
     poisonPlayer: 'You are poisoned and take {0} damage per second',
@@ -1365,6 +1367,13 @@ export default {
     bossBioResist: 'Bosses only take 10% biological damage',
     minibossBioResist: 'Minibosses only take 50% biological damage',
     enemyRespawn: 'Enemies take {0} to respawn and up to {1} enemies can be waiting. Defeating a boss immediately respawns all enemies',
+    taunt: {
+      title: 'Taunt mode',
+      description: 'When taunted, enemies keep spawning even when none are waiting, but all enemies spawned early carry no loot. Taunting only works when trying to reach the boss',
+      on: 'Taunt mode is on',
+      off: 'Taunt mode is off',
+      clickToToggle: 'click to toggle'
+    },
     reachBoss: {
       title: 'Reach the boss',
       description: 'To challenge the boss of this zone, you need to defeat {0} enemies without dying'

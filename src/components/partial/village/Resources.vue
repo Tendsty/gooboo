@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="d-flex flex-wrap justify-center ma-1">
-      <currency large class="ma-1" name="village_coin" :baseArray="foodConversion"></currency>
+      <currency large class="ma-1" name="village_coin" :baseArray="foodConversion">
+        <alert-text type="info">{{ $vuetify.lang.t('$vuetify.village.coinNotAffected') }}</alert-text>
+      </currency>
     </div>
     <div v-if="stat.village_wood.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.material`) }}</div>
     <div class="d-flex flex-wrap justify-center ma-1">
@@ -18,7 +20,9 @@
     <div v-if="stat.village_knowledge.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.mental`) }}</div>
     <div class="d-flex flex-wrap justify-center ma-1">
       <template v-for="item in mental">
-        <currency :key="item" class="ma-1" :class="{'premium-glow': mental_premium.includes(item) && upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}" :name="item"></currency>
+        <currency :key="item" class="ma-1" :class="{'premium-glow': mental_premium.includes(item) && upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}" :name="item">
+          <alert-text v-if="item === 'village_faith'" type="info">{{ $vuetify.lang.t('$vuetify.village.faithNotAffected') }}</alert-text>
+        </currency>
       </template>
     </div>
     <template v-if="canSeeLoot">
@@ -73,9 +77,10 @@ import { mapGetters, mapState } from 'vuex';
 import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD } from '../../../js/constants';
 import Currency from '../../render/Currency.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import AlertText from '../render/AlertText.vue';
 
 export default {
-  components: { Currency, StatBreakdown },
+  components: { Currency, StatBreakdown, AlertText },
   data: () => ({
     mental_premium: ['village_knowledge', 'village_science']
   }),

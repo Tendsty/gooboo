@@ -22,7 +22,7 @@
     <div class="d-flex flex-wrap justify-center align-center">
       <gb-tooltip :min-width="0">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip class="ma-1 boss-count-chip balloon-text-dynamic" :color="`pale-green ${ themeModifier }`" v-bind="attrs" v-on="on">
+          <v-chip @click="toggleTaunt" class="ma-1 boss-count-chip balloon-text-dynamic" :color="`${ isTaunted ? 'pale-red' : 'pale-green' } ${ themeModifier }`" v-bind="attrs" v-on="on">
             <v-icon class="mr-1" size="14">mdi-emoticon-frown</v-icon>
             <span v-if="enemyTimer < enemyRespawn">{{ $formatTime(enemyRespawn - enemyTimer) }}</span>
             <div v-else class="d-flex align-center">
@@ -33,6 +33,13 @@
           </v-chip>
         </template>
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.enemyRespawn`, $formatTime(enemyRespawn), $formatNum(enemyRespawnMax)) }}</div>
+        <h3 class="text-center">{{ $vuetify.lang.t(`$vuetify.horde.taunt.title`) }}</h3>
+        <div>{{ $vuetify.lang.t(`$vuetify.horde.taunt.description`) }}</div>
+        <div>
+          <span v-if="isTaunted">{{ $vuetify.lang.t(`$vuetify.horde.taunt.on`) }}</span>
+          <span v-else>{{ $vuetify.lang.t(`$vuetify.horde.taunt.off`) }}</span>
+          <span>&nbsp;({{ $vuetify.lang.t(`$vuetify.horde.taunt.clickToToggle`) }})</span>
+        </div>
       </gb-tooltip>
       <gb-tooltip v-if="canSpawnMiniboss" :title-text="$vuetify.lang.t(`$vuetify.horde.miniboss`)">
         <template v-slot:activator="{ on, attrs }">
@@ -151,7 +158,8 @@ export default {
       canSeeTower: state => state.unlock.hordeBrickTower.see,
       currentTower: state => state.horde.currentTower,
       towerKey: state => state.currency.horde_towerKey,
-      canSeeHeirloom: state => state.unlock.hordeHeirlooms.see
+      canSeeHeirloom: state => state.unlock.hordeHeirlooms.see,
+      isTaunted: state => state.horde.taunt
     }),
     ...mapGetters({
       comboRequired: 'horde/comboRequired',
@@ -271,6 +279,9 @@ export default {
     },
     toggleTowers() {
       this.showTowers = !this.showTowers;
+    },
+    toggleTaunt() {
+      this.$store.commit('horde/updateKey', {key: 'taunt', value: !this.isTaunted});
     }
   }
 }

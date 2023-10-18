@@ -3,7 +3,7 @@ import { buildNum } from "../../utils/format";
 
 export default {
     maxZone: {value: () => store.state.stat.horde_maxZone.total, default: 1, milestones: lvl => lvl * 10 + 10, relic: {7: 'ultimateGuide', 11: 'crackedSafe'}},
-    maxZoneSpeedrun: {value: () => store.state.stat.horde_maxZoneSpeedrun.total, default: 1, milestones: lvl => lvl * 5 + 10, relic: {6: 'dumbbell'}},
+    maxZoneSpeedrun: {value: () => store.state.stat.horde_maxZoneSpeedrun.total, default: 1, milestones: lvl => lvl * 5 + 10, relic: {8: 'dumbbell'}},
     totalDamage: {value: () => store.state.stat.horde_totalDamage.total, milestones: lvl => Math.pow(lvl * 250 + 7500, lvl) * buildNum(10, 'K'), relic: {6: 'newBackpack'}},
     maxDamage: {value: () => store.state.stat.horde_maxDamage.total, milestones: lvl => Math.pow(lvl * 250 + 7500, lvl) * 10, relic: {3: 'burningSkull'}},
     bone: {value: () => store.state.stat.horde_bone.total, milestones: lvl => Math.pow(buildNum(10, 'K'), lvl) * buildNum(1, 'M'), relic: {2: 'forgottenShield'}},
