@@ -1288,6 +1288,8 @@ export default {
     lootNeedQuality: 'Benötigt über {0} Qualität',
     buildingStat: 'Gesamte Gebäudezahl',
     housingStat: 'Gesamte Wohnungszahl (erste 25 pro Gebäude)',
+    coinNotAffected: 'Münzen werden nicht durch gesamtes Rohstoffeinkommen beeinflusst',
+    faithNotAffected: 'Glaube wird nicht durch gesamtes Rohstoffeinkommen und Mentale-Ressourcen-Einkommen beeinflusst',
     offering: {
       name: 'Opfergaben',
       description: {
@@ -1350,7 +1352,7 @@ export default {
     recoveryDescription: 'Heile einen Prozentwert deines fehlenden Lebens, wenn du einen Gegner besiegst',
     boss: 'Boss',
     miniboss: 'Miniboss',
-    minibossDescription: 'Minibosse nehmen den Platz regulärer Gegner ein und sind etwas stärker. Sie halten wertvolle Beute und bis zu 2 können auf einmal warten',
+    minibossDescription: 'Minibosse nehmen den Platz regulärer Gegner ein und sind etwas stärker. Sie halten wertvolle Beute und bis zu 2 können auf einmal warten. Einen zu besiegen zählt als 4 besiegte normale Gegner',
     minibossSoul: 'Minibosse halten {0} Seelen',
     minibossHeirloom: 'Minibosse halten {0} Seelen und haben eine {1}% Erbstück-Chance ({2} Nostalgie)',
     poisonPlayer: 'Du bist vergiftet und erleidest {0} Schaden pro Sekunde',
@@ -1365,6 +1367,13 @@ export default {
     bossBioResist: 'Bosse erleiden nur 10% biologischen Schaden',
     minibossBioResist: 'Minibosse erleiden nur 50% biologischen Schaden',
     enemyRespawn: 'Gegner brauchen {0} zum Erscheinen und bis zu {1} Gegner können warten. Wird ein Boss besiegt, erscheinen sofort alle Gegner',
+    taunt: {
+      title: 'Spottmodus',
+      description: 'Im Spottmodus erscheinen Gegner auch dann, wenn keine warten. Alle Gegner, die frühzeitig erscheinen, halten aber keine Beute. Verspotten funktioniert nur auf dem Weg zum Boss',
+      on: 'Der Spottmodus ist an',
+      off: 'Der Spottmodus ist aus',
+      clickToToggle: 'klicke zum Umschalten'
+    },
     reachBoss: {
       title: 'Erreiche den Boss',
       description: 'Um den Boss dieser Zone herauszufordern, musst du {0} Gegner in Folge besiegen, ohne zu sterben'

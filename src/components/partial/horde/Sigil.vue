@@ -20,7 +20,10 @@
       </v-badge>
     </template>
     <display-row class="mt-0" v-for="(item, key) in stats" :key="key" :name="item.name" :type="item.type" :after="item.amount"></display-row>
-    <div v-if="sigil.active">{{ $vuetify.lang.t('$vuetify.horde.sigil.hasActive') }}</div>
+    <template v-if="sigil.active">
+      <div>{{ $vuetify.lang.t('$vuetify.horde.sigil.hasActive') }}:</div>
+      <enemy-active-tooltip :name="name" :level="Math.max(tier, 1)" show-base></enemy-active-tooltip>
+    </template>
     <alert-text v-if="sigil.minZone === Infinity" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.special`) }}</alert-text>
     <alert-text v-else-if="sigil.minZone > 0" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.min`, sigil.minZone) }}</alert-text>
   </gb-tooltip>
@@ -30,9 +33,10 @@
 import { capitalize } from '../../../js/utils/format';
 import AlertText from '../render/AlertText.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
+import EnemyActiveTooltip from './EnemyActiveTooltip.vue';
 
 export default {
-  components: { DisplayRow, AlertText },
+  components: { DisplayRow, AlertText, EnemyActiveTooltip },
   props: {
     name: {
       type: String,

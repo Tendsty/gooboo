@@ -475,6 +475,8 @@ export default {
                     store.commit('horde/updateEnemyKey', {key: 'stunResist', value: enemyStats.stunResist + HORDE_RAMPAGE_STUN_RESIST * rampageDiff});
                     store.commit('horde/updateKey', {key: 'fightRampage', value: newRampage});
                 }
+            } else if (store.state.horde.taunt && !store.state.horde.bossAvailable && store.state.horde.zone === store.state.stat.horde_maxZone.value) {
+                store.dispatch('horde/updateEnemyStats');
             } else {
                 secondsSpent = Math.min(seconds, HORDE_ENEMY_RESPAWN_TIME - store.state.horde.enemyTimer);
                 tickEnemyRespawn(secondsSpent);
@@ -700,6 +702,9 @@ export default {
         if (store.state.horde.towerFloor > 0) {
             obj.towerFloor = store.state.horde.towerFloor;
         }
+        if (store.state.horde.taunt) {
+            obj.taunt = true;
+        }
 
         for (const [key, elem] of Object.entries(store.state.horde.tower)) {
             if (elem.highest > 0) {
@@ -713,7 +718,7 @@ export default {
         return obj;
     },
     loadGame(data) {
-        ['zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'fightTime', 'fightRampage', 'enemyTimer', 'minibossTimer', 'nostalgiaLost', 'chosenActive', 'currentTower', 'towerFloor'].forEach(elem => {
+        ['zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'fightTime', 'fightRampage', 'enemyTimer', 'minibossTimer', 'nostalgiaLost', 'chosenActive', 'currentTower', 'towerFloor', 'taunt'].forEach(elem => {
             if (data[elem] !== undefined) {
                 store.commit('horde/updateKey', {key: elem, value: data[elem]});
             }
