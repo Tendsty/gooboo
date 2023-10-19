@@ -37,7 +37,7 @@
 <template>
   <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.currency.event_${ingredientName}.name`)">
     <template v-slot:activator="{ on, attrs }">
-      <div class="ingredient-container rounded-lg d-flex justify-center align-center" @mouseover="hovered = true" @mouseleave="hovered = false" :class="[$vuetify.theme.dark ? 'darken-2' : 'lighten-2', {'ingredient-container-mobile': $vuetify.breakpoint.xsOnly}, currency.color, ...$vnode.data.staticClass]" v-bind="attrs" v-on="on">
+      <div class="ingredient-container rounded-lg d-flex justify-center align-center" @mouseover="hovered = true" @mouseleave="hovered = false" :class="[$vuetify.theme.dark ? 'darken-2' : 'lighten-2', {'ingredient-container-mobile': $vuetify.breakpoint.xsOnly}, currency.color, $vnode.data.staticClass]" v-bind="attrs" v-on="on">
         <v-icon :size="$vuetify.breakpoint.xsOnly ? 32 : 48">{{ currency.icon }}</v-icon>
         <div v-if="isBonus" class="ingredient-amount">{{ $formatNum(ingredientAmount) }}</div>
         <div v-else-if="potionLevel !== null" class="ingredient-amount">{{ $formatNum(potionLevel + 1) }}</div>

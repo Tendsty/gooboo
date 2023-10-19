@@ -8,7 +8,7 @@
   <gb-tooltip v-if="add || curr.alwaysVisible || stat.total > 0" :title-text="$vuetify.lang.t(`$vuetify.currency.${ currency }.name`)">
     <template v-slot:activator="{ on, attrs }">
       <v-badge dot overlap bordered :color="curr.color" :value="multWarning">
-        <div class="v-chip v-chip--label v-size--small px-2 balloon-text-dynamic" :class="[{'price-tag-highlight': highlight}, $vuetify.theme.dark ? 'theme--dark darken-3' : 'theme--light lighten-3', curr.color, ...$vnode.data.staticClass]" v-bind="attrs" v-on="on">
+        <div class="v-chip v-chip--label v-size--small px-2 balloon-text-dynamic" :class="[{'price-tag-highlight': highlight}, $vuetify.theme.dark ? 'theme--dark darken-3' : 'theme--light lighten-3', curr.color, $vnode.data.staticClass]" v-bind="attrs" v-on="on">
           <v-icon size="16" class="mr-2">{{ curr.icon }}</v-icon>
           <span :class="costClass">{{ (add && amount >= 0) ? '+' : '' }}{{ $formatNum(amount) }}<slot name="suffix"></slot></span>
         </div>

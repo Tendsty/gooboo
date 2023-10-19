@@ -67,6 +67,11 @@
   margin-top: 4px;
 }
 
+/* Default chip icon sizes */
+.v-chip .v-icon {
+  font-size: 14px;
+}
+
 /** Special effect for premium upgrades */
 @keyframes premium-glow-shadow {
   0%   {box-shadow: 0 1px 6px var(--v-red-base);}
@@ -220,7 +225,7 @@
 }
 .theme--dark.background-theme-sky >>> .main-app-bar {
   background: linear-gradient(transparent, #00000080 75%, #000000C0),
-              url("/theme/sky/navbar.png"),
+              url("/public/theme/sky/navbar.png"),
               linear-gradient(#000000, #000000);
   background-repeat: repeat;
 }

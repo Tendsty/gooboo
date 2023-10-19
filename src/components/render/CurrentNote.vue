@@ -1,9 +1,9 @@
 <style scoped>
 .theme--dark.current-note {
-  background: linear-gradient(#00000080, #00000080), url("/img/note.png"), linear-gradient(#DF9269, #DF9269);
+  background: linear-gradient(#00000080, #00000080), url("/public/img/note.png"), linear-gradient(#DF9269, #DF9269);
 }
 .theme--light.current-note {
-  background: url("/img/note.png"), linear-gradient(#DF9269, #DF9269);
+  background: url("/public/img/note.png"), linear-gradient(#DF9269, #DF9269);
 }
 .current-note {
   font-size: 150%;

@@ -33,7 +33,7 @@
 <template>
   <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.currency.${ currencyName }.name`)" :min-width="200">
     <template v-slot:activator="{ on, attrs }">
-      <div class="ingredient-container balloon-text-dynamic rounded d-flex justify-center align-center" @mouseover="hovered = true" @mouseleave="hovered = false" :class="[$vuetify.theme.dark ? 'darken-2' : 'lighten-2', currency.color, {'premium-glow': premium}, ...$vnode.data.staticClass]" v-bind="attrs" v-on="{$listeners, ...on}">
+      <div class="ingredient-container balloon-text-dynamic rounded d-flex justify-center align-center" @mouseover="hovered = true" @mouseleave="hovered = false" :class="[$vuetify.theme.dark ? 'darken-2' : 'lighten-2', currency.color, {'premium-glow': premium}, $vnode.data.staticClass]" v-bind="attrs" v-on="{$listeners, ...on}">
         <v-icon class="mb-3" large>{{ currency.icon }}</v-icon>
         <div class="ingredient-amount">{{ $formatNum(amount) }}</div>
         <v-btn @click="compressMore" v-if="canCompress && hovered" :disabled="!canUpgrade" class="ingredient-more px-1" x-small min-width="0" min-height="0"><v-icon size="12">mdi-arrow-up</v-icon></v-btn>
