@@ -28,6 +28,7 @@
     "core-js": "^3.33.0",
     "electron-squirrel-startup": "^1.0.0",
     "js-file-download": "^0.4.12",
+    "seedrandom": "^3.0.5",
     "semver": "^7.5.4",
     "v-snackbars": "^3.2.8",
     "vue": "^2.7.14",

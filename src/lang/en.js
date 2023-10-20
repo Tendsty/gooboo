@@ -233,6 +233,7 @@ export default {
   info: {
     title: 'Gooboo',
     subtitle: 'developed by Tendsty',
+    testing: 'testing',
     text: 'Gooboo is an idle / incremental game where you manage multiple features in a mysterious, unknown world. Gather different resources to buy a huge variety of upgrades to increase your resource gains. Progress in your main features to unlock new content and learn more about this world. And when progression starts slowing down, prestige individual features to take your gains to the next level.',
     updates: {
       web: 'You are using the web version. The game regularly checks for updates, automatically uses the newest version and notifies you when an update is available.',
@@ -242,6 +243,11 @@ export default {
         2: ' page.'
       },
       steam: 'You are using the steam version. Updates are handled via steam.'
+    },
+    testingDescription: {
+      0: 'You are playing on the testing build. Features may be unfinished or buggy, and game mechanics could change at any time. You can play the live version ',
+      1: 'here',
+      2: ' (savefiles from the testing build cannot be used in live versions of the game)'
     },
     viewPatchnotes: 'View patch notes',
     numberFormatting: 'Number formatting',

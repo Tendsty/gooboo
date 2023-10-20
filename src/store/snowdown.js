@@ -468,10 +468,11 @@ export default {
 
                 if (winner === 'player') {
                     const lootRating = rootGetters['mult/get']('snowdownLootRating', 35, 0.01);
-                    if (state.fight < 5 || chance(lootRating / (lootRating + 1), rootGetters['system/nextRng']('snowdown_item')[0])) {
+                    let rngGen = rootGetters['system/getRng']('snowdown_item');
+                    commit('system/nextRng', {name: 'snowdown_item', amount: 1}, {root: true});
+                    if (state.fight < 5 || chance(lootRating / (lootRating + 1), rngGen())) {
                         dispatch('addRewardItem');
                     }
-                    commit('system/takeRng', 'snowdown_item', {root: true});
                     // Get currency rewards
                     dispatch('currency/gain', {feature: 'event', name: 'snowball', amount: Math.round(rootGetters['mult/get']('snowdownLootRating', 3, 3))}, {root: true});
                     dispatch('currency/gain', {feature: 'event', name: 'snowdownToken', amount: Math.floor(rootGetters['mult/get']('snowdownLootRating', state.fight * 3.5 + 50, 0.05))}, {root: true});
@@ -536,11 +537,11 @@ export default {
                 }
 
                 // Pick (up to) 3 items
-                const rng = rootGetters['system/nextRng']('snowdown_itemType');
-                commit('system/takeRng', 'snowdown_itemType', {root: true});
+                let rngGen = rootGetters['system/getRng']('snowdown_itemReroll');
+                commit('system/nextRng', {name: 'snowdown_itemReroll', amount: 1}, {root: true});
                 for (let i = 0; i < 3; i++) {
                     if (itemPool.length > 0) {
-                        const chosenIndex = randomInt(0, itemPool.length - 1, rng[i]);
+                        const chosenIndex = randomInt(0, itemPool.length - 1, rngGen());
                         itemReward.push(itemPool[chosenIndex]);
                         itemPool.splice(chosenIndex, 1);
                     }
@@ -568,11 +569,11 @@ export default {
             }
 
             // Pick (up to) 3 items
-            const rng = rootGetters['system/nextRng']('snowdown_itemType');
-            commit('system/takeRng', 'snowdown_itemType', {root: true});
+            let rngGen = rootGetters['system/getRng']('snowdown_itemType');
+            commit('system/nextRng', {name: 'snowdown_itemType', amount: 1}, {root: true});
             for (let i = 0; i < 3; i++) {
                 if (itemPool.length > 0) {
-                    const chosenIndex = randomInt(0, itemPool.length - 1, rng[i]);
+                    const chosenIndex = randomInt(0, itemPool.length - 1, rngGen());
                     itemReward.push(itemPool[chosenIndex]);
                     itemPool.splice(chosenIndex, 1);
                 }

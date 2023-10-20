@@ -16,27 +16,25 @@ function breedFlower(breeder, amount = 1) {
         let tier = -1;
         let addTier = true;
         let flowerAmount = 1;
-        if (canSplit) {
-            if (chance(0.25, store.getters['system/nextRng']('bloom_flower')[0])) {
-                flowerAmount++;
-            }
-            store.commit('system/takeRng', 'bloom_flower');
-        }
 
+        let rngGen = store.getters['system/getRng']('bloom_flower');
+        const tierChance = rngGen();
         while (addTier && tier < maxTier) {
             tier++;
-            if (!chance(baseTierChance - tier * 0.2, store.getters['system/nextRng']('bloom_flower')[0])) {
+            if (!chance(baseTierChance - tier * 0.2, tierChance)) {
                 addTier = false;
             }
-            store.commit('system/takeRng', 'bloom_flower');
+        }
+
+        if (canSplit && chance(0.25, rngGen())) {
+            flowerAmount++;
         }
 
         let gene = [];
-        if (chance(geneChance, store.getters['system/nextRng']('bloom_flower')[0])) {
-            store.commit('system/takeRng', 'bloom_flower');
-            gene.push(randomElem(Object.keys(store.state.bloom.gene), store.getters['system/nextRng']('bloom_flower')[0]));
+        if (chance(geneChance, rngGen())) {
+            gene.push(randomElem(Object.keys(store.state.bloom.gene), rngGen()));
         }
-        store.commit('system/takeRng', 'bloom_flower');
+        store.commit('system/nextRng', {name: 'bloom_flower', amount: 1});
 
         for (let i = 0; i < flowerAmount; i++) {
             if (store.getters['bloom/hasInventorySpace']) {

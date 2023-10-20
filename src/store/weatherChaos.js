@@ -222,9 +222,9 @@ export default {
                 trashWeights.push(elem);
             }
             for (let i = 0; i < amount; i++) {
-                const rng = rootGetters['system/nextRng']('weatherChaos_catch');
-                commit('system/takeRng', 'weatherChaos_catch', {root: true});
-                if (chance(treasureChance, rng[0])) {
+                let rngGen = rootGetters['system/getRng']('weatherChaos_catch');
+                commit('system/nextRng', {name: 'weatherChaos_catch', amount: 1}, {root: true});
+                if (chance(treasureChance, rngGen())) {
                     // Catch treasure
                     let treasureNames = [];
                     let treasureWeights = [];
@@ -232,7 +232,7 @@ export default {
                         treasureNames.push(key);
                         treasureWeights.push(elem);
                     }
-                    const treasureCaught = treasureNames[weightSelect(treasureWeights, rng[2])];
+                    const treasureCaught = treasureNames[weightSelect(treasureWeights, rngGen())];
 
                     if (treasureCaught === 'next') {
                         // Unlock next location
@@ -250,25 +250,26 @@ export default {
                             }
                         }
                         if (eligible.length > 0) {
-                            commit('updateSubkey', {name: 'fishingRod', key: randomElem(eligible, rootGetters['system/nextRng']('weatherChaos_fishingRod')), subkey: 'owned', value: true});
-                            commit('system/takeRng', 'weatherChaos_fishingRod', {root: true});
+                            let rngGenRod = rootGetters['system/getRng']('weatherChaos_fishingRod');
+                            commit('system/nextRng', {name: 'weatherChaos_fishingRod', amount: 1}, {root: true});
+                            commit('updateSubkey', {name: 'fishingRod', key: randomElem(eligible, rngGenRod()), subkey: 'owned', value: true});
                             commit('updateKey', {key: 'treasureRods', value: state.treasureRods + 1});
                         }
                     } else if (treasureCaught === 'bait') {
                         // Gain random bait
-                        const baitName = randomElem(Object.keys(state.bait));
+                        const baitName = randomElem(Object.keys(state.bait), rngGen());
                         const bait = state.bait[baitName];
                         commit('updateSubkey', {name: 'bait', key: baitName, subkey: 'owned', value: bait.owned + bait.stackSize});
                     }
-                } else if (chance(fishChance, rng[1])) {
+                } else if (chance(fishChance, rngGen())) {
                     // Catch fish
                     for (let i = 0, n = chance(fishDoubleChance) ? 2 : 1; i < n; i++) {
-                        dispatch('catchFish', fishNames[weightSelect(fishWeights, rng[2])]);
+                        dispatch('catchFish', fishNames[weightSelect(fishWeights, rngGen())]);
                     }
                     dispatch('note/find', 'event_16', {root: true});
                 } else {
                     // Catch trash
-                    dispatch('currency/gain', {feature: 'event', name: trashNames[weightSelect(trashWeights)], gainMult: true, amount: 100 * getters.eventMult}, {root: true});
+                    dispatch('currency/gain', {feature: 'event', name: trashNames[weightSelect(trashWeights, rngGen())], gainMult: true, amount: 100 * getters.eventMult}, {root: true});
                 }
             }
         },

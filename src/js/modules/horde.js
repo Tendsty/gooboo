@@ -571,7 +571,7 @@ export default {
         hordeHeirloomChance: {display: 'percent', max: 1, roundNearZero: true},
         hordeHeirloomAmount: {baseValue: 1, round: true},
         hordeHeirloomEffect: {},
-        hordeNostalgia: {baseValue: 5, round: true},
+        hordeNostalgia: {baseValue: 25, round: true},
         hordeCorruption: {display: 'percent', min: 0, roundNearZero: true},
         hordeItemMasteryGain: {},
         hordeShardChance: {display: 'percent', baseValue: 0.0001},
@@ -580,7 +580,7 @@ export default {
         {mult: 'hordeHeirloomEffect', name: 'multType', type: 'heirloomEffect'}
     ],
     currency: {
-        bone: {color: 'lightest-grey', icon: 'mdi-bone', gainMult: {}, capMult: {baseValue: buildNum(500, 'K')}},
+        bone: {color: 'lightest-grey', icon: 'mdi-bone', gainMult: {}, capMult: {baseValue: buildNum(5, 'M')}},
         monsterPart: {color: 'cherry', icon: 'mdi-stomach', gainMult: {display: 'perSecond'}, capMult: {baseValue: 100}},
         corruptedFlesh: {color: 'deep-purple', icon: 'mdi-food-steak', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true},
         mysticalShard: {color: 'teal', icon: 'mdi-billiards-rack', currencyMult: {
@@ -602,11 +602,7 @@ export default {
     relic,
     achievement,
     note: buildArray(31).map(() => 'g'),
-    rng: {
-        horde_soul: {amount: 25},
-        horde_heirloom: {amount: 25},
-        horde_heirloomType: {size: 2, amount: 25}
-    },
+    rng: ['horde_heirloom', 'horde_heirloomType'],
     init() {
         for (const [key, elem] of Object.entries(equipment)) {
             store.commit('horde/initItem', {name: key, ...elem});

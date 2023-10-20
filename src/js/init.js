@@ -20,6 +20,8 @@ import cryolab from "./modules/cryolab";
 
 export { newGame, loadGame }
 
+const semverCompare = require('semver/functions/compare');
+
 const modules = [meta, gem, relic, treasure, achievement, school, cryolab, card, general, mining, village, horde, farm, gallery, event];
 
 function newGame(startTick = true) {
@@ -33,6 +35,7 @@ function newGame(startTick = true) {
     });
 
     store.commit('upgrade/initCache');
+    store.commit('system/generatePlayerId');
     store.dispatch('system/updateCurrentDay');
 
     if (startTick) {
@@ -48,11 +51,12 @@ function loadGame(file, runPrepare = true) {
     const parsedFile = loadFile(file);
 
     store.commit('system/updateKey', {key: 'currentDay', value: getDay(new Date(store.state.system.timestamp * 1000))});
+    store.commit('system/generatePlayerId');
     advance();
 
     const offlineTime = store.state.system.timestamp - parsedFile.timestamp;
     store.commit('system/updateKey', {key: 'offlineTime', value: offlineTime});
-    if (parsedFile?.settings?.general?.pause || offlineTime < 60) {
+    if ((semverCompare(parsedFile?.version, store.state.system.version) >= 0) && (parsedFile?.settings?.general?.pause || offlineTime < 60)) {
         // No summary for very short offline times
         store.commit('system/updateKey', {key: 'screen', value: 'mining'});
     } else {
@@ -113,9 +117,9 @@ function prepare() {
             }
         }
         if (module.rng) {
-            for (const [key, elem] of Object.entries(module.rng)) {
-                store.commit('system/initRng', {name: key, ...elem});
-            }
+            module.rng.forEach(elem => {
+                store.commit('system/initRng', elem);
+            });
         }
 
         // Module init functions

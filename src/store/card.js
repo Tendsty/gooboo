@@ -95,9 +95,9 @@ export default {
             const pack = state.pack[o.name];
             let content = {};
             for (let i = 0, n = o.amount; i < n; i++) {
-                const nextChances = rootGetters['system/nextRng']('cardPack_' + o.name);
+                let rngGen = rootGetters['system/getRng']('cardPack_' + o.name);
                 for (let j = 0, m = pack.amount; j < m; j++) {
-                    const cardChosen = pack.cacheContent[weightSelect(pack.cacheWeight, nextChances[j])];
+                    const cardChosen = pack.cacheContent[weightSelect(pack.cacheWeight, rngGen())];
                     const card = state.card[cardChosen];
                     if (content[cardChosen] === undefined) {
                         content[cardChosen] = {amount: 0, isNew: card.amount <= 0};
@@ -154,7 +154,7 @@ export default {
                         commit('updateKey', {type: 'card', name: cardChosen, key: 'amount', value: card.amount + 1});
                     }
                 }
-                commit('system/takeRng', 'cardPack_' + o.name, {root: true});
+                commit('system/nextRng', {name: 'cardPack_' + o.name, amount: 1}, {root: true});
             }
             if (o.notify && rootState.system.settings.notification.items.cardPackContent.value) {
                 commit('system/addNotification', {color: 'success', timeout: 5000, message: {

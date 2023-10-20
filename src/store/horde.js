@@ -583,12 +583,12 @@ export default {
             // Raise miniboss rewards
             if (maxZoneTotal >= HORDE_MINIBOSS_MIN_ZONE) {
                 const zoneBase = maxZoneTotal - HORDE_MINIBOSS_MIN_ZONE;
-                dispatch('mult/setBase', {name: 'currencyHordeSoulCorruptedCap', key: 'zoneClearedTotal', value: Math.round(Math.pow(1.16, zoneBase) * (zoneBase + 1) * 100)}, {root: true});
+                dispatch('mult/setBase', {name: 'currencyHordeSoulCorruptedCap', key: 'zoneClearedTotal', value: Math.round(Math.pow(1.16, zoneBase) * (zoneBase + 1) * 200)}, {root: true});
                 dispatch('mult/setBase', {name: 'hordeBossRequirement', key: 'zoneClearedTotal', value: (zoneBase + 1) * -2}, {root: true});
             }
             if (maxZone >= HORDE_MINIBOSS_MIN_ZONE) {
                 const zoneBase = maxZone - HORDE_MINIBOSS_MIN_ZONE;
-                dispatch('mult/setBase', {name: 'currencyHordeSoulCorruptedGain', key: 'zoneCleared', value: Math.pow(1.16, zoneBase) * (zoneBase + 1)}, {root: true});
+                dispatch('mult/setBase', {name: 'currencyHordeSoulCorruptedGain', key: 'zoneCleared', value: Math.pow(1.16, zoneBase) * (zoneBase + 1) * 2}, {root: true});
             }
             if (maxZone >= HORDE_HEIRLOOM_MIN_ZONE) {
                 const zoneBase = maxZone - HORDE_HEIRLOOM_MIN_ZONE;
@@ -602,7 +602,8 @@ export default {
             // Chance for heirloom
             if (getters.canFindHeirloom) {
                 for (let i = 0; i < amount; i++) {
-                    if (chance(rootGetters['mult/get']('hordeHeirloomChance'), rootGetters['system/nextRng']('horde_heirloom')[0])) {
+                    let rngGen = rootGetters['system/getRng']('horde_heirloom');
+                    if (chance(rootGetters['mult/get']('hordeHeirloomChance'), rngGen())) {
                         dispatch('findHeirloom', {zone: state.zone});
 
                         // Finding a heirloom with help removes 1 nostalgia
@@ -613,7 +614,7 @@ export default {
                     } else if (rootGetters['mult/get']('hordeHeirloomChance') >= 0.99) {
                         commit('stat/increaseTo', {feature: 'horde', name: 'unlucky', value: 1}, {root: true});
                     }
-                    commit('system/takeRng', 'horde_heirloom', {root: true});
+                    commit('system/nextRng', {name: 'horde_heirloom', amount: 1}, {root: true});
                 }
             }
 
@@ -861,10 +862,10 @@ export default {
                 eligibleHeirlooms.push(lowestItem);
             }
 
-            const rng = rootGetters['system/nextRng']('horde_heirloomType');
-            commit('system/takeRng', 'horde_heirloomType', {root: true});
-            const chosen = randomElem(eligibleHeirlooms, rng[0]);
-            const amount = randomInt(1, rootGetters['mult/get']('hordeHeirloomAmount'), rng[1]);
+            let rngGen = rootGetters['system/getRng']('horde_heirloomType');
+            const chosen = randomElem(eligibleHeirlooms, rngGen());
+            const amount = randomInt(1, rootGetters['mult/get']('hordeHeirloomAmount'), rngGen());
+            commit('system/nextRng', {name: 'horde_heirloomType', amount: 1}, {root: true});
             commit('updateHeirloomKey', {name: chosen, key: 'amount', value: state.heirloom[chosen].amount + amount});
             dispatch('applyHeirloomEffects', chosen);
 

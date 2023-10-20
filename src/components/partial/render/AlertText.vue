@@ -9,6 +9,7 @@
   bottom: 0;
   left: 0;
   opacity: 0.2;
+  pointer-events: none;
 }
 </style>
 

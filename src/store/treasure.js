@@ -97,7 +97,7 @@ export default {
             return Math.round(getters.averageFragments * TREASURE_FRAGMENT_BUY_GAIN);
         },
         generateItem: (state, getters, rootState, rootGetters) => (type, tier = 0, auto = false, rngSkip = 0, bonusTier = 0) => {
-            const nextChances = rootGetters['system/nextRng']('treasure_' + type, rngSkip);
+            let rngGen = rootGetters['system/getRng']('treasure_' + type, rngSkip);
 
             let effectList = {};
             for (const [key, elem] of Object.entries(state.effect)) {
@@ -114,8 +114,8 @@ export default {
             }
 
             let chosenEffect = [];
-            state.type[type].slots.forEach((slot, i) => {
-                const chosenElem = randomElem(effectList[slot.type], nextChances[2 + i]);
+            state.type[type].slots.forEach(slot => {
+                const chosenElem = randomElem(effectList[slot.type], rngGen());
                 effectList[slot.type] = effectList[slot.type].filter(el => el !== chosenElem);
                 chosenEffect.push(chosenElem);
             });
@@ -133,7 +133,7 @@ export default {
                 type: type,
                 level,
                 fragmentsSpent: Math.round(state.type[type].destroyPrice * level * 0.6), // track spent fragments to refund the correct amount, even after balance changes
-                icon: randomElem(state.iconList, nextChances[1]),
+                icon: randomElem(state.iconList, rngGen()),
                 effect: chosenEffect,
                 valueCache: chosenEffect.map((el, i) => getters.effectValue(
                     state.effect[state.effectToFeature[el]][el].value * state.type[type].slots[i].power,
@@ -230,20 +230,21 @@ export default {
             if (state.newItem === null) {
 
                 // get tier based on first stored chance
-                const nextChances = rootGetters['system/nextRng']('treasure_' + type);
+                let rngGen = rootGetters['system/getRng']('treasure_' + type);
+                const nextChance = rngGen();
 
                 let tier = null;
                 let totalChance = 0;
                 getters.tierChancesRaw.forEach(elem => {
                     totalChance += elem.chance;
-                    if (tier === null && chance(totalChance, nextChances[0])) {
+                    if (tier === null && chance(totalChance, nextChance)) {
                         tier = elem.tier;
                     }
                 });
 
                 if (tier !== null) {
                     commit('updateKey', {key: 'newItem', value: getters.generateItem(type, tier)});
-                    commit('system/takeRng', 'treasure_' + type, {root: true});
+                    commit('system/nextRng', {name: 'treasure_' + type, amount: 1}, {root: true});
                 } else {
                     console.error('Tier could not be defined');
                 }

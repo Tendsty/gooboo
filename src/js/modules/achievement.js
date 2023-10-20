@@ -1,5 +1,6 @@
 import store from "../../store"
 import { buildArray } from "../utils/array";
+import { buildNum } from "../utils/format";
 
 export default {
     name: 'achievement',
@@ -40,7 +41,7 @@ export default {
             {name: 'currencyMiningScrapCap', type: 'mult', value: 2}
         ]},
         redCard: {icon: 'mdi-cards', color: 'red', effect: [
-            {name: 'currencyHordeMonsterPartCap', type: 'bonus', value: 1000},
+            {name: 'currencyHordeMonsterPartCap', type: 'bonus', value: buildNum(10, 'K')},
             {name: 'hordeCardCap', type: 'base', value: 1}
         ]},
         briefcase: {icon: 'mdi-briefcase', color: 'pale-blue', effect: [

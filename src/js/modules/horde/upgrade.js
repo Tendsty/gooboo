@@ -56,7 +56,7 @@ export default {
     monsterSoup: {cap: 10, requirementBase, requirementStat, requirementValue: 13, price(lvl) {
         return {horde_monsterPart: Math.pow(1.1, lvl) * (lvl + 10) * 3};
     }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
         {name: 'currencyHordeMonsterPartCap', type: 'base', value: lvl => lvl * 5}
     ]},
     monsterBag: {cap: 75, requirementBase, requirementStat, requirementValue: 17, price(lvl) {

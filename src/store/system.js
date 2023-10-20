@@ -1,7 +1,8 @@
 import Vue from "vue";
 import { tick } from "../js/tick";
 import { getDay } from "../js/utils/date";
-import { simpleHash } from "../js/utils/random";
+import { randomHex, simpleHash } from "../js/utils/random";
+import seedrandom from "seedrandom";
 
 export default {
     namespaced: true,
@@ -241,8 +242,8 @@ export default {
                         unlock: 'debugFeature',
                         hasDescription: false,
                         type: 'switch',
-                        value: true,
-                        defaultValue: true
+                        value: false,
+                        defaultValue: false
                     }
                 }
             },
@@ -381,7 +382,8 @@ export default {
         noteHint: [],
         farmHint: false,
         tutorial: {},
-        cachePage: {}
+        cachePage: {},
+        playerId: null
     },
     getters: {
         mainFeatures: (state, getters, rootState) => {
@@ -419,10 +421,9 @@ export default {
 
             return feat;
         },
-        nextRng: (state) => (name, skip = 0) => {
+        getRng: (state) => (name, skip = 0) => {
             const hash = simpleHash(name);
-
-            return state.rng[hash].next.slice(skip * state.rng[hash].size, state.rng[hash].size);
+            return seedrandom(state.playerId + hash + (state.rng[hash] + skip));
         },
         backupHint: (state) => {
             const mode = state.settings.notification.items.backupHint.value;
@@ -471,50 +472,13 @@ export default {
         }
     },
     mutations: {
-        initRng(state, o) {
-            const hash = simpleHash(o.name);
-
-            // How many numbers are needed per instance
-            const size = o.size ?? 1;
-
-            // How many instances are stored in queue
-            const amount = o.amount ?? 10;
-
-            Vue.set(state.rng, hash, {
-                size,
-                amount,
-                next: []
-            });
-
-            // Fill queue on init
-            const needed = size * amount;
-            while (state.rng[hash].next.length < needed) {
-                state.rng[hash].next.push(Math.random());
-            }
-        },
-        fillRng(state, hash) {
-            const needed = state.rng[hash].size * state.rng[hash].amount;
-            while (state.rng[hash].next.length < needed) {
-                state.rng[hash].next.push(Math.random());
-            }
-        },
-        refillRng(state, hash) {
-            Vue.set(state.rng[hash], 'next', []);
-            const needed = state.rng[hash].size * state.rng[hash].amount;
-            while (state.rng[hash].next.length < needed) {
-                state.rng[hash].next.push(Math.random());
-            }
-        },
-        takeRng(state, name) {
+        initRng(state, name) {
             const hash = simpleHash(name);
-
-            state.rng[hash].next.splice(0, state.rng[hash].size);
-
-            // Also refill queue after taking from it
-            const needed = state.rng[hash].size * state.rng[hash].amount;
-            while (state.rng[hash].next.length < needed) {
-                state.rng[hash].next.push(Math.random());
-            }
+            Vue.set(state.rng, hash, 0);
+        },
+        nextRng(state, o) {
+            const hash = simpleHash(o.name);
+            state.rng[hash] += o.amount;
         },
         initTheme(state, o) {
             Vue.set(state.themes, o.name, {
@@ -553,6 +517,9 @@ export default {
         },
         updateKey(state, o) {
             Vue.set(state, o.key, o.value);
+        },
+        updateSubkey(state, o) {
+            Vue.set(state[o.name], o.key, o.value);
         },
         updateThemeKey(state, o) {
             Vue.set(state.themes[o.name], o.key, o.value);
@@ -593,6 +560,11 @@ export default {
         },
         removeNoteHint(state, name) {
             Vue.set(state, 'noteHint', state.noteHint.filter(elem => elem !== name));
+        },
+        generatePlayerId(state) {
+            if (state.playerId === null) {
+                state.playerId = randomHex(16);
+            }
         }
     },
     actions: {
@@ -625,7 +597,7 @@ export default {
                 commit('updateKeybind', {name: key, value: null});
             }
             for (const [key] of Object.entries(state.rng)) {
-                commit('refillRng', key);
+                commit('updateSubkey', {name: 'rng', key, value: 0});
             }
             for (const [key, elem] of Object.entries(state.themes)) {
                 commit('updateThemeKey', {name: key, key: 'owned', value: elem.ownedDefault});

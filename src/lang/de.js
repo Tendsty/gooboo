@@ -233,6 +233,7 @@ export default {
   info: {
     title: 'Gooboo',
     subtitle: 'entwickelt von Tendsty',
+    testing: 'testen',
     text: 'Gooboo ist ein Idle / Incremental-Spiel, wo du verschiedene Funktionen in einer mysteriösen, unbekannten Welt verwaltest. Sammle verschiedene Ressourcen, um eine riesige Menge an Verbesserungen zu kaufen und dein Rohstoffeinkommen weiter zu erhöhen. Schreite in den Hauptfunktionen fort, um neue Inhalte freizuschalten und mehr über diese Welt zu erfahren. Und sollte der Fortschritt sich verlangsamen, kannst du für einzelne Funktionen einen Prestige durchführen, um die Rohstoffgewinne auf die nächste Stufe zu bringen.',
     updates: {
       web: 'Du verwendest die Web-Version. Das Spiel prüft automatisch auf Updates, hält sich von selbst aktuell und benachrichtigt dich, wenn ein Update verfügbar ist.',
@@ -242,6 +243,11 @@ export default {
         2: '-Seite.'
       },
       steam: 'Du verwendest die Steam-Version. Updates werden über Steam verwaltet.'
+    },
+    testingDescription: {
+      0: 'Du spielst auf dem Teststand. Funktionen können unfertig oder fehlerhaft sein, und Spielmechaniken können sich jederzeit ändern. Du kannst die Live-Version ',
+      1: 'hier',
+      2: ' spielen (Spielstände vom Teststand können nicht in den Live-Versionen verwendet werden)'
     },
     viewPatchnotes: 'Patchnotizen ansehen',
     numberFormatting: 'Zahlenformatierung',

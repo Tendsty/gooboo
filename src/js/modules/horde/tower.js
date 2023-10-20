@@ -10,7 +10,7 @@ export default {
             50: {type: 'unlock', name: 'hordeUpgradeRoyalArmor', value: true},
             100: {type: 'mult', name: 'hordeHealth', value: 1.5},
             150: {type: 'mult', name: 'currencyHordeMonsterPartCap', value: 1.35},
-            200: {type: 'base', name: 'hordeNostalgia', value: 10},
+            200: {type: 'base', name: 'hordeNostalgia', value: 50},
             250: {type: 'unlock', name: 'hordeUpgradeRoyalButcher', value: true},
         },
     },

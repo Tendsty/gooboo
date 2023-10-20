@@ -68,8 +68,15 @@
 }
 
 /* Default chip icon sizes */
-.v-chip .v-icon {
+.v-chip.v-size--default .v-icon {
   font-size: 14px;
+  height: 14px;
+  width: 14px;
+}
+.v-chip.v-size--small .v-icon {
+  font-size: 12px;
+  height: 12px;
+  width: 12px;
 }
 
 /** Special effect for premium upgrades */

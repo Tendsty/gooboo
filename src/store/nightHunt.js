@@ -223,27 +223,28 @@ export default {
                 const potionRecipe = getters.ritualRecipe;
                 const ritualKey = state.ritualIngredients.join(',');
                 const tier = state.ritualIngredients.length;
-                const rng = rootGetters['system/nextRng']('nightHunt_ritual');
-                commit('system/takeRng', 'nightHunt_ritual', {root: true});
+                let rngGen = rootGetters['system/getRng']('nightHunt_ritual');
+                commit('system/nextRng', {name: 'nightHunt_ritual', amount: 1}, {root: true});
+                const stabilityChance = rngGen();
 
                 // Do not lose base resources if the ritual is really stable (100% - 200%)
-                if (!chance(stats.nightHuntRitualStability - 1, rng[0])) {
+                if (!chance(stats.nightHuntRitualStability - 1, stabilityChance)) {
                     state.ritualIngredients.forEach(elem => {
                         dispatch('currency/spend', {feature: 'event', name: elem, amount: potionRecipe ? (state.potion[potionRecipe].level + 1) : 1}, {root: true});
                     });
                 }
 
                 // Do not lose bonus resources if the ritual is stable (0% - 100%)
-                if (!chance(stats.nightHuntRitualStability, rng[0])) {
+                if (!chance(stats.nightHuntRitualStability, stabilityChance)) {
                     state.bonusIngredients.forEach(elem => {
                         dispatch('currency/spend', {feature: 'event', name: elem.name, amount: elem.amount}, {root: true});
                     });
                 }
 
                 // Fail the whole ritual if it is really unstable (-100% - 0%)
-                if (chance(stats.nightHuntRitualStability + 1, rng[0])) {
+                if (chance(stats.nightHuntRitualStability + 1, stabilityChance)) {
                     let canAddHint = false;
-                    if (chance(stats.nightHuntRitualSuccessChance, rng[1])) {
+                    if (chance(stats.nightHuntRitualSuccessChance, rngGen())) {
                         if (!getters.ritualPerformed) {
                             if (!potionRecipe) {
                                 dispatch('currency/gain', {feature: 'event', name: 'nightHuntToken', amount: 1}, {root: true});
@@ -276,7 +277,7 @@ export default {
                         commit('updateSubkey', {key: 'ritualFamiliarity', subkey: ritualKey, value: (state.ritualFamiliarity[ritualKey] ?? 0) + stats.nightHuntRitualFamiliarity});
                     }
 
-                    if (canAddHint && chance(stats.nightHuntRitualHintChance, rng[2])) {
+                    if (canAddHint && chance(stats.nightHuntRitualHintChance, rngGen())) {
                         const currencyList = Object.keys(state.ingredientStat).slice(0, rootGetters['mult/get']('nightHuntFindableIngredients'));
                         if (state.ritualHint[tier] === undefined) {
                             // Hint structure does not exist, create it and set a random potion as target
@@ -293,16 +294,16 @@ export default {
                             }
                         }
                         if (state.ritualHint[tier] !== undefined) {
-                            const hintRng = rootGetters['system/nextRng']('nightHunt_hint');
-                            commit('system/takeRng', 'nightHunt_hint', {root: true});
+                            let rngGenHint = rootGetters['system/getRng']('nightHunt_hint');
+                            commit('system/nextRng', {name: 'nightHunt_hint', amount: 1}, {root: true});
                             // Add hint item
-                            if ((state.ritualHint[tier].position.length + 1) < tier && chance(0.5, hintRng[0])) {
+                            if ((state.ritualHint[tier].position.length + 1) < tier && chance(0.5, rngGenHint())) {
                                 // Positional hint, reveal the ingredient of a random position
                                 const freePositions = buildArray(tier).filter(
                                     elem => state.ritualHint[tier].position.findIndex(el => el === elem) === -1
                                 );
                                 if (freePositions.length > 0) {
-                                    commit('pushHintKey', {key: tier, type: 'position', value: randomElem(freePositions, hintRng[1])});
+                                    commit('pushHintKey', {key: tier, type: 'position', value: randomElem(freePositions, rngGenHint())});
                                 }
                             } else {
                                 // Count hint, reveal the amount of a random ingredient
@@ -310,7 +311,7 @@ export default {
                                     elem => state.ritualHint[tier].ingredient.findIndex(el => el === elem) === -1
                                 );
                                 if (freeIngredients.length > 0) {
-                                    commit('pushHintKey', {key: tier, type: 'ingredient', value: randomElem(freeIngredients, hintRng[1])});
+                                    commit('pushHintKey', {key: tier, type: 'ingredient', value: randomElem(freeIngredients, rngGenHint())});
                                 }
                             }
                         }

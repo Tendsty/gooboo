@@ -401,29 +401,29 @@ export default {
         activeIcon: 'mdi-pentagram',
         activeColor: 'red'
     },
-    cleansingSpring: {
-        findZone: 32,
-        findChance: 1 / buildNum(115, 'K'),
+    brokenStopwatch: {
+        findZone: 31,
+        findChance: 1 / buildNum(25, 'K'),
         price(lvl) {
-            return Math.pow(6, lvl - 1) * 3600;
+            return Math.pow(6, lvl - 1) * 3000;
         },
         cap: 5,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeStunResist', value: 1}
+                {isPositive: false, type: 'mult', name: 'hordeNostalgia', value: 0}
             ];
         },
-        active() {
+        active(lvl) {
             return [
-                {type: 'removeStun', value: null}
+                {type: 'removeAttack', value: 0.08},
+                {type: 'stun', value: 5 + lvl}
             ];
         },
         activeType: 'combat',
-        usableInStun: true,
-        cooldown: lvl => 32 - lvl * 2,
-        icon: 'mdi-waterfall',
-        activeIcon: 'mdi-water-opacity',
-        activeColor: 'cyan'
+        cooldown: () => 60,
+        icon: 'mdi-timer',
+        activeIcon: 'mdi-timer',
+        activeColor: 'skyblue'
     },
     marblePillar: {
         findZone: 33,
@@ -503,7 +503,7 @@ export default {
         activeIcon: 'mdi-bottle-tonic-skull',
         activeColor: 'light-green'
     },
-    brokenStopwatch: {
+    cleansingSpring: {
         findZone: 40,
         findChance: 1 / buildNum(200, 'K'),
         price(lvl) {
@@ -512,20 +512,20 @@ export default {
         cap: 5,
         stats() {
             return [
-                {isPositive: false, type: 'mult', name: 'hordeNostalgia', value: 0}
+                {isPositive: true, type: 'base', name: 'hordeStunResist', value: 1}
             ];
         },
-        active(lvl) {
+        active() {
             return [
-                {type: 'removeAttack', value: 0.08},
-                {type: 'stun', value: 5 + lvl}
+                {type: 'removeStun', value: null}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 60,
-        icon: 'mdi-timer',
-        activeIcon: 'mdi-timer',
-        activeColor: 'skyblue'
+        usableInStun: true,
+        cooldown: lvl => 32 - lvl * 2,
+        icon: 'mdi-waterfall',
+        activeIcon: 'mdi-water-opacity',
+        activeColor: 'cyan'
     },
     toxicSword: {
         findZone: 43,
@@ -766,7 +766,7 @@ export default {
         stats(lvl) {
             return [
                 {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.09 - lvl * 0.01},
-                {isPositive: true, type: 'base', name: 'hordeNostalgia', value: 2}
+                {isPositive: true, type: 'base', name: 'hordeNostalgia', value: 10}
             ];
         },
         active() {
