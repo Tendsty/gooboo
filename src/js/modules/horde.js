@@ -107,6 +107,7 @@ export default {
             spellblade: store.getters['mult/get']('hordeSpellblade'),
             cutting: store.getters['mult/get']('hordeCutting'),
             stunResist: store.getters['mult/get']('hordeStunResist'),
+            shieldbreak: store.getters['mult/get']('hordeShieldbreak'),
 
             // Damage type specifics
             physicConversion: store.getters['mult/get']('hordePhysicConversion') / conversionTotal,
@@ -215,6 +216,8 @@ export default {
                                     store.commit('horde/updatePlayerKey', {key: 'revive', value: store.getters['mult/get']('hordeRevive')});
                                 } else if (elem.type === 'divisionShield') {
                                     store.commit('horde/updatePlayerKey', {key: 'divisionShield', value: store.state.horde.player.divisionShield + elem.value});
+                                } else if (elem.type === 'removeDivisionShield') {
+                                    store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: Math.ceil(store.state.horde.enemy.divisionShield * (1 - elem.value))});
                                 } else if (elem.type === 'removeAttack') {
                                     if (store.state.horde.fightRampage <= 0) {
                                         store.commit('horde/updateEnemyKey', {key: 'attack', value: Math.max(0, store.state.horde.enemy.attack * (1 - elem.value))});
@@ -280,7 +283,7 @@ export default {
 
                         enemyHealth = Math.max(0, enemyHealth - damage);
                         if (enemyStats.divisionShield > 0 && hitShield) {
-                            store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: enemyStats.divisionShield - 1});
+                            store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: Math.max(enemyStats.divisionShield - 1 - playerStats.shieldbreak, 0)});
                         }
                     }
                 }
@@ -550,6 +553,7 @@ export default {
         hordeCutting: {display: 'percent', min: 0},
         hordeDivisionShield: {round: true, min: 0},
         hordeStunResist: {round: true, min: 0},
+        hordeShieldbreak: {round: true, min: 0},
         hordeEnemyActiveStart: {display: 'percent', min: 0, max: 1},
 
         // Damage type specifics
@@ -602,7 +606,6 @@ export default {
     relic,
     achievement,
     note: buildArray(31).map(() => 'g'),
-    rng: ['horde_heirloom', 'horde_heirloomType'],
     init() {
         for (const [key, elem] of Object.entries(equipment)) {
             store.commit('horde/initItem', {name: key, ...elem});

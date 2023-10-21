@@ -123,10 +123,10 @@ export default {
             const feature = o.feature ?? 'meta';
 
             if (o.gainMult !== undefined) {
-                commit('mult/init', {name: getters.gainMultName(feature, o.name), unlock: o.multUnlock ?? null, ...o.gainMult}, {root: true});
+                commit('mult/init', {feature, name: getters.gainMultName(feature, o.name), unlock: o.multUnlock ?? null, ...o.gainMult}, {root: true});
             }
             if (o.capMult !== undefined) {
-                commit('mult/init', {name: getters.capMultName(feature, o.name), unlock: o.multUnlock ?? null, ...o.capMult}, {root: true});
+                commit('mult/init', {feature, name: getters.capMultName(feature, o.name), unlock: o.multUnlock ?? null, ...o.capMult}, {root: true});
             }
 
             commit('init', o);

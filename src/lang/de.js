@@ -133,6 +133,15 @@ export default {
     update: {
       get: 'Neues Update!',
       apply: 'Neu laden + anwenden'
+    },
+    import: {
+      message: 'Datei konnte nicht geladen werden',
+      base64: 'Dekodieren gescheitert',
+      json: 'JSON konnte nicht interpretiert werden',
+      key: 'Dem geladenen Spielstand fehlen wichtige Daten',
+      version: 'Diese Datei ist von einer neueren Version des Spiels (v{0}, aktuelle Version: v{1})',
+      testing: 'Dateien vom Teststand können nicht in der Live-Version verwendet werden',
+      migration: 'Ein Fehler ist beim Migrieren von v{0} nach v{1} aufgetreten'
     }
   },
   duplicateTab: {
@@ -998,6 +1007,9 @@ export default {
   settings: {
     keybinds: {
       name: 'Tastenbelegung',
+      prevMainFeature: {
+        name: 'Vorherige Hauptfunktion'
+      },
       nextMainFeature: {
         name: 'Nächste Hauptfunktion'
       },
@@ -1303,7 +1315,9 @@ export default {
         1: ' für ',
         2: ' und erhöhe die Kosten der nächsten Opfergabe. Opferkosten werden beim Prestige mit zurückgesetzt.'
       },
-      sacrifice: 'Opfern'
+      sacrifice: 'Opfern',
+      notUnlocked: 'Diese Opfergabe ist noch nicht freigeschaltet. Du kannst trotzdem opfern und Opfergaben einsetzen, aber die Rohstoffkapazität wird nicht erhöht, bis die Opfergabe freigeschaltet wurde',
+      notUnlockedHint: 'Diese Opfergabe ist nicht freigeschaltet, also wird die Rohstoffkapazität noch nicht erhöht'
     },
     material: 'Material',
     food: 'Nahrung',
@@ -1367,6 +1381,7 @@ export default {
     silenceEnemy: 'Dieser Gegner ist verstummt und kann keine aktiven Angriffe nutzen',
     stunPlayer: 'Du bist betäubt und kannst nicht angreifen',
     stunEnemy: 'Dieser Gegner ist betäubt und kann nicht angreifen',
+    shieldbreak: 'Zerbreche Teilungsschilde schneller',
     stunResist: 'Schnellere Erholung von Betäubungen',
     stunBoss: 'Bosse erhalten +2 Betäubungsresistenz',
     stunMiniboss: 'Minibosse erhalten +1 Betäubungsresistenz',
@@ -1491,6 +1506,7 @@ export default {
       antidote: 'Gegengift',
       brokenStopwatch: 'Kaputte Stoppuhr',
       luckyCharm: 'Glücksanhänger',
+      mailbreaker: 'Rüstungsbrecher',
       club: 'Keule',
       goldenStaff: 'Goldener Stab',
       toxicSword: 'Giftiges Schwert',
@@ -1499,6 +1515,7 @@ export default {
       healthyFruit: 'Gesundes Obst',
       glasses: 'Brille',
       deadBird: 'Toter Vogel',
+      shieldDissolver: 'Schildauflöser',
       calmingPill: 'Beruhigungspille',
       cleansingFluid: 'Reiniger',
       forbiddenSword: 'Verbotenes Schwert',
@@ -1597,6 +1614,10 @@ export default {
       divisionShield: {
         0: 'Erhalte',
         1: 'Teilungsschild'
+      },
+      removeDivisionShield: {
+        0: 'Entferne',
+        1: 'Teilungsschild vom Gegner'
       },
       reviveAll: 'Stelle alle Wiederbelebungen her',
       removeStun: 'Entferne Betäubungen',
@@ -1747,8 +1768,8 @@ export default {
       premiumOwned: 'Premium: {0} in Besitz',
       gardenGnome: {
         name: 'Gartenzwerg',
-        description: 'Pflanzen können bei der Ernte Gold aufdecken. Die Chance hängt von der Wachstumszeit der Pflanze ab.',
-        descriptionPremium: 'Pflanzen können bei der Ernte Gold aufdecken. Die Chance ist verdoppelt und hängt von der Wachstumszeit der Pflanze ab.',
+        description: 'Pflanzen können bei der Ernte Gold aufdecken, wenn der Gartenzwerg auf dem Feld steht. Die Chance hängt von der Wachstumszeit der Pflanze ab.',
+        descriptionPremium: 'Pflanzen können bei der Ernte Gold aufdecken, wenn der Gartenzwerg auf dem Feld steht. Die Chance ist verdoppelt und hängt von der Wachstumszeit der Pflanze ab.',
       },
       sprinkler: {
         name: 'Rasensprenger',

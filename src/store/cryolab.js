@@ -89,8 +89,8 @@ export default {
                     {name: passiveMultName, type: 'base', value: lvl => lvl * 0.01},
                     ...effect
                 ]);
-                commit('mult/init', {name: activeMultName, display: 'percent', baseValue: 0.25}, {root: true});
-                commit('mult/init', {name: passiveMultName, display: 'percent'}, {root: true});
+                commit('mult/init', {feature: 'cryolab', name: activeMultName, display: 'percent', baseValue: 0.25}, {root: true});
+                commit('mult/init', {feature: 'cryolab', name: passiveMultName, display: 'percent'}, {root: true});
             });
             commit('init', {...o, effect: modifiedEffect});
         },

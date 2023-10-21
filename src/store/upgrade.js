@@ -109,6 +109,7 @@ export default {
                 icon: o.icon ?? null,
                 mode,
                 hasDescription: o.hasDescription ?? false,
+                raiseOtherCap: o.raiseOtherCap ?? null,
                 level: 0,
                 bought: 0,
                 highestLevel: 0,
@@ -192,9 +193,10 @@ export default {
         },
         init({ getters, rootGetters, commit }, o) {
             let cap = o.cap ?? null;
+            const feature = o.feature ?? 'meta';
             if (o.capMult) {
-                const multName = getters.capMultName(o.feature ?? 'meta', o.name);
-                commit('mult/init', {name: multName, round: true, baseValue: cap ?? 0}, {root: true});
+                const multName = getters.capMultName(feature, o.name);
+                commit('mult/init', {feature, name: multName, round: true, baseValue: cap ?? 0}, {root: true});
                 cap = rootGetters['mult/get'](multName);
             }
             commit('init', {cap, ...o});

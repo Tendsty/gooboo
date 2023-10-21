@@ -105,7 +105,7 @@ export default {
                 endDate.setDate(endDate.getDate() + 6);
                 if (arr.findIndex(el => el.start <= endCompare && el.end >= startCompare) === -1) {
                     arr.push({
-                        name: state.small[getWeek(new Date(week)) % state.small.length],
+                        name: state.small[getWeek(startDate) % state.small.length],
                         start: startDate,
                         end: endDate
                     });
@@ -394,7 +394,9 @@ export default {
                 case 'bank': {
                     // Cash in investment
                     dispatch('bankCashInInvestment');
-                    commit('updateKey', {key: 'bank_project_current', value: randomElem(Object.keys(state.bank_project))});
+                    let rngGen = rootGetters['system/getRng']('bank_project');
+                    commit('system/nextRng', {name: 'bank_project', amount: 1}, {root: true});
+                    commit('updateKey', {key: 'bank_project_current', value: randomElem(Object.keys(state.bank_project), rngGen())});
                     commit('updateKey', {key: 'bank_investment', value: 0});
                     commit('updateKey', {key: 'bank_action', value: true});
                     dispatch('note/find', 'event_6', {root: true});

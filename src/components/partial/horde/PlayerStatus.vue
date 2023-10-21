@@ -43,6 +43,7 @@
         :cutting="playerCutting"
         :division-shield="playerStats.divisionShield"
         :max-division-shield="playerDivisionShield"
+        :shieldbreak="playerShieldbreak"
         :stun-resist="playerStunResist"
         :toxic="playerToxic"
         :silence="playerStats.silence"
@@ -118,6 +119,9 @@ export default {
     },
     playerDivisionShield() {
       return this.$store.getters['mult/get']('hordeDivisionShield');
+    },
+    playerShieldbreak() {
+      return this.$store.getters['mult/get']('hordeShieldbreak');
     },
     playerStunResist() {
       return this.$store.getters['mult/get']('hordeStunResist');

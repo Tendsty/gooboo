@@ -14,11 +14,7 @@ export default function(save) {
 
     // New upgrade format
     for (const [key, elem] of Object.entries(save.upgrade)) {
-        if (elem.bought !== undefined) {
-            save.upgrade[key] = [elem.collapse, elem.level, elem.highestLevel];
-        } else {
-            save.upgrade[key] = [elem.collapse, elem.level, elem.highestLevel, elem.bought, elem.timeProgress];
-        }
+        save.upgrade[key] = elem.bought === undefined ? [elem.collapse, elem.level, elem.highestLevel] : [elem.collapse, elem.level, elem.highestLevel, elem.bought, elem.timeProgress];
     }
 
     return save;

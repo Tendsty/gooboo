@@ -270,7 +270,6 @@ export default {
         ...snowdownUpgrade
     },
     relic,
-    rng: ['bank_cardPack', 'casino_type', 'bloom_flower', 'weatherChaos_catch', 'weatherChaos_fishingRod', 'nightHunt_ritual', 'nightHunt_hint', 'snowdown_item', 'snowdown_itemType', 'snowdown_itemReroll'],
     note: buildArray(34).map(() => 'g'),
     init() {
         for (const [key, elem] of Object.entries(weather)) {

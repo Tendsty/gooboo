@@ -328,7 +328,6 @@ export default {
             price: {gem_sapphire: 20}
         }
     },
-    rng: ['pickaxe_craft', 'pickaxe_enhance'],
     init() {
         for (const [key, elem] of Object.entries(ore)) {
             store.commit('unlock/init', 'miningCompress' + key.slice(3));

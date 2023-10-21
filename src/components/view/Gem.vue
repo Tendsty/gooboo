@@ -52,7 +52,7 @@ export default {
       return GEM_SPEED_BASE / this.$store.getters['gem/genSpeed'];
     },
     timeToNext() {
-      return (1 - this.$store.state.gem.progress) * this.timeNeeded;
+      return Math.ceil((1 - this.$store.state.gem.progress) * this.timeNeeded);
     },
     genPercent() {
       return 100 * this.$store.state.gem.progress;

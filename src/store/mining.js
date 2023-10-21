@@ -394,6 +394,8 @@ export default {
             ) {
                 const stats = getters.pickaxeStats;
 
+                const rngGroup = Math.max(0, Math.ceil(Math.log(stats.baseQuality * (consumables.mining_goldenHammer ? 1 : stats.purity) / 10) * 4));
+
                 dispatch('consumable/useMultiple', consumables, {root: true});
 
                 if (stats.quality < state.pickaxePower) {
@@ -402,14 +404,15 @@ export default {
 
                 let rval = 0;
                 if (!consumables.mining_goldenHammer) {
-                    let rngGen = rootGetters['system/getRng']('pickaxe_craft');
-                    commit('system/nextRng', {name: 'pickaxe_craft', amount: 1}, {root: true});
+                    let rngGen = rootGetters['system/getRng']('pickaxe_craft' + rngGroup);
+                    commit('system/nextRng', {name: 'pickaxe_craft' + rngGroup, amount: 1}, {root: true});
                     rval = 1 - rngGen();
                     commit('stat/increaseTo', {feature: 'mining', name: 'craftingLuck', value: 1 / rval}, {root: true});
                 }
 
                 const rng = 1 - (logBase(randomFloat(1, 1 / stats.purity + 1, rval), 2) / logBase(1 / stats.purity + 1, 2));
                 const newPick = (rng * (1 - stats.purity) + stats.purity) * stats.quality;
+                console.log(newPick);
                 if (newPick > state.pickaxePower) {
                     commit('updateKey', {key: 'pickaxePower', value: newPick});
                 }

@@ -5,7 +5,7 @@
 export const APP_ENV = 'WEB';
 
 // enable / disable testing version
-export const APP_TESTING = true;
+export const APP_TESTING = false;
 
 // time conversion
 export const SECONDS_PER_MINUTE = 60;

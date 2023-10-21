@@ -55,6 +55,7 @@ export default {
   hordeCutting: 'Schneiden',
   hordeDivisionShield: 'Teilungsschild',
   hordeStunResist: 'Betäubungsresistenz',
+  hordeShieldbreak: 'Schildbruch',
   hordeEnemyActiveStart: 'Gegnerische Anfangs-Abklingzeit',
   hordePhysicConversion: 'Physische Schadenskonvertierung',
   hordeMagicConversion: 'Magische Schadenskonvertierung',

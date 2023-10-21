@@ -578,6 +578,30 @@ export default {
         activeIcon: 'mdi-flare',
         activeColor: 'lime'
     },
+    mailbreaker: {
+        findZone: 46,
+        findChance: 1 / buildNum(375, 'K'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * buildNum(18, 'K');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 18},
+                {isPositive: true, type: 'base', name: 'hordeShieldbreak', value: 1}
+            ];
+        },
+        active() {
+            return [
+                {type: 'removeDivisionShield', value: 1},
+                {type: 'stun', value: 15}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 750,
+        icon: 'mdi-sword',
+        activeIcon: 'mdi-circle-off-outline',
+        activeColor: 'pale-blue'
+    },
     club: {
         findZone: 47,
         findChance: 1 / buildNum(400, 'K'),
@@ -755,6 +779,32 @@ export default {
         icon: 'mdi-bird',
         activeIcon: 'mdi-feather',
         activeColor: 'skyblue'
+    },
+    shieldDissolver: {
+        findZone: 61,
+        findChance: 1 / buildNum(1.4, 'M'),
+        price(lvl) {
+            return Math.pow(7, lvl - 1) * buildNum(90, 'K');
+        },
+        cap: 6,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeShieldbreak', value: 3},
+                {isPositive: false, type: 'mult', name: 'hordeHealth', value: 1 / 1.1},
+                {isPositive: false, type: 'mult', name: 'hordeDivisionShield', value: 0}
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'removeDivisionShield', value: 0.3}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: lvl => 17 - lvl,
+        icon: 'mdi-shield-off',
+        activeIcon: 'mdi-shield-remove',
+        activeColor: 'deep-orange'
     },
     calmingPill: {
         findZone: 63,

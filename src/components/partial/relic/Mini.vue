@@ -16,7 +16,7 @@
         <v-icon :size="large ? 28 : 16">{{ relic.icon }}</v-icon>
       </v-chip>
     </template>
-    <display-row class="mt-0" v-for="(item, key) in relic.effect" :key="key" :name="item.name" :type="item.type" :after="item.value"></display-row>
+    <display-row class="mt-0" v-for="(item, key) in relic.effect" :key="key" :name="item.name" :type="item.type" :after="item.value" show-icon></display-row>
     <alert-text v-if="isAchievementReward" type="info">{{ $vuetify.lang.t(`$vuetify.achievement.relicReward`) }}</alert-text>
   </gb-tooltip>
 </template>

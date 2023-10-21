@@ -47,16 +47,20 @@
       </v-col>
     </v-row>
   </div>
-  <div v-else class="text-center">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.notFound`) }}</div>
+  <div v-else>
+    <div class="text-center">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.notFound`) }}</div>
+    <alert-text v-if="type === 'book'" class="ma-2" type="info">{{ $vuetify.lang.t(`$vuetify.upgrade.${ feature === 'village' ? 'bookNotFoundVillage' : 'bookNotFound' }`) }}</alert-text>
+  </div>
 </template>
 
 <script>
 import { capitalize } from '../../js/utils/format';
+import AlertText from '../partial/render/AlertText.vue';
 import StatBreakdown from './StatBreakdown.vue';
 import Upgrade from './Upgrade.vue';
 
 export default {
-  components: { Upgrade, StatBreakdown },
+  components: { Upgrade, StatBreakdown, AlertText },
   props: {
     feature: {
       type: String,

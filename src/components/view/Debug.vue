@@ -232,6 +232,7 @@ import { buildNum, capitalize } from '../../js/utils/format';
 import { getDay, getWeek } from '../../js/utils/date';
 import { mapState } from 'vuex';
 import seedrandom from 'seedrandom';
+import { encodeFile } from '../../js/savefile';
 
 const Color = require('color');
 const colorVariants = ['lighten5', 'lighten4', 'lighten3', 'lighten2', 'lighten1', 'base', 'darken1', 'darken2', 'darken3', 'darken4'];
@@ -408,11 +409,12 @@ export default {
     },
     cleanSave() {
       // Creates a clean savefile with autoplay-friendly settings
-      localStorage.setItem('goobooSavefile', JSON.stringify({
-        version: "0.1.0",
+      localStorage.setItem('goobooSavefile', encodeFile({
+        version: "1.3.4",
         timestamp: this.$store.state.system.timestamp,
+        theme: "default",
         unlock: {
-          debugFeature: {see: true, use: true},
+          debugFeature: true
         },
         settings: {
           general: {
@@ -430,6 +432,18 @@ export default {
             fightHordeBoss: true
           }
         },
+        subfeature: {},
+        currency: {},
+        stat: {},
+        upgrade: {},
+        upgradeQueue: {},
+        relic: [],
+        globalLevel: {},
+        keybinds: {},
+        note: [],
+        consumable: {},
+        rng: {},
+        cachePage: {}
       }));
       location.reload();
     },

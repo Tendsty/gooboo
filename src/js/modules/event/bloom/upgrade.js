@@ -2,7 +2,7 @@ import store from "../../../../store";
 import { buildNum } from "../../../utils/format";
 
 export default {
-    colorfulSeedBag: {type: 'bloom', cap: 5, price(lvl) {
+    colorfulSeedBag: {type: 'bloom', cap: 5, hideCap: true, price(lvl) {
         return {event_blossom: [buildNum(1, 'M'), buildNum(1, 'Qa'), buildNum(1, 'O'), buildNum(1, 'TD'), buildNum(1, 'ND')][lvl]};
     }, effect: [
         {name: 'bloomPoppyFlower', type: 'unlock', value: lvl => lvl >= 1},

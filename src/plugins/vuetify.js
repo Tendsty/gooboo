@@ -5,14 +5,14 @@ import '@mdi/font/css/materialdesignicons.css'
 
 import en from '../lang/en';
 import de from '../lang/de';
-import { checkLocal } from '../js/savefile';
+import { checkLocal, decodeFile } from '../js/savefile';
 import themes from '../js/theme/themes';
 
 let theme = 'default';
 const localFile = checkLocal();
 if (localFile) {
-    const save = JSON.parse(localFile);
-    if (save.theme) {
+    const save = decodeFile(localFile, false);
+    if (save?.theme) {
         theme = save.theme;
     }
 }

@@ -8,7 +8,9 @@ export default {
     }, effect: [
         {name: 'villageMaterialGain', type: 'mult', value: lvl => fallbackArray([1, 1.1], Math.pow(1.25, lvl - 1), lvl)}
     ]},
-    goldenThrone: {type: 'premium', price(lvl) {
+    goldenThrone: {type: 'premium', requirement() {
+        return store.state.stat.village_coin.total > 0;
+    }, price(lvl) {
         return {gem_ruby: fallbackArray([30], [2, 3][(lvl - 1) % 2] * Math.pow(2, Math.floor((lvl - 1) / 2)) * 60, lvl)};
     }, effect: [
         {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => fallbackArray([1, 1.5], getSequence(2, lvl - 1) * 0.5 + 1, lvl)}

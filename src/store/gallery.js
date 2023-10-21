@@ -1,7 +1,7 @@
 import Vue from "vue"
 import { buildNum, capitalize } from "../js/utils/format";
 import { logBase } from "../js/utils/math";
-import { chance } from "../js/utils/random";
+import { randomRound } from "../js/utils/random";
 
 export default {
     namespaced: true,
@@ -152,27 +152,20 @@ export default {
                 dispatch('applyIdea', {name, onBuy: true});
             }
         },
-        openPackages({ state, rootState, rootGetters, dispatch }) {
+        openPackages({ state, rootState, rootGetters, commit, dispatch }) {
             const amount = Math.floor(rootState.currency.gallery_package.value);
             if (amount > 0) {
+                let rngGen = rootGetters['system/getRng']('gallery_package');
                 [...state.color].reverse().forEach(color => {
-                    let drums = 0;
                     const drumChance = rootGetters['mult/get'](`gallery${ capitalize(color) }DrumChance`);
-
-                    if (drumChance > 0 && drumChance < 1) {
-                        for (let i = 0; i < amount; i++) {
-                            if (chance(drumChance)) {
-                                drums++;
-                            }
+                    if (drumChance > 0) {
+                        const drums = randomRound(drumChance * amount, rngGen());
+                        if (drums > 0) {
+                            dispatch('currency/gain', {feature: 'gallery', name: color + 'Drum', amount: drums}, {root: true});
                         }
-                    } else {
-                        drums = (drumChance >= 1 ? 1 : 0) * amount;
-                    }
-
-                    if (drums > 0) {
-                        dispatch('currency/gain', {feature: 'gallery', name: color + 'Drum', amount: drums}, {root: true});
                     }
                 });
+                commit('system/nextRng', {name: 'gallery_package', amount: 1}, {root: true});
                 dispatch('currency/spend', {feature: 'gallery', name: 'package', amount}, {root: true});
             }
         }

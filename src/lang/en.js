@@ -133,6 +133,15 @@ export default {
     update: {
       get: 'New update!',
       apply: 'Refresh + apply'
+    },
+    import: {
+      message: 'File could not be loaded',
+      base64: 'Decoding failed',
+      json: 'JSON could not be interpreted',
+      key: 'The loaded savefile is missing required data',
+      version: 'This file is from a newer version of the game (v{0}, current version: v{1})',
+      testing: 'Files from the testing build cannot be used in the live version',
+      migration: 'An error occured while migrating from v{0} to v{1}'
     }
   },
   duplicateTab: {
@@ -998,6 +1007,9 @@ export default {
   settings: {
     keybinds: {
       name: 'Keybinds',
+      prevMainFeature: {
+        name: 'Previous main feature'
+      },
       nextMainFeature: {
         name: 'Next main feature'
       },
@@ -1303,7 +1315,9 @@ export default {
         1: ' for ',
         2: ' and increase the cost of the next sacrifice. Sacrifice cost resets on prestige.'
       },
-      sacrifice: 'Sacrifice'
+      sacrifice: 'Sacrifice',
+      notUnlocked: 'This offering is not unlocked yet. You can still sacrifice and spend offerings, but the resource capacity won\'t be applied until you unlock the offering',
+      notUnlockedHint: 'This offering is not unlocked, so the resource capacity does not apply yet'
     },
     material: 'Material',
     food: 'Food',
@@ -1367,6 +1381,7 @@ export default {
     silenceEnemy: 'This enemy is silenced and cannot use actives',
     stunPlayer: 'You are stunned and cannot attack',
     stunEnemy: 'This enemy is stunned and cannot attack',
+    shieldbreak: 'Break division shield faster',
     stunResist: 'Recover faster from stuns',
     stunBoss: 'Bosses receive +2 stun resist',
     stunMiniboss: 'Minibosses receive +1 stun resist',
@@ -1491,6 +1506,7 @@ export default {
       antidote: 'Antidote',
       brokenStopwatch: 'Broken stopwatch',
       luckyCharm: 'Lucky charm',
+      mailbreaker: 'Mailbreaker',
       club: 'Club',
       goldenStaff: 'Golden staff',
       toxicSword: 'Toxic sword',
@@ -1499,6 +1515,7 @@ export default {
       healthyFruit: 'Healthy fruit',
       glasses: 'Glasses',
       deadBird: 'Dead bird',
+      shieldDissolver: 'Shield dissolver',
       calmingPill: 'Calming pill',
       cleansingFluid: 'Cleansing fluid',
       forbiddenSword: 'Forbidden sword',
@@ -1597,6 +1614,10 @@ export default {
       divisionShield: {
         0: 'Gain',
         1: 'division shield'
+      },
+      removeDivisionShield: {
+        0: 'Remove',
+        1: 'division shield from the opponent'
       },
       reviveAll: 'Refill all revives',
       removeStun: 'Remove stuns',
@@ -1747,8 +1768,8 @@ export default {
       premiumOwned: 'Premium: {0} owned',
       gardenGnome: {
         name: 'Garden gnome',
-        description: 'Crops on the field may give gold on harvest. The chance is based on crop grow time.',
-        descriptionPremium: 'Crops on the field may give gold on harvest. The chance is doubled and based on crop grow time.',
+        description: 'Crops on the field may give gold on harvest when the garden gnome is placed on the field. The chance is based on crop grow time.',
+        descriptionPremium: 'Crops on the field may give gold on harvest when the garden gnome is placed on the field. The chance is doubled and based on crop grow time.',
       },
       sprinkler: {
         name: 'Sprinkler',

@@ -165,7 +165,7 @@ export default {
         },
         initFeature({ commit }, o) {
             commit('initFeature', o);
-            commit('mult/init', {name: o.name + 'CardCap', unlock: o.unlock ?? null, baseValue: 1, round: true}, {root: true});
+            commit('mult/init', {feature: 'card', name: o.name + 'CardCap', unlock: o.unlock ?? null, baseValue: 1, round: true}, {root: true});
         },
         calculateCaches({ state, commit, dispatch }) {
             // Reset existing caches

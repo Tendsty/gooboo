@@ -27,6 +27,12 @@
 .bg-tile-default {
   background-color: #80808020;
 }
+.theme--dark .bg-tile-background {
+  background-color: #12121280;
+}
+.theme--light .bg-tile-background {
+  background-color: #FFFFFF80;
+}
 .css-shadow-2 .balloon-text-black, .css-shadow-2.theme--dark .balloon-text-dynamic {
   text-shadow: -1px 0 0 #000000, 1px 0 0 #000000, 0 -1px 0 #000000, 0 1px 0 #000000, 1px 1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000, -1px -1px 0 #000000, 0 0 1px #000000, 0 0 2px #000000, 0 0 3px #000000, 0 0 4px #000000;
 }
@@ -316,7 +322,7 @@
 <template>
   <v-app class="game-app" :class="`background-theme-${ currentTheme } css-shadow-${ cssShadows }`">
     <v-app-bar v-if="screen !== 'newGame' && screen !== 'tab-duplicate'" class="px-lg-2 main-app-bar" app :color="$vuetify.theme.dark ? 'primary' : 'primary lighten-1'">
-      <v-menu min-width="296" :max-width="$vuetify.breakpoint.xsOnly ? 296 : 896" open-on-hover offset-y>
+      <v-menu min-width="296" :max-width="$vuetify.breakpoint.xsOnly ? 296 : ($vuetify.breakpoint.smOnly ? 488 : 896)" open-on-hover offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn class="px-2 ml-n2" text :icon="$vuetify.breakpoint.xsOnly" v-bind="attrs" v-on="on">
             <v-badge overlap color="secondary" :content="featureBadges" :value="featureBadges > 0">
@@ -440,6 +446,7 @@
         <achievement-message v-if="message.type === 'achievement'" :message="message"></achievement-message>
         <feature-message v-else-if="message.type === 'feature'" :message="message"></feature-message>
         <save-message v-else-if="message.type === 'save'" :message="message"></save-message>
+        <import-message v-else-if="message.type === 'import'" :message="message"></import-message>
         <note-message v-else-if="message.type === 'note'" :message="message"></note-message>
         <error-message v-else-if="message.type === 'error'" :message="message"></error-message>
         <card-pack-message v-else-if="message.type === 'cardPack'" :message="message"></card-pack-message>
@@ -471,7 +478,7 @@
     <v-dialog v-model="dialogDust" max-width="400">
       <golden-dust-menu @cancel="dialogDust = false"></golden-dust-menu>
     </v-dialog>
-    <input @change="importSave" type="file" accept="application/json" id="gooboo-savefile-input" style="display: none;"/>
+    <input @change="importSave" type="file" accept="text/plain, application/json" id="gooboo-savefile-input" style="display: none;"/>
     <v-icon v-if="activeTutorialCss !== null" class="tutorial-arrow" :style="activeTutorialCss">mdi-arrow-up-bold</v-icon>
   </v-app>
 </template>
@@ -501,7 +508,7 @@ import General from './components/view/General.vue';
 import Event from './components/view/Event.vue';
 import Treasure from './components/view/Treasure.vue';
 import Cryolab from './components/view/Cryolab.vue';
-import { cleanStore, exportFile, saveLocal } from './js/savefile';
+import { cleanStore, decodeFile, exportFile, saveLocal } from './js/savefile';
 import NextTile from './components/partial/main/NextTile.vue';
 import VSnackbars from 'v-snackbars'
 import AchievementMessage from './components/partial/snackbar/AchievementMessage.vue';
@@ -521,6 +528,7 @@ import GoldenDustMenu from './components/render/GoldenDustMenu.vue';
 import Currency from './components/render/Currency.vue';
 import UpdateMessage from './components/partial/snackbar/UpdateMessage.vue';
 import { APP_ENV } from './js/constants';
+import ImportMessage from './components/partial/snackbar/ImportMessage.vue';
 const semverCompare = require('semver/functions/compare');
 
 export default {
@@ -564,7 +572,8 @@ export default {
     SchoolMessage,
     GoldenDustMenu,
     Currency,
-    UpdateMessage
+    UpdateMessage,
+    ImportMessage
   },
   data: () => ({
     dialogDust: false,
@@ -594,7 +603,7 @@ export default {
       featureIsFrozen: 'cryolab/featureIsFrozen'
     }),
     marginSize() {
-      return this.$vuetify.breakpoint.smAndUp ? 2 : 1;
+      return this.$vuetify.breakpoint.mdAndUp ? 2 : 1;
     },
     hourglassShift() {
       return (1 - Math.max(0, Math.min(1, this.goldenDust.value / this.goldenDust.cap))) * 16 + 4;
@@ -688,17 +697,17 @@ export default {
         reader.readAsText(file, "UTF-8");
         let that = this;
         reader.onload = function (e) {
-          let data = JSON.parse(e.target.result);
-          if (data && data.version) {
+          const data = decodeFile(e.target.result);
+          if (data) {
             cleanStore();
-            loadGame(e.target.result);
-
-            // Apply theme
-            ['light', 'dark'].forEach(brightness => {
-              for (const [key, elem] of Object.entries({...that.$store.state.system.themes.default[brightness], ...that.$store.state.system.themes[data.theme][brightness]})) {
-                that.$vuetify.theme.themes[brightness][key] = elem;
-              }
-            });
+            if (loadGame(e.target.result)) {
+              // Apply theme
+              ['light', 'dark'].forEach(brightness => {
+                for (const [key, elem] of Object.entries({...that.$store.state.system.themes.default[brightness], ...that.$store.state.system.themes[data.theme][brightness]})) {
+                  that.$vuetify.theme.themes[brightness][key] = elem;
+                }
+              });
+            }
           }
         }
       }

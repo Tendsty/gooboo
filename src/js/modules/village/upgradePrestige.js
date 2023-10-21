@@ -96,7 +96,7 @@ export default {
         {name: 'village_knowledgeTower', type: 'keepUpgrade', value: lvl => lvl >= 5},
         {name: 'village_bigStorage', type: 'keepUpgrade', value: lvl => lvl >= 6}
     ]},
-    sandstone: {type: 'prestige', cap: 10, note: 'village_22', requirement() {
+    sandstone: {type: 'prestige', raiseOtherCap: 'village_obelisk', cap: 10, note: 'village_22', requirement() {
         return store.state.unlock.villageBuildings4.see;
     }, price(lvl) {
         return {village_blessing: Math.pow(2.25, lvl) * 1500};

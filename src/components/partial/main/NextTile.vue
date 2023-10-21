@@ -25,9 +25,9 @@
 </style>
 
 <template>
-  <v-card class="next-tile-card" :width="$vuetify.breakpoint.smAndUp ? 160 : 88" :height="$vuetify.breakpoint.smAndUp ? 100 : 55" v-on="$listeners">
+  <v-card class="next-tile-card" :width="$vuetify.breakpoint.mdAndUp ? 160 : 88" :height="$vuetify.breakpoint.mdAndUp ? 100 : 55" v-on="$listeners">
     <div class="d-flex justify-center align-center next-tile-container">
-      <v-icon color="secondary" :size="$vuetify.breakpoint.smAndUp ? 96 : 48">mdi-lock</v-icon>
+      <v-icon color="secondary" :size="$vuetify.breakpoint.mdAndUp ? 96 : 48">mdi-lock</v-icon>
       <v-icon class="next-tile-icon" color="white" size="40">mdi-octagram</v-icon>
       <div class="secondary--text next-tile-text d-flex justify-center align-center">
         <span>{{ level }}</span>

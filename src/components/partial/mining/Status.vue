@@ -23,9 +23,11 @@
   <div class="ma-1">
     <div class="d-flex justify-center align-center ma-1">
       <v-btn icon :disabled="depth <= 1 || isFrozen" @click="depthMin"><v-icon>mdi-skip-backward</v-icon></v-btn>
+      <v-btn icon :disabled="depth <= 1 || isFrozen" @click="depthPrev10"><v-icon>mdi-step-backward-2</v-icon></v-btn>
       <v-btn icon :disabled="depth <= 1 || isFrozen" @click="depthPrev"><v-icon>mdi-step-backward</v-icon></v-btn>
       <span class="mx-1">{{ depth }}m</span>
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthNext"><v-icon>mdi-step-forward</v-icon></v-btn>
+      <v-btn icon :disabled="isDeepest || isFrozen" @click="depthNext10"><v-icon>mdi-step-forward-2</v-icon></v-btn>
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
     </div>
     <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.mining.durability')">
@@ -321,9 +323,22 @@ export default {
         this.resetDurability();
       }
     },
+    depthPrev10() {
+      if (this.depth > 1) {
+        this.$store.commit('mining/updateKey', {key: 'depth', value: Math.max(this.depth - 10, 1)});
+        this.resetDurability();
+      }
+    },
     depthNext() {
       if (this.depth < this.maxDepth) {
         this.$store.commit('mining/updateKey', {key: 'depth', value: this.depth + 1});
+        this.$store.commit('system/updateTutorialKey', {name: 'miningDepth', key: 'completed', value: true});
+        this.resetDurability();
+      }
+    },
+    depthNext10() {
+      if (this.depth < this.maxDepth) {
+        this.$store.commit('mining/updateKey', {key: 'depth', value: Math.min(this.depth + 10, this.maxDepth)});
         this.$store.commit('system/updateTutorialKey', {name: 'miningDepth', key: 'completed', value: true});
         this.resetDurability();
       }

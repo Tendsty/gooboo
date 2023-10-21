@@ -106,13 +106,13 @@ export default {
                 [`currencyGallery${ capitalize(colorMult) }DrumCap`]: {type: 'bonus', value: val => val}
             }, overcapMult: 0, capMult: {baseValue: 10, round: true}});
 
-            store.commit('mult/init', {name: `gallery${ capitalize(elem) }Conversion`, unlock: 'galleryFeature', baseValue: 1}, {root: true});
-            store.commit('mult/init', {name: `gallery${ capitalize(elem) }DrumChance`, unlock: 'galleryDrums', display: 'percent'}, {root: true});
+            store.commit('mult/init', {feature: 'gallery', name: `gallery${ capitalize(elem) }Conversion`, unlock: 'galleryFeature', baseValue: 1}, {root: true});
+            store.commit('mult/init', {feature: 'gallery', name: `gallery${ capitalize(elem) }DrumChance`, unlock: 'galleryDrums', display: 'percent', min: 0, max: 1}, {root: true});
         });
 
-        store.commit('mult/init', {name: 'galleryColorGain', unlock: 'galleryFeature', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }Gain`)}, {root: true});
-        store.commit('mult/init', {name: 'galleryColorDrumChance', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `gallery${ capitalize(elem) }DrumChance`)}, {root: true});
-        store.commit('mult/init', {name: 'galleryColorDrumCap', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }DrumCap`)}, {root: true});
+        store.commit('mult/init', {feature: 'gallery', name: 'galleryColorGain', unlock: 'galleryFeature', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }Gain`)}, {root: true});
+        store.commit('mult/init', {feature: 'gallery', name: 'galleryColorDrumChance', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `gallery${ capitalize(elem) }DrumChance`)}, {root: true});
+        store.commit('mult/init', {feature: 'gallery', name: 'galleryColorDrumCap', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }DrumCap`)}, {root: true});
 
         for (const [key, elem] of Object.entries(idea)) {
             store.commit('gallery/initIdea', {name: key, ...elem});

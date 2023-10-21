@@ -73,6 +73,7 @@ export default {
     mutations: {
         init(state, o) {
             Vue.set(state.items, o.name, {
+                feature: o.feature ?? 'meta',
                 baseValue: o.baseValue ?? 0,
                 baseCache: o.baseValue ?? 0,
                 group: o.group ?? [],

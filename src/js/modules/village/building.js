@@ -1,6 +1,6 @@
 import store from "../../../store";
 import { buildNum } from "../../utils/format";
-import { getSequence, splicedLinear, splicedPow } from "../../utils/math";
+import { getSequence, splicedLinear, splicedPowLinear } from "../../utils/math";
 
 export default {
     // Tier 0 buildings
@@ -107,10 +107,10 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.15, lvl) * 225);
     }, effect: [
-        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => splicedPow(1.2, 1.05, 20, lvl)},
-        {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => splicedPow(1.2, 1.05, 20, lvl)},
-        {name: 'currencyVillageStoneCap', type: 'mult', value: lvl => splicedPow(1.2, 1.05, 20, lvl)},
-        {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => lvl > 5 ? splicedPow(1.2, 1.05, 15, lvl - 5) : null}
+        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 20, lvl)},
+        {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 20, lvl)},
+        {name: 'currencyVillageStoneCap', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 20, lvl)},
+        {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => lvl > 5 ? splicedPowLinear(1.2, 0.1, 15, lvl - 5) : null}
     ]},
     forge: {cap: 20, icon: 'mdi-anvil', requirement() {
         return store.state.unlock.villageBuildings2.use;
@@ -417,9 +417,9 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.15, lvl) * buildNum(15, 'K'));
     }, effect: [
-        {name: 'currencyVillageWaterCap', type: 'mult', value: lvl => splicedPow(1.25, 1.1, 20, lvl)},
-        {name: 'currencyVillageHardwoodCap', type: 'mult', value: lvl => splicedPow(1.2, 1.05, 20, lvl)},
-        {name: 'currencyVillageGemCap', type: 'mult', value: lvl => splicedPow(1.2, 1.05, 20, lvl)}
+        {name: 'currencyVillageWaterCap', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.2, 20, lvl)},
+        {name: 'currencyVillageHardwoodCap', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 20, lvl)},
+        {name: 'currencyVillageGemCap', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 20, lvl)}
     ]},
     luxuryHouse: {cap: 25, capMult: true, note: 'village_27', subtype: 'housing', icon: 'mdi-bank', requirement() {
         return store.state.unlock.villageBuildings4.use;

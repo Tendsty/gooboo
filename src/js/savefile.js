@@ -28,7 +28,8 @@ const migrations = {
     '1.1.0': v1_1_0
 };
 
-export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName }
+export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }
+const semverCompare = require('semver/functions/compare');
 
 /**
  * An array of modules that save and load data to the savefile
@@ -54,7 +55,6 @@ function cleanStore() {
 }
 
 function migrate(file) {
-    const semverCompare = require('semver/functions/compare');
     for (const [version, migration] of Object.entries(migrations)) {
         if (semverCompare(file.version, version) === -1) {
             file = migration(file);
@@ -63,8 +63,98 @@ function migrate(file) {
     return file;
 }
 
+function encodeFile(file) {
+    return btoa(JSON.stringify(file));
+}
+
+function decodeFile(file, showErrors = true) {
+    // Base64 decode if needed
+    if (file.charAt(0) !== '{') {
+        try {
+            file = atob(file);
+        } catch {
+            if (showErrors) {
+                store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                    type: 'import',
+                    error: 'base64'
+                }});
+            }
+            return null;
+        }
+    }
+
+    // Parse JSON
+    try {
+        file = JSON.parse(file);
+    } catch {
+        if (showErrors) {
+            store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                type: 'import',
+                error: 'json'
+            }});
+        }
+        return null;
+    }
+
+    // Check if keys are missing
+    [
+        'version', 'timestamp', 'theme', 'unlock', 'settings', 'subfeature',
+        'currency', 'stat', 'upgrade', 'upgradeQueue', 'relic', 'globalLevel',
+        'keybinds', 'note', 'consumable', 'rng', 'cachePage'
+    ].forEach(key => {
+        if (file[key] === undefined) {
+            if (showErrors) {
+                store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                    type: 'import',
+                    error: 'key'
+                }});
+            }
+            return null;
+        }
+    });
+
+    // Check if loaded from a newer version
+    if (semverCompare(file.version, store.state.system.version) === 1) {
+        if (showErrors) {
+            store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                type: 'import',
+                error: 'version',
+                version: file.version
+            }});
+        }
+        return null;
+    }
+
+    // Check if loaded from testing build
+    if (file.testing && !APP_TESTING) {
+        if (showErrors) {
+            store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                type: 'import',
+                error: 'testing'
+            }});
+        }
+        return null;
+    }
+
+    return file;
+}
+
 function loadFile(file) {
-    const save = migrate(JSON.parse(file));
+    // Try to run migrations
+    let save = null;
+    try {
+        save = migrate(file);
+    } catch {
+        store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+            type: 'import',
+            error: 'migration',
+            version: file.version
+        }});
+        return null;
+    }
+    if (!save) {
+        return;
+    }
 
     ['timestamp', 'currentDay', 'theme', 'backupTimer', 'playerId', 'noteHint'].forEach(elem => {
         if (save[elem]) {
@@ -247,7 +337,7 @@ function exportFile(file) {
     if (!file) {
         file = getSavefile();
     }
-    download(file, getSavefileName(), 'application/json');
+    download(file, getSavefileName(), 'text/plain');
 }
 
 function getSavefileName() {
@@ -255,7 +345,7 @@ function getSavefileName() {
     let year = now.slice(2, 4);
     let month = now.slice(5, 7);
     let day = now.slice(8, 10);
-    return `Gooboo_${ year }${ month }${ day }.json`;
+    return `Gooboo_${ year }${ month }${ day }.txt`;
 }
 
 function getSavefile() {
@@ -400,5 +490,5 @@ function getSavefile() {
         save.timeMult = store.state.system.timeMult;
     }
 
-    return JSON.stringify(save);
+    return encodeFile(save);
 }

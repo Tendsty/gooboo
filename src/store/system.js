@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { tick } from "../js/tick";
 import { getDay } from "../js/utils/date";
-import { randomHex, simpleHash } from "../js/utils/random";
+import { randomHex } from "../js/utils/random";
 import seedrandom from "seedrandom";
 
 export default {
@@ -359,6 +359,7 @@ export default {
             }
         },
         keybinds: {
+            prevMainFeature: null,
             nextMainFeature: null,
             debugSkip1m: null,
             debugSkip10m: null,
@@ -422,8 +423,7 @@ export default {
             return feat;
         },
         getRng: (state) => (name, skip = 0) => {
-            const hash = simpleHash(name);
-            return seedrandom(state.playerId + hash + (state.rng[hash] + skip));
+            return seedrandom(state.playerId + name + '_' + ((state.rng[name] ?? 0) + skip));
         },
         backupHint: (state) => {
             const mode = state.settings.notification.items.backupHint.value;
@@ -472,13 +472,8 @@ export default {
         }
     },
     mutations: {
-        initRng(state, name) {
-            const hash = simpleHash(name);
-            Vue.set(state.rng, hash, 0);
-        },
         nextRng(state, o) {
-            const hash = simpleHash(o.name);
-            state.rng[hash] += o.amount;
+            state.rng[o.name] = (state.rng[o.name] ?? 0) + o.amount;
         },
         initTheme(state, o) {
             Vue.set(state.themes, o.name, {
@@ -582,6 +577,9 @@ export default {
             commit('updateKey', {key: 'timeMult', value: 1});
             commit('updateKey', {key: 'noteHint', value: []});
             commit('updateKey', {key: 'farmHint', value: false});
+            commit('updateKey', {key: 'rng', value: {}});
+            commit('updateKey', {key: 'cachePage', value: {}});
+            commit('updateKey', {key: 'playerId', value: null});
 
             for (const [key, elem] of Object.entries(state.features)) {
                 if (elem.currentSubfeature !== undefined) {
@@ -595,9 +593,6 @@ export default {
             }
             for (const [key] of Object.entries(state.keybinds)) {
                 commit('updateKeybind', {name: key, value: null});
-            }
-            for (const [key] of Object.entries(state.rng)) {
-                commit('updateSubkey', {name: 'rng', key, value: 0});
             }
             for (const [key, elem] of Object.entries(state.themes)) {
                 commit('updateThemeKey', {name: key, key: 'owned', value: elem.ownedDefault});
@@ -703,6 +698,12 @@ export default {
                         }
                     }
                     switch (foundKeybind) {
+                        case 'prevMainFeature': {
+                            const mainFeatureList = getters.mainFeatures.map(elem => elem.name).filter(elem => !rootState.cryolab[elem]?.active).reverse();
+                            const currentIndex = mainFeatureList.findIndex(elem => elem === state.screen);
+                            commit('updateKey', {key: 'screen', value: mainFeatureList[(currentIndex + 1) >= mainFeatureList.length ? 0 : (currentIndex + 1)]});
+                            break;
+                        }
                         case 'nextMainFeature': {
                             const mainFeatureList = getters.mainFeatures.map(elem => elem.name).filter(elem => !rootState.cryolab[elem]?.active);
                             const currentIndex = mainFeatureList.findIndex(elem => elem === state.screen);

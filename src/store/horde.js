@@ -355,7 +355,7 @@ export default {
         },
         initHeirloom({ commit }, o) {
             commit('initHeirloom', o);
-            commit('mult/init', {name: `${ o.name }HeirloomEffect`, type: 'heirloomEffect'}, {root: true});
+            commit('mult/init', {feature: 'horde', name: `${ o.name }HeirloomEffect`, type: 'heirloomEffect'}, {root: true});
         },
         updatePlayerStats({ rootGetters, commit }) {
             commit('updatePlayerKey', {key: 'health', value: rootGetters['mult/get']('hordeHealth')});
@@ -404,12 +404,14 @@ export default {
                             }
 
                             let amt = getters.currentSigilVariety;
+                            let rngGen = rootGetters['system/getRng']('horde_sigilZone');
                             while (amt > 0 && sigilsAvailable.length > 0) {
-                                const newSigil = randomElem(sigilsAvailable);
+                                const newSigil = randomElem(sigilsAvailable, rngGen());
                                 sigils.push(newSigil);
                                 sigilsAvailable = sigilsAvailable.filter(sigil => sigil !== newSigil && !state.sigil[newSigil].exclude.includes(sigil));
                                 amt--;
                             }
+                            commit('system/nextRng', {name: 'horde_sigilZone', amount: 1}, {root: true});
 
                             commit('addSigilZone', sigils);
                         }
@@ -418,10 +420,15 @@ export default {
                     let amt = getters.currentSigils + (corruptionStats.sigil ?? 0);
                     let sigil = {};
                     let sigilSource = inTower ? [...state.tower[state.currentTower].sigils] : [...state.sigilZones[state.zone - 1]];
+                    let rngGen = state.bossFight === 0 ? null : rootGetters['system/getRng']('horde_sigil' + (state.bossFight === 2 ? 'Boss' : 'Miniboss'));
                     while (amt > 0) {
                         let chosen = null;
                         if (sigilSource.length > 0) {
-                            chosen = randomElem(sigilSource);
+                            if (state.bossFight === 0) {
+                                chosen = randomElem(sigilSource);
+                            } else {
+                                chosen = randomElem(sigilSource, rngGen());
+                            }
                         } else {
                             chosen = 'generic';
                         }
@@ -660,6 +667,7 @@ export default {
 
                 commit('updateKey', {key: 'minibossTimer', value: state.minibossTimer - 1});
                 commit('updateKey', {key: 'bossFight', value: 0});
+                commit('system/nextRng', {name: 'horde_sigilMiniboss', amount: 1}, {root: true});
             } else if (state.bossFight === 2) {
                 // Find notes based on depth
                 const note = notes[rootState.stat.horde_maxZone.value];
@@ -668,6 +676,7 @@ export default {
                 }
 
                 commit('updateKey', {key: 'bossFight', value: 0});
+                commit('system/nextRng', {name: 'horde_sigilBoss', amount: 1}, {root: true});
                 commit('updateKey', {key: 'bossAvailable', value: false});
                 commit('updateKey', {key: 'enemyTimer', value: HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX});
                 commit('stat/increaseTo', {feature: 'horde', name: 'maxZone', value: rootState.stat.horde_maxZone.value + 1}, {root: true});
