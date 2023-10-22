@@ -203,12 +203,28 @@ export default {
                 Vue.set(state.items[o.id], o.key, o.value);
             }
         },
-        moveItem(state, id) {
-            while (state.items.length < id) {
+        moveItem(state, o) {
+            while (state.items.length < (Math.max(o.from, o.to) + 1)) {
                 state.items.push(null);
             }
-            Vue.set(state.items, id, state.newItem);
-            Vue.set(state, 'newItem', null);
+            const fromContent = o.from === -1 ? state.newItem : state.items[o.from];
+            const toContent = o.to === -1 ? state.newItem : state.items[o.to];
+
+            // Cannot switch treasure in the temp slot
+            if (o.from === -1 && fromContent && toContent) {
+                return;
+            }
+
+            if (o.from === -1) {
+                Vue.set(state, 'newItem', toContent);
+            } else {
+                Vue.set(state.items, o.from, toContent);
+            }
+            if (o.to === -1) {
+                Vue.set(state, 'newItem', fromContent);
+            } else {
+                Vue.set(state.items, o.to, fromContent);
+            }
         },
         deleteItem(state, id) {
             if (id === -1) {
@@ -293,8 +309,8 @@ export default {
                 dispatch('currency/gain', {feature: 'treasure', name: 'fragment', amount: item.fragmentsSpent + getters.destroyFragments(item.tier, item.type)}, {root: true});
             }
         },
-        moveItem({ commit, dispatch }, id) {
-            commit('moveItem', id);
+        moveItem({ commit, dispatch }, o) {
+            commit('moveItem', o);
             dispatch('updateEffectCache');
         },
         deleteItem({ state, getters, commit, dispatch }, id) {

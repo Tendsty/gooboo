@@ -40,7 +40,8 @@ export default {
         oppenschroe: 'pale-yellow',
         bellux: 'pale-green',
         onoclua: 'pale-blue',
-        omnisolix: 'pale-purple'
+        omnisolix: 'pale-purple',
+        system: 'blue-grey'
       }[this.author];
     },
     hasBadge() {

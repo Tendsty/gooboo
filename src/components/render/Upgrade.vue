@@ -61,23 +61,25 @@
       <div class="d-flex flex-wrap align-center mx-n1 mt-2" v-if="!isMax">
         <price-tag class="ma-1" v-for="(amount, currency, index) in price" :key="currency + '-' + index" :currency="currency" :amount="amount"></price-tag>
         <v-spacer></v-spacer>
-        <gb-tooltip v-if="!upgrade.hideCap && !isNearMax" :min-width="350" :title-text="$vuetify.lang.t('$vuetify.upgrade.nextLevels')">
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon class="mx-1" v-bind="attrs" v-on="on">mdi-crystal-ball</v-icon>
-          </template>
-          <div v-for="(predict, key) in prediction" :key="`predict-${ key }`" class="d-flex align-center">
-            <div class="d-flex flex-column align-center mr-2">
-              <v-icon>mdi-chevron-double-up</v-icon>
-              <div style="font-size: 20px;">{{ predict.level }}</div>
-            </div>
-            <div class="bg-tile-background flex-grow-1 rounded pa-1">
-              <display-row v-for="(item, subkey) in predict.display" class="mx-1" :key="`predict-display-${key}-${item.name}-${item.type}-${subkey}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
-              <div class="d-flex flex-wrap">
-                <price-tag class="ma-1" v-for="(amount, currency, index) in predict.price" :key="'predict-price-' + key + '-' + currency + '-' + index" :currency="currency" :amount="amount"></price-tag>
+        <div>
+          <gb-tooltip v-if="!upgrade.hideCap && !isNearMax" :min-width="350" :title-text="$vuetify.lang.t('$vuetify.upgrade.nextLevels')">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon class="mx-1" v-bind="attrs" v-on="on">mdi-crystal-ball</v-icon>
+            </template>
+            <div v-for="(predict, key) in prediction" :key="`predict-${ key }`" class="d-flex align-center">
+              <div class="d-flex flex-column align-center mr-2">
+                <v-icon>mdi-chevron-double-up</v-icon>
+                <div style="font-size: 20px;">{{ predict.level }}</div>
+              </div>
+              <div class="bg-tile-background flex-grow-1 rounded pa-1">
+                <display-row v-for="(item, subkey) in predict.display" class="mx-1" :key="`predict-display-${key}-${item.name}-${item.type}-${subkey}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
+                <div class="d-flex flex-wrap">
+                  <price-tag class="ma-1" v-for="(amount, currency, index) in predict.price" :key="'predict-price-' + key + '-' + currency + '-' + index" :currency="currency" :amount="amount"></price-tag>
+                </div>
               </div>
             </div>
-          </div>
-        </gb-tooltip>
+          </gb-tooltip>
+        </div>
       </div>
       <v-progress-linear class="rounded mt-2" height="20" v-if="isTimed" :value="timePercentCurrent">
         <span v-if="isUpgrading">{{ $formatTime(timeLeftCurrent) }}</span>

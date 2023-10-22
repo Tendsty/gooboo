@@ -111,6 +111,13 @@ export default {
                 after: 'x1.6',
             },
             {
+                type: 'balance',
+                text: '205',
+                balance: 'buff',
+                before: '10.00K',
+                after: '500.0K'
+            },
+            {
                 type: 'remove',
                 text: '144'
             },

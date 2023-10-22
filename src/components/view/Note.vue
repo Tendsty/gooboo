@@ -6,7 +6,10 @@
       <note-list :clicked="clicked" @clickNote="clickNote" @hoverNote="hoverNote" @unhoverNote="unhoverNote" class="bg-tile-default ma-2" v-for="item in shownSideFeatures" :key="'side-' + item.name" :feature="item.name"></note-list>
     </v-col>
     <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="6" lg="4" xl="3">
-      <note-simple class="ma-2" v-if="shownNote !== null" :name="shownNote"></note-simple>
+      <template v-if="shownNote !== null">
+        <note-system v-if="author === 'system'" class="ma-2" :name="shownNote"></note-system>
+        <note-simple v-else class="ma-2" :name="shownNote"></note-simple>
+      </template>
     </v-col>
   </v-row>
 </template>
@@ -15,9 +18,10 @@
 import { mapGetters } from 'vuex';
 import NoteList from '../partial/note/NoteList.vue';
 import NoteSimple from '../render/NoteSimple.vue';
+import NoteSystem from '../render/NoteSystem.vue';
 
 export default {
-  components: { NoteList, NoteSimple },
+  components: { NoteList, NoteSimple, NoteSystem },
   data: () => ({
     hovered: null,
     clicked: null
@@ -32,6 +36,12 @@ export default {
     },
     shownNote() {
       return this.hovered ?? this.clicked;
+    },
+    author() {
+      if (this.shownNote === null) {
+        return null;
+      }
+      return this.$store.state.note[this.shownNote].author;
     }
   },
   methods: {

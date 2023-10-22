@@ -294,6 +294,8 @@ export default {
       snackbars: 'v-snackbars',
       color: 'color',
       mdi: 'Material Design Icons',
+      jsfiledownload: 'Javascript File Download',
+      seedrandom: 'seedrandom',
       caveat: 'Caveat',
       roboto: 'Roboto',
       robotomono: 'Roboto Mono',
@@ -1732,13 +1734,13 @@ export default {
       goldenRose: 'Goldrose'
     },
     cropUpgrade: {
-      yield: 'x1.15 Ertrag',
-      grow: 'x0.8 Wachstumszeit',
+      yield: 'x1.25 Ertrag',
+      grow: 'x0.9 Wachstumszeit',
       exp: '+0.5 Erfahrung',
-      gold: 'x1.12 Goldchance',
+      gold: 'x1.35 Goldchance',
       overgrow: '+50% Überwuchern',
       cost: 'x0.75 Kosten, mindestens -1 weniger',
-      double: 'x1.5 Ertrag, Erfahrung und Goldchance und x1.2 Chance auf seltenen Ertrag, aber x2 Wachstumszeit',
+      double: 'x1.5 Ertrag, Erfahrung und Goldchance und x1.3 Chance auf seltenen Ertrag, aber x2 Wachstumszeit',
       fertile: 'Düngereffekte sind 25% stärker',
       drops: 'x1.2 Chance auf seltenen Ertrag'
     },

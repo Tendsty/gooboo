@@ -573,6 +573,7 @@ export default {
             ];
         },
         activeType: 'combat',
+        usableInStun: true,
         cooldown: () => 1200,
         icon: 'mdi-necklace',
         activeIcon: 'mdi-flare',
@@ -749,6 +750,7 @@ export default {
             ];
         },
         activeType: 'combat',
+        usableInStun: true,
         cooldown: () => 220,
         icon: 'mdi-fruit-cherries',
         activeIcon: 'mdi-fruit-cherries',
@@ -1287,6 +1289,7 @@ export default {
             ];
         },
         activeType: 'combat',
+        usableInStun: true,
         cooldown: lvl => 53 - 3 * lvl,
         icon: 'mdi-halloween',
         activeIcon: 'mdi-pumpkin',

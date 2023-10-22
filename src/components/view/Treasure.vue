@@ -1,3 +1,9 @@
+<style scoped>
+.treasure-slot {
+  touch-action: none;
+}
+</style>
+
 <template>
   <v-row no-gutters>
     <v-col :class="{'scroll-container': $vuetify.breakpoint.mdAndUp}" cols="12" md="8" lg="9">
@@ -21,7 +27,14 @@
         </div>
         <v-spacer v-if="$vuetify.breakpoint.smAndUp"></v-spacer>
         <div class="d-flex flex-wrap justify-center align-center">
-          <item-slot class="ma-1" :id="-1"></item-slot>
+          <item-slot
+            class="ma-1 treasure-slot"
+            id="treasure_-1"
+            :slot-id="-1"
+            :draggable="newItem !== null"
+            @dragstart="drag($event, -1)"
+            @touchend="touchdrop($event, -1)"
+          ></item-slot>
           <buy-item class="ma-1" name="regular"></buy-item>
           <buy-item v-if="unlock.treasureDual.see" class="ma-1" name="dual"></buy-item>
         </div>
@@ -41,7 +54,18 @@
         </div>
       </div>
       <div class="d-flex flex-wrap ma-1">
-        <item-slot class="ma-1" v-for="i in treasureSlots" :key="i" :id="i - 1"></item-slot>
+        <item-slot
+          class="ma-1 treasure-slot"
+          v-for="i in treasureSlots"
+          :key="i"
+          :id="'treasure_' + (i - 1)"
+          :slot-id="i - 1"
+          :draggable="(i - 1) < items.length && items[i - 1] !== null"
+          @dragstart="drag($event, i - 1)"
+          @drop="drop($event, i - 1)"
+          @dragover="allowDrop"
+          @touchend="touchdrop($event, i - 1)"
+        ></item-slot>
       </div>
     </v-col>
     <v-col :class="{'scroll-container': $vuetify.breakpoint.mdAndUp}" cols="12" md="4" lg="3">
@@ -67,7 +91,9 @@ export default {
       upgrading: state => state.treasure.upgrading,
       deleting: state => state.treasure.deleting,
       treasureType: state => state.treasure.type,
-      unlock: state => state.unlock
+      unlock: state => state.unlock,
+      newItem : state => state.treasure.newItem,
+      items: state => state.treasure.items
     }),
     ...mapGetters({
       fragmentGain: 'treasure/fragmentGain'
@@ -83,6 +109,33 @@ export default {
     }
   },
   methods: {
+    drag(ev, id) {
+      ev.dataTransfer.setData("text", id);
+    },
+    drop(ev, id) {
+      ev.preventDefault();
+      const startId = parseInt(ev.dataTransfer.getData("text"));
+      const endId = parseInt(id);
+      if (startId !== endId) {
+        this.$store.dispatch('treasure/moveItem', {from: startId, to: endId});
+      }
+    },
+    allowDrop(ev) {
+      ev.preventDefault();
+    },
+    touchdrop(ev, draggedId) {
+      const elemList = document.elementsFromPoint(ev.changedTouches[0].clientX, ev.changedTouches[0].clientY);
+      if (elemList) {
+        const endElem = elemList.find(el => el.id.slice(0, 9) === 'treasure_');
+        if (endElem) {
+          const startId = parseInt(draggedId);
+          const endId = parseInt(endElem.id.slice(9));
+          if (startId !== endId && endId !== -1) {
+            this.$store.dispatch('treasure/moveItem', {from: startId, to: endId});
+          }
+        }
+      }
+    },
     buyFragments() {
       if (this.$store.state.system.settings.confirm.items.gem.value) {
         this.$store.commit('system/updateKey', {key: 'confirm', value: {

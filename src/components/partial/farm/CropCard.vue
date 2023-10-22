@@ -41,7 +41,7 @@
                 <v-icon class="ml-1" small>mdi-gold</v-icon>
               </div>
             </template>
-            <stat-breakdown name="farmGoldChance" :base="cropGoldChanceBase * 0.01" :multArray="goldChanceMult"></stat-breakdown>
+            <stat-breakdown name="farmGoldChance" :base="cropGoldChanceBase * 0.004" :multArray="goldChanceMult"></stat-breakdown>
             <div>{{ $vuetify.lang.t('$vuetify.farm.goldChanceDescription') }}</div>
             <alert-text v-if="(cropGoldChance * gnomeAmount) > 1" type="info">{{ $vuetify.lang.t(
               '$vuetify.farm.goldChanceMultiple',
@@ -197,7 +197,7 @@ export default {
       let arr = [];
 
       if (this.crop.upgrades.yield) {
-        arr.push({name: 'farmUpgrade_yield', value: Math.pow(1.15, this.crop.upgrades.yield)});
+        arr.push({name: 'farmUpgrade_yield', value: Math.pow(1.25, this.crop.upgrades.yield)});
       }
       if (this.crop.upgrades.double) {
         arr.push({name: 'farmUpgrade_double', value: Math.pow(1.5, this.crop.upgrades.double)});
@@ -230,7 +230,7 @@ export default {
         arr.push({name: 'farmUpgrade_drops', value: Math.pow(1.2, this.crop.upgrades.drops)});
       }
       if (this.crop.upgrades.double) {
-        arr.push({name: 'farmUpgrade_double', value: Math.pow(1.2, this.crop.upgrades.double)});
+        arr.push({name: 'farmUpgrade_double', value: Math.pow(1.3, this.crop.upgrades.double)});
       }
 
       return arr;
@@ -242,7 +242,7 @@ export default {
         mult *= Math.pow(1.2, this.crop.upgrades.drops);
       }
       if (this.crop.upgrades.double) {
-        mult *= Math.pow(1.2, this.crop.upgrades.double);
+        mult *= Math.pow(1.3, this.crop.upgrades.double);
       }
 
       return mult;
@@ -284,7 +284,7 @@ export default {
       let arr = [];
 
       if (this.crop.upgrades.gold) {
-        arr.push({name: 'farmUpgrade_gold', value: Math.pow(1.12, this.crop.upgrades.gold)});
+        arr.push({name: 'farmUpgrade_gold', value: Math.pow(1.35, this.crop.upgrades.gold)});
       }
       if (this.crop.upgrades.double) {
         arr.push({name: 'farmUpgrade_double', value: Math.pow(1.5, this.crop.upgrades.double)});

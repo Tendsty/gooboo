@@ -70,66 +70,29 @@ export default {
   }),
   mounted() {
     this.elo = this.$store.state.school.art.currentGrade;
-    this.answerCount = Math.floor(this.elo / 1.2 + 4);
-    this.changeAmount = 100000 / (this.elo * 3 / 500 + 1000);
+    this.answerCount = Math.floor(this.elo / 2 + 4);
+    this.changeAmount = 60000 / (this.elo * 150 + 1000);
     this.newQuestion();
   },
   methods: {
     newQuestion() {
-      const slMult = 50;
-      let hue = 0;
-      // Grey colors result in unfair colors with no way to differentiate them, so we reroll if that happens
-      while (hue < 20) {
-        this.mixed = [];
-        this.answers = [];
-        const firstHue = randomInt(0, 359);
-        this.mixed.push(Color(`hsl(${ randomInt(0, 359) }, ${ randomFloat(60, 100) }%, ${ randomFloat(35, 65) }%)`).hex());
-        this.mixed.push(Color(`hsl(${ chance(0.5) ? randomInt(firstHue + 30, firstHue + 119) : randomInt(firstHue + 240, firstHue + 329) }, ${ randomFloat(60, 100) }%, ${ randomFloat(35, 65) }%)`).hex());
-        this.solution = randomInt(0, this.answerCount - 1);
-        const answer = Color(this.mixed[0]).mix(Color(this.mixed[1])).hex();
-        hue = Color(answer).hsl().color[1];
-        for (let i = 0; i < this.answerCount; i++) {
-          let newColor = Color(answer);
-          if (i !== this.solution) {
-            let changeLeft = this.changeAmount * randomFloat(1, 2);
-
-            if (chance(0.4)) {
-              const l = newColor.hsl().color[2];
-              if (chance(0.5)) {
-                // lighten
-                if (l < 0.65) {
-                  const diff = randomFloat(0, Math.min(0.65 - l, changeLeft / slMult));
-                  newColor = newColor.lightness(l + diff);
-                  changeLeft -= diff * slMult;
-                }
-              } else {
-                // darken
-                if (l > 0.35) {
-                  const diff = randomFloat(0, Math.min(l - 0.35, changeLeft / slMult));
-                  newColor = newColor.lightness(l - diff);
-                  changeLeft -= diff * slMult;
-                }
-              }
-            }
-            if (chance(0.4)) {
-              const s = newColor.hsl().color[1];
-              if (chance(0.5)) {
-                // saturate
-                const diff = Math.random();
-                newColor = newColor.saturate(diff);
-                changeLeft -= (1 - s) * diff * slMult;
-              } else {
-                // desaturate
-                const diff = Math.random();
-                newColor = newColor.desaturate(diff);
-                changeLeft -= s * diff * slMult;
-              }
-            }
-
-            newColor = newColor.rotate(changeLeft * (chance(0.5) ? 1 : -1));
-          }
-          this.answers.push(newColor.hex());
+      this.mixed = [];
+      this.answers = [];
+      const firstHue = randomInt(0, 359);
+      let secondHue = chance(0.5) ? randomInt(firstHue + 30, firstHue + 119) : randomInt(firstHue + 240, firstHue + 329);
+      while (secondHue >= 360) {
+        secondHue -= 360;
+      }
+      this.mixed.push(Color(`hsl(${ firstHue }, 100%, 50%)`).hex());
+      this.mixed.push(Color(`hsl(${ secondHue }, 100%, 50%)`).hex());
+      this.solution = randomInt(0, this.answerCount - 1);
+      const answer = Color(this.mixed[0]).mix(Color(this.mixed[1])).hex();
+      for (let i = 0; i < this.answerCount; i++) {
+        let newColor = Color(answer);
+        if (i !== this.solution) {
+          newColor = newColor.rotate(this.changeAmount * randomFloat(1, 3) * (chance(0.5) ? 1 : -1));
         }
+        this.answers.push(newColor.hex());
       }
     },
     giveAnswer(id) {

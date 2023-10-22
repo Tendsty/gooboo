@@ -14,10 +14,13 @@ function buildArray(length = 0) {
  * @param {Array} array
  * @returns {Array}
  */
-function shuffleArray(array) {
+function shuffleArray(array, rngGen = null) {
+    if (rngGen === null) {
+        rngGen = () => Math.random()
+    }
     let arr = [...array];
     for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(rngGen() * (i + 1));
         const temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;

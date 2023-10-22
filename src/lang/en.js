@@ -294,6 +294,8 @@ export default {
       snackbars: 'v-snackbars',
       color: 'color',
       mdi: 'Material Design Icons',
+      jsfiledownload: 'Javascript File Download',
+      seedrandom: 'seedrandom',
       caveat: 'Caveat',
       roboto: 'Roboto',
       robotomono: 'Roboto Mono',
@@ -1732,13 +1734,13 @@ export default {
       goldenRose: 'Golden rose'
     },
     cropUpgrade: {
-      yield: 'x1.15 yield',
-      grow: 'x0.8 growth time',
+      yield: 'x1.25 yield',
+      grow: 'x0.9 growth time',
       exp: '+0.5 experience',
-      gold: 'x1.12 gold chance',
+      gold: 'x1.35 gold chance',
       overgrow: '+50% overgrow',
       cost: 'x0.75 cost, at least -1 cost reduction',
-      double: 'x1.5 yield, exp and gold chance and x1.2 rare drop chance, but x2 growth time',
+      double: 'x1.5 yield, exp and gold chance and x1.3 rare drop chance, but x2 growth time',
       fertile: 'Fertilizer effects are 25% stronger',
       drops: 'x1.2 rare drop chance'
     },

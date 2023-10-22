@@ -592,7 +592,7 @@ export default {
             hordeHealth: {type: 'mult', value: val => Math.pow(1.1, val)},
             currencyHordeBoneGain: {type: 'mult', value: val => Math.pow(1.1, val)}
         }},
-        soulCorrupted: {color: 'purple', icon: 'mdi-ghost', overcapMult: 0.75, overcapScaling: 0.85, gainMult: {}, capMult: {min: 100}},
+        soulCorrupted: {color: 'purple', icon: 'mdi-ghost', overcapMult: 0.75, overcapScaling: 0.85, gainMult: {}, capMult: {min: 200}},
         soulEmpowered: {type: 'prestige', alwaysVisible: true, color: 'pink', icon: 'mdi-ghost'},
         crown: {type: 'prestige', color: 'amber', icon: 'mdi-crown-circle-outline'},
         towerKey: {type: 'prestige', color: 'light-grey', icon: 'mdi-key-variant'}

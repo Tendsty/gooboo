@@ -412,7 +412,6 @@ export default {
 
                 const rng = 1 - (logBase(randomFloat(1, 1 / stats.purity + 1, rval), 2) / logBase(1 / stats.purity + 1, 2));
                 const newPick = (rng * (1 - stats.purity) + stats.purity) * stats.quality;
-                console.log(newPick);
                 if (newPick > state.pickaxePower) {
                     commit('updateKey', {key: 'pickaxePower', value: newPick});
                 }

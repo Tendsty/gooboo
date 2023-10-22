@@ -69,7 +69,7 @@ export default {
     luckyStrike: {cap: 15, capMult: true, requirementBase, requirementStat, requirementValue: 21, price(lvl) {
         return {horde_bone: splicedPow(1.85, 4.6, 15, lvl) * buildNum(30, 'B')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => splicedPowLinear(1.14, 0.14, 15, lvl)},
+        {name: 'hordeAttack', type: 'mult', value: lvl => splicedPowLinear(1.14, 0.07, 15, lvl)},
         {name: 'hordeItemChance', type: 'mult', value: lvl => lvl * 0.2 + 1}
     ]},
     hoarding: {cap: 20, requirementBase, requirementStat, requirementValue: 25, price(lvl) {
@@ -118,20 +118,20 @@ export default {
     survivalGuide: {cap: 25, capMult: true, requirementBase, requirementStat, requirementValue: 66, price(lvl) {
         return {horde_bone: splicedPow(2.25, 4.75, 25, lvl) * buildNum(1.25, 'O')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.2, 25, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => splicedPowLinear(1.15, 0.15, 25, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 25, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => splicedPowLinear(1.15, 0.075, 25, lvl)}
     ]},
     looting: {cap: 25, capMult: true, requirementBase, requirementStat, requirementValue: 69, price(lvl) {
         return {horde_bone: splicedPow(3.3, 8.7, 25, lvl) * buildNum(22, 'O')};
     }, effect: [
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => splicedPowLinear(2, 1, 25, lvl)},
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => splicedPowLinear(2, 0.25, 25, lvl)},
         {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => splicedPowLinear(1.05, 0.05, 25, lvl)}
     ]},
     whitePaint: {cap: 25, capMult: true, requirementBase, requirementStat, requirementValue: 80, price(lvl) {
         return {horde_bone: Math.pow(2.8, lvl) * buildNum(1.11, 'UD')};
     }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => splicedPowLinear(1.15, 0.15, 25, lvl)},
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.25, 25, lvl)}
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => splicedPowLinear(1.15, 0.075, 25, lvl)},
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.125, 25, lvl)}
     ]},
     targetDummy: {requirementBase, requirementStat, requirementValue: 92, price(lvl) {
         return {horde_bone: Math.pow(lvl * 0.005 + 1.7, lvl) * buildNum(250, 'TD')};
@@ -157,7 +157,7 @@ export default {
     carving: {cap: 5, capMult: true, requirementBase, requirementStat, requirementValue: 125, price(lvl) {
         return {horde_bone: Math.pow(12, lvl) * buildNum(2, 'ND')};
     }, effect: [
-        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => splicedPowLinear(8, 4, 5, lvl)},
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => splicedPowLinear(8, 0.25, 5, lvl)},
         {name: 'currencyHordeCorruptedFleshGain', type: 'mult', value: lvl => lvl * 0.2 + 1}
     ]},
     mysticalBag: {cap: 1, requirementBase, requirementStat, requirementValue: 135, price(lvl) {

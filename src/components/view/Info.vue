@@ -169,7 +169,9 @@ export default {
         vuex: {github: 'https://github.com/vuejs/vuex', website: 'https://vuex.vuejs.org'},
         snackbars: {github: 'https://github.com/Aymkdn/v-snackbars'},
         color: {github: 'https://github.com/Qix-/color'},
-        mdi: {github: 'https://github.com/Templarian/MaterialDesign-Webfont'}
+        mdi: {github: 'https://github.com/Templarian/MaterialDesign-Webfont'},
+        jsfiledownload: {github: 'https://github.com/kennethjiang/js-file-download'},
+        seedrandom: {github: 'https://github.com/davidbau/seedrandom'}
       },
       fonts: {
         caveat: {googlefonts: 'https://fonts.google.com/specimen/Caveat'},

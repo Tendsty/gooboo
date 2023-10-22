@@ -43,7 +43,7 @@ export default {
         highestGrade: {value: () => store.state.stat.school_highestGrade.total, secret: true, display: 'grade', cap: 5, milestones: lvl => (lvl + 1) * 3 - 2},
         longestOfflineTime: {value: () => store.state.stat.meta_longestOfflineTime.total, secret: true, display: 'time', cap: 3, milestones: lvl => [SECONDS_PER_DAY * 7, SECONDS_PER_DAY * 30, SECONDS_PER_DAY * 365][lvl]}
     },
-    note: buildArray(6).map(() => 'g'),
+    note: [...buildArray(6).map(() => 'g'), 'system'],
     init() {
         for (const [key, elem] of Object.entries(themes)) {
             store.commit('system/initTheme', {name: key, ...elem});

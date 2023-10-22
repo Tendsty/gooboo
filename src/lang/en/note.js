@@ -6,6 +6,10 @@ export default {
     meta_3: 'Multiple features. All keep working at the same time.',
     meta_4: 'Do not neglect features. All important.',
     meta_5: 'Global level. Need to unlock new features. Progress in features to increase.',
+    meta_6: {
+      title: 'Back up your savefile!',
+      text: 'Browser-based savefiles are not perfectly reliable, so backup your savefile often! Only one small accident is enough to wipe your progress, such as browser crash, power outage, the browser mistaking the game for a tracker or a bug in the game. Download a backup whenever the hint shows up and when a new update is released, and you should be safe. iOS users and itch players are at a higher risk of savefile loss and should change the backup hint to "Common"'
+    },
 
     mining_0: 'Use pickaxe. Dig deeper.',
     mining_1: 'Collect scrap. Buy upgrades.',
