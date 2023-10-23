@@ -1153,6 +1153,14 @@ export default {
       treasureDelete: {
         name: 'Treasure deletion'
       }
+    },
+    experiment: {
+      name: 'Experimental',
+      warning: 'These settings are still experimental and may be buggy, unfinished, performance heavy or confusing. Enable them at your own risk, and please leave feedback if you are using them! If this section is empty, no experimental settings are available at the time or you have not progressed far enough to be able to see them',
+      gainTimer: {
+        name: 'Display gain timers',
+        description: 'Show the time needed to reach resource capacity or afford an upgrade. Some resources with irregular income use estimates, and not all resources have this'
+      }
     }
   },
   statBreakdown: {
@@ -1235,6 +1243,7 @@ export default {
       power: 'Power',
       purity: 'Purity',
       impurity: 'Impurity',
+      oreQuality: 'The amount of ores required to craft a pickaxe is divided by your ore quality',
       craftPickaxe: 'Craft pickaxe',
       purityDescription: 'To reach 50% minimum quality, your purity needs to match your impurity.',
       premiumSlot: 'This is a premium crafting slot. Impurity above x1 is halved and purity is doubled.'
@@ -1735,8 +1744,8 @@ export default {
     },
     cropUpgrade: {
       yield: 'x1.25 yield',
-      grow: 'x0.9 growth time',
-      exp: '+0.5 experience',
+      grow: 'x0.92 growth time',
+      exp: '+0.35 experience',
       gold: 'x1.35 gold chance',
       overgrow: '+50% overgrow',
       cost: 'x0.75 cost, at least -1 cost reduction',

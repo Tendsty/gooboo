@@ -30,6 +30,9 @@
           <setting-item class="ma-2" :category="tab" :name="key"></setting-item>
         </v-col>
       </v-row>
+      <div v-if="tab === 'experiment'" class="d-flex justify-center ma-2">
+        <alert-text type="warning" style="max-width: 600px;">{{ $vuetify.lang.t(`$vuetify.settings.experiment.warning`) }}</alert-text>
+      </div>
     </div>
   </div>
 </template>
@@ -37,12 +40,13 @@
 <script>
 import { mapState } from 'vuex';
 import { APP_ENV } from '../../js/constants';
+import AlertText from '../partial/render/AlertText.vue';
 import SettingItem from '../partial/settings/Item.vue'
 import Keybind from '../partial/settings/Keybind.vue'
 import ThemeItem from '../partial/settings/ThemeItem.vue';
 
 export default {
-  components: { SettingItem, Keybind, ThemeItem },
+  components: { SettingItem, Keybind, ThemeItem, AlertText },
   data: () => ({
     tab: 'general'
   }),

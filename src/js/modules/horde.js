@@ -584,15 +584,21 @@ export default {
         {mult: 'hordeHeirloomEffect', name: 'multType', type: 'heirloomEffect'}
     ],
     currency: {
-        bone: {color: 'lightest-grey', icon: 'mdi-bone', gainMult: {}, capMult: {baseValue: buildNum(5, 'M')}},
-        monsterPart: {color: 'cherry', icon: 'mdi-stomach', gainMult: {display: 'perSecond'}, capMult: {baseValue: 100}},
-        corruptedFlesh: {color: 'deep-purple', icon: 'mdi-food-steak', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true},
+        bone: {color: 'lightest-grey', icon: 'mdi-bone', gainMult: {}, capMult: {baseValue: buildNum(5, 'M')}, gainTimerFunction() {
+            return store.getters['mult/get']('currencyHordeBoneGain', store.getters['horde/enemyBone'](store.state.horde.zone, 0) / HORDE_ENEMY_RESPAWN_TIME);
+        }, timerIsEstimate: true},
+        monsterPart: {color: 'cherry', icon: 'mdi-stomach', gainMult: {display: 'perSecond'}, capMult: {baseValue: 100}, gainTimerFunction() {
+            return store.getters['mult/get']('currencyHordeMonsterPartGain', store.getters['horde/currentMonsterPart'] * 0.8);
+        }, timerIsEstimate: true},
+        corruptedFlesh: {color: 'deep-purple', icon: 'mdi-food-steak', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, showGainTimer: true},
         mysticalShard: {color: 'teal', icon: 'mdi-billiards-rack', currencyMult: {
             hordeAttack: {type: 'mult', value: val => Math.pow(1.1, val)},
             hordeHealth: {type: 'mult', value: val => Math.pow(1.1, val)},
             currencyHordeBoneGain: {type: 'mult', value: val => Math.pow(1.1, val)}
         }},
-        soulCorrupted: {color: 'purple', icon: 'mdi-ghost', overcapMult: 0.75, overcapScaling: 0.85, gainMult: {}, capMult: {min: 200}},
+        soulCorrupted: {color: 'purple', icon: 'mdi-ghost', overcapMult: 0.75, overcapScaling: 0.85, gainMult: {}, capMult: {min: 200}, gainTimerFunction() {
+            return store.getters['mult/get']('currencyHordeSoulCorruptedGain') / store.getters['mult/get']('hordeMinibossTime');
+        }, timerIsEstimate: true},
         soulEmpowered: {type: 'prestige', alwaysVisible: true, color: 'pink', icon: 'mdi-ghost'},
         crown: {type: 'prestige', color: 'amber', icon: 'mdi-crown-circle-outline'},
         towerKey: {type: 'prestige', color: 'light-grey', icon: 'mdi-key-variant'}

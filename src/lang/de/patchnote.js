@@ -251,7 +251,7 @@ export default {
     199: 'Verbesserungen, die durch Bücher eine höhere Maximalstufe haben, skalieren nun immer linear, nachdem die eigentliche Maximalstufe überschritten wird',
     200: 'Eine Tastenbelegung für die vorherige Funktion wurde hinzugefügt',
     201: 'Du erhältst jetzt 5 mal so viel Nostalgie aus allen Quellen',
-    202: 'Seeleneinkommen und -kapazität verdoppelt',
+    202: 'Seelenkapazität verdoppelt',
     203: 'Die Preise von Prestige-Verbesserungen wurde im mittleren Spielverlauf erhöht',
     204: '"Rote Karte" Bonus-Monsterteil-Kapazität',
     205: 'Grundwert Knochen-Kapazität',
@@ -270,6 +270,11 @@ export default {
     218: 'Gen: Ertrag-Anstieg',
     219: 'Gen: Goldchance-Anstieg',
     220: '"Doppelt"-Gen: Anstieg für Chance auf seltenen Ertrag',
+    221: 'Die Erfolge "Nihilist" und "Schwarzes Loch" geben jetzt korrekt an, dass sie Opfer statt Opfergaben zählen',
+    222: 'Du kannst nun Verbesserungen in der minimierten Ansicht maximal kaufen',
+    223: 'Gen: Erfahrung-Anstieg',
+    224: 'Eine experimentelle Einstellung wurde hinzugefügt, um Timer für Rohstoffeinkommen anzuzeigen',
+    225: 'Der Tooltip zum Herstellen einer Spitzhacke erklärt nun Erz-Qualität',
   },
   v: {
     1: {

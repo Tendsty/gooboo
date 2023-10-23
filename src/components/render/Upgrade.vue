@@ -18,7 +18,7 @@
   <v-card class="d-flex align-center pa-1" v-if="upgrade.collapse">
     <v-icon v-if="upgrade.icon" class="ma-1">{{ upgrade.icon }}</v-icon>
     <div v-else class="ma-1">{{ $vuetify.lang.t(`$vuetify.upgrade.${name}`) }}</div>
-    <gb-tooltip v-if="upgrade.bought || (upgrade.cap !== null && !upgrade.hideCap)" :min-width="0">
+    <gb-tooltip key="upgrade-bought-collapse" v-if="upgrade.bought || (upgrade.cap !== null && !upgrade.hideCap)" :min-width="0">
       <template v-slot:activator="{ on, attrs }">
         <v-chip label small class="ma-1 px-2" v-bind="attrs" v-on="on">
           <v-icon class="mr-1">mdi-chevron-double-up</v-icon>
@@ -28,18 +28,19 @@
       </template>
       <div>{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.bought`) }}</div>
     </gb-tooltip>
-    <v-chip label small class="ma-1 px-2" v-if="isTimed && isUpgrading">
+    <v-chip key="upgrade-time-collapse" label small class="ma-1 px-2" v-if="isTimed && isUpgrading">
       <v-icon class="mr-1">mdi-timer</v-icon>
       {{ $formatTime(timeLeftCurrent) }}
     </v-chip>
-    <gb-tooltip v-if="upgrade.persistent" :min-width="0">
+    <gb-tooltip key="upgrade-persistent-collapse" v-if="upgrade.persistent" :min-width="0">
       <template v-slot:activator="{ on, attrs }">
-        <v-icon class="ma-1" v-if="upgrade.persistent" small v-bind="attrs" v-on="on">mdi-lock</v-icon>
+        <v-icon class="ma-1" small v-bind="attrs" v-on="on">mdi-lock</v-icon>
       </template>
       <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.persistent`) }}</div>
     </gb-tooltip>
     <v-spacer></v-spacer>
-    <gb-tooltip>
+    <v-btn key="upgrade-max-collapse" small v-if="!isMax" class="ma-1 px-2" color="primary" :disabled="!canAfford || disabled" @click="buyMax">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
+    <gb-tooltip key="upgrade-buy-collapse">
       <template v-slot:activator="{ on, attrs }">
         <div class="ma-1 rounded" v-bind="attrs" v-on="on">
           <v-btn class="px-2" v-if="!isMax" color="primary" :disabled="!canAfford || disabled" @click="buy">{{ $vuetify.lang.t(upgradeTranslation) }}</v-btn>
@@ -62,7 +63,7 @@
         <price-tag class="ma-1" v-for="(amount, currency, index) in price" :key="currency + '-' + index" :currency="currency" :amount="amount"></price-tag>
         <v-spacer></v-spacer>
         <div>
-          <gb-tooltip v-if="!upgrade.hideCap && !isNearMax" :min-width="350" :title-text="$vuetify.lang.t('$vuetify.upgrade.nextLevels')">
+          <gb-tooltip key="upgrade-predict" v-if="!upgrade.hideCap && !isNearMax" :min-width="350" :title-text="$vuetify.lang.t('$vuetify.upgrade.nextLevels')">
             <template v-slot:activator="{ on, attrs }">
               <v-icon class="mx-1" v-bind="attrs" v-on="on">mdi-crystal-ball</v-icon>
             </template>
@@ -87,13 +88,13 @@
       <slot></slot>
     </v-card-text>
     <v-card-actions>
-      <gb-tooltip v-if="subtype !== null" :min-width="0">
+      <gb-tooltip key="upgrade-subtype" v-if="subtype !== null" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
           <v-icon class="ma-1" small v-bind="attrs" v-on="on">{{ subtypeIcon }}</v-icon>
         </template>
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.upgrade.subtype.${ subtype }`) }}</div>
       </gb-tooltip>
-      <gb-tooltip v-if="upgrade.bought || (upgrade.cap !== null && !upgrade.hideCap)" :min-width="0">
+      <gb-tooltip key="upgrade-bought" v-if="upgrade.bought || (upgrade.cap !== null && !upgrade.hideCap)" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
           <v-chip
             :small="$vuetify.breakpoint.xsOnly"
@@ -111,6 +112,7 @@
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.bought`) }}</div>
       </gb-tooltip>
       <v-chip
+        key="upgrade-time"
         :small="$vuetify.breakpoint.xsOnly"
         :label="$vuetify.breakpoint.xsOnly"
         class="ma-1"
@@ -120,7 +122,7 @@
         <v-icon class="mr-1">mdi-timer</v-icon>
         {{ $formatTime(timeNeededNext) }}
       </v-chip>
-      <gb-tooltip v-if="upgrade.raiseOtherCap" :min-width="350" :title-text="$vuetify.lang.t(`$vuetify.upgrade.${ upgrade.raiseOtherCap }`)">
+      <gb-tooltip key="upgrade-other" v-if="upgrade.raiseOtherCap" :min-width="350" :title-text="$vuetify.lang.t(`$vuetify.upgrade.${ upgrade.raiseOtherCap }`)">
         <template v-slot:activator="{ on, attrs }">
           <v-icon class="mx-1" v-bind="attrs" v-on="on">mdi-book-arrow-up</v-icon>
         </template>
@@ -139,9 +141,9 @@
       <v-btn v-if="!isMax" :data-cy="`upgrade-${ name }-buy`" color="primary" :disabled="!canAfford || disabled" @click="buy">{{ $vuetify.lang.t(upgradeTranslation) }}</v-btn>
     </v-card-actions>
     <v-btn class="upgrade-collapse" icon @click="toggleCollapse"><v-icon>mdi-arrow-collapse</v-icon></v-btn>
-    <gb-tooltip v-if="upgrade.persistent" :min-width="0">
+    <gb-tooltip key="upgrade-persistent" v-if="upgrade.persistent" :min-width="0">
       <template v-slot:activator="{ on, attrs }">
-        <v-icon class="upgrade-persistent" v-if="upgrade.persistent" small v-bind="attrs" v-on="on">mdi-lock</v-icon>
+        <v-icon class="upgrade-persistent" small v-bind="attrs" v-on="on">mdi-lock</v-icon>
       </template>
       <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.persistent`) }}</div>
     </gb-tooltip>

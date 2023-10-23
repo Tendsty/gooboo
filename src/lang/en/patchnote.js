@@ -251,7 +251,7 @@ export default {
     199: 'Upgrades that have their maximum level increased by books now always use linear scaling after their regular maximum level',
     200: 'Added a keybind to go to the previous feature',
     201: 'You now get 5 times as much nostalgia from all sources',
-    202: 'Soul gain and capacity doubled',
+    202: 'Soul capacity doubled',
     203: 'Raised the prices of most mid-game prestige upgrades',
     204: '"Red card" bonus monster part capacity',
     205: 'Base bone capacity',
@@ -270,6 +270,11 @@ export default {
     218: 'Gene yield increase',
     219: 'Gene gold chance increase',
     220: '"Double" gene rare drop chance increase',
+    221: 'The "Nihilist" and "Black hole" achievement now state correctly that they count sacrifices instead of offerings',
+    222: 'You can now buy max upgrades in collapsed view',
+    223: 'Gene experience increase',
+    224: 'Added an experimental setting to show resource gain timers',
+    225: 'The pickaxe crafting tooltip now explains ore quality',
   },
   v: {
     1: {

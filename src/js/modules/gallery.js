@@ -75,10 +75,10 @@ export default {
         galleryInspirationStart: {}
     },
     currency: {
-        beauty: {color: 'deep-purple', icon: 'mdi-image-filter-vintage', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true},
-        converter: {color: 'pale-green', icon: 'mdi-recycle', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
+        beauty: {color: 'deep-purple', icon: 'mdi-image-filter-vintage', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, showGainTimer: true, timerIsEstimate: true},
+        converter: {color: 'pale-green', icon: 'mdi-recycle', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
         inspiration: {color: 'yellow', icon: 'mdi-lightbulb-on'},
-        package: {color: 'beige', icon: 'mdi-package-variant', overcapMult: 0.8, overcapScaling: 0.8, gainMult: {baseValue: 0.025, display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 5}},
+        package: {color: 'beige', icon: 'mdi-package-variant', overcapMult: 0.8, overcapScaling: 0.8, gainMult: {baseValue: 0.025, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 5}},
         cash: {type: 'prestige', alwaysVisible: true, color: 'green', icon: 'mdi-cash', gainMult: {}}
     },
     note: buildArray(10).map(() => 'g'),
@@ -97,7 +97,7 @@ export default {
 
             store.dispatch('currency/init', {feature: 'gallery', multUnlock: 'galleryFeature', name: elem, color: elem, icon: 'mdi-liquid-spot', currencyMult: {
                 [`currencyGallery${ capitalize(colorMult) }Gain`]: {type: 'base', value: val => val > 100 ? Math.pow(val * 100, 0.5) : val}
-            }, gainMult: {display: 'perSecond'}, showGainMult: true});
+            }, gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, timerIsEstimate: true});
             store.dispatch('currency/init', {feature: 'gallery', multUnlock: 'galleryDrums', name: elem + 'Drum', color: elem, icon: 'mdi-barrel', currencyMult: elem === 'red' ? {
                 currencyGalleryBeautyGain: {type: 'mult', value: val => Math.pow(val * 0.1 + 1, 2)}
             } : {

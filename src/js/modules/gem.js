@@ -74,19 +74,29 @@ export default {
     unlock: ['gemFeature'],
     currency: {
         // Permanent upgrades
-        ruby: {color: 'red', icon: 'mdi-rhombus'},
+        ruby: {color: 'red', icon: 'mdi-rhombus', gainTimerFunction() {
+            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        }, timerIsEstimate: true},
 
         // Replacable items (semi-permanent)
-        emerald: {color: 'green', icon: 'mdi-hexagon'},
+        emerald: {color: 'green', icon: 'mdi-hexagon', gainTimerFunction() {
+            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        }, timerIsEstimate: true},
 
         // Instant or temporary boosts
-        sapphire: {color: 'indigo', icon: 'mdi-pentagon'},
+        sapphire: {color: 'indigo', icon: 'mdi-pentagon', gainTimerFunction() {
+            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        }, timerIsEstimate: true},
 
         // Cosmetic items
-        amethyst: {color: 'purple', icon: 'mdi-cards-diamond'},
+        amethyst: {color: 'purple', icon: 'mdi-cards-diamond', gainTimerFunction() {
+            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        }, timerIsEstimate: true},
 
         // Event currency
-        topaz: {color: 'amber', icon: 'mdi-triangle', overcapMult: 0, capMult: {round: true, baseValue: 1000}},
+        topaz: {color: 'amber', icon: 'mdi-triangle', overcapMult: 0, capMult: {round: true, baseValue: 1000}, gainTimerFunction() {
+            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        }, timerIsEstimate: true},
 
         // Rare currency
         diamond: {color: 'cyan', icon: 'mdi-diamond'},

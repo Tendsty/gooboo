@@ -595,7 +595,7 @@ export default {
             }
             if (maxZone >= HORDE_MINIBOSS_MIN_ZONE) {
                 const zoneBase = maxZone - HORDE_MINIBOSS_MIN_ZONE;
-                dispatch('mult/setBase', {name: 'currencyHordeSoulCorruptedGain', key: 'zoneCleared', value: Math.pow(1.16, zoneBase) * (zoneBase + 1) * 2}, {root: true});
+                dispatch('mult/setBase', {name: 'currencyHordeSoulCorruptedGain', key: 'zoneCleared', value: Math.pow(1.16, zoneBase) * (zoneBase + 1)}, {root: true});
             }
             if (maxZone >= HORDE_HEIRLOOM_MIN_ZONE) {
                 const zoneBase = maxZone - HORDE_HEIRLOOM_MIN_ZONE;

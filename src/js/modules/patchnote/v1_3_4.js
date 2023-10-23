@@ -41,6 +41,14 @@ export default {
             {
                 type: 'qol',
                 text: '200'
+            },
+            {
+                type: 'qol',
+                text: '222'
+            },
+            {
+                type: 'new',
+                text: '224'
             }
         ],
         mining: [
@@ -52,6 +60,11 @@ export default {
             {
                 type: 'qol',
                 text: '190'
+            },
+            {
+                unlock: 'miningPickaxeCrafting',
+                type: 'clarity',
+                text: '225'
             }
         ],
         note: [
@@ -69,6 +82,11 @@ export default {
                 unlock: 'villageOffering1',
                 type: 'clarity',
                 text: '195'
+            },
+            {
+                unlock: 'villageOffering1',
+                type: 'clarity',
+                text: '221'
             }
         ],
         achievement: [
@@ -202,7 +220,7 @@ export default {
                 text: '217',
                 balance: 'nerf',
                 before: 'x0.8',
-                after: 'x0.9'
+                after: 'x0.92'
             },
             {
                 unlock: 'farmCropExp',
@@ -227,6 +245,14 @@ export default {
                 balance: 'buff',
                 before: 'x1.2',
                 after: 'x1.3'
+            },
+            {
+                unlock: 'farmCropExp',
+                type: 'balance',
+                text: '223',
+                balance: 'nerf',
+                before: '+0.5',
+                after: '+0.35'
             }
         ],
         event: [

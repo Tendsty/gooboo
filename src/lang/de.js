@@ -1153,6 +1153,14 @@ export default {
       treasureDelete: {
         name: 'Schätze löschen'
       }
+    },
+    experiment: {
+      name: 'Experimentell',
+      warning: 'Diese Einstellungen sind noch experimentell und können fehlerhaft, unfertig, langsam oder verwirrend sein. Aktiviere sie auf eigene Gefahr, und bitte gebe Feedback, falls du sie benutzen solltest! Wenn diese Sektion leer ist, sind gerade keine experimentellen Einstellungen vorhanden oder dein Fortschritt reicht nicht aus, um sie zu sehen',
+      gainTimer: {
+        name: 'Einkommen-Timer anzeigen',
+        description: 'Zeigt die benötigte Zeit an, um die Kapazität zu erreichen oder eine Verbesserung zu kaufen. Manche Ressourcen mit irregulärem Einkommen zeigen Schätzwerte an, und nicht alle Ressourcen haben diese Funktion'
+      }
     }
   },
   statBreakdown: {
@@ -1235,6 +1243,7 @@ export default {
       power: 'Stärke',
       purity: 'Reinheit',
       impurity: 'Unreinheit',
+      oreQuality: 'Die Menge an benötigten Erzen zum Herstellen einer Spitzhacke wird durch deine Erz-Qualität geteilt',
       craftPickaxe: 'Spitzhacke herstellen',
       purityDescription: 'Um 50% minimale Qualität zu erreichen, muss die Reinheit so hoch wie die Unreinheit sein.',
       premiumSlot: 'Dies ist ein Premium-Herstellplatz. Unreinheit über x1 ist halbiert und Reinheit verdoppelt.'
@@ -1735,8 +1744,8 @@ export default {
     },
     cropUpgrade: {
       yield: 'x1.25 Ertrag',
-      grow: 'x0.9 Wachstumszeit',
-      exp: '+0.5 Erfahrung',
+      grow: 'x0.92 Wachstumszeit',
+      exp: '+0.35 Erfahrung',
       gold: 'x1.35 Goldchance',
       overgrow: '+50% Überwuchern',
       cost: 'x0.75 Kosten, mindestens -1 weniger',

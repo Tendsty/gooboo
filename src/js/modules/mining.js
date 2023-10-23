@@ -273,24 +273,67 @@ export default {
         {mult: 'miningRareEarthGain', name: 'currencyGain', subtype: 'rareEarth'}
     ],
     currency: {
-        scrap: {color: 'brown', icon: 'mdi-dots-triangle', gainMult: {}, capMult: {baseValue: buildNum(10, 'K')}},
-        oreAluminium: {subtype: 'ore', color: 'blue-grey', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 12, round: true}},
-        oreCopper: {subtype: 'ore', color: 'orange', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 4, round: true}},
-        oreTin: {subtype: 'ore', color: 'grey', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 2, round: true}},
-        oreIron: {subtype: 'ore', color: 'deep-orange', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 1, round: true}},
-        oreTitanium: {subtype: 'ore', color: 'pale-light-green', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 1, round: true}},
-        orePlatinum: {subtype: 'ore', color: 'skyblue', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 1, round: true}},
+        scrap: {color: 'brown', icon: 'mdi-dots-triangle', gainMult: {}, capMult: {baseValue: buildNum(10, 'K')}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            return hitsNeeded === Infinity ? null : (((hitsNeeded + MINING_SCRAP_BREAK) * store.getters['mining/currentScrap']) / hitsNeeded);
+        }, timerIsEstimate: true},
+        oreAluminium: {subtype: 'ore', color: 'blue-grey', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 12, round: true}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const oreGain = store.getters['mining/currentOre'];
+            return (hitsNeeded === Infinity || !oreGain.oreAluminium) ? null : (((hitsNeeded + MINING_ORE_BREAK) * oreGain.oreAluminium.amount) / hitsNeeded);
+        }, timerIsEstimate: true},
+        oreCopper: {subtype: 'ore', color: 'orange', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 4, round: true}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const oreGain = store.getters['mining/currentOre'];
+            return (hitsNeeded === Infinity || !oreGain.oreCopper) ? null : (((hitsNeeded + MINING_ORE_BREAK) * oreGain.oreCopper.amount) / hitsNeeded);
+        }, timerIsEstimate: true},
+        oreTin: {subtype: 'ore', color: 'grey', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 2, round: true}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const oreGain = store.getters['mining/currentOre'];
+            return (hitsNeeded === Infinity || !oreGain.oreTin) ? null : (((hitsNeeded + MINING_ORE_BREAK) * oreGain.oreTin.amount) / hitsNeeded);
+        }, timerIsEstimate: true},
+        oreIron: {subtype: 'ore', color: 'deep-orange', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 1, round: true}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const oreGain = store.getters['mining/currentOre'];
+            return (hitsNeeded === Infinity || !oreGain.oreIron) ? null : (((hitsNeeded + MINING_ORE_BREAK) * oreGain.oreIron.amount) / hitsNeeded);
+        }, timerIsEstimate: true},
+        oreTitanium: {subtype: 'ore', color: 'pale-light-green', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 1, round: true}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const oreGain = store.getters['mining/currentOre'];
+            return (hitsNeeded === Infinity || !oreGain.oreTitanium) ? null : (((hitsNeeded + MINING_ORE_BREAK) * oreGain.oreTitanium.amount) / hitsNeeded);
+        }, timerIsEstimate: true},
+        orePlatinum: {subtype: 'ore', color: 'skyblue', icon: 'mdi-chart-bubble', gainMult: {}, capMult: {baseValue: 1, round: true}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const oreGain = store.getters['mining/currentOre'];
+            return (hitsNeeded === Infinity || !oreGain.orePlatinum) ? null : (((hitsNeeded + MINING_ORE_BREAK) * oreGain.orePlatinum.amount) / hitsNeeded);
+        }, timerIsEstimate: true},
         barAluminium: {subtype: 'bar', color: 'blue-grey', icon: 'mdi-gold'},
         barBronze: {subtype: 'bar', color: 'pale-orange', icon: 'mdi-gold'},
         barSteel: {subtype: 'bar', color: 'grey', icon: 'mdi-gold'},
         barTitanium: {subtype: 'bar', color: 'pale-green', icon: 'mdi-gold'},
         barShiny: {subtype: 'bar', color: 'pale-blue', icon: 'mdi-gold'},
-        granite: {subtype: 'rareEarth', color: 'skyblue', icon: 'mdi-cube', gainMult: {}},
-        salt: {subtype: 'rareEarth', color: 'lighter-grey', icon: 'mdi-shaker', gainMult: {}},
+        granite: {subtype: 'rareEarth', color: 'skyblue', icon: 'mdi-cube', gainMult: {}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const rareDropGain = store.getters['mining/rareDrops'];
+            return (hitsNeeded === Infinity || !rareDropGain.granite) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.granite) / hitsNeeded);
+        }, timerIsEstimate: true},
+        salt: {subtype: 'rareEarth', color: 'lighter-grey', icon: 'mdi-shaker', gainMult: {}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const rareDropGain = store.getters['mining/rareDrops'];
+            return (hitsNeeded === Infinity || !rareDropGain.salt) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.salt) / hitsNeeded);
+        }, timerIsEstimate: true},
         coal: {color: 'dark-grey', icon: 'mdi-chart-bubble', gainMult: {}},
-        sulfur: {subtype: 'rareEarth', color: 'pale-yellow', icon: 'mdi-fire-circle', gainMult: {}},
+        sulfur: {subtype: 'rareEarth', color: 'pale-yellow', icon: 'mdi-fire-circle', gainMult: {}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const rareDropGain = store.getters['mining/rareDrops'];
+            return (hitsNeeded === Infinity || !rareDropGain.sulfur) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.sulfur) / hitsNeeded);
+        }, timerIsEstimate: true},
         niter: {color: 'pale-light-green', icon: 'mdi-water-circle', gainMult: {}},
-        obsidian: {subtype: 'rareEarth', color: 'pale-purple', icon: 'mdi-cone', gainMult: {}},
+        obsidian: {subtype: 'rareEarth', color: 'pale-purple', icon: 'mdi-cone', gainMult: {}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const rareDropGain = store.getters['mining/rareDrops'];
+            return (hitsNeeded === Infinity || !rareDropGain.obsidian) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.obsidian) / hitsNeeded);
+        }, timerIsEstimate: true},
         smoke: {color: 'grey', icon: 'mdi-smoke', gainMult: {}, capMult: {baseValue: 10}, overcapScaling: 0.25},
         ember: {type: 'prestige', color: 'orange-red', icon: 'mdi-fire', overcapMult: 0, gainMult: {}, capMult: {baseValue: 100}, currencyMult: {
             miningSmelterySpeed: {type: 'mult', value: val => val * 0.02 + 1}

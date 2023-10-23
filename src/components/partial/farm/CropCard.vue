@@ -209,7 +209,7 @@ export default {
       let arr = [];
 
       if (this.crop.upgrades.exp) {
-        arr.push({name: 'farmUpgrade_exp', value: this.crop.upgrades.exp * 0.5});
+        arr.push({name: 'farmUpgrade_exp', value: this.crop.upgrades.exp * 0.35});
       }
 
       return arr;

@@ -356,6 +356,18 @@ export default {
                         defaultValue: true
                     }
                 }
+            },
+            experiment: {
+                unlock: null,
+                items: {
+                    gainTimer: {
+                        unlock: null,
+                        hasDescription: true,
+                        type: 'switch',
+                        value: false,
+                        defaultValue: false
+                    }
+                }
             }
         },
         keybinds: {

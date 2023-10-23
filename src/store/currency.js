@@ -93,6 +93,9 @@ export default {
                 currencyMult: o.currencyMult ?? null,
                 overcapMult: o.overcapMult ?? 0.25,
                 overcapScaling: o.overcapScaling ?? 0.5,
+                showGainTimer: o.showGainTimer ?? false,
+                gainTimerFunction: o.gainTimerFunction ?? null,
+                timerIsEstimate: o.timerIsEstimate ?? false,
                 color: o.color ?? '#808080',
                 icon: o.icon ?? 'mdi-sack'
             });

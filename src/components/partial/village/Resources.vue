@@ -20,7 +20,13 @@
     <div v-if="stat.village_knowledge.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.mental`) }}</div>
     <div class="d-flex flex-wrap justify-center ma-1">
       <template v-for="item in mental">
-        <currency :key="item" class="ma-1" :class="{'premium-glow': mental_premium.includes(item) && upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}" :name="item">
+        <currency
+          :key="item"
+          class="ma-1"
+          :class="{'premium-glow': mental_premium.includes(item) && upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}"
+          :name="item"
+          :gainBase="item === 'village_joy' ? joyGainBase : null"
+        >
           <alert-text v-if="item === 'village_faith'" type="info">{{ $vuetify.lang.t('$vuetify.village.faithNotAffected') }}</alert-text>
         </currency>
       </template>
@@ -93,7 +99,8 @@ export default {
     }),
     ...mapGetters({
       list: 'currency/list',
-      lootWeights: 'village/lootWeights'
+      lootWeights: 'village/lootWeights',
+      joyGainBase: 'village/joyGainBase'
     }),
     foodConsumption() {
       return this.$store.getters['mult/get']('villageTaxRate') * this.$store.getters['village/employed'];

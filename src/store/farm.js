@@ -81,7 +81,7 @@ export default {
         },
         cropExp: (state, getters, rootState, rootGetters) => (name) => {
             const crop = state.crop[name];
-            return rootGetters['mult/get']('farmExperience', crop.upgrades.exp * 0.5, Math.pow(1.5, crop.upgrades.double));
+            return rootGetters['mult/get']('farmExperience', crop.upgrades.exp * 0.35, Math.pow(1.5, crop.upgrades.double));
         },
         cropGoldChance: (state) => (name) => {
             const crop = state.crop[name];
@@ -89,7 +89,7 @@ export default {
         },
         cropGrow: (state) => (name, mult = 1) => {
             const crop = state.crop[name];
-            return Math.ceil(crop.grow / mult * Math.pow(2, crop.upgrades.double) * Math.pow(0.9, crop.upgrades.grow));
+            return Math.ceil(crop.grow / mult * Math.pow(2, crop.upgrades.double) * Math.pow(0.92, crop.upgrades.grow));
         },
         cropCost: (state) => (name) => {
             const crop = state.crop[name];
@@ -532,7 +532,7 @@ export default {
                 state.cropUpgrades.forEach(elem => {
                     if (!state.crop[name].nextUpgrades.includes(elem) && (
                         !(elem === 'cost' && state.crop[name].cost <= ((state.crop[name].upgrades.cost + 1) * 2)) && // Cannot reduce cost below 50%
-                        !(elem === 'grow' && getters.cropGrow(name) < (100 / 9)) &&                                  // Minimum grow time of 10m
+                        !(elem === 'grow' && getters.cropGrow(name) < 12.5) &&                                       // Always reduce grow time by at least 1m
                         !(elem === 'double' && getters.cropGrow(name) > 1800) &&                                     // Maximum grow time of 2d 12h
                         !(elem === 'fertile' && !rootState.unlock.farmFertilizer.see) &&                             // Fertilizer needs to be unlocked
                         !(elem === 'drops' && state.crop[name].rareDrop.length <= 0)                                 // Needs at least one rare drop

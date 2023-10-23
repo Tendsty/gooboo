@@ -2,6 +2,9 @@ export default {
   overcapGain: 'Einkommen ist durch Überkapazität auf {0}% reduziert',
   overcapNoGain: 'Kein Einkommen aufgrund von Überkapazität',
   benefitLoss: 'Der Kauf führt zum Verlust von Vorteilen',
+  gainTimerNeeded: 'Kaufbar in {0}',
+  capTimerNeeded: 'Kapazität erreicht in {0}',
+  overcapTimerNeeded: 'Nächste Kapazitätsstufe erreicht in {0}',
 
   // Premium currencies
   gem_ruby: {
