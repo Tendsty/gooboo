@@ -275,6 +275,8 @@ export default {
     223: 'Gen: Erfahrung-Anstieg',
     224: 'Eine experimentelle Einstellung wurde hinzugefügt, um Timer für Rohstoffeinkommen anzuzeigen',
     225: 'Der Tooltip zum Herstellen einer Spitzhacke erklärt nun Erz-Qualität',
+    226: 'Das Spiel sollte nun wieder speichern können, wenn Setnamen Emojis enthalten',
+    227: 'Datensicherungen von der Offline-Zusammenfassung gehen nicht mehr nach einer Migration kaputt',
   },
   v: {
     1: {

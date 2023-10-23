@@ -670,7 +670,7 @@ export default {
 
         if (store.state.horde.loadout.length > 0) {
             obj.loadout = store.state.horde.loadout.map(elem => {
-                return {name: elem.name, content: elem.content};
+                return {name: encodeURIComponent(elem.name), content: elem.content};
             });
         }
 
@@ -773,7 +773,7 @@ export default {
             data.loadout.forEach(elem => {
                 store.commit('horde/addExistingLoadout', {
                     id: nextId,
-                    name: elem.name,
+                    name: decodeURIComponent(elem.name),
                     content: elem.content
                 });
                 nextId++;

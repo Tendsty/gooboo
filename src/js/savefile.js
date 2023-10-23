@@ -20,8 +20,10 @@ import v1_1_2 from "./modules/migration/v1_1_2";
 import v1_3_0 from "./modules/migration/v1_3_0";
 import { APP_TESTING } from "./constants";
 import v1_3_4 from "./modules/migration/v1_3_4";
+import v1_3_5 from "./modules/migration/v1_3_5";
 
 const migrations = {
+    '1.3.5': v1_3_5,
     '1.3.4': v1_3_4,
     '1.3.0': v1_3_0,
     '1.1.2': v1_1_2,

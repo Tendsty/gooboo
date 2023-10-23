@@ -63,7 +63,7 @@ function loadGame(file, runPrepare = true) {
             store.commit('system/updateKey', {key: 'screen', value: 'mining'});
         } else {
             store.commit('system/updateKey', {key: 'screen', value: 'offlineSummary'});
-            store.commit('system/updateKey', {key: 'oldSavefile', value: parsedFile});
+            store.commit('system/updateKey', {key: 'oldSavefile', value: decodeFile(file)});
         }
 
         store.commit('upgrade/initCache');
