@@ -275,6 +275,8 @@ export default {
     223: 'Gene experience increase',
     224: 'Added an experimental setting to show resource gain timers',
     225: 'The pickaxe crafting tooltip now explains ore quality',
+    226: 'The game should now be able to save again if your loadout names contained emojis',
+    227: 'Fixed backups from the offline summary breaking if migrations occur',
   },
   v: {
     1: {

@@ -137,8 +137,8 @@
         </div>
       </gb-tooltip>
       <v-spacer></v-spacer>
-      <v-btn small v-if="!isMax" color="primary" :disabled="!canAfford || disabled" @click="buyMax">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
-      <v-btn v-if="!isMax" :data-cy="`upgrade-${ name }-buy`" color="primary" :disabled="!canAfford || disabled" @click="buy">{{ $vuetify.lang.t(upgradeTranslation) }}</v-btn>
+      <v-btn key="upgrade-buy-max" small v-if="!isMax" color="primary" :disabled="!canAfford || disabled" @click="buyMax">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
+      <v-btn key="upgrade-buy" v-if="!isMax" :data-cy="`upgrade-${ name }-buy`" color="primary" :disabled="!canAfford || disabled" @click="buy">{{ $vuetify.lang.t(upgradeTranslation) }}</v-btn>
     </v-card-actions>
     <v-btn class="upgrade-collapse" icon @click="toggleCollapse"><v-icon>mdi-arrow-collapse</v-icon></v-btn>
     <gb-tooltip key="upgrade-persistent" v-if="upgrade.persistent" :min-width="0">
