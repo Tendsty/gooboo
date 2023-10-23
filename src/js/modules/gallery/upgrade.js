@@ -1,6 +1,6 @@
 import store from "../../../store";
 import { buildNum } from "../../utils/format";
-import { splicedPow } from "../../utils/math";
+import { splicedPowLinear } from "../../utils/math";
 
 export default {
     newStyle: {cap: 10, note: 'gallery_1', price(lvl) {
@@ -19,7 +19,7 @@ export default {
     }, price(lvl) {
         return {gallery_red: Math.pow(2.5, lvl) * 2};
     }, effect: [
-        {name: 'currencyGalleryBeautyGain', type: 'mult', value: lvl => splicedPow(1.25, 1.1, 15, lvl)}
+        {name: 'currencyGalleryBeautyGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
     redConversion: {cap: 10, note: 'gallery_3', requirement() {
         return store.state.stat.gallery_red.total > 0;
@@ -41,7 +41,7 @@ export default {
     }, price(lvl) {
         return {gallery_orange: Math.pow(2.5, lvl) * 2};
     }, effect: [
-        {name: 'currencyGalleryRedGain', type: 'mult', value: lvl => splicedPow(1.25, 1.1, 15, lvl)}
+        {name: 'currencyGalleryRedGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
     redLuck: {cap: 40, hasDescription: true, requirement() {
         return store.state.stat.gallery_orange.total > 0 && store.state.unlock.galleryDrums.see;
@@ -91,7 +91,7 @@ export default {
     }, price(lvl) {
         return {gallery_yellow: Math.pow(2.5, lvl) * 2};
     }, effect: [
-        {name: 'currencyGalleryOrangeGain', type: 'mult', value: lvl => splicedPow(1.25, 1.1, 15, lvl)}
+        {name: 'currencyGalleryOrangeGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
     orangeLuck: {cap: 40, requirement() {
         return store.state.stat.gallery_yellow.total > 0 && store.state.unlock.galleryDrums.see;
@@ -120,7 +120,7 @@ export default {
     }, price(lvl) {
         return {gallery_green: Math.pow(2.5, lvl) * 2};
     }, effect: [
-        {name: 'currencyGalleryYellowGain', type: 'mult', value: lvl => splicedPow(1.25, 1.1, 15, lvl)}
+        {name: 'currencyGalleryYellowGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
     yellowLuck: {cap: 40, requirement() {
         return store.state.stat.gallery_green.total > 0 && store.state.unlock.galleryDrums.see;
@@ -150,7 +150,7 @@ export default {
     }, price(lvl) {
         return {gallery_blue: Math.pow(2.5, lvl) * 2};
     }, effect: [
-        {name: 'currencyGalleryGreenGain', type: 'mult', value: lvl => splicedPow(1.25, 1.1, 15, lvl)}
+        {name: 'currencyGalleryGreenGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
     greenLuck: {cap: 40, requirement() {
         return store.state.stat.gallery_blue.total > 0 && store.state.unlock.galleryDrums.see;
@@ -172,7 +172,7 @@ export default {
     }, price(lvl) {
         return {gallery_purple: Math.pow(2.5, lvl) * 2};
     }, effect: [
-        {name: 'currencyGalleryBlueGain', type: 'mult', value: lvl => splicedPow(1.25, 1.1, 15, lvl)}
+        {name: 'currencyGalleryBlueGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
     blueLuck: {cap: 40, requirement() {
         return store.state.stat.gallery_purple.total > 0 && store.state.unlock.galleryDrums.see;

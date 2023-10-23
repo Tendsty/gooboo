@@ -6,6 +6,10 @@ export default {
     meta_3: 'Mehrere Funktionen. Alle laufen gleichzeitig weiter.',
     meta_4: 'Vernachlässige keine Funktion. Alle wichtig.',
     meta_5: 'Globale Stufe. Schaltet neue Funktionen frei. Fortschritt in Funktionen zum Erhöhen.',
+    meta_6: {
+      title: 'Sichere den Spielstand!',
+      text: 'Browser-basierte Spielstände sind nicht immer zuverlässig, also sichere den Spielstand häufig! Nur ein kleiner Unfall reicht aus, um den gesamten Fortschritt auszulöschen, wie ein Browserabsturz, Stromausfall, der Browser stuft das Spiel irrtümlich als Tracker ein oder ein Spielfehler. Lade eine Sicherungskopie herunter, wenn der Hinweis auftaucht und wenn ein neues Update erscheint, und du solltest auf der sicheren Seite sein. iOS-Nutzer und Spieler auf itch sind gegenüber Spielstandverlust besonders gefährdet und sollten den Sicherungshinweis auf "Häufig" schalten'
+    },
 
     mining_0: 'Nutze Spitzhacke. Grabe tiefer.',
     mining_1: 'Sammle Schrott. Kaufe Verbesserungen.',

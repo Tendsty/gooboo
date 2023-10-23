@@ -75,10 +75,10 @@ export default {
         galleryInspirationStart: {}
     },
     currency: {
-        beauty: {color: 'deep-purple', icon: 'mdi-image-filter-vintage', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true},
-        converter: {color: 'pale-green', icon: 'mdi-recycle', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
+        beauty: {color: 'deep-purple', icon: 'mdi-image-filter-vintage', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, showGainTimer: true, timerIsEstimate: true},
+        converter: {color: 'pale-green', icon: 'mdi-recycle', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
         inspiration: {color: 'yellow', icon: 'mdi-lightbulb-on'},
-        package: {color: 'beige', icon: 'mdi-package-variant', overcapMult: 0.8, overcapScaling: 0.8, gainMult: {baseValue: 0.025, display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 5}},
+        package: {color: 'beige', icon: 'mdi-package-variant', overcapMult: 0.8, overcapScaling: 0.8, gainMult: {baseValue: 0.025, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 5}},
         cash: {type: 'prestige', alwaysVisible: true, color: 'green', icon: 'mdi-cash', gainMult: {}}
     },
     note: buildArray(10).map(() => 'g'),
@@ -97,7 +97,7 @@ export default {
 
             store.dispatch('currency/init', {feature: 'gallery', multUnlock: 'galleryFeature', name: elem, color: elem, icon: 'mdi-liquid-spot', currencyMult: {
                 [`currencyGallery${ capitalize(colorMult) }Gain`]: {type: 'base', value: val => val > 100 ? Math.pow(val * 100, 0.5) : val}
-            }, gainMult: {display: 'perSecond'}, showGainMult: true});
+            }, gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, timerIsEstimate: true});
             store.dispatch('currency/init', {feature: 'gallery', multUnlock: 'galleryDrums', name: elem + 'Drum', color: elem, icon: 'mdi-barrel', currencyMult: elem === 'red' ? {
                 currencyGalleryBeautyGain: {type: 'mult', value: val => Math.pow(val * 0.1 + 1, 2)}
             } : {
@@ -106,13 +106,13 @@ export default {
                 [`currencyGallery${ capitalize(colorMult) }DrumCap`]: {type: 'bonus', value: val => val}
             }, overcapMult: 0, capMult: {baseValue: 10, round: true}});
 
-            store.commit('mult/init', {name: `gallery${ capitalize(elem) }Conversion`, unlock: 'galleryFeature', baseValue: 1}, {root: true});
-            store.commit('mult/init', {name: `gallery${ capitalize(elem) }DrumChance`, unlock: 'galleryDrums', display: 'percent'}, {root: true});
+            store.commit('mult/init', {feature: 'gallery', name: `gallery${ capitalize(elem) }Conversion`, unlock: 'galleryFeature', baseValue: 1}, {root: true});
+            store.commit('mult/init', {feature: 'gallery', name: `gallery${ capitalize(elem) }DrumChance`, unlock: 'galleryDrums', display: 'percent', min: 0, max: 1}, {root: true});
         });
 
-        store.commit('mult/init', {name: 'galleryColorGain', unlock: 'galleryFeature', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }Gain`)}, {root: true});
-        store.commit('mult/init', {name: 'galleryColorDrumChance', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `gallery${ capitalize(elem) }DrumChance`)}, {root: true});
-        store.commit('mult/init', {name: 'galleryColorDrumCap', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }DrumCap`)}, {root: true});
+        store.commit('mult/init', {feature: 'gallery', name: 'galleryColorGain', unlock: 'galleryFeature', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }Gain`)}, {root: true});
+        store.commit('mult/init', {feature: 'gallery', name: 'galleryColorDrumChance', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `gallery${ capitalize(elem) }DrumChance`)}, {root: true});
+        store.commit('mult/init', {feature: 'gallery', name: 'galleryColorDrumCap', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }DrumCap`)}, {root: true});
 
         for (const [key, elem] of Object.entries(idea)) {
             store.commit('gallery/initIdea', {name: key, ...elem});

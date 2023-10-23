@@ -16,7 +16,7 @@
 </style>
 
 <template>
-  <div :data-cy="id !== null ? `treasure-slot-${ id }` : undefined" @click="handleClick" class="treasure-item-slot bg-tile-default elevation-2 d-flex justify-center align-center rounded-lg" :class="{'treasure-item-slot-mobile': $vuetify.breakpoint.xsOnly}">
+  <div :data-cy="slotId !== null ? `treasure-slot-${ slotId }` : undefined" @click="handleClick" v-bind="$attrs" v-on="$listeners" class="treasure-item-slot bg-tile-default elevation-2 d-flex justify-center align-center rounded-lg" :class="{'treasure-item-slot-mobile': $vuetify.breakpoint.xsOnly}">
     <v-badge v-if="item" :value="itemType.icon" bordered :icon="itemType.icon" color="grey">
       <v-badge bordered overlap bottom :value="item.level > 0" :content="'+' + item.level" color="success">
         <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.treasure.tierItem`, item.tier + 1)">
@@ -25,13 +25,13 @@
           </template>
           <div class="d-flex align-center mt-0" v-for="(effect, index) in item.effect" :key="effect">
             <v-icon small class="mr-2">{{ featureIcon[effectToFeature[effect]].icon }}</v-icon>
-            <display-row class="flex-grow-1" :name="effect" type="mult" :before="itemValue[index]" :after="(id !== null && upgrading) ? itemValueNext[index] : null"></display-row>
+            <display-row class="flex-grow-1" :name="effect" type="mult" :before="itemValue[index]" :after="(slotId !== null && upgrading) ? itemValueNext[index] : null"></display-row>
           </div>
         </gb-tooltip>
       </v-badge>
     </v-badge>
-    <v-badge class="treasure-badge balloon-text-black" inline bordered left v-if="id !== null && upgrading && upgradeCost !== null" :content="'-' + $formatNum(upgradeCost)" color="amber"></v-badge>
-    <v-badge class="treasure-badge balloon-text-black" inline bordered left v-if="id !== null && deleting && destroyValue !== null" :content="'+' + $formatNum(destroyValue)" color="amber"></v-badge>
+    <v-badge class="treasure-badge balloon-text-black" inline bordered left v-if="slotId !== null && upgrading && upgradeCost !== null" :content="'-' + $formatNum(upgradeCost)" color="amber"></v-badge>
+    <v-badge class="treasure-badge balloon-text-black" inline bordered left v-if="slotId !== null && deleting && destroyValue !== null" :content="'+' + $formatNum(destroyValue)" color="amber"></v-badge>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ import DisplayRow from '../upgrade/DisplayRow.vue';
 export default {
   components: { DisplayRow },
   props: {
-    id: {
+    slotId: {
       type: Number,
       required: false,
       default: null
@@ -64,7 +64,7 @@ export default {
       if (this.itemObj !== null) {
         return this.itemObj;
       }
-      return this.id === -1 ? this.$store.state.treasure.newItem : (this.id < this.$store.state.treasure.items.length ? this.$store.state.treasure.items[this.id] : null);
+      return this.slotId === -1 ? this.$store.state.treasure.newItem : (this.slotId < this.$store.state.treasure.items.length ? this.$store.state.treasure.items[this.slotId] : null);
     },
     itemColor() {
       if (this.item === null) {
@@ -113,22 +113,22 @@ export default {
   },
   methods: {
     handleClick() {
-      if (this.id !== null) {
-        if (this.upgrading && this.upgradeCost !== null && (this.id === -1 ? this.$store.state.treasure.newItem : this.$store.state.treasure.items[this.id])) {
-          this.$store.dispatch('treasure/upgradeItem', this.id);
-        } else if (this.deleting && (this.id === -1 ? this.$store.state.treasure.newItem : this.$store.state.treasure.items[this.id])) {
+      if (this.slotId !== null) {
+        if (this.upgrading && this.upgradeCost !== null && (this.slotId === -1 ? this.$store.state.treasure.newItem : this.$store.state.treasure.items[this.slotId])) {
+          this.$store.dispatch('treasure/upgradeItem', this.slotId);
+        } else if (this.deleting && (this.slotId === -1 ? this.$store.state.treasure.newItem : this.$store.state.treasure.items[this.slotId])) {
           if (this.$store.state.system.settings.confirm.items.treasureDelete.value) {
             this.$store.commit('system/updateKey', {key: 'confirm', value: {
               type: 'treasureDelete',
-              id: this.id,
+              id: this.slotId,
               gain: {treasure_fragment: this.destroyValue},
             }});
           } else {
-            this.$store.dispatch('treasure/deleteItem', this.id);
+            this.$store.dispatch('treasure/deleteItem', this.slotId);
           }
         } else {
-          if (this.id !== -1 && this.$store.state.treasure.newItem && !this.$store.state.treasure.items[this.id]) {
-            this.$store.dispatch('treasure/moveItem', this.id);
+          if (this.slotId !== -1 && this.$store.state.treasure.newItem && !this.$store.state.treasure.items[this.slotId]) {
+            this.$store.dispatch('treasure/moveItem', {from: -1, to: this.slotId});
           }
         }
       }

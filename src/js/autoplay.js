@@ -713,7 +713,7 @@ async function autoplayEndOfDay() {
 
                 // Place it in an empty slot if one is available
                 if (emptyId !== null) {
-                    store.dispatch('treasure/moveItem', emptyId);
+                    store.dispatch('treasure/moveItem', {from: -1, to: emptyId});
                 } else {
                     store.dispatch('treasure/deleteItem', -1);
                 }

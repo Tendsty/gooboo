@@ -4,6 +4,9 @@
 // STEAM hides auto-updates and hides support links
 export const APP_ENV = 'WEB';
 
+// enable / disable testing version
+export const APP_TESTING = false;
+
 // time conversion
 export const SECONDS_PER_MINUTE = 60;
 export const SECONDS_PER_HOUR = 3600;
@@ -28,7 +31,9 @@ export const MINING_ENHANCEMENT_BAR_AMOUNT = 10;
 export const MINING_ENHANCEMENT_CHANCE_EXPONENT = 0.5;
 
 export const VILLAGE_COINS_PER_FOOD = 0.25;
+export const VILLAGE_JOY_MIN_HAPPINESS = 1.25;
 export const VILLAGE_JOY_PER_HAPPINESS = 0.2;
+export const VILLAGE_JOY_HAPPINESS_REDUCTION = 1.2;
 export const VILLAGE_MIN_HAPPINESS = 0.01;
 
 export const HORDE_COMBO_ATTACK = 1.025;
@@ -50,7 +55,7 @@ export const HORDE_MINIBOSS_MIN_ZONE = 21;
 export const HORDE_HEIRLOOM_MIN_ZONE = 31;
 export const HORDE_KEYS_PER_TOWER = 3;
 export const HORDE_HEIRLOOM_TOWER_FLOORS = 5;
-export const HORDE_HEIRLOOM_CHANCE_PER_NOSTALGIA = 0.008;
+export const HORDE_HEIRLOOM_CHANCE_PER_NOSTALGIA = 0.001;
 
 export const TREASURE_TIER_UPGRADE_MULT = 5;
 export const TREASURE_TIER_DESTROY_MULT = 4;

@@ -1,20 +1,28 @@
 <template>
-  <gb-tooltip>
-    <template v-slot:activator="{ on, attrs }">
-      <v-badge overlap dot :value="hasBadge">
-        <v-btn width="48" height="48" min-width="0" @click="showNote" :class="[$vnode.data.staticClass, buttonColor, $vuetify.theme.dark ? 'darken-2' : 'lighten-2']" v-bind="attrs" v-on="on">#{{ id }}</v-btn>
-      </v-badge>
-    </template>
-    <div>{{ $vuetify.lang.t(`$vuetify.note.text.${name}`) }}</div>
-    <div class="text-right">~ {{ $vuetify.lang.t(`$vuetify.note.author.${author}`) }}</div>
-  </gb-tooltip>
+  <v-badge overlap dot :value="hasBadge">
+    <v-btn
+      width="48"
+      height="48"
+      min-width="0"
+      @click="clickNote"
+      @mouseenter="hoverNote"
+      @mouseleave="unhoverNote"
+      :class="[buttonColor, $vuetify.theme.dark ? 'darken-2' : 'lighten-2', {'selected-primary': clicked === name}]"
+    >#{{ id }}</v-btn>
+  </v-badge>
 </template>
 
 <script>
 export default {
   props: {
     name: {
+      type: String,
       required: true
+    },
+    clicked: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   computed: {
@@ -32,7 +40,8 @@ export default {
         oppenschroe: 'pale-yellow',
         bellux: 'pale-green',
         onoclua: 'pale-blue',
-        omnisolix: 'pale-purple'
+        omnisolix: 'pale-purple',
+        system: 'blue-grey'
       }[this.author];
     },
     hasBadge() {
@@ -40,9 +49,20 @@ export default {
     }
   },
   methods: {
-    showNote() {
-      this.$store.commit('system/updateKey', {key: 'note', value: this.name});
+    clickNote() {
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        this.$emit('clickNote', this.name);
+      } else {
+        this.$store.commit('system/updateKey', {key: 'note', value: this.name});
+      }
       this.$store.commit('system/removeNoteHint', this.name);
+    },
+    hoverNote() {
+      this.$emit('hoverNote', this.name);
+      this.$store.commit('system/removeNoteHint', this.name);
+    },
+    unhoverNote() {
+      this.$emit('unhoverNote');
     }
   }
 }

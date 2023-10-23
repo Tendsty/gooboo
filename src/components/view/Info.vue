@@ -20,7 +20,10 @@
 <template>
   <div :class="$vuetify.breakpoint.mdAndUp ? 'scroll-container' : ''">
     <v-card class="ma-2">
-      <v-card-title class="justify-center">{{ $vuetify.lang.t('$vuetify.info.title') }} {{ version }}</v-card-title>
+      <v-card-title class="justify-center">
+        <span>{{ $vuetify.lang.t('$vuetify.info.title') }} {{ version }}</span>
+        <span v-if="isTestingVersion">-{{ $vuetify.lang.t('$vuetify.info.testing') }}</span>
+      </v-card-title>
       <v-card-subtitle class="text-center">{{ $vuetify.lang.t('$vuetify.info.subtitle') }}</v-card-subtitle>
       <v-card-text>
         <div class="mb-2">{{ $vuetify.lang.t('$vuetify.info.text') }}</div>
@@ -32,6 +35,15 @@
           <span>{{ $vuetify.lang.t('$vuetify.info.updates.desktop.2') }}</span>
         </div>
         <div v-else>{{ $vuetify.lang.t(`$vuetify.info.updates.${ appEnv }`) }}</div>
+        <alert-text v-if="isTestingVersion" class="mt-2">
+          <div>
+            <span>{{ $vuetify.lang.t('$vuetify.info.testingDescription.0') }}</span>
+            <a target="_blank" href="https://tendsty.github.io/gooboo">
+              <span>{{ $vuetify.lang.t('$vuetify.info.testingDescription.1') }}</span>
+            </a>
+            <span>{{ $vuetify.lang.t('$vuetify.info.testingDescription.2') }}</span>
+          </div>
+        </alert-text>
       </v-card-text>
       <v-card-actions class="flex-wrap justify-end">
         <v-spacer></v-spacer>
@@ -142,10 +154,12 @@
 
 <script>
 import { mapState } from 'vuex';
-import { APP_ENV } from '../../js/constants';
+import { APP_ENV, APP_TESTING } from '../../js/constants';
 import { numFormatters, numNegativeFormatters } from '../../js/utils/format';
+import AlertText from '../partial/render/AlertText.vue';
 
 export default {
+  components: { AlertText },
   data: () => ({
     timeUnits: ['s', 'm', 'h', 'd'],
     tech: {
@@ -155,7 +169,9 @@ export default {
         vuex: {github: 'https://github.com/vuejs/vuex', website: 'https://vuex.vuejs.org'},
         snackbars: {github: 'https://github.com/Aymkdn/v-snackbars'},
         color: {github: 'https://github.com/Qix-/color'},
-        mdi: {github: 'https://github.com/Templarian/MaterialDesign-Webfont'}
+        mdi: {github: 'https://github.com/Templarian/MaterialDesign-Webfont'},
+        jsfiledownload: {github: 'https://github.com/kennethjiang/js-file-download'},
+        seedrandom: {github: 'https://github.com/davidbau/seedrandom'}
       },
       fonts: {
         caveat: {googlefonts: 'https://fonts.google.com/specimen/Caveat'},
@@ -183,6 +199,9 @@ export default {
     },
     appEnv() {
       return APP_ENV.toLowerCase();
+    },
+    isTestingVersion() {
+      return APP_TESTING;
     }
   },
   methods: {

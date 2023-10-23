@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { capitalize } from "../js/utils/format";
 import { weightSelect } from "../js/utils/random";
+import { VILLAGE_JOY_HAPPINESS_REDUCTION, VILLAGE_JOY_MIN_HAPPINESS, VILLAGE_JOY_PER_HAPPINESS } from "../js/constants";
 
 export default {
     namespaced: true,
@@ -42,6 +43,10 @@ export default {
                 arr.push((quality - 200) * Math.pow(0.75, 5));
             }
             return arr;
+        },
+        joyGainBase: (state, getters, rootState, rootGetters) => {
+            const happiness = rootGetters['mult/get']('villageHappiness');
+            return happiness > VILLAGE_JOY_MIN_HAPPINESS ? ((happiness - VILLAGE_JOY_HAPPINESS_REDUCTION) * VILLAGE_JOY_PER_HAPPINESS) : 0;
         }
     },
     mutations: {

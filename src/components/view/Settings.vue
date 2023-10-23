@@ -12,6 +12,7 @@
       <v-tab v-for="(item, key) in settings" :key="'tab-' + key" :href="'#' + key">{{ $vuetify.lang.t(`$vuetify.settings.${key}.name`) }}</v-tab>
     </v-tabs>
     <div v-if="tab === 'keybinds'" :class="$vuetify.breakpoint.mdAndUp ? 'scroll-container-tab' : ''">
+      <keybind class="ma-2" name="prevMainFeature"></keybind>
       <keybind class="ma-2" name="nextMainFeature"></keybind>
       <template v-if="canSeeDebug">
         <keybind class="ma-2" name="debugSkip1m"></keybind>
@@ -29,6 +30,9 @@
           <setting-item class="ma-2" :category="tab" :name="key"></setting-item>
         </v-col>
       </v-row>
+      <div v-if="tab === 'experiment'" class="d-flex justify-center ma-2">
+        <alert-text type="warning" style="max-width: 600px;">{{ $vuetify.lang.t(`$vuetify.settings.experiment.warning`) }}</alert-text>
+      </div>
     </div>
   </div>
 </template>
@@ -36,12 +40,13 @@
 <script>
 import { mapState } from 'vuex';
 import { APP_ENV } from '../../js/constants';
+import AlertText from '../partial/render/AlertText.vue';
 import SettingItem from '../partial/settings/Item.vue'
 import Keybind from '../partial/settings/Keybind.vue'
 import ThemeItem from '../partial/settings/ThemeItem.vue';
 
 export default {
-  components: { SettingItem, Keybind, ThemeItem },
+  components: { SettingItem, Keybind, ThemeItem, AlertText },
   data: () => ({
     tab: 'general'
   }),

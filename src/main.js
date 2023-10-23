@@ -18,42 +18,44 @@ Vue.use(gbPlugin);
 
 // Handle javascript errors
 window.onerror = function(message, source, line, column) {
-  store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
-    type: 'error',
-    tech: 'javascript',
-    source,
-    message,
-    line,
-    column
-  }});
+    store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+        type: 'error',
+        tech: 'javascript',
+        source,
+        message,
+        line,
+        column
+    }});
 };
 
 const localFile = checkLocal();
 
 if (localFile) {
-  loadGame(localFile);
+    if (!loadGame(localFile)) {
+        newGame();
+    }
 } else {
-  newGame();
+    newGame();
 }
 
 Vue.component('gb-tooltip', GoobooTooltip);
 
 new Vue({
-  vuetify,
-  store,
-  render: h => h(App),
+    vuetify,
+    store,
+    render: h => h(App),
 
-  // Handle vue.js errors
-  errorCaptured: function(err) {
-    store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
-      type: 'error',
-      tech: 'vuejs',
-      source: err.fileName,
-      message: err.message,
-      line: err.lineNumber,
-      column: err.columnNumber
-    }});
-  }
+    // Handle vue.js errors
+    errorCaptured: function(err) {
+        store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+            type: 'error',
+            tech: 'vuejs',
+            source: err.fileName,
+            message: err.message,
+            line: err.lineNumber,
+            column: err.columnNumber
+        }});
+    }
 }).$mount('#app')
 
 // Duplicate tab check

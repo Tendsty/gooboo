@@ -394,6 +394,8 @@ export default {
             ) {
                 const stats = getters.pickaxeStats;
 
+                const rngGroup = Math.max(0, Math.ceil(Math.log(stats.baseQuality * (consumables.mining_goldenHammer ? 1 : stats.purity) / 10) * 4));
+
                 dispatch('consumable/useMultiple', consumables, {root: true});
 
                 if (stats.quality < state.pickaxePower) {
@@ -402,8 +404,9 @@ export default {
 
                 let rval = 0;
                 if (!consumables.mining_goldenHammer) {
-                    rval = 1 - rootGetters['system/nextRng']('pickaxe_craft')[0];
-                    commit('system/takeRng', 'pickaxe_craft', {root: true});
+                    let rngGen = rootGetters['system/getRng']('pickaxe_craft' + rngGroup);
+                    commit('system/nextRng', {name: 'pickaxe_craft' + rngGroup, amount: 1}, {root: true});
+                    rval = 1 - rngGen();
                     commit('stat/increaseTo', {feature: 'mining', name: 'craftingLuck', value: 1 / rval}, {root: true});
                 }
 
@@ -503,14 +506,15 @@ export default {
         enhance({ state, getters, rootGetters, commit, dispatch }, max = false) {
             if (state.enhancementIngredient !== null) {
                 const enhancement = state.enhancement[state.enhancementIngredient];
-                const rng = Math.pow(rootGetters['system/nextRng']('pickaxe_enhance')[0], MINING_ENHANCEMENT_CHANCE_EXPONENT);
+                let rngGen = rootGetters['system/getRng']('pickaxe_enhance');
+                const rng = Math.pow(rngGen(), MINING_ENHANCEMENT_CHANCE_EXPONENT);
                 const successChance = getters.enhancementChance;
                 const amount = Math.max(1, Math.min(max ? Infinity : 1, Math.floor(rootGetters['currency/value']('mining_' + state.enhancementIngredient) / MINING_ENHANCEMENT_BAR_AMOUNT), Math.ceil((rng - state.enhancementMercy) / successChance)));
                 const newChance = state.enhancementMercy + successChance * amount;
                 if (chance(newChance, rng)) {
                     commit('updateEnhancementKey', {name: state.enhancementIngredient, key: 'level', value: enhancement.level + 1});
                     commit('updateKey', {key: 'enhancementMercy', value: 0});
-                    commit('system/takeRng', 'pickaxe_enhance', {root: true});
+                    commit('system/nextRng', {name: 'pickaxe_enhance', amount: 1}, {root: true});
                     dispatch('applyEnhancement', {trigger: true, name: state.enhancementIngredient});
                 } else {
                     commit('updateKey', {key: 'enhancementMercy', value: newChance});

@@ -21,6 +21,7 @@
       <v-tab>Card creator</v-tab>
       <v-tab>Date tester</v-tab>
       <v-tab>Stat viewer</v-tab>
+      <v-tab>RNG tester</v-tab>
       <v-tab>Autoplay stats</v-tab>
     </v-tabs>
     <div class="scroll-container-tab" v-if="tab === 0">
@@ -207,6 +208,14 @@
       </v-data-table>
     </div>
     <div class="scroll-container-tab" v-else-if="tab === 6">
+      <div class="d-flex align-center ma-1">
+        <div>{{ playerId }}</div>
+        <v-text-field class="ma-1" label="Seed" outlined hide-details v-model="rngSeed"></v-text-field>
+        <v-btn class="ma-1" color="primary" @click="seedRngData">Roll</v-btn>
+      </div>
+      <div v-for="(rngrow, key) in rngOutput" :key="`rngoutput-${ key }`">{{ rngrow }}</div>
+    </div>
+    <div class="scroll-container-tab" v-else-if="tab === 7">
       <autoplay-graph></autoplay-graph>
     </div>
   </div>
@@ -222,6 +231,8 @@ import CardItem from '../partial/card/CardItem.vue';
 import { buildNum, capitalize } from '../../js/utils/format';
 import { getDay, getWeek } from '../../js/utils/date';
 import { mapState } from 'vuex';
+import seedrandom from 'seedrandom';
+import { encodeFile } from '../../js/savefile';
 
 const Color = require('color');
 const colorVariants = ['lighten5', 'lighten4', 'lighten3', 'lighten2', 'lighten1', 'base', 'darken1', 'darken2', 'darken3', 'darken4'];
@@ -268,11 +279,14 @@ export default {
       {text: 'Total', value: 'total'},
     ],
     statSearch: '',
-    includeEmptyStat: false
+    includeEmptyStat: false,
+    rngSeed: 'test',
+    rngOutput: []
   }),
   computed: {
     ...mapState({
-      currentDay: state => state.system.currentDay
+      currentDay: state => state.system.currentDay,
+      playerId: state => state.system.playerId,
     }),
     statArray() {
       let arr = [];
@@ -395,11 +409,12 @@ export default {
     },
     cleanSave() {
       // Creates a clean savefile with autoplay-friendly settings
-      localStorage.setItem('goobooSavefile', JSON.stringify({
-        version: "0.1.0",
+      localStorage.setItem('goobooSavefile', encodeFile({
+        version: "1.3.4",
         timestamp: this.$store.state.system.timestamp,
+        theme: "default",
         unlock: {
-          debugFeature: {see: true, use: true},
+          debugFeature: true
         },
         settings: {
           general: {
@@ -417,6 +432,18 @@ export default {
             fightHordeBoss: true
           }
         },
+        subfeature: {},
+        currency: {},
+        stat: {},
+        upgrade: {},
+        upgradeQueue: {},
+        relic: [],
+        globalLevel: {},
+        keybinds: {},
+        note: [],
+        consumable: {},
+        rng: {},
+        cachePage: {}
       }));
       location.reload();
     },
@@ -564,6 +591,14 @@ export default {
           this.$store.dispatch('farm/getCropExp', {crop: key, value: buildNum(1, 'M')});
         }
       }
+    },
+    seedRngData() {
+      let myrng = seedrandom(this.rngSeed, {state: true});
+      this.rngOutput = [];
+      for (let i = 0; i < 20; i++) {
+        this.rngOutput.push(myrng());
+      }
+      console.log(JSON.stringify(myrng.state()));
     }
   },
   watch: {

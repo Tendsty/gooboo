@@ -68,7 +68,7 @@ export default {
         },
         cropYield: (state, getters, rootState, rootGetters) => (name) => {
             const crop = state.crop[name];
-            return rootGetters['mult/get']('currencyFarm' + capitalize(crop.type) + 'Gain', crop.yield * Math.pow(1.15, crop.upgrades.yield) * Math.pow(1.5, crop.upgrades.double));
+            return rootGetters['mult/get']('currencyFarm' + capitalize(crop.type) + 'Gain', crop.yield * Math.pow(1.25, crop.upgrades.yield) * Math.pow(1.5, crop.upgrades.double));
         },
         cropBaseOvergrow: (state, getters, rootState, rootGetters) => (name) => {
             const crop = state.crop[name];
@@ -81,15 +81,15 @@ export default {
         },
         cropExp: (state, getters, rootState, rootGetters) => (name) => {
             const crop = state.crop[name];
-            return rootGetters['mult/get']('farmExperience', crop.upgrades.exp * 0.5, Math.pow(1.5, crop.upgrades.double));
+            return rootGetters['mult/get']('farmExperience', crop.upgrades.exp * 0.35, Math.pow(1.5, crop.upgrades.double));
         },
         cropGoldChance: (state) => (name) => {
             const crop = state.crop[name];
-            return 0.01 * Math.pow(1.12, crop.upgrades.gold) * Math.pow(1.5, crop.upgrades.double);
+            return 0.004 * Math.pow(1.35, crop.upgrades.gold) * Math.pow(1.5, crop.upgrades.double);
         },
         cropGrow: (state) => (name, mult = 1) => {
             const crop = state.crop[name];
-            return Math.ceil(crop.grow / mult * Math.pow(2, crop.upgrades.double) * Math.pow(0.8, crop.upgrades.grow));
+            return Math.ceil(crop.grow / mult * Math.pow(2, crop.upgrades.double) * Math.pow(0.92, crop.upgrades.grow));
         },
         cropCost: (state) => (name) => {
             const crop = state.crop[name];
@@ -413,7 +413,7 @@ export default {
                     const dropChance = Math.min(1, rootGetters['mult/get']('farmRareDrop',
                         elem.chance *
                         Math.pow(1.2, crop.upgrades.drops) *
-                        Math.pow(1.2, crop.upgrades.double) +
+                        Math.pow(1.3, crop.upgrades.double) +
                         field.dropChance +
                         (((field.buildingEffect.pinwheel ?? 0) / field.grow) * 0.01)
                     ));
@@ -532,7 +532,7 @@ export default {
                 state.cropUpgrades.forEach(elem => {
                     if (!state.crop[name].nextUpgrades.includes(elem) && (
                         !(elem === 'cost' && state.crop[name].cost <= ((state.crop[name].upgrades.cost + 1) * 2)) && // Cannot reduce cost below 50%
-                        !(elem === 'grow' && getters.cropGrow(name) < 6.25) &&                                       // Minimum grow time of 5m
+                        !(elem === 'grow' && getters.cropGrow(name) < 12.5) &&                                       // Always reduce grow time by at least 1m
                         !(elem === 'double' && getters.cropGrow(name) > 1800) &&                                     // Maximum grow time of 2d 12h
                         !(elem === 'fertile' && !rootState.unlock.farmFertilizer.see) &&                             // Fertilizer needs to be unlocked
                         !(elem === 'drops' && state.crop[name].rareDrop.length <= 0)                                 // Needs at least one rare drop

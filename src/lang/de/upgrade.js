@@ -1,6 +1,9 @@
 export default {
   maxLevel: '{0}-Maximalstufe',
   queueEmpty: 'Warteschlange leer',
+  nextLevels: 'Nächste Stufen',
+  bookNotFound: 'Finde Buch-Verbesserungen für diese Funktion, indem du auf bestimmten Verbesserungen die höchste Stufe erreichst',
+  bookNotFoundVillage: 'Finde Buch-Verbesserungen für diese Funktion, indem du auf bestimmten Verbesserungen oder Gebäuden die höchste Stufe erreichst',
 
   keyset: {
     default: {

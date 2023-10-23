@@ -105,11 +105,11 @@ export default {
   },
   village_totalOffering: {
     achievement: 'Nihilist',
-    description: 'Total offering count'
+    description: 'Total sacrifice count'
   },
   village_bestOffering: {
     achievement: 'Black hole',
-    description: 'Maximum offerings in one prestige'
+    description: 'Maximum sacrifices in one prestige'
   },
   village_oil: {
     achievement: 'Take their oil!',

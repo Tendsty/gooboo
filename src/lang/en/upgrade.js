@@ -1,6 +1,9 @@
 export default {
   maxLevel: '{0} maximum level',
   queueEmpty: 'Queue empty',
+  nextLevels: 'Next levels',
+  bookNotFound: 'Find book upgrades for this feature by reaching the maximum level on certain upgrades',
+  bookNotFoundVillage: 'Find book upgrades for this feature by reaching the maximum level on certain upgrades or buildings',
 
   keyset: {
     default: {

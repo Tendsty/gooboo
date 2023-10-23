@@ -1,6 +1,6 @@
 import store from "../../../store";
 import { buildNum } from "../../utils/format";
-import { splicedLinear, splicedPow } from "../../utils/math";
+import { splicedLinear, splicedPowLinear } from "../../utils/math";
 
 const requirementStat = 'mining_maxDepth0';
 const requirementBase = () => store.state.stat[requirementStat].total;
@@ -167,7 +167,7 @@ export default {
         }
         return obj;
     }, effect: [
-        {name: 'miningPickaxeCraftingPower', type: 'mult', value: lvl => splicedPow(1.1, 1.05, 25, lvl)},
+        {name: 'miningPickaxeCraftingPower', type: 'mult', value: lvl => splicedPowLinear(1.1, 0.05, 25, lvl)},
         {name: 'miningOreGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
     ]},
     bronzeCache: {cap: 4, requirementBase, requirementStat, requirementValue: 75, price(lvl) {
@@ -190,7 +190,7 @@ export default {
     ironExpansion: {cap: 3, capMult: true, requirementBase, requirementStat, requirementValue: 85, price(lvl) {
         return {mining_oreIron: Math.pow(1.3, Math.max(0, lvl - 2)) * lvl * 3 + 2, mining_barBronze: 4};
     }, effect: [
-        {name: 'currencyMiningOreTinCap', type: 'mult', value: lvl => splicedPow(1.5, 1.1, 3, lvl)},
+        {name: 'currencyMiningOreTinCap', type: 'mult', value: lvl => splicedPowLinear(1.5, 0.1, 3, lvl)},
         {name: 'currencyMiningOreIronCap', type: 'base', value: lvl => lvl}
     ]},
     ironHardening: {cap: 12, requirementBase, requirementStat, requirementValue: 90, price(lvl) {
@@ -217,7 +217,7 @@ export default {
     magnet: {cap: 10, capMult: true, requirementBase, requirementStat, requirementValue: 100, price(lvl) {
         return {mining_scrap: Math.pow(1.55, lvl) * buildNum(440, 'Qa'), mining_oreIron: Math.pow(1.2, Math.max(0, lvl - 9)) * lvl * 5 + 10, mining_barBronze: 6};
     }, effect: [
-        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => splicedPowLinear(1.15, 0.15, 10, lvl)},
         {name: 'miningOreGain', type: 'mult', value: lvl => splicedLinear(0.1, 0.05, 10, lvl) + 1}
     ]},
     enhancingStation: {cap: 1, hasDescription: true, persistent: true, note: 'mining_25', requirementBase, requirementStat, requirementValue: 105, price() {
@@ -284,8 +284,8 @@ export default {
     metalDetector: {cap: 12, capMult: true, requirementBase, requirementStat, requirementValue: 140, price(lvl) {
         return {mining_scrap: Math.pow(3.5, lvl) * buildNum(15, 'Sp'), mining_barSteel: lvl + 11};
     }, effect: [
-        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)},
-        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => splicedPowLinear(1.1, 0.1, 12, lvl)},
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => splicedPowLinear(1.3, 0.3, 12, lvl)},
         {name: 'currencyMiningOreTitaniumCap', type: 'base', value: lvl => lvl * 2}
     ]},
     recycling: {persistent: true, requirementBase, requirementStat, requirementValue: 145, price(lvl) {

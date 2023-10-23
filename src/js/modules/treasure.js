@@ -55,9 +55,9 @@ const treasureTypes = {
     }
 };
 
-let treasureRng = {};
-for (const [key, elem] of Object.entries(treasureTypes)) {
-    treasureRng[`treasure_${key}`] = {size: elem.slots.length + 2};
+let treasureRng = [];
+for (const [key] of Object.entries(treasureTypes)) {
+    treasureRng.push(`treasure_${key}`);
 }
 
 export default {

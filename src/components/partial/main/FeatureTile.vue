@@ -50,24 +50,24 @@
 </style>
 
 <template>
-  <v-btn class="feature-tile-container pa-0" :width="$vuetify.breakpoint.smAndUp ? 160 : 88" :height="$vuetify.breakpoint.smAndUp ? 100 : 55" v-on="$listeners">
+  <v-btn class="feature-tile-container pa-0" :width="$vuetify.breakpoint.mdAndUp ? 160 : 88" :height="$vuetify.breakpoint.mdAndUp ? 100 : 55" v-on="$listeners">
     <div class="d-flex flex-column justify-center align-center">
       <v-badge overlap dot :value="hasBadge">
-        <v-icon :class="{'ma-2': $vuetify.breakpoint.smAndUp, 'ma-1': $vuetify.breakpoint.xsOnly}" :x-large="$vuetify.breakpoint.smAndUp">{{ icon }}</v-icon>
+        <v-icon :class="{'ma-2': $vuetify.breakpoint.mdAndUp, 'ma-1': $vuetify.breakpoint.smAndDown}" :x-large="$vuetify.breakpoint.mdAndUp">{{ icon }}</v-icon>
       </v-badge>
       <div
         class="text-center"
-        :class="{'feature-tile-text': $vuetify.breakpoint.smAndUp, 'feature-tile-text-mobile': $vuetify.breakpoint.xsOnly}"
+        :class="{'feature-tile-text': $vuetify.breakpoint.mdAndUp, 'feature-tile-text-mobile': $vuetify.breakpoint.smAndDown}"
       >{{ $vuetify.lang.t(`$vuetify.feature.${ name }`) }}</div>
     </div>
-    <div v-if="subfeatureLevel !== null" class="d-flex justify-center align-center feature-tile-inside" :class="{'feature-tile-mobile': $vuetify.breakpoint.xsOnly}">
-      <v-icon color="white" :size="$vuetify.breakpoint.smAndUp ? 40 : 30">mdi-octagram</v-icon>
+    <div v-if="subfeatureLevel !== null" class="d-flex justify-center align-center feature-tile-inside" :class="{'feature-tile-mobile': $vuetify.breakpoint.smAndDown}">
+      <v-icon color="white" :size="$vuetify.breakpoint.mdAndUp ? 40 : 30">mdi-octagram</v-icon>
       <div class="secondary--text feature-tile-inside-text d-flex justify-center align-center">
         <span>{{ subfeatureLevel }}</span>
       </div>
     </div>
-    <div v-if="isFrozen" class="feature-tile-frozen" :class="{'feature-tile-frozen-mobile': $vuetify.breakpoint.xsOnly}">
-      <v-icon color="cyan" :size="$vuetify.breakpoint.smAndUp ? 24 : 18">mdi-snowflake</v-icon>
+    <div v-if="isFrozen" class="feature-tile-frozen" :class="{'feature-tile-frozen-mobile': $vuetify.breakpoint.smAndDown}">
+      <v-icon color="cyan" :size="$vuetify.breakpoint.mdAndUp ? 24 : 18">mdi-snowflake</v-icon>
     </div>
   </v-btn>
 </template>

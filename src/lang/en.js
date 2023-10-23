@@ -133,6 +133,15 @@ export default {
     update: {
       get: 'New update!',
       apply: 'Refresh + apply'
+    },
+    import: {
+      message: 'File could not be loaded',
+      base64: 'Decoding failed',
+      json: 'JSON could not be interpreted',
+      key: 'The loaded savefile is missing required data',
+      version: 'This file is from a newer version of the game (v{0}, current version: v{1})',
+      testing: 'Files from the testing build cannot be used in the live version',
+      migration: 'An error occured while migrating from v{0} to v{1}'
     }
   },
   duplicateTab: {
@@ -233,6 +242,7 @@ export default {
   info: {
     title: 'Gooboo',
     subtitle: 'developed by Tendsty',
+    testing: 'testing',
     text: 'Gooboo is an idle / incremental game where you manage multiple features in a mysterious, unknown world. Gather different resources to buy a huge variety of upgrades to increase your resource gains. Progress in your main features to unlock new content and learn more about this world. And when progression starts slowing down, prestige individual features to take your gains to the next level.',
     updates: {
       web: 'You are using the web version. The game regularly checks for updates, automatically uses the newest version and notifies you when an update is available.',
@@ -242,6 +252,11 @@ export default {
         2: ' page.'
       },
       steam: 'You are using the steam version. Updates are handled via steam.'
+    },
+    testingDescription: {
+      0: 'You are playing on the testing build. Features may be unfinished or buggy, and game mechanics could change at any time. You can play the live version ',
+      1: 'here',
+      2: ' (savefiles from the testing build cannot be used in live versions of the game)'
     },
     viewPatchnotes: 'View patch notes',
     numberFormatting: 'Number formatting',
@@ -279,6 +294,8 @@ export default {
       snackbars: 'v-snackbars',
       color: 'color',
       mdi: 'Material Design Icons',
+      jsfiledownload: 'Javascript File Download',
+      seedrandom: 'seedrandom',
       caveat: 'Caveat',
       roboto: 'Roboto',
       robotomono: 'Roboto Mono',
@@ -992,6 +1009,9 @@ export default {
   settings: {
     keybinds: {
       name: 'Keybinds',
+      prevMainFeature: {
+        name: 'Previous main feature'
+      },
       nextMainFeature: {
         name: 'Next main feature'
       },
@@ -1133,6 +1153,14 @@ export default {
       treasureDelete: {
         name: 'Treasure deletion'
       }
+    },
+    experiment: {
+      name: 'Experimental',
+      warning: 'These settings are still experimental and may be buggy, unfinished, performance heavy or confusing. Enable them at your own risk, and please leave feedback if you are using them! If this section is empty, no experimental settings are available at the time or you have not progressed far enough to be able to see them',
+      gainTimer: {
+        name: 'Display gain timers',
+        description: 'Show the time needed to reach resource capacity or afford an upgrade. Some resources with irregular income use estimates, and not all resources have this'
+      }
     }
   },
   statBreakdown: {
@@ -1215,6 +1243,7 @@ export default {
       power: 'Power',
       purity: 'Purity',
       impurity: 'Impurity',
+      oreQuality: 'The amount of ores required to craft a pickaxe is divided by your ore quality',
       craftPickaxe: 'Craft pickaxe',
       purityDescription: 'To reach 50% minimum quality, your purity needs to match your impurity.',
       premiumSlot: 'This is a premium crafting slot. Impurity above x1 is halved and purity is doubled.'
@@ -1297,7 +1326,9 @@ export default {
         1: ' for ',
         2: ' and increase the cost of the next sacrifice. Sacrifice cost resets on prestige.'
       },
-      sacrifice: 'Sacrifice'
+      sacrifice: 'Sacrifice',
+      notUnlocked: 'This offering is not unlocked yet. You can still sacrifice and spend offerings, but the resource capacity won\'t be applied until you unlock the offering',
+      notUnlockedHint: 'This offering is not unlocked, so the resource capacity does not apply yet'
     },
     material: 'Material',
     food: 'Food',
@@ -1361,6 +1392,7 @@ export default {
     silenceEnemy: 'This enemy is silenced and cannot use actives',
     stunPlayer: 'You are stunned and cannot attack',
     stunEnemy: 'This enemy is stunned and cannot attack',
+    shieldbreak: 'Break division shield faster',
     stunResist: 'Recover faster from stuns',
     stunBoss: 'Bosses receive +2 stun resist',
     stunMiniboss: 'Minibosses receive +1 stun resist',
@@ -1485,6 +1517,7 @@ export default {
       antidote: 'Antidote',
       brokenStopwatch: 'Broken stopwatch',
       luckyCharm: 'Lucky charm',
+      mailbreaker: 'Mailbreaker',
       club: 'Club',
       goldenStaff: 'Golden staff',
       toxicSword: 'Toxic sword',
@@ -1493,6 +1526,7 @@ export default {
       healthyFruit: 'Healthy fruit',
       glasses: 'Glasses',
       deadBird: 'Dead bird',
+      shieldDissolver: 'Shield dissolver',
       calmingPill: 'Calming pill',
       cleansingFluid: 'Cleansing fluid',
       forbiddenSword: 'Forbidden sword',
@@ -1591,6 +1625,10 @@ export default {
       divisionShield: {
         0: 'Gain',
         1: 'division shield'
+      },
+      removeDivisionShield: {
+        0: 'Remove',
+        1: 'division shield from the opponent'
       },
       reviveAll: 'Refill all revives',
       removeStun: 'Remove stuns',
@@ -1705,13 +1743,13 @@ export default {
       goldenRose: 'Golden rose'
     },
     cropUpgrade: {
-      yield: 'x1.15 yield',
-      grow: 'x0.8 growth time',
-      exp: '+0.5 experience',
-      gold: 'x1.12 gold chance',
+      yield: 'x1.25 yield',
+      grow: 'x0.92 growth time',
+      exp: '+0.35 experience',
+      gold: 'x1.35 gold chance',
       overgrow: '+50% overgrow',
       cost: 'x0.75 cost, at least -1 cost reduction',
-      double: 'x1.5 yield, exp and gold chance and x1.2 rare drop chance, but x2 growth time',
+      double: 'x1.5 yield, exp and gold chance and x1.3 rare drop chance, but x2 growth time',
       fertile: 'Fertilizer effects are 25% stronger',
       drops: 'x1.2 rare drop chance'
     },
@@ -1741,8 +1779,8 @@ export default {
       premiumOwned: 'Premium: {0} owned',
       gardenGnome: {
         name: 'Garden gnome',
-        description: 'Crops on the field may give gold on harvest. The chance is based on crop grow time.',
-        descriptionPremium: 'Crops on the field may give gold on harvest. The chance is doubled and based on crop grow time.',
+        description: 'Crops on the field may give gold on harvest when the garden gnome is placed on the field. The chance is based on crop grow time.',
+        descriptionPremium: 'Crops on the field may give gold on harvest when the garden gnome is placed on the field. The chance is doubled and based on crop grow time.',
       },
       sprinkler: {
         name: 'Sprinkler',

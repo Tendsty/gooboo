@@ -1,6 +1,7 @@
 <template>
   <div v-if="isSimple" class="text-center">{{ text }}</div>
   <div v-else class="d-flex">
+    <v-icon v-if="showIcon && featureIcon" small class="mr-2">{{ featureIcon }}</v-icon>
     <div class="flex-grow-1">{{ text }}{{ showStar ? '*' : '' }}:</div>
     <div v-if="showRelative">
       <mult-stat :mult="name" :type="type" :value="relativeValue"></mult-stat>
@@ -37,6 +38,13 @@ export default {
     },
     relativeValue() {
       return this.before === null ? this.after : (this.after === null ? this.before : (this.type === 'mult' ? (this.after / this.before) : (this.after - this.before)));
+    },
+    featureIcon() {
+      if (!this.isSimple && this.$store.state.mult.items[this.name]) {
+        const feature = this.$store.state.mult.items[this.name].feature;
+        return feature === 'meta' ? 'mdi-earth' : this.$store.state.system.features[feature].icon;
+      }
+      return null;
     }
   },
   props: {
@@ -57,6 +65,11 @@ export default {
       default: null
     },
     showStar: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    showIcon: {
       type: Boolean,
       required: false,
       default: false

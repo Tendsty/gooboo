@@ -18,14 +18,18 @@ import v1_1_0 from "./modules/migration/v1_1_0";
 import { getDay } from "./utils/date";
 import v1_1_2 from "./modules/migration/v1_1_2";
 import v1_3_0 from "./modules/migration/v1_3_0";
+import { APP_TESTING } from "./constants";
+import v1_3_4 from "./modules/migration/v1_3_4";
 
 const migrations = {
+    '1.3.4': v1_3_4,
     '1.3.0': v1_3_0,
     '1.1.2': v1_1_2,
     '1.1.0': v1_1_0
 };
 
-export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName }
+export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }
+const semverCompare = require('semver/functions/compare');
 
 /**
  * An array of modules that save and load data to the savefile
@@ -51,7 +55,6 @@ function cleanStore() {
 }
 
 function migrate(file) {
-    const semverCompare = require('semver/functions/compare');
     for (const [version, migration] of Object.entries(migrations)) {
         if (semverCompare(file.version, version) === -1) {
             file = migration(file);
@@ -60,10 +63,100 @@ function migrate(file) {
     return file;
 }
 
-function loadFile(file) {
-    const save = migrate(JSON.parse(file));
+function encodeFile(file) {
+    return btoa(JSON.stringify(file));
+}
 
-    ['timestamp', 'currentDay', 'theme', 'backupTimer', 'noteHint'].forEach(elem => {
+function decodeFile(file, showErrors = true) {
+    // Base64 decode if needed
+    if (file.charAt(0) !== '{') {
+        try {
+            file = atob(file);
+        } catch {
+            if (showErrors) {
+                store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                    type: 'import',
+                    error: 'base64'
+                }});
+            }
+            return null;
+        }
+    }
+
+    // Parse JSON
+    try {
+        file = JSON.parse(file);
+    } catch {
+        if (showErrors) {
+            store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                type: 'import',
+                error: 'json'
+            }});
+        }
+        return null;
+    }
+
+    // Check if keys are missing
+    [
+        'version', 'timestamp', 'theme', 'unlock', 'settings', 'subfeature',
+        'currency', 'stat', 'upgrade', 'upgradeQueue', 'relic', 'globalLevel',
+        'keybinds', 'note', 'consumable', 'rng', 'cachePage'
+    ].forEach(key => {
+        if (file[key] === undefined) {
+            if (showErrors) {
+                store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                    type: 'import',
+                    error: 'key'
+                }});
+            }
+            return null;
+        }
+    });
+
+    // Check if loaded from a newer version
+    if (semverCompare(file.version, store.state.system.version) === 1) {
+        if (showErrors) {
+            store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                type: 'import',
+                error: 'version',
+                version: file.version
+            }});
+        }
+        return null;
+    }
+
+    // Check if loaded from testing build
+    if (file.testing && !APP_TESTING) {
+        if (showErrors) {
+            store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                type: 'import',
+                error: 'testing'
+            }});
+        }
+        return null;
+    }
+
+    return file;
+}
+
+function loadFile(file) {
+    // Try to run migrations
+    let save = null;
+    try {
+        save = migrate(file);
+    } catch {
+        store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+            type: 'import',
+            error: 'migration',
+            version: file.version
+        }});
+        return null;
+    }
+    if (!save) {
+        return;
+    }
+
+    ['timestamp', 'currentDay', 'theme', 'backupTimer', 'playerId', 'noteHint'].forEach(elem => {
         if (save[elem]) {
             store.commit('system/updateKey', {key: elem, value: save[elem]});
         }
@@ -92,8 +185,8 @@ function loadFile(file) {
     if (save.unlock) {
         for (const [key, elem] of Object.entries(save.unlock)) {
             if (store.state.unlock[key] !== undefined) {
-                Vue.set(store.state.unlock[key], 'see', !!elem.see);
-                Vue.set(store.state.unlock[key], 'use', !!elem.use);
+                Vue.set(store.state.unlock[key], 'see', true);
+                Vue.set(store.state.unlock[key], 'use', !!elem);
             }
         }
     }
@@ -107,26 +200,26 @@ function loadFile(file) {
     if (save.stat) {
         for (const [key, elem] of Object.entries(save.stat)) {
             if (store.state.stat[key] !== undefined) {
-                Vue.set(store.state.stat[key], 'value', elem.value);
-                Vue.set(store.state.stat[key], 'total', elem.total);
+                Vue.set(store.state.stat[key], 'value', elem[0]);
+                Vue.set(store.state.stat[key], 'total', elem[1]);
             }
         }
     }
     if (save.upgrade) {
         for (const [key, elem] of Object.entries(save.upgrade)) {
             if (store.state.upgrade.item[key] !== undefined) {
-                Vue.set(store.state.upgrade.item[key], 'collapse', elem.collapse);
-                Vue.set(store.state.upgrade.item[key], 'highestLevel', elem.highestLevel);
+                Vue.set(store.state.upgrade.item[key], 'collapse', elem[0]);
+                Vue.set(store.state.upgrade.item[key], 'highestLevel', elem[2]);
 
                 if (store.state.upgrade.item[key].mode === 'instant') {
-                    Vue.set(store.state.upgrade.item[key], 'bought', elem.level);
-                } else {
-                    Vue.set(store.state.upgrade.item[key], 'bought', elem.bought);
-                    Vue.set(store.state.upgrade.item[key], 'timeProgress', elem.timeProgress);
+                    Vue.set(store.state.upgrade.item[key], 'bought', elem[1]);
+                } else if (elem.length >= 4) {
+                    Vue.set(store.state.upgrade.item[key], 'bought', elem[3]);
+                    Vue.set(store.state.upgrade.item[key], 'timeProgress', elem[4]);
                 }
 
-                if (elem.level > 0) {
-                    Vue.set(store.state.upgrade.item[key], 'level', elem.level);
+                if (elem[1] > 0) {
+                    Vue.set(store.state.upgrade.item[key], 'level', elem[1]);
                     store.dispatch('upgrade/apply', {name: key});
                 }
             }
@@ -199,8 +292,7 @@ function loadFile(file) {
     if (save.rng) {
         for (const [key, elem] of Object.entries(save.rng)) {
             if (store.state.system.rng[key] !== undefined) {
-                Vue.set(store.state.system.rng[key], 'next', elem);
-                store.commit('system/fillRng', key);
+                Vue.set(store.state.system.rng, key, elem);
             }
         }
     }
@@ -245,7 +337,7 @@ function exportFile(file) {
     if (!file) {
         file = getSavefile();
     }
-    download(file, getSavefileName(), 'application/json');
+    download(file, getSavefileName(), 'text/plain');
 }
 
 function getSavefileName() {
@@ -253,7 +345,7 @@ function getSavefileName() {
     let year = now.slice(2, 4);
     let month = now.slice(5, 7);
     let day = now.slice(8, 10);
-    return `Gooboo_${ year }${ month }${ day }.json`;
+    return `Gooboo_${ year }${ month }${ day }.txt`;
 }
 
 function getSavefile() {
@@ -263,6 +355,7 @@ function getSavefile() {
         currentDay: store.state.system.currentDay,
         theme: store.state.system.theme,
         backupTimer: store.state.system.backupTimer,
+        playerId: store.state.system.playerId,
         themesOwned: [],
         completedTutorial: [],
 
@@ -283,6 +376,10 @@ function getSavefile() {
         cachePage: {}
     };
 
+    if (APP_TESTING) {
+        save.testing = true;
+    }
+
     // Generic systems
     for (const [key, elem] of Object.entries(store.state.system.themes)) {
         if (elem.owned) {
@@ -300,8 +397,8 @@ function getSavefile() {
         }
     }
     for (const [key, elem] of Object.entries(store.state.unlock)) {
-        if (elem.see || elem.use) {
-            save.unlock[key] = {see: !!elem.see, use: !!elem.use};
+        if (elem.see) {
+            save.unlock[key] = elem.use;
         }
     }
     for (const [key, elem] of Object.entries(store.state.currency)) {
@@ -311,14 +408,14 @@ function getSavefile() {
     }
     for (const [key, elem] of Object.entries(store.state.stat)) {
         if (elem.value > elem.default || elem.total > elem.default) {
-            save.stat[key] = {value: elem.value, total: elem.total};
+            save.stat[key] = [elem.value, elem.total];
         }
     }
     for (const [key, elem] of Object.entries(store.state.upgrade.item)) {
         if (elem.bought > 0 || elem.highestLevel > 0 || elem.collapse) {
             save.upgrade[key] = elem.mode === 'instant' ?
-                {level: elem.level, highestLevel: elem.highestLevel, collapse: elem.collapse} :
-                {bought: elem.bought, level: elem.level, highestLevel: elem.highestLevel, timeProgress: elem.timeProgress, collapse: elem.collapse};
+                [elem.collapse, elem.level, elem.highestLevel] :
+                [elem.collapse, elem.level, elem.highestLevel, elem.bought, elem.timeProgress];
         }
     }
     for (const [key, elem] of Object.entries(store.state.upgrade.queue)) {
@@ -364,7 +461,9 @@ function getSavefile() {
         }
     }
     for (const [key, elem] of Object.entries(store.state.system.rng)) {
-        save.rng[key] = elem.next;
+        if (elem > 0) {
+            save.rng[key] = elem;
+        }
     }
     for (const [key, elem] of Object.entries(store.state.system.cachePage)) {
         if (elem > 1) {
@@ -391,5 +490,5 @@ function getSavefile() {
         save.timeMult = store.state.system.timeMult;
     }
 
-    return JSON.stringify(save);
+    return encodeFile(save);
 }

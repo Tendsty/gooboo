@@ -82,6 +82,11 @@
           <div class="d-flex flex-wrap mx-n1 mb-n1">
             <price-tag class="ma-1" v-for="(amount, currency) in pickaxeCost" :key="'price-' + currency" :currency="`mining_${currency}`" :amount="amount"></price-tag>
           </div>
+          <template v-if="oreQuality > 1">
+            <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.miningOreQuality') }}</h3>
+            <div>{{ $vuetify.lang.t('$vuetify.mining.crafting.oreQuality') }}</div>
+            <stat-breakdown name="miningOreQuality"></stat-breakdown>
+          </template>
         </gb-tooltip>
         <consumable class="ma-1" name="mining_goldenHammer" :disabled="!canCraftPickaxe || !canAffordGoldenHammer || isFrozen" @click="craftPickaxe({mining_goldenHammer: 1})"></consumable>
       </div>
@@ -183,6 +188,9 @@ export default {
     },
     pickaxePremiumSlots() {
       return this.$store.getters['mult/get']('miningPickaxePremiumCraftingSlots');
+    },
+    oreQuality() {
+      return this.$store.getters['mult/get']('miningOreQuality');
     },
     pickaxeUpgradeChance() {
       return this.ingredientList.length > 0 ? this.$store.getters['mining/pickaxeUpgradeChance'] : 0;

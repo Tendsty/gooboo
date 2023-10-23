@@ -1,30 +1,19 @@
-<style scoped>
-.theme--dark.current-note {
-  background: linear-gradient(#00000080, #00000080), url("/img/note.png"), linear-gradient(#DF9269, #DF9269);
-}
-.theme--light.current-note {
-  background: url("/img/note.png"), linear-gradient(#DF9269, #DF9269);
-}
-.current-note {
-  font-size: 150%;
-  line-height: 100%;
-  font-family: Caveat;
-}
-</style>
-
 <template>
   <v-dialog v-model="dialog" max-width="400">
-    <v-card class="current-note pa-2" v-if="note !== null">
-      <div class="ma-2" :class="textClass">{{ $vuetify.lang.t(`$vuetify.note.text.${note}`) }}</div>
-      <div class="ma-2 text-right" :class="textClass">~ {{ $vuetify.lang.t(`$vuetify.note.author.${author}`) }}</div>
-    </v-card>
+    <template v-if="note !== null">
+      <note-system v-if="author === 'system'" :name="note"></note-system>
+      <note-simple v-else :name="note"></note-simple>
+    </template>
   </v-dialog>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import NoteSimple from './NoteSimple.vue';
+import NoteSystem from './NoteSystem.vue';
 
 export default {
+  components: { NoteSimple, NoteSystem },
   data: () => ({
     dialog: false
   }),
@@ -33,13 +22,10 @@ export default {
       note: state => state.system.note
     }),
     author() {
-      if (this.note !== null) {
-        return this.$store.state.note[this.note].author;
+      if (this.note === null) {
+        return null;
       }
-      return null;
-    },
-    textClass() {
-      return 'brown--text ' + (this.$vuetify.theme.dark ? 'text--lighten-4' : 'text--darken-2');
+      return this.$store.state.note[this.note].author;
     }
   },
   watch: {

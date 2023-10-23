@@ -133,6 +133,15 @@ export default {
     update: {
       get: 'Neues Update!',
       apply: 'Neu laden + anwenden'
+    },
+    import: {
+      message: 'Datei konnte nicht geladen werden',
+      base64: 'Dekodieren gescheitert',
+      json: 'JSON konnte nicht interpretiert werden',
+      key: 'Dem geladenen Spielstand fehlen wichtige Daten',
+      version: 'Diese Datei ist von einer neueren Version des Spiels (v{0}, aktuelle Version: v{1})',
+      testing: 'Dateien vom Teststand können nicht in der Live-Version verwendet werden',
+      migration: 'Ein Fehler ist beim Migrieren von v{0} nach v{1} aufgetreten'
     }
   },
   duplicateTab: {
@@ -233,6 +242,7 @@ export default {
   info: {
     title: 'Gooboo',
     subtitle: 'entwickelt von Tendsty',
+    testing: 'testen',
     text: 'Gooboo ist ein Idle / Incremental-Spiel, wo du verschiedene Funktionen in einer mysteriösen, unbekannten Welt verwaltest. Sammle verschiedene Ressourcen, um eine riesige Menge an Verbesserungen zu kaufen und dein Rohstoffeinkommen weiter zu erhöhen. Schreite in den Hauptfunktionen fort, um neue Inhalte freizuschalten und mehr über diese Welt zu erfahren. Und sollte der Fortschritt sich verlangsamen, kannst du für einzelne Funktionen einen Prestige durchführen, um die Rohstoffgewinne auf die nächste Stufe zu bringen.',
     updates: {
       web: 'Du verwendest die Web-Version. Das Spiel prüft automatisch auf Updates, hält sich von selbst aktuell und benachrichtigt dich, wenn ein Update verfügbar ist.',
@@ -242,6 +252,11 @@ export default {
         2: '-Seite.'
       },
       steam: 'Du verwendest die Steam-Version. Updates werden über Steam verwaltet.'
+    },
+    testingDescription: {
+      0: 'Du spielst auf dem Teststand. Funktionen können unfertig oder fehlerhaft sein, und Spielmechaniken können sich jederzeit ändern. Du kannst die Live-Version ',
+      1: 'hier',
+      2: ' spielen (Spielstände vom Teststand können nicht in den Live-Versionen verwendet werden)'
     },
     viewPatchnotes: 'Patchnotizen ansehen',
     numberFormatting: 'Zahlenformatierung',
@@ -279,6 +294,8 @@ export default {
       snackbars: 'v-snackbars',
       color: 'color',
       mdi: 'Material Design Icons',
+      jsfiledownload: 'Javascript File Download',
+      seedrandom: 'seedrandom',
       caveat: 'Caveat',
       roboto: 'Roboto',
       robotomono: 'Roboto Mono',
@@ -992,6 +1009,9 @@ export default {
   settings: {
     keybinds: {
       name: 'Tastenbelegung',
+      prevMainFeature: {
+        name: 'Vorherige Hauptfunktion'
+      },
       nextMainFeature: {
         name: 'Nächste Hauptfunktion'
       },
@@ -1133,6 +1153,14 @@ export default {
       treasureDelete: {
         name: 'Schätze löschen'
       }
+    },
+    experiment: {
+      name: 'Experimentell',
+      warning: 'Diese Einstellungen sind noch experimentell und können fehlerhaft, unfertig, langsam oder verwirrend sein. Aktiviere sie auf eigene Gefahr, und bitte gebe Feedback, falls du sie benutzen solltest! Wenn diese Sektion leer ist, sind gerade keine experimentellen Einstellungen vorhanden oder dein Fortschritt reicht nicht aus, um sie zu sehen',
+      gainTimer: {
+        name: 'Einkommen-Timer anzeigen',
+        description: 'Zeigt die benötigte Zeit an, um die Kapazität zu erreichen oder eine Verbesserung zu kaufen. Manche Ressourcen mit irregulärem Einkommen zeigen Schätzwerte an, und nicht alle Ressourcen haben diese Funktion'
+      }
     }
   },
   statBreakdown: {
@@ -1215,6 +1243,7 @@ export default {
       power: 'Stärke',
       purity: 'Reinheit',
       impurity: 'Unreinheit',
+      oreQuality: 'Die Menge an benötigten Erzen zum Herstellen einer Spitzhacke wird durch deine Erz-Qualität geteilt',
       craftPickaxe: 'Spitzhacke herstellen',
       purityDescription: 'Um 50% minimale Qualität zu erreichen, muss die Reinheit so hoch wie die Unreinheit sein.',
       premiumSlot: 'Dies ist ein Premium-Herstellplatz. Unreinheit über x1 ist halbiert und Reinheit verdoppelt.'
@@ -1297,7 +1326,9 @@ export default {
         1: ' für ',
         2: ' und erhöhe die Kosten der nächsten Opfergabe. Opferkosten werden beim Prestige mit zurückgesetzt.'
       },
-      sacrifice: 'Opfern'
+      sacrifice: 'Opfern',
+      notUnlocked: 'Diese Opfergabe ist noch nicht freigeschaltet. Du kannst trotzdem opfern und Opfergaben einsetzen, aber die Rohstoffkapazität wird nicht erhöht, bis die Opfergabe freigeschaltet wurde',
+      notUnlockedHint: 'Diese Opfergabe ist nicht freigeschaltet, also wird die Rohstoffkapazität noch nicht erhöht'
     },
     material: 'Material',
     food: 'Nahrung',
@@ -1361,6 +1392,7 @@ export default {
     silenceEnemy: 'Dieser Gegner ist verstummt und kann keine aktiven Angriffe nutzen',
     stunPlayer: 'Du bist betäubt und kannst nicht angreifen',
     stunEnemy: 'Dieser Gegner ist betäubt und kann nicht angreifen',
+    shieldbreak: 'Zerbreche Teilungsschilde schneller',
     stunResist: 'Schnellere Erholung von Betäubungen',
     stunBoss: 'Bosse erhalten +2 Betäubungsresistenz',
     stunMiniboss: 'Minibosse erhalten +1 Betäubungsresistenz',
@@ -1485,6 +1517,7 @@ export default {
       antidote: 'Gegengift',
       brokenStopwatch: 'Kaputte Stoppuhr',
       luckyCharm: 'Glücksanhänger',
+      mailbreaker: 'Rüstungsbrecher',
       club: 'Keule',
       goldenStaff: 'Goldener Stab',
       toxicSword: 'Giftiges Schwert',
@@ -1493,6 +1526,7 @@ export default {
       healthyFruit: 'Gesundes Obst',
       glasses: 'Brille',
       deadBird: 'Toter Vogel',
+      shieldDissolver: 'Schildauflöser',
       calmingPill: 'Beruhigungspille',
       cleansingFluid: 'Reiniger',
       forbiddenSword: 'Verbotenes Schwert',
@@ -1591,6 +1625,10 @@ export default {
       divisionShield: {
         0: 'Erhalte',
         1: 'Teilungsschild'
+      },
+      removeDivisionShield: {
+        0: 'Entferne',
+        1: 'Teilungsschild vom Gegner'
       },
       reviveAll: 'Stelle alle Wiederbelebungen her',
       removeStun: 'Entferne Betäubungen',
@@ -1705,13 +1743,13 @@ export default {
       goldenRose: 'Goldrose'
     },
     cropUpgrade: {
-      yield: 'x1.15 Ertrag',
-      grow: 'x0.8 Wachstumszeit',
-      exp: '+0.5 Erfahrung',
-      gold: 'x1.12 Goldchance',
+      yield: 'x1.25 Ertrag',
+      grow: 'x0.92 Wachstumszeit',
+      exp: '+0.35 Erfahrung',
+      gold: 'x1.35 Goldchance',
       overgrow: '+50% Überwuchern',
       cost: 'x0.75 Kosten, mindestens -1 weniger',
-      double: 'x1.5 Ertrag, Erfahrung und Goldchance und x1.2 Chance auf seltenen Ertrag, aber x2 Wachstumszeit',
+      double: 'x1.5 Ertrag, Erfahrung und Goldchance und x1.3 Chance auf seltenen Ertrag, aber x2 Wachstumszeit',
       fertile: 'Düngereffekte sind 25% stärker',
       drops: 'x1.2 Chance auf seltenen Ertrag'
     },
@@ -1741,8 +1779,8 @@ export default {
       premiumOwned: 'Premium: {0} in Besitz',
       gardenGnome: {
         name: 'Gartenzwerg',
-        description: 'Pflanzen können bei der Ernte Gold aufdecken. Die Chance hängt von der Wachstumszeit der Pflanze ab.',
-        descriptionPremium: 'Pflanzen können bei der Ernte Gold aufdecken. Die Chance ist verdoppelt und hängt von der Wachstumszeit der Pflanze ab.',
+        description: 'Pflanzen können bei der Ernte Gold aufdecken, wenn der Gartenzwerg auf dem Feld steht. Die Chance hängt von der Wachstumszeit der Pflanze ab.',
+        descriptionPremium: 'Pflanzen können bei der Ernte Gold aufdecken, wenn der Gartenzwerg auf dem Feld steht. Die Chance ist verdoppelt und hängt von der Wachstumszeit der Pflanze ab.',
       },
       sprinkler: {
         name: 'Rasensprenger',

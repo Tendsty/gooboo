@@ -107,6 +107,7 @@ export default {
             spellblade: store.getters['mult/get']('hordeSpellblade'),
             cutting: store.getters['mult/get']('hordeCutting'),
             stunResist: store.getters['mult/get']('hordeStunResist'),
+            shieldbreak: store.getters['mult/get']('hordeShieldbreak'),
 
             // Damage type specifics
             physicConversion: store.getters['mult/get']('hordePhysicConversion') / conversionTotal,
@@ -215,6 +216,8 @@ export default {
                                     store.commit('horde/updatePlayerKey', {key: 'revive', value: store.getters['mult/get']('hordeRevive')});
                                 } else if (elem.type === 'divisionShield') {
                                     store.commit('horde/updatePlayerKey', {key: 'divisionShield', value: store.state.horde.player.divisionShield + elem.value});
+                                } else if (elem.type === 'removeDivisionShield') {
+                                    store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: Math.ceil(store.state.horde.enemy.divisionShield * (1 - elem.value))});
                                 } else if (elem.type === 'removeAttack') {
                                     if (store.state.horde.fightRampage <= 0) {
                                         store.commit('horde/updateEnemyKey', {key: 'attack', value: Math.max(0, store.state.horde.enemy.attack * (1 - elem.value))});
@@ -280,7 +283,7 @@ export default {
 
                         enemyHealth = Math.max(0, enemyHealth - damage);
                         if (enemyStats.divisionShield > 0 && hitShield) {
-                            store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: enemyStats.divisionShield - 1});
+                            store.commit('horde/updateEnemyKey', {key: 'divisionShield', value: Math.max(enemyStats.divisionShield - 1 - playerStats.shieldbreak, 0)});
                         }
                     }
                 }
@@ -550,6 +553,7 @@ export default {
         hordeCutting: {display: 'percent', min: 0},
         hordeDivisionShield: {round: true, min: 0},
         hordeStunResist: {round: true, min: 0},
+        hordeShieldbreak: {round: true, min: 0},
         hordeEnemyActiveStart: {display: 'percent', min: 0, max: 1},
 
         // Damage type specifics
@@ -571,7 +575,7 @@ export default {
         hordeHeirloomChance: {display: 'percent', max: 1, roundNearZero: true},
         hordeHeirloomAmount: {baseValue: 1, round: true},
         hordeHeirloomEffect: {},
-        hordeNostalgia: {baseValue: 5, round: true},
+        hordeNostalgia: {baseValue: 25, round: true},
         hordeCorruption: {display: 'percent', min: 0, roundNearZero: true},
         hordeItemMasteryGain: {},
         hordeShardChance: {display: 'percent', baseValue: 0.0001},
@@ -580,15 +584,21 @@ export default {
         {mult: 'hordeHeirloomEffect', name: 'multType', type: 'heirloomEffect'}
     ],
     currency: {
-        bone: {color: 'lightest-grey', icon: 'mdi-bone', gainMult: {}, capMult: {baseValue: buildNum(500, 'K')}},
-        monsterPart: {color: 'cherry', icon: 'mdi-stomach', gainMult: {display: 'perSecond'}, capMult: {baseValue: 100}},
-        corruptedFlesh: {color: 'deep-purple', icon: 'mdi-food-steak', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true},
+        bone: {color: 'lightest-grey', icon: 'mdi-bone', gainMult: {}, capMult: {baseValue: buildNum(5, 'M')}, gainTimerFunction() {
+            return store.getters['mult/get']('currencyHordeBoneGain', store.getters['horde/enemyBone'](store.state.horde.zone, 0) / HORDE_ENEMY_RESPAWN_TIME);
+        }, timerIsEstimate: true},
+        monsterPart: {color: 'cherry', icon: 'mdi-stomach', gainMult: {display: 'perSecond'}, capMult: {baseValue: 100}, gainTimerFunction() {
+            return store.getters['mult/get']('currencyHordeMonsterPartGain', store.getters['horde/currentMonsterPart'] * 0.8);
+        }, timerIsEstimate: true},
+        corruptedFlesh: {color: 'deep-purple', icon: 'mdi-food-steak', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, showGainTimer: true},
         mysticalShard: {color: 'teal', icon: 'mdi-billiards-rack', currencyMult: {
             hordeAttack: {type: 'mult', value: val => Math.pow(1.1, val)},
             hordeHealth: {type: 'mult', value: val => Math.pow(1.1, val)},
             currencyHordeBoneGain: {type: 'mult', value: val => Math.pow(1.1, val)}
         }},
-        soulCorrupted: {color: 'purple', icon: 'mdi-ghost', overcapMult: 0.75, overcapScaling: 0.85, gainMult: {}, capMult: {min: 100}},
+        soulCorrupted: {color: 'purple', icon: 'mdi-ghost', overcapMult: 0.75, overcapScaling: 0.85, gainMult: {}, capMult: {min: 200}, gainTimerFunction() {
+            return store.getters['mult/get']('currencyHordeSoulCorruptedGain') / store.getters['mult/get']('hordeMinibossTime');
+        }, timerIsEstimate: true},
         soulEmpowered: {type: 'prestige', alwaysVisible: true, color: 'pink', icon: 'mdi-ghost'},
         crown: {type: 'prestige', color: 'amber', icon: 'mdi-crown-circle-outline'},
         towerKey: {type: 'prestige', color: 'light-grey', icon: 'mdi-key-variant'}
@@ -602,11 +612,6 @@ export default {
     relic,
     achievement,
     note: buildArray(31).map(() => 'g'),
-    rng: {
-        horde_soul: {amount: 25},
-        horde_heirloom: {amount: 25},
-        horde_heirloomType: {size: 2, amount: 25}
-    },
     init() {
         for (const [key, elem] of Object.entries(equipment)) {
             store.commit('horde/initItem', {name: key, ...elem});

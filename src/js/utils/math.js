@@ -1,4 +1,4 @@
-export { logBase, getSequence, splicedLinear, splicedPow, deltaLinear }
+export { logBase, getSequence, splicedLinear, splicedPow, splicedPowLinear, deltaLinear }
 
 /**
  * Returns the logarithm of a number
@@ -26,6 +26,10 @@ function splicedLinear(increase1, increase2, breakpoint, value) {
 
 function splicedPow(exponent1, exponent2, breakpoint, value) {
     return Math.pow(exponent2, Math.max(0, value - breakpoint)) * Math.pow(exponent1, Math.min(breakpoint, value));
+}
+
+function splicedPowLinear(exponent, increase, breakpoint, value) {
+    return (Math.max(0, value - breakpoint) * increase + 1) * Math.pow(exponent, Math.min(breakpoint, value));
 }
 
 function deltaLinear(base, increase, amount = 1, skip = 0) {

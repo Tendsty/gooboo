@@ -31,7 +31,7 @@
         </div>
       </v-card>
     </template>
-    <display-row class="mt-0" v-for="(item, key) in relic.effect" :key="key" :name="item.name" :type="item.type" :after="item.value"></display-row>
+    <display-row class="mt-0" v-for="(item, key) in relic.effect" :key="key" :name="item.name" :type="item.type" :after="item.value" show-icon></display-row>
   </gb-tooltip>
 </template>
 

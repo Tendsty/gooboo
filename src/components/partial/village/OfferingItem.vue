@@ -1,6 +1,21 @@
+<style scoped>
+.offering-locked {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  opacity: 0.5;
+}
+</style>
+
 <template>
-  <div class="bg-tile-default elevation-2 pa-1 rounded">
+  <v-card class="pa-1">
     <currency always-show class="my-1 mx-auto" :name="`village_${name}`"></currency>
+    <gb-tooltip v-if="!isUnlocked" :min-width="0">
+      <template v-slot:activator="{ on, attrs }">
+        <v-icon size="32" class="offering-locked" v-bind="attrs" v-on="on">mdi-cancel</v-icon>
+      </template>
+      <div class="mt-0">{{ $vuetify.lang.t('$vuetify.village.offering.notUnlocked') }}</div>
+    </gb-tooltip>
     <div class="d-flex align-center">
       <v-chip class="ma-1" style="height: 28px;">
         <v-icon class="mr-1">mdi-fire</v-icon>
@@ -41,9 +56,10 @@
           </div>
         </template>
         <display-row class="mt-0" :name="capName" type="base" :before="valueBefore" :after="valueAfter"></display-row>
+        <alert-text v-if="!isUnlocked" type="warning">{{ $vuetify.lang.t('$vuetify.village.offering.notUnlockedHint') }}</alert-text>
       </gb-tooltip>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -52,10 +68,11 @@ import { capitalize } from '../../../js/utils/format';
 import Currency from '../../render/Currency.vue';
 import CurrencyIcon from '../../render/CurrencyIcon.vue';
 import PriceTag from '../../render/PriceTag.vue';
+import AlertText from '../render/AlertText.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
 
 export default {
-  components: { Currency, PriceTag, DisplayRow, CurrencyIcon },
+  components: { Currency, PriceTag, DisplayRow, CurrencyIcon, AlertText },
   props: {
     name: {
       type: String,
@@ -94,6 +111,9 @@ export default {
     },
     valueAfter() {
       return (this.offering.upgradeBought + 1) * this.valuePerOffering;
+    },
+    isUnlocked() {
+      return this.offering.unlock === null || this.$store.state.unlock[this.offering.unlock].use;
     }
   },
   methods: {

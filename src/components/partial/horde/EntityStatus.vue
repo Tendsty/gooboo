@@ -88,6 +88,13 @@
         <div>{{ $vuetify.lang.t('$vuetify.horde.cuttingDescription') }}</div>
         <stat-breakdown v-if="isPlayer" name="hordeCutting"></stat-breakdown>
       </gb-tooltip>
+      <gb-tooltip key="status-shieldbreak" v-if="shieldbreak > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeShieldbreak')">
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip label small :color="`teal ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-circle-off-outline</v-icon>{{ $formatNum(shieldbreak) }}</v-chip>
+        </template>
+        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.shieldbreak`) }}</div>
+        <stat-breakdown v-if="isPlayer" name="hordeShieldbreak"></stat-breakdown>
+      </gb-tooltip>
       <gb-tooltip key="status-stun-resist" v-if="stunResist > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeStunResist')">
         <template v-slot:activator="{ on, attrs }">
           <v-chip label small :color="`wooden ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-alert-octagram-outline</v-icon>{{ $formatNum(stunResist) }}</v-chip>
@@ -212,6 +219,11 @@ export default {
       default: 0
     },
     stunResist: {
+      type: Number,
+      required: false,
+      default: 0
+    },
+    shieldbreak: {
       type: Number,
       required: false,
       default: 0

@@ -1,4 +1,4 @@
-export { randomInt, randomFloat, randomElem, weightSelect, chance, randomRound, simpleHash }
+export { randomInt, randomFloat, randomElem, weightSelect, chance, randomRound, simpleHash, randomHex }
 
 /**
  * Return a random integer between two numbers
@@ -88,4 +88,18 @@ function simpleHash(str) {
         hash = ((hash << 5) - hash + str.charCodeAt(i++)) << 0;
     }
     return (hash + 2147483647).toString(16);
+}
+
+/**
+ * Generates a random hex string
+ * @param {Number} length The amount of characters the output will have
+ * @returns {String} A hex string
+ */
+function randomHex(length = 8) {
+    let result = '';
+    let chars = '0123456789abcdef';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(randomInt(0, 15));
+    }
+    return result;
 }

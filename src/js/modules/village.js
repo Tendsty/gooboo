@@ -9,7 +9,7 @@ import relic from "./village/relic";
 import job from "./village/job";
 import offering from "./village/offering";
 import policy from "./village/policy";
-import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD, VILLAGE_JOY_PER_HAPPINESS, VILLAGE_MIN_HAPPINESS } from "../constants";
+import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD, VILLAGE_MIN_HAPPINESS } from "../constants";
 import bookVillage from "./school/bookVillage";
 
 let upgradeBuilding = {};
@@ -52,8 +52,9 @@ export default {
             });
         }
 
-        if (happiness > 1.25) {
-            store.dispatch('currency/gain', {feature: 'village', name: 'joy', gainMult: true, amount: (happiness - 1.2) * VILLAGE_JOY_PER_HAPPINESS * seconds});
+        const joyGain = store.getters['village/joyGainBase'];
+        if (joyGain > 0) {
+            store.dispatch('currency/gain', {feature: 'village', name: 'joy', gainMult: true, amount: joyGain * seconds});
         }
         if (happiness <= VILLAGE_MIN_HAPPINESS) {
             store.commit('stat/increaseTo', {feature: 'village', name: 'minHappiness', value: 1});
@@ -149,19 +150,29 @@ export default {
     relic,
     achievement,
     currency: {
-        coin: {overcapMult: 0.5, color: 'amber', icon: 'mdi-circle-multiple', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 500}},
+        coin: {overcapMult: 0.5, color: 'amber', icon: 'mdi-circle-multiple', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 500}, gainTimerFunction() {
+            const taxpayers = store.getters['mult/get']('villageTaxRate') * store.getters['village/employed'];
+            if (taxpayers <= 0) {
+                return 0;
+            }
+            return store.getters['mult/get']('currencyVillageCoinGain', store.getters['currency/list']('village', 'regular', 'food').map(currencyName => {
+                const food = currencyName.split('_')[1];
+                const nextAmount = store.getters['currency/value']('village_' + food) + store.getters['mult/get'](store.getters['currency/gainMultName']('village', food));
+                return Math.min(taxpayers, nextAmount) * VILLAGE_COINS_PER_FOOD;
+            }).reduce((a, b) => a + b, 0));
+        }, timerIsEstimate: true},
 
         // Basic material
-        wood: {subtype: 'material', color: 'wooden', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 2000}},
-        plantFiber: {subtype: 'material', color: 'green', icon: 'mdi-leaf', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 2000}},
-        stone: {subtype: 'material', color: 'grey', icon: 'mdi-chart-bubble', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 2000}},
-        metal: {subtype: 'material', color: 'lighter-grey', icon: 'mdi-gold', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
-        water: {subtype: 'material', color: 'blue', icon: 'mdi-water', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
-        glass: {subtype: 'material', color: 'cyan', icon: 'mdi-mirror', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
-        hardwood: {subtype: 'material', color: 'cherry', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
-        gem: {subtype: 'material', color: 'pink', icon: 'mdi-diamond', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
-        oil: {subtype: 'material', color: 'pale-green', icon: 'mdi-oil', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 800}},
-        marble: {subtype: 'material', color: 'pale-blue', icon: 'mdi-mirror-rectangle', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 200}},
+        wood: {subtype: 'material', color: 'wooden', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
+        plantFiber: {subtype: 'material', color: 'green', icon: 'mdi-leaf', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
+        stone: {subtype: 'material', color: 'grey', icon: 'mdi-chart-bubble', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
+        metal: {subtype: 'material', color: 'lighter-grey', icon: 'mdi-gold', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        water: {subtype: 'material', color: 'blue', icon: 'mdi-water', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        glass: {subtype: 'material', color: 'cyan', icon: 'mdi-mirror', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        hardwood: {subtype: 'material', color: 'cherry', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        gem: {subtype: 'material', color: 'pink', icon: 'mdi-diamond', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        oil: {subtype: 'material', color: 'pale-green', icon: 'mdi-oil', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 800}},
+        marble: {subtype: 'material', color: 'pale-blue', icon: 'mdi-mirror-rectangle', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 200}},
 
         // FOOD
         grain: {subtype: 'food', color: 'yellow', icon: 'mdi-barley', gainMult: {display: 'perSecond'}, showGainMult: true},
@@ -171,10 +182,12 @@ export default {
         meat: {subtype: 'food', color: 'brown', icon: 'mdi-food-steak', gainMult: {display: 'perSecond'}, showGainMult: true},
 
         // Mental resources
-        knowledge: {subtype: 'mental', overcapScaling: 0.4, color: 'lime', icon: 'mdi-brain', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 100}},
-        faith: {subtype: 'mental', overcapMult: 0.9, overcapScaling: 0.9, color: 'amber', icon: 'mdi-hands-pray', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 50}},
-        science: {subtype: 'mental', overcapScaling: 0.4, color: 'light-blue', icon: 'mdi-flask', gainMult: {display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 40}},
-        joy: {subtype: 'mental', overcapScaling: 0.4, color: 'pink-purple', icon: 'mdi-party-popper', gainMult: {}, capMult: {baseValue: 250}},
+        knowledge: {subtype: 'mental', overcapScaling: 0.4, color: 'lime', icon: 'mdi-brain', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 100}},
+        faith: {subtype: 'mental', overcapMult: 0.9, overcapScaling: 0.9, color: 'amber', icon: 'mdi-hands-pray', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 50}},
+        science: {subtype: 'mental', overcapScaling: 0.4, color: 'light-blue', icon: 'mdi-flask', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 40}},
+        joy: {subtype: 'mental', overcapScaling: 0.4, color: 'pink-purple', icon: 'mdi-party-popper', gainMult: {display: 'perSecond'}, capMult: {baseValue: 250}, showGainMult: true, gainTimerFunction() {
+            return store.getters['mult/get']('currencyVillageJoyGain', store.getters['village/joyGainBase']);
+        }},
 
         // Loot resources
         loot0: {subtype: 'loot', color: 'light-grey', icon: 'mdi-trophy-variant'},

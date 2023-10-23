@@ -36,6 +36,7 @@ export default {
             school_0: 25,
             meta_5: 30,
             relic_0: 40,
+            meta_6: 42,
             school_3: 50,
             horde_0: 60,
             card_0: 80,

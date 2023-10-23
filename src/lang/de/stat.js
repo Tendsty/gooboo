@@ -105,11 +105,11 @@ export default {
   },
   village_totalOffering: {
     achievement: 'Nihilist',
-    description: 'Opfergaben erhalten'
+    description: 'Opfer erbracht'
   },
   village_bestOffering: {
     achievement: 'Schwarzes Loch',
-    description: 'Opfergaben in einem Zyklus erhalten'
+    description: 'Opfer in einem Zyklus erbracht'
   },
   village_oil: {
     achievement: 'Nehmt ihr Öl!',

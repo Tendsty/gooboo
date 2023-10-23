@@ -13,10 +13,12 @@
   <div class="ma-1">
     <div class="d-flex justify-center align-center ma-1">
       <v-btn icon :disabled="zone <= 1 || isFrozen || currentTower !== null" @click="zoneMin"><v-icon>mdi-skip-backward</v-icon></v-btn>
+      <v-btn icon :disabled="zone <= 1 || isFrozen || currentTower !== null" @click="zonePrev10"><v-icon>mdi-step-backward-2</v-icon></v-btn>
       <v-btn icon :disabled="zone <= 1 || isFrozen || currentTower !== null" @click="zonePrev"><v-icon>mdi-step-backward</v-icon></v-btn>
       <div v-if="currentTower !== null" class="mx-2">{{ $vuetify.lang.t('$vuetify.horde.zone') }} ~{{ zoneEstimation }}</div>
       <div v-else class="mx-2">{{ $vuetify.lang.t('$vuetify.horde.zone') }} {{ zone }}</div>
       <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneNext"><v-icon>mdi-step-forward</v-icon></v-btn>
+      <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneNext10"><v-icon>mdi-step-forward-2</v-icon></v-btn>
       <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
     </div>
     <div class="d-flex flex-wrap justify-center align-center">
@@ -267,9 +269,19 @@ export default {
         this.$store.dispatch('horde/updateZone', this.zone - 1);
       }
     },
+    zonePrev10() {
+      if (this.zone > 1) {
+        this.$store.dispatch('horde/updateZone', Math.max(this.zone - 10, 1));
+      }
+    },
     zoneNext() {
       if (this.zone < this.maxZone) {
         this.$store.dispatch('horde/updateZone', this.zone + 1);
+      }
+    },
+    zoneNext10() {
+      if (this.zone < this.maxZone) {
+        this.$store.dispatch('horde/updateZone', Math.min(this.zone + 10, this.maxZone));
       }
     },
     zoneMax() {

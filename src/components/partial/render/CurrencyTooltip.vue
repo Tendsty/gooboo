@@ -18,6 +18,12 @@
         </span>
       </template>
     </div>
+    <div v-if="gainTimerNeeded !== null" class="text-center mt-n1">
+      {{ $vuetify.lang.t('$vuetify.currency.gainTimerNeeded', (currency.timerIsEstimate ? '~' : '') + $formatTime(gainTimerNeeded)) }}
+    </div>
+    <div v-if="capTimerNeeded !== null" class="text-center mt-n1">
+      {{ $vuetify.lang.t(`$vuetify.currency.${ overcapStage >= 1 ? 'overcapTimerNeeded' : 'capTimerNeeded' }`, (currency.timerIsEstimate ? '~' : '') + $formatTime(capTimerNeeded)) }}
+    </div>
     <alert-text v-if="!afford" type="error">{{ $vuetify.lang.t('$vuetify.gooboo.cantAfford') }}</alert-text>
     <alert-text v-if="!affordCap" type="error">{{ $vuetify.lang.t('$vuetify.gooboo.capTooLow') }}</alert-text>
     <alert-text v-if="showMultWarning" type="warning">{{ $vuetify.lang.t('$vuetify.currency.benefitLoss') }}</alert-text>
@@ -145,6 +151,29 @@ export default {
         obj[key] = {type: elem.type, value: elem.value(value)};
       }
       return obj;
+    },
+    showTimer() {
+      return this.$store.state.system.settings.experiment.items.gainTimer.value && (
+        (this.currency.showGainTimer && this.gainAmount !== null && this.gainAmount > 0) ||
+        (this.timerFunction !== null && this.timerFunction !== null && this.timerFunction > 0)
+      );
+    },
+    timerFunction() {
+      return this.currency.gainTimerFunction === null ? null : this.currency.gainTimerFunction();
+    },
+    gainTimerNeeded() {
+      if (!this.showTimer || this.needed === null || !this.affordCap || this.needed <= this.currency.value) {
+        return null;
+      }
+      const gainAmount = this.currency.showGainTimer ? this.gainAmount : this.timerFunction;
+      return Math.ceil((this.needed - this.currency.value) / gainAmount);
+    },
+    capTimerNeeded() {
+      if (!this.showTimer || this.needed !== null || this.currency.cap === null) {
+        return null;
+      }
+      const gainAmount = this.currency.showGainTimer ? this.gainAmount : this.timerFunction;
+      return Math.ceil((this.currency.cap * (this.overcapStage + 1) - this.currency.value) / (gainAmount * this.overcapMult));
     }
   }
 }

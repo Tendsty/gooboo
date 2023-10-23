@@ -81,7 +81,7 @@ export default {
       // List selected offline stats
       if (this.$store.state.system.features[this.name].offlineStat) {
         this.$store.state.system.features[this.name].offlineStat.forEach(elem => {
-          const oldValue = this.oldSavefile.stat[elem]?.value ?? this.$store.state.stat[elem].default;
+          const oldValue = this.oldSavefile.stat[elem] ? this.oldSavefile.stat[elem][0] : this.$store.state.stat[elem].default;
           if (this.$store.state.stat[elem].value > oldValue) {
             this.$set(this.stats, elem, {before: oldValue, after: this.$store.state.stat[elem].value, isNew: this.oldSavefile.stat[elem] === undefined});
           }
@@ -90,9 +90,9 @@ export default {
 
       // List all upgrades
       for (const [key, elem] of Object.entries(this.$store.state.upgrade.item)) {
-        const oldValue = this.oldSavefile.upgrade[key]?.level ?? 0;
+        const oldValue = this.oldSavefile.upgrade[key] ? this.oldSavefile.upgrade[key][1] : 0;
         if (elem.feature === this.name && elem.level > oldValue) {
-          this.$set(this.upgrades, key, {before: oldValue, after: elem.level, isNew: this.oldSavefile.upgrade[key] === undefined || this.oldSavefile.upgrade[key].highestLevel <= 0});
+          this.$set(this.upgrades, key, {before: oldValue, after: elem.level, isNew: this.oldSavefile.upgrade[key] === undefined || this.oldSavefile.upgrade[key][2] <= 0});
           this.hasUpgrades = true;
         }
       }

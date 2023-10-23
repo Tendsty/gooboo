@@ -105,7 +105,7 @@ export default {
                 endDate.setDate(endDate.getDate() + 6);
                 if (arr.findIndex(el => el.start <= endCompare && el.end >= startCompare) === -1) {
                     arr.push({
-                        name: state.small[getWeek(new Date(week)) % state.small.length],
+                        name: state.small[getWeek(startDate) % state.small.length],
                         start: startDate,
                         end: endDate
                     });
@@ -157,7 +157,8 @@ export default {
             }
             return Math.floor(state.casino_bingo_boosts.length / 2 + 3);
         },
-        getRandomPrize: (state, getters, rootState) => (pool, amount = 1) => {
+        getRandomPrize: (state, getters, rootState, rootGetters) => (pool, amount = 1) => {
+            let rngGen = rootGetters['system/getRng']('event_prizePool_' + pool);
             let eligible = [];
             let eligibleWeights = [];
             let chosen = [];
@@ -178,7 +179,7 @@ export default {
             }
             for (let i = 0; i < amount; i++) {
                 if (eligible.length > 0) {
-                    const chosenIndex = weightSelect(eligibleWeights);
+                    const chosenIndex = weightSelect(eligibleWeights, rngGen());
                     const prize = state.prize[eligible[chosenIndex]];
                     const isTreasure = prize.type === 'treasure';
                     if (isTreasure && treasureRng[prize.item] === undefined) {
@@ -374,8 +375,9 @@ export default {
                     break;
                 }
                 case 'casino': {
-                    commit('updateKey', {key: 'casino_type', value: randomElem(state.casino_types, rootGetters['system/nextRng']('casino_type')[0])});
-                    commit('system/takeRng', 'casino_type', {root: true});
+                    let rngGen = rootGetters['system/getRng']('casino_type');
+                    commit('system/nextRng', {name: 'casino_type', amount: 1}, {root: true});
+                    commit('updateKey', {key: 'casino_type', value: randomElem(state.casino_types, rngGen())});
                     switch (state.casino_type) {
                         case 'bingo': {
                             dispatch('casinoBingoCardGenerate');
@@ -393,7 +395,9 @@ export default {
                 case 'bank': {
                     // Cash in investment
                     dispatch('bankCashInInvestment');
-                    commit('updateKey', {key: 'bank_project_current', value: randomElem(Object.keys(state.bank_project))});
+                    let rngGen = rootGetters['system/getRng']('bank_project');
+                    commit('system/nextRng', {name: 'bank_project', amount: 1}, {root: true});
+                    commit('updateKey', {key: 'bank_project_current', value: randomElem(Object.keys(state.bank_project), rngGen())});
                     commit('updateKey', {key: 'bank_investment', value: 0});
                     commit('updateKey', {key: 'bank_action', value: true});
                     dispatch('note/find', 'event_6', {root: true});
@@ -635,10 +639,11 @@ export default {
             }
         },
         bankRollForCardPack({ rootGetters, commit, dispatch}) {
-            if (chance(rootGetters['mult/get']('bankCardPackChance'), rootGetters['system/nextRng']('bank_cardPack')[0])) {
+            let rngGen = rootGetters['system/getRng']('bank_cardPack');
+            commit('system/nextRng', {name: 'bank_cardPack', amount: 1}, {root: true});
+            if (chance(rootGetters['mult/get']('bankCardPackChance'), rngGen())) {
                 dispatch('card/openPack', {name: 'investorsDream', notify: true, amount: 1}, {root: true});
             }
-            commit('system/takeRng', 'bank_cardPack', {root: true});
         },
         bankCashInInvestment({ state, rootGetters, dispatch }) {
             if (state.bank_investment > 0) {
@@ -653,16 +658,20 @@ export default {
                 dispatch('currency/gain', {feature: 'gem', name: 'topaz', amount: state.bank_investment, refund: true}, {root: true});
             }
         },
-        casinoBingoCardGenerate({ state, getters, commit }) {
+        casinoBingoCardGenerate({ state, getters, rootGetters, commit }) {
             let bingoCard = [];
+            let rngGen = rootGetters['system/getRng']('bingo_generate');
+            commit('system/nextRng', {name: 'bingo_generate', amount: 1}, {root: true});
             for (let i = 0; i < 5; i++) {
-                bingoCard.push(shuffleArray(buildArray(15).map(n => n + i * 15 + 1)).slice(0, 5).map(elem => {return {value: elem, prize: null, isRare: false};}));
+                bingoCard.push(shuffleArray(buildArray(15).map(n => n + i * 15 + 1), rngGen).slice(0, 5).map(elem => {return {value: elem, prize: null, isRare: false};}));
             }
-            shuffleArray([...buildArray(12), ...buildArray(12).map(i => i + 13)]).slice(0, 6).forEach(num => {
-                const prize = getters.getRandomPrize('bingo' + (getters.bingoCellIsRare(num) ? 1 : 0))[0];
+            shuffleArray([...buildArray(12), ...buildArray(12).map(i => i + 13)], rngGen).slice(0, 6).forEach(num => {
+                const pool = 'bingo' + (getters.bingoCellIsRare(num) ? 1 : 0);
+                const prize = getters.getRandomPrize(pool)[0];
+                commit('system/nextRng', {name: 'event_prizePool_' + pool, amount: 1}, {root: true});
                 const prizeData = state.prize[prize.prize];
                 if (prizeData.type === 'treasure') {
-                    commit('system/takeRng', 'treasure_' + prizeData.item, {root: true});
+                    commit('system/nextRng', {name: 'treasure_' + prizeData.item, amount: 1}, {root: true});
                 }
                 bingoCard[Math.floor(num / 5)][num % 5].prize = prize;
                 if (getters.bingoCellIsRare(num)) {
@@ -673,15 +682,17 @@ export default {
             commit('updateKey', {key: 'casino_bingo_draws', value: []});
             commit('updateKey', {key: 'casino_bingo_boosts', value: []});
             for (let i = 0; i < 3; i++) {
-                const prize = getters.getRandomPrize('bingo' + (i + 2))[0];
+                const pool = 'bingo' + (i + 2);
+                const prize = getters.getRandomPrize(pool)[0];
+                commit('system/nextRng', {name: 'event_prizePool_' + pool, amount: 1}, {root: true});
                 const prizeData = state.prize[prize.prize];
                 if (prizeData.type === 'treasure') {
-                    commit('system/takeRng', 'treasure_' + prizeData.item, {root: true});
+                    commit('system/nextRng', {name: 'treasure_' + prizeData.item, amount: 1}, {root: true});
                 }
                 commit('updateKey', {key: 'casino_bingo_prize_' + (i + 1), value: prize});
             }
         },
-        casinoBingoCardDraw({ state, getters, commit, dispatch }) {
+        casinoBingoCardDraw({ state, getters, rootGetters, commit, dispatch }) {
             let weights = buildArray(75).map(elem => {
                 const num = elem + 1;
                 if (state.casino_bingo_draws.includes(num)) {
@@ -703,8 +714,10 @@ export default {
                 drawGoal = 17;
             }
 
+            let rngGen = rootGetters['system/getRng']('bingo_draw');
+            commit('system/nextRng', {name: 'bingo_draw', amount: 1}, {root: true});
             while (state.casino_bingo_draws.length < drawGoal) {
-                const drawnNum = weightSelect(weights);
+                const drawnNum = weightSelect(weights, rngGen());
                 weights[drawnNum] = 0;
                 commit('pushKey', {key: 'casino_bingo_draws', value: drawnNum + 1});
 
@@ -780,46 +793,55 @@ export default {
                     break;
             }
         },
-        casinoWheelGenerate({ state, getters, commit }) {
+        casinoWheelGenerate({ state, getters, rootGetters, commit }) {
             const rareSegments = [
                 {rarity: 4, percent: 1},
                 {rarity: 2, percent: 4},
                 {rarity: 3, percent: 3},
                 {rarity: 2, percent: 4},
             ];
+            let rngGen = rootGetters['system/getRng']('wheel_generate');
+            commit('system/nextRng', {name: 'wheel_generate', amount: 1}, {root: true});
             const commonSegments = shuffleArray([
                 [{rarity: 0, percent: 12}, {rarity: 1, percent: 8}],
                 [{rarity: 0, percent: 12}],
                 [{rarity: 0, percent: 12}, {rarity: 1, percent: 12}, {rarity: 0, percent: 12}],
                 [{rarity: 1, percent: 8}, {rarity: 0, percent: 12}]
-            ]);
+            ], rngGen);
             let segments = [];
             for (let i = 0; i < 4; i++) {
                 segments.push(rareSegments[i], ...commonSegments[i]);
             }
             segments = segments.map(segment => {
-                const prize = getters.getRandomPrize('wheelOfFortune' + segment.rarity)[0];
+                const pool = 'wheelOfFortune' + segment.rarity;
+                const prize = getters.getRandomPrize(pool)[0];
+                commit('system/nextRng', {name: 'event_prizePool_' + pool, amount: 1}, {root: true});
                 const prizeData = state.prize[prize.prize];
                 if (prizeData.type === 'treasure') {
-                    commit('system/takeRng', 'treasure_' + prizeData.item, {root: true});
+                    commit('system/nextRng', {name: 'treasure_' + prizeData.item, amount: 1}, {root: true});
                 }
                 return {width: segment.percent * 3.6, rarity: segment.rarity, prize};
             });
             commit('updateKey', {key: 'casino_wheel_segments', value: segments});
-            commit('updateKey', {key: 'casino_wheel_rotation', value: randomFloat(0, 360)});
+            let rngGenSpin = rootGetters['system/getRng']('wheel_spin');
+            commit('updateKey', {key: 'casino_wheel_rotation', value: randomFloat(0, 360, rngGenSpin())});
+            commit('system/nextRng', {name: 'wheel_spin', amount: 1}, {root: true});
         },
         casinoWheelSpin({ state, getters, rootGetters, commit, dispatch }) {
             if (rootGetters['currency/value']('gem_topaz') >= CASINO_WHEEL_COST) {
                 dispatch('currency/spend', {feature: 'gem', name: 'topaz', amount: CASINO_WHEEL_COST}, {root: true});
-                commit('updateKey', {key: 'casino_wheel_rotation', value: state.casino_wheel_rotation + randomFloat(3 * 360, 6 * 360)});
+                let rngGen = rootGetters['system/getRng']('wheel_spin');
+                commit('updateKey', {key: 'casino_wheel_rotation', value: state.casino_wheel_rotation + randomFloat(3 * 360, 6 * 360, rngGen())});
+                commit('system/nextRng', {name: 'wheel_spin', amount: 1}, {root: true});
                 const segment = getters.getWheelSegment;
                 if (segment !== -1) {
                     const pool = 'wheelOfFortune' + state.casino_wheel_segments[segment].rarity;
                     dispatch('winPrize', {prize: state.casino_wheel_segments[segment].prize, pool, notify: true}).then(() => {
                         const prize = getters.getRandomPrize(pool)[0];
+                        commit('system/nextRng', {name: 'event_prizePool_' + pool, amount: 1}, {root: true});
                         const prizeData = state.prize[prize.prize];
                         if (prizeData.type === 'treasure') {
-                            commit('system/takeRng', 'treasure_' + prizeData.item, {root: true});
+                            commit('system/nextRng', {name: 'treasure_' + prizeData.item, amount: 1}, {root: true});
                         }
                         commit('updateIndex', {name: 'casino_wheel_segments', key: segment, subkey: 'prize', value: prize});
                     });
@@ -839,15 +861,17 @@ export default {
                         const prizeData = state.prize[prize.prize];
                         chosen.push(prize);
                         if (prizeData.type === 'treasure') {
-                            commit('system/takeRng', 'treasure_' + prizeData.item, {root: true});
+                            commit('system/nextRng', {name: 'treasure_' + prizeData.item, amount: 1}, {root: true});
                         }
+                        commit('system/nextRng', {name: 'event_prizePool', amount: 1}, {root: true});
                     }
                 }
             }
             const randomPrizes = getters.getRandomPrize(pool, pool === 'merchant' ? rootGetters['mult/get']('merchantOffers') : 3);
+            commit('system/nextRng', {name: 'event_prizePool_' + pool, amount: 1}, {root: true});
             randomPrizes.forEach(prize => {
                 if (prize.type === 'treasure') {
-                    commit('system/takeRng', 'treasure_' + prize.item, {root: true});
+                    commit('system/nextRng', {name: 'treasure_' + prize.item, amount: 1}, {root: true});
                 }
             });
             commit('updateKey', {key: pool === 'merchant' ? 'shop_merchant' : 'shop_big', value: [...chosen, ...randomPrizes]});

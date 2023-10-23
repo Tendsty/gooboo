@@ -1,12 +1,13 @@
 import Vue from "vue";
 import { tick } from "../js/tick";
 import { getDay } from "../js/utils/date";
-import { simpleHash } from "../js/utils/random";
+import { randomHex } from "../js/utils/random";
+import seedrandom from "seedrandom";
 
 export default {
     namespaced: true,
     state: {
-        version: '1.3.3',
+        version: '1.3.4',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -241,8 +242,8 @@ export default {
                         unlock: 'debugFeature',
                         hasDescription: false,
                         type: 'switch',
-                        value: true,
-                        defaultValue: true
+                        value: false,
+                        defaultValue: false
                     }
                 }
             },
@@ -355,9 +356,22 @@ export default {
                         defaultValue: true
                     }
                 }
+            },
+            experiment: {
+                unlock: null,
+                items: {
+                    gainTimer: {
+                        unlock: null,
+                        hasDescription: true,
+                        type: 'switch',
+                        value: false,
+                        defaultValue: false
+                    }
+                }
             }
         },
         keybinds: {
+            prevMainFeature: null,
             nextMainFeature: null,
             debugSkip1m: null,
             debugSkip10m: null,
@@ -381,7 +395,8 @@ export default {
         noteHint: [],
         farmHint: false,
         tutorial: {},
-        cachePage: {}
+        cachePage: {},
+        playerId: null
     },
     getters: {
         mainFeatures: (state, getters, rootState) => {
@@ -419,10 +434,8 @@ export default {
 
             return feat;
         },
-        nextRng: (state) => (name, skip = 0) => {
-            const hash = simpleHash(name);
-
-            return state.rng[hash].next.slice(skip * state.rng[hash].size, state.rng[hash].size);
+        getRng: (state) => (name, skip = 0) => {
+            return seedrandom(state.playerId + name + '_' + ((state.rng[name] ?? 0) + skip));
         },
         backupHint: (state) => {
             const mode = state.settings.notification.items.backupHint.value;
@@ -471,50 +484,8 @@ export default {
         }
     },
     mutations: {
-        initRng(state, o) {
-            const hash = simpleHash(o.name);
-
-            // How many numbers are needed per instance
-            const size = o.size ?? 1;
-
-            // How many instances are stored in queue
-            const amount = o.amount ?? 10;
-
-            Vue.set(state.rng, hash, {
-                size,
-                amount,
-                next: []
-            });
-
-            // Fill queue on init
-            const needed = size * amount;
-            while (state.rng[hash].next.length < needed) {
-                state.rng[hash].next.push(Math.random());
-            }
-        },
-        fillRng(state, hash) {
-            const needed = state.rng[hash].size * state.rng[hash].amount;
-            while (state.rng[hash].next.length < needed) {
-                state.rng[hash].next.push(Math.random());
-            }
-        },
-        refillRng(state, hash) {
-            Vue.set(state.rng[hash], 'next', []);
-            const needed = state.rng[hash].size * state.rng[hash].amount;
-            while (state.rng[hash].next.length < needed) {
-                state.rng[hash].next.push(Math.random());
-            }
-        },
-        takeRng(state, name) {
-            const hash = simpleHash(name);
-
-            state.rng[hash].next.splice(0, state.rng[hash].size);
-
-            // Also refill queue after taking from it
-            const needed = state.rng[hash].size * state.rng[hash].amount;
-            while (state.rng[hash].next.length < needed) {
-                state.rng[hash].next.push(Math.random());
-            }
+        nextRng(state, o) {
+            state.rng[o.name] = (state.rng[o.name] ?? 0) + o.amount;
         },
         initTheme(state, o) {
             Vue.set(state.themes, o.name, {
@@ -553,6 +524,9 @@ export default {
         },
         updateKey(state, o) {
             Vue.set(state, o.key, o.value);
+        },
+        updateSubkey(state, o) {
+            Vue.set(state[o.name], o.key, o.value);
         },
         updateThemeKey(state, o) {
             Vue.set(state.themes[o.name], o.key, o.value);
@@ -593,6 +567,11 @@ export default {
         },
         removeNoteHint(state, name) {
             Vue.set(state, 'noteHint', state.noteHint.filter(elem => elem !== name));
+        },
+        generatePlayerId(state) {
+            if (state.playerId === null) {
+                state.playerId = randomHex(16);
+            }
         }
     },
     actions: {
@@ -610,6 +589,9 @@ export default {
             commit('updateKey', {key: 'timeMult', value: 1});
             commit('updateKey', {key: 'noteHint', value: []});
             commit('updateKey', {key: 'farmHint', value: false});
+            commit('updateKey', {key: 'rng', value: {}});
+            commit('updateKey', {key: 'cachePage', value: {}});
+            commit('updateKey', {key: 'playerId', value: null});
 
             for (const [key, elem] of Object.entries(state.features)) {
                 if (elem.currentSubfeature !== undefined) {
@@ -623,9 +605,6 @@ export default {
             }
             for (const [key] of Object.entries(state.keybinds)) {
                 commit('updateKeybind', {name: key, value: null});
-            }
-            for (const [key] of Object.entries(state.rng)) {
-                commit('refillRng', key);
             }
             for (const [key, elem] of Object.entries(state.themes)) {
                 commit('updateThemeKey', {name: key, key: 'owned', value: elem.ownedDefault});
@@ -731,6 +710,12 @@ export default {
                         }
                     }
                     switch (foundKeybind) {
+                        case 'prevMainFeature': {
+                            const mainFeatureList = getters.mainFeatures.map(elem => elem.name).filter(elem => !rootState.cryolab[elem]?.active).reverse();
+                            const currentIndex = mainFeatureList.findIndex(elem => elem === state.screen);
+                            commit('updateKey', {key: 'screen', value: mainFeatureList[(currentIndex + 1) >= mainFeatureList.length ? 0 : (currentIndex + 1)]});
+                            break;
+                        }
                         case 'nextMainFeature': {
                             const mainFeatureList = getters.mainFeatures.map(elem => elem.name).filter(elem => !rootState.cryolab[elem]?.active);
                             const currentIndex = mainFeatureList.findIndex(elem => elem === state.screen);

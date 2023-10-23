@@ -74,14 +74,14 @@ export default {
         {name: 'gardenGnome', type: 'farmBuilding', value: lvl => lvl}
     ]},
     learning: {cap: 1, hasDescription: true, requirementBase, requirementStat, requirementValue: 4, price() {
-        return {farm_gold: 3};
+        return {farm_gold: 1};
     }, effect: [
         {name: 'farmCropExp', type: 'unlock', value: lvl => lvl >= 1}
     ]},
     manure: {cap: 1, requirement() {
         return store.state.upgrade.item.farm_learning.level >= 1;
     }, price() {
-        return {farm_gold: 30};
+        return {farm_gold: 5};
     }, effect: [
         {name: 'farmFertilizer', type: 'unlock', value: lvl => lvl >= 1}
     ]},
