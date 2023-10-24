@@ -138,7 +138,7 @@ export default {
         return {farm_bug: Math.round(5 * lvl * Math.pow(1.1, Math.max(0, lvl - 10)) + 10), farm_butterfly: Math.round(lvl * Math.pow(1.1, Math.max(0, lvl - 10)) + 2)};
     }, effect: [
         {name: 'currencyFarmFruitGain', type: 'mult', value: lvl => lvl * 0.15 + 1},
-        {name: 'farmRareDrop', type: 'base', value: lvl => lvl * 0.002}
+        {name: 'farmRareDropChance', type: 'base', value: lvl => lvl * 0.002}
     ]},
     mediumCrate: {cap: 8, capMult: true, requirementBase, requirementStat, requirementValue: 10, price(lvl) {
         return {farm_vegetable: buildNum(90, 'M') * Math.pow(1.75, lvl), farm_grain: buildNum(54, 'M') * Math.pow(2.1, lvl)};
@@ -161,7 +161,7 @@ export default {
         return {farm_gold: Math.round(Math.pow(1.25, lvl) * 350)};
     }, effect: [
         {name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
-        {name: 'farmRareDrop', type: 'base', value: lvl => lvl * 0.0025}
+        {name: 'farmRareDropChance', type: 'base', value: lvl => lvl * 0.0025}
     ]},
     butterflyWings: {cap: 6, requirementBase, requirementStat, requirementValue: 12, price(lvl) {
         return {farm_butterfly: Math.round(Math.pow(1.35, lvl) * 14)};

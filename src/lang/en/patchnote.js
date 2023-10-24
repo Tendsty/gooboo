@@ -284,6 +284,7 @@ export default {
       1: 'Principal replaced!',
       2: 'Eco-friendly',
       3: 'Neverending bosses',
+      4: 'Slow and steady',
     }
   }
 }

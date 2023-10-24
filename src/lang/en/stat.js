@@ -182,7 +182,7 @@ export default {
   },
   farm_maxOvergrow: {
     achievement: 'Gardener',
-    description: 'Maximum overgrow'
+    description: 'Best harvest'
   },
   farm_bestPrestige: {
     achievement: 'Prestigous',

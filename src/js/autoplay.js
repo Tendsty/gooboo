@@ -617,7 +617,7 @@ function autoplayTicks(newTime, oldTime) {
             for (let [key, elem] of Object.entries(store.state.farm.crop)) {
                 if (elem.found && elem.type === chosenType && store.getters['currency/value']('farm_gold') >= (elem.cost * freeCells)) {
                     seedList.push(key);
-                    seedWeight.push(1 / Math.sqrt(store.getters['farm/cropGrow'](key)))
+                    seedWeight.push(1 / Math.sqrt(elem.grow))
                 }
             }
 

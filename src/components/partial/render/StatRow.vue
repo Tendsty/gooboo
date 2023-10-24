@@ -28,7 +28,9 @@
       <span v-else-if="splitName[0] === 'hordeHeirloom'"><v-icon small class="mr-1">mdi-necklace</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.heirloom.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'hordeTower'"><v-icon small class="mr-1">mdi-office-building</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.tower.${ name.split('_')[1] }`) }} ({{ name.split('_')[2] }})</span>
       <span v-else-if="splitName[0] === 'farmGardenGnome'"><v-icon small class="mr-1">mdi-human-child</v-icon>{{ $vuetify.lang.t(`$vuetify.farm.building.gardenGnome.name`) }}</span>
-      <span v-else-if="splitName[0] === 'farmUpgrade'"><v-icon small class="mr-1">mdi-dna</v-icon>{{ $vuetify.lang.t(`$vuetify.farm.cropUpgradeName.${splitName[1]}`) }}</span>
+      <span v-else-if="splitName[0] === 'farmGene'"><v-icon small class="mr-1">mdi-dna</v-icon>{{ $vuetify.lang.t(`$vuetify.farm.gene.${splitName[1]}`) }}</span>
+      <span v-else-if="splitName[0] === 'farmGeneUpgrade'"><v-icon small class="mr-n1">mdi-dna</v-icon><v-icon small class="mr-1">mdi-chevron-double-up</v-icon>{{ $vuetify.lang.t(`$vuetify.farm.gene.${splitName[1]}`) }}</span>
+      <span v-else-if="splitName[0] === 'farmFertilizer'"><v-icon small class="mr-1">mdi-sack</v-icon>{{ $vuetify.lang.t(`$vuetify.consumable.farm_${splitName[1]}.name`) }}</span>
       <span v-else-if="splitName[0] === 'galleryIdea'"><v-icon small class="mr-1">mdi-lightbulb</v-icon>{{ $vuetify.lang.t(`$vuetify.gallery.idea.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'card'"><v-icon small class="mr-1">mdi-cards</v-icon>{{ $vuetify.lang.t(`$vuetify.card.card.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'cardCollection'"><v-icon small class="mr-1">mdi-cards</v-icon>{{ $vuetify.lang.t(`$vuetify.card.collection.${splitName[1]}`) }}</span>

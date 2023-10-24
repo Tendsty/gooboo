@@ -587,6 +587,10 @@ export default {
     name: 'Seed hull',
     description: 'An empty hull from a plant, the seed seems to be missing'
   },
+  farm_grass: {
+    name: 'Grass',
+    description: 'This seems unnatural, grass shouldn\'t grow on crops'
+  },
   farm_petal: {
     name: 'Petal',
     description: 'These petals grow on all flowers, but you only collect the most beautiful ones'
@@ -610,6 +614,10 @@ export default {
   farm_bee: {
     name: 'Bee',
     description: 'Bees are a common sight on a garden. Don\'t bother them, just let them collect their nectar'
+  },
+  farm_mysteryStone: {
+    name: 'Mystery stone',
+    description: 'What is this? What uses does it have?'
   },
   farm_goldenPetal: {
     name: 'Golden petal',

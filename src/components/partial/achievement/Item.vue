@@ -11,6 +11,7 @@
       <div>{{ $vuetify.lang.t(`$vuetify.stat.${name}.description`) }}</div>
       <v-progress-linear class="balloon-text-dynamic mt-1 mb-2" height="20" :color="achievement.secret ? 'purple' : 'primary'" :value="percent">
         <span v-if="achievement.display === 'number'">{{ $formatNum(stat) }}<span v-if="!isMax">&nbsp;/ {{ $formatNum(milestone) }}</span></span>
+        <span v-else-if="achievement.display === 'percent'">{{ $formatNum(stat * 100) }}%<span v-if="!isMax">&nbsp;/ {{ $formatNum(milestone * 100) }}%</span></span>
         <span v-else-if="achievement.display === 'time'">{{ $formatTime(stat) }}<span v-if="!isMax">&nbsp;/ {{ $formatTime(milestone) }}</span></span>
         <span v-else-if="achievement.display === 'grade'">{{ gradeCurrent }}<span v-if="!isMax">&nbsp;/ {{ gradeMilestone }}</span></span>
         <v-icon small v-else-if="achievement.display === 'boolean'">{{ stat ? 'mdi-check' : 'mdi-close' }}</v-icon>

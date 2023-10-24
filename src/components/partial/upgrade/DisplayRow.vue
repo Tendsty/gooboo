@@ -28,7 +28,7 @@ export default {
   }),
   computed: {
     isSimple() {
-      return ['unlock', 'keepUpgrade', 'farmSeed', 'findConsumable', 'galleryIdea'].includes(this.type);
+      return ['unlock', 'keepUpgrade', 'farmSeed', 'findConsumable', 'galleryIdea', 'text'].includes(this.type);
     },
     hidePrefix() {
       return ['hordeActive', 'hordeCooldown'].includes(this.type);
@@ -87,6 +87,9 @@ export default {
         case 'unlock':
           cacheValue = this.$vuetify.lang.t(`$vuetify.gooboo.unlock`) + ': ' + this.$vuetify.lang.t(`$vuetify.unlock.${this.name}`);
           break;
+        case 'text':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.text.${this.name}`);
+          break;
         case 'keepUpgrade':
           cacheValue = this.$vuetify.lang.t(`$vuetify.gooboo.keep`) + ': ' + this.$vuetify.lang.t(`$vuetify.upgrade.${this.name}`);
           break;
@@ -110,6 +113,12 @@ export default {
           break;
         case 'farmBuildingPremium':
           cacheValue = this.$vuetify.lang.t(`$vuetify.farm.building.premium`, this.$vuetify.lang.t(`$vuetify.farm.building.${this.name}.name`));
+          break;
+        case 'addRareDrop':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.farm.addRareDrop`, this.$vuetify.lang.t(`$vuetify.currency.${this.name}.name`));
+          break;
+        case 'addRareDropAmount':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.farm.addRareDropAmount`, this.$vuetify.lang.t(`$vuetify.currency.${this.name}.name`));
           break;
         case 'galleryIdea':
           cacheValue = this.$vuetify.lang.t(`$vuetify.gallery.idea.unlock`) + ': ' + this.$vuetify.lang.t(`$vuetify.gallery.idea.${this.name}`);

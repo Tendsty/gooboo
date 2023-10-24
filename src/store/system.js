@@ -7,7 +7,7 @@ import seedrandom from "seedrandom";
 export default {
     namespaced: true,
     state: {
-        version: '1.3.5',
+        version: '1.4.0',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -436,6 +436,9 @@ export default {
         },
         getRng: (state) => (name, skip = 0) => {
             return seedrandom(state.playerId + name + '_' + ((state.rng[name] ?? 0) + skip));
+        },
+        getRngById: (state) => (name, id) => {
+            return seedrandom(state.playerId + name + '_' + id);
         },
         backupHint: (state) => {
             const mode = state.settings.notification.items.backupHint.value;

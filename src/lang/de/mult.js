@@ -91,7 +91,7 @@ export default {
   farmExperience: 'Pflanzenerfahrung',
   farmTiles: 'Gartenfelder',
   farmOvergrow: 'Überwuchern',
-  farmRareDrop: 'Chance auf seltenen Ertrag',
+  farmRareDropChance: 'Chance auf seltenen Ertrag',
   farmCropGain: 'Ertrag',
   galleryInspirationBase: 'Inspiration-Grundzeit',
   galleryInspirationIncrement: 'Inspiration-Zeitanstieg',

@@ -284,6 +284,7 @@ export default {
       1: 'Direktor ersetzt!',
       2: 'Der Umwelt zuliebe',
       3: 'Endlose Bosse',
+      4: 'Langsam und stetig',
     }
   }
 }
