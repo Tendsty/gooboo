@@ -275,8 +275,14 @@ export default {
     223: 'Gene experience increase',
     224: 'Added an experimental setting to show resource gain timers',
     225: 'The pickaxe crafting tooltip now explains ore quality',
+
+    // v1.3.5
     226: 'The game should now be able to save again if your loadout names contained emojis',
     227: 'Fixed backups from the offline summary breaking if migrations occur',
+
+    // v1.3.6
+    228: 'Fixed a bug where seeded numbers were not restored on savefile load',
+    229: 'Fixed topaz showing time to next capacity when they are full',
   },
   v: {
     1: {
