@@ -9,6 +9,15 @@
 .crop-headline-small .stage-text-small {
   font-size: 8px;
 }
+.crop-symbol-bar {
+  position: absolute;
+  right: 4px;
+  top: 14px;
+  opacity: 0.25;
+}
+.mr-05 {
+  margin-right: 2px;
+}
 </style>
 
 <template>
@@ -22,6 +31,14 @@
     </div>
     <v-icon :size="iconSize" :color="crop.color">{{ crop.icon }}</v-icon>
     <v-progress-linear :class="{'rounded-b': $vuetify.breakpoint.smAndDown, 'rounded-b-lg': $vuetify.breakpoint.smAndUp}" :height="$vuetify.breakpoint.xsOnly ? 4 : 12" :color="isGrown ? 'green' : 'light-green'" :value="grow * 100"></v-progress-linear>
+    <div class="crop-symbol-bar">
+      <v-icon small v-if="item.cache.sprinkler" class="mr-05">mdi-sprinkler-variant</v-icon>
+      <v-icon small v-if="item.cache.lectern" class="mr-05">mdi-book-open-page-variant</v-icon>
+      <v-icon small v-if="item.cache.pinwheelSource" class="mr-05">mdi-pinwheel</v-icon>
+      <v-icon small v-if="item.cache.flag" class="mr-05">mdi-flag</v-icon>
+      <v-icon small v-if="item.cache.gnome" class="mr-05">mdi-human-child</v-icon>
+      <v-icon small v-if="item.cache.lonely" class="mr-05">mdi-circle-expand</v-icon>
+    </div>
   </div>
 </template>
 

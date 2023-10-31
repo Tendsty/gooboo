@@ -199,8 +199,8 @@ export default {
     goldenRose: {
         icon: 'mdi-flower',
         color: 'amber',
-        cost: 720 * MINUTES_PER_HOUR,
-        grow: 4320,
+        cost: 100,
+        grow: 720 * MINUTES_PER_HOUR,
         rareDrop: [
             {name: 'farm_petal', type: 'currency', chance: 0.55, value: 10},
             {name: 'farm_goldenPetal', type: 'currency', chance: 0.225, value: 1},

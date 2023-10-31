@@ -67,6 +67,7 @@ function loadGame(file, runPrepare = true) {
         }
 
         store.commit('upgrade/initCache');
+        store.dispatch('farm/updateFieldCaches');
         store.commit('system/resetAutosaveTimer');
         return true;
     }

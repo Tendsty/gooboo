@@ -1787,8 +1787,8 @@ export default {
       },
       sprinkler: {
         name: 'Sprinkler',
-        description: 'Crops in the same row grow twice as fast',
-        descriptionPremium: 'Crops in the same row grow three times as fast',
+        description: 'Crops in the same row grow +10% faster and have +250% overgrow',
+        descriptionPremium: 'Crops in the same row grow +20% faster and have +500% overgrow',
       },
       lectern: {
         name: 'Lectern',

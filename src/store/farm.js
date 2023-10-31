@@ -66,7 +66,7 @@ export default {
         },
         cropFertilizerCost: (state) => (name) => {
             const crop = state.crop[name];
-            return Math.ceil(Math.pow(crop.grow, 0.4) * 0.25 + (crop.cost > 0 ? (Math.pow(crop.cost, 0.8) * 0.5) : 0));
+            return Math.ceil(Math.pow(crop.grow, 0.4) * 0.12 + (crop.cost > 0 ? (Math.pow(crop.cost, 0.8) * 0.5) : 0));
         },
         currentPrestigeLevel: (state) => {
             let totalPrestige = 0;
@@ -249,7 +249,7 @@ export default {
                 rareDrop,
                 level: 0,
                 levelMax: 0,
-                dna: 9999,
+                dna: 0,
                 genes: [],
                 upgrades: {},
                 exp: 0,
@@ -398,12 +398,14 @@ export default {
                 const rngGen = rootGetters['system/getRngById'](`farmCrop_${ o.crop }`, field.rng);
                 const geneStats = getters.cropGeneStats(field.crop, field.fertilizer);
 
+                const allGainBoost = 0.1 * (field.buildingEffect.gnomeBoost ?? 0) / field.time + 1;
+
                 // Gain currency based on crop type
                 dispatch('currency/gain', {feature: 'farm', name: crop.type, amount: rootGetters['mult/get'](
                     'currencyFarm' + capitalize(crop.type) + 'Gain',
                     crop.yield + geneStats.mult.farmCropGain.baseValue,
                     (((field.buildingEffect.flag ?? 0) / field.time) * 0.5 + 1) * geneStats.mult.farmCropGain.multValue
-                ) * field.grow}, {root: true});
+                ) * allGainBoost * field.grow}, {root: true});
 
                 // Chance to gain gold
                 const goldAmount = randomRound(
@@ -411,7 +413,7 @@ export default {
                         'farmGoldChance',
                         getters.baseGoldChance(field.crop) + geneStats.mult.farmGoldChance.baseValue,
                         ((field.buildingEffect.gardenGnome ?? 0) / field.time) * geneStats.mult.farmGoldChance.multValue
-                    ) * field.grow,
+                    ) * allGainBoost * field.grow,
                     rngGen()
                 );
                 if (goldAmount) {
@@ -434,7 +436,7 @@ export default {
                         'farmRareDropChance',
                         elem.chance + (((field.buildingEffect.pinwheel ?? 0) / field.time) * 0.01) + geneStats.mult.farmRareDropChance.baseValue,
                         geneStats.mult.farmRareDropChance.multValue
-                    ) * field.grow, rngGen());
+                    ) * allGainBoost * field.grow, rngGen());
                     if (times > 0) {
                         switch (elem.type) {
                             case 'consumable':
@@ -462,7 +464,7 @@ export default {
                         'farmExperience',
                         getters.baseGoldChance(field.crop) + geneStats.mult.farmExperience.baseValue,
                         (((field.buildingEffect.lectern ?? 0) / field.time) * 2 + 1) * geneStats.mult.farmExperience.multValue
-                    ) * field.grow});
+                    ) * allGainBoost * field.grow});
                 }
 
                 // Add stats
@@ -658,6 +660,11 @@ export default {
                                 break;
                         }
                     }
+                    if (cell !== null && cell.type === 'crop') {
+                        commit('updateFieldCache', {x, y, key: 'pinwheelSource', value: false});
+                        commit('updateFieldCache', {x, y, key: 'gnome', value: 0});
+                        commit('updateFieldCache', {x, y, key: 'lonely', value: false});
+                    }
                 });
             });
             if (pinwheels.length > 0) {
@@ -681,6 +688,8 @@ export default {
                                 } else if (!pinwheelCropFound) {
                                     pinwheelCrops.push({crop: cell.crop, premium: false});
                                 }
+
+                                commit('updateFieldCache', {x, y, key: 'pinwheelSource', value: true});
                             }
                         }
                     });
@@ -691,11 +700,20 @@ export default {
                     if (cell !== null && cell.type === 'crop') {
                         const crop = state.crop[cell.crop];
                         const geneStats = getters.cropGeneStats(cell.crop, cell.fertilizer);
-                        const growSpeed = (sprinklerRows.find(e => e.premium && e.y === y) ? 3 : (sprinklerRows.find(e => e.y === y) ? 2 : 1));
+                        const sprinklers = (sprinklerRows.find(e => e.premium && e.y === y) ? 2 : (sprinklerRows.find(e => e.y === y) ? 1 : 0));
+                        let growSpeed = sprinklers * 0.1 + 1;
+                        if (geneStats.tag.includes('farmLonelyGrow')) {
+                            const cropCount = state.field.reduce((a, b) => a + b.reduce((c, d) => c + ((d !== null && d.crop === cell.crop) ? 1 : 0), 0), 0);
+                            if (cropCount <= 1) {
+                                growSpeed *= 2;
+                                commit('updateFieldCache', {x, y, key: 'lonely', value: true});
+                            }
+                        }
                         const growTime = rootGetters['mult/get']('farmGrow', crop.grow + geneStats.mult.farmGrow.baseValue, geneStats.mult.farmGrow.multValue);
-                        const overgrow = rootGetters['mult/get']('farmOvergrow', geneStats.mult.farmOvergrow.baseValue, geneStats.mult.farmOvergrow.multValue);
+                        const overgrow = rootGetters['mult/get']('farmOvergrow', sprinklers * 2.5 + geneStats.mult.farmOvergrow.baseValue, geneStats.mult.farmOvergrow.multValue);
                         commit('updateFieldCache', {x, y, key: 'grow', value: 1 / (growTime / growSpeed)});
                         commit('updateFieldCache', {x, y, key: 'overgrow', value: overgrow > 0 ? (1 / overgrow + 1) : null});
+                        commit('updateFieldCache', {x, y, key: 'sprinkler', value: sprinklerRows.find(e => e.premium && e.y === y) ? 2 : (sprinklerRows.find(e => e.y === y) ? 1 : 0)});
                         commit('updateFieldCache', {x, y, key: 'lectern', value: lecternColumns.find(e => e.x === x) ? (lecternColumns.find(e => e.premium && e.x === x) ? 2 : 1) : 0});
                         commit('updateFieldCache', {x, y, key: 'pinwheel', value: pinwheelCrops.filter(e => e.premium).length + pinwheelCrops.length});
                         let flagMult = 0;
@@ -710,6 +728,12 @@ export default {
                             }
                         });
                         commit('updateFieldCache', {x, y, key: 'flag', value: flagMult});
+                        if (geneStats.tag.includes('farmGnomeBoost')) {
+                            const gnomesFound = gnomes.filter(p => Math.abs(x - p.x) <= 1 && Math.abs(y - p.y) <= 1);
+                            if (gnomesFound.length > 0) {
+                                commit('updateFieldCache', {x, y, key: 'gnome', value: gnomesFound.filter(e => e.premium).length + gnomesFound.length});
+                            }
+                        }
                     }
                 });
             });

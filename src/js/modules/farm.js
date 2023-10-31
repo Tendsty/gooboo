@@ -49,6 +49,9 @@ export default {
                     if (cell.cache.flag > 0) {
                         store.commit('farm/addFieldBuildingEffect', {x, y, key: 'flag', value: cell.cache.flag * ticks});
                     }
+                    if (cell.cache.gnome > 0) {
+                        store.commit('farm/addFieldBuildingEffect', {x, y, key: 'gnomeBoost', value: cell.cache.gnome * ticks});
+                    }
                 }
             });
         });
@@ -148,7 +151,10 @@ export default {
                 obj.crop[key] = {
                     exp: elem.exp,
                     level: elem.level,
-                    levelMax: elem.levelMax
+                    levelMax: elem.levelMax,
+                    dna: elem.dna,
+                    genes: elem.genes,
+                    upgrades: elem.upgrades
                 };
                 if (rareDrops.length > 0) {
                     obj.crop[key].rareDrop = rareDrops;
@@ -174,6 +180,9 @@ export default {
                         store.commit('farm/findCropRareDrop', {name: key, index});
                     });
                 }
+                store.commit('farm/updateCropKey', {name: key, key: 'dna', value: elem.dna});
+                store.commit('farm/updateCropKey', {name: key, key: 'genes', value: elem.genes});
+                store.commit('farm/updateCropKey', {name: key, key: 'upgrades', value: elem.upgrades});
             }
         }
         store.commit('farm/calculateCropBuildingCaches');

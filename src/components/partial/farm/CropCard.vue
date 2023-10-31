@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="pa-2 justify-center">{{ $vuetify.lang.t(`$vuetify.farm.crop.${ name }`) }}</v-card-title>
     <v-card-text>
-      <div class="d-flex justify-center align-center flex-wrap">
+      <div class="d-flex justify-center align-center flex-wrap" key="crop-stats-bar">
         <gb-tooltip :min-width="0">
           <template v-slot:activator="{ on, attrs }">
             <div v-bind="attrs" v-on="on">{{ $formatTime(cropGrow * 60) }}</div>
@@ -68,7 +68,7 @@
           </gb-tooltip>
         </template>
       </div>
-      <div v-if="rareDrops.length > 0 || Object.keys(cropGeneStats.rareDrop).length > 0" class="mb-2">
+      <div v-if="rareDrops.length > 0 || Object.keys(cropGeneStats.rareDrop).length > 0" class="mb-2" key="crop-rare-drop-list">
         <div>{{ $vuetify.lang.t('$vuetify.farm.rareDrops') }}:</div>
         <crop-rare-drop
           class="ml-1"
@@ -87,7 +87,7 @@
           :item="{name: key, type: 'currency', chance: dnaRareDropChance, value: item}"
         ></crop-rare-drop>
       </div>
-      <div class="d-flex flex-wrap align-end justify-space-between" v-if="unlock.farmCropExp.use">
+      <div class="d-flex flex-wrap align-end justify-space-between" v-if="unlock.farmCropExp.use" key="crop-level-prestige">
         <span>{{ $vuetify.lang.t('$vuetify.gooboo.level') }} {{ crop.level }}{{ crop.levelMax > 0 ? ` (${$formatNum(crop.levelMax)})` : '' }}</span>
         <gb-tooltip v-if="crop.level >= 4" :title-text="$vuetify.lang.t('$vuetify.gooboo.prestige')">
           <template v-slot:activator="{ on, attrs }">
@@ -107,22 +107,24 @@
           <div v-else>{{ $vuetify.lang.t(`$vuetify.farm.prestige.nextNoEffect`) }}</div>
         </gb-tooltip>
       </div>
-      <gb-tooltip v-if="unlock.farmCropExp.use" :title-text="$vuetify.lang.t('$vuetify.gooboo.multGain', $vuetify.lang.t('$vuetify.farm.experience'))">
-        <template v-slot:activator="{ on, attrs }">
-          <v-progress-linear class="balloon-text-dynamic rounded" height="20" color="light-blue" :value="100 * crop.exp / expNeeded" v-bind="attrs" v-on="on">
-            {{ $formatNum(crop.exp) }} / {{ $formatNum(expNeeded) }}
-          </v-progress-linear>
-        </template>
-        <stat-breakdown name="farmExperience" :baseArray="this.cropGeneStats.mult.farmExperience.baseArray" :multArray="this.cropGeneStats.mult.farmExperience.multArray"></stat-breakdown>
-        <div>{{ $vuetify.lang.t(`$vuetify.farm.expToLevelUp`, $formatNum(harvestsNeeded)) }}</div>
-      </gb-tooltip>
-      <template v-if="currentGenePicker !== null">
+      <div v-if="unlock.farmCropExp.use" key="crop-exp-bar">
+        <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.gooboo.multGain', $vuetify.lang.t('$vuetify.farm.experience'))">
+          <template v-slot:activator="{ on, attrs }">
+            <v-progress-linear class="balloon-text-dynamic rounded" height="20" color="light-blue" :value="100 * crop.exp / expNeeded" v-bind="attrs" v-on="on">
+              {{ $formatNum(crop.exp) }} / {{ $formatNum(expNeeded) }}
+            </v-progress-linear>
+          </template>
+          <stat-breakdown name="farmExperience" :baseArray="this.cropGeneStats.mult.farmExperience.baseArray" :multArray="this.cropGeneStats.mult.farmExperience.multArray"></stat-breakdown>
+          <div>{{ $vuetify.lang.t(`$vuetify.farm.expToLevelUp`, $formatNum(harvestsNeeded)) }}</div>
+        </gb-tooltip>
+      </div>
+      <div v-if="currentGenePicker !== null" key="crop-gene-picker">
         <div class="text-center mt-2">Pick a level {{ genePickerLevel }} gene:</div>
         <div class="d-flex flex-wrap justify-center">
           <gene-icon v-for="geneName in currentGenePicker" class="ma-1" style="cursor: pointer;" @click="pickGene(geneName)" :key="`gene-pick-${ geneName }`" :name="geneName"></gene-icon>
         </div>
-      </template>
-      <div class="d-flex justify-center mt-2">
+      </div>
+      <div class="d-flex justify-center mt-2" key="crop-dna-display">
         <v-chip>
           <v-icon class="mr-1">mdi-dna</v-icon>
           {{ crop.dna }}
