@@ -16,6 +16,7 @@ import v1_3_3 from "./patchnote/v1_3_3";
 import v1_3_4 from "./patchnote/v1_3_4";
 import v1_3_5 from "./patchnote/v1_3_5";
 import v1_4_0 from "./patchnote/v1_4_0";
+import v1_3_6 from "./patchnote/v1_3_6";
 
 export default {
     name: 'meta',
@@ -52,6 +53,7 @@ export default {
         }
         for (const [key, elem] of Object.entries({
             '1.4.0': v1_4_0,
+            '1.3.6': v1_3_6,
             '1.3.5': v1_3_5,
             '1.3.4': v1_3_4,
             '1.3.3': v1_3_3,

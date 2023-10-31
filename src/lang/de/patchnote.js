@@ -275,8 +275,14 @@ export default {
     223: 'Gen: Erfahrung-Anstieg',
     224: 'Eine experimentelle Einstellung wurde hinzugefügt, um Timer für Rohstoffeinkommen anzuzeigen',
     225: 'Der Tooltip zum Herstellen einer Spitzhacke erklärt nun Erz-Qualität',
+
+    // v1.3.5
     226: 'Das Spiel sollte nun wieder speichern können, wenn Setnamen Emojis enthalten',
     227: 'Datensicherungen von der Offline-Zusammenfassung gehen nicht mehr nach einer Migration kaputt',
+
+    // v1.3.6
+    228: 'Ein Fehler wurde behoben, bei dem der Würfelmechanismus mit Saat nicht aus dem Spielstand geladen wurde',
+    229: 'Topaz zeigen nun nicht mehr die Zeit bis zur nächsten Kapazität, wenn sie voll sind',
   },
   v: {
     1: {

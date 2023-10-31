@@ -169,7 +169,7 @@ export default {
       return Math.ceil((this.needed - this.currency.value) / gainAmount);
     },
     capTimerNeeded() {
-      if (!this.showTimer || this.needed !== null || this.currency.cap === null) {
+      if (!this.showTimer || this.needed !== null || this.currency.cap === null || this.overcapMult <= 0) {
         return null;
       }
       const gainAmount = this.currency.showGainTimer ? this.gainAmount : this.timerFunction;

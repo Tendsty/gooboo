@@ -293,9 +293,7 @@ function loadFile(file) {
     }
     if (save.rng) {
         for (const [key, elem] of Object.entries(save.rng)) {
-            if (store.state.system.rng[key] !== undefined) {
-                Vue.set(store.state.system.rng, key, elem);
-            }
+            Vue.set(store.state.system.rng, key, elem);
         }
     }
     if (save.cachePage) {
