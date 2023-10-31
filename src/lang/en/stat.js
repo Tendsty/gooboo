@@ -235,6 +235,9 @@ export default {
     achievement: 'Rich',
     description: 'Cash gained'
   },
+  gallery_greenMax: {
+    description: 'Highest green paint in one prestige'
+  },
   gallery_bestPrestige: {
     description: 'Highest cash in one prestige'
   },

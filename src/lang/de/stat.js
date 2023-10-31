@@ -235,6 +235,9 @@ export default {
     achievement: 'Reich',
     description: 'Geld erhalten'
   },
+  gallery_greenMax: {
+    description: 'Meiste grüne Farbe in einem Prestige'
+  },
   gallery_bestPrestige: {
     description: 'Meistes Geld in einem Prestige'
   },

@@ -60,7 +60,7 @@
 
 /** Tooltip stuff */
 .v-tooltip__content {
-  padding: 4px 12px 8px;
+  padding: 4px 12px;
 }
 .theme--dark .v-tooltip__content {
   background-color: #404040;
