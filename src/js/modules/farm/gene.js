@@ -2,30 +2,30 @@ export default {
     // Level 1 genes
     yield: {
         icon: 'mdi-sack',
-        effect: [{name: 'farmCropGain', type: 'mult', value: 1.6}],
-        upgrade: [{name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.1 + 1}]
+        effect: [{name: 'farmCropGain', type: 'mult', value: 1.4}],
+        upgrade: [{name: 'farmCropGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)}]
     },
     gold: {
         icon: 'mdi-gold',
-        effect: [{name: 'farmGoldChance', type: 'mult', value: 2}],
-        upgrade: [{name: 'farmGoldChance', type: 'mult', value: lvl => lvl * 0.12 + 1}]
+        effect: [{name: 'farmGoldChance', type: 'mult', value: 1.75}],
+        upgrade: [{name: 'farmGoldChance', type: 'mult', value: lvl => Math.pow(1.12, lvl)}]
     },
     exp: {
         icon: 'mdi-star',
-        effect: [{name: 'farmExperience', type: 'mult', value: 1.5}],
-        upgrade: [{name: 'farmExperience', type: 'base', value: lvl => lvl * 0.1}]
+        effect: [{name: 'farmExperience', type: 'mult', value: 1.3}],
+        upgrade: [{name: 'farmExperience', type: 'base', value: lvl => lvl * 0.15}]
     },
     rareDrop: {
         icon: 'mdi-dice-2',
-        effect: [{name: 'farmRareDropChance', type: 'mult', value: 1.35}],
-        upgrade: [{name: 'farmRareDropChance', type: 'mult', value: lvl => lvl * 0.05 + 1}]
+        effect: [{name: 'farmRareDropChance', type: 'mult', value: 1.25}],
+        upgrade: [{name: 'farmRareDropChance', type: 'mult', value: lvl => Math.pow(1.08, lvl)}]
     },
 
     // Level 5 genes
     grow: {
         icon: 'mdi-timer',
         effect: [{name: 'farmGrow', type: 'mult', value: 0.8}],
-        upgrade: [{name: 'farmExperience', type: 'base', value: lvl => lvl * 0.08}]
+        upgrade: [{name: 'farmExperience', type: 'base', value: lvl => lvl * 0.12}]
     },
     overgrow: {
         icon: 'mdi-sprout',
@@ -38,7 +38,7 @@ export default {
             {name: 'farmGrow', type: 'mult', value: 5},
             {name: 'farmAllGain', type: 'mult', value: 4}
         ],
-        upgrade: [{name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.08 + 1}]
+        upgrade: [{name: 'farmCropGain', type: 'mult', value: lvl => Math.pow(1.08, lvl)}]
     },
     grass: {
         icon: 'mdi-grass',
@@ -55,7 +55,7 @@ export default {
     gnome: {
         icon: 'mdi-human-child',
         effect: [{name: 'farmGnomeBoost', type: 'text'}],
-        upgrade: [{name: 'farmGoldChance', type: 'mult', value: lvl => lvl * 0.09 + 1}]
+        upgrade: [{name: 'farmGoldChance', type: 'mult', value: lvl => Math.pow(1.09, lvl)}]
     },
     lonely: {
         icon: 'mdi-circle-expand',
@@ -77,7 +77,7 @@ export default {
     conversion: {
         icon: 'mdi-swap-horizontal',
         effect: [{name: 'farmYieldConversion', type: 'text'}],
-        upgrade: [{name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.05 + 1}]
+        upgrade: [{name: 'farmCropGain', type: 'mult', value: lvl => Math.pow(1.07, lvl)}]
     },
     prestige: {
         icon: 'mdi-shimmer',

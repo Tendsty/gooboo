@@ -147,9 +147,20 @@ export default {
             crop.genes.forEach(elem => {
                 state.gene[elem].effect.forEach(effect => {
                     switch (effect.type) {
-                        case 'text':
+                        case 'text': {
                             stats.tag.push(effect.name);
+                            if (effect.name === 'farmFertileBoost' && fertilizer !== null) {
+                                const fertilizerGrow = state.fertilizer[fertilizer].effect.farmGrow ?? 1;
+                                if (fertilizerGrow < 1) {
+                                    const fertilizerBoost = (1 / fertilizerGrow - 1) * 0.3 + 1;
+                                    allGain.forEach(mult => {
+                                        stats.mult[mult].multValue *= fertilizerBoost;
+                                        stats.mult[mult].multArray.push({name: `farmGene_${ elem }`, value: fertilizerBoost});
+                                    });
+                                }
+                            }
                             break;
+                        }
                         case 'addRareDrop':
                             stats.rareDrop[effect.name] = effect.value;
                             break;
@@ -277,7 +288,7 @@ export default {
         initFertilizer(state, o) {
             Vue.set(state.fertilizer, o.name, {
                 type: o.type ?? 'all',
-                effect: o.effect ?? (() => { return {}; })
+                effect: o.effect ?? {}
             });
         },
         updateKey(state, o) {
@@ -401,11 +412,18 @@ export default {
                 const allGainBoost = 0.1 * (field.buildingEffect.gnomeBoost ?? 0) / field.time + 1;
 
                 // Gain currency based on crop type
-                dispatch('currency/gain', {feature: 'farm', name: crop.type, amount: rootGetters['mult/get'](
+                const gainAmount = rootGetters['mult/get'](
                     'currencyFarm' + capitalize(crop.type) + 'Gain',
                     crop.yield + geneStats.mult.farmCropGain.baseValue,
                     (((field.buildingEffect.flag ?? 0) / field.time) * 0.5 + 1) * geneStats.mult.farmCropGain.multValue
-                ) * allGainBoost * field.grow}, {root: true});
+                ) * allGainBoost * field.grow;
+                if (geneStats.tag.includes('farmYieldConversion')) {
+                    ['vegetable', 'fruit', 'grain', 'flower'].forEach(croptype => {
+                        dispatch('currency/gain', {feature: 'farm', name: croptype, amount: gainAmount * (crop.type === croptype ? 0.4 : 0.2)}, {root: true});
+                    });
+                } else {
+                    dispatch('currency/gain', {feature: 'farm', name: crop.type, amount: gainAmount}, {root: true});
+                }
 
                 // Chance to gain gold
                 const goldAmount = randomRound(
@@ -561,7 +579,7 @@ export default {
             });
             dispatch('updateFieldCaches');
         },
-        cropPrestige({ state, commit, dispatch }, name) {
+        cropPrestige({ state, getters, commit, dispatch }, name) {
             const crop = state.crop[name];
             if (crop.level >= 4) {
                 // Set max prestige level
@@ -574,7 +592,20 @@ export default {
 
                 // Reset all crop upgrades and experience
                 commit('updateCropKey', {name, key: 'exp', value: 0});
-                commit('updateCropKey', {name, key: 'level', value: 0});
+                if (crop.genes.includes('prestige')) {
+                    const newLevel = Math.max(crop.level - 5, 0);
+                    let newDna = 0;
+                    for (let i = 0; i < newLevel; i++) {
+                        newDna += getters.cropDnaGain(i);
+                    }
+                    commit('updateCropKey', {name, key: 'dna', value: newDna});
+                    commit('updateCropKey', {name, key: 'level', value: newLevel});
+                } else {
+                    commit('updateCropKey', {name, key: 'dna', value: 0});
+                    commit('updateCropKey', {name, key: 'level', value: 0});
+                }
+                commit('updateCropKey', {name, key: 'genes', value: []});
+                commit('updateCropKey', {name, key: 'upgrades', value: {}});
 
                 // Apply prestige effect
                 dispatch('applyCropPrestige');

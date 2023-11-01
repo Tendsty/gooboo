@@ -96,6 +96,11 @@ export default {
     }, effect: [
         {name: 'farmExperience', type: 'base', value: lvl => lvl * 0.1}
     ]},
+    hayBales: {requirementBase, requirementStat, requirementValue: 5, price(lvl) {
+        return {farm_grass: lvl * 125 + 75};
+    }, effect: [
+        {name: 'currencyFarmGrassCap', type: 'base', value: lvl => lvl * 100}
+    ]},
     smallCrate: {cap: 7, capMult: true, requirementBase, requirementStat, requirementValue: 6, price(lvl) {
         return {farm_fruit: buildNum(24.5, 'K') * Math.pow(1.9, lvl)};
     }, effect: [

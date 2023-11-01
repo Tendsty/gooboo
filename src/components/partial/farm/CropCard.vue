@@ -85,6 +85,10 @@
           v-for="(item, key) in cropGeneStats.rareDrop"
           :key="'rare-drop-' + key"
           :item="{name: key, type: 'currency', chance: dnaRareDropChance, value: item}"
+          :dropBase="cropGeneStats.mult.farmRareDropChance.baseValue"
+          :dropMult="cropGeneStats.mult.farmRareDropChance.multValue"
+          :baseArray="cropGeneStats.mult.farmRareDropChance.baseArray"
+          :multArray="cropGeneStats.mult.farmRareDropChance.multArray"
         ></crop-rare-drop>
       </div>
       <div class="d-flex flex-wrap align-end justify-space-between" v-if="unlock.farmCropExp.use" key="crop-level-prestige">

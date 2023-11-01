@@ -43,14 +43,41 @@
 .currency-clickable {
   cursor: pointer;
 }
+.currency-container {
+  position: relative;
+  height: 44px;
+}
+.currency-labels {
+  position: absolute;
+  font-size: 12px;
+  bottom: -8px;
+  left: 32px;
+  right: 0;
+}
+.currency-label {
+  border: 2px solid white;
+}
 </style>
 
 <template>
   <gb-tooltip v-if="alwaysShow || stat > 0" :title-text="$vuetify.lang.t(`$vuetify.currency.${ name }.name`)">
     <template v-slot:activator="{ on, attrs }">
-      <div v-if="currency" class="rounded d-flex flex-nowrap pa-2" :class="[transparent ? 'transparent' : currency.color, $vnode.data.class, $vnode.data.staticClass, {'render-currency-small': !large, 'render-currency-large': large, 'elevation-0': transparent, 'darken-2': $vuetify.theme.dark, 'render-currency-mobile': $vuetify.breakpoint.xsOnly}]" v-bind="attrs" v-on="{...$listeners, ...on}" @mouseover="handleHover">
+      <div
+        class="currency-container rounded d-flex flex-nowrap pa-2"
+        :class="[transparent ? 'transparent' : currency.color, $vnode.data.class, $vnode.data.staticClass, {
+          'render-currency-small': !large,
+          'render-currency-large': large,
+          'elevation-0': transparent,
+          'darken-2': $vuetify.theme.dark,
+          'render-currency-mobile': $vuetify.breakpoint.xsOnly,
+          'mb-3': hasLabels
+        }]"
+        v-bind="attrs"
+        v-on="{...$listeners, ...on}"
+        @mouseover="handleHover"
+      >
         <v-icon :color="transparent ? currency.color : undefined" class="mr-2">{{ icon }}</v-icon>
-        <div class="currency-border rounded">
+        <div class="currency-border rounded" :class="{'mt-n1 mb-1': hasLabels}">
           <v-progress-linear
             :background-color="transparent ? undefined : (currency.color + ($vuetify.theme.dark ? ' darken-4' : ' darken-2'))"
             :color="transparent ? undefined : (currency.color + ($vuetify.theme.dark ? '' : ' lighten-2'))"
@@ -65,6 +92,18 @@
               <div class="currency-line currency-line--large"></div>
             </template>
           </v-progress-linear>
+        </div>
+        <div v-if="hasLabels" class="currency-labels d-flex justify-center">
+          <div
+            v-if="!currency.hideGainTag && gainTimerAmount > 0"
+            class="currency-label balloon-text-dynamic rounded mx-1 px-1"
+            :style="`background-color: var(--v-${ currency.color }-base);`"
+          >+{{ currency.timerIsEstimate ? '~' : '' }}{{ $formatNum(gainTimerAmount, true) }}{{ gainUnit }}</div>
+          <div
+            v-if="capTimerNeeded !== null"
+            class="currency-label balloon-text-dynamic rounded mx-1 px-1"
+            :style="`background-color: var(--v-${ currency.color }-base);`"
+          >{{ currency.timerIsEstimate ? '~' : '' }}{{ $formatTime(capTimerNeeded) }}</div>
         </div>
       </div>
     </template>
@@ -158,6 +197,70 @@ export default {
     },
     stat() {
       return this.$store.state.stat[this.name].total;
+    },
+    showTimer() {
+      return (this.currency.showGainTimer && this.gainAmount !== null && this.gainAmount > 0) ||
+        (this.timerFunction !== null && this.timerFunction > 0);
+    },
+    gainName() {
+      return this.currency.showGainMult ? this.$store.getters['currency/gainMultName'](...this.name.split('_')) : null;
+    },
+    gainAmount() {
+      return this.gainName === null ? null : this.$store.getters['mult/get'](this.gainName);
+    },
+    gainDisplay() {
+      return this.gainName === null ? null : this.$store.state.mult.items[this.gainName].display;
+    },
+    gainTimeMult() {
+      switch (this.gainDisplay) {
+        case 'perSecond':
+          return 1;
+        case 'perHour':
+          return 3600;
+        default:
+          return 1;
+      }
+    },
+    gainUnit() {
+      switch (this.gainDisplay) {
+        case 'perSecond':
+          return '/s';
+        case 'perHour':
+          return '/h';
+        default:
+          return '';
+      }
+    },
+    timerFunction() {
+      return this.currency.gainTimerFunction === null ? null : this.currency.gainTimerFunction();
+    },
+    gainTimerAmount() {
+      return (this.currency.showGainTimer ? this.gainAmount : this.timerFunction) * this.overcapMult;
+    },
+    isOvercap() {
+      return this.currency.cap !== null && this.currency.value >= this.currency.cap;
+    },
+    overcapStage() {
+      if (!this.isOvercap) {
+        return 0;
+      }
+      return Math.floor(this.currency.value / this.currency.cap);
+    },
+    overcapMult() {
+      if (!this.isOvercap) {
+        return 1;
+      }
+      return this.currency.overcapMult * Math.pow(this.currency.overcapScaling, this.overcapStage - 1);
+    },
+    capTimerNeeded() {
+      if (this.currency.cap === null || this.overcapMult <= 0) {
+        return null;
+      }
+      const gainAmount = this.currency.showGainTimer ? this.gainAmount : this.timerFunction;
+      return Math.ceil((this.currency.cap * (this.overcapStage + 1) - this.currency.value) * this.gainTimeMult / (gainAmount * this.overcapMult));
+    },
+    hasLabels() {
+      return this.showTimer && ((!this.currency.hideGainTag && this.gainTimerAmount > 0) || this.capTimerNeeded !== null);
     }
   },
   methods: {

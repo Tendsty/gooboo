@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import { capitalize } from '../../../js/utils/format';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
 import AlertText from './AlertText.vue';
@@ -90,21 +89,13 @@ export default {
       return this.$store.state.currency[this.name];
     },
     gainName() {
-      if (!this.currency.showGainMult) {
-        return null;
-      }
-      const splitName = this.name.split('_');
-      return 'currency' + capitalize(splitName[0]) + capitalize(splitName[1]) + 'Gain';
+      return this.currency.showGainMult ? this.$store.getters['currency/gainMultName'](...this.name.split('_')) : null;
     },
     gainAmount() {
-      if (this.gainName === null) {
-        return null;
-      }
-      return this.$store.getters['mult/get'](this.gainName);
+      return this.gainName === null ? null : this.$store.getters['mult/get'](this.gainName);
     },
     capName() {
-      const splitName = this.name.split('_');
-      return 'currency' + capitalize(splitName[0]) + capitalize(splitName[1]) + 'Cap';
+      return this.currency.cap !== null ? this.$store.getters['currency/capMultName'](...this.name.split('_')) : null;
     },
     afford() {
       return this.needed === null || this.currency.value >= this.needed;
@@ -152,11 +143,22 @@ export default {
       }
       return obj;
     },
+    gainDisplay() {
+      return this.gainName === null ? null : this.$store.state.mult.items[this.gainName].display;
+    },
+    gainTimeMult() {
+      switch (this.gainDisplay) {
+        case 'perSecond':
+          return 1;
+        case 'perHour':
+          return 3600;
+        default:
+          return 1;
+      }
+    },
     showTimer() {
-      return this.$store.state.system.settings.experiment.items.gainTimer.value && (
-        (this.currency.showGainTimer && this.gainAmount !== null && this.gainAmount > 0) ||
-        (this.timerFunction !== null && this.timerFunction !== null && this.timerFunction > 0)
-      );
+      return (this.currency.showGainTimer && this.gainAmount !== null && this.gainAmount > 0) ||
+        (this.timerFunction !== null && this.timerFunction > 0);
     },
     timerFunction() {
       return this.currency.gainTimerFunction === null ? null : this.currency.gainTimerFunction();
@@ -166,14 +168,14 @@ export default {
         return null;
       }
       const gainAmount = this.currency.showGainTimer ? this.gainAmount : this.timerFunction;
-      return Math.ceil((this.needed - this.currency.value) / gainAmount);
+      return Math.ceil((this.needed - this.currency.value) * this.gainTimeMult / gainAmount);
     },
     capTimerNeeded() {
       if (!this.showTimer || this.needed !== null || this.currency.cap === null || this.overcapMult <= 0) {
         return null;
       }
       const gainAmount = this.currency.showGainTimer ? this.gainAmount : this.timerFunction;
-      return Math.ceil((this.currency.cap * (this.overcapStage + 1) - this.currency.value) / (gainAmount * this.overcapMult));
+      return Math.ceil((this.currency.cap * (this.overcapStage + 1) - this.currency.value) * this.gainTimeMult / (gainAmount * this.overcapMult));
     }
   }
 }

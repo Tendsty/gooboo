@@ -360,7 +360,7 @@ export default {
             experiment: {
                 unlock: null,
                 items: {
-                    gainTimer: {
+                    currencyLabel: {
                         unlock: null,
                         hasDescription: true,
                         type: 'switch',

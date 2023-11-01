@@ -450,6 +450,7 @@ export default {
   farm_manure: 'Manure',
   farm_groundSeeds: 'Ground seeds',
   farm_roastedSeeds: 'Roasted seeds',
+  farm_hayBales: 'Hay bales',
   farm_smallCrate: 'Small crate',
   farm_sprinkler: 'Sprinkler',
   farm_scarecrow: 'Scarecrow',

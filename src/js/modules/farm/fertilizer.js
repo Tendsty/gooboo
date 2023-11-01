@@ -4,7 +4,7 @@ export default {
         type: 'all',
         color: 'brown',
         price: {farm_gold: 1},
-        effect: {farmCropGain: 1.15, farmGrow: 1 / 1.25}
+        effect: {farmCropGain: 1.1, farmGrow: 1 / 1.25}
     },
     flower: {
         found: true,
@@ -18,21 +18,21 @@ export default {
         type: 'all',
         color: 'blue',
         price: {gem_sapphire: 1},
-        effect: {farmGrow: 1 / 1.75}
+        effect: {farmGrow: 1 / 3}
     },
     richSoil: {
         found: true,
         type: 'all',
         color: 'green',
         price: {gem_sapphire: 1},
-        effect: {farmCropGain: 1.4}
+        effect: {farmCropGain: 1.2, farmGrow: 1 / 2}
     },
     shiny: {
         found: true,
         type: 'all',
         color: 'amber',
         price: {gem_sapphire: 1},
-        effect: {farmGoldChance: 1.75, farmRareDropChance: 1.1}
+        effect: {farmGoldChance: 2.5, farmRareDropChance: 1.1, farmGrow: 1 / 2}
     },
     potatoWater: {
         type: 'vegetable',
@@ -42,56 +42,56 @@ export default {
     roseWater: {
         type: 'flower',
         color: 'red-pink',
-        effect: {farmCropGain: 1.15, farmGoldChance: 1.1}
+        effect: {farmCropGain: 1.15, farmGoldChance: 1.4}
     },
     weedKiller: {
         type: 'grain',
         color: 'beige',
         price: {farm_gold: 4},
-        effect: {farmCropGain: 1.5, farmGrow: 1 / 1.4, farmRareDropChance: 1 / 1.25}
+        effect: {farmCropGain: 1.5, farmGrow: 1 / 1.75, farmRareDropChance: 1 / 1.25}
     },
     turboGrow: {
         type: 'all',
         color: 'red',
         price: {gem_sapphire: 1},
-        effect: {farmCropGain: 0.75, farmGrow: 1 / 5, farmGoldChance: 0.75, farmRareDropChance: 1 / 1.25}
+        effect: {farmGrow: 1 / 5, farmCropGain: 0.5, farmGoldChance: 0.5, farmRareDropChance: 0.5, farmExperience: 0.5}
     },
     premium: {
         type: 'all',
         color: 'purple',
         price: {gem_sapphire: 2},
-        effect: {farmCropGain: 1.25, farmGrow: 1 / 1.4, farmGoldChance: 1.3, farmRareDropChance: 1.1}
+        effect: {farmCropGain: 1.25, farmGrow: 1 / 2.5, farmGoldChance: 1.3, farmRareDropChance: 1.1}
     },
     sunshine: {
         type: 'all',
         color: 'yellow',
-        effect: {farmGoldChance: 3.5, farmRareDropChance: 1.1}
+        effect: {farmGrow: 1 / 2, farmGoldChance: 3.5, farmRareDropChance: 1.1}
     },
     superFlower: {
         type: 'flower',
         color: 'orange-red',
-        effect: {farmCropGain: 2.25, farmGrow: 1 / 1.25, farmGoldChance: 1.5}
+        effect: {farmGrow: 1 / 2.5, farmCropGain: 2.25, farmGoldChance: 1.5}
     },
     smellyMud: {
         type: 'vegetable',
         color: 'brown',
-        effect: {farmCropGain: 2.5, farmGoldChance: 1.5, farmRareDropChance: 1.1}
+        effect: {farmGrow: 1 / 2, farmCropGain: 2.5, farmGoldChance: 1.5, farmRareDropChance: 1.1}
     },
     tropicalWater: {
         type: 'fruit',
         icon: 'mdi-flask-round-bottom',
         color: 'cyan',
-        effect: {farmGrow: 1 / 2, farmGoldChance: 2.5, farmRareDropChance: 1.1}
+        effect: {farmGrow: 1 / 4, farmGoldChance: 2.5, farmRareDropChance: 1.1}
     },
     fieldBlessing: {
         type: 'grain',
         icon: 'mdi-auto-fix',
         color: 'pink-purple',
-        effect: {farmGrow: 1 / 3, farmGoldChance: 2}
+        effect: {farmGrow: 1 / 6, farmGoldChance: 2}
     },
     cinnamonBag: {
         type: 'all',
         color: 'brown',
-        effect: {farmCropGain: 1.8, farmGoldChance: 2}
+        effect: {farmGrow: 1 / 2, farmCropGain: 1.8, farmGoldChance: 2}
     },
 }

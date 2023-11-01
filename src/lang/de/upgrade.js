@@ -450,6 +450,7 @@ export default {
   farm_manure: 'Dünger',
   farm_groundSeeds: 'Zermahlene Saat',
   farm_roastedSeeds: 'Geröstete Saat',
+  farm_hayBales: 'Heuballen',
   farm_smallCrate: 'Kleine Kiste',
   farm_sprinkler: 'Rasensprenger',
   farm_scarecrow: 'Vogelscheuche',

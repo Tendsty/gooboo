@@ -238,7 +238,7 @@ export default {
     farmUnlockDna: 'Unlock all DNA upgrades from level 1 genes',
     farmGnomeBoost: 'Nearby garden gnomes increase all crop gains by 10%',
     farmLonelyGrow: 'Grow twice as fast if no other crops of this type are on the field',
-    farmFertileBoost: 'Increase all crop gains by 40% if fertilizer is used',
+    farmFertileBoost: 'Increase all crop gains by 30% of fertilizer grow time reduction',
     farmYieldConversion: 'Convert 60% of yield to other yield types (20% each)',
     farmFastPrestige: 'Prestige reduces crop level by 5 instead of resetting it to 0',
   },
@@ -1165,9 +1165,9 @@ export default {
     experiment: {
       name: 'Experimental',
       warning: 'These settings are still experimental and may be buggy, unfinished, performance heavy or confusing. Enable them at your own risk, and please leave feedback if you are using them! If this section is empty, no experimental settings are available at the time or you have not progressed far enough to be able to see them',
-      gainTimer: {
-        name: 'Display gain timers',
-        description: 'Show the time needed to reach resource capacity or afford an upgrade. Some resources with irregular income use estimates, and not all resources have this'
+      currencyLabel: {
+        name: 'Show currency labels',
+        description: 'Display currency gain and time until you reach capacity without needing to hover'
       }
     }
   },
