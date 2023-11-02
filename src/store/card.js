@@ -19,6 +19,7 @@ export default {
             Vue.set(state.card, id, {
                 feature: o.feature,
                 id: o.id,
+                group: o.group ?? null,
                 instant: o.instant ?? false,
                 reward: o.reward,
                 amount: 0,
@@ -225,6 +226,8 @@ export default {
                 }
 
                 dispatch('applyCardEffects', feature);
+            } else {
+                commit('updateKey', {type: 'feature', name: feature, key: 'cardEquipped', value: []});
             }
         },
         applyCardEffects({ state, dispatch }, feature) {

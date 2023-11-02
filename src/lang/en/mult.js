@@ -95,6 +95,7 @@ export default {
   farmOvergrow: 'Overgrow',
   farmRareDropChance: 'Rare drop chance',
   farmMystery: 'Mystery',
+  farmDnaNext: 'Next prestige DNA',
   farmCropGain: 'Crop gain',
   farmAllGain: 'All harvest gain',
   galleryInspirationBase: 'Inspiration time base',

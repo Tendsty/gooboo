@@ -56,6 +56,7 @@ export default {
   hordeUpgradeRoyalStorage: 'Royal storage upgrade',
   hordeUpgradeRoyalButcher: 'Royal butcher upgrade',
   hordeUpgradeRoyalCrypt: 'Royal crypt upgrade',
+  farmDisableEarlyGame: 'Disable "First crops"',
   farmCropExp: 'Crop experience',
   farmFertilizer: 'Fertilizer',
   galleryConversion: 'Conversion',

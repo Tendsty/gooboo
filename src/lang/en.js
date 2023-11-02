@@ -1187,6 +1187,7 @@ export default {
     hordeItemPermanent: 'Equipment effect',
     hordeNostalgia: 'Nostalgia',
     hordeNostalgiaLost: 'Heirlooms found',
+    farmEarlyGame: 'First crops',
     cards: 'Cards',
     treasure: 'Treasure',
     debug: 'Debug',
@@ -1754,6 +1755,7 @@ export default {
     },
     gene: {
       name: 'Gene',
+      pickLevel: 'Pick a level {0} gene',
       yield: 'Yield',
       gold: 'Gold',
       exp: 'Experience',

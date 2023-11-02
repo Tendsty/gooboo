@@ -29,6 +29,10 @@ export default {
     name: 'Strahlender Dünger',
     description: ''
   },
+  farm_juicy: {
+    name: 'Saftiger Dünger',
+    description: ''
+  },
   farm_potatoWater: {
     name: 'Kartoffelwasser',
     description: ''

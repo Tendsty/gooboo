@@ -57,7 +57,7 @@ export default {
         });
         store.dispatch('farm/updateGrownHint');
     },
-    unlock: ['farmFeature', 'farmCropExp', 'farmFertilizer', 'farmAdvancedCardPack', 'farmLuxuryCardPack'],
+    unlock: ['farmFeature', 'farmDisableEarlyGame', 'farmCropExp', 'farmFertilizer', 'farmAdvancedCardPack', 'farmLuxuryCardPack'],
     stat: {
         harvests: {},
         maxOvergrow: {},
@@ -154,6 +154,9 @@ export default {
                     levelMax: elem.levelMax,
                     dna: elem.dna,
                     genes: elem.genes,
+                    genesBlocked: elem.genesBlocked,
+                    cardSelected: elem.cardSelected,
+                    cardEquipped: elem.cardEquipped,
                     upgrades: elem.upgrades
                 };
                 if (rareDrops.length > 0) {
@@ -182,6 +185,9 @@ export default {
                 }
                 store.commit('farm/updateCropKey', {name: key, key: 'dna', value: elem.dna});
                 store.commit('farm/updateCropKey', {name: key, key: 'genes', value: elem.genes});
+                store.commit('farm/updateCropKey', {name: key, key: 'genesBlocked', value: elem.genesBlocked});
+                store.commit('farm/updateCropKey', {name: key, key: 'cardSelected', value: elem.cardSelected});
+                store.commit('farm/updateCropKey', {name: key, key: 'cardEquipped', value: elem.cardEquipped});
                 store.commit('farm/updateCropKey', {name: key, key: 'upgrades', value: elem.upgrades});
             }
         }

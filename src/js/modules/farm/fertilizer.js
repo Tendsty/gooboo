@@ -34,6 +34,13 @@ export default {
         price: {gem_sapphire: 1},
         effect: {farmGoldChance: 2.5, farmRareDropChance: 1.1, farmGrow: 1 / 2}
     },
+    juicy: {
+        found: true,
+        type: 'all',
+        color: 'lime',
+        price: {farm_grass: 5},
+        effect: {farmRareDropChance: 1.25}
+    },
     potatoWater: {
         type: 'vegetable',
         color: 'indigo',

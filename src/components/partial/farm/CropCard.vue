@@ -123,12 +123,12 @@
         </gb-tooltip>
       </div>
       <div v-if="currentGenePicker !== null" key="crop-gene-picker">
-        <div class="text-center mt-2">Pick a level {{ genePickerLevel }} gene:</div>
+        <div class="text-center mt-2">{{ $vuetify.lang.t('$vuetify.farm.gene.pickLevel', genePickerLevel) }}:</div>
         <div class="d-flex flex-wrap justify-center">
           <gene-icon v-for="geneName in currentGenePicker" class="ma-1" style="cursor: pointer;" @click="pickGene(geneName)" :key="`gene-pick-${ geneName }`" :name="geneName"></gene-icon>
         </div>
       </div>
-      <div class="d-flex justify-center mt-2" key="crop-dna-display">
+      <div v-if="unlock.farmCropExp.use" class="d-flex justify-center mt-2" key="crop-dna-display">
         <v-chip>
           <v-icon class="mr-1">mdi-dna</v-icon>
           {{ crop.dna }}
@@ -141,6 +141,9 @@
         </div>
         <gene-upgrade v-else class="ma-1 flex-grow-1" :crop="name" :name="geneName"></gene-upgrade>
       </div>
+      <div v-if="unlock.farmCropExp.use">
+        <card-overview feature="farm" :crop="name" :group="crop.type"></card-overview>
+      </div>
     </v-card-text>
   </v-card>
 </template>
@@ -151,13 +154,14 @@ import { fallbackArray } from '../../../js/utils/array';
 import { capitalize } from '../../../js/utils/format';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import CardOverview from '../card/CardOverview.vue';
 import AlertText from '../render/AlertText.vue';
 import CropRareDrop from './CropRareDrop.vue';
 import GeneIcon from './GeneIcon.vue';
 import GeneUpgrade from './GeneUpgrade.vue';
 
 export default {
-  components: { StatBreakdown, CropRareDrop, PriceTag, AlertText, GeneIcon, GeneUpgrade },
+  components: { StatBreakdown, CropRareDrop, PriceTag, AlertText, GeneIcon, GeneUpgrade, CardOverview },
   props: {
     name: {
       type: String,
@@ -254,7 +258,7 @@ export default {
       let index = 0;
       for (const [key, value] of Object.entries(this.$store.state.farm.geneLevels)) {
         if (this.crop.level >= parseInt(key) && this.crop.genes.length <= index) {
-          picker = [...value];
+          picker = [...value].filter(elem => !this.crop.genesBlocked.includes(elem));
           break;
         }
         index++;

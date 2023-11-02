@@ -71,7 +71,8 @@ export default {
     gardenGnome: {cap: 5, hasDescription: true, requirementBase, requirementStat, requirementValue: 3, price(lvl) {
         return {farm_vegetable: 500 * Math.pow(96, lvl), farm_fruit: 500 * Math.pow(96, lvl), farm_flower: 1000 * Math.pow(128, lvl)};
     }, effect: [
-        {name: 'gardenGnome', type: 'farmBuilding', value: lvl => lvl}
+        {name: 'gardenGnome', type: 'farmBuilding', value: lvl => lvl},
+        {name: 'farmDisableEarlyGame', type: 'unlock', value: lvl => lvl >= 1}
     ]},
     learning: {cap: 1, hasDescription: true, requirementBase, requirementStat, requirementValue: 4, price() {
         return {farm_gold: 1};

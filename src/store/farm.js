@@ -127,13 +127,13 @@ export default {
             return Math.round(Math.pow(1.07, level) * level + 5);
         },
         cropDnaGain: () => (level) => {
-            return level * 2 + 10;
+            return level * 4 + 14;
         },
         dnaRareDropChance: (state) => (name) => {
             const crop = state.crop[name];
             return Math.pow(crop.grow, 0.6) * 0.005;
         },
-        cropGeneStats: (state) => (name, fertilizer = null) => {
+        cropGeneStats: (state, getters, rootState) => (name, fertilizer = null) => {
             let stats = {
                 mult: {},
                 rareDrop: {},
@@ -144,6 +144,60 @@ export default {
             });
             const crop = state.crop[name];
             const allGain = ['farmCropGain', 'farmGoldChance', 'farmExperience', 'farmRareDropChance'];
+            let active = {};
+            crop.cardEquipped.forEach(elem => {
+                if (active[elem]) {
+                    active[elem]++;
+                } else {
+                    active[elem] = 1;
+                }
+            });
+            for (const [card, amount] of Object.entries(active)) {
+                const cardItem = rootState.card.card[card];
+                cardItem.reward.forEach(effect => {
+                    let value = effect.value;
+                    if (['base', 'bonus'].includes(effect.type)) {
+                        value *= amount;
+                    } else if (effect.type === 'mult') {
+                        if (value >= 1) {
+                            value = (value - 1) * amount + 1;
+                        } else {
+                            value = Math.pow(value, amount);
+                        }
+                    }
+                    switch (effect.type) {
+                        case 'addRareDrop': {
+                            if (stats.rareDrop[effect.name] === undefined) {
+                                stats.rareDrop[effect.name] = 0;
+                            }
+                            stats.rareDrop[effect.name] += value;
+                            break;
+                        }
+                        case 'base': {
+                            if (stats.mult[effect.name]) {
+                                stats.mult[effect.name].baseValue += value;
+                                stats.mult[effect.name].baseArray.push({name: `card_${card}`, value: value});
+                            }
+                            break;
+                        }
+                        case 'mult': {
+                            if (effect.name === 'farmAllGain') {
+                                allGain.forEach(mult => {
+                                    stats.mult[mult].multValue *= value;
+                                    stats.mult[mult].multArray.push({name: `card_${card}`, value: value});
+                                });
+                            } else if (stats.mult[effect.name]) {
+                                stats.mult[effect.name].multValue *= value;
+                                stats.mult[effect.name].multArray.push({name: `card_${card}`, value: value});
+                            }
+                            break;
+                        }
+                        default:
+                            console.warn(`Unknown card effect ${ effect.type }`);
+                            break;
+                    }
+                });
+            }
             crop.genes.forEach(elem => {
                 state.gene[elem].effect.forEach(effect => {
                     switch (effect.type) {
@@ -161,9 +215,13 @@ export default {
                             }
                             break;
                         }
-                        case 'addRareDrop':
+                        case 'addRareDrop': {
+                            if (stats.rareDrop[effect.name] === undefined) {
+                                stats.rareDrop[effect.name] = 0;
+                            }
                             stats.rareDrop[effect.name] = effect.value;
                             break;
+                        }
                         case 'base': {
                             if (stats.mult[effect.name]) {
                                 stats.mult[effect.name].baseValue += effect.value;
@@ -248,7 +306,7 @@ export default {
             const rareDrop = o.rareDrop ? o.rareDrop.map(elem => {
                 return {...elem, found: false};
             }) : [];
-            const baseExpMult = 1 / Math.pow(cost + 1, 0.6) / Math.pow(o.grow, 0.55);
+            const baseExpMult = 1 / Math.pow(cost + 1, 0.6) / Math.pow(o.grow / 10, 0.7);
             Vue.set(state.crop, o.name, {
                 found: o.found ?? false,
                 foundDefault: o.found ?? false,
@@ -256,12 +314,15 @@ export default {
                 color: o.color ?? 'green',
                 cost,
                 grow: o.grow ?? 60,
-                yield: o.yield ?? (Math.pow(o.grow, 0.55) + Math.pow(cost, 0.55)) * Math.pow(0.95, rareDrop.length) * 4.2 * Math.pow(1.05, tier) * Math.pow(cost + 1, 0.4),
+                yield: o.yield ?? (Math.pow(o.grow / 10, 0.7) + Math.pow(cost * 3, 0.65)) * Math.pow(0.95, rareDrop.length) * 11 * Math.pow(1.05, tier) * Math.pow(cost * 1.5 + 1, 0.6),
                 rareDrop,
                 level: 0,
                 levelMax: 0,
                 dna: 0,
                 genes: [],
+                genesBlocked: [],
+                cardSelected: [],
+                cardEquipped: [],
                 upgrades: {},
                 exp: 0,
                 baseExp: Math.pow(1.5, tier) * 60 * baseExpMult,
@@ -361,6 +422,9 @@ export default {
                 commit('updateCropKey', {name: key, key: 'levelMax', value: 0});
                 commit('updateCropKey', {name: key, key: 'dna', value: 0});
                 commit('updateCropKey', {name: key, key: 'genes', value: []});
+                commit('updateCropKey', {name: key, key: 'genesBlocked', value: []});
+                commit('updateCropKey', {name: key, key: 'cardSelected', value: []});
+                commit('updateCropKey', {name: key, key: 'cardEquipped', value: []});
                 commit('updateCropKey', {name: key, key: 'upgrades', value: {}});
                 commit('updateCropKey', {name: key, key: 'found', value: elem.foundDefault});
             }
@@ -579,7 +643,7 @@ export default {
             });
             dispatch('updateFieldCaches');
         },
-        cropPrestige({ state, getters, commit, dispatch }, name) {
+        cropPrestige({ state, rootState, getters, commit, dispatch }, name) {
             const crop = state.crop[name];
             if (crop.level >= 4) {
                 // Set max prestige level
@@ -590,11 +654,19 @@ export default {
                 // Increase stat
                 commit('stat/increaseTo', {feature: 'farm', name: 'bestPrestige', value: crop.level}, {root: true});
 
+                let genesBlocked = [...crop.genesBlocked];
+                // Clear reached genes first
+                for (const [level, genes] of Object.entries(state.geneLevels)) {
+                    if (crop.level >= parseInt(level)) {
+                        genesBlocked = genesBlocked.filter(elem => !genes.includes(elem));
+                    }
+                }
+
                 // Reset all crop upgrades and experience
                 commit('updateCropKey', {name, key: 'exp', value: 0});
                 if (crop.genes.includes('prestige')) {
                     const newLevel = Math.max(crop.level - 5, 0);
-                    let newDna = 0;
+                    let newDna = state.gene.prestige.upgrade[0].value(crop.upgrades.prestige ?? 0);
                     for (let i = 0; i < newLevel; i++) {
                         newDna += getters.cropDnaGain(i);
                     }
@@ -604,8 +676,36 @@ export default {
                     commit('updateCropKey', {name, key: 'dna', value: 0});
                     commit('updateCropKey', {name, key: 'level', value: 0});
                 }
+
+                // Then add genes used this prestige
+                commit('updateCropKey', {name, key: 'genesBlocked', value: [...genesBlocked, ...crop.genes]});
                 commit('updateCropKey', {name, key: 'genes', value: []});
                 commit('updateCropKey', {name, key: 'upgrades', value: {}});
+
+                // Apply card effects
+                commit('updateCropKey', {name, key: 'cardEquipped', value: [...crop.cardSelected]});
+                commit('updateCropKey', {name, key: 'cardSelected', value: []});
+                let active = {};
+                crop.cardEquipped.forEach(elem => {
+                    if (active[elem]) {
+                        active[elem]++;
+                    } else {
+                        active[elem] = 1;
+                    }
+                });
+                let canAfford = true;
+                for (const [card, amount] of Object.entries(active)) {
+                    if ((rootState.card.card[card].amount - 1) < amount) {
+                        canAfford = false;
+                    }
+                }
+                if (canAfford) {
+                    for (const [card, amount] of Object.entries(active)) {
+                        commit('card/updateKey', {type: 'card', name: card, key: 'amount', value: rootState.card.card[card].amount - amount}, {root: true});
+                    }
+                } else {
+                    commit('updateCropKey', {name, key: 'cardEquipped', value: []});
+                }
 
                 // Apply prestige effect
                 dispatch('applyCropPrestige');
@@ -660,6 +760,15 @@ export default {
                 commit('applyCropUpgrade', {crop: o.crop, upgrade: o.name});
             }
             dispatch('updateFieldCaches');
+        },
+        applyEarlyGameBuff({ rootState, dispatch }) {
+            if (rootState.unlock.farmDisableEarlyGame.use) {
+                dispatch('mult/removeKey', {name: 'farmGrow', key: 'farmEarlyGame', type: 'mult'}, {root: true});
+                dispatch('mult/removeKey', {name: 'farmCropGain', key: 'farmEarlyGame', type: 'mult'}, {root: true});
+            } else {
+                dispatch('mult/setMult', {name: 'farmGrow', key: 'farmEarlyGame', value: 1 / 12}, {root: true});
+                dispatch('mult/setMult', {name: 'farmCropGain', key: 'farmEarlyGame', value: 1 / 8}, {root: true});
+            }
         },
         updateFieldCaches({ state, getters, rootGetters, commit }) {
             let gnomes = [];

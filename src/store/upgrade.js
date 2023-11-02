@@ -209,6 +209,9 @@ export default {
             if (trigger && ['horde_mysticalBag', 'horde_collector'].includes(o.name)) {
                 dispatch('horde/checkPlayerHealth', null, {root: true});
             }
+            if (trigger && o.name === 'farm_gardenGnome') {
+                dispatch('farm/applyEarlyGameBuff', null, {root: true});
+            }
         },
         applyReset({ state, dispatch }, name) {
             state.item[name].effect.forEach(eff => {

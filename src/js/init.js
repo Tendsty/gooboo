@@ -37,6 +37,7 @@ function newGame(startTick = true) {
     store.commit('upgrade/initCache');
     store.commit('system/generatePlayerId');
     store.dispatch('system/updateCurrentDay');
+    store.dispatch('farm/applyEarlyGameBuff');
 
     if (startTick) {
         advance();
@@ -54,6 +55,8 @@ function loadGame(file, runPrepare = true) {
 
         store.commit('system/updateKey', {key: 'currentDay', value: getDay(new Date(store.state.system.timestamp * 1000))});
         store.commit('system/generatePlayerId');
+        store.dispatch('farm/updateFieldCaches');
+        store.dispatch('farm/applyEarlyGameBuff');
         advance();
 
         const offlineTime = store.state.system.timestamp - parsedFile.timestamp;
@@ -67,7 +70,6 @@ function loadGame(file, runPrepare = true) {
         }
 
         store.commit('upgrade/initCache');
-        store.dispatch('farm/updateFieldCaches');
         store.commit('system/resetAutosaveTimer');
         return true;
     }

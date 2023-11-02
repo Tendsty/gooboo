@@ -29,6 +29,10 @@ export default {
     name: 'Shiny fertilizer',
     description: ''
   },
+  farm_juicy: {
+    name: 'Juicy fertilizer',
+    description: ''
+  },
   farm_potatoWater: {
     name: 'Potato water',
     description: ''

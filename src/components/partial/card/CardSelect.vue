@@ -31,6 +31,16 @@ export default {
     feature: {
       type: String,
       required: true
+    },
+    crop: {
+      type: String,
+      required: false,
+      default: null
+    },
+    group: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   computed: {
@@ -38,7 +48,7 @@ export default {
       let cards = [];
 
       for (const [key, elem] of Object.entries(this.$store.state.card.card)) {
-        if (elem.feature === this.feature && elem.amount > 1) {
+        if (elem.feature === this.feature && (this.group === null || elem.group === null || this.group === elem.group) && elem.amount > 1) {
           cards.push({name: key, ...elem});
         }
       }
@@ -60,7 +70,7 @@ export default {
       });
     },
     cardSelected() {
-      return this.$store.state.card.feature[this.feature].cardSelected;
+      return this.crop === null ? this.$store.state.card.feature[this.feature].cardSelected : this.$store.state.farm.crop[this.crop].cardSelected;
     }
   },
   mounted() {
@@ -75,7 +85,11 @@ export default {
         if (arr.length !== newVal.length) {
           this.$set(this, 'values', arr);
         } else {
-          this.$store.commit('card/updateKey', {type: 'feature', name: this.feature, key: 'cardSelected', value: arr});
+          if (this.crop === null) {
+            this.$store.commit('card/updateKey', {type: 'feature', name: this.feature, crop: this.crop, key: 'cardSelected', value: arr});
+          } else {
+            this.$store.commit('farm/updateCropKey', {name: this.crop, key: 'cardSelected', value: arr});
+          }
         }
       }
     },
