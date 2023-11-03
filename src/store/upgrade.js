@@ -212,6 +212,9 @@ export default {
             if (trigger && o.name === 'farm_gardenGnome') {
                 dispatch('farm/applyEarlyGameBuff', null, {root: true});
             }
+            if (trigger && ['farm_overgrowth', 'farm_groundSeeds'].includes(o.name)) {
+                dispatch('farm/updateFieldCaches', null, {root: true});
+            }
         },
         applyReset({ state, dispatch }, name) {
             state.item[name].effect.forEach(eff => {

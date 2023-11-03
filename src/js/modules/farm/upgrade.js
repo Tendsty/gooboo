@@ -149,7 +149,8 @@ export default {
     mediumCrate: {cap: 8, capMult: true, requirementBase, requirementStat, requirementValue: 10, price(lvl) {
         return {farm_vegetable: buildNum(90, 'M') * Math.pow(1.75, lvl), farm_grain: buildNum(54, 'M') * Math.pow(2.1, lvl)};
     }, effect: [
-        {name: 'currencyFarmSeedHullCap', type: 'base', value: lvl => lvl * 25}
+        {name: 'currencyFarmSeedHullCap', type: 'base', value: lvl => lvl * 25},
+        {name: 'currencyFarmGrassCap', type: 'base', value: lvl => lvl * 40}
     ]},
     stompedSeeds: {requirementBase, requirementStat, requirementValue: 10, price(lvl) {
         return {farm_seedHull: Math.round(Math.pow(1.15, lvl) * 150)};
@@ -201,6 +202,7 @@ export default {
         return {farm_fruit: buildNum(190, 'B') * Math.pow(1.85, lvl), farm_grain: buildNum(240, 'B') * Math.pow(1.85, lvl)};
     }, effect: [
         {name: 'currencyFarmSeedHullCap', type: 'base', value: lvl => lvl * 60},
+        {name: 'currencyFarmGrassCap', type: 'base', value: lvl => lvl * 80},
         {name: 'currencyFarmPetalCap', type: 'base', value: lvl => lvl * 25}
     ]},
     artificialWebs: {cap: 3, requirementBase, requirementStat, requirementValue: 15, price(lvl) {

@@ -228,7 +228,7 @@ export default {
         case 'perHour':
           return '/h';
         default:
-          return '';
+          return '/s';
       }
     },
     timerFunction() {

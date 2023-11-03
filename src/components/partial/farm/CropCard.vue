@@ -95,20 +95,21 @@
         <span>{{ $vuetify.lang.t('$vuetify.gooboo.level') }} {{ crop.level }}{{ crop.levelMax > 0 ? ` (${$formatNum(crop.levelMax)})` : '' }}</span>
         <gb-tooltip v-if="crop.level >= 4" :title-text="$vuetify.lang.t('$vuetify.gooboo.prestige')">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              small
-              class="ma-1 mr-0"
-              :color="cropLevelGain > 0 ? 'primary' : 'error'"
-              @click="prestige"
-              :disabled="isFrozen"
-              v-bind="attrs"
-              v-on="on"
-            >{{ $vuetify.lang.t('$vuetify.gooboo.prestige') }}</v-btn>
+            <div v-bind="attrs" v-on="on">
+              <v-btn
+                small
+                class="ma-1 mr-0"
+                :color="cropLevelGain > 0 ? 'primary' : 'error'"
+                @click="prestige"
+                :disabled="isFrozen || cropCount > 0"
+              >{{ $vuetify.lang.t('$vuetify.gooboo.prestige') }}</v-btn>
+            </div>
           </template>
           <div>{{ $vuetify.lang.t(`$vuetify.farm.prestige.description`) }}</div>
           <div v-if="currentPrestigeLevel > 0">{{ $vuetify.lang.t(`$vuetify.farm.prestige.current`, currentPrestigeLevel, $formatNum(currentPrestigeEffect, true)) }}</div>
           <div v-if="cropLevelGain > 0">{{ $vuetify.lang.t(`$vuetify.farm.prestige.next`, cropLevelGain, currentPrestigeLevel + cropLevelGain, $formatNum(nextPrestigeEffect, true)) }}</div>
           <div v-else>{{ $vuetify.lang.t(`$vuetify.farm.prestige.nextNoEffect`) }}</div>
+          <alert-text v-if="cropCount > 0" type="error">{{ $vuetify.lang.t(`$vuetify.farm.prestige.cropOnField`) }}</alert-text>
         </gb-tooltip>
       </div>
       <div v-if="unlock.farmCropExp.use" key="crop-exp-bar">
@@ -125,14 +126,19 @@
       <div v-if="currentGenePicker !== null" key="crop-gene-picker">
         <div class="text-center mt-2">{{ $vuetify.lang.t('$vuetify.farm.gene.pickLevel', genePickerLevel) }}:</div>
         <div class="d-flex flex-wrap justify-center">
-          <gene-icon v-for="geneName in currentGenePicker" class="ma-1" style="cursor: pointer;" @click="pickGene(geneName)" :key="`gene-pick-${ geneName }`" :name="geneName"></gene-icon>
+          <gene-icon v-for="geneName in currentGenePicker" class="ma-1" style="cursor: pointer;" @click="pickGene(geneName)" :key="`gene-pick-${ geneName }`" :name="geneName" show-upgrade></gene-icon>
         </div>
       </div>
       <div v-if="unlock.farmCropExp.use" class="d-flex justify-center mt-2" key="crop-dna-display">
-        <v-chip>
-          <v-icon class="mr-1">mdi-dna</v-icon>
-          {{ crop.dna }}
-        </v-chip>
+        <gb-tooltip :min-width="0">
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on">
+              <v-icon class="mr-1">mdi-dna</v-icon>
+              {{ crop.dna }}
+            </v-chip>
+          </template>
+          <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaDescription`, $formatNum(dnaNext)) }}</div>
+        </gb-tooltip>
       </div>
       <div v-for="geneName in crop.genes" class="d-flex align-center" :key="`gene-taken-${ geneName }`">
         <gene-icon class="ma-1" :name="geneName"></gene-icon>
@@ -276,6 +282,12 @@ export default {
     },
     dnaRareDropChance() {
       return this.$store.getters['farm/dnaRareDropChance'](this.name);
+    },
+    dnaNext() {
+      return this.$store.getters['farm/cropDnaGain'](this.crop.level);
+    },
+    cropCount() {
+      return this.$store.state.farm.field.reduce((a, b) => a + b.reduce((c, d) => c + ((d !== null && d.crop === this.name) ? 1 : 0), 0), 0);
     }
   },
   methods: {

@@ -131,7 +131,7 @@ export default {
         },
         dnaRareDropChance: (state) => (name) => {
             const crop = state.crop[name];
-            return Math.pow(crop.grow, 0.6) * 0.005;
+            return (Math.pow(crop.grow / 10, 0.7) + Math.pow(crop.cost * 3, 0.65)) * 0.003 * Math.pow(crop.cost * 1.5 + 1, 0.6);
         },
         cropGeneStats: (state, getters, rootState) => (name, fertilizer = null) => {
             let stats = {
@@ -314,7 +314,7 @@ export default {
                 color: o.color ?? 'green',
                 cost,
                 grow: o.grow ?? 60,
-                yield: o.yield ?? (Math.pow(o.grow / 10, 0.7) + Math.pow(cost * 3, 0.65)) * Math.pow(0.95, rareDrop.length) * 11 * Math.pow(1.05, tier) * Math.pow(cost * 1.5 + 1, 0.6),
+                yield: o.yield ?? ((Math.pow(o.grow / 10, 0.7) + Math.pow(cost * 3, 0.65)) * Math.pow(0.9, rareDrop.length) * 11 * Math.pow(1.05, tier) * Math.pow(cost * 1.5 + 1, 0.6)),
                 rareDrop,
                 level: 0,
                 levelMax: 0,

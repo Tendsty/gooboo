@@ -129,14 +129,16 @@ export default {
     },
     saveGame() {
         let obj = {
-            field: [],
+            field: {},
             crop: {}
         };
 
         store.state.farm.field.forEach((row, y) => {
             row.forEach((cell, x) => {
                 if (cell !== null && (cell.type !== null || cell.color !== null)) {
-                    obj.field.push({x, y, content: cell});
+                    // eslint-disable-next-line no-unused-vars
+                    const {cache: _, ...newObj} = cell;
+                    obj.field[y * 7 + x] = newObj;
                 }
             });
         });
@@ -169,9 +171,14 @@ export default {
     },
     loadGame(data) {
         if (data.field) {
-            data.field.forEach(item => {
-                store.commit('farm/updateField', {x: item.x, y: item.y, value: item.content});
-            });
+            for (const [key, elem] of Object.entries(data.field)) {
+                const fieldId = parseInt(key);
+                let cell = elem;
+                if (cell.type === 'crop') {
+                    cell.cache = {};
+                }
+                store.commit('farm/updateField', {x: fieldId % 7, y: Math.floor(fieldId / 7), value: elem});
+            }
         }
         if (data.crop) {
             for (const [key, elem] of Object.entries(data.crop)) {

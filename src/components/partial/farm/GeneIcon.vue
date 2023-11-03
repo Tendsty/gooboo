@@ -20,6 +20,10 @@
     <div>
       <display-row v-for="(elem, key) in gene.effect" :key="`stat-${ key }`" :name="elem.name" :type="elem.type" :after="elem.value"></display-row>
     </div>
+    <template v-if="showUpgrade && display.length > 0">
+      <div class="text-center">{{ $vuetify.lang.t(`$vuetify.farm.gene.hasUpgrade`) }}:</div>
+      <display-row v-for="(elem, key) in display" :key="`stat-${ key }`" class="mt-0" :name="elem.name" :type="elem.type" :before="elem.before" :after="elem.after"></display-row>
+    </template>
   </gb-tooltip>
 </template>
 
@@ -31,11 +35,25 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    showUpgrade: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
     gene() {
       return this.$store.state.farm.gene[this.name];
+    },
+    display() {
+      return this.gene.upgrade.map(elem => {
+        return {
+          ...elem,
+          before: elem.value(0),
+          after: elem.value(1)
+        };
+      });
     }
   }
 }

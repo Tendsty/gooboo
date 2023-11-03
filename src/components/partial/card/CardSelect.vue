@@ -74,7 +74,14 @@ export default {
     }
   },
   mounted() {
-    this.values = [...this.cardSelected];
+    let cost = {};
+    this.values = this.cardSelected.filter(card => {
+      if (cost[card] === undefined) {
+        cost[card] = 0;
+      }
+      cost[card]++;
+      return this.$store.state.card.card[card].amount > cost[card];
+    });
   },
   watch: {
     values: {

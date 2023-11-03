@@ -21,8 +21,10 @@ import v1_3_0 from "./modules/migration/v1_3_0";
 import { APP_TESTING } from "./constants";
 import v1_3_4 from "./modules/migration/v1_3_4";
 import v1_3_5 from "./modules/migration/v1_3_5";
+import v1_4_0 from "./modules/migration/v1_4_0";
 
 const migrations = {
+    '1.4.0': v1_4_0,
     '1.3.5': v1_3_5,
     '1.3.4': v1_3_4,
     '1.3.0': v1_3_0,
@@ -102,7 +104,7 @@ function decodeFile(file, showErrors = true) {
     [
         'version', 'timestamp', 'theme', 'unlock', 'settings', 'subfeature',
         'currency', 'stat', 'upgrade', 'upgradeQueue', 'relic', 'globalLevel',
-        'keybinds', 'note', 'consumable', 'rng', 'cachePage'
+        'keybinds', 'note', 'consumable', 'rng'
     ].forEach(key => {
         if (file[key] === undefined) {
             if (showErrors) {

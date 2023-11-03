@@ -1706,7 +1706,8 @@ export default {
       description: 'You can prestige a crop that has reached level 4, increasing its prestige level to its current level for bonuses. This will reset all experience, level and genes for that crop. Each prestige level multiplies all crop gain by x1.04.',
       current: 'Your current prestige level is {0}, multiplying all crop gain by x{1}.',
       next: 'Prestiging this crop increases your prestige level by {0}. This raises your total prestige level to {1}, increasing your crop gain to x{2}.',
-      nextNoEffect: 'Your level is not higher than your prestige level for this crop. Prestiging will not increase your prestige level, but still reset level and genes.'
+      nextNoEffect: 'Your level is not higher than your prestige level for this crop. Prestiging will not increase your prestige level, but still reset level and genes.',
+      cropOnField: 'You cannot prestige now because this crop is on the field'
     },
     button: {
       plantAll: 'Plant the selected crop ({0}) on all empty tiles. You can also plant a single crop by clicking the empty tile',
@@ -1756,6 +1757,8 @@ export default {
     gene: {
       name: 'Gene',
       pickLevel: 'Pick a level {0} gene',
+      dnaDescription: 'You get DNA when this crop reaches a new level and can spend it on gene upgrades. The next crop level gives {0} DNA',
+      hasUpgrade: 'Has gene upgrade',
       yield: 'Yield',
       gold: 'Gold',
       exp: 'Experience',
