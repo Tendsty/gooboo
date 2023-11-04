@@ -63,6 +63,7 @@ export default {
     levelSuffix: 'level',
     delete: 'Delete',
     convert: 'Convert',
+    add: 'Add',
     playedBefore: {
       0: 'Already played before? Load your savefile ',
       1: 'here'
@@ -256,6 +257,11 @@ export default {
       web: 'You are using the web version. The game regularly checks for updates, automatically uses the newest version and notifies you when an update is available.',
       desktop: {
         0: 'You are using the desktop version. You need to check for updates manually on the ',
+        1: 'releases',
+        2: ' page.'
+      },
+      offline: {
+        0: 'You are using the offline version. You need to check for updates manually on the ',
         1: 'releases',
         2: ' page.'
       },

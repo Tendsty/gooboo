@@ -21,6 +21,13 @@ export default {
     }, effect: [
         {name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
+    moreRareEarth: {type: 'premium', requirement() {
+        return store.state.stat.mining_maxDepth0.total >= 50;
+    }, price(lvl) {
+        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 120};
+    }, effect: [
+        {name: 'miningRareEarthGain', type: 'mult', value: lvl => getSequence(3, lvl) * 0.05 + 1}
+    ]},
     fasterSmeltery: {type: 'premium', requirement() {
         return store.state.unlock.miningSmeltery.see;
     }, price(lvl) {
@@ -91,12 +98,20 @@ export default {
         {name: 'currencyMiningOrePlatinumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOrePlatinumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
+    moreIridium: {type: 'premium', cap: 1, requirement() {
+        return store.state.stat.mining_maxDepth0.total >= 260;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 2500};
+    }, effect: [
+        {name: 'currencyMiningOreIridiumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
+        {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
+    ]},
     moreHelium: {type: 'premium', cap: 10, requirement() {
         return store.state.unlock.miningGasSubfeature.see;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 300};
     }, effect: [
-        {name: 'currencyMiningHeliumGain', type: 'base', value: lvl => lvl * 0.004}
+        {name: 'currencyMiningHeliumGain', type: 'base', value: lvl => lvl * 0.002}
     ]},
     moreSmoke: {type: 'premium', requirement() {
         return store.state.unlock.miningSmoke.see;
@@ -110,13 +125,13 @@ export default {
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 525};
     }, effect: [
-        {name: 'currencyMiningNeonGain', type: 'base', value: lvl => lvl * 0.004}
+        {name: 'currencyMiningNeonGain', type: 'base', value: lvl => lvl * 0.002}
     ]},
     moreArgon: {type: 'premium', cap: 10, requirement() {
         return store.state.stat.mining_maxDepth1.total >= 90;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 800};
     }, effect: [
-        {name: 'currencyMiningArgonGain', type: 'base', value: lvl => lvl * 0.004}
+        {name: 'currencyMiningArgonGain', type: 'base', value: lvl => lvl * 0.002}
     ]},
 }

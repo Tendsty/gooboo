@@ -260,7 +260,7 @@ export default {
       return Math.ceil((this.currency.cap * (this.overcapStage + 1) - this.currency.value) * this.gainTimeMult / (gainAmount * this.overcapMult));
     },
     hasLabels() {
-      return this.showTimer && ((!this.currency.hideGainTag && this.gainTimerAmount > 0) || this.capTimerNeeded !== null);
+      return this.$store.state.system.settings.experiment.items.currencyLabel.value && this.showTimer && ((!this.currency.hideGainTag && this.gainTimerAmount > 0) || this.capTimerNeeded !== null);
     }
   },
   methods: {

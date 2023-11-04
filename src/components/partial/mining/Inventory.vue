@@ -118,32 +118,32 @@
       </gb-tooltip>
       <div class="ingredient-empty balloon-text-dynamic rounded d-flex justify-center align-center ma-1" :class="enhancementIngredient ? (currency['mining_' + enhancementIngredient].color + ' ' + ($vuetify.theme.dark ? 'darken-2' : 'lighten-2')) : 'bg-tile-default'">
         <template v-if="enhancementIngredient">
-          <v-icon class="mb-3" large>{{ currency['mining_' + enhancementIngredient].icon }}</v-icon>
-          <div class="ingredient-amount">{{ $formatNum(enhancementBarAmount) }}</div>
+          <v-icon :class="{'mb-3': enhancementBars >= enhancementBarsNeeded}" large>{{ currency['mining_' + enhancementIngredient].icon }}</v-icon>
+          <div v-if="enhancementBars >= enhancementBarsNeeded" class="ingredient-amount">{{ $formatNum(enhancementFinalNeeded) }}</div>
         </template>
       </div>
       <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.mining.enhancement.title')">
         <template v-slot:activator="{ on, attrs }">
-          <div class="ma-1 mx-4 mx-8-lg" style="width: 225px;" v-bind="attrs" v-on="on">
-            <v-progress-linear class="balloon-text-dynamic rounded" height="32" :value="enhancementMercy * 100">{{ $formatNum(enhancementChance * 100, true) }}% ({{ $formatNum(enhancementCurrentChance * 100, true) }}%)</v-progress-linear>
+          <div class="ma-1" style="width: 225px;" v-bind="attrs" v-on="on">
+            <v-progress-linear class="balloon-text-dynamic rounded" height="32" :value="100 * enhancementBars / enhancementBarsNeeded">
+              {{ $formatNum(enhancementBars) }} / {{ $formatNum(enhancementBarsNeeded) }}
+            </v-progress-linear>
           </div>
         </template>
-        <div>{{ $vuetify.lang.t('$vuetify.mining.enhancement.chanceDescription', $formatNum(enhancementChanceBase * 100), $formatNum(enhancementChanceIncrement * 100)) }}</div>
-        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementChanceBase') }}</h3>
-        <stat-breakdown name="miningEnhancementChanceBase"></stat-breakdown>
-        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementChanceIncrement') }}</h3>
-        <stat-breakdown name="miningEnhancementChanceIncrement"></stat-breakdown>
+        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementBarsIncrement') }}</h3>
+        <stat-breakdown name="miningEnhancementBarsIncrement"></stat-breakdown>
+        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementFinalIncrement') }}</h3>
+        <stat-breakdown name="miningEnhancementFinalIncrement"></stat-breakdown>
       </gb-tooltip>
-      <v-btn class="ma-1" small color="primary" :disabled="!canEnhance" @click="performEnhancement(true)">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
-      <v-btn class="ma-1" color="primary" :disabled="!canEnhance" @click="performEnhancement(false)">{{ $vuetify.lang.t('$vuetify.mining.enhance') }}</v-btn>
+      <v-btn class="ma-1" color="primary" :disabled="enhancementBars >= enhancementBarsNeeded || !canEnhanceBars" @click="performEnhancementBars">{{ $vuetify.lang.t('$vuetify.gooboo.add') }}</v-btn>
+      <v-btn class="ma-1" color="primary" :disabled="enhancementBars < enhancementBarsNeeded || !canEnhanceFinal" @click="performEnhancementFinal">{{ $vuetify.lang.t('$vuetify.mining.enhance') }}</v-btn>
     </div>
     <smeltery v-if="unlock.miningSmeltery.see && subfeature === 0" class="mt-4 mt-lg-8"></smeltery>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import { MINING_ENHANCEMENT_BAR_AMOUNT, MINING_ENHANCEMENT_CHANCE_EXPONENT } from '../../../js/constants';
+import { mapGetters, mapState } from 'vuex';
 import Consumable from '../../render/Consumable.vue';
 import Currency from '../../render/Currency.vue'
 import PriceTag from '../../render/PriceTag.vue';
@@ -171,14 +171,16 @@ export default {
       subfeature: state => state.system.features.mining.currentSubfeature,
       isFrozen: state => state.cryolab.mining.active,
       enhancement: state => state.mining.enhancement,
-      enhancementMercy: state => state.mining.enhancementMercy,
       enhancementIngredient: state => state.mining.enhancementIngredient,
+      enhancementBars: state => state.mining.enhancementBars,
       currency: state => state.currency
     }),
     ...mapGetters({
       pickaxeStats: 'mining/pickaxeStats',
       pickaxeCost: 'mining/pickaxeCost',
-      enhancementChance: 'mining/enhancementChance'
+      enhancementChance: 'mining/enhancementChance',
+      enhancementBarsNeeded: 'mining/enhancementBarsNeeded',
+      enhancementFinalNeeded: 'mining/enhancementFinalNeeded'
     }),
     canCraftPickaxe() {
       return this.ingredientList.length > 0 && this.$store.getters['mining/pickaxeCanAfford'];
@@ -227,24 +229,11 @@ export default {
     currentSmokePower() {
       return this.$store.getters['mult/get']('miningPickaxeCraftingPower', this.currentSmoke);
     },
-    canEnhance() {
-      return this.enhancementIngredient !== null && this.currency['mining_' + this.enhancementIngredient].value >= MINING_ENHANCEMENT_BAR_AMOUNT;
+    canEnhanceBars() {
+      return this.enhancementIngredient !== null && this.currency['mining_' + this.enhancementIngredient].value >= 1;
     },
-    enhancementCurrentChance() {
-      const valueBefore = this.enhancementMercy;
-      const valueAfter = Math.min(1, valueBefore + this.enhancementChance);
-      const chanceBefore = Math.pow(valueBefore, 1 / MINING_ENHANCEMENT_CHANCE_EXPONENT);
-      const chanceAfter = Math.pow(valueAfter, 1 / MINING_ENHANCEMENT_CHANCE_EXPONENT);
-      return 1 - ((1 - chanceAfter) / (1 - chanceBefore));
-    },
-    enhancementBarAmount() {
-      return MINING_ENHANCEMENT_BAR_AMOUNT;
-    },
-    enhancementChanceBase() {
-      return this.$store.getters['mult/get']('miningEnhancementChanceBase');
-    },
-    enhancementChanceIncrement() {
-      return this.$store.getters['mult/get']('miningEnhancementChanceIncrement');
+    canEnhanceFinal() {
+      return this.enhancementIngredient !== null && this.currency['mining_' + this.enhancementIngredient].value >= this.enhancementFinalNeeded;
     }
   },
   methods: {
@@ -277,8 +266,11 @@ export default {
         this.$store.commit('mining/updateKey', {key: 'enhancementIngredient', value: this.enhancementIngredient === name ? null : name});
       }
     },
-    performEnhancement(max) {
-      this.$store.dispatch('mining/enhance', max);
+    performEnhancementBars() {
+      this.$store.dispatch('mining/enhanceBars');
+    },
+    performEnhancementFinal() {
+      this.$store.dispatch('mining/enhanceFinal');
     }
   }
 }

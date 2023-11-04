@@ -452,7 +452,7 @@ export default {
                 case 'mining': {
                     switch (state.features.mining.currentSubfeature) {
                         case 0:
-                            return rootState.stat.mining_maxDepth0.total > 155;
+                            return rootState.stat.mining_maxDepth0.total > 300;
                         case 1:
                             return rootState.stat.mining_maxDepth1.total > 100;
                     }
@@ -635,9 +635,9 @@ export default {
                     }
                     break;
                 case 'unlock':
-                    if (o.trigger && o.value) {
+                    if (o.value) {
                         commit('unlock/unlock', o.name, {root: true});
-                        if (o.name.slice(0, 15) === 'villageOffering') {
+                        if (o.trigger && o.name.slice(0, 15) === 'villageOffering') {
                             dispatch('village/applyOfferingEffect', null, {root: true});
                         }
                     }

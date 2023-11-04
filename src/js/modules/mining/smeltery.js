@@ -1,3 +1,5 @@
+import { buildNum } from "../../utils/format";
+
 export default {
     aluminium: {
         price: {
@@ -40,7 +42,7 @@ export default {
     shiny: {
         price: {
             mining_orePlatinum: {base: 1000, increment: 50},
-            mining_obsidian: {base: 200, increment: 10}
+            mining_obsidian: {base: buildNum(2, 'M'), increment: buildNum(100, 'K')}
         },
         output: 'mining_barShiny',
         timeNeeded: 86400,

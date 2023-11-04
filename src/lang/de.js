@@ -63,6 +63,7 @@ export default {
     levelSuffix: 'Stufe',
     delete: 'Löschen',
     convert: 'Umwandeln',
+    add: 'Hinzufügen',
     playedBefore: {
       0: 'Schon mal gespielt? Lade deinen Spielstand ',
       1: 'hier'
@@ -248,6 +249,11 @@ export default {
       web: 'Du verwendest die Web-Version. Das Spiel prüft automatisch auf Updates, hält sich von selbst aktuell und benachrichtigt dich, wenn ein Update verfügbar ist.',
       desktop: {
         0: 'Du verwendest die Desktop-Version. Updates müssen manuell installiert werden. Informiere dich dazu auf der ',
+        1: 'Releases',
+        2: '-Seite.'
+      },
+      offline: {
+        0: 'Du verwendest die Offline-Version. Updates müssen manuell installiert werden. Informiere dich dazu auf der ',
         1: 'Releases',
         2: '-Seite.'
       },
