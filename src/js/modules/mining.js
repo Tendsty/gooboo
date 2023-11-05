@@ -317,6 +317,7 @@ export default {
         barSteel: {subtype: 'bar', color: 'grey', icon: 'mdi-gold'},
         barTitanium: {subtype: 'bar', color: 'pale-green', icon: 'mdi-gold'},
         barShiny: {subtype: 'bar', color: 'pale-blue', icon: 'mdi-gold'},
+        barIridium: {subtype: 'bar', color: 'pale-pink', icon: 'mdi-gold'},
         granite: {subtype: 'rareEarth', color: 'skyblue', icon: 'mdi-cube', gainMult: {}, gainTimerFunction() {
             const hitsNeeded = store.getters['mining/hitsNeeded'];
             const rareDropGain = store.getters['mining/rareDrops'];
@@ -327,17 +328,20 @@ export default {
             const rareDropGain = store.getters['mining/rareDrops'];
             return (hitsNeeded === Infinity || !rareDropGain.salt) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.salt) / hitsNeeded);
         }, timerIsEstimate: true},
-        coal: {color: 'dark-grey', icon: 'mdi-chart-bubble', gainMult: {}},
+        coal: {color: 'dark-grey', icon: 'mdi-chart-bubble', gainMult: {round: true}},
         sulfur: {subtype: 'rareEarth', color: 'pale-yellow', icon: 'mdi-fire-circle', gainMult: {}, gainTimerFunction() {
             return store.getters['mining/rareDrops'].sulfur ?? null;
         }, timerIsEstimate: true},
         niter: {color: 'pale-light-green', icon: 'mdi-water-circle', gainMult: {}},
-        obsidian: {subtype: 'rareEarth', color: 'pale-purple', icon: 'mdi-cone', gainMult: {}, gainTimerFunction() {
+        obsidian: {subtype: 'rareEarth', color: 'deep-purple', icon: 'mdi-cone', gainMult: {}, gainTimerFunction() {
             const hitsNeeded = store.getters['mining/hitsNeeded'];
             const rareDropGain = store.getters['mining/rareDrops'];
             return (hitsNeeded === Infinity || !rareDropGain.obsidian) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.obsidian) / hitsNeeded);
         }, timerIsEstimate: true},
-        smoke: {color: 'grey', icon: 'mdi-smoke', gainMult: {}, capMult: {baseValue: 10}, overcapScaling: 0.25},
+        smoke: {color: 'grey', icon: 'mdi-smoke', gainMult: {}, capMult: {baseValue: 10}, overcapScaling: 0.25, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            return hitsNeeded === Infinity ? null : (((hitsNeeded + MINING_SMOKE_BREAK) * store.getters['mining/currentSmoke']) / hitsNeeded);
+        }, timerIsEstimate: true},
         ember: {type: 'prestige', color: 'orange-red', icon: 'mdi-fire', overcapMult: 0, gainMult: {}, capMult: {baseValue: 100}, currencyMult: {
             miningSmelterySpeed: {type: 'mult', value: val => val * 0.02 + 1}
         }},

@@ -1,3 +1,4 @@
+import { SECONDS_PER_DAY, SECONDS_PER_HOUR } from "../../constants";
 import { buildNum } from "../../utils/format";
 
 export default {
@@ -7,7 +8,7 @@ export default {
             mining_granite: {base: 800, increment: 800}
         },
         output: 'mining_barAluminium',
-        timeNeeded: 60,
+        timeNeeded: 300,
         minTemperature: 100
     },
     bronze: {
@@ -17,7 +18,7 @@ export default {
             mining_salt: {base: 150, increment: 50}
         },
         output: 'mining_barBronze',
-        timeNeeded: 600,
+        timeNeeded: SECONDS_PER_HOUR,
         minTemperature: 275
     },
     steel: {
@@ -26,7 +27,7 @@ export default {
             mining_coal: {base: 2, increment: 0}
         },
         output: 'mining_barSteel',
-        timeNeeded: 3600,
+        timeNeeded: 8 * SECONDS_PER_HOUR,
         minTemperature: 500
     },
     titanium: {
@@ -36,7 +37,7 @@ export default {
             mining_niter: {base: 50, increment: 0}
         },
         output: 'mining_barTitanium',
-        timeNeeded: 18000,
+        timeNeeded: 3 * SECONDS_PER_DAY,
         minTemperature: 800
     },
     shiny: {
@@ -45,7 +46,16 @@ export default {
             mining_obsidian: {base: buildNum(2, 'M'), increment: buildNum(100, 'K')}
         },
         output: 'mining_barShiny',
-        timeNeeded: 86400,
+        timeNeeded: 30 * SECONDS_PER_DAY,
         minTemperature: 1200
+    },
+    iridium: {
+        price: {
+            mining_oreIridium: {base: 1000, increment: 50},
+            mining_helium: {base: buildNum(10, 'K'), increment: 2500}
+        },
+        output: 'mining_barIridium',
+        timeNeeded: 365 * SECONDS_PER_DAY,
+        minTemperature: 1750
     }
 }

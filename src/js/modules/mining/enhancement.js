@@ -27,5 +27,10 @@ export default {
             {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(2, lvl)},
             {name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => lvl * 0.2 + 1}
         ]
+    },
+    barIridium: {
+        effect: [
+            {name: 'currencyMiningEmberGain', type: 'mult', value: lvl => lvl + 1}
+        ]
     }
 }

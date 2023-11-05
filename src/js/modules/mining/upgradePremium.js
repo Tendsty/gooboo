@@ -106,7 +106,7 @@ export default {
         {name: 'currencyMiningOreIridiumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreHelium: {type: 'premium', cap: 10, requirement() {
+    moreHelium: {type: 'premium', cap: 5, requirement() {
         return store.state.unlock.miningGasSubfeature.see;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 300};
@@ -120,14 +120,14 @@ export default {
     }, effect: [
         {name: 'currencyMiningSmokeCap', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    moreNeon: {type: 'premium', cap: 10, requirement() {
+    moreNeon: {type: 'premium', cap: 5, requirement() {
         return store.state.stat.mining_maxDepth1.total >= 40;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 525};
     }, effect: [
         {name: 'currencyMiningNeonGain', type: 'base', value: lvl => lvl * 0.002}
     ]},
-    moreArgon: {type: 'premium', cap: 10, requirement() {
+    moreArgon: {type: 'premium', cap: 5, requirement() {
         return store.state.stat.mining_maxDepth1.total >= 90;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 800};

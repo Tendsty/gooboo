@@ -340,4 +340,27 @@ export default {
         {name: 'currencyMiningOreTitaniumCap', type: 'mult', value: lvl => Math.pow(100, lvl)},
         {name: 'currencyMiningOrePlatinumCap', type: 'mult', value: lvl => Math.pow(100, lvl)}
     ]},
+    titaniumBombs: {cap: 16, requirementBase, requirementStat, requirementValue: 220, price(lvl) {
+        return {mining_barSteel: lvl * 8 + 20, mining_barTitanium: lvl * 4 + 4};
+    }, effect: [
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
+    ]},
+    undergroundRadar: {persistent: true, requirementBase, requirementStat, requirementValue: 240, price(lvl) {
+        return {mining_barShiny: Math.round(Math.pow(1.15, lvl) * (lvl + 1) * 5)};
+    }, effect: [
+        {name: 'miningRareEarthGain', type: 'mult', value: lvl => Math.pow(1.13, lvl)}
+    ]},
+    iridiumExpansion: {persistent: true, requirementBase, requirementStat, requirementValue: 260, price(lvl) {
+        return {mining_barTitanium: Math.round(Math.pow(1.22, lvl) * (lvl + 3) * 2)};
+    }, effect: [
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(1.11, lvl)},
+        {name: 'currencyMiningOreIridiumCap', type: 'base', value: lvl => getSequence(1, lvl)}
+    ]},
+    iridiumCache: {cap: 4, requirementBase, requirementStat, requirementValue: 270, price(lvl) {
+        return {mining_scrap: Math.pow(22.5, lvl) * buildNum(10, 'DD'), mining_sulfur: Math.pow(2.45, lvl) * buildNum(13, 'T')};
+    }, effect: [
+        {name: 'currencyMiningOreTitaniumCap', type: 'mult', value: lvl => lvl * 0.25 + 1},
+        {name: 'currencyMiningOrePlatinumCap', type: 'mult', value: lvl => lvl * 0.5 + 1},
+        {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl + 1}
+    ]},
 }
