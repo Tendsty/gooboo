@@ -82,6 +82,7 @@
           <div class="d-flex flex-wrap mx-n1 mb-n1">
             <price-tag class="ma-1" v-for="(amount, currency) in pickaxeCost" :key="'price-' + currency" :currency="`mining_${currency}`" :amount="amount"></price-tag>
           </div>
+          <alert-text v-if="pickaxeStats.purity < 0.001" type="error">{{ $vuetify.lang.t('$vuetify.mining.crafting.minPurity') }}</alert-text>
           <template v-if="oreQuality > 1">
             <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.miningOreQuality') }}</h3>
             <div>{{ $vuetify.lang.t('$vuetify.mining.crafting.oreQuality') }}</div>
@@ -148,11 +149,12 @@ import Consumable from '../../render/Consumable.vue';
 import Currency from '../../render/Currency.vue'
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import AlertText from '../render/AlertText.vue';
 import Ingredient from './Ingredient.vue';
 import Smeltery from './Smeltery.vue';
 
 export default {
-  components: { Currency, Ingredient, Consumable, StatBreakdown, PriceTag, Smeltery },
+  components: { Currency, Ingredient, Consumable, StatBreakdown, PriceTag, Smeltery, AlertText },
   data: () => ({
     subfeatureCurrencies: [
       ['mining_resin', 'mining_granite', 'mining_salt', 'mining_coal', 'mining_sulfur', 'mining_niter', 'mining_obsidian'],
@@ -183,7 +185,7 @@ export default {
       enhancementFinalNeeded: 'mining/enhancementFinalNeeded'
     }),
     canCraftPickaxe() {
-      return this.ingredientList.length > 0 && this.$store.getters['mining/pickaxeCanAfford'];
+      return this.ingredientList.length > 0 && this.$store.getters['mining/pickaxeCanAfford'] && this.pickaxeStats.purity >= 0.001;
     },
     pickaxeEmptySlots() {
       return Math.max(0, this.$store.getters['mult/get']('miningPickaxeCraftingSlots') - this.ingredientList.length);

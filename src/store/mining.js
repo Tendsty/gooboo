@@ -37,7 +37,7 @@ export default {
             return Math.ceil(Math.pow(incrementValue, depth) * Math.pow(depth * 0.1 + 1, 2) * baseValue);
         },
         depthBaseToughness: (state, getters, rootState) => (depth) => {
-            return (depth < 10 || rootState.system.features.mining.currentSubfeature === 1) ? 0 : (Math.pow(1.82, depth) * (depth * 0.01 - 0.09) * 0.25 * Math.pow(depth * 0.1 + 1, 2));
+            return (depth < 10 || rootState.system.features.mining.currentSubfeature === 1) ? 0 : (Math.pow(1.82, depth) * (depth * 0.01 - 0.09) * 0.25 * Math.pow(depth * 0.1 + 1, 2) * (depth > 250 ? Math.pow(depth * 0.02 - 4, depth - 250) : 1));
         },
         depthToughness: (state, getters, rootState, rootGetters) => (depth) => {
             return rootGetters['mult/get']('miningToughness', (getters.depthBaseToughness(depth)));

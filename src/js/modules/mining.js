@@ -254,7 +254,7 @@ export default {
         miningPickaxeCraftingPower: {},
         miningPickaxeCraftingQuality: {},
         miningOreQuality: {baseValue: 1},
-        miningDepthDwellerSpeed: {baseValue: 0.0001},
+        miningDepthDwellerSpeed: {baseValue: 0.00005},
         miningDepthDwellerMax: {display: 'percent', baseValue: 0.1},
         miningResinMax: {round: true, baseValue: 1},
         currencyMiningHeliumIncrement: {display: 'percent'},

@@ -70,7 +70,7 @@ export default {
             {mining_oreAluminium: buildNum(30, 'K')},
             {mining_oreAluminium: buildNum(750, 'K')},
             {mining_oreAluminium: buildNum(1, 'B')},
-            {mining_oreAluminium: buildNum(400, 'B')}
+            {mining_oreAluminium: buildNum(100, 'T')}
         ][lvl];
     }, effect: [
         {name: 'miningCompressAluminium', type: 'unlock', value: lvl => lvl >= 1},
@@ -135,7 +135,7 @@ export default {
     drillFuel: {requirementBase, requirementStat, requirementValue: 50, price(lvl) {
         return {mining_scrap: Math.pow(lvl * 0.1 + 2.4, lvl) * buildNum(35, 'B')};
     }, effect: [
-        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)}
+        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(1.02, lvl) * (lvl * 0.05 + 1)}
     ]},
     graniteHardening: {cap: 6, requirementBase, requirementStat, requirementValue: 55, price(lvl) {
         return {mining_granite: Math.pow(2.5, lvl) * 1600, mining_oreTin: lvl + 2};
@@ -362,5 +362,16 @@ export default {
         {name: 'currencyMiningOreTitaniumCap', type: 'mult', value: lvl => lvl * 0.25 + 1},
         {name: 'currencyMiningOrePlatinumCap', type: 'mult', value: lvl => lvl * 0.5 + 1},
         {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl + 1}
+    ]},
+    iridiumTreetap: {persistent: true, requirementBase, requirementStat, requirementValue: 280, price(lvl) {
+        return {mining_barIridium: Math.round(Math.pow(1.3, lvl) * (lvl + 2))};
+    }, effect: [
+        {name: 'currencyMiningResinCap', type: 'base', value: lvl => lvl * 10},
+        {name: 'miningResinMax', type: 'base', value: lvl => lvl}
+    ]},
+    iridiumBombs: {cap: 7, requirementBase, requirementStat, requirementValue: 300, price(lvl) {
+        return {mining_barBronze: Math.round(Math.pow(1.4, lvl) * buildNum(30, 'K')), mining_barIridium: lvl * 8 + 6};
+    }, effect: [
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.23, lvl)}
     ]},
 }

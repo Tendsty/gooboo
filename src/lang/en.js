@@ -1261,7 +1261,8 @@ export default {
       oreQuality: 'The amount of ores required to craft a pickaxe is divided by your ore quality',
       craftPickaxe: 'Craft pickaxe',
       purityDescription: 'To reach 50% minimum quality, your purity needs to match your impurity.',
-      premiumSlot: 'This is a premium crafting slot. Impurity above x1 is halved and purity is doubled.'
+      premiumSlot: 'This is a premium crafting slot. Impurity above x1 is halved and purity is doubled.',
+      minPurity: 'You need at least 0.1% minimum quality to craft a pickaxe'
     },
     craftingDescription: 'Consume selected ores and create a new pickaxe with a random power value. If it is better than your current pickaxe ({0} power), replace it.',
     resinDescription: 'Each piece of resin adds 30% power and 25% purity. Up to {0} resin may be used per pickaxe craft.',
@@ -1280,7 +1281,8 @@ export default {
       barBronze: 'Sturdy',
       barSteel: 'Sharp',
       barTitanium: 'Excavator',
-      barShiny: 'Rich'
+      barShiny: 'Rich',
+      barIridium: 'Molten'
     },
     gasGain: {
       0: 'Gain ',

@@ -25,7 +25,7 @@ export default {
         return {mining_helium: 250};
     }, effect: [
         {name: 'miningDepthDweller', type: 'unlock', value: lvl => lvl >= 1},
-        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(2, lvl)}
+        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(3, lvl)}
     ]},
     piston: {subfeature: 1, requirementBase, requirementStat, requirementValue: 20, price(lvl) {
         return {mining_helium: Math.round(Math.pow(1.35, lvl) * 50)};
@@ -71,5 +71,10 @@ export default {
         return {mining_argon: Math.round(Math.pow(1.35, lvl) * 50)};
     }, effect: [
         {name: 'currencyMiningCrystalYellowGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+    ]},
+    smoker: {subfeature: 1, requirementBase, requirementStat, requirementValue: 160, price(lvl) {
+        return {mining_krypton: Math.round(Math.pow(1.35, lvl) * 50)};
+    }, effect: [
+        {name: 'currencyMiningSmokeGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.2 + 1)}
     ]},
 }

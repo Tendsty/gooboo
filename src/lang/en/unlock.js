@@ -11,6 +11,7 @@ export default {
   miningCompressIron: 'Iron compression',
   miningCompressTitanium: 'Titanium compression',
   miningCompressPlatinum: 'Platinum compression',
+  miningCompressIridium: 'Iridium compression',
   villageBuildings1: 'Tier 1 buildings',
   villageBuildings2: 'Tier 2 buildings',
   villageBuildings3: 'Tier 3 buildings',
