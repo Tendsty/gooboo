@@ -239,7 +239,7 @@ function prestige(feature) {
 function getPrestigeInfo() {
     return {
         mining: {
-            canPrestige: store.state.stat.mining_depthDweller0.value >= 1,
+            canPrestige: store.state.stat.mining_depthDwellerCap0.value >= 1,
             statIndicator: store.state.stat.mining_depthDweller0.value,
             currencyGain: store.getters['mining/dwellerGreenCrystal'],
             timeSpent: Math.max(store.state.stat.mining_timeSpent.value, 1)

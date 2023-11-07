@@ -12,11 +12,11 @@ export default {
     achievement: 'Deeprun',
     description: 'Maximum depth in under 15 minutes'
   },
-  mining_depthDweller0: {
+  mining_depthDwellerCap0: {
     achievement: 'Drilling straight down',
     description: 'Maximum dweller depth'
   },
-  mining_depthDweller1: {
+  mining_depthDwellerCap1: {
     achievement: 'Sparkless',
     description: 'Maximum gas dweller depth'
   },

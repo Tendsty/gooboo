@@ -1,10 +1,10 @@
 import store from "../../../store";
 import { buildNum } from "../../utils/format";
 
-const requirementStat0 = 'mining_depthDweller0';
+const requirementStat0 = 'mining_depthDwellerCap0';
 const requirementBase0 = () => store.state.stat[requirementStat0].total;
 
-const requirementStat1 = 'mining_depthDweller1';
+const requirementStat1 = 'mining_depthDwellerCap1';
 const requirementBase1 = () => store.state.stat[requirementStat1].total;
 
 export default {

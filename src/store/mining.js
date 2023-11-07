@@ -251,16 +251,22 @@ export default {
             return rootState.stat[`mining_maxDepth${rootState.system.features.mining.currentSubfeature}`].value * rootGetters['mult/get']('miningDepthDwellerMax');
         },
         dwellerGreenCrystal: (state, getters, rootState) => {
-            return getters.dwellerGain(Math.floor(rootState.stat.mining_depthDweller0.value * 2), 0);
+            const baseValue = Math.floor(rootState.stat.mining_depthDweller0.value * 2);
+            const capValue = Math.floor(rootState.stat.mining_depthDwellerCap0.value * 2);
+            const bonusPercent = capValue > 0 ? (baseValue / capValue) : 1;
+            return getters.dwellerGain(capValue, 0) * bonusPercent;
         },
         dwellerYellowCrystal: (state, getters, rootState) => {
-            return getters.dwellerGain(Math.floor(rootState.stat.mining_depthDweller1.value * 2), 1);
+            const baseValue = Math.floor(rootState.stat.mining_depthDweller1.value * 2);
+            const capValue = Math.floor(rootState.stat.mining_depthDwellerCap1.value * 2);
+            const bonusPercent = capValue > 0 ? (baseValue / capValue) : 1;
+            return getters.dwellerGain(capValue, 1) * bonusPercent;
         },
         crystalColor: () => (subfeature) => {
             return ['Green', 'Yellow'][subfeature];
         },
         dwellerGain: (state, getters, rootState, rootGetters) => (steps, subfeature) => {
-            return rootGetters['mult/get'](`currencyMiningCrystal${ getters.crystalColor(subfeature) }Gain`, Math.pow(1.15, steps / 2) * steps * 5);
+            return rootGetters['mult/get'](`currencyMiningCrystal${ getters.crystalColor(subfeature) }Gain`, Math.pow(1.15, steps / 2) * steps * 7);
         },
         currentBreaks: (state) => {
             return state.breaks.length >= state.depth ? state.breaks[state.depth - 1] : 0;

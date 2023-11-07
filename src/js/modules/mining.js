@@ -1,5 +1,5 @@
 import store from "../../store"
-import { MINING_COAL_DEPTH, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_ORE_BREAK, MINING_RARE_DROP_BREAK, MINING_SALT_DEPTH, MINING_SCRAP_BREAK, MINING_SMOKE_BREAK, MINING_SULFUR_DEPTH } from "../constants";
+import { MINING_COAL_DEPTH, MINING_DWELLER_OVERCAP_MULT, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_ORE_BREAK, MINING_RARE_DROP_BREAK, MINING_SALT_DEPTH, MINING_SCRAP_BREAK, MINING_SMOKE_BREAK, MINING_SULFUR_DEPTH } from "../constants";
 import { buildArray } from "../utils/array";
 import { buildNum } from "../utils/format";
 import achievement from "./mining/achievement";
@@ -140,7 +140,7 @@ export default {
 
         // Resin
         if (store.state.unlock.miningResin.use && subfeature === 0) {
-            store.dispatch('currency/gain', {feature: 'mining', name: 'resin', amount: seconds * store.getters['mult/get']('currencyMiningResinGain', 0.0001)});
+            store.dispatch('currency/gain', {feature: 'mining', name: 'resin', amount: seconds * store.getters['mult/get']('currencyMiningResinGain')});
         }
 
         // Mining
@@ -215,14 +215,35 @@ export default {
         if (store.state.unlock.miningDepthDweller.use) {
             const dwellerLimit = store.getters['mining/dwellerLimit'];
             const dwellerSpeed = store.getters['mult/get']('miningDepthDwellerSpeed') / dwellerLimit;
-            const newDweller = Math.min(
-                0.1 + dwellerLimit -
-                (0.1 + dwellerLimit - store.state.stat[`mining_depthDweller${subfeature}`].value) *
-                Math.pow(1 - dwellerSpeed, seconds), dwellerLimit
-            );
-            store.commit('stat/increaseTo', {feature: 'mining', name: 'depthDweller' + subfeature, value: newDweller});
-            if (newDweller >= dwellerLimit) {
-                store.commit('stat/increaseTo', {feature: 'mining', name: 'dwellerCapHit', value: 1});
+            let timeLeft = seconds;
+            if (store.state.stat[`mining_depthDweller${subfeature}`].value < dwellerLimit) {
+                // Regular dweller calculation
+                const newDweller = Math.min(
+                    0.1 + dwellerLimit -
+                    (0.1 + dwellerLimit - store.state.stat[`mining_depthDweller${subfeature}`].value) *
+                    Math.pow(1 - dwellerSpeed, seconds), dwellerLimit
+                );
+                if (newDweller >= dwellerLimit) {
+                    store.commit('stat/increaseTo', {feature: 'mining', name: 'dwellerCapHit', value: 1});
+                    timeLeft -= Math.ceil(store.getters['mining/timeUntilNext'](dwellerLimit));
+                } else {
+                    timeLeft = 0;
+                }
+                store.commit('stat/increaseTo', {feature: 'mining', name: 'depthDweller' + subfeature, value: newDweller});
+                store.commit('stat/increaseTo', {feature: 'mining', name: 'depthDwellerCap' + subfeature, value: newDweller});
+            }
+            if (timeLeft > 0 && dwellerLimit > 0) {
+                // Dweller overcap
+                let newDweller = store.state.stat[`mining_depthDweller${subfeature}`].value;
+                let dwellerProgress = dwellerSpeed * 0.1 * timeLeft;
+                while (dwellerProgress > 0) {
+                    const breakpointCount = Math.floor(10 * newDweller / dwellerLimit) - 10;
+                    const targetAmount = ((breakpointCount + 1) / 10) * dwellerLimit;
+                    const progressMade = Math.min(dwellerProgress * Math.pow(MINING_DWELLER_OVERCAP_MULT, breakpointCount + 1), targetAmount);
+                    newDweller += progressMade;
+                    dwellerProgress -= progressMade * Math.pow(1 / MINING_DWELLER_OVERCAP_MULT, breakpointCount + 1);
+                }
+                store.commit('stat/increaseTo', {feature: 'mining', name: 'depthDweller' + subfeature, value: newDweller});
             }
         }
     },
@@ -231,7 +252,9 @@ export default {
         maxDepth0: {value: 1},
         maxDepth1: {value: 1},
         depthDweller0: {},
+        depthDwellerCap0: {},
         depthDweller1: {},
+        depthDwellerCap1: {},
         totalDamage: {},
         maxDamage: {},
         craftingCount: {},
@@ -345,7 +368,7 @@ export default {
         ember: {type: 'prestige', color: 'orange-red', icon: 'mdi-fire', overcapMult: 0, gainMult: {}, capMult: {baseValue: 100}, currencyMult: {
             miningSmelterySpeed: {type: 'mult', value: val => val * 0.02 + 1}
         }},
-        resin: {type: 'prestige', color: 'orange', icon: 'mdi-water', gainMult: {}, capMult: {baseValue: 5}},
+        resin: {type: 'prestige', color: 'orange', icon: 'mdi-water', gainMult: {baseValue: 0.0001, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 5}},
         crystalGreen: {type: 'prestige', alwaysVisible: true, color: 'light-green', icon: 'mdi-star-four-points', gainMult: {}},
         helium: {type: 'prestige', color: 'pale-blue', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}, currencyMult: {
             currencyMiningScrapCap: {type: 'mult', value: val => val * 0.01 + 1}

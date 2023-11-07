@@ -13,7 +13,7 @@ export default {
                     {type: 'stat', subtype: 'current', name: 'village_maxBuilding', operator: '>=', value: 200}
                 ]},
                 {note: 'general_3', tasks: [
-                    {type: 'stat', subtype: 'current', name: 'mining_depthDweller0', operator: '>=', value: 5}
+                    {type: 'stat', subtype: 'current', name: 'mining_depthDwellerCap0', operator: '>=', value: 5}
                 ]},
                 {note: 'general_4', tasks: [
                     {type: 'upgrade', subtype: 'current', name: 'village_school', operator: '>=', value: 1}

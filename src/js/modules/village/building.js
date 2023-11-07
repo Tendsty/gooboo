@@ -283,7 +283,7 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * 4800);
     }, effect: [
-        {name: 'currencyVillageFaithGain', type: 'base', value: lvl => getSequence(1, lvl) * 0.04}
+        {name: 'currencyVillageFaithGain', type: 'base', value: lvl => getSequence(1, lvl) * 0.02}
     ]},
     school: {icon: 'mdi-school', cap: 5, capMult: true, note: 'village_20', requirement() {
         return store.state.unlock.villageBuildings3.use;
@@ -485,7 +485,7 @@ export default {
         };
     }, effect: [
         {name: 'currencyVillageKnowledgeCap', type: 'base', value: lvl => lvl * 8},
-        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 5},
+        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 20},
         {name: 'villageUpgradeAxe', type: 'unlock', value: lvl => lvl >= 2},
         {name: 'villageUpgradeBomb', type: 'unlock', value: lvl => lvl >= 4},
         {name: 'villageUpgradeToll', type: 'unlock', value: lvl => lvl >= 6},
@@ -590,7 +590,7 @@ export default {
         return Math.ceil(Math.pow(1.75, lvl) * buildNum(1.5, 'M'));
     }, effect: [
         {name: 'villageFoodGain', type: 'mult', value: lvl => Math.pow(1.2, lvl) * (lvl * 0.25 + 1)},
-        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 8}
+        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 32}
     ]},
     storageHall: {cap: 20, icon: 'mdi-warehouse', requirement() {
         return store.state.unlock.villageBuildings5.use;
@@ -657,7 +657,7 @@ export default {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(1.5, 'M'));
     }, effect: [
         {name: 'villageOfferingPower', type: 'mult', value: lvl => lvl * 0.5 + 1},
-        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 8}
+        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 32}
     ]},
     mosque: {cap: 25, icon: 'mdi-mosque', requirement() {
         return store.state.unlock.villageBuildings5.use;
@@ -670,7 +670,7 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(3.2, 'M'));
     }, effect: [
-        {name: 'currencyVillageFaithGain', type: 'base', value: lvl => getSequence(2, lvl) * 2}
+        {name: 'currencyVillageFaithGain', type: 'base', value: lvl => getSequence(2, lvl)}
     ]},
     waterTower: {cap: 12, icon: 'mdi-tower-beach', requirement() {
         return store.state.unlock.villageBuildings5.use;

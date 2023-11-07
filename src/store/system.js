@@ -18,7 +18,7 @@ export default {
                 subfeatures: ['miningGasSubfeature'],
                 currentSubfeature: 0,
                 icon: 'mdi-pickaxe',
-                offlineStat: ['mining_maxDepth0', 'mining_maxDepth1', 'mining_depthDweller0', 'mining_depthDweller1'],
+                offlineStat: ['mining_maxDepth0', 'mining_maxDepth1', 'mining_depthDwellerCap0', 'mining_depthDwellerCap1'],
                 main: true
             },
             village: {
@@ -454,7 +454,7 @@ export default {
                         case 0:
                             return rootState.stat.mining_maxDepth0.total > 300;
                         case 1:
-                            return rootState.stat.mining_maxDepth1.total > 100;
+                            return rootState.stat.mining_maxDepth1.total > 160;
                     }
                     break;
                 }

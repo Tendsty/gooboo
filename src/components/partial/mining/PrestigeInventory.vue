@@ -17,10 +17,10 @@ export default {
     }),
     prestigeStone() {
       let arr = [];
-      if (this.$store.state.stat.mining_depthDweller0.total >= 10) {
+      if (this.$store.state.stat.mining_depthDwellerCap0.total >= 10) {
         arr.push({currency: 'mining_crystalGreen', stat: 'mining_bestPrestige0'});
       }
-      if (this.$store.state.stat.mining_depthDweller1.total >= 10) {
+      if (this.$store.state.stat.mining_depthDwellerCap1.total >= 10) {
         arr.push({currency: 'mining_crystalYellow', stat: 'mining_bestPrestige1'});
       }
       return arr;

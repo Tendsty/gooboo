@@ -7,8 +7,9 @@
             <v-chip label small class="ma-1 px-2" v-bind="attrs" v-on="on">
               <v-icon class="mr-2">mdi-pickaxe</v-icon>
               <span v-if="unlock.miningDepthDweller.use">
-                <span>{{ Math.round(dweller * 100) / 100 }}m</span>
+                <span>{{ Math.round(dwellerCap * 100) / 100 }}m</span>
                 <span v-if="dweller < dwellerLimit">&nbsp;/&nbsp;{{ Math.round(dwellerLimit * 100) / 100 }}m</span>
+                <span v-else>&nbsp;(+{{ Math.round((dweller - dwellerCap) * 100) / 100 }}m)</span>
               </span>
               <v-icon v-else>mdi-lock</v-icon>
               <v-icon class="ml-1" v-if="dweller >= dwellerLimit">mdi-check</v-icon>
@@ -54,8 +55,8 @@ export default {
   components: { StatusTemplate, PriceTag },
   computed: {
     ...mapState({
-      maxDweller0: state => state.stat.mining_depthDweller0.total,
-      maxDweller1: state => state.stat.mining_depthDweller1.total,
+      maxDweller0: state => state.stat.mining_depthDwellerCap0.total,
+      maxDweller1: state => state.stat.mining_depthDwellerCap1.total,
       unlock: state => state.unlock,
       subfeature: state => state.system.features.mining.currentSubfeature,
       currency: state => state.currency
@@ -86,6 +87,9 @@ export default {
     },
     dweller() {
       return this.$store.state.stat['mining_depthDweller' + this.subfeature].value;
+    },
+    dwellerCap() {
+      return this.$store.state.stat['mining_depthDwellerCap' + this.subfeature].value;
     },
     themeModifier() {
       return this.$vuetify.theme.dark ? 'darken-2' : 'lighten-2';

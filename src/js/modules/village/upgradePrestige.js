@@ -124,8 +124,8 @@ export default {
     }, price(lvl) {
         return {village_blessing: Math.pow(lvl * 0.15 + 1.75, lvl) * buildNum(40, 'K')};
     }, effect: [
-        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 5},
-        {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => Math.pow(1.35, lvl)}
+        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 20},
+        {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
     ]},
     holyLab: {type: 'prestige', requirement() {
         return store.state.unlock.villageBuildings5.see;
