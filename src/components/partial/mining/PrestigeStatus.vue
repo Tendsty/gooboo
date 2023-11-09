@@ -18,6 +18,7 @@
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description1') }}</div>
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description2') }}</div>
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description3', $formatNum(dwellerPercent)) }}</div>
+          <alert-text class="mb-2" type="info">{{ $vuetify.lang.t('$vuetify.mining.dweller.descriptionOvercap', $formatNum(dwellerOvercapPercent)) }}</alert-text>
           <div v-for="(nextTime, key) in timesUntilNext" :key="`next-time-${ key }`">
             <price-tag v-if="nextTime.gain !== null" class="mr-1" add :currency="`mining_crystal${ crystalColor }`" :amount="nextTime.gain"></price-tag>
             <span>{{ $vuetify.lang.t('$vuetify.mining.dweller.nextTime', Math.round(nextTime.depth * 100) / 100, $formatTime(nextTime.time)) }}</span>
@@ -48,11 +49,13 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import { MINING_DWELLER_OVERCAP_MULT } from '../../../js/constants';
 import PriceTag from '../../render/PriceTag.vue';
 import StatusTemplate from '../prestige/StatusTemplate.vue';
+import AlertText from '../render/AlertText.vue';
 
 export default {
-  components: { StatusTemplate, PriceTag },
+  components: { StatusTemplate, PriceTag, AlertText },
   computed: {
     ...mapState({
       maxDweller0: state => state.stat.mining_depthDwellerCap0.total,
@@ -119,10 +122,36 @@ export default {
           gain: this.$store.getters['mining/dwellerGain'](Math.floor(max * 2), this.subfeature)
         });
       }
+      const baseValue = Math.floor(Math.max(this.dweller, max) * 2) / 2;
+      const maxValue = Math.floor(max * 2) / 2;
+      current = Math.max(this.dweller, max);
+      let bonusTime = 0;
+      while (arr.length < 4) {
+        current += 0.5;
+        const currentFloored = Math.floor(current * 2) / 2;
+        const bonusPercent = baseValue > 0 ? (currentFloored / maxValue) : 1;
+        const dwellerSpeed = 0.1 * this.$store.getters['mult/get']('miningDepthDwellerSpeed') / max;
+        let currentProgress = current - 0.5;
+        while (currentProgress < currentFloored) {
+          const breakpointCount = Math.floor(10 * (currentProgress + 0.000000000001) / max) - 10;
+          const targetAmount = Math.min(max * (breakpointCount + 11) / 10, currentFloored);
+          bonusTime += (targetAmount - currentProgress) * Math.pow(1 / MINING_DWELLER_OVERCAP_MULT, breakpointCount + 1) / dwellerSpeed;
+          currentProgress = targetAmount;
+        }
+        arr.push({
+          depth: currentFloored,
+          time: this.$store.getters['mining/timeUntilNext'](max) + Math.ceil(bonusTime),
+          gain: this.$store.getters['mining/dwellerGain'](maxValue * 2, this.subfeature) * bonusPercent
+        });
+        current = currentFloored;
+      }
       return arr;
     },
     crystalColor() {
       return this.$store.getters['mining/crystalColor'](this.subfeature);
+    },
+    dwellerOvercapPercent() {
+      return MINING_DWELLER_OVERCAP_MULT * 100;
     }
   }
 }

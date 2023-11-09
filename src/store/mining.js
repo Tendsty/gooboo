@@ -315,7 +315,7 @@ export default {
                 return null;
             }
             const dwellerSpeed = rootGetters['mult/get']('miningDepthDwellerSpeed') / dwellerLimit;
-            return logBase((amount - 0.1 - dwellerLimit) / -(0.1 + dwellerLimit - rootState.stat[`mining_depthDweller${rootState.system.features.mining.currentSubfeature}`].value), 1 - dwellerSpeed);
+            return logBase((amount - 0.1 - dwellerLimit) / -(0.1 + dwellerLimit - rootState.stat[`mining_depthDwellerCap${rootState.system.features.mining.currentSubfeature}`].value), 1 - dwellerSpeed);
         }
     },
     mutations: {
@@ -530,6 +530,7 @@ export default {
                     commit('updateKey', {key: 'enhancementBars', value: state.enhancementBars - getters.enhancementBarsNeeded});
                     dispatch('currency/spend', {feature: 'mining', name: state.enhancementIngredient, amount: barsNeeded}, {root: true});
                     commit('updateEnhancementKey', {name: state.enhancementIngredient, key: 'level', value: state.enhancement[state.enhancementIngredient].level + 1});
+                    dispatch('applyEnhancement', {trigger: true, name: state.enhancementIngredient});
                 }
             }
         },
@@ -545,5 +546,12 @@ export default {
                 dispatch('system/resetEffect', {type: eff.type, name: eff.name, multKey: `miningEnhancement_${ name }`}, {root: true});
             });
         },
+        updateDwellerStat({ rootState, getters, commit }) {
+            const subfeature = rootState.system.features.mining.currentSubfeature;
+            commit('stat/increaseTo', {feature: 'mining', name: 'depthDwellerCap' + subfeature, value: Math.min(
+                rootState.stat[`mining_depthDweller${ subfeature }`].value,
+                getters.dwellerLimit
+            )}, {root: true});
+        }
     }
 }

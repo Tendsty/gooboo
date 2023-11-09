@@ -9,7 +9,7 @@ export default {
 
     // Village effects
     queueSpeedVillageBuilding: {feature: 'village', value: 0.3},
-    villageMaterialGain: {feature: 'village', value: 0.25},
+    villageMaterialGain: {feature: 'village', value: 0.1},
     currencyVillageCoinGain: {feature: 'village', value: 0.25},
     villageMentalGain: {feature: 'village', value: 0.1},
     currencyVillageFaithGain: {feature: 'village', type: 'special', unique: true, value: 0.1},

@@ -26,5 +26,19 @@ export default function(save) {
         }
     }
 
+    // Update dweller cap stats
+    if (save.stat.mining_depthDweller0) {
+        save.stat.mining_depthDwellerCap0 = save.stat.mining_depthDweller0;
+    }
+    if (save.stat.mining_depthDweller1) {
+        save.stat.mining_depthDwellerCap1 = save.stat.mining_depthDweller1;
+    }
+    if (save.achievement?.mining_depthDweller0) {
+        save.achievement.mining_depthDwellerCap0 = save.achievement.mining_depthDweller0;
+    }
+    if (save.achievement?.mining_depthDweller1) {
+        save.achievement.mining_depthDwellerCap1 = save.achievement.mining_depthDweller1;
+    }
+
     return save;
 }

@@ -182,7 +182,7 @@ export default {
   },
   farm_maxOvergrow: {
     achievement: 'Gärtner',
-    description: 'Maximales Überwuchern'
+    description: 'Beste Ernte'
   },
   farm_bestPrestige: {
     achievement: 'Renommiert',

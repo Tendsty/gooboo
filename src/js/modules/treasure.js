@@ -42,7 +42,7 @@ const treasureTypes = {
     empowered: {
         destroyPrice: 16,
         slots: [
-            {type: 'regular', power: 2}
+            {type: 'regular', power: 1.25}
         ],
         icon: 'mdi-star-circle'
     },

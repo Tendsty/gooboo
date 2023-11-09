@@ -151,7 +151,7 @@ export default {
 
     school_0: 'Lerne in der Schule. Antworte richtig. Verbessere Noten.',
     school_1: 'Sei ein fleißiger Schüler. Erhalte Goldstaub. Kann Zeit überspringen.',
-    school_2: 'Bekomme neue Bücher. Jede Stunde. Noch mehr mit besseren Noten.',
+    school_2: 'Bekomme neue Bücher. Jede Stunde. Noch mehr mit mehr Fächern.',
     school_3: 'Lerne auch das Schreiben. Bekomme mehr Bücher.',
     school_4: 'Geschichte ist wichtig. Merke Daten. Noch mehr Bücher.',
 

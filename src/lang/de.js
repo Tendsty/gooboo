@@ -235,6 +235,14 @@ export default {
   },
   unlock,
   mult,
+  text: {
+    farmUnlockDna: 'Schalte alle DNA-Verbesserungen von Stufe-1-Genen frei',
+    farmGnomeBoost: 'Angrenzende Gartenzwerge erhöhen sämtlichen Pflanzenertrag um 10%',
+    farmLonelyGrow: 'Pflanzen wachsen doppelt so schnell, wenn keine anderen Pflanzen der gleichen Art auf dem Feld sind',
+    farmFertileBoost: 'Erhöht sämtlichen Pflanzenertrag um 30% vom Wachstumsbonus des Düngers',
+    farmYieldConversion: '60% vom Ertrag wird in andere Ertragsarten umgewandelt (jeweils 20%)',
+    farmFastPrestige: 'Prestige reduziert die Pflanzenstufe um 5, anstatt sie auf 0 zurückzusetzen',
+  },
   upgrade,
   currency,
   stat,
@@ -1185,6 +1193,7 @@ export default {
     hordeItemPermanent: 'Ausrüstungs-Effekt',
     hordeNostalgia: 'Nostalgie',
     hordeNostalgiaLost: 'Erbstücke gefunden',
+    farmEarlyGame: 'Erste Pflanzen',
     cards: 'Karten',
     treasure: 'Schätze',
     debug: 'Debug',
@@ -1211,6 +1220,7 @@ export default {
       description2: 'Für jeden abgeschlossenen halben Meter aktueller Gräbertiefe erhöht sich die Prestigebelohnung.',
       description3: 'Die höchstmögliche Gräbertiefe beträgt {0}% der maximalen Tiefe im Bergwerk.',
       description4: 'Maximale Gräbertiefe',
+      descriptionOvercap: 'Der Gräber kann nach der höchstmöglichen Gräbertiefe für Bonustiefe weiter graben, was die Prestigebelohnung linear erhöht. Das Gräbertempo wird auf {0}% reduziert, und für jede 10% nach der höchstmöglichen Gräbertiefe wird das Tempo erneut auf {0}% gesenkt',
       nextTime: 'Du erreichst {0}m in {1}'
     },
     pickaxePower: 'Dies ist die Kraft deiner Spitzhacke und dein Grundschaden. Erhöhe es, indem du eine bessere Spitzhacke herstellst.',
@@ -1252,7 +1262,8 @@ export default {
       oreQuality: 'Die Menge an benötigten Erzen zum Herstellen einer Spitzhacke wird durch deine Erz-Qualität geteilt',
       craftPickaxe: 'Spitzhacke herstellen',
       purityDescription: 'Um 50% minimale Qualität zu erreichen, muss die Reinheit so hoch wie die Unreinheit sein.',
-      premiumSlot: 'Dies ist ein Premium-Herstellplatz. Unreinheit über x1 ist halbiert und Reinheit verdoppelt.'
+      premiumSlot: 'Dies ist ein Premium-Herstellplatz. Unreinheit über x1 ist halbiert und Reinheit verdoppelt.',
+      minPurity: 'Du benötigst mindestens 0.1% Qualität, um Spitzhacken herzustellen'
     },
     craftingDescription: 'Verbrauche die ausgewählten Erze und stelle eine neue Spitzhacke mit einem zufälligen Kraftwert her. Wenn dieser Wert die bisherige Spitzhacke ({0} Kraft) übertrifft, tausche sie durch die neue aus.',
     resinDescription: 'Jedes Stück Harz fügt 30% Stärke und 25% Reinheit hinzu. Bis zu {0} Harz kann pro Spitzhacke verwendet werden.',
@@ -1266,12 +1277,14 @@ export default {
     enhancement: {
       title: 'Aufwertungen',
       description: 'Benutze Barren, um deine Spitzhacke aufzuwerten. Jeder Barren hat eine einzigartige Aufwertung, die mehrfach angewendet werden kann. Aber sei vorsichtig, jede erfolgreiche Aufwertung erschwert die Nächste, also überlege dir gut, wie du deine Spitzhacke aufwertest',
-      chanceDescription: 'Deine Aufwertungen haben eine Erfolgschance von {0}% und werden mit jedem Erfolg {1}% schwerer. Barren werden immer verbraucht, aber die Aufwertung wird nur beim Erfolg angewendet. Solltest du scheitern, steigt deine Erfolgschance, bis eine Aufwertung gelingt. Aufwertungen sind eher am Ende der Erfolgsleiste erfolgreich',
+      barsDescription: 'Aufwertungen benötigen zuerst irgendeine Art von Barren. Die Menge steigt mit jeder Aufwertung',
+      enhancementDescription: 'Dann benötigst du Barren, welche die Art der Aufwertung bestimmen. Die Menge steigt mit jeder Aufwertung der selben Barrenart',
       barAluminium: 'Leichtgewicht',
       barBronze: 'Robust',
       barSteel: 'Spitz',
       barTitanium: 'Ausgräber',
-      barShiny: 'Reich'
+      barShiny: 'Reich',
+      barIridium: 'Geschmolzen'
     },
     gasGain: {
       0: 'Erhalte ',
@@ -1697,11 +1710,14 @@ export default {
     expToLevelUp: 'Du brauchst noch {0} weitere Ernten, um die nächste Stufe zu erreichen',
     yield: 'Ertrag',
     rareDrops: 'Seltener Ertrag',
+    addRareDrop: 'Neuer seltener Ertrag ({0})',
+    addRareDropAmount: '{0}-Menge',
     prestige: {
       description: 'Ein Prestige einer Pflanze ist möglich, sobald sie Stufe 4 erreicht. Dadurch wird ihre Prestige-Stufe auf die aktuelle Stufe erhöht, was Vorteile mit sich bringt. Dadurch werden für diese Pflanze Stufe, Erfahrung und Gene zurückgesetzt. Jede Prestige-Stufe erhöht den Ertrag aller Pflanzen um x1.04.',
       current: 'Deine aktuelle Prestige-Stufe ist {0}, was den Ertrag aller Pflanzen um x{1} erhöht.',
       next: 'Ein Prestige dieser Pflanze erhöht die Prestige-Stufe um {0}. Dadurch steigt sie auf {1}, was den Ertrag aller Pflanzen auf x{2} erhöht.',
-      nextNoEffect: 'Die Stufe dieser Pflanze ist nicht höher als ihre Prestige-Stufe. Ein Prestige wird die Prestige-Stufe nicht anheben, aber trotzdem Stufe und Gene zurücksetzen.'
+      nextNoEffect: 'Die Stufe dieser Pflanze ist nicht höher als ihre Prestige-Stufe. Ein Prestige wird die Prestige-Stufe nicht anheben, aber trotzdem Stufe und Gene zurücksetzen.',
+      cropOnField: 'Du kannst gerade keinen Prestige durchführen, da sich diese Pflanze noch auf dem Feld befindet'
     },
     button: {
       plantAll: 'Säe die ausgewählte Pflanze ({0}) auf allen leeren Feldern aus. Du kannst auch Saat auf ein einzelnes Feld legen, indem du es anklickst',
@@ -1748,33 +1764,29 @@ export default {
       violet: 'Veilchen',
       goldenRose: 'Goldrose'
     },
-    cropUpgrade: {
-      yield: 'x1.25 Ertrag',
-      grow: 'x0.92 Wachstumszeit',
-      exp: '+0.35 Erfahrung',
-      gold: 'x1.35 Goldchance',
-      overgrow: '+50% Überwuchern',
-      cost: 'x0.75 Kosten, mindestens -1 weniger',
-      double: 'x1.5 Ertrag, Erfahrung und Goldchance und x1.3 Chance auf seltenen Ertrag, aber x2 Wachstumszeit',
-      fertile: 'Düngereffekte sind 25% stärker',
-      drops: 'x1.2 Chance auf seltenen Ertrag'
-    },
-    cropUpgradeName: {
+    gene: {
+      name: 'Gen',
+      pickLevel: 'Wähle ein Stufe-{0}-Gen',
+      dnaDescription: 'Du erhältst DNA, wenn die Pflanze in der Stufe aufsteigt und kannst mit ihr Gen-Verbesserungen kaufen. Die nächste Pflanzenstufe gibt {0} DNA',
+      hasUpgrade: 'Hat Gen-Verbesserung',
       yield: 'Ertrag',
-      grow: 'Wachsen',
-      exp: 'Erfahrung',
       gold: 'Gold',
+      exp: 'Erfahrung',
+      rareDrop: 'Seltener Ertrag',
+      grow: 'Wachsen',
       overgrow: 'Überwuchern',
-      cost: 'Kosten',
-      double: 'Doppelt',
+      giant: 'Riesig',
+      grass: 'Gras',
+      dna: 'DNA',
+      gnome: 'Zwerg',
+      lonely: 'Einsam',
       fertile: 'Fruchtbar',
-      drops: 'Seltener Ertrag'
+      mystery: 'Mysterium',
+      conversion: 'Umwandlung',
+      prestige: 'Prestige',
+      rareDropChance: 'Entdeckung'
     },
     fertilizerEffect: {
-      yield: 'Ertrag',
-      grow: 'Wachstumstempo',
-      gold: 'Goldchance',
-      drop: 'Chance auf seltenen Ertrag',
       vegetable: 'Nur Gemüse',
       fruit: 'Nur Früchte',
       grain: 'Nur Getreide',
@@ -1790,8 +1802,8 @@ export default {
       },
       sprinkler: {
         name: 'Rasensprenger',
-        description: 'Pflanzen in der selben Reihe wachsen doppelt so schnell',
-        descriptionPremium: 'Pflanzen in der selben Reihe wachsen dreifach so schnell',
+        description: 'Pflanzen in der selben Reihe wachsen +10% schneller und haben +250% Überwuchern',
+        descriptionPremium: 'Pflanzen in der selben Reihe wachsen +20% schneller und haben +500% Überwuchern',
       },
       lectern: {
         name: 'Rednerpult',

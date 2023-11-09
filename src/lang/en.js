@@ -1220,6 +1220,7 @@ export default {
       description2: 'For each completed half meter of current dweller depth, your prestige reward increases.',
       description3: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
       description4: 'Maximum dweller depth',
+      descriptionOvercap: 'The dweller can gain bonus depth after reaching its highest possible depth, giving a linear increase to your prestige reward. Dweller speed is reduced to {0}%, and every 10% after the highest possible depth reduces speed to {0}% again',
       nextTime: 'You reach {0}m in {1}'
     },
     pickaxePower: 'This is the power of your pickaxe and your base damage. Increase it by crafting a better pickaxe.',
@@ -1276,7 +1277,8 @@ export default {
     enhancement: {
       title: 'Enhancements',
       description: 'Use bars to apply enhancements to your pickaxe. Each bar has their own unique enhancement that can be applied multiple times. But be careful, each successful enhancement makes the next one more difficult, so think about which enhancements you put on your pickaxe',
-      chanceDescription: 'Your enhancements have a {0}% chance to succeed and get {1}% harder when they do. Bars will always be consumed, but the enhancement only applies on success. When you fail, your success chance keeps increasing until you get a successful enhancement. Enhancements are also more likely to succeed at the end of your success bar',
+      barsDescription: 'Enhancements require any type of bars first. This amount increases with each enhancement',
+      enhancementDescription: 'Then you need a specific type of bars that determine the type of enhancement. This amount also increases with each enhancement of this bar type',
       barAluminium: 'Lightweight',
       barBronze: 'Sturdy',
       barSteel: 'Sharp',

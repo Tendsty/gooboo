@@ -7,17 +7,17 @@ export default {
     }, effect: [
         {name: 'villageWorker', type: 'base', value: lvl => lvl * 2}
     ]},
-    holyTree: {type: 'prestige', price(lvl) {
-        return {village_blessing: Math.pow(1.65, lvl) * 50};
-    }, effect: [
-        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
-        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
-    ]},
     holyGrass: {type: 'prestige', price(lvl) {
         return {village_blessing: Math.pow(1.65, lvl) * 50};
     }, effect: [
         {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
         {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
+    ]},
+    holyTree: {type: 'prestige', price(lvl) {
+        return {village_blessing: Math.pow(1.65, lvl) * 50};
+    }, effect: [
+        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
     ]},
     holyRock: {type: 'prestige', price(lvl) {
         return {village_blessing: Math.pow(1.65, lvl) * 50};

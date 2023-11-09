@@ -123,7 +123,7 @@
           <div v-if="enhancementBars >= enhancementBarsNeeded" class="ingredient-amount">{{ $formatNum(enhancementFinalNeeded) }}</div>
         </template>
       </div>
-      <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.mining.enhancement.title')">
+      <gb-tooltip>
         <template v-slot:activator="{ on, attrs }">
           <div class="ma-1" style="width: 225px;" v-bind="attrs" v-on="on">
             <v-progress-linear class="balloon-text-dynamic rounded" height="32" :value="100 * enhancementBars / enhancementBarsNeeded">
@@ -131,9 +131,11 @@
             </v-progress-linear>
           </div>
         </template>
-        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementBarsIncrement') }}</h3>
+        <h3 class="text-center mt-0">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementBarsIncrement') }}</h3>
+        <div>{{ $vuetify.lang.t('$vuetify.mining.enhancement.barsDescription') }}</div>
         <stat-breakdown name="miningEnhancementBarsIncrement"></stat-breakdown>
-        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementFinalIncrement') }}</h3>
+        <h3 class="text-center mt-4">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementFinalIncrement') }}</h3>
+        <div>{{ $vuetify.lang.t('$vuetify.mining.enhancement.enhancementDescription') }}</div>
         <stat-breakdown name="miningEnhancementFinalIncrement"></stat-breakdown>
       </gb-tooltip>
       <v-btn class="ma-1" color="primary" :disabled="enhancementBars >= enhancementBarsNeeded || !canEnhanceBars" @click="performEnhancementBars">{{ $vuetify.lang.t('$vuetify.gooboo.add') }}</v-btn>

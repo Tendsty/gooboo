@@ -3,16 +3,16 @@ export default {
         max: null,
         needed: 1,
         rewards: [
-            {type: 'base', name: 'currencyVillageWoodGain', amount: 0.15},
-            {type: 'base', name: 'currencyVillagePlantFiberGain', amount: 0.15},
-            {type: 'base', name: 'currencyVillageStoneGain', amount: 0.15}
+            {type: 'base', name: 'currencyVillagePlantFiberGain', amount: 0.3},
+            {type: 'base', name: 'currencyVillageWoodGain', amount: 0.3},
+            {type: 'base', name: 'currencyVillageStoneGain', amount: 0.3}
         ]
     },
     farmer: {
         max: 0,
         needed: 2,
         rewards: [
-            {type: 'base', name: 'currencyVillagePlantFiberGain', amount: 1},
+            {type: 'base', name: 'currencyVillagePlantFiberGain', amount: 2},
             {type: 'base', name: 'currencyVillageGrainGain', amount: 0.25}
         ]
     },
@@ -20,7 +20,7 @@ export default {
         max: 0,
         needed: 2,
         rewards: [
-            {type: 'base', name: 'currencyVillageWoodGain', amount: 1},
+            {type: 'base', name: 'currencyVillageWoodGain', amount: 2},
             {type: 'base', name: 'currencyVillageFruitGain', amount: 0.25}
         ]
     },
@@ -28,7 +28,7 @@ export default {
         max: 0,
         needed: 2,
         rewards: [
-            {type: 'base', name: 'currencyVillageStoneGain', amount: 1},
+            {type: 'base', name: 'currencyVillageStoneGain', amount: 2},
             {type: 'base', name: 'currencyVillageMetalGain', amount: 0.25}
         ]
     },
@@ -64,7 +64,7 @@ export default {
         max: 0,
         needed: 6,
         rewards: [
-            {type: 'base', name: 'currencyVillageWoodGain', amount: 6},
+            {type: 'base', name: 'currencyVillageWoodGain', amount: 12},
             {type: 'base', name: 'currencyVillageHardwoodGain', amount: 0.15}
         ]
     },
@@ -72,7 +72,7 @@ export default {
         max: 0,
         needed: 6,
         rewards: [
-            {type: 'base', name: 'currencyVillageStoneGain', amount: 6},
+            {type: 'base', name: 'currencyVillageStoneGain', amount: 12},
             {type: 'base', name: 'currencyVillageGemGain', amount: 0.15}
         ]
     },
@@ -94,7 +94,7 @@ export default {
         max: 0,
         needed: 8,
         rewards: [
-            {type: 'base', name: 'currencyVillagePlantFiberGain', amount: 10},
+            {type: 'base', name: 'currencyVillagePlantFiberGain', amount: 20},
             {type: 'base', name: 'currencyVillageVegetableGain', amount: 20}
         ]
     },

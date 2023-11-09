@@ -206,6 +206,9 @@ export default {
             state.item[o.name].effect.forEach(eff => {
                 dispatch('system/applyEffect', {type: eff.type, name: eff.name, multKey: `upgrade_${o.name}`, value: eff.value(state.item[o.name].level), trigger}, {root: true});
             });
+            if (trigger && o.name === 'mining_crystalDrill') {
+                dispatch('mining/updateDwellerStat', null, {root: true});
+            }
             if (trigger && ['horde_mysticalBag', 'horde_collector'].includes(o.name)) {
                 dispatch('horde/checkPlayerHealth', null, {root: true});
             }

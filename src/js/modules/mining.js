@@ -188,6 +188,9 @@ export default {
                     if (store.state.stat.mining_timeSpent.value <= 900 && subfeature === 0) {
                         store.commit('stat/increaseTo', {feature: 'mining', name: 'maxDepthSpeedrun', value: store.state.mining.depth + 1});
                     }
+
+                    // Update dweller stat
+                    store.dispatch('mining/updateDwellerStat');
                 }
                 if (
                     isLatest &&
@@ -237,7 +240,7 @@ export default {
                 let newDweller = store.state.stat[`mining_depthDweller${subfeature}`].value;
                 let dwellerProgress = dwellerSpeed * 0.1 * timeLeft;
                 while (dwellerProgress > 0) {
-                    const breakpointCount = Math.floor(10 * newDweller / dwellerLimit) - 10;
+                    const breakpointCount = Math.floor(10 * (newDweller + 0.000000000001) / dwellerLimit) - 10;
                     const targetAmount = ((breakpointCount + 1) / 10) * dwellerLimit;
                     const progressMade = Math.min(dwellerProgress * Math.pow(MINING_DWELLER_OVERCAP_MULT, breakpointCount + 1), targetAmount);
                     newDweller += progressMade;

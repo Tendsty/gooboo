@@ -151,7 +151,7 @@ export default {
 
     school_0: 'Learn in school. Answer correctly. Get good grades.',
     school_1: 'Be an eager student. Receive golden dust. Can skip time.',
-    school_2: 'Get new books. Every hour. Even more with better grades.',
+    school_2: 'Get new books. Every hour. Even more with more subjects.',
     school_3: 'Also learn to write. Get more books.',
     school_4: 'History is important. Remember dates. Even more books.',
 

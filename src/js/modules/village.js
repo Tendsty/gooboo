@@ -163,8 +163,8 @@ export default {
         }, timerIsEstimate: true},
 
         // Basic material
-        wood: {subtype: 'material', color: 'wooden', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
         plantFiber: {subtype: 'material', color: 'green', icon: 'mdi-leaf', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
+        wood: {subtype: 'material', color: 'wooden', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
         stone: {subtype: 'material', color: 'grey', icon: 'mdi-chart-bubble', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
         metal: {subtype: 'material', color: 'lighter-grey', icon: 'mdi-gold', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
         water: {subtype: 'material', color: 'blue', icon: 'mdi-water', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
