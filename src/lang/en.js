@@ -63,6 +63,7 @@ export default {
     levelSuffix: 'level',
     delete: 'Delete',
     convert: 'Convert',
+    add: 'Add',
     playedBefore: {
       0: 'Already played before? Load your savefile ',
       1: 'here'
@@ -234,6 +235,14 @@ export default {
   },
   unlock,
   mult,
+  text: {
+    farmUnlockDna: 'Unlock all DNA upgrades from level 1 genes',
+    farmGnomeBoost: 'Nearby garden gnomes increase all crop gains by 10%',
+    farmLonelyGrow: 'Grow twice as fast if no other crops of this type are on the field',
+    farmFertileBoost: 'Increase all crop gains by 30% of fertilizer grow time reduction',
+    farmYieldConversion: 'Convert 60% of yield to other yield types (20% each)',
+    farmFastPrestige: 'Prestige reduces crop level by 5 instead of resetting it to 0',
+  },
   upgrade,
   currency,
   stat,
@@ -248,6 +257,11 @@ export default {
       web: 'You are using the web version. The game regularly checks for updates, automatically uses the newest version and notifies you when an update is available.',
       desktop: {
         0: 'You are using the desktop version. You need to check for updates manually on the ',
+        1: 'releases',
+        2: ' page.'
+      },
+      offline: {
+        0: 'You are using the offline version. You need to check for updates manually on the ',
         1: 'releases',
         2: ' page.'
       },
@@ -1157,9 +1171,9 @@ export default {
     experiment: {
       name: 'Experimental',
       warning: 'These settings are still experimental and may be buggy, unfinished, performance heavy or confusing. Enable them at your own risk, and please leave feedback if you are using them! If this section is empty, no experimental settings are available at the time or you have not progressed far enough to be able to see them',
-      gainTimer: {
-        name: 'Display gain timers',
-        description: 'Show the time needed to reach resource capacity or afford an upgrade. Some resources with irregular income use estimates, and not all resources have this'
+      currencyLabel: {
+        name: 'Show currency labels',
+        description: 'Display currency gain and time until you reach capacity without needing to hover'
       }
     }
   },
@@ -1179,6 +1193,7 @@ export default {
     hordeItemPermanent: 'Equipment effect',
     hordeNostalgia: 'Nostalgia',
     hordeNostalgiaLost: 'Heirlooms found',
+    farmEarlyGame: 'First crops',
     cards: 'Cards',
     treasure: 'Treasure',
     debug: 'Debug',
@@ -1205,6 +1220,7 @@ export default {
       description2: 'For each completed half meter of current dweller depth, your prestige reward increases.',
       description3: 'Highest possible dweller depth is {0}% of your maximum depth in the mine.',
       description4: 'Maximum dweller depth',
+      descriptionOvercap: 'The dweller can gain bonus depth after reaching its highest possible depth, giving a linear increase to your prestige reward. Dweller speed is reduced to {0}%, and every 10% after the highest possible depth reduces speed to {0}% again',
       nextTime: 'You reach {0}m in {1}'
     },
     pickaxePower: 'This is the power of your pickaxe and your base damage. Increase it by crafting a better pickaxe.',
@@ -1246,7 +1262,8 @@ export default {
       oreQuality: 'The amount of ores required to craft a pickaxe is divided by your ore quality',
       craftPickaxe: 'Craft pickaxe',
       purityDescription: 'To reach 50% minimum quality, your purity needs to match your impurity.',
-      premiumSlot: 'This is a premium crafting slot. Impurity above x1 is halved and purity is doubled.'
+      premiumSlot: 'This is a premium crafting slot. Impurity above x1 is halved and purity is doubled.',
+      minPurity: 'You need at least 0.1% minimum quality to craft a pickaxe'
     },
     craftingDescription: 'Consume selected ores and create a new pickaxe with a random power value. If it is better than your current pickaxe ({0} power), replace it.',
     resinDescription: 'Each piece of resin adds 30% power and 25% purity. Up to {0} resin may be used per pickaxe craft.',
@@ -1260,12 +1277,14 @@ export default {
     enhancement: {
       title: 'Enhancements',
       description: 'Use bars to apply enhancements to your pickaxe. Each bar has their own unique enhancement that can be applied multiple times. But be careful, each successful enhancement makes the next one more difficult, so think about which enhancements you put on your pickaxe',
-      chanceDescription: 'Your enhancements have a {0}% chance to succeed and get {1}% harder when they do. Bars will always be consumed, but the enhancement only applies on success. When you fail, your success chance keeps increasing until you get a successful enhancement. Enhancements are also more likely to succeed at the end of your success bar',
+      barsDescription: 'Enhancements require any type of bars first. This amount increases with each enhancement',
+      enhancementDescription: 'Then you need a specific type of bars that determine the type of enhancement. This amount also increases with each enhancement of this bar type',
       barAluminium: 'Lightweight',
       barBronze: 'Sturdy',
       barSteel: 'Sharp',
       barTitanium: 'Excavator',
-      barShiny: 'Rich'
+      barShiny: 'Rich',
+      barIridium: 'Molten'
     },
     gasGain: {
       0: 'Gain ',
@@ -1658,6 +1677,7 @@ export default {
     itemMastery: {
       name: 'Mastery',
       description: 'Defeat bosses or minibosses at zone {0} or higher with this item equipped to earn mastery points. Higher zone bosses earn more mastery points.',
+      gain: 'Receive {0} mastery points from bosses on this zone, and {1}% of that value ({2}) from minibosses',
       bonuses: 'Raise your mastery level to unlock bonuses for this equipment',
       current: 'This equipment has {0} / {1} mastery points',
       1: 'Keep the equipment after prestige',
@@ -1691,11 +1711,14 @@ export default {
     expToLevelUp: 'You need {0} more harvests to reach the next level',
     yield: 'Yield',
     rareDrops: 'Rare drops',
+    addRareDrop: 'Add rare drop ({0})',
+    addRareDropAmount: '{0} amount',
     prestige: {
       description: 'You can prestige a crop that has reached level 4, increasing its prestige level to its current level for bonuses. This will reset all experience, level and genes for that crop. Each prestige level multiplies all crop gain by x1.04.',
       current: 'Your current prestige level is {0}, multiplying all crop gain by x{1}.',
       next: 'Prestiging this crop increases your prestige level by {0}. This raises your total prestige level to {1}, increasing your crop gain to x{2}.',
-      nextNoEffect: 'Your level is not higher than your prestige level for this crop. Prestiging will not increase your prestige level, but still reset level and genes.'
+      nextNoEffect: 'Your level is not higher than your prestige level for this crop. Prestiging will not increase your prestige level, but still reset level and genes.',
+      cropOnField: 'You cannot prestige now because this crop is on the field'
     },
     button: {
       plantAll: 'Plant the selected crop ({0}) on all empty tiles. You can also plant a single crop by clicking the empty tile',
@@ -1742,33 +1765,31 @@ export default {
       violet: 'Violet',
       goldenRose: 'Golden rose'
     },
-    cropUpgrade: {
-      yield: 'x1.25 yield',
-      grow: 'x0.92 growth time',
-      exp: '+0.35 experience',
-      gold: 'x1.35 gold chance',
-      overgrow: '+50% overgrow',
-      cost: 'x0.75 cost, at least -1 cost reduction',
-      double: 'x1.5 yield, exp and gold chance and x1.3 rare drop chance, but x2 growth time',
-      fertile: 'Fertilizer effects are 25% stronger',
-      drops: 'x1.2 rare drop chance'
-    },
-    cropUpgradeName: {
+    gene: {
+      name: 'Gene',
+      pickLevel: 'Pick a level {0} gene',
+      dnaDescription: 'You get DNA when this crop reaches a new level and can spend it on gene upgrades. The next crop level gives {0} DNA',
+      dnaDuplicate: 'Genes you choose do not appear on your next prestige. Not picking genes makes all 4 available on the next prestige',
+      dnaBlocked: 'Blocked genes',
+      hasUpgrade: 'Has gene upgrade',
       yield: 'Yield',
-      grow: 'Grow',
-      exp: 'Experience',
       gold: 'Gold',
+      exp: 'Experience',
+      rareDrop: 'Rare drops',
+      grow: 'Grow',
       overgrow: 'Overgrow',
-      cost: 'Cost',
-      double: 'Double',
+      giant: 'Giant',
+      grass: 'Grass',
+      dna: 'DNA',
+      gnome: 'Gnome',
+      lonely: 'Lonely',
       fertile: 'Fertile',
-      drops: 'Drops'
+      mystery: 'Mystery',
+      conversion: 'Conversion',
+      prestige: 'Prestige',
+      rareDropChance: 'Discovery'
     },
     fertilizerEffect: {
-      yield: 'Yield',
-      grow: 'Grow',
-      gold: 'Gold',
-      drop: 'Rare drop chance',
       vegetable: 'Vegetables only',
       fruit: 'Fruits only',
       grain: 'Grains only',
@@ -1784,8 +1805,8 @@ export default {
       },
       sprinkler: {
         name: 'Sprinkler',
-        description: 'Crops in the same row grow twice as fast',
-        descriptionPremium: 'Crops in the same row grow three times as fast',
+        description: 'Crops in the same row grow +10% faster and have +250% overgrow',
+        descriptionPremium: 'Crops in the same row grow +20% faster and have +500% overgrow',
       },
       lectern: {
         name: 'Lectern',
@@ -1809,6 +1830,7 @@ export default {
     auction: 'Auction',
     colorSuffix: 'color',
     openPackage: 'Open',
+    colorGainReduced: 'Additional gains are reduced to square root after 100 color',
     idea: {
       tier: 'Tier {0} idea',
       unlock: 'Unlock idea',

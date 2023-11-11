@@ -21,7 +21,9 @@ export default {
         highestGrade: {display: 'grade'}
     },
     currency: {
-        book: {color: 'brown', icon: 'mdi-book', gainMult: {display: 'perHour'}, showGainMult: true, showGainTimer: true},
+        book: {color: 'brown', icon: 'mdi-book', gainMult: {display: 'perHour'}, showGainMult: true, gainTimerFunction() {
+            return store.getters['mult/get']('currencySchoolBookGain', store.getters['school/subjectsBookGain']);
+        }},
         goldenDust: {color: 'amber', icon: 'mdi-timer-sand', overcapMult: 0, capMult: {baseValue: buildNum(10, 'K')}},
         examPass: {color: 'pale-blue', icon: 'mdi-ticket-account'}
     },

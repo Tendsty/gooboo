@@ -64,7 +64,18 @@ export default {
                     // Special handler for farm experience
                     for (const [key, elem] of Object.entries(store.state.farm.crop)) {
                         if (elem.found) {
-                            store.dispatch('farm/getCropExp', {crop: key, value: amount * elem.baseExpMult * seconds / SECONDS_PER_DAY});
+                            let amountLeft = amount * elem.baseExpMult * seconds / SECONDS_PER_DAY;
+                            while (amountLeft > 0) {
+                                const levelDiff = elem.levelMax - elem.level;
+                                if (levelDiff <= 0) {
+                                    amountLeft = 0;
+                                    break;
+                                }
+                                const expToNext = store.getters['farm/expNeeded'](key) - elem.exp;
+                                const amountGiven = Math.min(expToNext, amountLeft * levelDiff);
+                                store.dispatch('farm/getCropExp', {crop: key, value: amountGiven});
+                                amountLeft -= amountGiven / levelDiff;
+                            }
                         }
                     }
                 } else {

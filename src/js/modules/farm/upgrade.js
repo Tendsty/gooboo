@@ -71,7 +71,8 @@ export default {
     gardenGnome: {cap: 5, hasDescription: true, requirementBase, requirementStat, requirementValue: 3, price(lvl) {
         return {farm_vegetable: 500 * Math.pow(96, lvl), farm_fruit: 500 * Math.pow(96, lvl), farm_flower: 1000 * Math.pow(128, lvl)};
     }, effect: [
-        {name: 'gardenGnome', type: 'farmBuilding', value: lvl => lvl}
+        {name: 'gardenGnome', type: 'farmBuilding', value: lvl => lvl},
+        {name: 'farmDisableEarlyGame', type: 'unlock', value: lvl => lvl >= 1}
     ]},
     learning: {cap: 1, hasDescription: true, requirementBase, requirementStat, requirementValue: 4, price() {
         return {farm_gold: 1};
@@ -95,6 +96,11 @@ export default {
         return {farm_seedHull: Math.round(Math.pow(1.8, lvl) * 4)};
     }, effect: [
         {name: 'farmExperience', type: 'base', value: lvl => lvl * 0.1}
+    ]},
+    hayBales: {requirementBase, requirementStat, requirementValue: 5, price(lvl) {
+        return {farm_grass: lvl * 125 + 75};
+    }, effect: [
+        {name: 'currencyFarmGrassCap', type: 'base', value: lvl => lvl * 100}
     ]},
     smallCrate: {cap: 7, capMult: true, requirementBase, requirementStat, requirementValue: 6, price(lvl) {
         return {farm_fruit: buildNum(24.5, 'K') * Math.pow(1.9, lvl)};
@@ -138,12 +144,13 @@ export default {
         return {farm_bug: Math.round(5 * lvl * Math.pow(1.1, Math.max(0, lvl - 10)) + 10), farm_butterfly: Math.round(lvl * Math.pow(1.1, Math.max(0, lvl - 10)) + 2)};
     }, effect: [
         {name: 'currencyFarmFruitGain', type: 'mult', value: lvl => lvl * 0.15 + 1},
-        {name: 'farmRareDrop', type: 'base', value: lvl => lvl * 0.002}
+        {name: 'farmRareDropChance', type: 'base', value: lvl => lvl * 0.002}
     ]},
     mediumCrate: {cap: 8, capMult: true, requirementBase, requirementStat, requirementValue: 10, price(lvl) {
         return {farm_vegetable: buildNum(90, 'M') * Math.pow(1.75, lvl), farm_grain: buildNum(54, 'M') * Math.pow(2.1, lvl)};
     }, effect: [
-        {name: 'currencyFarmSeedHullCap', type: 'base', value: lvl => lvl * 25}
+        {name: 'currencyFarmSeedHullCap', type: 'base', value: lvl => lvl * 25},
+        {name: 'currencyFarmGrassCap', type: 'base', value: lvl => lvl * 40}
     ]},
     stompedSeeds: {requirementBase, requirementStat, requirementValue: 10, price(lvl) {
         return {farm_seedHull: Math.round(Math.pow(1.15, lvl) * 150)};
@@ -160,8 +167,7 @@ export default {
     goldenTools: {requirementBase, requirementStat, requirementValue: 11, price(lvl) {
         return {farm_gold: Math.round(Math.pow(1.25, lvl) * 350)};
     }, effect: [
-        {name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
-        {name: 'farmRareDrop', type: 'base', value: lvl => lvl * 0.0025}
+        {name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
     ]},
     butterflyWings: {cap: 6, requirementBase, requirementStat, requirementValue: 12, price(lvl) {
         return {farm_butterfly: Math.round(Math.pow(1.35, lvl) * 14)};
@@ -195,6 +201,7 @@ export default {
         return {farm_fruit: buildNum(190, 'B') * Math.pow(1.85, lvl), farm_grain: buildNum(240, 'B') * Math.pow(1.85, lvl)};
     }, effect: [
         {name: 'currencyFarmSeedHullCap', type: 'base', value: lvl => lvl * 60},
+        {name: 'currencyFarmGrassCap', type: 'base', value: lvl => lvl * 80},
         {name: 'currencyFarmPetalCap', type: 'base', value: lvl => lvl * 25}
     ]},
     artificialWebs: {cap: 3, requirementBase, requirementStat, requirementValue: 15, price(lvl) {

@@ -252,7 +252,7 @@ export default [
         {"x": -0.45, "y": 0.95, "rotate": 0, "size": 0.75, "icon": "mdi-mine"}
     ]},
     {id: 27, collection: 'supplyAndSupport', reward: [
-        {name: 'hordeNostalgia', type: 'mult', value: 2},
+        {name: 'hordeNostalgia', type: 'base', value: 50},
         {name: 'hordeRespawn', type: 'base', value: -30}
     ], color: 'dark-blue', icons: [
         {"x": -0.65, "y": 0.25, "rotate": 0, "size": 1.55, "icon": "mdi-walk"},
@@ -261,7 +261,7 @@ export default [
     ]},
     {id: 28, collection: 'supplyAndSupport', reward: [
         {name: 'hordeHeirloomChance', type: 'base', value: 0.04},
-        {name: 'hordeNostalgia', type: 'mult', value: 2}
+        {name: 'hordeNostalgia', type: 'base', value: 50}
     ], color: 'yellow', icons: [
         {"x": 0, "y": 0.25, "rotate": 180, "size": 5, "icon": "mdi-dome-light"},
         {"x": -0.2, "y": 0.15, "rotate": 0, "size": 1.25, "icon": "mdi-human-handsdown"},
@@ -302,7 +302,7 @@ export default [
     {id: 33, collection: 'againstTheCorruption', reward: [
         {name: 'hordeItemChance', type: 'mult', value: 5},
         {name: 'hordeItemMasteryGain', type: 'mult', value: 3},
-        {name: 'hordeCorruption', type: 'bonus', value: 0.2}
+        {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'skyblue', icons: [
         {"x": -0.5, "y": 0.4, "rotate": 0, "size": 1.75, "icon": "mdi-washing-machine"},
         {"x": 0.5, "y": 0.4, "rotate": 0, "size": 1.75, "icon": "mdi-tumble-dryer"},
@@ -314,7 +314,7 @@ export default [
         {name: 'hordeAttack', type: 'mult', value: 1.5},
         {name: 'hordeCritChance', type: 'base', value: 0.2},
         {name: 'hordeCritMult', type: 'base', value: 0.6},
-        {name: 'hordeCorruption', type: 'bonus', value: 0.2}
+        {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'orange', icons: [
         {"x": 0, "y": 0.5, "rotate": 30, "size": 1.5, "icon": "mdi-liquid-spot"},
         {"x": 0.4, "y": 0.5, "rotate": -45, "size": 1.5, "icon": "mdi-liquid-spot"},
@@ -325,7 +325,7 @@ export default [
     {id: 35, collection: 'againstTheCorruption', reward: [
         {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.5},
         {name: 'currencyHordeSoulCorruptedCap', type: 'mult', value: 1.5},
-        {name: 'hordeCorruption', type: 'bonus', value: 0.2}
+        {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'pink', icons: [
         {"x": -0.65, "y": 0.4, "rotate": 180, "size": 3, "icon": "mdi-alpha-t"},
         {"x": -0.45, "y": 0, "rotate": 120, "size": 2, "icon": "mdi-flashlight"},
@@ -336,7 +336,7 @@ export default [
         {name: 'hordeHealth', type: 'mult', value: 2},
         {name: 'hordeDivisionShield', type: 'base', value: 10},
         {name: 'hordeRevive', type: 'base', value: 2},
-        {name: 'hordeCorruption', type: 'bonus', value: 0.2}
+        {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'pale-purple', icons: [
         {"x": 0, "y": -0.9, "rotate": 0, "size": 1.5, "icon": "mdi-arrow-collapse-down"},
         {"x": 0, "y": 0.15, "rotate": 15, "size": 1.25, "icon": "mdi-liquid-spot"},
@@ -345,7 +345,7 @@ export default [
     ]},
     {id: 37, collection: 'againstTheCorruption', reward: [
         {name: 'hordeMaxItems', type: 'base', value: 3},
-        {name: 'hordeCorruption', type: 'bonus', value: 0.2}
+        {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'brown', icons: [
         {"x": 0.25, "y": -0.6, "rotate": 0, "size": 1.75, "icon": "mdi-truck-cargo-container"},
         {"x": -0.7, "y": 0.45, "rotate": 0, "size": 1.5, "icon": "mdi-trash-can"},
@@ -366,7 +366,7 @@ export default [
         {name: 'hordeFirstStrike', type: 'base', value: 7.5},
         {name: 'hordeBossRequirement', type: 'base', value: -10},
         {name: 'hordeRespawn', type: 'mult', value: 0.25},
-        {name: 'hordeCorruption', type: 'bonus', value: 0.2}
+        {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'cyan', icons: [
         {"x": 0.3, "y": -0.1, "rotate": 0, "size": 2, "icon": "mdi-vacuum"},
         {"x": -0.5, "y": -0.1, "rotate": 0, "size": 2, "icon": "mdi-walk"},
@@ -375,8 +375,8 @@ export default [
     ]},
     {id: 40, collection: 'againstTheCorruption', reward: [
         {name: 'hordeHeirloomChance', type: 'base', value: 0.1},
-        {name: 'hordeNostalgia', type: 'mult', value: 5},
-        {name: 'hordeCorruption', type: 'bonus', value: 0.2}
+        {name: 'hordeNostalgia', type: 'mult', value: 2},
+        {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'light-green', icons: [
         {"x": -0.2, "y": -0.6, "rotate": 125, "size": 2.5, "icon": "mdi-flask-round-bottom-empty"},
         {"x": 0.25, "y": -0.05, "rotate": 0, "size": 0.8, "icon": "mdi-water"},

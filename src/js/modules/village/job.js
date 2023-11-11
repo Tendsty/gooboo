@@ -3,8 +3,8 @@ export default {
         max: null,
         needed: 1,
         rewards: [
-            {type: 'base', name: 'currencyVillageWoodGain', amount: 0.3},
             {type: 'base', name: 'currencyVillagePlantFiberGain', amount: 0.3},
+            {type: 'base', name: 'currencyVillageWoodGain', amount: 0.3},
             {type: 'base', name: 'currencyVillageStoneGain', amount: 0.3}
         ]
     },
@@ -29,28 +29,28 @@ export default {
         needed: 2,
         rewards: [
             {type: 'base', name: 'currencyVillageStoneGain', amount: 2},
-            {type: 'base', name: 'currencyVillageMetalGain', amount: 0.5}
+            {type: 'base', name: 'currencyVillageMetalGain', amount: 0.4}
         ]
     },
     wellWorker: {
         max: 0,
         needed: 3,
         rewards: [
-            {type: 'base', name: 'currencyVillageWaterGain', amount: 3}
+            {type: 'base', name: 'currencyVillageWaterGain', amount: 2}
         ]
     },
     librarian: {
         max: 0,
         needed: 4,
         rewards: [
-            {type: 'base', name: 'currencyVillageKnowledgeGain', amount: 0.03}
+            {type: 'base', name: 'currencyVillageKnowledgeGain', amount: 0.02}
         ]
     },
     glassblower: {
         max: 0,
         needed: 4,
         rewards: [
-            {type: 'base', name: 'currencyVillageGlassGain', amount: 0.3}
+            {type: 'base', name: 'currencyVillageGlassGain', amount: 0.2}
         ]
     },
     entertainer: {
@@ -65,7 +65,7 @@ export default {
         needed: 6,
         rewards: [
             {type: 'base', name: 'currencyVillageWoodGain', amount: 12},
-            {type: 'base', name: 'currencyVillageHardwoodGain', amount: 0.3}
+            {type: 'base', name: 'currencyVillageHardwoodGain', amount: 0.2}
         ]
     },
     blastMiner: {
@@ -73,7 +73,7 @@ export default {
         needed: 6,
         rewards: [
             {type: 'base', name: 'currencyVillageStoneGain', amount: 12},
-            {type: 'base', name: 'currencyVillageGemGain', amount: 0.3}
+            {type: 'base', name: 'currencyVillageGemGain', amount: 0.2}
         ]
     },
     fisherman: {
@@ -87,7 +87,7 @@ export default {
         max: 0,
         needed: 8,
         rewards: [
-            {type: 'base', name: 'currencyVillageScienceGain', amount: 0.01}
+            {type: 'base', name: 'currencyVillageScienceGain', amount: 0.008}
         ]
     },
     gardener: {
@@ -102,7 +102,7 @@ export default {
         max: 0,
         needed: 11,
         rewards: [
-            {type: 'base', name: 'currencyVillageOilGain', amount: 0.5}
+            {type: 'base', name: 'currencyVillageOilGain', amount: 0.35}
         ]
     },
     sculptor: {

@@ -1,29 +1,33 @@
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-center align-center ma-1">
+    <div class="d-flex flex-wrap justify-center ma-1">
       <currency class="ma-1" name="school_book" :gain-base="subjectsBookGain">
         <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.subjectBookGain`) }}</alert-text>
       </currency>
       <currency class="ma-1" name="school_examPass">
         <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.school.passCapGain`, $formatTime(secondsUntilDailyReset)) }}</alert-text>
       </currency>
-      <gb-tooltip v-if="canBuyPass" :min-width="0">
-        <template v-slot:activator="{ on, attrs }">
-          <div v-bind="attrs" v-on="on">
-            <v-btn small class="ma-1 pa-1" color="success" min-width="32" min-height="32" :disabled="!canAffordPass" @click="buyPass"><v-icon>mdi-plus</v-icon></v-btn>
+      <div v-if="canBuyPass" class="d-flex align-center full-h">
+        <gb-tooltip :min-width="0">
+          <template v-slot:activator="{ on, attrs }">
+            <div v-bind="attrs" v-on="on">
+              <v-btn small class="ma-1 pa-1" color="success" min-width="32" min-height="32" :disabled="!canAffordPass" @click="buyPass"><v-icon>mdi-plus</v-icon></v-btn>
+            </div>
+          </template>
+          <div class="d-flex align-center mt-0">
+            <span>{{ $vuetify.lang.t(`$vuetify.school.buyPass`) }}</span>
+            <price-tag class="ml-1" currency="gem_sapphire" :amount="passPrice"></price-tag>
           </div>
-        </template>
-        <div class="d-flex align-center mt-0">
-          <span>{{ $vuetify.lang.t(`$vuetify.school.buyPass`) }}</span>
-          <price-tag class="ml-1" currency="gem_sapphire" :amount="passPrice"></price-tag>
-        </div>
-      </gb-tooltip>
-      <gb-tooltip v-if="dustMult < 1" :title-text="$vuetify.lang.t(`$vuetify.school.beginner.title`)">
-        <template v-slot:activator="{ on, attrs }">
-          <v-icon large class="ml-2" v-bind="attrs" v-on="on">mdi-head-question</v-icon>
-        </template>
-        <div>{{ $vuetify.lang.t(`$vuetify.school.beginner.description`, $formatNum(dustMult * 100, true)) }}</div>
-      </gb-tooltip>
+        </gb-tooltip>
+      </div>
+      <div v-if="dustMult < 1" class="d-flex align-center full-h">
+        <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.school.beginner.title`)">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon large class="ml-2" v-bind="attrs" v-on="on">mdi-head-question</v-icon>
+          </template>
+          <div>{{ $vuetify.lang.t(`$vuetify.school.beginner.description`, $formatNum(dustMult * 100, true)) }}</div>
+        </gb-tooltip>
+      </div>
     </div>
     <v-row no-gutters>
       <v-col v-for="subject in subjects" :key="subject" cols="12" lg="6" xl="4">

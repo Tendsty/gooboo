@@ -239,7 +239,7 @@ function prestige(feature) {
 function getPrestigeInfo() {
     return {
         mining: {
-            canPrestige: store.state.stat.mining_depthDweller0.value >= 1,
+            canPrestige: store.state.stat.mining_depthDwellerCap0.value >= 1,
             statIndicator: store.state.stat.mining_depthDweller0.value,
             currencyGain: store.getters['mining/dwellerGreenCrystal'],
             timeSpent: Math.max(store.state.stat.mining_timeSpent.value, 1)
@@ -617,7 +617,7 @@ function autoplayTicks(newTime, oldTime) {
             for (let [key, elem] of Object.entries(store.state.farm.crop)) {
                 if (elem.found && elem.type === chosenType && store.getters['currency/value']('farm_gold') >= (elem.cost * freeCells)) {
                     seedList.push(key);
-                    seedWeight.push(1 / Math.sqrt(store.getters['farm/cropGrow'](key)))
+                    seedWeight.push(1 / Math.sqrt(elem.grow))
                 }
             }
 

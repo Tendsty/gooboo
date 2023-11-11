@@ -122,11 +122,16 @@
       </div>
     </template>
     <div v-if="card.amount > 0" class="mb-2">
-      <div>{{ $vuetify.lang.t(`$vuetify.gooboo.effects`) }} ({{ $vuetify.lang.t(`$vuetify.card.${ card.instant ? 'onDuplicate' : 'onActive' }`) }}):</div>
+      <div>
+        <span>{{ $vuetify.lang.t(`$vuetify.gooboo.effects`) }} ({{ $vuetify.lang.t(`$vuetify.card.${ card.instant ? 'onDuplicate' : 'onActive' }`) }}</span>
+        <span v-if="card.group">, {{ $vuetify.lang.t(`$vuetify.farm.fertilizerEffect.${ card.group }`) }}</span>
+        <span>):</span>
+      </div>
       <ul>
         <li v-for="(reward, rkey) in card.reward" :key="rkey">
           <span v-if="reward.type === 'currency'">+{{ $formatNum(reward.useMult ? multGet(gainMult(...reward.name.split('_')), reward.value) : reward.value) }} {{ $vuetify.lang.t(`$vuetify.currency.${ reward.name }.name`) }}</span>
-          <span v-else-if="reward.type === 'consumable'">+{{ $formatNum(reward.value) }} {{ $vuetify.lang.t(`$vuetify.consumable.${reward.name}.name`) }}</span>
+          <span v-else-if="reward.type === 'consumable'">+{{ $formatNum(reward.value) }} {{ $vuetify.lang.t(`$vuetify.consumable.${ reward.name }.name`) }}</span>
+          <span v-else-if="reward.type === 'addRareDrop'">{{ $vuetify.lang.t(`$vuetify.farm.addRareDrop`, $vuetify.lang.t(`$vuetify.currency.${ reward.name }.name`)) }}: +{{ $formatNum(reward.value) }}</span>
           <span v-else>
             <mult-name :name="reward.name"></mult-name>&nbsp;<mult-stat :mult="reward.name" :type="reward.type" :value="reward.value"></mult-stat>
           </span>

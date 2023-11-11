@@ -1,30 +1,32 @@
+import { MINUTES_PER_HOUR } from "../../constants";
+
 export default {
     carrot: {
         found: true,
         icon: 'mdi-carrot',
         color: 'orange',
-        grow: 5,
+        grow: MINUTES_PER_HOUR + 30,
         tier: 0,
         type: 'vegetable'
     },
     blueberry: {
         icon: 'mdi-fruit-grapes',
         color: 'blue',
-        grow: 15,
+        grow: 3 * MINUTES_PER_HOUR,
         tier: 1,
         type: 'fruit'
     },
     wheat: {
         icon: 'mdi-barley',
         color: 'yellow',
-        grow: 30,
+        grow: 6 * MINUTES_PER_HOUR,
         tier: 2,
         type: 'grain'
     },
     tulip: {
         icon: 'mdi-flower-tulip',
         color: 'red',
-        grow: 60,
+        grow: 12 * MINUTES_PER_HOUR,
         tier: 3,
         type: 'flower'
     },
@@ -32,7 +34,7 @@ export default {
         icon: 'mdi-circle',
         color: 'brown',
         cost: 1,
-        grow: 480,
+        grow: 30 * MINUTES_PER_HOUR,
         rareDrop: [
             {name: 'farm_potatoWater', type: 'consumable', chance: 0.15, value: 5}
         ],
@@ -42,9 +44,10 @@ export default {
     raspberry: {
         icon: 'mdi-fruit-grapes',
         color: 'pink',
-        grow: 180,
+        cost: 1,
+        grow: 16 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'seedHull', type: 'currency', chance: 0.2, value: 2}
+            {name: 'farm_seedHull', type: 'currency', chance: 0.35, value: 3}
         ],
         tier: 5,
         type: 'fruit'
@@ -52,9 +55,9 @@ export default {
     barley: {
         icon: 'mdi-barley',
         color: 'amber',
-        grow: 360,
+        grow: 20 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'seedHull', type: 'currency', chance: 0.2, value: 3}
+            {name: 'farm_seedHull', type: 'currency', chance: 0.08, value: 1}
         ],
         tier: 6,
         type: 'grain'
@@ -62,9 +65,10 @@ export default {
     dandelion: {
         icon: 'mdi-flower',
         color: 'pale-yellow',
-        grow: 20,
+        cost: 1,
+        grow: 2 * MINUTES_PER_HOUR + 30,
         rareDrop: [
-            {name: 'petal', type: 'currency', chance: 0.05, value: 1}
+            {name: 'farm_petal', type: 'currency', chance: 0.24, value: 1}
         ],
         tier: 7,
         type: 'flower'
@@ -72,9 +76,9 @@ export default {
     corn: {
         icon: 'mdi-corn',
         color: 'amber',
-        grow: 1200,
+        grow: 52 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'bug', type: 'currency', chance: 0.2, value: 6}
+            {name: 'farm_bug', type: 'currency', chance: 0.05, value: 2}
         ],
         tier: 8,
         type: 'vegetable'
@@ -83,10 +87,10 @@ export default {
         icon: 'mdi-fruit-watermelon',
         color: 'red',
         cost: 4,
-        grow: 720,
+        grow: 40 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'bug', type: 'currency', chance: 0.16, value: 3},
-            {name: 'butterfly', type: 'currency', chance: 0.18, value: 1}
+            {name: 'farm_bug', type: 'currency', chance: 0.16, value: 5},
+            {name: 'farm_butterfly', type: 'currency', chance: 0.18, value: 1}
         ],
         tier: 9,
         type: 'fruit'
@@ -95,10 +99,10 @@ export default {
         icon: 'mdi-rice',
         color: 'light-grey',
         cost: 2,
-        grow: 1800,
+        grow: 72 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'seedHull', type: 'currency', chance: 0.22, value: 7},
-            {name: 'ladybug', type: 'currency', chance: 0.01, value: 1}
+            {name: 'farm_seedHull', type: 'currency', chance: 0.22, value: 7},
+            {name: 'farm_ladybug', type: 'currency', chance: 0.01, value: 1}
         ],
         tier: 10,
         type: 'grain'
@@ -107,10 +111,10 @@ export default {
         icon: 'mdi-flower',
         color: 'red',
         cost: 10,
-        grow: 2880,
+        grow: 156 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'petal', type: 'currency', chance: 0.16, value: 8},
-            {name: 'ladybug', type: 'currency', chance: 0.02, value: 1},
+            {name: 'farm_petal', type: 'currency', chance: 0.16, value: 8},
+            {name: 'farm_ladybug', type: 'currency', chance: 0.02, value: 1},
             {name: 'farm_roseWater', type: 'consumable', chance: 0.1, value: 10}
         ],
         tier: 11,
@@ -120,10 +124,10 @@ export default {
         icon: 'mdi-leek',
         color: 'light-green',
         cost: 5,
-        grow: 180,
+        grow: 9 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'bug', type: 'currency', chance: 0.175, value: 1},
-            {name: 'ladybug', type: 'currency', chance: 0.35, value: 2}
+            {name: 'farm_bug', type: 'currency', chance: 0.225, value: 1},
+            {name: 'farm_ladybug', type: 'currency', chance: 0.35, value: 2}
         ],
         tier: 12,
         type: 'vegetable'
@@ -131,10 +135,10 @@ export default {
     honeymelon: {
         icon: 'mdi-fruit-watermelon',
         color: 'amber',
-        grow: 2160,
+        grow: 64 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'butterfly', type: 'currency', chance: 0.11, value: 4},
-            {name: 'spider', type: 'currency', chance: -0.03, value: 1}
+            {name: 'farm_butterfly', type: 'currency', chance: 0.06, value: 1},
+            {name: 'farm_spider', type: 'currency', chance: -0.08, value: 1}
         ],
         tier: 13,
         type: 'fruit'
@@ -143,10 +147,10 @@ export default {
         icon: 'mdi-barley',
         color: 'pale-orange',
         cost: 3,
-        grow: 900,
+        grow: 34 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'seedHull', type: 'currency', chance: 0.19, value: 12},
-            {name: 'spider', type: 'currency', chance: -0.02, value: 1}
+            {name: 'farm_seedHull', type: 'currency', chance: 0.19, value: 12},
+            {name: 'farm_spider', type: 'currency', chance: -0.02, value: 1}
         ],
         tier: 14,
         type: 'grain'
@@ -154,10 +158,12 @@ export default {
     daisy: {
         icon: 'mdi-flower',
         color: 'yellow',
-        grow: 1440,
+        cost: 8,
+        grow: 44 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'butterfly', type: 'currency', chance: 0.14, value: 5},
-            {name: 'bee', type: 'currency', chance: 0.5, value: 1}
+            {name: 'farm_petal', type: 'currency', chance: 0.13, value: 6},
+            {name: 'farm_butterfly', type: 'currency', chance: 0.14, value: 5},
+            {name: 'farm_bee', type: 'currency', chance: 0.5, value: 1}
         ],
         tier: 15,
         type: 'flower'
@@ -165,32 +171,46 @@ export default {
     cucumber: {
         icon: 'mdi-ruler',
         color: 'pale-green',
-        grow: 45,
-        rareDrop: [],
+        cost: 6,
+        grow: 4 * MINUTES_PER_HOUR + 45,
+        rareDrop: [
+            {name: 'farm_bug', type: 'currency', chance: 0.33, value: 1}
+        ],
         tier: 16,
         type: 'vegetable'
     },
     grapes: {
         icon: 'mdi-fruit-grapes',
         color: 'purple',
-        grow: 420,
-        rareDrop: [],
+        cost: 9,
+        grow: 7 * MINUTES_PER_HOUR + 30,
+        rareDrop: [
+            {name: 'farm_ladybug', type: 'currency', chance: 0.25, value: 3},
+            {name: 'farm_bee', type: 'currency', chance: 0.2, value: 1}
+        ],
         tier: 17,
         type: 'fruit'
     },
     hops: {
         icon: 'mdi-hops',
         color: 'green',
-        grow: 150,
-        rareDrop: [],
+        cost: 5,
+        grow: 2 * MINUTES_PER_HOUR,
+        rareDrop: [
+            {name: 'farm_bee', type: 'currency', chance: 0.12, value: 1},
+            {name: 'farm_spider', type: 'currency', chance: -0.01, value: 1}
+        ],
         tier: 18,
         type: 'grain'
     },
     violet: {
         icon: 'mdi-flower',
         color: 'deep-purple',
-        grow: 600,
-        rareDrop: [],
+        grow: 116 * MINUTES_PER_HOUR,
+        rareDrop: [
+            {name: 'farm_petal', type: 'currency', chance: 0.08, value: 1},
+            {name: 'farm_bee', type: 'currency', chance: 0.01, value: 1}
+        ],
         tier: 19,
         type: 'flower'
     },
@@ -198,10 +218,10 @@ export default {
         icon: 'mdi-flower',
         color: 'amber',
         cost: 100,
-        grow: 4320,
+        grow: 720 * MINUTES_PER_HOUR,
         rareDrop: [
-            {name: 'petal', type: 'currency', chance: 0.55, value: 10},
-            {name: 'goldenPetal', type: 'currency', chance: 0.225, value: 1},
+            {name: 'farm_petal', type: 'currency', chance: 0.55, value: 10},
+            {name: 'farm_goldenPetal', type: 'currency', chance: 0.225, value: 1},
             {name: 'farm_roseWater', type: 'consumable', chance: 0.1, value: 100}
         ],
         tier: 20,

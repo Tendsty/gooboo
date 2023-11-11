@@ -28,14 +28,6 @@ export default {
         {name: 'currencyVillageFaithGain', type: 'mult', value: lvl => lvl * 0.25 + 1},
         {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreWood: {type: 'premium', cap: 1, requirement() {
-        return store.state.stat.village_wood.total > 0;
-    }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 275};
-    }, effect: [
-        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)},
-        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
-    ]},
     morePlantFiber: {type: 'premium', cap: 1, requirement() {
         return store.state.stat.village_plantFiber.total > 0;
     }, price(lvl) {
@@ -43,6 +35,14 @@ export default {
     }, effect: [
         {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)},
         {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
+    ]},
+    moreWood: {type: 'premium', cap: 1, requirement() {
+        return store.state.stat.village_wood.total > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 275};
+    }, effect: [
+        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)},
+        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
     ]},
     moreStone: {type: 'premium', cap: 1, requirement() {
         return store.state.stat.village_stone.total > 0;

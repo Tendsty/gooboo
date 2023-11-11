@@ -113,7 +113,7 @@ export default {
             } else {
               this.$store.dispatch('farm/plantCrop', {x, y, crop: this.selectedCropName, fertilizer: this.selectedFertilizerName});
             }
-          } else if (field.type === 'crop' && field.grow >= field.growMax) {
+          } else if (field.type === 'crop' && field.grow >= 1) {
             this.$store.dispatch('farm/harvestCrop', {x, y, crop: this.selectedCropName});
           }
         }

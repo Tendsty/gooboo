@@ -90,6 +90,7 @@ export default {
                 alwaysVisible: o.alwaysVisible ?? false,
                 cap: o.capMult ? o.capMult.baseValue : null,
                 showGainMult: o.showGainMult ?? false,
+                hideGainTag: o.hideGainTag ?? false,
                 currencyMult: o.currencyMult ?? null,
                 overcapMult: o.overcapMult ?? 0.25,
                 overcapScaling: o.overcapScaling ?? 0.5,

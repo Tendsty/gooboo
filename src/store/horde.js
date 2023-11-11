@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_HEIRLOOM_MIN_ZONE, HORDE_HEIRLOOM_TOWER_FLOORS, HORDE_KEYS_PER_TOWER, HORDE_MINIBOSS_MIN_ZONE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from "../js/constants";
+import { HORDE_COMBO_ATTACK, HORDE_COMBO_BONE, HORDE_COMBO_HEALTH, HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_HEIRLOOM_MIN_ZONE, HORDE_HEIRLOOM_TOWER_FLOORS, HORDE_KEYS_PER_TOWER, HORDE_MASTERY_MINIBOSS_MULT, HORDE_MINIBOSS_MIN_ZONE, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from "../js/constants";
 import { buildNum, capitalize } from "../js/utils/format";
 import { chance, randomElem, randomInt } from "../js/utils/random";
 import { logBase } from "../js/utils/math";
@@ -206,6 +206,9 @@ export default {
         },
         canFindHeirloom: (state, getters, rootState) => {
             return rootState.stat.horde_maxZone.value >= HORDE_HEIRLOOM_MIN_ZONE;
+        },
+        masteryBaseGain: (state) => (name) => {
+            return state.zone - state.items[name].findZone - 24;
         }
     },
     mutations: {
@@ -627,7 +630,7 @@ export default {
 
             if (state.zone >= 75) {
                 // Add item mastery
-                dispatch('gainMastery', amount * 0.05);
+                dispatch('gainMastery', amount * HORDE_MASTERY_MINIBOSS_MULT);
             }
         },
         killEnemy({ state, rootState, getters, rootGetters, commit, dispatch }) {
@@ -714,9 +717,9 @@ export default {
         gainMastery({ state, getters, rootGetters, commit, dispatch }, amount = 1) {
             let updateMasteryStats = false;
             for (const [key, elem] of Object.entries(state.items)) {
-                const masteryBase = state.zone - elem.findZone - 24;
+                const masteryBase = getters.masteryBaseGain(key);
                 if (elem.equipped && masteryBase > 0) {
-                    commit('updateItemKey', {name: key, key: 'masteryPoint', value: elem.masteryPoint + rootGetters['mult/get']('hordeItemMasteryGain', masteryBase * amount)});
+                    commit('updateItemKey', {name: key, key: 'masteryPoint', value: elem.masteryPoint + rootGetters['mult/get']('hordeItemMasteryGain', masteryBase) * amount});
                     while (state.items[key].masteryPoint >= getters.masteryRequired(key, state.items[key].masteryLevel)) {
                         updateMasteryStats = true;
                         commit('updateItemKey', {name: key, key: 'masteryLevel', value: state.items[key].masteryLevel + 1});

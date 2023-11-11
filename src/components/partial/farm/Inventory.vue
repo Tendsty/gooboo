@@ -39,7 +39,7 @@ import FertilizerCard from './FertilizerCard.vue';
 export default {
   components: { Currency, CropCard, FertilizerCard, Consumable, BuildingCard },
   data: () => ({
-    currencies: ['vegetable', 'fruit', 'grain', 'flower', 'gold', 'seedHull', 'petal', 'bug', 'butterfly', 'ladybug', 'spider', 'bee', 'goldenPetal']
+    currencies: ['vegetable', 'fruit', 'grain', 'flower', 'gold', 'seedHull', 'grass', 'petal', 'bug', 'butterfly', 'ladybug', 'spider', 'bee', 'mysteryStone', 'goldenPetal']
   }),
   computed: {
     ...mapState({

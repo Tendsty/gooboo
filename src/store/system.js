@@ -7,7 +7,7 @@ import seedrandom from "seedrandom";
 export default {
     namespaced: true,
     state: {
-        version: '1.3.6',
+        version: '1.4.0',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -18,7 +18,7 @@ export default {
                 subfeatures: ['miningGasSubfeature'],
                 currentSubfeature: 0,
                 icon: 'mdi-pickaxe',
-                offlineStat: ['mining_maxDepth0', 'mining_maxDepth1', 'mining_depthDweller0', 'mining_depthDweller1'],
+                offlineStat: ['mining_maxDepth0', 'mining_maxDepth1', 'mining_depthDwellerCap0', 'mining_depthDwellerCap1'],
                 main: true
             },
             village: {
@@ -360,7 +360,7 @@ export default {
             experiment: {
                 unlock: null,
                 items: {
-                    gainTimer: {
+                    currencyLabel: {
                         unlock: null,
                         hasDescription: true,
                         type: 'switch',
@@ -437,6 +437,9 @@ export default {
         getRng: (state) => (name, skip = 0) => {
             return seedrandom(state.playerId + name + '_' + ((state.rng[name] ?? 0) + skip));
         },
+        getRngById: (state) => (name, id) => {
+            return seedrandom(state.playerId + name + '_' + id);
+        },
         backupHint: (state) => {
             const mode = state.settings.notification.items.backupHint.value;
 
@@ -449,9 +452,9 @@ export default {
                 case 'mining': {
                     switch (state.features.mining.currentSubfeature) {
                         case 0:
-                            return rootState.stat.mining_maxDepth0.total > 155;
+                            return rootState.stat.mining_maxDepth0.total > 300;
                         case 1:
-                            return rootState.stat.mining_maxDepth1.total > 100;
+                            return rootState.stat.mining_maxDepth1.total > 160;
                     }
                     break;
                 }
@@ -632,9 +635,9 @@ export default {
                     }
                     break;
                 case 'unlock':
-                    if (o.trigger && o.value) {
+                    if (o.value) {
                         commit('unlock/unlock', o.name, {root: true});
-                        if (o.name.slice(0, 15) === 'villageOffering') {
+                        if (o.trigger && o.name.slice(0, 15) === 'villageOffering') {
                             dispatch('village/applyOfferingEffect', null, {root: true});
                         }
                     }

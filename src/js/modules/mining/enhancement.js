@@ -1,3 +1,5 @@
+import { getSequence } from "../../utils/math";
+
 export default {
     barAluminium: {
         effect: [
@@ -13,19 +15,24 @@ export default {
     },
     barSteel: {
         effect: [
-            {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.35, lvl)},
-            {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(0.8, lvl)}
+            {name: 'miningDamage', type: 'mult', value: lvl => lvl * 0.35 + 1},
+            {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(1 / 1.5, lvl)}
         ]
     },
     barTitanium: {
         effect: [
-            {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(2, lvl)}
+            {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => getSequence(2, lvl)}
         ]
     },
     barShiny: {
         effect: [
-            {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(2, lvl)},
+            {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(1.35, lvl)},
             {name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => lvl * 0.2 + 1}
+        ]
+    },
+    barIridium: {
+        effect: [
+            {name: 'currencyMiningEmberGain', type: 'mult', value: lvl => lvl + 1}
         ]
     }
 }

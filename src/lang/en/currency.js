@@ -331,6 +331,10 @@ export default {
     name: 'Platinum ore',
     description: 'This ore appears to be very beautiful if you polish it a bit. Let\'s hope it is not only beautiful, but useful as well'
   },
+  mining_oreIridium: {
+    name: 'Iridium ore',
+    description: 'Irid... what? You never heard of this one before, can it even be used for anything?'
+  },
   mining_granite: {
     name: 'Granite',
     description: 'Huge blocks of granite cut from the underground. Surprisingly, there is no scrap in them'
@@ -374,6 +378,10 @@ export default {
   mining_barShiny: {
     name: 'Shiny bar',
     description: 'This one is not very sharp or durable, but seems to have other uses'
+  },
+  mining_barIridium: {
+    name: 'Iridium bar',
+    description: 'What strange properties does this one have...'
   },
   mining_ember: {
     name: 'Ember',
@@ -587,6 +595,10 @@ export default {
     name: 'Seed hull',
     description: 'An empty hull from a plant, the seed seems to be missing'
   },
+  farm_grass: {
+    name: 'Grass',
+    description: 'This seems unnatural, grass shouldn\'t grow on crops'
+  },
   farm_petal: {
     name: 'Petal',
     description: 'These petals grow on all flowers, but you only collect the most beautiful ones'
@@ -610,6 +622,10 @@ export default {
   farm_bee: {
     name: 'Bee',
     description: 'Bees are a common sight on a garden. Don\'t bother them, just let them collect their nectar'
+  },
+  farm_mysteryStone: {
+    name: 'Mystery stone',
+    description: 'What is this? What uses does it have?'
   },
   farm_goldenPetal: {
     name: 'Golden petal',

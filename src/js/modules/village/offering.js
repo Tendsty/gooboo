@@ -1,8 +1,8 @@
 import { buildNum } from "../../utils/format";
 
 export default {
-    wood: {unlock: 'villageOffering1', cost: lvl => Math.pow(1.5, lvl) * buildNum(1, 'M'), effect: 200},
     plantFiber: {unlock: 'villageOffering1', cost: lvl => Math.pow(1.5, lvl) * buildNum(1, 'M'), effect: 200},
+    wood: {unlock: 'villageOffering1', cost: lvl => Math.pow(1.5, lvl) * buildNum(1, 'M'), effect: 200},
     stone: {unlock: 'villageOffering1', cost: lvl => Math.pow(1.5, lvl) * buildNum(1, 'M'), effect: 200},
 
     coin: {unlock: 'villageOffering2', amount: 3, cost: lvl => Math.pow(1.75, lvl) * buildNum(10, 'M'), effect: 200},

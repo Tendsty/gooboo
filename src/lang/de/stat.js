@@ -12,11 +12,11 @@ export default {
     achievement: 'Tieflauf',
     description: 'Maximale Tiefe in unter 15 Minuten'
   },
-  mining_depthDweller0: {
+  mining_depthDwellerCap0: {
     achievement: 'Gerade nach unten',
     description: 'Maximale Gräbertiefe'
   },
-  mining_depthDweller1: {
+  mining_depthDwellerCap1: {
     achievement: 'Funkenlos',
     description: 'Maximale Gasriesen-Gräbertiefe'
   },
@@ -182,7 +182,7 @@ export default {
   },
   farm_maxOvergrow: {
     achievement: 'Gärtner',
-    description: 'Maximales Überwuchern'
+    description: 'Beste Ernte'
   },
   farm_bestPrestige: {
     achievement: 'Renommiert',

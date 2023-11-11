@@ -32,7 +32,7 @@ export default {
         {name: 'hordeNostalgia', type: 'base', value: 5}
     ]},
     silverHorseshoe: {icon: 'mdi-horseshoe', color: 'lighter-grey', effect: [
-        {name: 'farmRareDrop', type: 'mult', value: 1.05}
+        {name: 'farmRareDropChance', type: 'mult', value: 1.05}
     ]},
 
     // Generic big event

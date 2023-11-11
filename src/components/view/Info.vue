@@ -27,12 +27,12 @@
       <v-card-subtitle class="text-center">{{ $vuetify.lang.t('$vuetify.info.subtitle') }}</v-card-subtitle>
       <v-card-text>
         <div class="mb-2">{{ $vuetify.lang.t('$vuetify.info.text') }}</div>
-        <div v-if="appEnv === 'desktop'">
-          <span>{{ $vuetify.lang.t('$vuetify.info.updates.desktop.0') }}</span>
+        <div v-if="appEnv === 'desktop' || appEnv === 'offline'">
+          <span>{{ $vuetify.lang.t(`$vuetify.info.updates.${ appEnv }.0`) }}</span>
           <a target="_blank" href="https://github.com/Tendsty/gooboo/releases">
-            <span>{{ $vuetify.lang.t('$vuetify.info.updates.desktop.1') }}</span>
+            <span>{{ $vuetify.lang.t(`$vuetify.info.updates.${ appEnv }.1`) }}</span>
           </a>
-          <span>{{ $vuetify.lang.t('$vuetify.info.updates.desktop.2') }}</span>
+          <span>{{ $vuetify.lang.t(`$vuetify.info.updates.${ appEnv }.2`) }}</span>
         </div>
         <div v-else>{{ $vuetify.lang.t(`$vuetify.info.updates.${ appEnv }`) }}</div>
         <alert-text v-if="isTestingVersion" class="mt-2">

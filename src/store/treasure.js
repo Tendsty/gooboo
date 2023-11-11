@@ -246,7 +246,8 @@ export default {
             if (state.newItem === null) {
 
                 // get tier based on first stored chance
-                let rngGen = rootGetters['system/getRng']('treasure_' + type);
+                let rngGen = rootGetters['system/getRng']('treasureTier_' + type);
+                commit('system/nextRng', {name: 'treasureTier_' + type, amount: 1}, {root: true});
                 const nextChance = rngGen();
 
                 let tier = null;

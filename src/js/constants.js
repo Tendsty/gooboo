@@ -1,11 +1,14 @@
 // game version to play / build
 // WEB has auto-updates and shows support links
-// DESKTOP hides auto-updates and shows support links
+// OFFLINE hides auto-updates and shows support links (web-based)
+// DESKTOP hides auto-updates and shows support links (windows app)
 // STEAM hides auto-updates and hides support links
 export const APP_ENV = 'WEB';
 
 // enable / disable testing version
 export const APP_TESTING = false;
+
+export const LOCAL_STORAGE_NAME = APP_TESTING ? 'goobooTesting' : 'goobooSavefile';
 
 // time conversion
 export const SECONDS_PER_MINUTE = 60;
@@ -27,8 +30,11 @@ export const MINING_SULFUR_DEPTH = 110;
 export const MINING_NITER_DEPTH = 130;
 export const MINING_OBSIDIAN_DEPTH = 150;
 export const MINING_SMELTERY_TEMPERATURE_SPEED = 0.004;
+export const MINING_ENHANCEMENT_BARS = 50;
+export const MINING_ENHANCEMENT_FINAL = 10;
 export const MINING_ENHANCEMENT_BAR_AMOUNT = 10;
 export const MINING_ENHANCEMENT_CHANCE_EXPONENT = 0.5;
+export const MINING_DWELLER_OVERCAP_MULT = 0.9;
 
 export const VILLAGE_COINS_PER_FOOD = 0.25;
 export const VILLAGE_JOY_MIN_HAPPINESS = 1.25;
@@ -56,6 +62,7 @@ export const HORDE_HEIRLOOM_MIN_ZONE = 31;
 export const HORDE_KEYS_PER_TOWER = 3;
 export const HORDE_HEIRLOOM_TOWER_FLOORS = 5;
 export const HORDE_HEIRLOOM_CHANCE_PER_NOSTALGIA = 0.001;
+export const HORDE_MASTERY_MINIBOSS_MULT = 0.05;
 
 export const TREASURE_TIER_UPGRADE_MULT = 5;
 export const TREASURE_TIER_DESTROY_MULT = 4;

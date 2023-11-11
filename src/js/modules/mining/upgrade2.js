@@ -25,12 +25,12 @@ export default {
         return {mining_helium: 250};
     }, effect: [
         {name: 'miningDepthDweller', type: 'unlock', value: lvl => lvl >= 1},
-        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(2, lvl)}
+        {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(3, lvl)}
     ]},
     piston: {subfeature: 1, requirementBase, requirementStat, requirementValue: 20, price(lvl) {
         return {mining_helium: Math.round(Math.pow(1.35, lvl) * 50)};
     }, effect: [
-        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.5, lvl)}
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.2 + 1)}
     ]},
     pollution: {subfeature: 1, cap: 1, persistent: true, requirementBase, requirementStat, requirementValue: 25, price() {
         return {mining_helium: 1000};
@@ -53,23 +53,28 @@ export default {
     vent: {subfeature: 1, cap: 20, requirementBase, requirementStat, requirementValue: 40, price(lvl) {
         return {mining_scrap: Math.ceil(Math.pow(1.65, lvl) * buildNum(40, 'T'))};
     }, effect: [
-        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.12, lvl)},
-        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.09, lvl)},
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.12, lvl)}
     ]},
     harvester: {subfeature: 1, requirementBase, requirementStat, requirementValue: 50, price(lvl) {
         return {mining_neon: Math.round(Math.pow(1.35, lvl) * 50)};
     }, effect: [
-        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)}
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.3 + 1)}
     ]},
     graphiteRod: {subfeature: 1, cap: 40, requirementBase, requirementStat, requirementValue: 75, price(lvl) {
         return {mining_scrap: Math.ceil(Math.pow(1.85, lvl) * buildNum(1, 'Qi'))};
     }, effect: [
-        {name: 'miningPickaxeCraftingPower', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+        {name: 'miningPickaxeCraftingPower', type: 'mult', value: lvl => Math.pow(1.12, lvl)},
         {name: 'currencyMiningSmokeCap', type: 'mult', value: lvl => Math.pow(1.1, lvl)}
     ]},
     enrichedCrystal: {subfeature: 1, requirementBase, requirementStat, requirementValue: 100, price(lvl) {
         return {mining_argon: Math.round(Math.pow(1.35, lvl) * 50)};
     }, effect: [
-        {name: 'currencyMiningCrystalYellowGain', type: 'mult', value: lvl => Math.pow(1.05, lvl)}
+        {name: 'currencyMiningCrystalYellowGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+    ]},
+    smoker: {subfeature: 1, requirementBase, requirementStat, requirementValue: 160, price(lvl) {
+        return {mining_krypton: Math.round(Math.pow(1.35, lvl) * 50)};
+    }, effect: [
+        {name: 'currencyMiningSmokeGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.2 + 1)}
     ]},
 }

@@ -331,6 +331,10 @@ export default {
     name: 'Platinerz',
     description: 'Dieses Erz sieht sehr schön aus, wenn man es ein wenig poliert. Hoffentlich ist es nicht nur schön, sondern auch nützlich'
   },
+  mining_oreIridium: {
+    name: 'Iridiumerz',
+    description: 'Irid... was? Der Name sagt dir nichts, hat es überhaupt einen Nutzen?'
+  },
   mining_granite: {
     name: 'Granit',
     description: 'Massive Granitblöcke, aus dem Untergrund geschnitten. Überraschenderweise sind sie komplett schrottfrei'
@@ -374,6 +378,10 @@ export default {
   mining_barShiny: {
     name: 'Glanzbarren',
     description: 'Der hier ist nicht besonders spitz oder haltbar, scheint aber einen anderen Nutzen zu haben'
+  },
+  mining_barIridium: {
+    name: 'Iridiumbarren',
+    description: 'Was für seltsame Eigenschaften dieser hier hat...'
   },
   mining_ember: {
     name: 'Glut',
@@ -587,6 +595,10 @@ export default {
     name: 'Saathülle',
     description: 'Eine leere pflanzliche Saathülle, die Saat selbst scheint zu fehlen'
   },
+  farm_grass: {
+    name: 'Gras',
+    description: 'Das wirkt unnatürlich, Gras sollte nicht auf Pflanzen wachsen'
+  },
   farm_petal: {
     name: 'Blütenblatt',
     description: 'Blütenblätter findet man auf allen Blumen, aber du sammelst nur die schönsten'
@@ -610,6 +622,10 @@ export default {
   farm_bee: {
     name: 'Biene',
     description: 'Bienen sind häufig in Gärten anzutreffen. Lass sie einfach in Ruhe ihren Nektar sammeln'
+  },
+  farm_mysteryStone: {
+    name: 'Mysterienstein',
+    description: 'Was ist das? Welchen Nutzen hat es?'
   },
   farm_goldenPetal: {
     name: 'Goldenes Blütenblatt',

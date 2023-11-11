@@ -1,3 +1,5 @@
+import { buildNum } from "../../utils/format";
+
 export default {
     oreAluminium: {
         power: 15,
@@ -39,18 +41,27 @@ export default {
         power: 7000,
         impurity: 3.5,
         minDepth: 120,
-        maxDepth: 220,
+        maxDepth: 200,
         modulo: 11,
         baseAmount: 0.000032,
         amountMult: 1.05
     },
     orePlatinum: {
-        power: 40000,
+        power: buildNum(40, 'K'),
         impurity: 4,
         minDepth: 175,
-        maxDepth: 310,
+        maxDepth: 295,
         modulo: 13,
         baseAmount: 0.0000064,
+        amountMult: 1.05
+    },
+    oreIridium: {
+        power: buildNum(250, 'K'),
+        impurity: 5,
+        minDepth: 260,
+        maxDepth: 420,
+        modulo: 17,
+        baseAmount: 0.00000128,
         amountMult: 1.05
     }
 }

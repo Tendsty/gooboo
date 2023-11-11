@@ -13,7 +13,7 @@
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.card.activeDescription`) }}</div>
       </gb-tooltip>
     </div>
-    <card-select :feature="feature"></card-select>
+    <card-select :key="`card-select-${ feature }-${ crop }`" :feature="feature" :crop="crop" :group="group"></card-select>
   </div>
 </template>
 
@@ -28,6 +28,16 @@ export default {
     feature: {
       type: String,
       required: true
+    },
+    crop: {
+      type: String,
+      required: false,
+      default: null
+    },
+    group: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   computed: {
@@ -35,10 +45,10 @@ export default {
       cards: state => state.card.card
     }),
     cardsSelected() {
-      return this.$store.state.card.feature[this.feature].cardSelected.length;
+      return this.crop === null ? this.$store.state.card.feature[this.feature].cardSelected.length : this.$store.state.farm.crop[this.crop].cardSelected.length;
     },
     cardsEquipped() {
-      return this.$store.state.card.feature[this.feature].cardEquipped;
+      return this.crop === null ? this.$store.state.card.feature[this.feature].cardEquipped : this.$store.state.farm.crop[this.crop].cardEquipped;
     },
     maxCards() {
       return this.$store.getters['mult/get'](this.feature + 'CardCap');

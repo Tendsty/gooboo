@@ -24,8 +24,8 @@ export default {
         store.state.stat.mining_oreTitanium.total,
         store.state.stat.mining_orePlatinum.total
     ].reduce((a, b) => a + (b > 0 ? 1 : 0), 0), milestones: lvl => lvl + 2, relic: {1: 'copperHeap', 2: 'catalyst', 3: 'magnet'}},
-    depthDweller0: {value: () => store.state.stat.mining_depthDweller0.total, milestones: lvl => lvl * 10 + (lvl === 0 ? 5 : 0), relic: {0: 'hammer'}},
-    depthDweller1: {value: () => store.state.stat.mining_depthDweller1.total, milestones: lvl => lvl * 10 + (lvl === 0 ? 5 : 0)},
+    depthDwellerCap0: {value: () => store.state.stat.mining_depthDwellerCap0.total, milestones: lvl => lvl * 10 + (lvl === 0 ? 5 : 0), relic: {0: 'hammer'}},
+    depthDwellerCap1: {value: () => store.state.stat.mining_depthDwellerCap1.total, milestones: lvl => lvl * 10 + (lvl === 0 ? 5 : 0)},
     coal: {value: () => store.state.stat.mining_coal.total, milestones: lvl => Math.pow(2.5, lvl) * 100, relic: {2: 'coalBrick'}},
     resin: {value: () => store.state.stat.mining_resin.total, milestones: lvl => Math.pow(2, lvl) * 50, relic: {3: 'honeyPot'}},
     craftingWasted: {value: () => store.state.stat.mining_craftingWasted.total, secret: true, display: 'boolean', cap: 1, milestones: () => 1},

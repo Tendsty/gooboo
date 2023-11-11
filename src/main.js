@@ -11,6 +11,7 @@ import "@fontsource/roboto/900.css";
 import "@fontsource/caveat/400.css";
 import "@fontsource/roboto-mono/400.css";
 import GoobooTooltip from './components/partial/render/GoobooTooltip.vue';
+import { APP_TESTING } from './js/constants';
 
 Vue.config.productionTip = false
 
@@ -59,7 +60,7 @@ new Vue({
 }).$mount('#app')
 
 // Duplicate tab check
-const channel = new BroadcastChannel('tab');
+const channel = new BroadcastChannel(APP_TESTING ? 'tabtest' : 'tab');
 let isOriginal = true;
 channel.postMessage('another-tab');
 channel.addEventListener('message', (msg) => {

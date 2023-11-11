@@ -16,7 +16,8 @@
     <div class="flex-grow-1">
       <div>{{ $vuetify.lang.t(`$vuetify.card.card.${item.name}`) }}</div>
       <div class="card-reward" v-for="(reward, rkey) in item.reward" :key="rkey">
-        <mult-name :name="reward.name"></mult-name> <mult-stat :mult="reward.name" :type="reward.type" :value="reward.value"></mult-stat>
+        <span v-if="reward.type === 'addRareDrop'">{{ $vuetify.lang.t(`$vuetify.farm.addRareDrop`, $vuetify.lang.t(`$vuetify.currency.${ reward.name }.name`)) }}: +{{ $formatNum(reward.value) }}</span>
+        <span v-else><mult-name :name="reward.name"></mult-name> <mult-stat :mult="reward.name" :type="reward.type" :value="reward.value"></mult-stat></span>
       </div>
     </div>
   </div>

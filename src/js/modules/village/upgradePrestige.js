@@ -7,17 +7,17 @@ export default {
     }, effect: [
         {name: 'villageWorker', type: 'base', value: lvl => lvl * 2}
     ]},
-    holyTree: {type: 'prestige', price(lvl) {
-        return {village_blessing: Math.pow(1.65, lvl) * 50};
-    }, effect: [
-        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
-        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
-    ]},
     holyGrass: {type: 'prestige', price(lvl) {
         return {village_blessing: Math.pow(1.65, lvl) * 50};
     }, effect: [
         {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
         {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
+    ]},
+    holyTree: {type: 'prestige', price(lvl) {
+        return {village_blessing: Math.pow(1.65, lvl) * 50};
+    }, effect: [
+        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
     ]},
     holyRock: {type: 'prestige', price(lvl) {
         return {village_blessing: Math.pow(1.65, lvl) * 50};
@@ -124,8 +124,8 @@ export default {
     }, price(lvl) {
         return {village_blessing: Math.pow(lvl * 0.15 + 1.75, lvl) * buildNum(40, 'K')};
     }, effect: [
-        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 5},
-        {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => Math.pow(1.35, lvl)}
+        {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 20},
+        {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
     ]},
     holyLab: {type: 'prestige', requirement() {
         return store.state.unlock.villageBuildings5.see;

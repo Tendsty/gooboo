@@ -10,6 +10,11 @@ export default {
       title: 'Back up your savefile!',
       text: 'Browser-based savefiles are not perfectly reliable, so backup your savefile often! Only one small accident is enough to wipe your progress, such as browser crash, power outage, the browser mistaking the game for a tracker or a bug in the game. Download a backup whenever the hint shows up and when a new update is released, and you should be safe. iOS users and itch players are at a higher risk of savefile loss and should change the backup hint to "Common"'
     },
+    meta_7: {
+      title: 'Tooltips',
+      text: 'Many elements in the game display additional information if you hover over them with your mouse. Players on mobile devices can tap and hold to achieve the same result',
+      buttonTooltip: 'Click to toggle'
+    },
 
     mining_0: 'Use pickaxe. Dig deeper.',
     mining_1: 'Collect scrap. Buy upgrades.',
@@ -77,6 +82,10 @@ export default {
     village_28: 'Relaxing lake. Full of fish.',
     village_29: 'Knowledge lost. Over time. Discover it again.',
     village_30: 'Small creatures. Love this one.',
+    village_31: {
+      title: 'Moving queue elements',
+      text: 'You can change the order of elements in the building queue by dragging them around'
+    },
 
     horde_0: 'Hordes of monsters. Block path. Only one way to progress. Kill enough. Then kill leader.',
     horde_1: 'One group dead. But more appear.',
@@ -151,7 +160,7 @@ export default {
 
     school_0: 'Learn in school. Answer correctly. Get good grades.',
     school_1: 'Be an eager student. Receive golden dust. Can skip time.',
-    school_2: 'Get new books. Every hour. Even more with better grades.',
+    school_2: 'Get new books. Every hour. Even more with more subjects.',
     school_3: 'Also learn to write. Get more books.',
     school_4: 'History is important. Remember dates. Even more books.',
 

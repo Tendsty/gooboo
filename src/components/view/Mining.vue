@@ -94,9 +94,9 @@ export default {
       return ['mining_maxDepth' + this.subfeature];
     },
     upgradePrestigeStat() {
-      let arr = ['mining_depthDweller0'];
+      let arr = ['mining_depthDwellerCap0'];
       if (this.unlock.miningGasSubfeature.see) {
-        arr.push('mining_depthDweller1');
+        arr.push('mining_depthDwellerCap1');
       }
       return arr;
     }

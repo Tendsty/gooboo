@@ -10,6 +10,11 @@ export default {
       title: 'Sichere den Spielstand!',
       text: 'Browser-basierte Spielstände sind nicht immer zuverlässig, also sichere den Spielstand häufig! Nur ein kleiner Unfall reicht aus, um den gesamten Fortschritt auszulöschen, wie ein Browserabsturz, Stromausfall, der Browser stuft das Spiel irrtümlich als Tracker ein oder ein Spielfehler. Lade eine Sicherungskopie herunter, wenn der Hinweis auftaucht und wenn ein neues Update erscheint, und du solltest auf der sicheren Seite sein. iOS-Nutzer und Spieler auf itch sind gegenüber Spielstandverlust besonders gefährdet und sollten den Sicherungshinweis auf "Häufig" schalten'
     },
+    meta_7: {
+      title: 'Tooltips',
+      text: 'Viele Elemente im Spiel zeigen zusätzliche Informationen an, wenn du mit der Maus herüberfährst. Spieler auf Mobilgeräten können durch Antippen und Gedrückthalten das gleiche Ergebnis erzielen',
+      buttonTooltip: 'Klicke zum Umschalten'
+    },
 
     mining_0: 'Nutze Spitzhacke. Grabe tiefer.',
     mining_1: 'Sammle Schrott. Kaufe Verbesserungen.',
@@ -77,6 +82,10 @@ export default {
     village_28: 'Entspannender See. Voller Fische.',
     village_29: 'Wissen verloren. Mit der Zeit. Entdecke es wieder.',
     village_30: 'Kleine Kreaturen. Lieben das hier.',
+    village_31: {
+      title: 'Warteschlange anordnen',
+      text: 'Du kannst die Position von Elementen in der Bauwarteschlange tauschen, indem du sie verschiebst'
+    },
 
     horde_0: 'Horden von Monstern. Blockieren Weg. Nur ein Weg nach vorne. Töte genug. Dann töte Anführer.',
     horde_1: 'Eine Gruppe tot. Mehr kommen nach.',
@@ -151,7 +160,7 @@ export default {
 
     school_0: 'Lerne in der Schule. Antworte richtig. Verbessere Noten.',
     school_1: 'Sei ein fleißiger Schüler. Erhalte Goldstaub. Kann Zeit überspringen.',
-    school_2: 'Bekomme neue Bücher. Jede Stunde. Noch mehr mit besseren Noten.',
+    school_2: 'Bekomme neue Bücher. Jede Stunde. Noch mehr mit mehr Fächern.',
     school_3: 'Lerne auch das Schreiben. Bekomme mehr Bücher.',
     school_4: 'Geschichte ist wichtig. Merke Daten. Noch mehr Bücher.',
 
