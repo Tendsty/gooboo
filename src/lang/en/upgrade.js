@@ -54,7 +54,7 @@ export default {
     farm_pinwheel: 'Pinwheels allow you to increase your rare drop chance',
     farm_flag: 'Flags increase crop gain based on positioning',
     farm_premiumGardenGnome: 'Premium garden gnomes provide double the gold chance',
-    farm_premiumSprinkler: 'Premium sprinklers triple growth speed',
+    farm_premiumSprinkler: 'Premium sprinklers double the grow speed and overgrow bonuses',
     farm_premiumLectern: 'Premium lecterns quintuple experience',
     farm_premiumPinwheel: 'Premium pinwheels provide double the drop chance bonus',
     farm_premiumFlag: 'Premium flags provide double the crop gain bonus',

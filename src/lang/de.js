@@ -1677,6 +1677,7 @@ export default {
     itemMastery: {
       name: 'Meistern',
       description: 'Besiege Bosse oder Minibosse ab Zone {0} mit dieser Ausrüstung, um Meisterungspunkte zu erhalten. Je höher die Zone, desto mehr Punkte.',
+      gain: 'Erhalte {0} Meisterungspunkte von Bossen dieser Zone, und {1}% von dem Wert ({2}) von Minibossen',
       bonuses: 'Erhöhe die Meisterungsstufe, um neue Boni für diese Ausrüstung freizuschalten',
       current: 'Diese Ausrüstung hat {0} / {1} Meisterungspunkte',
       1: 'Behalte die Ausrüstung nach dem Prestige',
@@ -1768,6 +1769,8 @@ export default {
       name: 'Gen',
       pickLevel: 'Wähle ein Stufe-{0}-Gen',
       dnaDescription: 'Du erhältst DNA, wenn die Pflanze in der Stufe aufsteigt und kannst mit ihr Gen-Verbesserungen kaufen. Die nächste Pflanzenstufe gibt {0} DNA',
+      dnaDuplicate: 'Ausgewählte Gene tauchen beim nächsten Prestige nicht auf. Wird kein Gen ausgewählt, sind beim nächsten Prestige alle 4 verfügbar',
+      dnaBlocked: 'Blockierte Gene',
       hasUpgrade: 'Hat Gen-Verbesserung',
       yield: 'Ertrag',
       gold: 'Gold',
@@ -1827,6 +1830,7 @@ export default {
     auction: 'Auktion',
     colorSuffix: 'Farbe',
     openPackage: 'Öffnen',
+    colorGainReduced: 'Zusätzliches Einkommen wird nach 100 Farbe auf die Quadratwurzel reduziert',
     idea: {
       tier: 'Stufe-{0}-Idee',
       unlock: 'Idee freischalten',

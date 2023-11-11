@@ -76,9 +76,9 @@ export default {
     }, price(lvl) {
         return {village_knowledge: 12 * lvl + 80};
     }, effect: [
-        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
-        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
-        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
     ]},
     processing: {cap: 15, requirement() {
         return store.state.unlock.villageUpgradeProcessing.use;
@@ -107,7 +107,7 @@ export default {
     }, price(lvl) {
         return {village_knowledge: 12 * lvl + 240};
     }, effect: [
-        {name: 'currencyVillageKnowledgeGain', type: 'mult', value: lvl => lvl * 0.02 + 1}
+        {name: 'currencyVillageKnowledgeGain', type: 'mult', value: lvl => lvl * 0.04 + 1}
     ]},
 
     // More coin upgrades

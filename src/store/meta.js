@@ -27,6 +27,7 @@ export default {
         },
         globalLevelNotes: {
             meta_0: 5,
+            meta_7: 8,
             gem_0: 10,
             village_0: 12,
             meta_3: 13,
@@ -86,56 +87,58 @@ export default {
             commit('updateKey', {key: 'globalLevel', value: 0});
             commit('updateKey', {key: 'globalLevelParts', value: {}});
         },
-        globalLevelPart({ state, rootState, rootGetters, commit, dispatch }, o) {
+        globalLevelPart({ state, commit, dispatch }, o) {
             const oldGlobalLevel = state.globalLevel;
             if (state.globalLevelParts[o.key] === undefined || state.globalLevelParts[o.key] < o.amount) {
                 commit('updateSubkey', {name: 'globalLevelParts', key: o.key, value: o.amount});
                 commit('updateGlobalLevel');
-
-                // Global level unlocks
-                for (const [key, elem] of Object.entries(state.globalLevelUnlocks)) {
-                    if (state.globalLevel >= elem && !rootState.unlock[key].use) {
-                        let parentFeature = null;
-                        for (const [subkey, subelem] of Object.entries(rootState.system.features)) {
-                            if (subelem.subfeatures.includes(key)) {
-                                parentFeature = subkey;
-                            }
-                        }
-
-                        commit('system/addNotification', {color: 'success', timeout: -1, message: {
-                            type: 'feature',
-                            name: parentFeature ?? key.slice(0, -7),
-                            subfeature: parentFeature ? key.slice(0, -10) : null
-                        }}, {root: true});
-                        commit('unlock/unlock', key, {root: true});
-
-                        // Start current event if events just got unlocked
-                        if (key === 'eventFeature') {
-                            const currentEvent = rootGetters['event/currentEvent'];
-                            if (currentEvent !== null) {
-                                dispatch('event/start', currentEvent, {root: true});
-                            }
-                        }
-                    }
-                }
-
-                // Global level notes
-                for (const [key, elem] of Object.entries(state.globalLevelNotes)) {
-                    if (state.globalLevel >= elem && !rootState.note[key].found) {
-                        dispatch('note/find', key, {root: true});
-                    }
-                }
-
-                // Get a relic at global level 40 (when relics unlock)
-                if (state.globalLevel >= 40 && !rootState.relic.friendlyBat.found) {
-                    dispatch('relic/find', 'friendlyBat', {root: true});
-                }
+                dispatch('globalLevelUnlocks');
 
                 // Update exam passes
                 const globalLevelDiff = Math.floor(state.globalLevel / 10) - Math.floor(oldGlobalLevel / 10);
                 if (globalLevelDiff > 0) {
                     dispatch('currency/gain', {feature: 'school', name: 'examPass', amount: globalLevelDiff}, {root: true});
                 }
+            }
+        },
+        globalLevelUnlocks({ state, rootState, rootGetters, commit, dispatch }) {
+            // Global level unlocks
+            for (const [key, elem] of Object.entries(state.globalLevelUnlocks)) {
+                if (state.globalLevel >= elem && !rootState.unlock[key].use) {
+                    let parentFeature = null;
+                    for (const [subkey, subelem] of Object.entries(rootState.system.features)) {
+                        if (subelem.subfeatures.includes(key)) {
+                            parentFeature = subkey;
+                        }
+                    }
+
+                    commit('system/addNotification', {color: 'success', timeout: -1, message: {
+                        type: 'feature',
+                        name: parentFeature ?? key.slice(0, -7),
+                        subfeature: parentFeature ? key.slice(0, -10) : null
+                    }}, {root: true});
+                    commit('unlock/unlock', key, {root: true});
+
+                    // Start current event if events just got unlocked
+                    if (key === 'eventFeature') {
+                        const currentEvent = rootGetters['event/currentEvent'];
+                        if (currentEvent !== null) {
+                            dispatch('event/start', currentEvent, {root: true});
+                        }
+                    }
+                }
+            }
+
+            // Global level notes
+            for (const [key, elem] of Object.entries(state.globalLevelNotes)) {
+                if (state.globalLevel >= elem && !rootState.note[key].found) {
+                    dispatch('note/find', key, {root: true});
+                }
+            }
+
+            // Get a relic at global level 40 (when relics unlock)
+            if (state.globalLevel >= 40 && !rootState.relic.friendlyBat.found) {
+                dispatch('relic/find', 'friendlyBat', {root: true});
             }
         }
     }

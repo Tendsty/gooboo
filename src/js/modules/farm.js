@@ -61,7 +61,8 @@ export default {
     stat: {
         harvests: {},
         maxOvergrow: {},
-        bestPrestige: {}
+        bestPrestige: {},
+        totalMystery: {}
     },
     mult: {
         farmExperience: {baseValue: 1},
@@ -196,6 +197,9 @@ export default {
                 store.commit('farm/updateCropKey', {name: key, key: 'cardSelected', value: elem.cardSelected});
                 store.commit('farm/updateCropKey', {name: key, key: 'cardEquipped', value: elem.cardEquipped});
                 store.commit('farm/updateCropKey', {name: key, key: 'upgrades', value: elem.upgrades});
+
+                // Apply level ups
+                store.dispatch('farm/getCropExp', {crop: key, value: 0});
             }
         }
         store.commit('farm/calculateCropBuildingCaches');

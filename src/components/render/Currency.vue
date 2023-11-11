@@ -31,8 +31,13 @@
   height: 24px;
   left: 50%;
 }
+.currency-container {
+  position: relative;
+  height: 44px;
+}
 .render-currency-mobile {
   font-size: 80%;
+  height: 40px;
 }
 .render-currency-mobile.render-currency-small {
   width: 160px;
@@ -43,16 +48,17 @@
 .currency-clickable {
   cursor: pointer;
 }
-.currency-container {
-  position: relative;
-  height: 44px;
-}
 .currency-labels {
   position: absolute;
   font-size: 12px;
   bottom: -8px;
   left: 32px;
   right: 0;
+}
+.render-currency-mobile .currency-labels {
+  font-size: 10px;
+  bottom: -5px;
+  left: 32px;
 }
 .currency-label {
   border: 2px solid white;
@@ -70,7 +76,8 @@
           'elevation-0': transparent,
           'darken-2': $vuetify.theme.dark,
           'render-currency-mobile': $vuetify.breakpoint.xsOnly,
-          'mb-3': hasLabels
+          'mb-2': $vuetify.breakpoint.xsOnly && hasLabels,
+          'mb-3': $vuetify.breakpoint.smAndUp && hasLabels
         }]"
         v-bind="attrs"
         v-on="{...$listeners, ...on}"
@@ -168,6 +175,11 @@ export default {
       type: Array,
       required: false,
       default: (() => [])
+    },
+    hideLabels: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data: (() => ({
@@ -260,7 +272,7 @@ export default {
       return Math.ceil((this.currency.cap * (this.overcapStage + 1) - this.currency.value) * this.gainTimeMult / (gainAmount * this.overcapMult));
     },
     hasLabels() {
-      return this.$store.state.system.settings.experiment.items.currencyLabel.value && this.showTimer && ((!this.currency.hideGainTag && this.gainTimerAmount > 0) || this.capTimerNeeded !== null);
+      return !this.hideLabels && this.$store.state.system.settings.experiment.items.currencyLabel.value && this.showTimer && ((!this.currency.hideGainTag && this.gainTimerAmount > 0) || this.capTimerNeeded !== null);
     }
   },
   methods: {

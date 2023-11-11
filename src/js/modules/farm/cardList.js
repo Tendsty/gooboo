@@ -211,7 +211,7 @@ export default [
         {"x": -0.25, "y": -0.15, "rotate": -70, "size": 1, "icon": "mdi-chili-medium"}
     ]},
     {id: 21, group: 'fruit', collection: 'organicDyes', reward: [
-        {name: 'farm_butterfly', type: 'addRareDrop', value: 3}
+        {name: 'farm_butterfly', type: 'addRareDrop', value: 2}
     ], color: 'pale-yellow', icons: [
         {"x": -0.7, "y": 0, "rotate": 0, "size": 1.25, "icon": "mdi-flower"},
         {"x": 0.7, "y": 0, "rotate": 0, "size": 1.25, "icon": "mdi-flower"},
@@ -257,7 +257,7 @@ export default [
         {"x": 0, "y": 0.25, "rotate": 0, "size": 0.7, "icon": "mdi-mushroom"}
     ]},
     {id: 25, collection: 'organicDyes', reward: [
-        {name: 'farm_ladybug', type: 'addRareDrop', value: 10}
+        {name: 'farm_ladybug', type: 'addRareDrop', value: 2}
     ], color: 'brown', icons: [
         {"x": 0, "y": 0.1, "rotate": 0, "size": 2, "icon": "mdi-bowl-mix"},
         {"x": -0.25, "y": 0, "rotate": -15, "size": 0.7, "icon": "mdi-bug"},
@@ -274,7 +274,7 @@ export default [
         {"x": -0.2, "y": -0.35, "rotate": 0, "size": 1, "icon": "mdi-fruit-citrus"}
     ]},
     {id: 27, collection: 'organicDyes', reward: [
-        {name: 'farm_bee', type: 'addRareDrop', value: 25}
+        {name: 'farm_bee', type: 'addRareDrop', value: 15}
     ], color: 'pink', icons: [
         {"x": 0.55, "y": -0.55, "rotate": 0, "size": 1.5, "icon": "mdi-bee-flower"},
         {"x": 0, "y": 1, "rotate": 0, "size": 1.4, "icon": "mdi-flower"},

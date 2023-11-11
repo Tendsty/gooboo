@@ -131,7 +131,7 @@ export default {
         },
         dnaRareDropChance: (state) => (name) => {
             const crop = state.crop[name];
-            return (Math.pow(crop.grow / 10, 0.7) + Math.pow(crop.cost * 3, 0.65)) * 0.003 * Math.pow(crop.cost * 1.5 + 1, 0.6);
+            return (Math.pow(crop.grow / 10, 0.7) + Math.pow(crop.cost * 3, 0.65)) * 0.002 * Math.pow(crop.cost * 1.5 + 1, 0.6);
         },
         cropGeneStats: (state, getters, rootState) => (name, fertilizer = null) => {
             let stats = {
@@ -569,7 +569,9 @@ export default {
             }
         },
         getCropExp({ state, getters, commit, dispatch }, o) {
-            commit('updateCropKey', {name: o.crop, key: 'exp', value: state.crop[o.crop].exp + o.value});
+            if (o.value > 0) {
+                commit('updateCropKey', {name: o.crop, key: 'exp', value: state.crop[o.crop].exp + o.value});
+            }
             let leveled = false;
             while (state.crop[o.crop].exp >= getters.expNeeded(o.crop)) {
                 commit('updateCropKey', {name: o.crop, key: 'dna', value: state.crop[o.crop].dna + getters.cropDnaGain(state.crop[o.crop].level)});
@@ -754,12 +756,15 @@ export default {
         buyDnaUpgrade({ state, getters, commit, dispatch }, o) {
             const crop = state.crop[o.crop];
             const level = crop.upgrades[o.name] ?? 0;
-            const cost = getters.upgradeDnaCost(level)
+            const cost = getters.upgradeDnaCost(level);
             if (crop.dna >= cost) {
                 commit('updateCropKey', {name: o.crop, key: 'dna', value: crop.dna - cost});
                 commit('applyCropUpgrade', {crop: o.crop, upgrade: o.name});
+                if (o.name === 'mystery') {
+                    commit('stat/add', {feature: 'farm', name: 'totalMystery', value: 1}, {root: true});
+                }
+                dispatch('updateFieldCaches');
             }
-            dispatch('updateFieldCaches');
         },
         applyEarlyGameBuff({ rootState, dispatch }) {
             if (rootState.unlock.farmDisableEarlyGame.use) {

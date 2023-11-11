@@ -208,7 +208,7 @@ export default {
         ...upgradePremium,
         ...bookVillage
     },
-    note: buildArray(31).map(() => 'g'),
+    note: [...buildArray(31).map(() => 'g'), 'system'],
     init() {
         for (const [key, elem] of Object.entries(job)) {
             store.commit('village/initJob', {name: key, ...elem});

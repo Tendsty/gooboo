@@ -138,6 +138,14 @@
             </v-chip>
           </template>
           <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaDescription`, $formatNum(dnaNext)) }}</div>
+          <div>{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaDuplicate`) }}</div>
+          <div v-if="crop.genesBlocked.length > 0">
+            <span>{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaBlocked`) }}:&nbsp;</span>
+            <span v-for="(blocked, index) in crop.genesBlocked" :key="`gene-blocked-${ blocked }`">
+              <span v-if="index > 0">,&nbsp;</span>
+              <span>{{ $vuetify.lang.t(`$vuetify.farm.gene.${ blocked }`) }}</span>
+            </span>
+          </div>
         </gb-tooltip>
       </div>
       <div v-for="geneName in crop.genes" class="d-flex align-center" :key="`gene-taken-${ geneName }`">

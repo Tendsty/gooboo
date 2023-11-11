@@ -18,7 +18,7 @@ import v1_1_0 from "./modules/migration/v1_1_0";
 import { getDay } from "./utils/date";
 import v1_1_2 from "./modules/migration/v1_1_2";
 import v1_3_0 from "./modules/migration/v1_3_0";
-import { APP_TESTING } from "./constants";
+import { APP_TESTING, LOCAL_STORAGE_NAME } from "./constants";
 import v1_3_4 from "./modules/migration/v1_3_4";
 import v1_3_5 from "./modules/migration/v1_3_5";
 import v1_4_0 from "./modules/migration/v1_4_0";
@@ -41,11 +41,11 @@ const semverCompare = require('semver/functions/compare');
 const modules = [event, mining, village, horde, farm, gallery, gem, achievement, school, card, general, treasure, cryolab];
 
 function checkLocal() {
-    return localStorage.getItem('goobooSavefile');
+    return localStorage.getItem(LOCAL_STORAGE_NAME);
 }
 
 function saveLocal() {
-    localStorage.setItem('goobooSavefile', getSavefile());
+    localStorage.setItem(LOCAL_STORAGE_NAME, getSavefile());
 }
 
 function cleanStore() {
@@ -186,6 +186,11 @@ function loadFile(file) {
             store.commit('system/updateSubfeature', {key, value: elem});
         }
     }
+    if (save.note) {
+        save.note.forEach(name => {
+            Vue.set(store.state.note[name], 'found', true);
+        });
+    }
     if (save.unlock) {
         for (const [key, elem] of Object.entries(save.unlock)) {
             if (store.state.unlock[key] !== undefined) {
@@ -225,6 +230,11 @@ function loadFile(file) {
                 if (elem[1] > 0) {
                     Vue.set(store.state.upgrade.item[key], 'level', elem[1]);
                     store.dispatch('upgrade/apply', {name: key});
+                }
+
+                // Award "lost" notes
+                if (elem[2] > 0 && store.state.upgrade.item[key].note !== null) {
+                    store.dispatch('note/find', store.state.upgrade.item[key].note);
                 }
             }
         }
@@ -277,11 +287,6 @@ function loadFile(file) {
                 code: elem.code
             }});
         }
-    }
-    if (save.note) {
-        save.note.forEach(name => {
-            Vue.set(store.state.note[name], 'found', true);
-        });
     }
     if (save.consumable) {
         for (const [key, elem] of Object.entries(save.consumable)) {

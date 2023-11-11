@@ -8,6 +8,8 @@ export const APP_ENV = 'WEB';
 // enable / disable testing version
 export const APP_TESTING = false;
 
+export const LOCAL_STORAGE_NAME = APP_TESTING ? 'goobooTesting' : 'goobooSavefile';
+
 // time conversion
 export const SECONDS_PER_MINUTE = 60;
 export const SECONDS_PER_HOUR = 3600;
@@ -60,6 +62,7 @@ export const HORDE_HEIRLOOM_MIN_ZONE = 31;
 export const HORDE_KEYS_PER_TOWER = 3;
 export const HORDE_HEIRLOOM_TOWER_FLOORS = 5;
 export const HORDE_HEIRLOOM_CHANCE_PER_NOSTALGIA = 0.001;
+export const HORDE_MASTERY_MINIBOSS_MULT = 0.05;
 
 export const TREASURE_TIER_UPGRADE_MULT = 5;
 export const TREASURE_TIER_DESTROY_MULT = 4;

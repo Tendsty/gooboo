@@ -72,7 +72,7 @@ export default {
     }, effect: [
         {name: 'villageWorker', type: 'base', value: lvl => lvl}
     ]},
-    crane: {cap: 20, icon: 'mdi-crane', requirement() {
+    crane: {cap: 20, icon: 'mdi-crane', note: 'village_31', requirement() {
         return store.state.unlock.villageBuildings2.use;
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.2, lvl) * 45);

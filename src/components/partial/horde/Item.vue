@@ -77,6 +77,11 @@
         </template>
         <div>{{ $vuetify.lang.t(`$vuetify.horde.itemMastery.description`, masteryZoneNeeded) }}</div>
         <div>{{ $vuetify.lang.t(`$vuetify.horde.itemMastery.current`, $formatNum(item.masteryPoint), $formatNum(masteryNeeded)) }}</div>
+        <h3 class="text-center">{{ $vuetify.lang.t(`$vuetify.gooboo.gain`) }}</h3>
+        <template v-if="masteryGainBase > 0">
+          <div>{{ $vuetify.lang.t(`$vuetify.horde.itemMastery.gain`, $formatNum(masteryGainBoss, true), $formatNum(masteryMinibossMult * 100), $formatNum(masteryGainMiniboss, true)) }}</div>
+          <stat-breakdown name="hordeItemMasteryGain" :base="masteryGainBase"></stat-breakdown>
+        </template>
       </gb-tooltip>
     </v-card-subtitle>
     <v-card-text class="px-4 py-0">
@@ -120,7 +125,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import { HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from '../../../js/constants';
+import { HORDE_MASTERY_MINIBOSS_MULT, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from '../../../js/constants';
 import MultName from '../../render/MultName.vue';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
@@ -229,6 +234,18 @@ export default {
     },
     shardCurrent() {
       return Math.max(this.item.masteryLevel - 5, 0) * HORDE_SHARD_INCREMENT + HORDE_SHARD_PER_EQUIP;
+    },
+    masteryGainBase() {
+      return this.$store.getters['horde/masteryBaseGain'](this.name);
+    },
+    masteryGainBoss() {
+      return this.$store.getters['mult/get']('hordeItemMasteryGain', this.masteryGainBase);
+    },
+    masteryGainMiniboss() {
+      return this.masteryGainBase * HORDE_MASTERY_MINIBOSS_MULT;
+    },
+    masteryMinibossMult() {
+      return HORDE_MASTERY_MINIBOSS_MULT;
     }
   },
   methods: {

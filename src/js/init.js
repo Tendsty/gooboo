@@ -57,6 +57,7 @@ function loadGame(file, runPrepare = true) {
         store.commit('system/generatePlayerId');
         store.dispatch('farm/updateFieldCaches');
         store.dispatch('farm/applyEarlyGameBuff');
+        store.dispatch('meta/globalLevelUnlocks');
         advance();
 
         const offlineTime = store.state.system.timestamp - parsedFile.timestamp;

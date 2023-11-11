@@ -167,8 +167,7 @@ export default {
     goldenTools: {requirementBase, requirementStat, requirementValue: 11, price(lvl) {
         return {farm_gold: Math.round(Math.pow(1.25, lvl) * 350)};
     }, effect: [
-        {name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
-        {name: 'farmRareDropChance', type: 'base', value: lvl => lvl * 0.0025}
+        {name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
     ]},
     butterflyWings: {cap: 6, requirementBase, requirementStat, requirementValue: 12, price(lvl) {
         return {farm_butterfly: Math.round(Math.pow(1.35, lvl) * 14)};

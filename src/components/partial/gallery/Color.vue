@@ -6,7 +6,9 @@
 
 <template>
   <div class="bg-tile-default d-flex flex-wrap align-center rounded pa-2" :class="{'premium-glow': isPremium, 'elevation-2': !isPremium}" style="min-height: 68px;">
-    <currency :name="`gallery_${name}`" class="ma-1" :large="name === 'beauty'"></currency>
+    <currency :name="`gallery_${name}`" class="ma-1" :large="name === 'beauty'">
+      <alert-text v-if="showAmountInfo" type="info">{{ $vuetify.lang.t('$vuetify.gallery.colorGainReduced') }}</alert-text>
+    </currency>
     <div class="color-label ma-1 ml-3" :class="`${name}--text text--${themeModifier}`">
       <span v-if="colorGain > 0">+{{ $formatNum(colorGain, true) }}</span>
     </div>
@@ -57,9 +59,10 @@ import { capitalize } from '../../../js/utils/format';
 import Currency from '../../render/Currency.vue';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import AlertText from '../render/AlertText.vue';
 
 export default {
-  components: { Currency, StatBreakdown, PriceTag },
+  components: { Currency, StatBreakdown, PriceTag, AlertText },
   props: {
     name: {
       type: String,
@@ -74,6 +77,9 @@ export default {
   computed: {
     colorGain() {
       return this.$store.getters['mult/get'](`currencyGallery${ this.statBaseName }Gain`);
+    },
+    showAmountInfo() {
+      return this.name !== 'beauty' && this.$store.getters['currency/value'](`gallery_${ this.name }`) > 100;
     },
     drumChance() {
       if (this.name === 'beauty') {

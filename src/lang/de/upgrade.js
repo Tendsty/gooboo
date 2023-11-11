@@ -54,7 +54,7 @@ export default {
     farm_pinwheel: 'Windräder erlauben es dir, mehr seltenen Ertrag zu finden',
     farm_flag: 'Flaggen erhöhen den Ertrag abhängig von der Position',
     farm_premiumGardenGnome: 'Premium-Gartenzwerge bieten die doppelte Goldchance',
-    farm_premiumSprinkler: 'Premium-Rasensprenger verdreifachen das Wachstumstempo',
+    farm_premiumSprinkler: 'Premium-Rasensprenger verdoppeln den Bonus auf Wachstum und Überwuchern',
     farm_premiumLectern: 'Premium-Rednerpulte verfünffachen die Erfahrung',
     farm_premiumPinwheel: 'Premium-Windräder bieten den doppelten Bonus auf seltenen Ertrag',
     farm_premiumFlag: 'Premium-Flaggen bieten den doppelten Ertragsbonus',

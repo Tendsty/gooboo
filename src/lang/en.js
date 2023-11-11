@@ -1677,6 +1677,7 @@ export default {
     itemMastery: {
       name: 'Mastery',
       description: 'Defeat bosses or minibosses at zone {0} or higher with this item equipped to earn mastery points. Higher zone bosses earn more mastery points.',
+      gain: 'Receive {0} mastery points from bosses on this zone, and {1}% of that value ({2}) from minibosses',
       bonuses: 'Raise your mastery level to unlock bonuses for this equipment',
       current: 'This equipment has {0} / {1} mastery points',
       1: 'Keep the equipment after prestige',
@@ -1768,6 +1769,8 @@ export default {
       name: 'Gene',
       pickLevel: 'Pick a level {0} gene',
       dnaDescription: 'You get DNA when this crop reaches a new level and can spend it on gene upgrades. The next crop level gives {0} DNA',
+      dnaDuplicate: 'Genes you choose do not appear on your next prestige. Not picking genes makes all 4 available on the next prestige',
+      dnaBlocked: 'Blocked genes',
       hasUpgrade: 'Has gene upgrade',
       yield: 'Yield',
       gold: 'Gold',
@@ -1827,6 +1830,7 @@ export default {
     auction: 'Auction',
     colorSuffix: 'color',
     openPackage: 'Open',
+    colorGainReduced: 'Additional gains are reduced to square root after 100 color',
     idea: {
       tier: 'Tier {0} idea',
       unlock: 'Unlock idea',
