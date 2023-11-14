@@ -62,7 +62,7 @@ export default {
         },
         baseGoldChance: (state) => (name) => {
             const crop = state.crop[name];
-            return Math.pow(crop.grow, 0.5) * 0.004;
+            return Math.pow(crop.grow, 0.5) * 0.008;
         },
         cropFertilizerCost: (state) => (name) => {
             const crop = state.crop[name];
@@ -846,7 +846,7 @@ export default {
                         const crop = state.crop[cell.crop];
                         const geneStats = getters.cropGeneStats(cell.crop, cell.fertilizer);
                         const sprinklers = (sprinklerRows.find(e => e.premium && e.y === y) ? 2 : (sprinklerRows.find(e => e.y === y) ? 1 : 0));
-                        let growSpeed = sprinklers * 0.1 + 1;
+                        let growSpeed = sprinklers * 0.5 + 1;
                         if (geneStats.tag.includes('farmLonelyGrow')) {
                             const cropCount = state.field.reduce((a, b) => a + b.reduce((c, d) => c + ((d !== null && d.crop === cell.crop) ? 1 : 0), 0), 0);
                             if (cropCount <= 1) {
@@ -855,7 +855,7 @@ export default {
                             }
                         }
                         const growTime = rootGetters['mult/get']('farmGrow', crop.grow + geneStats.mult.farmGrow.baseValue, geneStats.mult.farmGrow.multValue);
-                        const overgrow = rootGetters['mult/get']('farmOvergrow', sprinklers * 2.5 + geneStats.mult.farmOvergrow.baseValue, geneStats.mult.farmOvergrow.multValue);
+                        const overgrow = rootGetters['mult/get']('farmOvergrow', sprinklers * 1.5 + geneStats.mult.farmOvergrow.baseValue, geneStats.mult.farmOvergrow.multValue);
                         commit('updateFieldCache', {x, y, key: 'grow', value: 1 / (growTime / growSpeed)});
                         commit('updateFieldCache', {x, y, key: 'overgrow', value: overgrow > 0 ? (1 / overgrow + 1) : null});
                         commit('updateFieldCache', {x, y, key: 'sprinkler', value: sprinklerRows.find(e => e.premium && e.y === y) ? 2 : (sprinklerRows.find(e => e.y === y) ? 1 : 0)});

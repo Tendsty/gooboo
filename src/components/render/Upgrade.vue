@@ -88,29 +88,33 @@
       <slot></slot>
     </v-card-text>
     <v-card-actions>
-      <gb-tooltip key="upgrade-subtype" v-if="subtype !== null" :min-width="0">
-        <template v-slot:activator="{ on, attrs }">
-          <v-icon class="ma-1" small v-bind="attrs" v-on="on">{{ subtypeIcon }}</v-icon>
-        </template>
-        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.upgrade.subtype.${ subtype }`) }}</div>
-      </gb-tooltip>
-      <gb-tooltip key="upgrade-bought" v-if="upgrade.bought || (upgrade.cap !== null && !upgrade.hideCap)" :min-width="0">
-        <template v-slot:activator="{ on, attrs }">
-          <v-chip
-            :small="$vuetify.breakpoint.xsOnly"
-            :label="$vuetify.breakpoint.xsOnly"
-            class="ma-1"
-            :class="{'px-2': $vuetify.breakpoint.xsOnly, 'reduced-height': $vuetify.breakpoint.smAndUp}"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon class="mr-1">mdi-chevron-double-up</v-icon>
-            <span>{{ upgrade.level }}{{ upgrade.level !== upgrade.bought ? (' (+' + Math.round(upgrade.bought - upgrade.level) + ')') : '' }}</span>
-            <span v-if="upgrade.cap !== null && !upgrade.hideCap">&nbsp;/ {{ upgrade.cap }}</span>
-          </v-chip>
-        </template>
-        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.bought`) }}</div>
-      </gb-tooltip>
+      <div>
+        <gb-tooltip key="upgrade-subtype" v-if="subtype !== null" :min-width="0">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon class="ma-1" small v-bind="attrs" v-on="on">{{ subtypeIcon }}</v-icon>
+          </template>
+          <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.upgrade.subtype.${ subtype }`) }}</div>
+        </gb-tooltip>
+      </div>
+      <div>
+        <gb-tooltip key="upgrade-bought" v-if="upgrade.bought || (upgrade.cap !== null && !upgrade.hideCap)" :min-width="0">
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip
+              :small="$vuetify.breakpoint.xsOnly"
+              :label="$vuetify.breakpoint.xsOnly"
+              class="ma-1"
+              :class="{'px-2': $vuetify.breakpoint.xsOnly, 'reduced-height': $vuetify.breakpoint.smAndUp}"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon class="mr-1">mdi-chevron-double-up</v-icon>
+              <span>{{ upgrade.level }}{{ upgrade.level !== upgrade.bought ? (' (+' + Math.round(upgrade.bought - upgrade.level) + ')') : '' }}</span>
+              <span v-if="upgrade.cap !== null && !upgrade.hideCap">&nbsp;/ {{ upgrade.cap }}</span>
+            </v-chip>
+          </template>
+          <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.bought`) }}</div>
+        </gb-tooltip>
+      </div>
       <v-chip
         key="upgrade-time"
         :small="$vuetify.breakpoint.xsOnly"
@@ -122,20 +126,22 @@
         <v-icon class="mr-1">mdi-timer</v-icon>
         {{ $formatTime(timeNeededNext) }}
       </v-chip>
-      <gb-tooltip key="upgrade-other" v-if="upgrade.raiseOtherCap" :min-width="350" :title-text="$vuetify.lang.t(`$vuetify.upgrade.${ upgrade.raiseOtherCap }`)">
-        <template v-slot:activator="{ on, attrs }">
-          <v-icon class="mx-1" v-bind="attrs" v-on="on">mdi-book-arrow-up</v-icon>
-        </template>
-        <div class="mt-n1 mb-2 text-center">
-          <v-icon small class="mr-1">mdi-chevron-double-up</v-icon>
-          <span>{{ otherUpgrade.level }}{{ otherUpgrade.level !== otherUpgrade.bought ? (' (+' + Math.round(otherUpgrade.bought - otherUpgrade.level) + ')') : '' }}</span>
-          <span v-if="otherUpgrade.cap !== null && !otherUpgrade.hideCap">&nbsp;/ {{ otherUpgrade.cap }}</span>
-        </div>
-        <display-row v-for="(item, key) in otherDisplay" class="mt-0 mx-1" :key="`other-display-${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
-        <div class="d-flex flex-wrap mt-0">
-          <price-tag class="ma-1" v-for="(amount, currency, index) in otherPrice" :key="'other-price-' + currency + '-' + index" :currency="currency" :amount="amount"></price-tag>
-        </div>
-      </gb-tooltip>
+      <div>
+        <gb-tooltip key="upgrade-other" v-if="upgrade.raiseOtherCap" :min-width="350" :title-text="$vuetify.lang.t(`$vuetify.upgrade.${ upgrade.raiseOtherCap }`)">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon class="mx-1" v-bind="attrs" v-on="on">mdi-book-arrow-up</v-icon>
+          </template>
+          <div class="mt-n1 mb-2 text-center">
+            <v-icon small class="mr-1">mdi-chevron-double-up</v-icon>
+            <span>{{ otherUpgrade.level }}{{ otherUpgrade.level !== otherUpgrade.bought ? (' (+' + Math.round(otherUpgrade.bought - otherUpgrade.level) + ')') : '' }}</span>
+            <span v-if="otherUpgrade.cap !== null && !otherUpgrade.hideCap">&nbsp;/ {{ otherUpgrade.cap }}</span>
+          </div>
+          <display-row v-for="(item, key) in otherDisplay" class="mt-0 mx-1" :key="`other-display-${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
+          <div class="d-flex flex-wrap mt-0">
+            <price-tag class="ma-1" v-for="(amount, currency, index) in otherPrice" :key="'other-price-' + currency + '-' + index" :currency="currency" :amount="amount"></price-tag>
+          </div>
+        </gb-tooltip>
+      </div>
       <v-spacer></v-spacer>
       <v-btn key="upgrade-buy-max" small v-if="!isMax" color="primary" :disabled="!canAfford || disabled" @click="buyMax">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
       <v-btn key="upgrade-buy" v-if="!isMax" :data-cy="`upgrade-${ name }-buy`" color="primary" :disabled="!canAfford || disabled" @click="buy">{{ $vuetify.lang.t(upgradeTranslation) }}</v-btn>

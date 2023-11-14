@@ -22,8 +22,10 @@ import { APP_TESTING, LOCAL_STORAGE_NAME } from "./constants";
 import v1_3_4 from "./modules/migration/v1_3_4";
 import v1_3_5 from "./modules/migration/v1_3_5";
 import v1_4_0 from "./modules/migration/v1_4_0";
+import v1_4_1 from "./modules/migration/v1_4_1";
 
 const migrations = {
+    '1.4.1': v1_4_1,
     '1.4.0': v1_4_0,
     '1.3.5': v1_3_5,
     '1.3.4': v1_3_4,

@@ -24,6 +24,7 @@ export default {
             schoolArtSubfeature: 440,
             // generalOrladeeSubfeature: 500,
             miningGasSubfeature: 625,
+            // villageCraftingSubfeature: 800,
         },
         globalLevelNotes: {
             meta_0: 5,

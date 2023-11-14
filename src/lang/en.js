@@ -222,6 +222,7 @@ export default {
     },
     village: {
       0: 'Workers',
+      1: 'Crafters guild',
     },
     horde: {
       0: 'Equipment',
@@ -399,7 +400,7 @@ export default {
     expDescription2: 'Experience gain is based on your best prestige.',
     expNext: 'Next level effect:',
     expNoGain: 'To gain experience for this feature, gain some prestige currency first',
-    cropExp: 'Gain up to this amount of experience for each crop (base grow time and gold cost reduce experience gained)',
+    cropExp: 'Gain up to this amount of experience for each crop (base grow time and gold cost reduce experience gained). This is then multiplied by the difference between highest and current crop level (crops at their highest level get no experience)',
     frozenFeature: {
       title: 'Feature is frozen',
       description: 'This feature is frozen by the cryolab. You will not gain any progress in this feature, but gain prestige currency automatically.'
@@ -1329,7 +1330,7 @@ export default {
     taxpayersDescription1: 'All working citizens consume up to {0} of each food per second and pay taxes equal to {1} ',
     taxpayersDescription2: ' per food item consumed.',
     happinessDescription: 'Happiness modifies all resource gain (except gold coins and faith)',
-    powerDescription: 'Gain a +50% increase to all material and food gain for each power. Your current power multiplies material and food gain by x{0}',
+    powerDescription: 'Gain a +20% increase to all material and food gain for each power. Your current power multiplies material and food gain by x{0}',
     pollutionDescription: 'Reduce happiness by 1% for each point of pollution. If you have more pollution than tolerance, the happiness penalty increases by 1% per pollution over your tolerance. Your next point of pollution would reduce happiness by {0}%',
     lootDescription: 'Find new loot every time the bar fills',
     lootRarity: 'Loot quality determines your loot rarity distribution:',
@@ -1346,8 +1347,9 @@ export default {
         2: ' and increase the cost of the next sacrifice. Sacrifice cost resets on prestige.'
       },
       sacrifice: 'Sacrifice',
-      notUnlocked: 'This offering is not unlocked yet. You can still sacrifice and spend offerings, but the resource capacity won\'t be applied until you unlock the offering',
-      notUnlockedHint: 'This offering is not unlocked, so the resource capacity does not apply yet'
+      notUnlocked: 'This offering is not unlocked yet. You can still spend offerings, but not sacrifice and the resource capacity won\'t be applied until you unlock the offering',
+      notUnlockedHint: 'This offering is not unlocked, so the resource capacity does not apply yet',
+      autoGen: 'Generate 1% of your offerings gained this run ({0}) per hour'
     },
     material: 'Material',
     food: 'Food',
@@ -1805,8 +1807,8 @@ export default {
       },
       sprinkler: {
         name: 'Sprinkler',
-        description: 'Crops in the same row grow +10% faster and have +250% overgrow',
-        descriptionPremium: 'Crops in the same row grow +20% faster and have +500% overgrow',
+        description: 'Crops in the same row grow +50% faster and have +150% overgrow',
+        descriptionPremium: 'Crops in the same row grow +100% faster and have +300% overgrow',
       },
       lectern: {
         name: 'Lectern',
