@@ -78,7 +78,7 @@ export default {
       }
     },
     powerBonus() {
-      return this.power * 0.5 + 1;
+      return this.power * 0.2 + 1;
     },
     nextPollutionPenalty() {
       const tolerance = this.$store.getters['mult/get']('villagePollutionTolerance');

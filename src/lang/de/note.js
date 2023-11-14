@@ -127,7 +127,7 @@ export default {
     farm_5: 'Hole Gartenzwerg. Setze in Garten. Finde seltene Währung.',
     farm_6: 'Ernte bestimmte Pflanzen. Bekomme seltenen Ertrag.',
     farm_7: 'Vorsicht mit Kapazität. Harte Grenze für seltenen Ertrag.',
-    farm_8: 'Platziere Rasensprenger. Reihe wächst schneller. Doppeltes Tempo.',
+    farm_8: 'Platziere Rasensprenger. Reihe wächst schneller.',
     farm_9: 'Blütenblätter besonders. Erhöhen Blumenertrag. Horte sie.',
     farm_10: 'Käfer ekelhaft. Keiner mag sie. Leider trotzdem nötig.',
     farm_11: 'Wunderschöne Flügel. Wie kleine zerbrechliche Vögel.',

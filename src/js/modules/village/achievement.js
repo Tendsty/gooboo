@@ -12,7 +12,7 @@ export default {
     metal: {value: () => store.state.stat.village_metalMax.total, milestones: lvl => Math.pow(10, lvl) * 5000, relic: {3: 'screwdriver'}},
     coin: {value: () => store.state.stat.village_coin.total, milestones: lvl => Math.pow(16, lvl) * 2000, relic: {4: 'treasureChest'}},
     water: {value: () => store.state.stat.village_waterMax.total, milestones: lvl => Math.pow(20, lvl) * 5000, relic: {3: 'rose'}},
-    knowledge: {value: () => store.state.stat.village_knowledgeMax.total, milestones: lvl => getSequence(2, lvl + 1) * 250, relic: {2: 'globe'}},
+    knowledge: {value: () => store.state.stat.village_knowledgeMax.total, milestones: lvl => Math.round(getSequence(2, lvl + 1) * Math.pow(1.2, Math.max(lvl - 10, 0)) * 250), relic: {2: 'globe'}},
     advancedResources: {value: () => Math.max(
         store.state.stat.village_hardwoodMax.total,
         store.state.stat.village_gemMax.total

@@ -333,6 +333,31 @@ export default {
     274: 'Added 2 new system notes to explain game mechanics',
     275: 'Equipment now shows mastery point gain in its tooltips',
     276: 'Colors now show a hint when gains are reduced at higher numbers',
+
+    // v1.4.1
+    277: 'Depth dweller minimum speed',
+    278: 'This should be an increase in speed for most players, especially in the early game',
+    279: 'While the last update did reach the goal of preventing players from reaching the end of content too fast, players in the early tiers were hit by the collateral damage as well. These changes aim to restore the familiar village experience for earlier tiers (1-4), while keeping the current village speed for later content (late tier 5 or higher)',
+    280: 'Most resource gains were raised to their old values or the average between old and new values',
+    281: 'Upgrades that were reduced from exponential to linear scaling now use a hybrid formula. The final upgrade values should be about 75% of the old ones',
+    282: 'Maximum level of upgrades unlocked from the "School" building',
+    283: 'The "Basics" upgrade now has an increased effect on plant fiber',
+    284: 'You can no longer sacrifice resources before unlocking the associated offering',
+    285: 'Offerings now generate over time based on the amount of offerings gained on the current run',
+    286: 'Tier 5 building cost increased to 1.5x - 5x',
+    287: 'Tier 6 building cost increased to 6x - 20x',
+    288: 'Tier 7 building cost increased to 22.5x - 45x',
+    289: 'Resource gain increase per power',
+    290: 'Fixed a bug that caused building UI elements to appear in the wrong place',
+    291: 'Fixed upgrades not being immediately visible after unlocking them',
+    292: 'Reduced the grow time of most crops, especially those with a high grow time (new grow times are between 1 hour and 2 days)',
+    293: 'Sprinkler overgrow increase',
+    294: 'Increased most fertilizer effects',
+    295: 'Increased the effect of the HO-0039 and HO-0040 cards',
+    296: 'Material overcap gain',
+    297: 'Tier 4 offerings now increase their cost with each purchase',
+    298: 'Added a text shadow to the achievement message if it contains relics',
+    299: 'Increased the requirement for the "Mastermind" achievement after level 10',
   },
   v: {
     1: {
@@ -341,6 +366,7 @@ export default {
       2: 'Eco-friendly',
       3: 'Neverending bosses',
       4: 'Slow and steady',
+      5: '???',
     }
   }
 }

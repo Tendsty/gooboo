@@ -1,5 +1,5 @@
 import store from "../../store"
-import { MINING_COAL_DEPTH, MINING_DWELLER_OVERCAP_MULT, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_ORE_BREAK, MINING_RARE_DROP_BREAK, MINING_SALT_DEPTH, MINING_SCRAP_BREAK, MINING_SMOKE_BREAK, MINING_SULFUR_DEPTH } from "../constants";
+import { MINING_COAL_DEPTH, MINING_DWELLER_OVERCAP_MULT, MINING_DWELLER_OVERFLOW, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_ORE_BREAK, MINING_RARE_DROP_BREAK, MINING_SALT_DEPTH, MINING_SCRAP_BREAK, MINING_SMOKE_BREAK, MINING_SULFUR_DEPTH } from "../constants";
 import { buildArray } from "../utils/array";
 import { buildNum } from "../utils/format";
 import achievement from "./mining/achievement";
@@ -222,8 +222,8 @@ export default {
             if (store.state.stat[`mining_depthDweller${subfeature}`].value < dwellerLimit) {
                 // Regular dweller calculation
                 const newDweller = Math.min(
-                    0.1 + dwellerLimit -
-                    (0.1 + dwellerLimit - store.state.stat[`mining_depthDweller${subfeature}`].value) *
+                    MINING_DWELLER_OVERFLOW + dwellerLimit -
+                    (MINING_DWELLER_OVERFLOW + dwellerLimit - store.state.stat[`mining_depthDweller${subfeature}`].value) *
                     Math.pow(1 - dwellerSpeed, seconds), dwellerLimit
                 );
                 if (newDweller >= dwellerLimit) {
@@ -238,7 +238,7 @@ export default {
             if (timeLeft > 0 && dwellerLimit > 0) {
                 // Dweller overcap
                 let newDweller = store.state.stat[`mining_depthDweller${subfeature}`].value;
-                let dwellerProgress = dwellerSpeed * 0.1 * timeLeft;
+                let dwellerProgress = dwellerSpeed * MINING_DWELLER_OVERFLOW * timeLeft;
                 while (dwellerProgress > 0) {
                     const breakpointCount = Math.floor(10 * (newDweller + 0.000000000001) / dwellerLimit) - 10;
                     const targetAmount = ((breakpointCount + 1) / 10) * dwellerLimit;
@@ -280,7 +280,7 @@ export default {
         miningPickaxeCraftingPower: {},
         miningPickaxeCraftingQuality: {},
         miningOreQuality: {baseValue: 1},
-        miningDepthDwellerSpeed: {baseValue: 0.00008},
+        miningDepthDwellerSpeed: {baseValue: 0.000065},
         miningDepthDwellerMax: {display: 'percent', baseValue: 0.1},
         miningResinMax: {round: true, baseValue: 1},
         currencyMiningHeliumIncrement: {display: 'percent'},

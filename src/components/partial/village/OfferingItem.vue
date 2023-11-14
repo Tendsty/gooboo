@@ -23,11 +23,11 @@
       </v-chip>
       <v-spacer></v-spacer>
       <price-tag class="ma-1" :currency="`village_${name}`" :amount="sacrificeCost"></price-tag>
-      <v-btn small class="ma-1" color="primary" :disabled="!canAffordSacrifice || disabled" @click="buySacrifice(true)">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
+      <v-btn small class="ma-1" color="primary" :disabled="!canAffordSacrifice || !isUnlocked || disabled" @click="buySacrifice(true)">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
       <gb-tooltip>
         <template v-slot:activator="{ on, attrs }">
           <div v-bind="attrs" v-on="on">
-            <v-btn class="ma-1" color="primary" :disabled="!canAffordSacrifice || disabled" @click="buySacrifice(false)">{{ $vuetify.lang.t('$vuetify.village.offering.sacrifice') }}</v-btn>
+            <v-btn class="ma-1" color="primary" :disabled="!canAffordSacrifice || !isUnlocked || disabled" @click="buySacrifice(false)">{{ $vuetify.lang.t('$vuetify.village.offering.sacrifice') }}</v-btn>
           </div>
         </template>
         <div class="mt-0">
@@ -47,7 +47,7 @@
         {{ offering.upgradeBought }}
       </v-chip>
       <v-spacer></v-spacer>
-      <price-tag class="ma-1" currency="village_offering" :amount="offering.amount"></price-tag>
+      <price-tag class="ma-1" currency="village_offering" :amount="upgradeCost"></price-tag>
       <v-btn small class="ma-1" color="primary" :disabled="!canAffordUpgrade || disabled" @click="buyUpgrade(true)">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
       <gb-tooltip>
         <template v-slot:activator="{ on, attrs }">
@@ -94,11 +94,14 @@ export default {
     sacrificeCost() {
       return this.offering.cost(this.offering.offeringBought);
     },
+    upgradeCost() {
+      return this.offering.amount + this.offering.increment * this.offering.upgradeBought;
+    },
     canAffordSacrifice() {
       return this.$store.getters['currency/value']('village_' + this.name) >= this.sacrificeCost;
     },
     canAffordUpgrade() {
-      return this.$store.getters['currency/value']('village_offering') >= this.offering.amount;
+      return this.$store.getters['currency/value']('village_offering') >= this.upgradeCost;
     },
     capName() {
       return 'currencyVillage' + capitalize(this.name) + 'Cap';

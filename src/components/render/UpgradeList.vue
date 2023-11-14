@@ -182,6 +182,8 @@ export default {
     pages(newVal) {
       if (this.page > newVal) {
         this.page = Math.max(newVal, 1);
+      } else if (this.page <= 0 && newVal > 0) {
+        this.page = 1;
       }
     }
   }

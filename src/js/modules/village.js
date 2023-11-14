@@ -52,6 +52,17 @@ export default {
             });
         }
 
+        // Auto-gain 1% of offerings gained this run
+        const offeringGain = store.getters['village/offeringPerSecond'];
+        if (offeringGain > 0) {
+            let newOffering = store.state.village.offeringGen + offeringGain * seconds;
+            if (newOffering > 0) {
+                store.dispatch('currency/gain', {feature: 'village', name: 'offering', amount: Math.floor(newOffering)});
+                newOffering -= Math.floor(newOffering);
+            }
+            store.commit('village/updateKey', {key: 'offeringGen', value: newOffering});
+        }
+
         const joyGain = store.getters['village/joyGainBase'];
         if (joyGain > 0) {
             store.dispatch('currency/gain', {feature: 'village', name: 'joy', gainMult: true, amount: joyGain * seconds});
@@ -90,7 +101,8 @@ export default {
             'Bartering', 'Sparks',
         ].map(elem => 'villageUpgrade' + elem),
         ...buildArray(4).map(elem => 'villageOffering' + (elem + 1)),
-        'villageLoot'
+        'villageLoot',
+        'villageCraftingSubfeature'
     ],
     stat: {
         maxBuilding: {},
@@ -101,6 +113,7 @@ export default {
         totalOffering: {},
         minHappiness: {},
         bestOffering: {},
+        offeringAmount: {},
         highestPower: {},
     },
     mult: {
@@ -163,16 +176,16 @@ export default {
         }, timerIsEstimate: true},
 
         // Basic material
-        plantFiber: {subtype: 'material', color: 'green', icon: 'mdi-leaf', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
-        wood: {subtype: 'material', color: 'wooden', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
-        stone: {subtype: 'material', color: 'grey', icon: 'mdi-chart-bubble', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
-        metal: {subtype: 'material', color: 'lighter-grey', icon: 'mdi-gold', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
-        water: {subtype: 'material', color: 'blue', icon: 'mdi-water', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
-        glass: {subtype: 'material', color: 'cyan', icon: 'mdi-mirror', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
-        hardwood: {subtype: 'material', color: 'cherry', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
-        gem: {subtype: 'material', color: 'pink', icon: 'mdi-diamond', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
-        oil: {subtype: 'material', color: 'pale-green', icon: 'mdi-oil', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 800}},
-        marble: {subtype: 'material', color: 'pale-blue', icon: 'mdi-mirror-rectangle', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 200}},
+        plantFiber: {subtype: 'material', overcapMult: 0.4, color: 'green', icon: 'mdi-leaf', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
+        wood: {subtype: 'material', overcapMult: 0.4, color: 'wooden', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
+        stone: {subtype: 'material', overcapMult: 0.4, color: 'grey', icon: 'mdi-chart-bubble', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
+        metal: {subtype: 'material', overcapMult: 0.4, color: 'lighter-grey', icon: 'mdi-gold', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        water: {subtype: 'material', overcapMult: 0.4, color: 'blue', icon: 'mdi-water', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        glass: {subtype: 'material', overcapMult: 0.4, color: 'cyan', icon: 'mdi-mirror', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        hardwood: {subtype: 'material', overcapMult: 0.4, color: 'cherry', icon: 'mdi-tree', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        gem: {subtype: 'material', overcapMult: 0.4, color: 'pink', icon: 'mdi-diamond', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 1000}},
+        oil: {subtype: 'material', overcapMult: 0.4, color: 'pale-green', icon: 'mdi-oil', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 800}},
+        marble: {subtype: 'material', overcapMult: 0.4, color: 'pale-blue', icon: 'mdi-mirror-rectangle', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 200}},
 
         // FOOD
         grain: {subtype: 'food', color: 'yellow', icon: 'mdi-barley', gainMult: {display: 'perSecond'}, showGainMult: true},
@@ -199,7 +212,9 @@ export default {
 
         // Prestige currency
         blessing: {type: 'prestige', alwaysVisible: true, color: 'yellow', icon: 'mdi-flare'},
-        offering: {type: 'prestige', color: 'orange-red', icon: 'mdi-candle'}
+        offering: {type: 'prestige', color: 'orange-red', icon: 'mdi-candle', gainMult: {display: 'perHour'}, showGainMult: true, gainTimerFunction() {
+            return store.getters['village/offeringPerSecond'] * SECONDS_PER_HOUR;
+        }, timerIsEstimate: true}
     },
     upgrade: {
         ...upgradeBuilding,
@@ -253,6 +268,9 @@ export default {
         if (store.state.village.explorerProgress > 0) {
             obj.explorerProgress = store.state.village.explorerProgress;
         }
+        if (store.state.village.offeringGen > 0) {
+            obj.offeringGen = store.state.village.offeringGen;
+        }
 
         return obj;
     },
@@ -282,6 +300,9 @@ export default {
         }
         if (data.explorerProgress !== undefined) {
             store.commit('village/updateKey', {key: 'explorerProgress', value: data.explorerProgress});
+        }
+        if (data.offeringGen !== undefined) {
+            store.commit('village/updateKey', {key: 'offeringGen', value: data.offeringGen});
         }
         store.dispatch('village/applyAllJobs');
         store.dispatch('village/applyOfferingEffect');

@@ -3,7 +3,7 @@
 // OFFLINE hides auto-updates and shows support links (web-based)
 // DESKTOP hides auto-updates and shows support links (windows app)
 // STEAM hides auto-updates and hides support links
-export const APP_ENV = 'WEB';
+export const APP_ENV = 'DESKTOP';
 
 // enable / disable testing version
 export const APP_TESTING = false;
@@ -35,6 +35,7 @@ export const MINING_ENHANCEMENT_FINAL = 10;
 export const MINING_ENHANCEMENT_BAR_AMOUNT = 10;
 export const MINING_ENHANCEMENT_CHANCE_EXPONENT = 0.5;
 export const MINING_DWELLER_OVERCAP_MULT = 0.9;
+export const MINING_DWELLER_OVERFLOW = 5;
 
 export const VILLAGE_COINS_PER_FOOD = 0.25;
 export const VILLAGE_JOY_MIN_HAPPINESS = 1.25;

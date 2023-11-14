@@ -363,9 +363,9 @@ export default [
         {"x": 0.8, "y": 0, "rotate": 0, "size": 2, "icon": "mdi-candle"}
     ]},
     {id: 39, collection: 'againstTheCorruption', reward: [
-        {name: 'hordeFirstStrike', type: 'base', value: 7.5},
+        {name: 'hordeFirstStrike', type: 'base', value: 12.5},
         {name: 'hordeBossRequirement', type: 'base', value: -10},
-        {name: 'hordeRespawn', type: 'mult', value: 0.25},
+        {name: 'hordeRespawn', type: 'mult', value: 0.2},
         {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'cyan', icons: [
         {"x": 0.3, "y": -0.1, "rotate": 0, "size": 2, "icon": "mdi-vacuum"},
@@ -374,7 +374,7 @@ export default [
         {"x": 0.6, "y": 0.65, "rotate": 150, "size": 1, "icon": "mdi-liquid-spot"}
     ]},
     {id: 40, collection: 'againstTheCorruption', reward: [
-        {name: 'hordeHeirloomChance', type: 'base', value: 0.1},
+        {name: 'hordeHeirloomChance', type: 'base', value: 0.15},
         {name: 'hordeNostalgia', type: 'mult', value: 2},
         {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'light-green', icons: [

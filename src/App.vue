@@ -33,16 +33,16 @@
 .theme--light .bg-tile-background {
   background-color: #FFFFFF80;
 }
-.css-shadow-2 .balloon-text-black, .css-shadow-2.theme--dark .balloon-text-dynamic {
+.css-shadow-2 .balloon-text-black, .css-shadow-2.theme--dark .balloon-text-dynamic, .css-shadow-2.theme--light .balloon-text-inverted {
   text-shadow: -1px 0 0 #000000, 1px 0 0 #000000, 0 -1px 0 #000000, 0 1px 0 #000000, 1px 1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000, -1px -1px 0 #000000, 0 0 1px #000000, 0 0 2px #000000, 0 0 3px #000000, 0 0 4px #000000;
 }
-.css-shadow-2 .balloon-text-white, .css-shadow-2.theme--light .balloon-text-dynamic {
+.css-shadow-2 .balloon-text-white, .css-shadow-2.theme--light .balloon-text-dynamic, .css-shadow-2.theme--dark .balloon-text-inverted {
   text-shadow: -1px 0 0 #FFFFFF, 1px 0 0 #FFFFFF, 0 -1px 0 #FFFFFF, 0 1px 0 #FFFFFF, 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 0 0 1px #FFFFFF, 0 0 2px #FFFFFF, 0 0 3px #FFFFFF, 0 0 4px #FFFFFF;
 }
-.css-shadow-1 .balloon-text-black, .css-shadow-1.theme--dark .balloon-text-dynamic {
+.css-shadow-1 .balloon-text-black, .css-shadow-1.theme--dark .balloon-text-dynamic, .css-shadow-1.theme--light .balloon-text-inverted {
   text-shadow: -2px 0 0 #000000, -1px -1px 0 #000000, 0 -2px 0 #000000, 1px -1px 0 #000000, 2px 0 0 #000000, 1px 1px 0 #000000, 0 2px 0 #000000, -1px 1px 0 #000000;
 }
-.css-shadow-1 .balloon-text-white, .css-shadow-1.theme--light .balloon-text-dynamic {
+.css-shadow-1 .balloon-text-white, .css-shadow-1.theme--light .balloon-text-dynamic, .css-shadow-1.theme--dark .balloon-text-inverted {
   text-shadow: -2px 0 0 #FFFFFF, -1px -1px 0 #FFFFFF, 0 -2px 0 #FFFFFF, 1px -1px 0 #FFFFFF, 2px 0 0 #FFFFFF, 1px 1px 0 #FFFFFF, 0 2px 0 #FFFFFF, -1px 1px 0 #FFFFFF;
 }
 .selected-primary {
