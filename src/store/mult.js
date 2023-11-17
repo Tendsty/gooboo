@@ -286,7 +286,7 @@ export default {
                 }
             } else if (name === 'villagePower') {
                 const power = getters.get('villagePower');
-                const value = power * 0.5 + 1;
+                const value = power * 0.2 + 1;
                 if (value > 1) {
                     dispatch('setMult', {name: 'villageMaterialGain', key: 'villagePower', value});
                     dispatch('setMult', {name: 'villageFoodGain', key: 'villagePower', value});

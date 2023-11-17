@@ -333,6 +333,31 @@ export default {
     274: '2 neue Systemnotizen wurden hinzugefügt, um Spielmechaniken zu erklären',
     275: 'Ausrüstung zeigt nun die erhaltenen Meisterungspunkte im Tooltip',
     276: 'Farben zeigen nun einen Hinweis, wenn Einkommen durch hohe Menge reduziert wird',
+
+    // v1.4.1
+    277: 'Tiefengräber-Minimaltempo',
+    278: 'Das sollte den Tiefengräber für die meisten Spieler beschleunigen, besonders im frühen Spielverlauf',
+    279: 'Während das letzte Update das Ziel erreicht hat, Spieler vom vorzeitigen Erreichen des Inhaltsendes abzuhalten, wurden Spieler in den frühen Stufen ebenfalls von den Kollateralschäden getroffen. Diese Änderungen sollten für Spieler in den früheren Stufen (1-4) die bekannte Dorferfahrung wiederherstellen, und gleichzeitig das aktuelle Dorftempo für spätere Inhalte (späte Stufe 5 oder höher) beibehalten',
+    280: 'Die meisten Rohstoffeinkommen wurden auf ihren alten Wert oder auf den Mittelwert zwischen altem und neuem Wert angehoben',
+    281: 'Verbesserungen, die von exponentiellen auf linearen Anstieg reduziert wurden nutzen nun eine Mischformel. Die letzten Verbesserungswerte sollten etwa 75% des Ursprungswertes betragen',
+    282: 'Maximalstufe von Verbesserungen, die durch das "Schule"-Gebäude freigeschaltet werden',
+    283: 'Die "Grundlagen"-Verbesserung hat nun einen erhöhten Effekt auf Pflanzenfasern',
+    284: 'Du kannst nun nicht mehr Ressourcen opfern, bevor die zugehörige Opfergabe freigeschaltet wird',
+    285: 'Opfergaben werden nun mit der Zeit generiert, abhängig von der Menge an erzeugten Opfergaben in diesem Durchlauf',
+    286: 'Kosten von Stufe-5-Gebäuden auf 1.5x - 5x angehoben',
+    287: 'Kosten von Stufe-6-Gebäuden auf 6x - 20x angehoben',
+    288: 'Kosten von Stufe-7-Gebäuden auf 22.5x - 45x angehoben',
+    289: 'Rohstoffeinkommen-Anstieg pro Energie',
+    290: 'Ein Fehler wurde behoben, bei dem UI-Elemente von Gebäuden an der falschen Stelle auftauchten',
+    291: 'Verbesserungen sind jetzt sofort sichtbar, nachdem sie freigeschaltet werden',
+    292: 'Die Wachstumszeit der meisten Pflanzen wurde reduziert, besonders von denen mit hoher Wachstumszeit (neue Wachstumszeiten liegen zwischen 1 Stunde und 2 Tagen)',
+    293: 'Überwuchern durch Rasensprenger',
+    294: 'Die meisten Dünger wurden verstärkt',
+    295: 'Die Karten HO-0039 und HO-0040 wurden verstärkt',
+    296: 'Materialeinkommen bei Überkapazität',
+    297: 'Kosten von Stufe-4-Opfergaben steigen nun mit jedem Kauf',
+    298: 'Die Erfolgsnachricht hat jetzt einen Textschatten, wenn ein Relikt enthalten ist',
+    299: 'Die Anforderungen für den "Genie"-Erfolg wurden ab Stufe 10 erhöht',
   },
   v: {
     1: {
@@ -341,6 +366,7 @@ export default {
       2: 'Der Umwelt zuliebe',
       3: 'Endlose Bosse',
       4: 'Langsam und stetig',
+      5: '???',
     }
   }
 }

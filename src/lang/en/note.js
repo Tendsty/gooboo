@@ -127,7 +127,7 @@ export default {
     farm_5: 'Get gnomes. Place on farm. Find rare currency.',
     farm_6: 'Harvest specific crops. Get rare drops.',
     farm_7: 'Careful about capacity. Hard limit for rare drops.',
-    farm_8: 'Place sprinkler. Row grows faster. Double speed.',
+    farm_8: 'Place sprinkler. Row grows faster.',
     farm_9: 'Petals special. Improve flower yield. Hoard them.',
     farm_10: 'Bugs disgusting. Nobody likes them. Unfortunately still needed.',
     farm_11: 'Beautiful wings. Like little fragile birds.',

@@ -9,6 +9,7 @@ const data = {
     ],
     village: [
         {village_blessing: 'village_bestPrestige'},
+        {village_blessing: 'village_bestPrestige'},
     ],
     horde: [
         {horde_soulEmpowered: 'horde_bestPrestige'},
@@ -31,6 +32,7 @@ const effect = {
             {name: 'currencyVillageFaithGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
             {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
         ],
+        [],
     ],
     horde: [
         [

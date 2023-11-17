@@ -49,7 +49,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { MINING_DWELLER_OVERCAP_MULT } from '../../../js/constants';
+import { MINING_DWELLER_OVERCAP_MULT, MINING_DWELLER_OVERFLOW } from '../../../js/constants';
 import PriceTag from '../../render/PriceTag.vue';
 import StatusTemplate from '../prestige/StatusTemplate.vue';
 import AlertText from '../render/AlertText.vue';
@@ -130,7 +130,7 @@ export default {
         current += 0.5;
         const currentFloored = Math.floor(current * 2) / 2;
         const bonusPercent = baseValue > 0 ? (currentFloored / maxValue) : 1;
-        const dwellerSpeed = 0.1 * this.$store.getters['mult/get']('miningDepthDwellerSpeed') / max;
+        const dwellerSpeed = MINING_DWELLER_OVERFLOW * this.$store.getters['mult/get']('miningDepthDwellerSpeed') / max;
         let currentProgress = current - 0.5;
         while (currentProgress < currentFloored) {
           const breakpointCount = Math.floor(10 * (currentProgress + 0.000000000001) / max) - 10;

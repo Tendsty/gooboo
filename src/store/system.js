@@ -7,7 +7,7 @@ import seedrandom from "seedrandom";
 export default {
     namespaced: true,
     state: {
-        version: '1.4.0',
+        version: '1.4.1',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -23,7 +23,7 @@ export default {
             },
             village: {
                 unlock: 'villageFeature',
-                subfeatures: [],
+                subfeatures: ['villageCraftingSubfeature'],
                 currentSubfeature: 0,
                 icon: 'mdi-home-group',
                 offlineStat: ['village_maxBuilding'],

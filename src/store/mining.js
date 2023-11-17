@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { MINING_COAL_DEPTH, MINING_CRAFTING_COMPRESSION, MINING_ENHANCEMENT_BARS, MINING_ENHANCEMENT_FINAL, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_SALT_DEPTH, MINING_SMELTERY_TEMPERATURE_SPEED, MINING_SULFUR_DEPTH } from "../js/constants";
+import { MINING_COAL_DEPTH, MINING_CRAFTING_COMPRESSION, MINING_DWELLER_OVERFLOW, MINING_ENHANCEMENT_BARS, MINING_ENHANCEMENT_FINAL, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_SALT_DEPTH, MINING_SMELTERY_TEMPERATURE_SPEED, MINING_SULFUR_DEPTH } from "../js/constants";
 import { buildNum, capitalize } from "../js/utils/format";
 import { deltaLinear, logBase } from "../js/utils/math";
 import { randomFloat } from "../js/utils/random";
@@ -315,7 +315,7 @@ export default {
                 return null;
             }
             const dwellerSpeed = rootGetters['mult/get']('miningDepthDwellerSpeed') / dwellerLimit;
-            return logBase((amount - 0.1 - dwellerLimit) / -(0.1 + dwellerLimit - rootState.stat[`mining_depthDwellerCap${rootState.system.features.mining.currentSubfeature}`].value), 1 - dwellerSpeed);
+            return logBase((amount - MINING_DWELLER_OVERFLOW - dwellerLimit) / -(MINING_DWELLER_OVERFLOW + dwellerLimit - rootState.stat[`mining_depthDwellerCap${rootState.system.features.mining.currentSubfeature}`].value), 1 - dwellerSpeed);
         }
     },
     mutations: {
@@ -481,7 +481,6 @@ export default {
             commit('system/updateSubfeature', {key: 'mining', value: subfeature}, {root: true});
             commit('updateKey', {key: 'durability', value: getters.currentDurability});
             dispatch('upgrade/reset', {feature: 'mining', subfeature, type: 'regular'}, {root: true});
-            dispatch('upgrade/reset', {feature: 'mining', subfeature, type: 'smeltery'}, {root: true});
             dispatch('currency/reset', {feature: 'mining', type: 'regular'}, {root: true});
             dispatch('stat/reset', {feature: 'mining', type: 'regular'}, {root: true});
             dispatch('card/activateCards', 'mining', {root: true});

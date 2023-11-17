@@ -222,6 +222,7 @@ export default {
     },
     village: {
       0: 'Arbeiter',
+      1: 'Handwerkergilde',
     },
     horde: {
       0: 'Ausrüstung',
@@ -399,7 +400,7 @@ export default {
     expDescription2: 'Das Erfahrungseinkommen hängt vom besten Prestige ab.',
     expNext: 'Effekte der nächsten Stufe:',
     expNoGain: 'Um Erfahrung für diese Funktion zu sammeln, benötigst du zuerst etwas Prestige-Währung',
-    cropExp: 'Erhalte bis zu diese Menge an Erfahrung für jede Pflanze (Grundwachstumszeit und Goldkosten senken die Erfahrungsmenge)',
+    cropExp: 'Erhalte bis zu diese Menge an Erfahrung für jede Pflanze (Grundwachstumszeit und Goldkosten senken die Erfahrungsmenge). Das wird dann mit dem Unterschied zwischen höchster und aktueller Pflanzenstufe multipliziert (Pflanzen auf der höchsten Stufe erhalten keine Erfahrung)',
     frozenFeature: {
       title: 'Funktion ist eingefroren',
       description: 'Diese Funktion wurde durch das Kryolabor eingefroren. Du erzeugst keinen Fortschritt in dieser Funktion, bekommst aber automatisch Prestige-Währung.'
@@ -1332,7 +1333,7 @@ export default {
     taxpayersDescription1: 'Die arbeitende Bevölkerung konsumiert bis zu {0} von jedem Nahrungsmittel pro Sekunde und zahlt {1} ',
     taxpayersDescription2: ' Steuern pro verbrauchtem Lebensmittel.',
     happinessDescription: 'Zufriedenheit beeinflusst das Einkommen aller Rohstoffe (außer Goldmünzen und Glaube)',
-    powerDescription: 'Pro Energie steigt das Einkommen von Material und Nahrung um +50%. Deine aktuelle Energie multipliziert das Material- und Nahrungseinkommen mit x{0}',
+    powerDescription: 'Pro Energie steigt das Einkommen von Material und Nahrung um +20%. Deine aktuelle Energie multipliziert das Material- und Nahrungseinkommen mit x{0}',
     pollutionDescription: 'Für jeden Punkt Verschmutzung sinkt die Zufriedenheit um 1%. Sollte die Verschmutzung die Toleranz überschreiten, steigt die Zufriedenheitsstrafe um 1% pro überschrittener Toleranz. Der nächste Punkt Verschmutzung würde die Zufriedenheit um {0}% senken',
     lootDescription: 'Finde jedes Mal neue Beute, wenn die Leiste gefüllt wird',
     lootRarity: 'Beutequalität beeinflusst die Verteilung der Beuteseltenheit:',
@@ -1349,8 +1350,9 @@ export default {
         2: ' und erhöhe die Kosten der nächsten Opfergabe. Opferkosten werden beim Prestige mit zurückgesetzt.'
       },
       sacrifice: 'Opfern',
-      notUnlocked: 'Diese Opfergabe ist noch nicht freigeschaltet. Du kannst trotzdem opfern und Opfergaben einsetzen, aber die Rohstoffkapazität wird nicht erhöht, bis die Opfergabe freigeschaltet wurde',
-      notUnlockedHint: 'Diese Opfergabe ist nicht freigeschaltet, also wird die Rohstoffkapazität noch nicht erhöht'
+      notUnlocked: 'Diese Opfergabe ist noch nicht freigeschaltet. Du kannst trotzdem Opfergaben einsetzen, aber nicht opfern und die Rohstoffkapazität wird nicht erhöht, bis die Opfergabe freigeschaltet wurde',
+      notUnlockedHint: 'Diese Opfergabe ist nicht freigeschaltet, also wird die Rohstoffkapazität noch nicht erhöht',
+      autoGen: 'Generiere 1% deiner erhaltenen Opfergaben dieses Durchlaufs ({0}) pro Stunde'
     },
     material: 'Material',
     food: 'Nahrung',
@@ -1808,8 +1810,8 @@ export default {
       },
       sprinkler: {
         name: 'Rasensprenger',
-        description: 'Pflanzen in der selben Reihe wachsen +10% schneller und haben +250% Überwuchern',
-        descriptionPremium: 'Pflanzen in der selben Reihe wachsen +20% schneller und haben +500% Überwuchern',
+        description: 'Pflanzen in der selben Reihe wachsen +50% schneller und haben +150% Überwuchern',
+        descriptionPremium: 'Pflanzen in der selben Reihe wachsen +100% schneller und haben +300% Überwuchern',
       },
       lectern: {
         name: 'Rednerpult',

@@ -29,14 +29,14 @@ export default {
         needed: 2,
         rewards: [
             {type: 'base', name: 'currencyVillageStoneGain', amount: 2},
-            {type: 'base', name: 'currencyVillageMetalGain', amount: 0.4}
+            {type: 'base', name: 'currencyVillageMetalGain', amount: 0.5}
         ]
     },
     wellWorker: {
         max: 0,
         needed: 3,
         rewards: [
-            {type: 'base', name: 'currencyVillageWaterGain', amount: 2}
+            {type: 'base', name: 'currencyVillageWaterGain', amount: 3}
         ]
     },
     librarian: {
@@ -50,7 +50,7 @@ export default {
         max: 0,
         needed: 4,
         rewards: [
-            {type: 'base', name: 'currencyVillageGlassGain', amount: 0.2}
+            {type: 'base', name: 'currencyVillageGlassGain', amount: 0.25}
         ]
     },
     entertainer: {
@@ -65,7 +65,7 @@ export default {
         needed: 6,
         rewards: [
             {type: 'base', name: 'currencyVillageWoodGain', amount: 12},
-            {type: 'base', name: 'currencyVillageHardwoodGain', amount: 0.2}
+            {type: 'base', name: 'currencyVillageHardwoodGain', amount: 0.25}
         ]
     },
     blastMiner: {
@@ -73,7 +73,7 @@ export default {
         needed: 6,
         rewards: [
             {type: 'base', name: 'currencyVillageStoneGain', amount: 12},
-            {type: 'base', name: 'currencyVillageGemGain', amount: 0.2}
+            {type: 'base', name: 'currencyVillageGemGain', amount: 0.25}
         ]
     },
     fisherman: {

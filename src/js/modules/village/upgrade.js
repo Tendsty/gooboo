@@ -33,7 +33,7 @@ export default {
     }, price(lvl) {
         return {village_coin: Math.ceil(Math.pow(1.55, lvl) * 2500)};
     }, effect: [
-        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)},
         {name: 'currencyVillageGrainGain', type: 'mult', value: lvl => Math.pow(1.08, lvl)}
     ]},
     hatchet: {cap: 20, requirement() {
@@ -41,7 +41,7 @@ export default {
     }, price(lvl) {
         return {village_coin: Math.ceil(Math.pow(1.55, lvl) * 5000)};
     }, effect: [
-        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)},
         {name: 'currencyVillageFruitGain', type: 'mult', value: lvl => Math.pow(1.08, lvl)}
     ]},
     pickaxe: {cap: 20, requirement() {
@@ -49,8 +49,8 @@ export default {
     }, price(lvl) {
         return {village_coin: Math.ceil(Math.pow(1.55, lvl) * 7500)};
     }, effect: [
-        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'currencyVillageMetalGain', type: 'mult', value: lvl => lvl * 0.075 + 1}
+        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)},
+        {name: 'currencyVillageMetalGain', type: 'mult', value: lvl => Math.pow(1.04, lvl) * (lvl * 0.04 + 1)}
     ]},
     wateringCan: {cap: 20, requirement() {
         return store.state.unlock.villageUpgradeWateringCan.use;
@@ -67,42 +67,42 @@ export default {
         return {village_coin: Math.ceil(Math.pow(1.35, lvl) * buildNum(12.5, 'K'))};
     }, effect: [
         {name: 'villageTaxRate', type: 'mult', value: lvl => Math.pow(1.05, lvl)},
-        {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)}
+        {name: 'currencyVillageCoinGain', type: 'mult', value: lvl => Math.pow(1.11, lvl)}
     ]},
 
     // Knowledge upgrades
-    basics: {cap: 15, requirement() {
+    basics: {cap: 20, requirement() {
         return store.state.unlock.villageUpgradeBasics.use;
     }, price(lvl) {
         return {village_knowledge: 12 * lvl + 80};
     }, effect: [
-        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
+        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.15 + 1)},
+        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)},
+        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)}
     ]},
-    processing: {cap: 15, requirement() {
+    processing: {cap: 20, requirement() {
         return store.state.unlock.villageUpgradeProcessing.use;
     }, price(lvl) {
         return {village_knowledge: 12 * lvl + 120};
     }, effect: [
         {name: 'villageFoodGain', type: 'mult', value: lvl => Math.pow(1.07, lvl)},
-        {name: 'currencyVillageMetalGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
+        {name: 'currencyVillageMetalGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)}
     ]},
-    pump: {cap: 15, requirement() {
+    pump: {cap: 20, requirement() {
         return store.state.unlock.villageUpgradePump.use;
     }, price(lvl) {
         return {village_knowledge: 12 * lvl + 160};
     }, effect: [
-        {name: 'currencyVillageWaterGain', type: 'mult', value: lvl => Math.pow(1.24, lvl)}
+        {name: 'currencyVillageWaterGain', type: 'mult', value: lvl => Math.pow(1.2, lvl) * (lvl * 0.04 + 1)}
     ]},
-    sand: {cap: 15, requirement() {
+    sand: {cap: 20, requirement() {
         return store.state.unlock.villageUpgradeSand.use;
     }, price(lvl) {
         return {village_knowledge: 12 * lvl + 200};
     }, effect: [
-        {name: 'currencyVillageGlassGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
+        {name: 'currencyVillageGlassGain', type: 'mult', value: lvl => Math.pow(1.08, lvl) * (lvl * 0.08 + 1)}
     ]},
-    book: {cap: 15, requirement() {
+    book: {cap: 20, requirement() {
         return store.state.unlock.villageUpgradeBook.use;
     }, price(lvl) {
         return {village_knowledge: 12 * lvl + 240};

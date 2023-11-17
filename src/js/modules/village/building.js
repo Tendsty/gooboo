@@ -516,10 +516,10 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_wood: Math.pow(1.65, lvl) * buildNum(220, 'M'),
-            village_glass: Math.pow(1.65, lvl) * buildNum(160, 'K'),
-            village_hardwood: Math.pow(1.3, lvl) * buildNum(55, 'K'),
-            village_gem: Math.pow(1.35, lvl) * buildNum(12, 'K')
+            village_wood: Math.pow(1.65, lvl) * buildNum(330, 'M'),
+            village_glass: Math.pow(1.65, lvl) * buildNum(240, 'K'),
+            village_hardwood: Math.pow(1.3, lvl) * buildNum(77.5, 'K'),
+            village_gem: Math.pow(1.35, lvl) * buildNum(18, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.25, lvl) * buildNum(200, 'K'));
@@ -532,10 +532,10 @@ export default {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(275, 'K'));
     }, price(lvl) {
         return {
-            village_plantFiber: Math.pow(1.65, lvl) * buildNum(1.1, 'B'),
-            village_stone: Math.pow(1.65, lvl) * buildNum(875, 'M'),
-            village_metal: Math.pow(1.65, lvl) * buildNum(180, 'M'),
-            village_coin: Math.pow(1.85, lvl) * buildNum(400, 'M')
+            village_plantFiber: Math.pow(1.65, lvl) * buildNum(1.7, 'B'),
+            village_stone: Math.pow(1.65, lvl) * buildNum(1.35, 'B'),
+            village_metal: Math.pow(1.65, lvl) * buildNum(290, 'M'),
+            village_coin: Math.pow(1.85, lvl) * buildNum(650, 'M')
         };
     }, effect: [
         {name: 'currencyVillageWaterGain', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
@@ -545,9 +545,9 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_metal: Math.pow(1.85, lvl) * buildNum(40, 'M'),
-            village_glass: Math.pow(1.85, lvl) * buildNum(275, 'K'),
-            village_gem: Math.pow(1.85, lvl) * buildNum(77.5, 'K')
+            village_metal: Math.pow(1.85, lvl) * buildNum(70, 'M'),
+            village_glass: Math.pow(1.85, lvl) * buildNum(475, 'K'),
+            village_gem: Math.pow(1.85, lvl) * buildNum(140, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.33, lvl) * buildNum(300, 'K'));
@@ -560,8 +560,8 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_hardwood: Math.pow(1.85, lvl) * buildNum(140, 'K'),
-            village_knowledge: Math.round(Math.pow(1.15, lvl) * 275),
+            village_hardwood: Math.pow(1.85, lvl) * buildNum(280, 'K'),
+            village_knowledge: Math.round(Math.pow(1.15, lvl) * 290),
             village_science: lvl * 20 + 30
         };
     }, timeNeeded(lvl) {
@@ -573,7 +573,10 @@ export default {
     greenhouse: {cap: 10, capMult: true, subtype: 'workstation', icon: 'mdi-greenhouse', requirement() {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
-        return {village_plantFiber: Math.pow(1.85, lvl) * buildNum(500, 'M'), village_glass: Math.pow(1.85, lvl) * buildNum(400, 'K')};
+        return {
+            village_plantFiber: Math.pow(1.85, lvl) * buildNum(1.15, 'B'),
+            village_glass: Math.pow(1.85, lvl) * buildNum(900, 'K')
+        };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.33, lvl) * buildNum(550, 'K'));
     }, effect: [
@@ -583,7 +586,7 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_plantFiber: Math.pow(2.4, lvl) * buildNum(1, 'B'),
+            village_plantFiber: Math.pow(2.4, lvl) * buildNum(2.4, 'B'),
             village_joy: Math.ceil(Math.pow(1.35, lvl) * 70)
         };
     }, timeNeeded(lvl) {
@@ -596,9 +599,9 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_wood: Math.pow(1.85, lvl) * buildNum(1.75, 'B'),
-            village_metal: Math.pow(1.65, lvl) * buildNum(140, 'M'),
-            village_hardwood: Math.pow(1.5, lvl) * buildNum(230, 'K')
+            village_wood: Math.pow(1.85, lvl) * buildNum(4.5, 'B'),
+            village_metal: Math.pow(1.65, lvl) * buildNum(360, 'M'),
+            village_hardwood: Math.pow(1.5, lvl) * buildNum(575, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(700, 'K'));
@@ -612,8 +615,8 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_metal: Math.pow(2.3, lvl) * buildNum(200, 'M'),
-            village_gem: Math.pow(1.85, lvl) * buildNum(260, 'K')
+            village_metal: Math.pow(2.3, lvl) * buildNum(580, 'M'),
+            village_gem: Math.pow(1.85, lvl) * buildNum(695, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.75, lvl) * buildNum(1, 'M'));
@@ -627,10 +630,10 @@ export default {
         return store.state.unlock.villageBuildings5.use && store.state.upgrade.item.village_court.level >= 1;
     }, price(lvl) {
         return {
-            village_stone: Math.pow(6, lvl) * buildNum(3.5, 'B'),
-            village_water: Math.pow(15, lvl) * buildNum(25, 'B'),
-            village_knowledge: lvl * 75 + 300,
-            village_coin: Math.pow(3.5, lvl) * buildNum(2, 'B')
+            village_stone: Math.pow(6, lvl) * buildNum(10.5, 'B'),
+            village_water: Math.pow(15, lvl) * buildNum(75, 'B'),
+            village_knowledge: lvl * 75 + 350,
+            village_coin: Math.pow(3.5, lvl) * buildNum(6, 'B')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(2.5, lvl) * buildNum(1.2, 'M'));
@@ -652,7 +655,10 @@ export default {
     cemetery: {cap: 10, icon: 'mdi-grave-stone', requirement() {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
-        return {village_wood: Math.pow(1.85, lvl) * buildNum(6, 'B'), village_stone: Math.pow(1.85, lvl) * buildNum(8.5, 'B')};
+        return {
+            village_wood: Math.pow(lvl * 0.1 + 1.85, lvl) * buildNum(20, 'B'),
+            village_stone: Math.pow(lvl * 0.1 + 1.85, lvl) * buildNum(27.5, 'B')
+        };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(1.5, 'M'));
     }, effect: [
@@ -663,9 +669,9 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_stone: Math.pow(2.12, lvl) * buildNum(42, 'B'),
-            village_glass: Math.pow(1.9, lvl) * buildNum(11, 'M'),
-            village_gem: Math.pow(1.55, lvl) * buildNum(4.5, 'M')
+            village_stone: Math.pow(2.12, lvl) * buildNum(155, 'B'),
+            village_glass: Math.pow(1.9, lvl) * buildNum(40, 'M'),
+            village_gem: Math.pow(1.55, lvl) * buildNum(17, 'M')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(3.2, 'M'));
@@ -676,8 +682,8 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_plantFiber: Math.pow(2.45, lvl) * buildNum(65, 'B'),
-            village_knowledge: lvl * 125 + 625
+            village_plantFiber: Math.pow(2.45, lvl) * buildNum(260, 'B'),
+            village_knowledge: lvl * 125 + 700
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.65, lvl) * buildNum(8, 'M'));
@@ -688,8 +694,8 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_water: Math.pow(3.3, lvl) * buildNum(360, 'B'),
-            village_joy: lvl * 180 + 600
+            village_water: Math.pow(3.3, lvl) * buildNum(1.6, 'T'),
+            village_joy: lvl * 180 + 720
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.65, lvl) * buildNum(18.5, 'M'));
@@ -700,8 +706,8 @@ export default {
         return store.state.unlock.villageBuildings5.use;
     }, price(lvl) {
         return {
-            village_metal: Math.pow(1.85, lvl) * buildNum(1.6, 'B'),
-            village_science: lvl * 45 + 225
+            village_metal: Math.pow(1.85, lvl) * buildNum(7.35, 'B'),
+            village_science: lvl * 45 + 270
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.65, lvl) * buildNum(40, 'M'));
@@ -713,7 +719,14 @@ export default {
     }, timeNeeded() {
         return buildNum(600, 'M');
     }, price() {
-        return {village_metal: buildNum(5.76, 'B'), village_water: buildNum(9, 'T'), village_hardwood: buildNum(35, 'M'), village_coin: buildNum(700, 'B'), village_science: 360, village_joy: 1200};
+        return {
+            village_metal: buildNum(27.6, 'B'),
+            village_water: buildNum(45, 'T'),
+            village_hardwood: buildNum(175, 'M'),
+            village_coin: buildNum(3.5, 'T'),
+            village_science: 440,
+            village_joy: 1500
+        };
     }, effect: [
         {name: 'villageBuildings6', type: 'unlock', value: lvl => lvl >= 1}
     ]},
@@ -723,7 +736,7 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_plantFiber: Math.pow(1.65, lvl) * buildNum(10.5, 'T'),
+            village_plantFiber: Math.pow(1.65, lvl) * buildNum(63, 'T'),
             village_marble: Math.pow(1.35, lvl) * 600
         };
     }, timeNeeded(lvl) {
@@ -735,9 +748,9 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_stone: Math.pow(2.35, lvl) * buildNum(220, 'B'),
-            village_water: Math.pow(4.1, lvl) * buildNum(15, 'T'),
-            village_knowledge: lvl * 500 + 1250
+            village_stone: Math.pow(2.35, lvl) * buildNum(1.32, 'T'),
+            village_water: Math.pow(4.1, lvl) * buildNum(90, 'T'),
+            village_knowledge: lvl * 500 + 1500
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.33, lvl) * buildNum(320, 'M'));
@@ -749,8 +762,8 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_wood: Math.pow(1.45, lvl) * buildNum(275, 'B'),
-            village_metal: Math.pow(1.2, lvl) * buildNum(12, 'B'),
+            village_wood: Math.pow(1.45, lvl) * buildNum(1.93, 'T'),
+            village_metal: Math.pow(1.2, lvl) * buildNum(84, 'B'),
             village_oil: Math.pow(1.25, lvl) * 1400
         };
     }, timeNeeded(lvl) {
@@ -763,9 +776,9 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_plantFiber: Math.pow(lvl * 0.06 + 1.6, lvl) * buildNum(460, 'B'),
-            village_gem: Math.pow(lvl * 0.04 + 1.4, lvl) * buildNum(60, 'M'),
-            village_oil: Math.pow(lvl * 0.05 + 1.5, lvl) * 2200
+            village_plantFiber: Math.pow(lvl * 0.06 + 1.6, lvl) * buildNum(3.68, 'T'),
+            village_gem: Math.pow(lvl * 0.04 + 1.4, lvl) * buildNum(480, 'M'),
+            village_oil: Math.pow(lvl * 0.05 + 1.5, lvl) * 2800
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(650, 'M'));
@@ -776,7 +789,7 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_coin: Math.pow(lvl * 0.05 + 1.35, lvl) * buildNum(1.5, 'T')
+            village_coin: Math.pow(lvl * 0.05 + 1.35, lvl) * buildNum(13.5, 'T')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(750, 'M'));
@@ -787,8 +800,8 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_hardwood: Math.pow(1.55, lvl) * buildNum(105, 'M'),
-            village_glass: Math.pow(1.6, lvl) * buildNum(225, 'M')
+            village_hardwood: Math.pow(1.55, lvl) * buildNum(1.05, 'B'),
+            village_glass: Math.pow(1.6, lvl) * buildNum(2.25, 'B')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(1.1, 'B'));
@@ -801,9 +814,9 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_plantFiber: Math.pow(2.9, lvl) * buildNum(18, 'T'),
-            village_oil: Math.pow(2.2, lvl) * buildNum(24, 'K'),
-            village_joy: lvl * 400 + 1800
+            village_plantFiber: Math.pow(2.9, lvl) * buildNum(198, 'T'),
+            village_oil: Math.pow(2.2, lvl) * buildNum(264, 'K'),
+            village_joy: lvl * 400 + 2200
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.33, lvl) * buildNum(1.6, 'B'));
@@ -815,8 +828,8 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_hardwood: Math.pow(1.35, lvl) * buildNum(440, 'M'),
-            village_oil: Math.pow(1.6, lvl) * buildNum(30, 'K')
+            village_hardwood: Math.pow(1.35, lvl) * buildNum(5.28, 'B'),
+            village_oil: Math.pow(1.6, lvl) * buildNum(360, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(2.2, 'B'));
@@ -830,7 +843,7 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_gem: Math.pow(1.45, lvl) * buildNum(600, 'M')
+            village_gem: Math.pow(1.45, lvl) * buildNum(7.8, 'B')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(3, 'B'));
@@ -842,9 +855,9 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_wood: Math.pow(7.1, lvl) * buildNum(120, 'T'),
-            village_marble: Math.pow(4.5, lvl) * 3000,
-            village_knowledge: lvl * 600 + 1800
+            village_wood: Math.pow(7.1, lvl) * buildNum(1.68, 'Qa'),
+            village_marble: Math.pow(4.5, lvl) * 7500,
+            village_knowledge: lvl * 600 + 2800
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(10, lvl) * buildNum(4, 'B'));
@@ -857,9 +870,9 @@ export default {
         return store.state.unlock.villageBuildings6.use && store.state.upgrade.item.village_court.level >= 2;
     }, price(lvl) {
         return {
-            village_knowledge: lvl * 2000 + 3000,
-            village_science: lvl * 750 + 1000,
-            village_coin: Math.pow(10, lvl) * buildNum(100, 'T')
+            village_knowledge: lvl * 2000 + 4500,
+            village_science: lvl * 750 + 1500,
+            village_coin: Math.pow(10, lvl) * buildNum(1.5, 'Qa')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(8, lvl) * buildNum(5, 'B'));
@@ -873,7 +886,7 @@ export default {
             village_marble: Math.pow(1.65, lvl) * 2250
         };
     }, timeNeeded(lvl) {
-        return Math.ceil(Math.pow(1.75, lvl) * buildNum(7.5, 'B'));
+        return Math.ceil(Math.pow(1.75, lvl) * buildNum(120, 'B'));
     }, effect: [
         {name: 'villageHappiness', type: 'base', value: lvl => lvl * 0.004},
         {name: 'currencyVillageMarbleCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
@@ -883,9 +896,9 @@ export default {
         return store.state.unlock.villageBuildings6.use && store.state.upgrade.item.village_court.level >= 2;
     }, price(lvl) {
         return {
-            village_gem: Math.pow(6.25, lvl) * buildNum(4.75, 'B'),
-            village_oil: Math.pow(5.5, lvl) * buildNum(3, 'M'),
-            village_marble: Math.pow(2.5, lvl) * buildNum(10, 'K')
+            village_gem: Math.pow(6.25, lvl) * buildNum(82, 'B'),
+            village_oil: Math.pow(5.5, lvl) * buildNum(55, 'M'),
+            village_marble: Math.pow(2.5, lvl) * buildNum(50, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(6, lvl) * buildNum(11, 'B'));
@@ -896,10 +909,10 @@ export default {
         return store.state.unlock.villageBuildings6.use;
     }, price(lvl) {
         return {
-            village_plantFiber: Math.pow(1.5, lvl) * buildNum(810, 'T'),
-            village_wood: Math.pow(1.5, lvl) * buildNum(630, 'T'),
-            village_hardwood: Math.pow(1.35, lvl) * buildNum(7.4, 'B'),
-            village_water: Math.pow(1.9, lvl) * buildNum(500, 'Qa')
+            village_plantFiber: Math.pow(1.5, lvl) * buildNum(15.4, 'Qa'),
+            village_wood: Math.pow(1.5, lvl) * buildNum(12, 'Qa'),
+            village_hardwood: Math.pow(1.35, lvl) * buildNum(140, 'B'),
+            village_water: Math.pow(1.9, lvl) * buildNum(9.5, 'Qi')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.25, lvl) * buildNum(16, 'B'));
@@ -912,7 +925,7 @@ export default {
     }, timeNeeded() {
         return buildNum(250, 'B');
     }, price() {
-        return {village_oil: buildNum(4.8, 'M'), village_marble: buildNum(25, 'K'), village_coin: buildNum(700, 'T'), village_science: 1000, village_joy: 3000};
+        return {village_oil: buildNum(96, 'M'), village_marble: buildNum(500, 'K'), village_coin: buildNum(14, 'Qa'), village_science: 2000, village_joy: 6000};
     }, effect: [
         {name: 'villageBuildings7', type: 'unlock', value: lvl => lvl >= 1}
     ]},
@@ -922,7 +935,7 @@ export default {
         return store.state.unlock.villageBuildings7.use;
     }, price(lvl) {
         return {
-            village_hardwood: Math.pow(1.45, lvl) * buildNum(6.5, 'B'),
+            village_hardwood: Math.pow(1.45, lvl) * buildNum(162.5, 'B'),
             village_loot0: Math.ceil(Math.pow(1.2, lvl) * 5)
         };
     }, timeNeeded(lvl) {
@@ -934,8 +947,8 @@ export default {
         return store.state.unlock.villageBuildings7.use;
     }, price(lvl) {
         return {
-            village_hardwood: Math.pow(1.35, lvl) * buildNum(7.4, 'B'),
-            village_water: Math.pow(1.9, lvl) * buildNum(500, 'Qa')
+            village_hardwood: Math.pow(1.35, lvl) * buildNum(185, 'B'),
+            village_water: Math.pow(1.9, lvl) * buildNum(12.5, 'Qi')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.25, lvl) * buildNum(250, 'B'));
@@ -946,9 +959,9 @@ export default {
         return store.state.unlock.villageBuildings7.use;
     }, price(lvl) {
         return {
-            village_wood: Math.pow(1.85, lvl) * buildNum(4.4, 'Qa'),
-            village_stone: Math.pow(1.85, lvl) * buildNum(5.2, 'Qa'),
-            village_oil: Math.pow(1.6, lvl) * buildNum(8.5, 'M')
+            village_wood: Math.pow(1.85, lvl) * buildNum(121, 'Qa'),
+            village_stone: Math.pow(1.85, lvl) * buildNum(143, 'Qa'),
+            village_oil: Math.pow(1.6, lvl) * buildNum(234, 'M')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(60, 'B'));
@@ -963,9 +976,9 @@ export default {
         return store.state.unlock.villageBuildings7.use;
     }, price(lvl) {
         return {
-            village_stone: Math.pow(3.75, lvl) * buildNum(12.5, 'Qa'),
-            village_marble: Math.pow(2.45, lvl) * buildNum(95, 'K'),
-            village_joy: lvl * 4000 + 7500
+            village_stone: Math.pow(3.75, lvl) * buildNum(375, 'Qa'),
+            village_marble: Math.pow(2.45, lvl) * buildNum(2.85, 'M'),
+            village_joy: lvl * 4000 + buildNum(15.5, 'K')
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.45, lvl) * buildNum(100, 'B'));
@@ -989,7 +1002,7 @@ export default {
         return store.state.unlock.villageBuildings7.use;
     }, price(lvl) {
         let obj = {
-            village_coin: Math.pow(2.5, lvl) * buildNum(1, 'Qa')
+            village_coin: Math.pow(2.5, lvl) * buildNum(32.5, 'Qa')
         };
         obj[`village_loot${ Math.floor(lvl / 2) }`] = Math.pow(10, lvl % 2) * 10;
         return obj;
@@ -1008,7 +1021,7 @@ export default {
         return store.state.unlock.villageBuildings7.use;
     }, price(lvl) {
         return {
-            village_metal: Math.pow(1.65, lvl) * buildNum(35, 'T'),
+            village_metal: Math.pow(1.65, lvl) * buildNum(1.25, 'Qa'),
             village_loot1: Math.ceil(Math.pow(1.15, lvl) * (3 + lvl))
         };
     }, timeNeeded(lvl) {
@@ -1021,9 +1034,9 @@ export default {
         return store.state.unlock.villageBuildings7.use && store.state.upgrade.item.village_court.level >= 2;
     }, price(lvl) {
         return {
-            village_metal: Math.pow(3.15, lvl) * buildNum(175, 'T'),
-            village_marble: Math.pow(2.4, lvl) * buildNum(1.1, 'M'),
-            village_science: lvl * 650 + 2200
+            village_metal: Math.pow(3.15, lvl) * buildNum(6.57, 'Qa'),
+            village_marble: Math.pow(2.4, lvl) * buildNum(41.5, 'M'),
+            village_science: lvl * 650 + 3500
         };
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(3, lvl) * buildNum(333, 'B'));
@@ -1034,8 +1047,8 @@ export default {
         return store.state.unlock.villageBuildings7.use;
     }, price(lvl) {
         return {
-            village_water: Math.pow(2.2, lvl) * buildNum(5, 'Qi'),
-            village_glass: Math.pow(1.65, lvl) * buildNum(170, 'B'),
+            village_water: Math.pow(2.2, lvl) * buildNum(200, 'Qi'),
+            village_glass: Math.pow(1.65, lvl) * buildNum(6.8, 'T'),
             village_loot2: Math.ceil(Math.pow(1.14, lvl) * (2 + lvl))
         };
     }, timeNeeded(lvl) {
@@ -1048,8 +1061,8 @@ export default {
         return store.state.unlock.villageBuildings7.use;
     }, price(lvl) {
         return {
-            village_gem: Math.pow(1.55, lvl) * buildNum(200, 'B'),
-            village_oil: Math.pow(1.8, lvl) * buildNum(675, 'M'),
+            village_gem: Math.pow(1.55, lvl) * buildNum(9, 'T'),
+            village_oil: Math.pow(1.8, lvl) * buildNum(30.4, 'B'),
             village_loot3: Math.ceil(Math.pow(1.13, lvl) * (1 + lvl))
         };
     }, timeNeeded(lvl) {
