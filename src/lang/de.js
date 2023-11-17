@@ -1029,6 +1029,9 @@ export default {
       nextMainFeature: {
         name: 'Nächste Hauptfunktion'
       },
+      togglePause: {
+        name: 'Pause Umschalten'
+      },
       debugSkip1m: {
         name: 'Überspringe 1 Minute'
       },
