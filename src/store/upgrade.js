@@ -324,6 +324,7 @@ export default {
         },
         makePersistent({ state, rootState, commit, dispatch }, name) {
             const upgrade = state.item[name];
+            const level = upgrade.level;
             commit('updateKey', {name, key: 'persistent', value: true});
 
             const subfeature = rootState.system.features[upgrade.feature]?.currentSubfeature;
@@ -332,10 +333,10 @@ export default {
             }
 
             // Cleanup the build queue if needed
-            if (upgrade.mode === 'queue' && upgrade.bought > upgrade.level) {
+            if (upgrade.mode === 'queue' && upgrade.bought > level) {
                 const queueKey = `${upgrade.feature}_${upgrade.type}`;
                 let newQueue = [...state.queue[queueKey]];
-                for (let i = 0, n = upgrade.highestLevel - upgrade.level; i < n; i++) {
+                for (let i = 0, n = upgrade.highestLevel - level; i < n; i++) {
                     const index = newQueue.findIndex(elem => elem === name);
                     if (index !== -1) {
                         newQueue.splice(index, 1);
