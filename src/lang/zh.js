@@ -1,4 +1,3 @@
-// 此汉化来自http://www.gityx.com/
 import { zh } from 'vuetify/lib/locale';
 import card from './zh/card';
 import consumable from './zh/consumable';
@@ -11,6 +10,7 @@ import unlock from './zh/unlock';
 import upgrade from './zh/upgrade';
 import patchnote from './zh/patchnote';
 
+// 此汉化来自http://www.gityx.com/
 export default {
   ...zh,
 
