@@ -151,13 +151,13 @@ export default {
                         defaultValue: 30,
                         clearable: true
                     },
-                    lang: {
+                     lang: {
                         unlock: null,
                         hasDescription: false,
                         type: 'select',
-                        items: ['en', 'de'],
-                        value: 'en',
-                        defaultValue: 'en'
+                        items: ['zh', 'en', 'de'],
+                        value: 'zh',
+                        defaultValue: 'zh'
                     },
                     tabDisplayDesktop: {
                         unlock: null,
