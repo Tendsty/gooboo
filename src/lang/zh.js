@@ -1,4 +1,4 @@
-import { zh } from 'vuetify/lib/locale';
+import { zhHans } from 'vuetify/lib/locale';
 import card from './zh/card';
 import consumable from './zh/consumable';
 import currency from './zh/currency';
@@ -12,7 +12,7 @@ import patchnote from './zh/patchnote';
 
 // 此汉化来自http://www.gityx.com/
 export default {
-  ...zh,
+  ...zhHans,
 
   gooboo: {
     buy: '购买',
