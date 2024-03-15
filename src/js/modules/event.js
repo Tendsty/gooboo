@@ -83,6 +83,8 @@ export default {
         bloomMaxPoppy: {type: 'bloom'},
         bloomMaxIris: {type: 'bloom'},
         bloomMaxLily: {type: 'bloom'},
+        bloomMaxOrchid: {type: 'bloom'},
+        bloomMaxCornflower: {type: 'bloom'},
         summerFestivalMaxStage: {type: 'summerFestival'}
     },
     mult: {
