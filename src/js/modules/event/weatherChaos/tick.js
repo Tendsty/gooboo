@@ -2,15 +2,17 @@ import store from "../../../../store";
 import { SECONDS_PER_HOUR } from "../../../constants";
 
 export default function(seconds, oldTime, newTime) {
-    let step = oldTime;
-    while (step < newTime) {
-        const oldStep = step;
-        step = Math.min(Math.floor((step + SECONDS_PER_HOUR) / SECONDS_PER_HOUR) * SECONDS_PER_HOUR, newTime);
-        if (step % SECONDS_PER_HOUR === 0) {
-            store.dispatch('weatherChaos/nextWeatherStep');
-        }
-        if (step > oldStep) {
-            singleTick(step - oldStep);
+    if (store.getters['weatherChaos/currentWeather'] !== undefined) {
+        let step = oldTime;
+        while (step < newTime) {
+            const oldStep = step;
+            step = Math.min(Math.floor((step + SECONDS_PER_HOUR) / SECONDS_PER_HOUR) * SECONDS_PER_HOUR, newTime);
+            if (step % SECONDS_PER_HOUR === 0) {
+                store.dispatch('weatherChaos/nextWeatherStep');
+            }
+            if (step > oldStep) {
+                singleTick(step - oldStep);
+            }
         }
     }
 }

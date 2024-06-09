@@ -358,6 +358,12 @@ export default {
     297: 'Tier 4 offerings now increase their cost with each purchase',
     298: 'Added a text shadow to the achievement message if it contains relics',
     299: 'Increased the requirement for the "Mastermind" achievement after level 10',
+
+    // v1.4.2
+    '299_1': 'Fixed a game crash when the weather chaos event ends',
+    '299_2': 'Removed equipment capacity from horde cards',
+    '299_3': 'Removed equipment capacity from an event relic',
+    '299_4': 'Changed most genes to a linear scaling',
   },
   v: {
     1: {
