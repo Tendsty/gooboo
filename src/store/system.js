@@ -373,6 +373,7 @@ export default {
         keybinds: {
             prevMainFeature: null,
             nextMainFeature: null,
+            togglePause: null,
             debugSkip1m: null,
             debugSkip10m: null,
             debugSkip1h: null,
@@ -723,6 +724,11 @@ export default {
                             const mainFeatureList = getters.mainFeatures.map(elem => elem.name).filter(elem => !rootState.cryolab[elem]?.active);
                             const currentIndex = mainFeatureList.findIndex(elem => elem === state.screen);
                             commit('updateKey', {key: 'screen', value: mainFeatureList[(currentIndex + 1) >= mainFeatureList.length ? 0 : (currentIndex + 1)]});
+                            break;
+                        }
+                        case 'togglePause': {
+                            const currentlyPaused = state.settings.general.items.pause.value;
+                            commit('updateSetting', {category: 'general', name: 'pause', value: !currentlyPaused})
                             break;
                         }
                         case 'debugSkip1m': {
