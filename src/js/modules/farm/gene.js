@@ -2,17 +2,17 @@ export default {
     // Level 1 genes
     yield: {
         icon: 'mdi-sack',
-        effect: [{name: 'farmCropGain', type: 'mult', value: 1.3}],
+        effect: [{name: 'farmCropGain', type: 'mult', value: 1.5}],
         upgrade: [{name: 'farmCropGain', type: 'mult', value: lvl => lvl * 0.1 + 1}]
     },
     gold: {
         icon: 'mdi-gold',
-        effect: [{name: 'farmGoldChance', type: 'mult', value: 1.4}],
+        effect: [{name: 'farmGoldChance', type: 'mult', value: 1.75}],
         upgrade: [{name: 'farmGoldChance', type: 'mult', value: lvl => lvl * 0.05 + 1}]
     },
     exp: {
         icon: 'mdi-star',
-        effect: [{name: 'farmExperience', type: 'mult', value: 1.175}],
+        effect: [{name: 'farmExperience', type: 'mult', value: 1.5}],
         upgrade: [{name: 'farmExperience', type: 'base', value: lvl => lvl * 0.15}]
     },
     rareDrop: {
