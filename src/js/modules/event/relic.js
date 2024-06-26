@@ -76,7 +76,7 @@ export default {
         {name: 'currencyMiningScrapGain', type: 'mult', value: 1.08}
     ]},
     suitcase: {icon: 'mdi-bag-carry-on', color: 'dark-blue', effect: [
-        {name: 'hordeMaxItems', type: 'base', value: 3}
+        {name: 'currencyHordeBoneCap', type: 'mult', value: 1.07}
     ]},
 
     // Summer festival
