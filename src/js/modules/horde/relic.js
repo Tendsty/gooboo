@@ -32,6 +32,6 @@ export default {
         {name: 'horde_looting', type: 'keepUpgrade', value: true}
     ]},
     fakeSuitcase: {icon: 'mdi-bag-carry-on', color: 'red', effect: [
-        {name: 'hordeMaxItems', type: 'base', value: 5}
+        {name: 'hordeMaxItems', type: 'base', value: 7}
     ]},
 }
