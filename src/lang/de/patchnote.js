@@ -358,6 +358,12 @@ export default {
     297: 'Kosten von Stufe-4-Opfergaben steigen nun mit jedem Kauf',
     298: 'Die Erfolgsnachricht hat jetzt einen Textschatten, wenn ein Relikt enthalten ist',
     299: 'Die Anforderungen für den "Genie"-Erfolg wurden ab Stufe 10 erhöht',
+
+    // v1.4.2
+    '299_1': 'Ein Spielabsturz wurde behoben, der nach dem Ende vom Wetterchaos auftrat',
+    '299_2': 'Ausrüstungskapazität wurde von Horde-Karten entfernt',
+    '299_3': 'Ausrüstungskapazität wurde von einem Event-Relikt entfernt',
+    '299_4': 'Die meisten Gene steigern sich jetzt linear',
   },
   v: {
     1: {

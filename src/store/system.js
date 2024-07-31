@@ -7,7 +7,7 @@ import seedrandom from "seedrandom";
 export default {
     namespaced: true,
     state: {
-        version: '1.4.1',
+        version: '1.4.2',
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
