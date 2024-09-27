@@ -26,7 +26,7 @@ export default {
             for (const [, stat] of Object.entries(state[feature].data[subfeature])) {
                 const statValue = rootState.stat[stat].total;
                 if (statValue > 0) {
-                    const baseValue = stat === 'farm_bestPrestige' ? statValue : logBase(statValue, stat === 'horde_bestPrestige' ? 9 : 3);
+                    const baseValue = stat === 'farm_bestPrestige' ? statValue : logBase(statValue, stat === 'horde_bestPrestige0' ? 9 : 3);
                     gain += baseValue * Math.pow(1.1, baseValue) * 40;
                 }
             }
@@ -84,12 +84,13 @@ export default {
             (o.effect ?? [[]]).forEach((effect, subfeature) => {
                 const activeMultName = `${ o.name }CryolabActive${ subfeature }`;
                 const passiveMultName = `${ o.name }CryolabPassive${ subfeature }`;
+                const featureMult = o.name === 'village' ? 0.4 : 1;
                 modifiedEffect.push([
-                    {name: activeMultName, type: 'base', value: lvl => lvl * 0.02},
-                    {name: passiveMultName, type: 'base', value: lvl => lvl * 0.01},
+                    {name: activeMultName, type: 'base', value: lvl => lvl * featureMult * 0.02},
+                    {name: passiveMultName, type: 'base', value: lvl => lvl * featureMult * 0.01},
                     ...effect
                 ]);
-                commit('mult/init', {feature: 'cryolab', name: activeMultName, display: 'percent', baseValue: 0.25}, {root: true});
+                commit('mult/init', {feature: 'cryolab', name: activeMultName, display: 'percent', baseValue: 0.25 * featureMult}, {root: true});
                 commit('mult/init', {feature: 'cryolab', name: passiveMultName, display: 'percent'}, {root: true});
             });
             commit('init', {...o, effect: modifiedEffect});
@@ -121,6 +122,14 @@ export default {
                         name: eff.name,
                         multKey: `cryolab_${ o.feature }_${ o.subfeature }`,
                         value: eff.value(level)
+                    }, {root: true});
+                });
+            } else {
+                state[o.feature].effect[o.subfeature].forEach(eff => {
+                    dispatch('system/resetEffect', {
+                        type: eff.type,
+                        name: eff.name,
+                        multKey: `cryolab_${ o.feature }_${ o.subfeature }`
                     }, {root: true});
                 });
             }

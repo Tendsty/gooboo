@@ -200,7 +200,7 @@ export default {
             dispatch('currency/gain', {feature: 'event', name: 'slime', gainMult: true, amount: size}, {root: true});
 
             if (state.fish[name].catchRecord === null || state.fish[name].catchRecord < size) {
-                dispatch('currency/gain', {feature: 'event', name: 'weatherChaosToken', amount: size - (state.fish[name].catchRecord ?? 0)}, {root: true});
+                dispatch('event/giveTokens', {event: 'weatherChaos', amount: size - (state.fish[name].catchRecord ?? 0)}, {root: true});
                 commit('updateSubkey', {name: 'fish', key: name, subkey: 'catchRecord', value: size});
                 dispatch('note/find', 'event_18', {root: true});
             }

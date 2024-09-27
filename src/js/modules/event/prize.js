@@ -64,7 +64,7 @@ export default {
     treasure_empoweredN5: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: -5,
+        bonusTier: -10,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -77,7 +77,7 @@ export default {
     treasure_empoweredN4: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: -4,
+        bonusTier: -9,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -90,7 +90,7 @@ export default {
     treasure_empoweredN3: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: -3,
+        bonusTier: -8,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -105,7 +105,7 @@ export default {
     treasure_empoweredN2: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: -2,
+        bonusTier: -7,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -118,7 +118,7 @@ export default {
     treasure_empoweredN1: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: -1,
+        bonusTier: -6,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -134,6 +134,7 @@ export default {
     treasure_empowered: {
         type: 'treasure',
         item: 'empowered',
+        bonusTier: -5,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -147,7 +148,7 @@ export default {
     treasure_empoweredP1: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: 1,
+        bonusTier: -4,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -163,7 +164,7 @@ export default {
     treasure_empoweredP2: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: 2,
+        bonusTier: -3,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -177,7 +178,7 @@ export default {
     treasure_empoweredP3: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: 3,
+        bonusTier: -2,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -191,7 +192,7 @@ export default {
     treasure_empoweredP4: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: 4,
+        bonusTier: -1,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -202,7 +203,6 @@ export default {
     treasure_empoweredP5: {
         type: 'treasure',
         item: 'empowered',
-        bonusTier: 5,
         requirement() {
             return store.state.unlock.treasureFeature.see;
         },
@@ -676,7 +676,7 @@ export default {
         requirement() {
             return store.state.stat.village_prestigeCount.total >= 1;
         },
-        amountMult: () => store.state.stat.village_bestPrestige.total,
+        amountMult: () => store.state.stat.village_bestPrestige0.total,
         pool: {
             bingo1: {amount: 0.1},
             bingo2: {amount: 0.4},
@@ -693,7 +693,7 @@ export default {
         requirement() {
             return store.state.stat.horde_prestigeCount.total >= 1;
         },
-        amountMult: () => store.state.stat.horde_bestPrestige.total,
+        amountMult: () => store.state.stat.horde_bestPrestige0.total,
         pool: {
             bingo1: {amount: 0.1},
             bingo2: {amount: 0.4},

@@ -335,6 +335,14 @@ export default {
     name: 'Iridiumerz',
     description: 'Irid... was? Der Name sagt dir nichts, hat es überhaupt einen Nutzen?'
   },
+  mining_oreOsmium: {
+    name: 'Osmiumerz',
+    description: ''
+  },
+  mining_oreLead: {
+    name: 'Bleierz',
+    description: ''
+  },
   mining_granite: {
     name: 'Granit',
     description: 'Massive Granitblöcke, aus dem Untergrund geschnitten. Überraschenderweise sind sie komplett schrottfrei'
@@ -359,6 +367,14 @@ export default {
     name: 'Obsidian',
     description: 'Wunderschöne lila Scherben, sie sehen zerbrechlich aus'
   },
+  mining_deeprock: {
+    name: 'Tiefenstein',
+    description: ''
+  },
+  mining_glowshard: {
+    name: 'Leuchtscherbe',
+    description: ''
+  },
   mining_barAluminium: {
     name: 'Aluminiumbarren',
     description: 'Der Erste von vielen'
@@ -382,6 +398,10 @@ export default {
   mining_barIridium: {
     name: 'Iridiumbarren',
     description: 'Was für seltsame Eigenschaften dieser hier hat...'
+  },
+  mining_barDarkIron: {
+    name: 'Schwarzeisenbarren',
+    description: ''
   },
   mining_ember: {
     name: 'Glut',
@@ -430,6 +450,10 @@ export default {
   village_coin: {
     name: 'Goldmünze',
     description: 'Münzen, die du durch den Verkauf von Lebensmitteln an die Dorfbewohner erhalten hast'
+  },
+  village_copperCoin: {
+    name: 'Kupfermünze',
+    description: 'Münzen, die du durch den Verkauf von hergestellten Gegenständen an die Dorfbewohner erhalten hast'
   },
   village_wood: {
     name: 'Holz',
@@ -495,6 +519,10 @@ export default {
     name: 'Segen',
     description: 'Die Hoffnungen deiner Dorfbewohner haben sich bewahrheitet! Dinge sind in der Zukunft besser! Es wird mit der Zeit einfacher!'
   },
+  village_shares: {
+    name: 'Aktien',
+    description: 'Investiere, um mehr Geld zu verdienen!'
+  },
   village_offering: {
     name: 'Opfergabe',
     description: 'Eine mysteriöse Opfergabe, für welche Ressourcen geopfert werden mussten'
@@ -539,6 +567,22 @@ export default {
     name: 'Mythische Beute',
     description: 'Und du dachtest sie wäre für immer verschollen'
   },
+  village_acidVial: {
+    name: 'Säurephiole',
+    description: 'Sei vorsichtig!'
+  },
+  village_snowflake: {
+    name: 'Schneeflocke',
+    description: ''
+  },
+  village_chiliBundle: {
+    name: 'Chilibündel',
+    description: ''
+  },
+  village_gears: {
+    name: 'Zahnräder',
+    description: ''
+  },
   horde_bone: {
     name: 'Knochen',
     description: 'Knöcherne Reste von besiegten Gegnern'
@@ -563,6 +607,10 @@ export default {
     name: 'Verstärkte Seele',
     description: 'Ehemals verdorbene Seelen, welche durch ein komplexes Ritual gereinigt und bestärkt wurden'
   },
+  horde_courage: {
+    name: 'Courage',
+    description: 'Mut ist eine wichtige Tugend, wenn man es mit einer nicht endenden Horde zu tun hat'
+  },
   horde_crown: {
     name: 'Krone',
     description: 'Sie haben einst über die Türme geherrscht, sind jetzt aber entthront'
@@ -571,13 +619,21 @@ export default {
     name: 'Turmschlüssel',
     description: 'Ein seltener Schlüssel, der dir Zugang zu einem Turm gewährt'
   },
+  horde_blood: {
+    name: 'Blut',
+    description: 'Iih!'
+  },
+  horde_lockpick: {
+    name: 'Dietrich',
+    description: 'Erlaubt es dir von einen bereits besiegten Boss Schmuckstücke zu erhalten. Nur für den Pirat'
+  },
   farm_vegetable: {
     name: 'Gemüse',
     description: 'Iss dein Gemüse!'
   },
-  farm_fruit: {
-    name: 'Frucht',
-    description: 'Der fruchtbare Boden auf dem Bauernhof gibt den Früchten einen intensiven Geschmack'
+  farm_berry: {
+    name: 'Beeren',
+    description: 'Der fruchtbare Boden auf dem Bauernhof gibt den Beeren einen intensiven Geschmack'
   },
   farm_grain: {
     name: 'Getreide',
@@ -630,6 +686,10 @@ export default {
   farm_goldenPetal: {
     name: 'Goldenes Blütenblatt',
     description: 'Dieses extrem seltene Blütenblatt kann nur auf Rosen gefunden werden. Gerüchte behaupten, dass Rosen mit solchen Blütenblättern dunkler als gewöhnlich sind'
+  },
+  farm_smallSeed: {
+    name: 'Kleine Saat',
+    description: ''
   },
   gallery_beauty: {
     name: 'Schönheit',
@@ -743,6 +803,54 @@ export default {
     name: 'Pinke Farbtrommel',
     description: ''
   },
+  gallery_motivation: {
+    name: 'Motivation',
+    description: ''
+  },
+  gallery_mysteryShape: {
+    name: 'Mysterienform',
+    description: 'Was ist diese Form? Sie sieht seltsam aus, als würde sie nicht in diese Dimension gehören'
+  },
+  gallery_circle: {
+    name: 'Kreis',
+    description: ''
+  },
+  gallery_rectangle: {
+    name: 'Rechteck',
+    description: ''
+  },
+  gallery_triangle: {
+    name: 'Dreieck',
+    description: 'Achtung, sie sind gefährlich'
+  },
+  gallery_star: {
+    name: 'Stern',
+    description: ''
+  },
+  gallery_ellipse: {
+    name: 'Ellipse',
+    description: ''
+  },
+  gallery_heart: {
+    name: 'Herz',
+    description: '<3'
+  },
+  gallery_square: {
+    name: 'Quadrat',
+    description: ''
+  },
+  gallery_octagon: {
+    name: 'Achteck',
+    description: ''
+  },
+  gallery_pentagon: {
+    name: 'Fünfeck',
+    description: 'Eine Form, kein Gebäude'
+  },
+  gallery_hexagon: {
+    name: 'Sechseck',
+    description: ''
+  },
   gallery_cash: {
     name: 'Geld',
     description: 'Leicht verdientes Geld!'
@@ -758,6 +866,10 @@ export default {
   school_examPass: {
     name: 'Prüfungspass',
     description: 'Seltsam, bei unserer alten Schule haben wir sowas nicht gebraucht. Hier sind sie nötig, um eine Prüfung zu schreiben'
+  },
+  card_shinyDust: {
+    name: 'Glitzerstaub',
+    description: ''
   },
   treasure_fragment: {
     name: 'Fragment',

@@ -3,7 +3,7 @@
     <template v-slot:activator="{ on, attrs }">
       <div :class="$vnode.data.staticClass" v-bind="attrs" v-on="on">
         <v-btn width="56" height="56" min-width="56" :disabled="!canUpgrade || disabled" :color="idea.color" @click="buy">
-          <v-badge overlap bottom color="grey" :disabled="!canUpgrade" :content="$formatNum(idea.level)">
+          <v-badge overlap bottom left offset-x="45" color="grey" :disabled="!canUpgrade" :content="$formatNum(idea.level)">
             <v-icon large>{{ idea.icon }}</v-icon>
           </v-badge>
         </v-btn>

@@ -13,6 +13,7 @@
     <div class="d-flex flex-wrap justify-center pa-1">
       <currency class="ma-1" name="event_essence" :multArray="essenceMult"></currency>
       <currency class="ma-1" name="event_magic">
+        <alert-text v-if="canSeeSackDescription" type="info">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.sackDescription`) }}</alert-text>
         <alert-text type="info">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.ingredientSizeDescription`) }}</alert-text>
         <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.nightHuntIngredientSize') }}</h3>
         <stat-breakdown name="nightHuntIngredientSize"></stat-breakdown>
@@ -27,6 +28,23 @@
           <display-row class="mt-0" v-for="(subitem, key) in ingredientStat[item].effect" :key="`${subitem.name}-${subitem.type}-${key}`" :name="subitem.name" :type="subitem.type" :after="subitem.value"></display-row>
         </template>
       </currency>
+    </div>
+    <div v-if="canSeeFavouriteIngredient" class="d-flex justify-center align-center">
+      <span>{{ $vuetify.lang.t(`$vuetify.event.nightHunt.favouriteIngredient.title`) }}:</span>
+      <div class="ml-2" style="width: 280px;">
+        <v-select dense outlined hide-details v-model="favouriteIngredient" :items="favouritableList" @change="selectFavourite">
+          <template v-slot:selection="{ item }"><night-hunt-favouritable-display :name="item"></night-hunt-favouritable-display></template>
+          <template v-slot:item="{ item }"><night-hunt-favouritable-display :name="item"></night-hunt-favouritable-display></template>
+        </v-select>
+      </div>
+      <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.event.nightHunt.favouriteIngredient.title`)">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon class="ml-2" small v-bind="attrs" v-on="on">mdi-help-circle</v-icon>
+        </template>
+        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.favouriteIngredient.description`) }}</div>
+        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.nightHuntFavouriteIngredientSize') }}</h3>
+        <stat-breakdown name="nightHuntFavouriteIngredientSize"></stat-breakdown>
+      </gb-tooltip>
     </div>
     <div class="d-flex flex-wrap justify-center mt-12 pa-1">
       <night-hunt-ingredient class="ma-1" v-for="(item, key) in ritualIngredients" :key="'ritual-' + key" key-name="ritualIngredients" :index="key"></night-hunt-ingredient>
@@ -166,15 +184,19 @@ import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
+import NightHuntFavouritableDisplay from './NightHuntFavouritableDisplay.vue';
 import NightHuntIngredient from './NightHuntIngredient.vue';
 
 export default {
-  components: { Currency, NightHuntIngredient, DisplayRow, CurrencyIcon, StatBreakdown, PriceTag, AlertText },
+  components: { Currency, NightHuntIngredient, DisplayRow, CurrencyIcon, StatBreakdown, PriceTag, AlertText, NightHuntFavouritableDisplay },
+  data: () => ({
+    favouriteIngredient: 'copy',
+  }),
   computed: {
     ...mapState({
       ritualIngredients: state => state.nightHunt.ritualIngredients,
       bonusIngredients: state => state.nightHunt.bonusIngredients,
-      ingredientStat: state => state.nightHunt.ingredientStat
+      ingredientStat: state => state.nightHunt.ingredientStat,
     }),
     ...mapGetters({
       canPerformRitual: 'nightHunt/canPerformRitual',
@@ -184,8 +206,11 @@ export default {
       ritualStats: 'nightHunt/ritualStats',
       ritualPerformed: 'nightHunt/ritualPerformed',
       undiscoveredRituals: 'nightHunt/undiscoveredRituals',
-      ritualCost: 'nightHunt/ritualCost'
+      ritualCost: 'nightHunt/ritualCost',
     }),
+    favouritableList() {
+      return ['copy', ...Object.keys(this.ingredientStat).slice(0, this.$store.getters['mult/get']('nightHuntFindableIngredients'))];
+    },
     emptyRitualSlots() {
       return this.$store.getters['mult/get']('nightHuntMaxIngredients') - this.ritualIngredients.length;
     },
@@ -194,6 +219,9 @@ export default {
     },
     hasBonusSlots() {
       return this.$store.getters['mult/get']('nightHuntBonusIngredientCount') > 0;
+    },
+    canSeeFavouriteIngredient() {
+      return this.$store.getters['mult/get']('nightHuntFavouriteIngredientSize') > 0;
     },
     ingredientCurrencies() {
       return Object.keys(this.ingredientStat);
@@ -255,7 +283,13 @@ export default {
     },
     essenceMult() {
       return [{name: 'globalLevel', value: Math.pow(NIGHT_HUNT_GL_BOOST, this.$store.getters['meta/globalEventLevel'])}];
+    },
+    canSeeSackDescription() {
+      return this.$store.getters['currency/value']('event_magic') >= 1000;
     }
+  },
+  mounted() {
+    this.favouriteIngredient = this.$store.state.nightHunt.favouriteIngredient;
   },
   methods: {
     addIngredient(name) {
@@ -267,6 +301,9 @@ export default {
     },
     performRitual() {
       this.$store.dispatch('nightHunt/performRitual');
+    },
+    selectFavourite() {
+      this.$store.commit('nightHunt/updateKey', {key: 'favouriteIngredient', value: this.favouriteIngredient});
     }
   }
 }

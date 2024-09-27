@@ -45,6 +45,36 @@
   top: -5px;
   font-size: 10px;
 }
+.card-playing-power-dark {
+  border: 4px solid white !important;
+}
+.card-playing-power-light {
+  border: 4px solid black !important;
+}
+.card-playing-power {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: -18px;
+  top: -26px;
+}
+.card-playing-power-inner {
+  width: 20px;
+  height: 20px;
+  margin-left: -2px;
+  margin-top: -2px;
+}
+.card-playing-power-mobile {
+  width: 20px;
+  height: 20px;
+  right: -15px;
+  top: -16px;
+}
+.card-playing-power-mobile > .card-playing-power-inner {
+  width: 16px;
+  height: 16px;
+  font-size: 12px;
+}
 .card-playing-inner {
   border-top: 2px solid black !important;
   border-bottom: 2px solid black !important;
@@ -75,6 +105,30 @@
 }
 .card-ma-05 {
   margin: 2px;
+}
+
+/* shiny card visuals */
+@keyframes shiny-card {
+  0%   {opacity: 30%;}
+  10%  {opacity: 40%;}
+  20%  {opacity: 55%;}
+  30%  {opacity: 30%;}
+  40%  {opacity: 40%;}
+  50%  {opacity: 30%;}
+  60%  {opacity: 60%;}
+  70%  {opacity: 40%;}
+  80%  {opacity: 30%;}
+  90%  {opacity: 45%;}
+  100% {opacity: 30%;}
+}
+.card-shiny {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(25deg, #FFFFFFFF, #E0F0FFC0);
+  animation: shiny-card 10s linear infinite;
 }
 </style>
 
@@ -108,14 +162,24 @@
               class="card-playing-amount rounded px-1"
               :class="[{'card-playing-amount-mobile': $vuetify.breakpoint.xsOnly}, $vuetify.theme.dark ? `${ card.color } lighten-2` : `${ card.color } lighten-5`]"
             ><v-icon size="10">mdi-close</v-icon>{{ $formatNum(card.amount - 1) }}</div>
+            <div v-if="!card.instant" class="card-playing-power rounded-circle" :class="[{'card-playing-power-mobile': $vuetify.breakpoint.xsOnly}, `card-playing-power-${ $vuetify.theme.dark ? 'dark' : 'light' }`]">
+              <div
+                class="d-flex justify-center align-center card-playing-power-inner rounded-circle"
+                :class="[{'card-playing-power-mobile': $vuetify.breakpoint.xsOnly}, $vuetify.theme.dark ? `${ card.color } lighten-2` : `${ card.color } lighten-5`]"
+              >{{ cardPower }}</div>
+            </div>
           </div>
         </div>
-        <div class="card-playing-bottom d-flex align-center" :class="$vuetify.theme.dark ? `${ card.color } darken-2` : `${ card.color } lighten-1`">{{ id }}</div>
+        <div class="card-playing-bottom d-flex align-center" :class="$vuetify.theme.dark ? `${ card.color } darken-2` : `${ card.color } lighten-1`">
+          <span>{{ id }}</span>
+          <v-icon v-if="card.foundShiny" class="ml-1" x-small>mdi-shimmer</v-icon>
+        </div>
         <div
           class="card-feature-icon d-flex justify-center align-center"
           :style="`border-top: 2px solid ${ $vuetify.theme.dark ? 'white' : 'black' } !important; border-left: 2px solid ${ $vuetify.theme.dark ? 'white' : 'black' } !important;`"
           :class="$vuetify.theme.dark ? `${ card.color } darken-3` : card.color"
         ><v-icon size="20" :color="$vuetify.theme.dark ? 'white' : 'black'">{{ featureIcon }}</v-icon></div>
+        <div v-if="card.foundShiny" class="card-shiny"></div>
       </div>
       <div v-else class="card-hidden bg-tile-default rounded elevation-2 d-flex justify-center align-center" :class="[{'card-playing-mobile': $vuetify.breakpoint.xsOnly}, $vuetify.breakpoint.xsOnly ? 'card-ma-05' : 'ma-1']" v-bind="attrs" v-on="on">
         <v-icon color="#80808040" :size="$vuetify.breakpoint.smAndUp ? 64 : 48">{{ obtainable.length ? 'mdi-help' : 'mdi-lock' }}</v-icon>
@@ -128,6 +192,7 @@
         <span>):</span>
       </div>
       <ul>
+        <li v-if="cardPower > 0">{{ $vuetify.lang.t(`$vuetify.card.cardPower`) }} +{{ cardPower }}</li>
         <li v-for="(reward, rkey) in card.reward" :key="rkey">
           <span v-if="reward.type === 'currency'">+{{ $formatNum(reward.useMult ? multGet(gainMult(...reward.name.split('_')), reward.value) : reward.value) }} {{ $vuetify.lang.t(`$vuetify.currency.${ reward.name }.name`) }}</span>
           <span v-else-if="reward.type === 'consumable'">+{{ $formatNum(reward.value) }} {{ $vuetify.lang.t(`$vuetify.consumable.${ reward.name }.name`) }}</span>
@@ -193,6 +258,9 @@ export default {
         }
       }
       return arr;
+    },
+    cardPower() {
+      return this.card.power + (this.card.foundShiny ? 1 : 0);
     }
   }
 }

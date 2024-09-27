@@ -9,6 +9,14 @@ export default {
     name: 'Golden hammer',
     description: 'Get the best pickaxe possible for this craft'
   },
+  village_ingredientBox: {
+    name: 'Ingredient box',
+    description: 'Contains special ingredients that can only be found in these boxes'
+  },
+  horde_manaPotion: {
+    name: 'Mana potion',
+    description: 'Refill 50% of your maximum mana'
+  },
   farm_basic: {
     name: 'Basic fertilizer',
     description: ''
@@ -33,6 +41,10 @@ export default {
     name: 'Juicy fertilizer',
     description: ''
   },
+  farm_dissolving: {
+    name: 'Crop dissolver',
+    description: ''
+  },
   farm_potatoWater: {
     name: 'Potato water',
     description: ''
@@ -51,6 +63,18 @@ export default {
   },
   farm_premium: {
     name: 'Premium fertilizer',
+    description: ''
+  },
+  farm_analyzing: {
+    name: 'Analyzing fertilizer',
+    description: ''
+  },
+  farm_superJuicy: {
+    name: 'Super-juicy',
+    description: ''
+  },
+  farm_pellets: {
+    name: 'Pellets',
     description: ''
   },
   farm_sunshine: {

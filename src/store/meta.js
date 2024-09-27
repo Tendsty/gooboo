@@ -22,9 +22,10 @@ export default {
             cryolabFeature: 290,
             galleryFeature: 360,
             schoolArtSubfeature: 440,
-            // generalOrladeeSubfeature: 500,
             miningGasSubfeature: 625,
-            // villageCraftingSubfeature: 800,
+            villageCraftingSubfeature: 800,
+            // generalOrladeeSubfeature: 1000,
+            hordeClassesSubfeature: 1100,
         },
         globalLevelNotes: {
             meta_0: 5,
@@ -52,7 +53,7 @@ export default {
             cryolab_0: 290,
             gallery_0: 360,
         },
-        globalLevelList: ['mining_0', 'mining_1', 'village_0', 'horde_0', 'farm_0', 'gallery_0']
+        globalLevelList: ['mining_0', 'mining_1', 'village_0', 'village_1', 'horde_0', 'horde_1', 'farm_0', 'gallery_0']
     },
     getters: {
         globalEventLevel: (state) => {
@@ -120,12 +121,22 @@ export default {
                     }}, {root: true});
                     commit('unlock/unlock', key, {root: true});
 
-                    // Start current event if events just got unlocked
-                    if (key === 'eventFeature') {
+                    // Gain various gems on feature unlock to let new players experience the feature right away
+                    if (key === 'gemFeature') {
+                        dispatch('currency/gain', {feature: 'gem', name: 'ruby', amount: 50}, {root: true});
+                        dispatch('currency/gain', {feature: 'gem', name: 'amethyst', amount: 800}, {root: true});
+                    } else if (key === 'cardFeature') {
+                        dispatch('currency/gain', {feature: 'gem', name: 'emerald', amount: 100}, {root: true});
+                    } else if (key === 'eventFeature') {
+                        dispatch('currency/gain', {feature: 'gem', name: 'topaz', amount: 500}, {root: true});
+
+                        // Start current event if events just got unlocked
                         const currentEvent = rootGetters['event/currentEvent'];
                         if (currentEvent !== null) {
                             dispatch('event/start', currentEvent, {root: true});
                         }
+                    } else if (key === 'treasureFeature') {
+                        dispatch('currency/gain', {feature: 'gem', name: 'emerald', amount: 300}, {root: true});
                     }
                 }
             }
@@ -138,7 +149,7 @@ export default {
             }
 
             // Get a relic at global level 40 (when relics unlock)
-            if (state.globalLevel >= 40 && !rootState.relic.friendlyBat.found) {
+            if (state.globalLevel >= 40 && !rootState.relic.item.friendlyBat.found) {
                 dispatch('relic/find', 'friendlyBat', {root: true});
             }
         }

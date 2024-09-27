@@ -5,12 +5,12 @@ export default {
     hasCustomNavbar: true,
     hasCustomBackground: true,
     light: {
-        primary: '#FFD500',
+        primary: '#E89820',
         secondary: '#A0A0A0',
         accent: '#D18147',
     },
     dark: {
-        primary: '#FFD500',
+        primary: '#E89820',
         secondary: '#A0A0A0',
         accent: '#D18147',
     }

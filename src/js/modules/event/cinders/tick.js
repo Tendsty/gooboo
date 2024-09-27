@@ -31,11 +31,7 @@ export default function(seconds) {
         const totalTokens = Math.floor(store.getters['mult/get']('currencyEventCindersTokenGain', logBase(lightGained / buildNum(10, 'K'), 1.2)));
         const collectedTokens = store.state.stat.event_cindersToken.value;
         if (totalTokens > collectedTokens) {
-            store.dispatch('currency/gain', {
-                feature: 'event',
-                name: 'cindersToken',
-                amount: totalTokens - collectedTokens
-            });
+            store.dispatch('event/giveTokens', {event: 'cinders', amount: totalTokens - collectedTokens});
             store.dispatch('note/find', 'event_10');
         }
     }

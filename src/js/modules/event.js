@@ -63,6 +63,10 @@ export default {
                 eventTicks[stats.startEvent](newTicks - oldTime, oldTime, newTicks);
             }
 
+            if (oldDay !== newDay) {
+                store.dispatch('event/dayChange', {start: oldDay, end: newDay});
+            }
+
             // Tick new event
             if (stats.isBigEvent) {
                 const oldTicks = Math.floor(Math.max(
@@ -83,7 +87,13 @@ export default {
         bloomMaxPoppy: {type: 'bloom'},
         bloomMaxIris: {type: 'bloom'},
         bloomMaxLily: {type: 'bloom'},
-        summerFestivalMaxStage: {type: 'summerFestival'}
+        summerFestivalMaxStage: {type: 'summerFestival'},
+        cindersHighscore: {type: 'cinders'},
+        bloomHighscore: {type: 'bloom'},
+        weatherChaosHighscore: {type: 'weatherChaos'},
+        summerFestivalHighscore: {type: 'summerFestival'},
+        nightHuntHighscore: {type: 'nightHunt'},
+        snowdownHighscore: {type: 'snowdown'},
     },
     mult: {
         // shop mults
@@ -149,7 +159,8 @@ export default {
 
         // night hunt mults
         nightHuntFindableIngredients: {baseValue: 4, round: true},
-        nightHuntIngredientSize: {baseValue: 1},
+        nightHuntIngredientSize: {baseValue: 8, round: true},
+        nightHuntFavouriteIngredientSize: {round: true},
         nightHuntMaxIngredients: {baseValue: 1, round: true},
         nightHuntBonusIngredientCount: {round: true},
         nightHuntBonusIngredientAmount: {baseValue: 1, round: true},
@@ -500,6 +511,9 @@ export default {
         if (Object.keys(store.state.nightHunt.ritualHint).length > 0) {
             obj.nightHunt_ritualHint = store.state.nightHunt.ritualHint;
         }
+        if (store.state.nightHunt.favouriteIngredient !== 'copy') {
+            obj.nightHunt_favouriteIngredient = store.state.nightHunt.favouriteIngredient;
+        }
 
         let potions = {};
         let hasPotions = false;
@@ -706,6 +720,9 @@ export default {
         }
         if (data.nightHunt_ritualHint !== undefined) {
             store.commit('nightHunt/updateKey', {key: 'ritualHint', value: data.nightHunt_ritualHint});
+        }
+        if (data.nightHunt_favouriteIngredient !== undefined) {
+            store.commit('nightHunt/updateKey', {key: 'favouriteIngredient', value: data.nightHunt_favouriteIngredient});
         }
         if (data.nightHunt_potion !== undefined) {
             for (const [key, elem] of Object.entries(data.nightHunt_potion)) {

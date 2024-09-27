@@ -27,14 +27,15 @@
       <price-tag class="ma-1" :currency="smeltery.output" :amount="1" add></price-tag>
       <v-spacer></v-spacer>
       <v-badge v-if="smeltery.stored > 0" inline color="secondary" :content="$formatNum(smeltery.stored)"></v-badge>
-      <v-btn class="ma-1" small color="primary" :disabled="!canAfford" @click="buyMax">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
-      <v-btn class="ma-1" color="primary" :disabled="!canAfford" @click="buy">{{ $vuetify.lang.t('$vuetify.mining.smelt') }}</v-btn>
+      <v-btn class="ma-1" small color="primary" :disabled="isFrozen || !canAfford" @click="buyMax">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
+      <v-btn class="ma-1" color="primary" :disabled="isFrozen || !canAfford" @click="buy">{{ $vuetify.lang.t('$vuetify.mining.smelt') }}</v-btn>
     </div>
-    <v-progress-linear class="rounded-b" height="4" :value="smeltery.progress * 100"></v-progress-linear>
+    <v-progress-linear class="rounded-b" height="4" :indeterminate="isHighspeed" :value="isHighspeed ? undefined : (smeltery.progress * 100)"></v-progress-linear>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { MINING_SMELTERY_TEMPERATURE_SPEED } from '../../../js/constants';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
@@ -48,6 +49,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      isFrozen: state => state.cryolab.mining.active,
+    }),
     smeltery() {
       return this.$store.state.mining.smeltery[this.name];
     },
@@ -65,6 +69,9 @@ export default {
     },
     temperatureSpeedMult() {
       return this.temperatureSpeed > 0 ? [{name: 'miningTemperature', value: this.temperatureSpeed + 1}] : [];
+    },
+    isHighspeed() {
+      return this.timeNeeded < 1 && this.smeltery.stored > 0;
     }
   },
   methods: {

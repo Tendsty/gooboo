@@ -1,19 +1,28 @@
 <template>
-  <div class="d-flex flex-wrap ma-1 pb-2" :class="$vuetify.breakpoint.mdAndUp ? 'scroll-container' : ''">
-    <item class="ma-1" v-for="(item, key) in owned" :key="key" :name="item"></item>
+  <div>
+    <v-tabs v-model="tab" grow show-arrows>
+      <v-tab href="#relics"><tab-icon-text :text="$vuetify.lang.t('$vuetify.relic.relics')" icon="mdi-ring"></tab-icon-text></v-tab>
+      <v-tab href="#museum" v-if="canSeeMuseum"><tab-icon-text :text="$vuetify.lang.t('$vuetify.relic.museum')" icon="mdi-bank"></tab-icon-text></v-tab>
+    </v-tabs>
+    <relic-list v-if="tab === 'relics'" :class="$vuetify.breakpoint.mdAndUp ? 'scroll-container-tab' : ''"></relic-list>
+    <museum-tab v-else-if="tab === 'museum'" :class="$vuetify.breakpoint.mdAndUp ? 'scroll-container-tab' : ''"></museum-tab>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Item from '../partial/relic/Item.vue';
+import MuseumTab from '../partial/relic/MuseumTab.vue';
+import RelicList from '../partial/relic/RelicList.vue';
+import TabIconText from '../partial/render/TabIconText.vue';
 
 export default {
-  components: { Item },
+  components: { RelicList, TabIconText, MuseumTab },
+  data: () => ({
+    tab: 'relics'
+  }),
   computed: {
-    ...mapGetters({
-      owned: 'relic/owned'
-    })
+    canSeeMuseum() {
+      return false;
+    }
   }
 }
 </script>

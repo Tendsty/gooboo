@@ -3,7 +3,7 @@ export default {
         {name: 'currencyFarmVegetableGain', type: 'mult', value: 1.4}
     ]},
     goldenApple: {icon: 'mdi-food-apple', color: 'amber', effect: [
-        {name: 'currencyFarmFruitGain', type: 'mult', value: 1.4}
+        {name: 'currencyFarmBerryGain', type: 'mult', value: 1.4}
     ]},
     popcorn: {icon: 'mdi-popcorn', color: 'pale-yellow', effect: [
         {name: 'currencyFarmGrainGain', type: 'mult', value: 1.4}

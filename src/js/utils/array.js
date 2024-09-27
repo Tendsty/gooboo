@@ -1,4 +1,4 @@
-export { buildArray, shuffleArray, fallbackArray }
+export { buildArray, shuffleArray, fallbackArray, filterUnique }
 
 /**
  * Create an array with a fixed length
@@ -37,4 +37,13 @@ function shuffleArray(array, rngGen = null) {
  */
 function fallbackArray(array = [], fallback = null, index = 0) {
     return (index >= 0 && index < array.length) ? array[index] : fallback;
+}
+
+/**
+ * Return the array with duplicates removed
+ * @param {Array} array
+ * @returns {Array}
+ */
+function filterUnique(array) {
+    return array.filter((v, i, a) => a.indexOf(v) === i);
 }

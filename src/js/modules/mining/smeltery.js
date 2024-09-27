@@ -57,5 +57,16 @@ export default {
         output: 'mining_barIridium',
         timeNeeded: 365 * SECONDS_PER_DAY,
         minTemperature: 1750
-    }
+    },
+    darkIron: {
+        price: {
+            mining_oreIron: {base: buildNum(10, 'M'), increment: buildNum(500, 'K')},
+            mining_oreOsmium: {base: 1000, increment: 50},
+            mining_deeprock: {base: buildNum(100, 'M'), increment: buildNum(25, 'M')},
+            mining_neon: {base: buildNum(10, 'K'), increment: 2500}
+        },
+        output: 'mining_barDarkIron',
+        timeNeeded: 5000 * SECONDS_PER_DAY,
+        minTemperature: 2500
+    },
 }

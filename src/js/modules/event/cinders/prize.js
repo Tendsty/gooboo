@@ -35,7 +35,7 @@ export default {
     farm_sunshine: {
         type: 'consumable',
         item: 'farm_sunshine',
-        amount: 5,
+        amount: 20,
         requirement() {
             return store.state.unlock.farmFertilizer.see;
         },

@@ -10,16 +10,19 @@
       <v-col class="scroll-container-tab" cols="3">
         <resources></resources>
       </v-col>
-      <v-col class="scroll-container-tab" cols="3">
+      <v-col v-if="subfeature === 0" class="scroll-container-tab" cols="3">
         <job-list></job-list>
       </v-col>
-      <v-col class="scroll-container-tab" cols="3">
+      <v-col v-if="subfeature === 1" class="scroll-container-tab" cols="6">
+        <crafting-list></crafting-list>
+      </v-col>
+      <v-col v-if="subfeature === 0" class="scroll-container-tab" cols="3">
         <upgrade-queue feature="village" type="building" :disabled="isFrozen"></upgrade-queue>
         <building-stat-bar></building-stat-bar>
         <upgrade-list feature="village" type="building" key="village-building"></upgrade-list>
       </v-col>
       <v-col class="scroll-container-tab" cols="3">
-        <upgrade-list feature="village" key="village-regular"></upgrade-list>
+        <upgrade-list feature="village" key="village-regular" :subfeature="subfeature"></upgrade-list>
       </v-col>
     </v-row>
     <v-row v-else-if="tab === 'offering'" no-gutters>
@@ -56,17 +59,20 @@
         <resources></resources>
       </v-col>
       <v-col class="scroll-container-tab" cols="6">
-        <job-list></job-list>
+        <job-list v-if="subfeature === 0"></job-list>
+        <crafting-list v-else-if="subfeature === 1"></crafting-list>
       </v-col>
     </v-row>
     <v-row v-else-if="tab === 'upgrades'" no-gutters>
       <v-col class="scroll-container-tab" cols="6">
-        <upgrade-queue feature="village" type="building" :disabled="isFrozen"></upgrade-queue>
-        <building-stat-bar></building-stat-bar>
-        <upgrade-list feature="village" type="building" key="village-building"></upgrade-list>
+        <template v-if="subfeature === 0">
+          <upgrade-queue feature="village" type="building" :disabled="isFrozen"></upgrade-queue>
+          <building-stat-bar></building-stat-bar>
+          <upgrade-list feature="village" type="building" key="village-building"></upgrade-list>
+        </template>
       </v-col>
       <v-col class="scroll-container-tab" cols="6">
-        <upgrade-list feature="village" key="village-regular"></upgrade-list>
+        <upgrade-list feature="village" key="village-regular" :subfeature="subfeature"></upgrade-list>
       </v-col>
     </v-row>
     <v-row v-else-if="tab === 'offering'" no-gutters>
@@ -91,8 +97,9 @@
   <div v-else>
     <v-tabs class="mobile-tabs" v-model="tab" grow show-arrows>
       <v-tab href="#village"><tab-icon-text :text="$vuetify.lang.t('$vuetify.village.village')" icon="mdi-home-group"></tab-icon-text></v-tab>
-      <v-tab href="#jobs"><tab-icon-text :text="$vuetify.lang.t('$vuetify.village.job.name')" icon="mdi-account-hard-hat"></tab-icon-text></v-tab>
-      <v-tab href="#buildings"><tab-icon-text :text="$vuetify.lang.t('$vuetify.village.buildings')" icon="mdi-hammer"></tab-icon-text></v-tab>
+      <v-tab v-if="subfeature === 0" href="#jobs"><tab-icon-text :text="$vuetify.lang.t('$vuetify.village.job.name')" icon="mdi-account-hard-hat"></tab-icon-text></v-tab>
+      <v-tab v-else-if="subfeature === 1" href="#crafting"><tab-icon-text :text="$vuetify.lang.t('$vuetify.village.job.name')" icon="mdi-hammer"></tab-icon-text></v-tab>
+      <v-tab v-if="subfeature === 0" href="#buildings"><tab-icon-text :text="$vuetify.lang.t('$vuetify.village.buildings')" icon="mdi-hammer"></tab-icon-text></v-tab>
       <v-tab href="#upgrades" v-if="canSeeUpgrades"><tab-icon-text name="upgrades"></tab-icon-text></v-tab>
       <v-tab href="#offering" v-if="canSeeOffering"><tab-icon-text :text="$vuetify.lang.t('$vuetify.village.offering.name')" icon="mdi-candle"></tab-icon-text></v-tab>
       <v-tab href="#policies" v-if="canSeePolicies"><tab-icon-text :text="$vuetify.lang.t('$vuetify.village.policy.name')" icon="mdi-script-text"></tab-icon-text></v-tab>
@@ -101,12 +108,13 @@
     </v-tabs>
     <resources v-if="tab === 'village'"></resources>
     <job-list v-else-if="tab === 'jobs'"></job-list>
+    <crafting-list v-else-if="tab === 'crafting'"></crafting-list>
     <div v-else-if="tab === 'buildings'">
       <upgrade-queue feature="village" type="building" :disabled="isFrozen"></upgrade-queue>
       <building-stat-bar></building-stat-bar>
       <upgrade-list feature="village" type="building" key="village-building"></upgrade-list>
     </div>
-    <upgrade-list v-else-if="tab === 'upgrades'" feature="village" key="village-regular"></upgrade-list>
+    <upgrade-list v-else-if="tab === 'upgrades'" feature="village" key="village-regular" :subfeature="subfeature"></upgrade-list>
     <policy-list v-else-if="tab === 'policies'"></policy-list>
     <div v-else-if="tab === 'offering'" no-gutters>
       <offering-inventory></offering-inventory>
@@ -124,6 +132,7 @@
 import { mapState } from 'vuex';
 import TabIconText from '../partial/render/TabIconText.vue';
 import BuildingStatBar from '../partial/village/BuildingStatBar.vue';
+import CraftingList from '../partial/village/CraftingList.vue';
 import JobList from '../partial/village/JobList.vue';
 import OfferingInventory from '../partial/village/OfferingInventory.vue';
 import OfferingList from '../partial/village/OfferingList.vue';
@@ -135,13 +144,14 @@ import UpgradeList from '../render/UpgradeList.vue';
 import UpgradeQueue from '../render/UpgradeQueue.vue';
 
 export default {
-  components: { UpgradeList, Resources, JobList, PrestigeStatus, PrestigeInventory, UpgradeQueue, OfferingInventory, OfferingList, PolicyList, TabIconText, BuildingStatBar },
+  components: { UpgradeList, Resources, JobList, PrestigeStatus, PrestigeInventory, UpgradeQueue, OfferingInventory, OfferingList, PolicyList, TabIconText, BuildingStatBar, CraftingList },
   data: () => ({
     tab: 'village'
   }),
   computed: {
     ...mapState({
-      isFrozen: state => state.cryolab.village.active
+      isFrozen: state => state.cryolab.village.active,
+      subfeature: state => state.system.features.village.currentSubfeature
     }),
     canSeeUpgrades() {
       return this.$store.state.unlock.villageCoinUpgrades.see;
@@ -150,13 +160,13 @@ export default {
       return this.$store.state.unlock.villagePrestige.see;
     },
     canSeeOffering() {
-      return this.$store.state.unlock.villageOffering1.see;
+      return this.subfeature === 0 && this.$store.state.unlock.villageOffering1.see;
     },
     canSeePolicies() {
-      return this.$store.getters['mult/get']('villagePolicyTaxes') >= 1;
+      return this.subfeature === 0 && this.$store.getters['mult/get']('villagePolicyTaxes') >= 1;
     },
     upgradeNextRequired() {
-      const nextBuild = ['localGovernment', 'government'].find(build => {
+      const nextBuild = ['campfire', 'communityCenter', 'townHall', 'localGovernment', 'government', 'steamEngine', 'ecoCouncil'].find(build => {
         return this.$store.state.upgrade.item[`village_${build}`].highestLevel < 1;
       });
       return nextBuild ? [{value: 1, text:

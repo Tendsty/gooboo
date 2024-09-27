@@ -29,6 +29,7 @@ import note from './note';
 import treasure from './treasure';
 import cryolab from './cryolab';
 import consumable from './consumable';
+import tag from './tag';
 
 // store modules
 
@@ -64,6 +65,7 @@ export default new Vuex.Store({
         note,
         treasure,
         cryolab,
-        consumable
+        consumable,
+        tag
     }
 })

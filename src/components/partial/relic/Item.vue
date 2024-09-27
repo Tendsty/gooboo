@@ -5,7 +5,7 @@
 .relic-feature-list {
   position: absolute;
   left: 0;
-  right: 8px;
+  right: 4px;
   bottom: -12px;
 }
 </style>
@@ -25,7 +25,7 @@
         <v-icon :x-large="$vuetify.breakpoint.smAndUp">{{ relic.icon }}</v-icon>
         <div class="text-center" :class="{'relic-name-mobile': $vuetify.breakpoint.xsOnly}">{{ $vuetify.lang.t(`$vuetify.relic.${name}`) }}</div>
         <div class="relic-feature-list d-flex flex-wrap justify-end">
-          <div v-for="item in relic.feature" :key="'feature-' + item" :class="relic.color + ($vuetify.theme.dark ? ' darken-2' : ' lighten-2')" class="rounded-circle" :style="`border: 2px solid ${ $vuetify.theme.dark ? '#121212' : '#FFFFFF' } !important;`">
+          <div v-for="item in relic.feature" :key="'feature-' + item" :class="relic.color + ($vuetify.theme.dark ? ' darken-2' : ' lighten-2')" class="rounded-circle mr-1" :style="`border: 2px solid ${ $vuetify.theme.dark ? '#121212' : '#FFFFFF' } !important;`">
             <v-icon class="ma-1" small>{{ features[item].icon }}</v-icon>
           </div>
         </div>
@@ -52,7 +52,7 @@ export default {
       features: state => state.system.features
     }),
     relic() {
-      return this.$store.state.relic[this.name];
+      return this.$store.state.relic.item[this.name];
     }
   }
 }

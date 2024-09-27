@@ -38,7 +38,7 @@ export default {
     farm_fieldBlessing: {
         type: 'consumable',
         item: 'farm_fieldBlessing',
-        amount: 5,
+        amount: 20,
         requirement() {
             return store.state.unlock.farmFertilizer.see;
         },

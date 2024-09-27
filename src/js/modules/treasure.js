@@ -40,9 +40,9 @@ const treasureTypes = {
         icon: 'mdi-call-split'
     },
     empowered: {
-        destroyPrice: 16,
+        destroyPrice: 32,
         slots: [
-            {type: 'regular', power: 1.25}
+            {type: 'regular', power: 1}
         ],
         icon: 'mdi-star-circle'
     },

@@ -189,7 +189,7 @@ export default {
             const statName = 'bloomMax' + capitalize(o.type);
             const amount = Math.max(0, o.tier - rootState.stat['event_' + statName].value);
             if (amount > 0) {
-                dispatch('currency/gain', {feature: 'event', name: 'bloomToken', amount: amount * state.flower[o.type].tokens}, {root: true});
+                dispatch('event/giveTokens', {event: 'bloom', amount: amount * state.flower[o.type].tokens}, {root: true});
                 dispatch('note/find', 'event_14', {root: true});
             }
             commit('stat/increaseTo', {feature: 'event', name: statName, value: o.tier}, {root: true});

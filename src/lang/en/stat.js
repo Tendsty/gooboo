@@ -69,6 +69,15 @@ export default {
   mining_timeSpent: {
     description: 'Time spent'
   },
+  mining_bestPrestige0: {
+    description: 'Best prestige (ore mine)'
+  },
+  mining_bestPrestige1: {
+    description: 'Best prestige (gas giant)'
+  },
+  mining_prestigeCount: {
+    description: 'Prestiges'
+  },
 
   // Village stats
   village_maxBuilding: {
@@ -126,11 +135,23 @@ export default {
   village_timeSpent: {
     description: 'Time spent'
   },
+  village_bestPrestige0: {
+    description: 'Best prestige (workers)'
+  },
+  village_bestPrestige1: {
+    description: 'Best prestige (crafters guild)'
+  },
+  village_prestigeCount: {
+    description: 'Prestiges'
+  },
 
   // Horde stats
   horde_maxZone: {
     achievement: 'Explorer',
     description: 'Maximum zone'
+  },
+  horde_maxDifficulty: {
+    description: 'Maximum difficulty'
   },
   horde_maxZoneSpeedrun: {
     achievement: 'Swift strikes',
@@ -156,6 +177,10 @@ export default {
     achievement: 'Shepherd of souls',
     description: 'Corrupted souls gained'
   },
+  horde_maxCorruptionKill: {
+    achievement: 'Challenging evil',
+    description: 'Highest corruption enemy defeated'
+  },
   horde_maxMastery: {
     achievement: 'One-trick',
     description: 'Highest mastery level'
@@ -173,6 +198,15 @@ export default {
   },
   horde_timeSpent: {
     description: 'Time spent'
+  },
+  horde_bestPrestige0: {
+    description: 'Best prestige (equipment)'
+  },
+  horde_bestPrestige1: {
+    description: 'Best prestige (classes)'
+  },
+  horde_prestigeCount: {
+    description: 'Prestiges'
   },
 
   // Farm stats
@@ -192,9 +226,9 @@ export default {
     achievement: 'Vegetarian',
     description: 'Vegetables gained'
   },
-  farm_fruit: {
-    achievement: 'Fruitarian',
-    description: 'Fruits gained'
+  farm_berry: {
+    achievement: 'Berry good',
+    description: 'Berries gained'
   },
   farm_grain: {
     achievement: 'Baker',
@@ -216,6 +250,9 @@ export default {
   },
   farm_butterflyMax: {
     description: 'Highest butterfly amount'
+  },
+  farm_totalMystery: {
+    description: 'Mystery'
   },
 
   // Gallery stats
@@ -256,8 +293,27 @@ export default {
     achievement: 'Dum dum dum',
     description: 'Highest red drum amount'
   },
+  gallery_shapeComboTotal: {
+    achievement: 'Collector',
+    description: 'Total shapes collected'
+  },
+  gallery_shapeComboHighest: {
+    achievement: 'Genius',
+    description: 'Highest shape combo'
+  },
+  gallery_canvasLevelTotal: {
+    achievement: 'Visionary',
+    description: 'Total canvas level'
+  },
+  gallery_hourglassHighest: {
+    achievement: 'Borrowed time',
+    description: 'Reach 1d of hourglass time'
+  },
   gallery_timeSpent: {
     description: 'Time spent'
+  },
+  gallery_prestigeCount: {
+    description: 'Prestiges'
   },
 
   // Meta stats
