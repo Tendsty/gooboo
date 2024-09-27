@@ -7,6 +7,9 @@
         <div v-else-if="confirm.type === 'theme'">{{ $vuetify.lang.t(`$vuetify.confirm.theme.0`) }}"{{ $vuetify.lang.t(`$vuetify.theme.${confirm.name}`) }}"{{ $vuetify.lang.t(`$vuetify.confirm.theme.1`) }}</div>
         <div v-else-if="confirm.type === 'cardPack'">{{ $vuetify.lang.t(`$vuetify.confirm.cardPack.0`) }}"{{ $vuetify.lang.t(`$vuetify.card.pack.${confirm.name}`) }}"{{ confirm.amount > 1 ? ` x${confirm.amount}` : '' }}{{ $vuetify.lang.t(`$vuetify.confirm.cardPack.1`) }}</div>
         <div v-else-if="confirm.type === 'weatherChaosFishingRodBuy'">{{ $vuetify.lang.t(`$vuetify.confirm.weatherChaosFishingRodBuy`, $vuetify.lang.t(`$vuetify.event.weatherChaos.fishingRod.${ confirm.name }`)) }}</div>
+        <div v-else-if="confirm.type === 'reset'">
+          <div>{{ $vuetify.lang.t(`$vuetify.confirm.reset.text`, $vuetify.lang.t(`$vuetify.feature.${ confirm.feature }`)) }}</div>
+        </div>
         <div v-else-if="confirm.type === 'prestige' && !hasGain">{{ $vuetify.lang.t(`$vuetify.confirm.prestigeNoGain`) }}</div>
         <div v-else>{{ $vuetify.lang.t(`$vuetify.confirm.${confirm.type}`) }}</div>
         <div v-if="hasGain" class="mt-2">

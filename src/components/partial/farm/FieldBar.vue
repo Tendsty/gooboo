@@ -37,10 +37,9 @@
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.farm.button.color`) }}</div>
       </gb-tooltip>
     </div>
-    <div v-if="showColors" class="d-flex flex-wrap justify-center ma-1 mt-n1">
-      <v-btn x-small min-width="24" v-for="color in colors" :key="color" class="ma-1" :color="color" @click="selectColor(color)"></v-btn>
-      <v-btn x-small min-width="24" class="ma-1 px-0" :color="selectedColor === 0 ? 'error' : 'secondary'" @click="selectColor(selectedColor === 0 ? null : 0)"><v-icon small>mdi-delete</v-icon></v-btn>
-      <v-btn x-small min-width="24" class="ma-1 px-0" color="secondary" @click="selectColor(null)"><v-icon small>mdi-close</v-icon></v-btn>
+    <div v-if="showColors" class="d-flex flex-wrap justify-center ma-1">
+      <v-btn x-small min-width="24" v-for="color in colors" :key="color" class="mr-1" :color="color" @click="selectColor(color)"></v-btn>
+      <v-btn x-small min-width="24" class="ml-2 px-0" :color="selectedColor === 0 ? 'error' : 'secondary'" @click="selectColor(0)"><v-icon small>mdi-delete</v-icon></v-btn>
     </div>
   </div>
 </template>
@@ -66,7 +65,7 @@ export default {
     }
   },
   data: () => ({
-    colors: ['green', 'yellow', 'red', 'blue', 'orange', 'pink', 'purple', 'brown']
+    colors: ['brown', 'green', 'light-green', 'yellow', 'orange', 'red', 'pink', 'purple', 'indigo', 'blue']
   }),
   methods: {
     deleteMode() {
@@ -113,7 +112,7 @@ export default {
       }
     },
     selectColor(name) {
-      this.$store.commit('farm/updateKey', {key: 'selectedColor', value: name});
+      this.$store.commit('farm/updateKey', {key: 'selectedColor', value: this.selectedColor === name ? null : name});
     },
     toggleColors() {
       this.$store.commit('farm/updateKey', {key: 'showColors', value: !this.showColors});

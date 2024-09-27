@@ -1,8 +1,8 @@
 <template>
   <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.consumable.${ name }.name`)">
     <template v-slot:activator="{ on, attrs }">
-      <div v-bind="attrs" v-on="on">
-        <v-btn class="px-2" :class="[{'selected-primary': isSelected}, $vnode.data.staticClass]" :color="consumable.color" :disabled="disabled" v-on="$listeners">
+      <div :class="$vnode.data.staticClass" v-bind="attrs" v-on="on">
+        <v-btn class="px-2" :class="{'selected-primary': isSelected}" :color="consumable.color" :disabled="disabled" v-on="$listeners">
           <v-badge inline bordered :content="$formatNum(consumable.amount)" :color="consumable.amount > 0 ? consumable.color : 'grey'">
             <v-icon>{{ consumable.icon }}</v-icon>
           </v-badge>

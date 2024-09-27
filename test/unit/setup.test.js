@@ -11,7 +11,7 @@ test('game sets up everything correctly', () => {
     const mults = Object.keys(store.state.mult.items).length;
     const currencies = Object.keys(store.state.currency).length;
     const upgrades = Object.keys(store.state.upgrade.item).length;
-    const relics = Object.keys(store.state.relic).length;
+    const relics = Object.keys(store.state.relic.item).length;
     const achievements = Object.keys(store.state.achievement).length;
 
     // Specific systems

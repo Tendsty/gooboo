@@ -1,6 +1,9 @@
 export default {
   cardPack: 'Card pack',
   cardsSuffix: ' cards',
+  cardPower: 'Card power',
+  cardPowerValue: '{0} card power',
+  cardPowerDescription: 'Card power is added for all active cards and increases basic stats of that feature',
   notFound: 'No cards found',
   fullCollectionReward: 'Full collection reward',
   canFind: 'This card can be found in the following packs',

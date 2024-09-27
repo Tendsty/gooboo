@@ -218,6 +218,20 @@ let obj = {
         darken3: '#37474f',
         darken4: '#263238'
     },
+
+    // Full custom colors
+    babypink: {
+        base: '#E325B5',
+        lighten5: '#FDE8F8',
+        lighten4: '#F8C4EB',
+        lighten3: '#F49FDF',
+        lighten2: '#EF71D0',
+        lighten1: '#EB4CC5',
+        darken1: '#D219A5',
+        darken2: '#B3148D',
+        darken3: '#8E106F',
+        darken4: '#650B4F'
+    },
 };
 
 // Add pale variants
@@ -230,6 +244,7 @@ obj['orange-red'] = mergeColorObject(obj.orange, obj.red);
 obj['red-pink'] = mergeColorObject(obj.red, obj.pink);
 obj['pink-purple'] = mergeColorObject(obj.pink, obj.purple);
 obj['dark-blue'] = mergeColorObject(obj.blue, obj.indigo);
+obj.aqua = mergeColorObject(obj.green, obj.teal, 0.75);
 
 // Add custom colors
 obj.wooden = filterColorObject(mergeColorObject(obj.brown, obj['orange-red']), color => color.blacken(0.8));

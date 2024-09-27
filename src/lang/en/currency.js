@@ -335,6 +335,14 @@ export default {
     name: 'Iridium ore',
     description: 'Irid... what? You never heard of this one before, can it even be used for anything?'
   },
+  mining_oreOsmium: {
+    name: 'Osmium ore',
+    description: ''
+  },
+  mining_oreLead: {
+    name: 'Lead ore',
+    description: ''
+  },
   mining_granite: {
     name: 'Granite',
     description: 'Huge blocks of granite cut from the underground. Surprisingly, there is no scrap in them'
@@ -359,6 +367,14 @@ export default {
     name: 'Obsidian',
     description: 'Beautiful purple shards, they look fragile'
   },
+  mining_deeprock: {
+    name: 'Deeprock',
+    description: ''
+  },
+  mining_glowshard: {
+    name: 'Glowshard',
+    description: ''
+  },
   mining_barAluminium: {
     name: 'Aluminium bar',
     description: 'The first of many'
@@ -382,6 +398,10 @@ export default {
   mining_barIridium: {
     name: 'Iridium bar',
     description: 'What strange properties does this one have...'
+  },
+  mining_barDarkIron: {
+    name: 'Dark iron bar',
+    description: ''
   },
   mining_ember: {
     name: 'Ember',
@@ -430,6 +450,10 @@ export default {
   village_coin: {
     name: 'Gold coin',
     description: 'Coins earned by selling food to your villagers'
+  },
+  village_copperCoin: {
+    name: 'Copper coin',
+    description: 'Coins earned by selling crafted items to your villagers'
   },
   village_wood: {
     name: 'Wood',
@@ -495,6 +519,10 @@ export default {
     name: 'Blessing',
     description: 'The hopes of your villagers turned out to be true! Things are better in the future! It will get easier over time!'
   },
+  village_shares: {
+    name: 'Shares',
+    description: 'Invest to make more money!'
+  },
   village_offering: {
     name: 'Offering',
     description: 'A mysterious offering that required a resource sacrifice'
@@ -539,6 +567,22 @@ export default {
     name: 'Mythical loot',
     description: 'And you thought these were lost forever'
   },
+  village_acidVial: {
+    name: 'Acid vial',
+    description: 'Be careful!'
+  },
+  village_snowflake: {
+    name: 'Snowflake',
+    description: ''
+  },
+  village_chiliBundle: {
+    name: 'Chili bundle',
+    description: ''
+  },
+  village_gears: {
+    name: 'Gears',
+    description: ''
+  },
   horde_bone: {
     name: 'Bone',
     description: 'Skeletal remains of the enemies you have slain'
@@ -563,6 +607,10 @@ export default {
     name: 'Empowered soul',
     description: 'Formerly corrupted souls that were purified and strengthened by a complex ritual'
   },
+  horde_courage: {
+    name: 'Courage',
+    description: 'Bravery is a much needed virtue when facing a neverending horde'
+  },
   horde_crown: {
     name: 'Crown',
     description: 'They used to rule the towers, but are now dethroned'
@@ -571,13 +619,21 @@ export default {
     name: 'Tower key',
     description: 'A rare key that allows you to access a tower'
   },
+  horde_blood: {
+    name: 'Blood',
+    description: 'Eww!'
+  },
+  horde_lockpick: {
+    name: 'Lockpick',
+    description: 'Allows you to receive trinkets from already defeated bosses. Exclusive to the pirate'
+  },
   farm_vegetable: {
     name: 'Vegetable',
     description: 'Eat your veggies!'
   },
-  farm_fruit: {
-    name: 'Fruit',
-    description: 'The fertile soil on this farm gives the fruit an intense taste'
+  farm_berry: {
+    name: 'Berry',
+    description: 'The fertile soil on this farm gives the berries an intense taste'
   },
   farm_grain: {
     name: 'Grain',
@@ -630,6 +686,10 @@ export default {
   farm_goldenPetal: {
     name: 'Golden petal',
     description: 'This extremely rare petal can only be found on roses. Rumors say the roses with these petals look darker than others'
+  },
+  farm_smallSeed: {
+    name: 'Small seed',
+    description: ''
   },
   gallery_beauty: {
     name: 'Beauty',
@@ -743,6 +803,54 @@ export default {
     name: 'Pink drum',
     description: ''
   },
+  gallery_motivation: {
+    name: 'Motivation',
+    description: ''
+  },
+  gallery_mysteryShape: {
+    name: 'Mystery shape',
+    description: 'What is this shape? It looks strange, like it doesn\'t belong in this dimension'
+  },
+  gallery_circle: {
+    name: 'Circle',
+    description: ''
+  },
+  gallery_rectangle: {
+    name: 'Rectangle',
+    description: ''
+  },
+  gallery_triangle: {
+    name: 'Triangle',
+    description: 'Careful, those are dangerous'
+  },
+  gallery_star: {
+    name: 'Star',
+    description: ''
+  },
+  gallery_ellipse: {
+    name: 'Ellipse',
+    description: ''
+  },
+  gallery_heart: {
+    name: 'Heart',
+    description: '<3'
+  },
+  gallery_square: {
+    name: 'Square',
+    description: ''
+  },
+  gallery_octagon: {
+    name: 'Octagon',
+    description: ''
+  },
+  gallery_pentagon: {
+    name: 'Pentagon',
+    description: 'It\'s a shape, not a building'
+  },
+  gallery_hexagon: {
+    name: 'Hexagon',
+    description: ''
+  },
   gallery_cash: {
     name: 'Cash',
     description: 'Easy money!'
@@ -758,6 +866,10 @@ export default {
   school_examPass: {
     name: 'Exam pass',
     description: 'Strange, we didn\'t need them at our old school. Here they are needed to take an exam'
+  },
+  card_shinyDust: {
+    name: 'Shiny dust',
+    description: ''
   },
   treasure_fragment: {
     name: 'Fragment',

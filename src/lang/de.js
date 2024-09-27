@@ -1,14 +1,15 @@
-import { de } from 'vuetify/lib/locale'
-import card from './de/card'
-import consumable from './de/consumable'
-import currency from './de/currency'
-import mult from './de/mult'
-import note from './de/note'
-import relic from './de/relic'
-import stat from './de/stat'
-import unlock from './de/unlock'
-import upgrade from './de/upgrade'
-import patchnote from './de/patchnote'
+import { de } from 'vuetify/lib/locale';
+import card from './de/card';
+import consumable from './de/consumable';
+import currency from './de/currency';
+import mult from './de/mult';
+import note from './de/note';
+import relic from './de/relic';
+import stat from './de/stat';
+import unlock from './de/unlock';
+import upgrade from './de/upgrade';
+import patchnote from './de/patchnote';
+import tag from './de/tag';
 
 export default {
   ...de,
@@ -23,6 +24,9 @@ export default {
     equip: 'Ausrüsten',
     unequip: 'Ablegen',
     unequipAll: 'Alle ablegen',
+    select: 'Auswählen',
+    deselect: 'Abwählen',
+    take: 'Nehmen',
     max: 'Max',
     maxed: 'Max',
     free: 'Kostenlos',
@@ -46,6 +50,7 @@ export default {
     saveManual: 'Speichern',
     saveExport: 'Nach Datei exportieren',
     saveImport: 'Aus Datei laden',
+    resetProgress: 'Fortschritt zurücksetzen',
     closeAll: 'Alle schließen',
     draw: 'Ziehen',
     finish: 'Abschließen',
@@ -142,12 +147,28 @@ export default {
       key: 'Dem geladenen Spielstand fehlen wichtige Daten',
       version: 'Diese Datei ist von einer neueren Version des Spiels (v{0}, aktuelle Version: v{1})',
       testing: 'Dateien vom Teststand können nicht in der Live-Version verwendet werden',
-      migration: 'Ein Fehler ist beim Migrieren von v{0} nach v{1} aufgetreten'
+      testingVersion: 'Dateien von älteren Testversionen können nicht verwendet werden',
+      migration: 'Ein Fehler ist beim Migrieren von v{0} nach v{1} aufgetreten',
+      checksum: 'Ungültige Prüfsumme',
     }
   },
   duplicateTab: {
     title: 'Gooboo läuft bereits in einem anderen Tab',
     description: 'Um Konflikte im Spielstand zu vermeiden, kann Gooboo nur einmal gleichzeitig laufen. Bitte schließe diesen Tab und kehre zum vorhandenen Tab mit dem Spiel zurück.'
+  },
+  reset: {
+    feature: 'Möchtest du neu anfangen? Hier kannst du den Fortschritt in einer einzelnen Funktion zurücksetzen, ohne den Rest des Spiels zu beeinflussen.',
+    warning: 'Das ist KEIN Prestige und es gibt dafür keine Belohnungen oder Erstattungen. Das Zurücksetzen kann nicht rückgängig gemacht werden',
+    deleteSave: 'Du kannst auch den gesamten Spielstand löschen:',
+    deleteButton: 'Spielstand löschen'
+  },
+  prestigeDescription: {
+    mining_ember: 'Erhalte einen Prozentsatz der Gräbertiefe als Glut',
+    village_blessing: 'Glaube wird in Segen umgewandelt',
+    village_shares: 'Erhalte 0.1% der aktuellen Kupfermünzen im Besitz als Aktien',
+    horde_soulEmpowered: 'Korrupte Seelen werden in verstärkte Seelen umgewandelt',
+    horde_courage: 'Erhalte Courage, wenn du Stufe 10 erreichst, und noch mehr für jede Stufe darüber',
+    gallery_cash: 'Erhalte Geld, abhängig von der in diesem Durchlauf erhaltenen Schönheitsmenge',
   },
   confirm: {
     title: 'Aktion bestätigen',
@@ -170,13 +191,18 @@ export default {
     weatherChaosFishingRodBuy: 'Die Angel "{0}" kostet seltene Währung. Möchtest du das wirklich kaufen?',
     summerFestivalCellBuy: 'Ein neues Inselfeld kostet seltene Währung. Möchtest du das wirklich kaufen?',
     farmCrop: 'Die ausgewählten Pflanzen kosten seltene Währung. Möchtest du das wirklich kaufen?',
+    galleryMotivation: 'Motivation kostet seltene Währung. Möchtest du das wirklich kaufen?',
     treasure: 'Ein neuer Schatz kostet seltene Währung. Möchtest du das wirklich kaufen?',
     schoolExamPass: 'Ein Prüfungspass kostet seltene Währung. Möchtest du das wirklich kaufen?',
     treasureFragment: 'Fragmente kosten seltene Währung. Möchtest du das wirklich kaufen?',
     treasureDelete: 'Möchtest du den Schatz wirklich zerstören und in Fragmente umwandeln?',
     casinoBingoBuy: 'Eine Bingokarte kostet seltene Währung. Möchtest du das wirklich kaufen?',
     casinoWheelSpin: 'Ein Dreh am Glücksrad kostet seltene Währung. Möchtest du das wirklich kaufen?',
-    consumable: 'Diese Aktion benötigt Verbrauchsgüter, die du nicht besitzt. Möchtest du sie automatisch für seltene Währung einkaufen?'
+    consumable: 'Diese Aktion benötigt Verbrauchsgüter, die du nicht besitzt. Möchtest du sie automatisch für seltene Währung einkaufen?',
+    reset: {
+      text: 'Möchtest du wirklich die {0}-Funktion zurücksetzen? Das kann nicht rückgängig gemacht werden!',
+    },
+    resetAll: 'Möchtest du wirklich deinen Spielstand löschen? Das kann nicht rückgängig gemacht werden!'
   },
   feature: {
     subfeature: 'Unterfunktion',
@@ -203,6 +229,8 @@ export default {
 
     // Subfeatures
     miningGas: 'Gas',
+    villageCrafting: 'Handwerk',
+    hordeClasses: 'Klassen',
     schoolLiterature: 'Literatur',
     schoolHistory: 'Geschichte',
     schoolArt: 'Kunst',
@@ -226,6 +254,7 @@ export default {
     },
     horde: {
       0: 'Ausrüstung',
+      1: 'Klassen',
     },
     farm: {
       0: 'Garten',
@@ -236,13 +265,23 @@ export default {
   },
   unlock,
   mult,
+  tag,
   text: {
+    villageIngredientBoxGet: 'Erhalte 3 Zutatenkisten',
+    hordeBattlePassUpgrade: 'Neue Verbesserung',
+    hordeBattlePassPrestigeUpgrade: 'Neue Prestige-Verbesserung',
     farmUnlockDna: 'Schalte alle DNA-Verbesserungen von Stufe-1-Genen frei',
-    farmGnomeBoost: 'Angrenzende Gartenzwerge erhöhen sämtlichen Pflanzenertrag um 10%',
+    farmGnomeBoost: 'Erhöht sämtlichen Pflanzenertrag um 4% pro angrenzenden Gartenzwerg. Premium-Gartenzwerge zählen doppelt',
     farmLonelyGrow: 'Pflanzen wachsen doppelt so schnell, wenn keine anderen Pflanzen der gleichen Art auf dem Feld sind',
-    farmFertileBoost: 'Erhöht sämtlichen Pflanzenertrag um 30% vom Wachstumsbonus des Düngers',
-    farmYieldConversion: '60% vom Ertrag wird in andere Ertragsarten umgewandelt (jeweils 20%)',
+    farmFertileBoost: 'Erhöht den Ertrag um 30% pro Saphirkosten des Düngers',
+    farmYieldConversion: '5% vom Ertrag wird an andere Ertragsarten gegeben',
     farmFastPrestige: 'Prestige reduziert die Pflanzenstufe um 5, anstatt sie auf 0 zurückzusetzen',
+    farmLuckyHarvest: '1% chance to receive 8x harvest gain',
+    farmSelfless: 'Erhöht den Ertrag aller Pflanzen um +5%',
+    farmUnyielding: 'Beim Ernten der Pflanze wird sie zu 40% kostenlos neu gepflanzt',
+    farmTeamwork: 'Wenn dieses Gen auf einer Pflanze jeder Ertragsart vorhanden ist, wird der Ertrag aller Pflanzen verdoppelt',
+    farmHunter: 'Seltene Rohstofferträge, die auf dieser Pflanze heimisch sind, werden gejagt. Die Jagdchance beträgt 1% der Chance auf seltenen Ertrag. Bei jeder erfolgreichen Jagd steigt die Rohstoffkapazität um 10% des Grundwertes und senkt die Grund-Jagdchance um 5%',
+    farmPatient: 'Erhöht den Ertrag um +3% pro Tag nachdem dieses Gen ausgewählt wurde, bis zu +180% nach 60 Tagen',
   },
   upgrade,
   currency,
@@ -319,6 +358,36 @@ export default {
       github: 'GitHub',
       website: 'Website',
       googlefonts: 'Google Fonts'
+    },
+    cheater: {
+      0: {
+        title: 'Ehrenhaft',
+        description: 'Hat das Spiel ohne die unten genannten Werkzeuge gespielt',
+      },
+      100: {
+        title: 'Automatisiert',
+        description: 'Hat Werkzeuge genutzt, um automatisch menschenähnliche Aktionen durchzuführen, aber noch die Regeln des Spiels befolgt',
+      },
+      200: {
+        title: 'Cheater',
+        description: 'Hat Spielvariablen bearbeitet oder Werkzeuge genutzt, um sonst unerreichbare Ergebnisse zu erzielen oder Ergebnisse vorhergesehen / verändert',
+      },
+      selfMark: 'Cheater-Status setzen',
+      selfMarkDescription: 'Du kannst dich hier selbst als Cheater markieren. Dies ist rein optisch und kann jederzeit rückgängig gemacht werden',
+      noDetected: 'Keine Cheats erkannt',
+      featureDetected: 'Cheats wurden in folgenden Funktionen erkannt:',
+      featureDetected2: 'Du kannst die Cheater-Markierung entfernen, indem du die betroffenen Funktionen vollständig zurücksetzt',
+      globalDetected: 'Cheats wurden erkannt und dein Spielstand wurde dauerhaft markiert',
+      selfMarkClick: 'Solltest du gecheatet haben und es wurde vom Spiel nicht erkannt, kannst du hier klicken um die Option anzuzeigen, sich selbst als Cheater zu markieren',
+    },
+    statistics: {
+      name: 'Statistiken',
+      overview: 'Übersicht',
+      other: 'Andere',
+      gained: 'Erhalten',
+      maxOwned: 'Höchstmenge',
+      currentTotal: 'aktuell / gesamt',
+      defaultPlayerName: 'Spieler',
     }
   },
   error: {
@@ -729,6 +798,12 @@ export default {
       ritualHintDescription: 'Chance, einen Hinweis auf eine Position oder Zutat zu erhalten. Hinweise werden nur bei erfolgreichen neuen Ritualen gegeben. Für jeden gefundenen Hinweis sinkt die Chance um {0}%. Hinweise und die reduzierte Chance werden zurückgesetzt, wenn das Ritual aus dem Hinweis gefunden wird.',
       clickToAdd: 'Klicke auf Zutaten, um sie dem Ritual hinzuzufügen',
       ingredientSizeDescription: 'Zutatengröße erlaubt es dir, mehrere Zutaten pro magischer Währung zu finden',
+      favouriteIngredient: {
+        title: 'Lieblingszutat',
+        description: 'Du kannst eine Zutat als Lieblingszutat definieren, und jedes Mal, wenn du eine Zutat findest, erhältst du auch deine Lieblingszutat',
+        copy: 'Gefundene Zutat kopieren',
+      },
+      sackDescription: 'Säcke tauchen bei hohen Magiemengen auf, verbrauchen 10x so viel Magie und enthalten 10x mehr Zutaten, welche gleichmäßig auf alle verfügbaren verteilt werden',
       newDescription: {
         empty: 'Hier kannst du sehen, ob das aktuelle Rezept neu ist (noch nie erfolgreich) oder nicht',
         isNew: 'Das ist ein neues Rezept und du erhältst beim Erfolg einen Nachtjagd-Chip',
@@ -982,9 +1057,11 @@ export default {
     mining_0: 'Tiefster zerbrochener Erzminen-Stein',
     mining_1: 'Tiefster zerbrochener Gasriesen-Stein',
     village_0: 'Maximaler Wohnraum',
+    village_1: 'Handwerks-Meilensteine erreicht',
     horde_0: 'Höchster Zonenboss besiegt',
+    horde_1: 'Battlepass-Stufe',
     farm_0: 'Summe aller Pflanzenstufen',
-    gallery_0: 'Log5 der gesamten Schönheit',
+    gallery_0: 'Log4 der gesamten Schönheit',
     debug: 'Debug'
   },
   theme: {
@@ -1077,6 +1154,10 @@ export default {
       relativeUpgradeStats: {
         name: 'Relative Verbesserungswerte',
         description: 'Zeigt den Unterschied anstatt vorher / nacher Werte'
+      },
+      useLegacyFarmSelect: {
+        name: 'Alte Bauernhofauswahl',
+        description: 'Nutzt das alte Menü um Pflanzen und Gebäude im Bauernhof auszuwählen'
       }
     },
     automation: {
@@ -1190,12 +1271,24 @@ export default {
     zoneCleared: 'Zone abgeschlossen',
     zoneClearedTotal: 'Höchste Zone abgeschlossen',
     zone: 'Zone',
+    hordeMaxDifficulty: 'Schwierigkeit abgeschlossen',
     hordeBasicLoot: 'Einfache Beute',
     hordeItemPermanent: 'Ausrüstungs-Effekt',
+    hordeMastery: 'Ausrüstungs-Meisterung',
+    hordeRest: 'Ruhe',
     hordeNostalgia: 'Nostalgie',
     hordeNostalgiaLost: 'Erbstücke gefunden',
+    hordeClassMult: 'Klassen-Multiplikator',
+    hordeClassLevel: 'Klassenstufe',
+    hordeBattlePass: 'Battlepass',
+    hordeEnergy: 'Energie',
+    hordeMana: 'Mana',
+    hordeTime: 'Zeit',
+    hordeSacrifice: 'Opfer',
     farmEarlyGame: 'Erste Pflanzen',
+    galleryCanvas: 'Leinwand',
     cards: 'Karten',
+    cardsShiny: 'Glitzerkarten',
     treasure: 'Schätze',
     debug: 'Debug',
     bankInvestment: 'Investition',
@@ -1206,6 +1299,8 @@ export default {
     ritualPotionLevel: 'Trank-Stufe',
     ritualHint: 'Gefundene Hinweise',
     ritualIngredient: 'Bonuszutat',
+    interest: 'Zinsen',
+    multiplier: 'Multiplikator',
   },
 
   // Feature specific translations
@@ -1251,7 +1346,9 @@ export default {
       coal: 'Kann ab {0}m oder tiefer gefunden werden, wenn der Stein das erste Mal zerborchen wird',
       sulfur: 'Kann ab {0}m oder tiefer gefunden werden, wenn der tiefste Stein getroffen wird',
       niter: 'Kann ab {0}m oder tiefer gefunden werden, wenn der Stein zerbrochen wird und die Anzahl der Zerbrechungen einer Zehnerpotenz entspricht',
-      obsidian: 'Kann ab {0}m oder tiefer gefunden werden, wenn die Spitzhacke nicht aufgewertet ist'
+      obsidian: 'Kann ab {0}m oder tiefer gefunden werden, wenn die Spitzhacke nicht aufgewertet ist',
+      deeprock: 'Kann ab {0}m oder tiefer gefunden werden, wenn die Ziffern der aktuellen Tiefe addiert 14 oder mehr ergeben',
+      glowshard: 'Kann ab {0}m oder tiefer gefunden werden, mit einer Chance von 0.1% pro Meter unter dem Limit. Pro erhaltene Leuchtscherbe musst du 1 Meter tiefer graben, das Limit wird aber jeden Tag um 10% reduziert',
     },
     rareEarthNotAffected: 'Dieser Rohstoff wird nicht durch Bodenschatz-Einkommen beeinflusst',
     scrapGainHint: 'Du erhältst keinen Schrott für Steine, die du noch nie zerbrochen hast. Manchmal ist es klüger auf der aktuellen Tiefe zu bleiben, um mehr Schrott zu sammeln, anstatt direkt tiefer zu graben.',
@@ -1285,13 +1382,31 @@ export default {
       barSteel: 'Spitz',
       barTitanium: 'Ausgräber',
       barShiny: 'Reich',
-      barIridium: 'Geschmolzen'
+      barIridium: 'Geschmolzen',
+      barDarkIron: 'Leere'
     },
     gasGain: {
       0: 'Erhalte ',
       1: '% vom möglichen ',
       2: ' wenn dieser Stein zerbrochen wird. Du kannst in dieser Tiefe bis zu ',
       3: ' sammeln'
+    },
+    beacon: {
+      noBeacon: 'Kein Leuchtfeuer',
+      clickToPlace: 'Klicke, um Leuchtfeuer zu platzieren',
+      selectToPlace: 'Wähle ein Leuchtfeuer zum Platzieren aus',
+      place: 'Platzieren',
+      remove: 'Leuchtfeuer entfernen',
+      removeDescription: 'Du kannst Leuchtfeuer jederzeit entfernen, musst aber 20 Stunden warten bevor du das nächste entfernen kannst',
+      removeCooldown: 'Warte {0}, bevor du Leuchtfeuer entfernen kannst',
+      piercing: 'Bohr-Leuchtfeuer',
+      rich: 'Reichtum-Leuchtfeuer',
+      wonder: 'Wunder-Leuchtfeuer',
+      hope: 'Hoffnungs-Leuchtfeuer',
+    },
+    anomaly: {
+      name: 'Anomalie',
+      toughness: 'Dieser Stein hat 100x Zähigkeit',
     }
   },
   village: {
@@ -1321,6 +1436,48 @@ export default {
       religion: 'Religion',
       scanning: 'Scannen',
     },
+    crafting: {
+      unlockNew: 'Neues Handwerk-Rezept: ',
+      owned: '{0} im Besitz',
+      changeStat: {
+        value: 'Erhöhe den Wert auf {0}',
+        timeNeeded: 'Senke die Herstellungszeit auf {0}'
+      },
+      nextEffect: 'Effekt bei der nächsten Herstellung',
+      special: {
+        description: 'Spezielle Gegenstände bieten permanente Effekte, wenn sie hergestellt werden und der Fortschritt wird beim Prestige nicht zurückgesetzt. Deren Kosten steigt mit jeder Herstellung und sie haben keine Meilensteine'
+      },
+      rope: 'Seil',
+      woodenPlanks: 'Holzbretter',
+      brick: 'Ziegel',
+      screws: 'Schrauben',
+      waterBottle: 'Wasserflasche',
+      cocktailGlass: 'Cocktailglas',
+      boomerang: 'Bumerang',
+      polishedGem: 'Polierter Edelstein',
+      oilLamp: 'Öllampe',
+      shower: 'Dusche',
+      pouch: 'Beutel',
+      cupboard: 'Schrank',
+      weight: 'Gewicht',
+      scissors: 'Schere',
+      herbTea: 'Kräutertee',
+      glasses: 'Brille',
+      arrows: 'Pfeile',
+      bowl: 'Schale',
+      chain: 'Kette',
+      spear: 'Speer',
+      goldenRing: 'Goldring',
+      poisonedArrows: 'Vergiftete Pfeile',
+      frostSpear: 'Eisspeer',
+      spicySoup: 'Würzige Suppe',
+      stopwatch: 'Stoppuhr',
+      smallChest: 'Kleine Truhe',
+      bush: 'Busch',
+      handSaw: 'Handsäge',
+      garage: 'Garage',
+      diamondRing: 'Diamantring',
+    },
     buildings: 'Gebäude',
     village: 'Dorf',
     pray: 'Beten',
@@ -1339,6 +1496,8 @@ export default {
     housingStat: 'Gesamte Wohnungszahl (erste 25 pro Gebäude)',
     coinNotAffected: 'Münzen werden nicht durch gesamtes Rohstoffeinkommen beeinflusst',
     faithNotAffected: 'Glaube wird nicht durch gesamtes Rohstoffeinkommen und Mentale-Ressourcen-Einkommen beeinflusst',
+    artisanDescription: 'Handwerker können Gegenstände für dich herstellen',
+    counterDescription: 'Mit Kassen kannst du hergestellte Gegenstände an deine Dorfbewohner verkaufen',
     offering: {
       name: 'Opfergaben',
       description: {
@@ -1355,6 +1514,7 @@ export default {
     food: 'Nahrung',
     mental: 'Mentale Ressourcen',
     loot: 'Beute',
+    specialIngredient: 'Besondere Zutaten',
     foodConsume: 'Verbrauche bis zu {0} pro Sekunde'
   },
   horde: {
@@ -1367,6 +1527,7 @@ export default {
     noLoadouts: 'Keine Sets vorhanden',
     monsterPartHint: 'Gehe zu Zone 10+ und erreiche Gegner #101, um eine neue Währung zu entdecken! Diese Währung ist essentiell, um weiter fortzuschreiten, da sie beim Erhöhen der Knochen-Kapazität hilft.',
     enemyDescription: 'Jeder Gegner in der selben Zone hat x{0} Angriff, x{1} Leben und +{2}% Knochen im Vergleich zum vorherigen Gegner. Dies ist Gegner #{3} und dieser hat x{4} Angriff, x{5} Leben und +{6}% Knochen. All diese Effekte werden bei deinem Tod zurückgesetzt.',
+    enemyDescriptionClasses: 'Jeder Gegner in der selben Zone hat x{0} Angriff, x{1} Leben und +{2}% Blut im Vergleich zum vorherigen Gegner. Dies ist Gegner #{3} und dieser hat x{4} Angriff, x{5} Leben und +{6}% Blut. All diese Effekte werden bei deinem Tod zurückgesetzt.',
     enemySigil1: {
       s: 'Gegner in dieser Zone haben {0} Zeichen',
       p: 'Gegner in dieser Zone haben {0} Zeichen',
@@ -1390,7 +1551,8 @@ export default {
       text: 'Normale Angriffe werden jede Sekunde ausgeführt und haben folgende Schadensverteilung: ',
       physic: '{0}% physisch',
       magic: '{0}% magisch',
-      bio: '{0}% biologisch'
+      bio: '{0}% biologisch',
+      strengthAmp: 'Jeder Punkt an Stärke erhöht den Schaden von normalen Angriffen um +{0}%, für einen Gesamtwert von +{1}%. Dies erhöht den Schaden deiner normalen Angriffe auf {2}.'
     },
     healthDescription: 'Die Menge an Schaden, die du erleiden kannst, ohne zu sterben',
     respawnDescription: 'Wie viel Zeit du benötigst, um dich vom Tod zu erholen',
@@ -1402,6 +1564,10 @@ export default {
     spellbladeDescription: 'Richte zusätzlichen magischen Schaden an, nachdem du einen Ausrüstungseffekt benutzt hast. Das funktioniert bei Ausrüstungseffekten mit einer Abklingszeit von unter 10 Sekunden nicht immer',
     cuttingDescription: 'Richte einen Prozentwert des aktuellen Lebens deines Ziels als biologischen Schaden an, nachdem du angegriffen hast',
     recoveryDescription: 'Heile einen Prozentwert deines fehlenden Lebens, wenn du einen Gegner besiegst',
+    defenseDescription: 'Reduziert eingehenden Schaden um einen Prozentsatz deines maximalen Lebens',
+    executeDescription: 'Gegner unter einer gewissen Lebensgrenze werden sofort getötet',
+    energyDescription: 'Manche aktive Fähigkeiten benötigen Energie. Sie füllt sich mit der Zeit wieder auf',
+    manaDescription: 'Manche aktive Fähigkeiten benötigen Mana. Es füllt sich langsam mit der Zeit wieder auf',
     boss: 'Boss',
     miniboss: 'Miniboss',
     minibossDescription: 'Minibosse nehmen den Platz regulärer Gegner ein und sind etwas stärker. Sie halten wertvolle Beute und bis zu 2 können auf einmal warten. Einen zu besiegen zählt als 4 besiegte normale Gegner',
@@ -1417,9 +1583,13 @@ export default {
     stunResist: 'Schnellere Erholung von Betäubungen',
     stunBoss: 'Bosse erhalten +2 Betäubungsresistenz',
     stunMiniboss: 'Minibosse erhalten +1 Betäubungsresistenz',
-    bossBioResist: 'Bosse erleiden nur 10% biologischen Schaden',
-    minibossBioResist: 'Minibosse erleiden nur 50% biologischen Schaden',
+    bossBioResist: 'Bosse erleiden nur 10% biologischen Schaden, aber nehmen 35% mehr magischen Schaden',
+    minibossBioResist: 'Minibosse erleiden nur 50% biologischen Schaden, aber nehmen 10% mehr magischen Schaden',
     enemyRespawn: 'Gegner brauchen {0} zum Erscheinen und bis zu {1} Gegner können warten. Wird ein Boss besiegt, erscheinen sofort alle Gegner',
+    bossBonusDifficulty: 'Boss-Schwierigkeit',
+    bossNoReward: 'Du kannst diesen Boss erneut auf jeder Schwierigkeit bekämpfen, erhältst dafür aber keine Belohnungen',
+    energyIncompatible: 'Deine aktuell ausgewählte Klasse kann diesen Schmuck nicht verwenden, weil er Energie benötigt',
+    manaIncompatible: 'Deine aktuell ausgewählte Klasse kann diesen Schmuck nicht verwenden, weil er Mana benötigt',
     taunt: {
       title: 'Spottmodus',
       description: 'Im Spottmodus erscheinen Gegner auch dann, wenn keine warten. Alle Gegner, die frühzeitig erscheinen, halten aber keine Beute. Verspotten funktioniert nur auf dem Weg zum Boss',
@@ -1492,6 +1662,8 @@ export default {
       rainbow: 'Regenbogen',
       drain: 'Saugen',
       shocking: 'Schock',
+      defense: 'Verteidigung',
+      executing: 'Hinrichten',
       berserk: 'Berserker',
       iceGiant: 'Eisriese',
       generic: 'Gewöhnlich',
@@ -1499,12 +1671,14 @@ export default {
     corruption: {
       name: 'Korruption',
       effects: 'Effekte',
-      power: 'Angriff und Leben x',
-      sigil: 'Zeichen +',
-      revive: 'Wiederbelebung +'
+      power: 'Angriff und Leben x{0}',
+      sigil: 'Zeichen +{0}',
+      revive: 'Wiederbelebung +{0}',
+      execute: 'Hinrichten +{0}%'
     },
     activeCooldown: 'Effekt-Abklingzeit',
-    itemsEquipped: 'Gegenstände ausgerüstet',
+    activeBuffFor: 'Für {0}:',
+    itemsEquipped: 'Ausrüstungsplätze benutzt',
     cleared: 'Besiegt',
     fighting: 'Im Kampf',
     items: {
@@ -1572,10 +1746,24 @@ export default {
       bomb: 'Bombe',
       leechingStaff: 'Aussaugender Stab',
       shatteredGem: 'Zersprungener Edelstein',
+      hourglass: 'Stundenglas',
+      glue: 'Kleber',
       firework: 'Feuerwerk',
       bowTie: 'Fliege',
+      forbiddenStopwatch: 'Verbotene Stoppuhr',
       mysticalAccelerator: 'Mystischer Beschleuniger',
       blazingStaff: 'Lodernder Stab',
+      shield: 'Schild',
+      armor: 'Rüstung',
+      natureStone: 'Naturstein',
+      evergrowingVine: 'Immerwachsende Ranke',
+      energyDrink: 'Energy-Drink',
+      dragonheart: 'Drachenherz',
+      prism: 'Prisma',
+      deathsword: 'Todesklinge',
+      needle: 'Nadel',
+      mine: 'Mine',
+      maskOfJoy: 'Maske der Freude',
 
       // Chess pieces
       pawn: 'Bauer',
@@ -1598,6 +1786,18 @@ export default {
         0: 'Verursache',
         1: 'biologischen Schaden'
       },
+      maxdamagePhysic: {
+        0: 'Verursache',
+        1: 'der maximalen Leben als physischen Schaden'
+      },
+      maxdamageMagic: {
+        0: 'Verursache',
+        1: 'der maximalen Leben als magischen Schaden'
+      },
+      maxdamageBio: {
+        0: 'Verursache',
+        1: 'der maximalen Leben als biologischen Schaden'
+      },
       heal: {
         0: 'Heile',
         1: 'Leben'
@@ -1605,6 +1805,10 @@ export default {
       bone: {
         0: 'Erhalte',
         1: 'Knochen der höchsten Zone'
+      },
+      blood: {
+        0: 'Erhalte',
+        1: 'Blut der höchsten Schwierigkeit'
       },
       monsterPart: {
         0: 'Erhalte',
@@ -1626,10 +1830,6 @@ export default {
         0: 'Entferne',
         1: 'Angriff vom Gegner'
       },
-      raiseAttack: {
-        0: 'Erhöhe den Angriff dauerhaft um',
-        1: ''
-      },
       poison: {
         0: 'Verursache',
         1: 'Giftschaden'
@@ -1643,6 +1843,11 @@ export default {
         2: ' um',
         1: '(bis zum Prestige)'
       },
+      gainStat: {
+        0: 'Erhöhe ',
+        2: ' um',
+        1: '(bis zum Prestige)'
+      },
       divisionShield: {
         0: 'Erhalte',
         1: 'Teilungsschild'
@@ -1650,6 +1855,22 @@ export default {
       removeDivisionShield: {
         0: 'Entferne',
         1: 'Teilungsschild vom Gegner'
+      },
+      executeKill: {
+        0: 'Töte einen Gegner unter',
+        1: 'Leben'
+      },
+      refillEnergy: {
+        0: 'Stelle',
+        1: 'Energie wieder her'
+      },
+      refillMana: {
+        0: 'Stelle',
+        1: 'Mana wieder her'
+      },
+      buff: {
+        duration: 'Schubdauer',
+        suffix: '(Schub)',
       },
       reviveAll: 'Stelle alle Wiederbelebungen her',
       removeStun: 'Entferne Betäubungen',
@@ -1675,6 +1896,8 @@ export default {
       brick: 'Ziegel',
       heat: 'Hitze',
       ice: 'Eis',
+      crystal: 'Kristall',
+      vitality: 'Vitalität',
     },
     itemMastery: {
       name: 'Meistern',
@@ -1691,7 +1914,7 @@ export default {
     tower: {
       name: 'Türme',
       description: 'Türme sind besondere Orte, welche einen Schlüssel zum Betreten benötigen. Du kannst Gegner für Kronen und einzigartige Erbstücke bekämpfen, bis du stirbst. Erreiche bestimmte Etagen, um neue Effekte freizuschalten',
-      zoneDescription: 'Gegner in diesem Turm sind auf der höchsten erreichten Etage etwa so stark wie ein Gegner in Zone {0}. Sie starten mit der Kraft eines Zone-{1}-Gegners und werden pro Etage um etwa {2} Zonen stärker. Korruption ist in Türmen nicht vorhanden',
+      zoneDescription: 'Gegner in diesem Turm sind auf der höchsten erreichten Etage etwa so stark wie ein Gegner in Zone {0}. Sie starten mit der Kraft eines Zone-{1}-Gegners und werden pro Etage um etwa {2} Zonen stärker',
       floorTitle: 'Höchste Etage besiegt',
       floorDescription: 'Besiege Gegner auf betimmten Etagen um permanente Effekte freizuschalten:',
       rewardTitle: 'Belohnungen',
@@ -1704,6 +1927,169 @@ export default {
       brick: 'Ziegelturm',
       fire: 'Feuerturm',
       ice: 'Eisturm',
+      danger: 'Gefahrenturm',
+      toxic: 'Toxischer Turm',
+    },
+    classes: {
+      skill: 'Fähigkeiten',
+      skillPointsLeft: '{0} Fähigkeitspunkt(e) übrig',
+      skillPointCost: 'Benötigt {0} Fähigkeitspunkte zum Aufwerten',
+      skillTreeChoice: 'Hier kannst du eine Wahl treffen, das Auswählen einer Fähigkeit blockiert die anderen Pfade',
+      adventurer: {
+        name: 'Abenteurer',
+        description: 'Ein Kämpfer, der auf alles vorbereitet ist und mit jeder Situation klarkommt'
+      },
+      archer: {
+        name: 'Bogenschütze',
+        description: 'Ein Fernkämpfer, der sich auf kritische Treffer spezialisiert und konstanten Schaden anrichtet'
+      },
+      mage: {
+        name: 'Magier',
+        description: 'Ein Kämpfer, der Feinde schnell mit Zaubern besiegt und automatisch Fähigkeiten einsetzen kann'
+      },
+      knight: {
+        name: 'Ritter',
+        description: 'Ein hartnäckiger Kämpfer, der selbst starke Feinde langsam aber sicher ausschaltet'
+      },
+      assassin: {
+        name: 'Assassine',
+        description: 'Ein beweglicher Kämpfer, der auf das schnelle Ausschalten von Feinden spezialisiert ist'
+      },
+      shaman: {
+        name: 'Schamane',
+        description: 'Ein naturverbundener Kämpfer, der Kämpfe mit Heilung und Gift für sich entscheidet'
+      },
+      pirate: {
+        name: 'Pirat',
+        description: 'Der Pirat ist zwar kein guter Kämpfer, sticht aber durch das Sammeln von Beute heraus'
+      },
+      undead: {
+        name: 'Untoter',
+        description: 'Ein schwacher Kämpfer, der diese Schwäche mit Zahlen wieder ausgleicht'
+      },
+      cultist: {
+        name: 'Kultist',
+        description: 'Ein vielseitiger Kämpfer, der sich auf jeweils eine Aufgabe konzentriert'
+      },
+      scholar: {
+        name: 'Gelehrter',
+        description: 'Ein unterstützender Kämpfer, der anderen Klassen hilft'
+      }
+    },
+    battlePass: {
+      name: 'Battlepass',
+      quest: {
+        stat: 'Erreiche {0} {1}',
+        zone: 'Besiege {0} Zone {1}',
+        level: 'Erreiche Stufe {0}',
+        boss: 'Besiege {0} (+{1})'
+      },
+      statType: {
+        base: 'Grund-{0}',
+        total: 'Gesamt-{0}',
+      }
+    },
+    enemyName: {
+      soldier: 'Soldat',
+      officer: 'Polizist',
+      hunter: 'Jäger',
+      sniper: 'Scharfschütze',
+      strongMonkey: 'Starker Affe',
+      angryMonkey: 'Wütender Affe',
+      dartMonkey: 'Dartaffe',
+      monkeyWizard: 'Affenmagier',
+      monkeyDefender: 'Affenverteidiger',
+      monkeyMonk: 'Affenmönch',
+      puppy: 'Welpe',
+      kitten: 'Kätzchen',
+      seal: 'Seehund',
+      piglet: 'Ferkel',
+      panda: 'Panda',
+      koala: 'Koala',
+      rabbit: 'Hase',
+      guineaPig: 'Meerschweinchen',
+    },
+    bossName: {
+      ohilio_guard1: 'Wache A',
+      ohilio_guard2: 'Wache B',
+      ohilio: 'ohilio',
+      chriz1: 'Chriz',
+      chriz2: 'Chriz',
+      mina: 'mina',
+    },
+    area: {
+      zoneEndless: 'Endlose Zone',
+      zoneBoss: 'Boss ({0})',
+      zone: 'Zone {0}',
+      difficulty: '{0} Schwierigkeit',
+      enemyAmount: '{0} Gegner in dieser Zone',
+      warzone: 'Kriegsgebiet',
+      monkeyJungle: 'Affendschungel',
+      loveIsland: 'Liebesinsel',
+    },
+    sign: {
+      sign_1: {
+        text: 'Mein Aim ist perfekt, ich verfehle nie! Pass\' besser auf!',
+        signed: 'ohilio',
+      },
+      sign_2: {
+        text: 'Du denkst du kannst mir weh tun? Niemals! Ich weiche allem aus, du kannst mich nicht mal treffen! Ich bin unantastbar!',
+        signed: 'ohilio',
+      },
+      sign_3: {
+        text: 'Ich bin der Größte, der Beste, perfekt, unbesiegbar! Selbst meine Wachen sind nichts im Vergleich zu mir! Du denkst, du hast eine Chance gegen mich? Hah! Bereite dich darauf vor, zu sterben!',
+        signed: 'ohilio',
+      },
+      sign_4: {
+        text: 'Nachdem du dir diese niedlichen Tiere genau angesehen hast, fällt dir auf, dass sie nicht echt sind. Es sind nur Irrlichter! Aber warum sind sie hier? Damit du dich schlecht fühlst? Keine Zeit drüber nachzudenken, du musst kämpfen um an diesen Tiergeistern vorbeizukommen',
+        signed: '???',
+      },
+    },
+    quest: {
+      name: 'Aufgaben',
+      description: 'Schließe Aufgaben ab, um im Battlepass fortzuschreiten und permanente Belohnungen freizuschalten',
+      completed: '{0} abgeschlossen',
+      allCompleted: 'Alle Aufgaben abgeschlossen',
+    },
+    trinket: {
+      rarity: {
+        0: 'Nicht gefunden',
+        1: 'Gewöhnlich',
+        2: 'Ungewöhnlich',
+        3: 'Selten',
+        4: 'Episch',
+        5: 'Legendär',
+        6: 'Mythisch',
+        7: 'Extraordinär',
+        8: 'Strahlend',
+        9: 'Prismatisch',
+        10: 'Abgeschlossen',
+        timeless: 'Zeitlos'
+      },
+      equipped: 'Schmuck ausgewählt (wird nach dem Prestige angelegt)',
+      vitality: 'Vitalität',
+      energy: 'Energie',
+      magic: 'Magie',
+      fists: 'Fäuste',
+      sparks: 'Funken',
+      haste: 'Eile',
+      precision: 'Präzision',
+      wrath: 'Zorn',
+      strength: 'Stärke',
+      toxins: 'Toxine',
+      wisdom: 'Weisheit',
+      extraction: 'Extraktion',
+      learning: 'Lernen',
+      preservation: 'Bewahrung',
+      energize: 'Aufladen',
+      automation: 'Automatisierung',
+      cure: 'Genesen',
+      duality: 'Dualiät',
+      love: 'Liebe',
+    },
+    sacrifice: {
+      name: 'Opfern',
+      description: 'Hier kannst du temporär Ausrüstungsplätze opfern, um dafür starke Effekte zu erhalten'
     }
   },
   farm: {
@@ -1713,6 +2099,7 @@ export default {
     expToLevelUp: 'Du brauchst noch {0} weitere Ernten, um die nächste Stufe zu erreichen',
     yield: 'Ertrag',
     rareDrops: 'Seltener Ertrag',
+    huntedRareDrops: 'Gejagter seltener Ertrag',
     addRareDrop: 'Neuer seltener Ertrag ({0})',
     addRareDropAmount: '{0}-Menge',
     prestige: {
@@ -1765,7 +2152,12 @@ export default {
       grapes: 'Weintrauben',
       hops: 'Hopfen',
       violet: 'Veilchen',
-      goldenRose: 'Goldrose'
+      goldenRose: 'Goldrose',
+      sweetPotato: 'Süßkartoffel',
+      strawberry: 'Erdbeere',
+      sesame: 'Sesam',
+      sunflower: 'Sonnenblume',
+      spinach: 'Spinat',
     },
     gene: {
       name: 'Gen',
@@ -1774,6 +2166,8 @@ export default {
       dnaDuplicate: 'Ausgewählte Gene tauchen beim nächsten Prestige nicht auf. Wird kein Gen ausgewählt, sind beim nächsten Prestige alle 4 verfügbar',
       dnaBlocked: 'Blockierte Gene',
       hasUpgrade: 'Hat Gen-Verbesserung',
+      lockOnField: 'Dieses Gen kann nicht ausgewählt werden, wenn Pflanzen der Art auf dem Feld sind',
+      basics: 'Grundlagen',
       yield: 'Ertrag',
       gold: 'Gold',
       exp: 'Erfahrung',
@@ -1789,17 +2183,25 @@ export default {
       mystery: 'Mysterium',
       conversion: 'Umwandlung',
       prestige: 'Prestige',
-      rareDropChance: 'Entdeckung'
+      rareDropChance: 'Entdeckung',
+      lucky: 'Glückspilz',
+      finalize: 'Letzter Schliff',
+      selfless: 'Selbstlos',
+      unyielding: 'Unnachgiebig',
+      teamwork: 'Teamwork',
+      hunter: 'Jäger',
+      patient: 'Geduldig',
     },
     fertilizerEffect: {
       vegetable: 'Nur Gemüse',
-      fruit: 'Nur Früchte',
+      berry: 'Nur Beeren',
       grain: 'Nur Getreide',
       flower: 'Nur Blumen'
     },
     building: {
       premium: 'Premium-{0}',
       premiumOwned: 'Premium: {0} in Besitz',
+      owned: '{0} in Besitz',
       gardenGnome: {
         name: 'Gartenzwerg',
         description: 'Pflanzen können bei der Ernte Gold aufdecken, wenn der Gartenzwerg auf dem Feld steht. Die Chance hängt von der Wachstumszeit der Pflanze ab.',
@@ -1817,13 +2219,13 @@ export default {
       },
       pinwheel: {
         name: 'Windrad',
-        description: 'Erhöht die Chance auf seltenen Ertrag auf dem gesamten Feld um +1% für jede einzigartige Pflanze in den umliegenden 8 Feldern',
-        descriptionPremium: 'Erhöht die Chance auf seltenen Ertrag auf dem gesamten Feld um +2% für jede einzigartige Pflanze in den umliegenden 8 Feldern',
+        description: 'Erhöht die Chance auf seltenen Ertrag auf dem gesamten Feld um +0.015x für jede einzigartige Pflanze in den umliegenden 8 Feldern',
+        descriptionPremium: 'Erhöht die Chance auf seltenen Ertrag auf dem gesamten Feld um +0.03x für jede einzigartige Pflanze in den umliegenden 8 Feldern',
       },
       flag: {
         name: 'Flagge',
-        description: 'Erhöht den Ertrag um +50%, wenn die Pflanze an der richtigen Position im Vergleich zur Flagge steht. Gemüse: Oben links, Frucht: Oben rechts, Getreide: Unten links, Blume: Unten rechts',
-        descriptionPremium: 'Erhöht den Ertrag um +100%, wenn die Pflanze an der richtigen Position im Vergleich zur Flagge steht. Gemüse: Oben links, Frucht: Oben rechts, Getreide: Unten links, Blume: Unten rechts',
+        description: 'Erhöht den Ertrag um +50%, wenn die Pflanze an der richtigen Position im Vergleich zur Flagge steht. Gemüse: Oben links, Beeren: Oben rechts, Getreide: Unten links, Blume: Unten rechts',
+        descriptionPremium: 'Erhöht den Ertrag um +100%, wenn die Pflanze an der richtigen Position im Vergleich zur Flagge steht. Gemüse: Oben links, Beeren: Oben rechts, Getreide: Unten links, Blume: Unten rechts',
       }
     }
   },
@@ -1833,6 +2235,7 @@ export default {
     colorSuffix: 'Farbe',
     openPackage: 'Öffnen',
     colorGainReduced: 'Zusätzliches Einkommen wird nach 100 Farbe auf die Quadratwurzel reduziert',
+    drumCompounding: 'Um diese Farbtrommel finden zu können, musst du auch alle Farbtrommeln der vorherigen Farben im selben Paket finden. Dies reduziert die effektive Chance, diese Farbtrommel zu finden',
     idea: {
       tier: 'Stufe-{0}-Idee',
       unlock: 'Idee freischalten',
@@ -1843,6 +2246,7 @@ export default {
       sortWaste: 'Abfall sortieren',
       advertise: 'Werben',
       beImpatient: 'Ungeduldig sein',
+      beExcited: 'Aufgeregt sein',
 
       makeLemonade: 'Limonade herstellen',
       growATree: 'Einen Baum großziehen',
@@ -1850,16 +2254,80 @@ export default {
       observeRainbow: 'Regenbogen beobachten',
       buildRedReservoir: 'Rotes Reservoir bauen',
       orderMassiveSafe: 'Massiven Safe bestellen',
+      buyPen: 'Füller kaufen',
 
       drawOcean: 'Ozean zeichnen',
       makeWine: 'Wein herstellen',
       calculateOdds: 'Chancen ausrechnen',
       buildOrangeReservoir: 'Oranges Reservoir bauen',
       thinkHarder: 'Härter nachdenken',
+      paintFaster: 'Schneller malen',
+      buyBrush: 'Pinsel kaufen',
+
+      harvestOranges: 'Orangen ernten',
+      pulverizeGold: 'Gold zerstauben',
+      buildYellowReservoir: 'Gelbes Reservoir bauen',
+      paintForFun: 'Aus Spaß malen',
+      printNewspaper: 'Zeitung drucken',
+      expandCanvas: 'Leinwand erweitern',
+      hyperfocus: 'Hyperfokus',
+
+      cutGrass: 'Glas schneiden',
+      shapeClay: 'Ton formen',
+      buildGreenReservoir: 'Grünes Reservoir bauen',
+      beMysterious: 'Mysteriös sein',
+
+      lookAtTheSky: 'Den Himmel betrachten',
+      chewBubblegum: 'Kaugummi kauen',
+      buildBlueReservoir: 'Blaues Reservoir bauen',
     },
     nextInspiration: {
       0: 'Nächste ',
       1: ' in '
+    },
+    shapes: {
+      name: 'Formen',
+      upgrades: 'Form-Verbesserungen',
+      description: 'Ziehe eine Form an eine angrenzende, um die Positionen zu tauschen, oder klicke sie zum Sammeln an. Das Sammeln benötigt 5 gleiche verbundene Formen und die Menge erhaltener Formen pro Form hängt von der Größe der Kombo ab.',
+      cost: 'Jede Aktion kostet',
+      special: {
+        name: 'Besondere Formen',
+        description: 'Eine besondere Form hat eine {0}% Chance anstatt einer normalen Form zu erscheinen, und besonderes Sammeln gibt {1}x Formen. Es kann nur eine besondere Form auf einmal auf dem Gitter vorhanden sein',
+        bomb: 'Alle Formen in einer + Formation werden besonders gesammelt',
+        dice: 'Alle Formen die nicht der Form darüber (oder darunter in der obersten Reihe) entsprechen werden neu gewürfelt',
+        accelerator: 'Die 8 umliegenden Formen werden besonders gesammelt. Wenn alle 8 von ihnen gleich sind, wird sämtliche Motivation verbraucht um davon noch mehr Formen zu erhalten',
+        sparkles: 'Die 4 direkt anliegenden Formen werden regulär gesammelt (wenn möglich) und zählen als eine große Kombo',
+        hourglass: 'Erhalte sofort Konverter und Pakete, sammle Formen um die Zeit zu erhöhen',
+        chest: '10 naheliegende Formen werden besonders gesammelt, die 8 umliegenden und die links und rechts daneben. Wenn alle 10 Formen verschieden sind, gibt es eine besondere Belohnung'
+      },
+      buyFor: {
+        0: 'Kaufe',
+        1: 'für'
+      },
+      reroll: 'Das gesamte Gitter neu würfeln für',
+      unlock: 'Form freischalten: {0}',
+      circle: 'Kreis',
+      rectangle: 'Rechteck',
+      triangle: 'Dreieck',
+      star: 'Stern',
+      ellipse: 'Ellipse',
+      heart: 'Herz',
+      square: 'Quadrat',
+      octagon: 'Achteck',
+      pentagon: 'Fünfeck',
+      hexagon: 'Sechseck',
+      bomb: 'Bombe',
+      dice: 'Würfel',
+      accelerator: 'Beschleuniger',
+      sparkles: 'Glitzer',
+      hourglass: 'Stundenglas',
+      chest: 'Truhe',
+    },
+    canvas: {
+      name: 'Leinwand',
+      description: 'Setze Farben auf die Leinwand um die Leinwandstufe langsam zu erhöhen, was permanente Boni gewährt',
+      level: 'Leinwandstufe',
+      untilNextLevel: '{0} bis zur nächsten Stufe'
     }
   },
   gem: {

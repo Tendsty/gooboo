@@ -6,14 +6,14 @@ const requirementBase = () => store.state.stat[requirementStat].total;
 
 export default {
     fumes: {subfeature: 1, price(lvl) {
-        return {mining_scrap: Math.ceil(Math.pow(lvl * 0.012 + 1.24, lvl) * buildNum(7.5, 'M'))};
+        return {mining_scrap: Math.ceil(Math.pow(lvl * 0.012 + 1.24, lvl) * buildNum(750, 'K'))};
     }, effect: [
         {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.12, lvl) * Math.pow(lvl * 0.2 + 1, 2)}
     ]},
     giantCrate: {subfeature: 1, requirementBase, requirementStat, requirementValue: 5, price(lvl) {
-        return {mining_scrap: Math.ceil(Math.pow(lvl * 2 + 10, lvl) * buildNum(25, 'M'))};
+        return {mining_scrap: Math.ceil(Math.pow(lvl * 2 + 8, lvl) * buildNum(2.5, 'M'))};
     }, effect: [
-        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(8, lvl)}
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(7, lvl)}
     ]},
     morePressure: {subfeature: 1, requirementBase, requirementStat, requirementValue: 10, price(lvl) {
         return {mining_scrap: Math.ceil(Math.pow(lvl * 0.025 + 1.75, lvl) * buildNum(400, 'M'))};
@@ -53,8 +53,8 @@ export default {
     vent: {subfeature: 1, cap: 20, requirementBase, requirementStat, requirementValue: 40, price(lvl) {
         return {mining_scrap: Math.ceil(Math.pow(1.65, lvl) * buildNum(40, 'T'))};
     }, effect: [
-        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.09, lvl)},
-        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.12, lvl)}
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.05, lvl)},
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
     ]},
     harvester: {subfeature: 1, requirementBase, requirementStat, requirementValue: 50, price(lvl) {
         return {mining_neon: Math.round(Math.pow(1.35, lvl) * 50)};

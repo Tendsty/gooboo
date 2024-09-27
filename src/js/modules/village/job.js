@@ -116,7 +116,7 @@ export default {
         max: 0,
         needed: 600,
         rewards: [
-            {type: 'base', name: 'villageLootGain', amount: 2}
+            {type: 'base', name: 'villageLootGain', amount: 0.5}
         ]
     }
 }

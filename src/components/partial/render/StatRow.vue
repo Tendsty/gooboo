@@ -20,13 +20,16 @@
       <span v-else-if="splitName[0] === 'upgrade'"><v-icon small class="mr-1">mdi-chevron-double-up</v-icon>{{ $vuetify.lang.t(`$vuetify.upgrade.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'currencyMult'">{{ $vuetify.lang.t(`$vuetify.currency.${splitName[1]}.name`) }}</span>
       <span v-else-if="splitName[0] === 'item'"><v-icon small class="mr-1">mdi-sack</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.items.${splitName[1]}`) }}</span>
+      <span v-else-if="splitName[0] === 'trinket'"><v-icon small class="mr-1">mdi-sack</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.trinket.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'villageJob'">{{ $vuetify.lang.t(`$vuetify.village.job.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'villageFood'"><v-icon small class="mr-1">mdi-cached</v-icon>{{ $vuetify.lang.t(`$vuetify.currency.village_${splitName[1]}.name`) }}</span>
       <span v-else-if="splitName[0] === 'villageHappiness'">{{ $vuetify.lang.t(`$vuetify.mult.villageHappiness`) }}</span>
       <span v-else-if="splitName[0] === 'villagePollution'"><v-icon small class="mr-1">mdi-smoke</v-icon>{{ $vuetify.lang.t(`$vuetify.mult.villagePollution`) }}</span>
       <span v-else-if="splitName[0] === 'villagePower'"><v-icon small class="mr-1">mdi-lightning-bolt</v-icon>{{ $vuetify.lang.t(`$vuetify.mult.villagePower`) }}</span>
+      <span v-else-if="splitName[0] === 'villageSpecialCraft'"><v-icon small class="mr-1">mdi-hammer</v-icon>{{ $vuetify.lang.t(`$vuetify.village.crafting.${ splitName[1] }`) }}</span>
       <span v-else-if="splitName[0] === 'hordeHeirloom'"><v-icon small class="mr-1">mdi-necklace</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.heirloom.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'hordeTower'"><v-icon small class="mr-1">mdi-office-building</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.tower.${ name.split('_')[1] }`) }} ({{ name.split('_')[2] }})</span>
+      <span v-else-if="splitName[0] === 'hordeSkill'"><v-icon small class="mr-1">mdi-star</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.classes.skill`) }}</span>
       <span v-else-if="splitName[0] === 'farmGardenGnome'"><v-icon small class="mr-1">mdi-human-child</v-icon>{{ $vuetify.lang.t(`$vuetify.farm.building.gardenGnome.name`) }}</span>
       <span v-else-if="splitName[0] === 'farmGene'"><v-icon small class="mr-1">mdi-dna</v-icon>{{ $vuetify.lang.t(`$vuetify.farm.gene.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'farmGeneUpgrade'"><v-icon small class="mr-n1">mdi-dna</v-icon><v-icon small class="mr-1">mdi-chevron-double-up</v-icon>{{ $vuetify.lang.t(`$vuetify.farm.gene.${splitName[1]}`) }}</span>
@@ -34,9 +37,11 @@
       <span v-else-if="splitName[0] === 'galleryIdea'"><v-icon small class="mr-1">mdi-lightbulb</v-icon>{{ $vuetify.lang.t(`$vuetify.gallery.idea.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'card'"><v-icon small class="mr-1">mdi-cards</v-icon>{{ $vuetify.lang.t(`$vuetify.card.card.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'cardCollection'"><v-icon small class="mr-1">mdi-cards</v-icon>{{ $vuetify.lang.t(`$vuetify.card.collection.${splitName[1]}`) }}</span>
+      <span v-else-if="splitName[0] === 'cardPower'"><v-icon small class="mr-1">mdi-cards-playing</v-icon>{{ $vuetify.lang.t(`$vuetify.card.cardPower`) }}</span>
       <span v-else-if="splitName[0] === 'treasure'"><v-icon small class="mr-1">mdi-treasure-chest</v-icon>{{ $vuetify.lang.t(`$vuetify.statBreakdown.treasure`) }}</span>
       <span v-else-if="splitName[0] === 'relic'"><v-icon small class="mr-1">mdi-ring</v-icon>{{ $vuetify.lang.t(`$vuetify.relic.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'miningEnhancement'"><v-icon small class="mr-1">mdi-package-up</v-icon>{{ $vuetify.lang.t(`$vuetify.mining.enhancement.${splitName[1]}`) }}</span>
+      <span v-else-if="splitName[0] === 'miningBeacon'"><v-icon small class="mr-1">mdi-spotlight</v-icon>{{ $vuetify.lang.t(`$vuetify.mining.beacon.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'bankProject'"><v-icon small class="mr-1">mdi-bank</v-icon>{{ $vuetify.lang.t(`$vuetify.event.bank.project.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'villagePolicy'"><v-icon small class="mr-1">mdi-gavel</v-icon>{{ $vuetify.lang.t(`$vuetify.village.policy.${splitName[1]}`) }}</span>
       <span v-else-if="splitName[0] === 'weatherChaosLocation'">{{ $vuetify.lang.t(`$vuetify.event.weatherChaos.location.${ splitName[1] }`) }}</span>

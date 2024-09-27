@@ -184,7 +184,7 @@ export default {
         },
         reset({ state, commit, dispatch }, o) {
             for (const [key, elem] of Object.entries(state)) {
-                if (elem.feature === o.feature && elem.type === o.type) {
+                if (elem.feature === o.feature && (o.type === undefined || elem.type === o.type)) {
                     commit('updateKey', {name: key, key: 'value', value: 0});
                     dispatch('updateCurrencyMult', key);
                 }
@@ -194,11 +194,11 @@ export default {
             if (state[name].currencyMult) {
                 for (const [key, elem] of Object.entries(state[name].currencyMult)) {
                     const value = elem.value(getters.value(name));
-                    if (elem.type === 'mult' && value > 1) {
+                    if (elem.type === 'mult' && value !== 1) {
                         dispatch('mult/setMult', {name: key, key: 'currencyMult_' + name, value}, {root: true});
-                    } else if (elem.type === 'base' && value > 0) {
+                    } else if (elem.type === 'base' && value !== 0) {
                         dispatch('mult/setBase', {name: key, key: 'currencyMult_' + name, value}, {root: true});
-                    } else if (elem.type === 'bonus' && value > 0) {
+                    } else if (elem.type === 'bonus' && value !== 0) {
                         dispatch('mult/setBonus', {name: key, key: 'currencyMult_' + name, value}, {root: true});
                     } else {
                         dispatch('mult/removeKey', {name: key, type: elem.type, key: 'currencyMult_' + name}, {root: true});

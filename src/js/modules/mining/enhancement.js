@@ -21,7 +21,7 @@ export default {
     },
     barTitanium: {
         effect: [
-            {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => getSequence(2, lvl)}
+            {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => getSequence(2, lvl) + 1}
         ]
     },
     barShiny: {
@@ -33,6 +33,11 @@ export default {
     barIridium: {
         effect: [
             {name: 'currencyMiningEmberGain', type: 'mult', value: lvl => lvl + 1}
+        ]
+    },
+    barDarkIron: {
+        effect: [
+            {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => getSequence(2, lvl) * 0.5 + 1}
         ]
     }
 }

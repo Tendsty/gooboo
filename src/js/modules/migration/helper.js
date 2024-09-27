@@ -1,4 +1,4 @@
-export { addCurrencyToSave, raiseUpgradeLevel, removeUpgrade, removeCurrency, refundCurrency, replaceTreasureEffect, removeRelic }
+export { addCurrencyToSave, raiseUpgradeLevel, lowerUpgradeLevel, removeUpgrade, removeCurrency, refundCurrency, replaceTreasureEffect, applyTreasureFilter, removeRelic }
 
 function addCurrencyToSave(save, currency, amount) {
     if (save.currency[currency] === undefined) {
@@ -32,6 +32,22 @@ function raiseUpgradeLevel(save, name, amount) {
     return save;
 }
 
+function lowerUpgradeLevel(save, name, max) {
+    if (save.upgrade[name] !== undefined) {
+        if (save.upgrade[name][1] > max) {
+            save.upgrade[name][1] = max;
+        }
+        if (save.upgrade[name][2] > max) {
+            save.upgrade[name][2] = max;
+        }
+        if (save.upgrade[name].length >= 4 && save.upgrade[name][3] > max) {
+            save.upgrade[name][3] = max;
+        }
+    }
+
+    return save;
+}
+
 function removeUpgrade(save, name) {
     if (save.upgrade[name] !== undefined) {
         delete save.upgrade[name];
@@ -51,7 +67,7 @@ function removeCurrency(save, name) {
 
 function refundCurrency(save, name) {
     if (save.currency[name] !== undefined && save.stat[name] !== undefined) {
-        save.currency[name] = save.stat[name].total;
+        save.currency[name] = save.stat[name][1];
     }
     return save;
 }
@@ -64,6 +80,20 @@ function replaceTreasureEffect(save, oldName, newName) {
         save.treasure.items.forEach(treasure => {
             if (treasure) {
                 treasure.effect = treasure.effect.map(effect => effect === oldName ? newName : effect);
+            }
+        });
+    }
+    return save;
+}
+
+function applyTreasureFilter(save, filter) {
+    if (save.treasure) {
+        if (save.treasure.newItem) {
+            save.treasure.newItem = filter(save.treasure.newItem);
+        }
+        save.treasure.items.forEach(treasure => {
+            if (treasure) {
+                treasure = filter(treasure);
             }
         });
     }

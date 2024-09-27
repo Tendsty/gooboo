@@ -13,7 +13,12 @@ export default {
       prestigeGainBase: 'gallery/prestigeGain'
     }),
     prestigeGain() {
-      return this.prestigeGainBase > 0 ? {gallery_cash: this.prestigeGainBase} : {};
+      return this.prestigeGainBase > 0 ? {gallery_cash: {
+        base: this.$store.getters['gallery/prestigeGainBase'],
+        total: this.prestigeGainBase,
+        gainMult: 'currencyGalleryCashGain',
+        showDescription: true,
+      }} : {};
     }
   }
 }

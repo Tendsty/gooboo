@@ -22,6 +22,20 @@ export default {
     }, effect: [
         {name: 'currencyGalleryCashGain', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
+    prettyShapes: {type: 'premium', requirement() {
+        return store.state.unlock.galleryShape.see;
+    }, price(lvl) {
+        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 225};
+    }, effect: [
+        {name: 'galleryShapeGain', type: 'mult', value: lvl => getSequence(2, lvl) * 0.5 + 1}
+    ]},
+    prettyCanvas: {type: 'premium', requirement() {
+        return store.state.unlock.galleryCanvas.see;
+    }, price(lvl) {
+        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 320};
+    }, effect: [
+        {name: 'galleryCanvasSpeed', type: 'mult', value: lvl => getSequence(2, lvl) * 0.1 + 1}
+    ]},
     prettyRed: {type: 'premium', cap: 1, requirement() {
         return store.state.stat.gallery_redDrum.total > 0;
     }, price(lvl) {
@@ -66,5 +80,32 @@ export default {
         {name: 'currencyGalleryBlueGain', type: 'mult', value: lvl => Math.pow(4, lvl)},
         {name: 'galleryBlueDrumChance', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
         {name: 'currencyGalleryBlueDrumCap', type: 'mult', value: lvl => Math.pow(2, lvl)},
+    ]},
+    prettyPurple: {type: 'premium', cap: 1, requirement() {
+        return store.state.stat.gallery_purpleDrum.total > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 3900};
+    }, effect: [
+        {name: 'currencyGalleryPurpleGain', type: 'mult', value: lvl => Math.pow(4, lvl)},
+        {name: 'galleryPurpleDrumChance', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
+        {name: 'currencyGalleryPurpleDrumCap', type: 'mult', value: lvl => Math.pow(2, lvl)},
+    ]},
+    'prettyDeep-orange': {type: 'premium', cap: 1, requirement() {
+        return store.state.stat['gallery_deep-orangeDrum'].total > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 5200};
+    }, effect: [
+        {name: 'currencyGalleryDeep-orangeGain', type: 'mult', value: lvl => Math.pow(4, lvl)},
+        {name: 'galleryDeep-orangeDrumChance', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
+        {name: 'currencyGalleryDeep-orangeDrumCap', type: 'mult', value: lvl => Math.pow(2, lvl)},
+    ]},
+    prettyAmber: {type: 'premium', cap: 1, requirement() {
+        return store.state.stat.gallery_amberDrum.total > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 6750};
+    }, effect: [
+        {name: 'currencyGalleryAmberGain', type: 'mult', value: lvl => Math.pow(4, lvl)},
+        {name: 'galleryAmberDrumChance', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
+        {name: 'currencyGalleryAmberDrumCap', type: 'mult', value: lvl => Math.pow(2, lvl)},
     ]},
 }
