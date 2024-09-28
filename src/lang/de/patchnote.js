@@ -477,6 +477,9 @@ export default {
     392: 'Kartenkraft wird nun korrekt beim Prestige zurückgesetzt',
     393: 'Der Courage-Multiplikator einzelner Klassen wird nun korrekt beim Prestige zurückgesetzt',
     394: 'Der Tooltip bei der Umwandlung zeigt nun an, dass alle Konverter verbraucht werden',
+
+    // v1.5.2
+    395: 'Konverter-Kapazität pro "Mülleimer"-Stufe',
   },
   v: {
     1: {
