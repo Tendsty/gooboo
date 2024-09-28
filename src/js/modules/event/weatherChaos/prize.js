@@ -19,7 +19,7 @@ export default {
         type: 'relic',
         item: 'suitcase',
         requirement() {
-            return store.state.unlock.hordeItems.see;
+            return store.state.unlock.hordeHeirlooms.see;
         },
         pool: {
             weatherChaos: {price: {event_weatherChaosToken: 155}}
@@ -35,7 +35,7 @@ export default {
     farm_smellyMud: {
         type: 'consumable',
         item: 'farm_smellyMud',
-        amount: 5,
+        amount: 20,
         requirement() {
             return store.state.unlock.farmFertilizer.see;
         },

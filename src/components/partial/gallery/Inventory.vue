@@ -5,7 +5,7 @@
       <v-btn class="ma-1" color="primary" :disabled="!canOpenPackage || isFrozen" @click="openPackages">{{ $vuetify.lang.t(`$vuetify.gallery.openPackage`) }}</v-btn>
     </div>
     <color class="ma-2" name="beauty"></color>
-    <color v-for="color in availableColors" :key="`color-${color}`" class="ma-2" :name="color" :disabled="isFrozen"></color>
+    <color v-for="(color, key) in availableColors" :key="`color-${color}`" class="ma-2" :name="color" :disabled="isFrozen" :is-last="(key + 1) === availableColors.length"></color>
   </div>
 </template>
 

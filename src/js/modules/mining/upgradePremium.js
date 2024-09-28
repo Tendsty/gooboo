@@ -106,6 +106,22 @@ export default {
         {name: 'currencyMiningOreIridiumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
+    moreOsmium: {type: 'premium', cap: 1, requirement() {
+        return store.state.stat.mining_maxDepth0.total >= 350;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 3500};
+    }, effect: [
+        {name: 'currencyMiningOreOsmiumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
+        {name: 'currencyMiningOreOsmiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
+    ]},
+    moreLead: {type: 'premium', cap: 1, requirement() {
+        return store.state.stat.mining_maxDepth0.total >= 450;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 5000};
+    }, effect: [
+        {name: 'currencyMiningOreLeadGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
+        {name: 'currencyMiningOreLeadCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
+    ]},
     moreHelium: {type: 'premium', cap: 5, requirement() {
         return store.state.unlock.miningGasSubfeature.see;
     }, price(lvl) {

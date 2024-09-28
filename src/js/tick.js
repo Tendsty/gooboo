@@ -28,9 +28,7 @@ function advance() {
         const newDay = getDay(new Date(timestamp * 1000));
         if (newDay !== oldDay) {
             store.commit('system/updateKey', {key: 'currentDay', value: newDay});
-            if (store.state.unlock.eventFeature.see) {
-                store.dispatch('event/dayChange', {start: oldDay, end: newDay});
-            }
+            store.commit('system/updateKey', {key: 'lastPlayedDays', value: [...store.state.system.lastPlayedDays, newDay].slice(-7)});
         }
 
         if (timeDiff > 0) {
@@ -82,10 +80,15 @@ function advance() {
 function tick(newTime, oldTime) {
     [meta, mining, village, horde, farm, gallery, gem, school, event, achievement, general, cryolab].forEach(module => {
         const isFrozen = !!store.state.cryolab[module.name] && store.state.cryolab[module.name].active;
-        if ((module.unlockNeeded === null || store.state.unlock[module.unlockNeeded].use) && !isFrozen) {
+        if ((module.unlockNeeded === null || store.state.unlock[module.unlockNeeded].use)) {
             const diff = Math.floor(newTime * store.state.system.timeMult / module.tickspeed) - Math.floor(oldTime * store.state.system.timeMult / module.tickspeed);
             if (diff > 0) {
-                module.tick(diff, oldTime, newTime);
+                if (!isFrozen) {
+                    module.tick(diff, oldTime, newTime);
+                }
+                if (module.forceTick !== undefined) {
+                    module.forceTick(diff, oldTime, newTime);
+                }
             }
         }
     });

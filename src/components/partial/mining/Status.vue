@@ -3,7 +3,9 @@
   position: relative;
   width: 64px;
   height: 64px;
-  padding: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .icon-card-tag {
   position: absolute;
@@ -16,6 +18,9 @@
   right: 2px;
   top: -2px;
   font-size: 14px;
+}
+.no-beacon {
+  opacity: 0.1;
 }
 </style>
 
@@ -172,6 +177,15 @@
         </template>
         <div class="mt-0">{{ $vuetify.lang.t('$vuetify.mining.timeToBreak') }}</div>
       </gb-tooltip>
+      <gb-tooltip v-if="canSeeBeacons" :title-text="$vuetify.lang.t(`$vuetify.mining.beacon.${ currentDepthBeacon ? currentDepthBeacon : 'noBeacon' }`)" :min-width="0">
+        <template v-slot:activator="{ on, attrs }">
+          <div class="icon-card-container bg-tile-default elevation-2 rounded" style="cursor: pointer;" v-bind="attrs" v-on="on" @click="showBeacons = !showBeacons">
+            <v-icon :class="{'no-beacon': currentDepthBeacon === null}" :color="currentDepthBeacon ? beacon[currentDepthBeacon].color : undefined" size="72">mdi-spotlight</v-icon>
+          </div>
+        </template>
+        <div v-if="!currentDepthBeacon" class="mt-0">{{ $vuetify.lang.t('$vuetify.mining.beacon.clickToPlace') }}</div>
+        <display-row class="mt-0" v-for="(effect, key) in beaconEffect" :key="`effect-beacon-${ key }`" :type="effect.type" :name="effect.name" :after="effect.value"></display-row>
+      </gb-tooltip>
     </div>
     <div v-if="enhancementLevel > 0" class="d-flex justify-center mt-8 mt-lg-12">
       <v-icon class="mr-2">mdi-package-up</v-icon>
@@ -184,19 +198,21 @@
         </gb-tooltip>
       </div>
     </div>
+    <beacon-sector v-if="showBeacons" class="ma-2"></beacon-sector>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { MINING_COAL_DEPTH, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_ORE_BREAK, MINING_RARE_DROP_BREAK, MINING_SALT_DEPTH, MINING_SCRAP_BREAK, MINING_SULFUR_DEPTH } from '../../../js/constants';
+import { MINING_COAL_DEPTH, MINING_DEEPROCK_DEPTH, MINING_GLOWSHARD_DEPTH, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_ORE_BREAK, MINING_RARE_DROP_BREAK, MINING_SALT_DEPTH, MINING_SCRAP_BREAK, MINING_SULFUR_DEPTH } from '../../../js/constants';
 import CurrencyIcon from '../../render/CurrencyIcon.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
+import BeaconSector from './BeaconSector.vue';
 
 export default {
-  components: { StatBreakdown, CurrencyIcon, AlertText, DisplayRow },
+  components: { StatBreakdown, CurrencyIcon, AlertText, DisplayRow, BeaconSector },
   data: () => ({
     rareEarthType: {
       granite: 'both',
@@ -204,7 +220,9 @@ export default {
       coal: 'break',
       sulfur: 'hit',
       niter: 'break',
-      obsidian: 'both'
+      obsidian: 'both',
+      deeprock: 'both',
+      glowshard: 'hit',
     },
     rareEarthDepth: {
       granite: MINING_GRANITE_DEPTH,
@@ -212,8 +230,11 @@ export default {
       coal: MINING_COAL_DEPTH,
       sulfur: MINING_SULFUR_DEPTH,
       niter: MINING_NITER_DEPTH,
-      obsidian: MINING_OBSIDIAN_DEPTH
-    }
+      obsidian: MINING_OBSIDIAN_DEPTH,
+      deeprock: MINING_DEEPROCK_DEPTH,
+      glowshard: MINING_GLOWSHARD_DEPTH,
+    },
+    showBeacons: false,
   }),
   computed: {
     ...mapState({
@@ -224,7 +245,8 @@ export default {
       ingredientList: state => state.mining.ingredientList,
       unlock: state => state.unlock,
       subfeature: state => state.system.features.mining.currentSubfeature,
-      isFrozen: state => state.cryolab.mining.active
+      beacon: state => state.mining.beacon,
+      isFrozen: state => state.cryolab.mining.active,
     }),
     ...mapGetters({
       damage: 'mining/damage',
@@ -245,7 +267,8 @@ export default {
       currentBreaks: 'mining/currentBreaks',
       rareDrops: 'mining/rareDrops',
       rareDropBase: 'mining/rareDropBase',
-      enhancementLevel: 'mining/enhancementLevel'
+      enhancementLevel: 'mining/enhancementLevel',
+      currentDepthBeacon: 'mining/currentDepthBeacon',
     }),
     maxDepth() {
       return this.$store.state.stat[`mining_maxDepth${this.subfeature}`].value;
@@ -307,11 +330,25 @@ export default {
     showScrapHint() {
       const maxDepth = this.$store.state.stat.mining_maxDepth0.total;
       return maxDepth >= 5 && maxDepth <= 10;
+    },
+    canSeeBeacons() {
+      return this.$store.getters['mult/get']('miningBeaconPiercing') >= 1;
+    },
+    beaconEffect() {
+      if (this.currentDepthBeacon) {
+        const beacon = this.beacon[this.currentDepthBeacon];
+        return beacon.effect.map(effect => {
+          return {...effect, value: effect.value(beacon.level)};
+        });
+      } else {
+        return [];
+      }
     }
   },
   methods: {
     resetDurability() {
       this.$store.commit('mining/updateKey', {key: 'durability', value: this.$store.getters['mining/currentDurability']});
+      this.$store.dispatch('mining/applyBeaconEffects');
     },
     depthMin() {
       this.$store.commit('mining/updateKey', {key: 'depth', value: 1});

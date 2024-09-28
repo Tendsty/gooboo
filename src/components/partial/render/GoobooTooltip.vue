@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip :min-width="minWidth" max-width="400" :disabled="disabled" bottom transition="fade-transition">
+  <v-tooltip :min-width="minWidth" :max-width="maxWidth" :disabled="disabled" bottom transition="fade-transition">
     <template v-slot:activator="{ on, attrs }">
       <slot name="activator" :on="on" :attrs="attrs"></slot>
     </template>
@@ -22,6 +22,11 @@ export default {
       type: Number,
       required: false,
       default: 300
+    },
+    maxWidth: {
+      type: Number,
+      required: false,
+      default: 400
     },
     disabled: {
       type: Boolean,

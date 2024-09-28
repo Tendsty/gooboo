@@ -44,8 +44,8 @@ export default {
     }, effect: [
         {name: 'miningPickaxeCraftingPower', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
     ]},
-    oreSlots: {cap: 8, hideCap: true, requirementBase, requirementStat, requirementValue: 25, requirement(lvl) {
-        return store.state.stat.mining_maxDepth0.total >= [25, 25, 30, 50, 80, 120, 175, 260][lvl];
+    oreSlots: {cap: 10, hideCap: true, requirementBase, requirementStat, requirementValue: 25, requirement(lvl) {
+        return store.state.stat.mining_maxDepth0.total >= [25, 25, 30, 50, 80, 120, 175, 260, 350, 450][lvl];
     }, price(lvl) {
         return [
             {mining_oreAluminium: 10},
@@ -55,13 +55,15 @@ export default {
             {mining_oreIron: 12},
             {mining_oreTitanium: 10},
             {mining_orePlatinum: 8},
-            {mining_oreIridium: 6}
+            {mining_oreIridium: 6},
+            {mining_oreOsmium: 5},
+            {mining_oreLead: 4}
         ][lvl];
     }, effect: [
         {name: 'miningPickaxeCraftingSlots', type: 'base', value: lvl => lvl}
     ]},
-    compressor: {cap: 7, hasDescription: true, hideCap: true, requirementBase, requirementStat, requirementValue: 25, requirement(lvl) {
-        return store.state.stat.mining_maxDepth0.total >= [25, 35, 60, 95, 140, 200, 280][lvl];
+    compressor: {cap: 9, hasDescription: true, hideCap: true, requirementBase, requirementStat, requirementValue: 25, requirement(lvl) {
+        return store.state.stat.mining_maxDepth0.total >= [25, 35, 60, 95, 140, 200, 280, 375, 480][lvl];
     }, price(lvl) {
         return [
             {mining_oreAluminium: 20},
@@ -70,7 +72,9 @@ export default {
             {mining_oreAluminium: buildNum(30, 'K')},
             {mining_oreAluminium: buildNum(750, 'K')},
             {mining_oreAluminium: buildNum(1, 'B')},
-            {mining_oreAluminium: buildNum(100, 'T')}
+            {mining_oreAluminium: buildNum(100, 'T')},
+            {mining_oreAluminium: buildNum(100, 'Qi')},
+            {mining_oreAluminium: buildNum(1, 'O')}
         ][lvl];
     }, effect: [
         {name: 'miningCompressAluminium', type: 'unlock', value: lvl => lvl >= 1},
@@ -79,7 +83,9 @@ export default {
         {name: 'miningCompressIron', type: 'unlock', value: lvl => lvl >= 4},
         {name: 'miningCompressTitanium', type: 'unlock', value: lvl => lvl >= 5},
         {name: 'miningCompressPlatinum', type: 'unlock', value: lvl => lvl >= 6},
-        {name: 'miningCompressIridium', type: 'unlock', value: lvl => lvl >= 7}
+        {name: 'miningCompressIridium', type: 'unlock', value: lvl => lvl >= 7},
+        {name: 'miningCompressOsmium', type: 'unlock', value: lvl => lvl >= 8},
+        {name: 'miningCompressLead', type: 'unlock', value: lvl => lvl >= 9}
     ]},
     copperCache: {cap: 8, requirementBase, requirementStat, requirementValue: 30, price(lvl) {
         return {mining_oreCopper: Math.round(lvl + 3)};
@@ -256,7 +262,7 @@ export default {
     emberForge: {hasDescription: true, requirementBase, requirementStat, requirementValue: 125, price(lvl) {
         return {mining_coal: lvl * 3 + 80};
     }, effect: [
-        {name: 'currencyMiningEmberGain', type: 'base', value: lvl => lvl}
+        {name: 'currencyMiningEmberGain', type: 'base', value: lvl => lvl * 0.03}
     ]},
     titaniumCache: {cap: 5, requirementBase, requirementStat, requirementValue: 130, price(lvl) {
         return {mining_scrap: Math.pow(7, lvl) * buildNum(80, 'Sx'), mining_oreTitanium: Math.pow(2, lvl) * 4, mining_sulfur: Math.pow(2.2, lvl) * buildNum(45, 'K'), mining_barSteel: 3};
@@ -266,7 +272,7 @@ export default {
         {name: 'currencyMiningOreIronCap', type: 'base', value: lvl => lvl * 4},
         {name: 'currencyMiningOreTitaniumCap', type: 'base', value: lvl => lvl * 2}
     ]},
-    giantForge: {persistent: true, requirementBase, requirementStat, requirementValue: 132, price(lvl) {
+    giantForge: {persistent: true, alwaysActive: true, requirementBase, requirementStat, requirementValue: 132, price(lvl) {
         return {mining_coal: Math.round(Math.pow(1.25, lvl) * 1200)};
     }, effect: [
         {name: 'currencyMiningEmberCap', type: 'base', value: lvl => lvl * 50}
@@ -282,7 +288,7 @@ export default {
         return {mining_niter: Math.round(Math.pow(1.05, lvl) * (lvl * 200 + 1000))};
     }, effect: [
         {name: 'miningDamage', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'miningEnhancementBarsIncrement', type: 'mult', value: lvl => Math.pow(1 / 1.03, lvl)}
+        {name: 'miningEnhancementBarsIncrement', type: 'mult', value: lvl => 1 / (lvl * 0.03 + 1)}
     ]},
     metalDetector: {cap: 12, capMult: true, requirementBase, requirementStat, requirementValue: 140, price(lvl) {
         return {mining_scrap: Math.pow(3.5, lvl) * buildNum(15, 'Sp'), mining_barSteel: lvl + 11};
@@ -294,7 +300,7 @@ export default {
     recycling: {persistent: true, requirementBase, requirementStat, requirementValue: 145, price(lvl) {
         return {mining_ember: Math.round(Math.pow(1.15, lvl) * 50)};
     }, effect: [
-        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.35, lvl)}
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.25 + 1)}
     ]},
     stickyJar: {cap: 1, hasDescription: true, persistent: true, note: 'mining_30', requirementBase, requirementStat, requirementValue: 150, price() {
         return {mining_scrap: buildNum(4, 'O')};
@@ -364,14 +370,62 @@ export default {
         {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl + 1}
     ]},
     iridiumTreetap: {persistent: true, requirementBase, requirementStat, requirementValue: 280, price(lvl) {
-        return {mining_barIridium: Math.round(Math.pow(1.3, lvl) * (lvl + 2))};
+        return {mining_deeprock: Math.pow(lvl + 1, 2) * buildNum(500, 'M'), mining_barIridium: Math.round(Math.pow(1.3, lvl) * (lvl + 2))};
     }, effect: [
         {name: 'currencyMiningResinCap', type: 'base', value: lvl => lvl * 10},
         {name: 'miningResinMax', type: 'base', value: lvl => lvl}
     ]},
-    iridiumBombs: {cap: 7, requirementBase, requirementStat, requirementValue: 300, price(lvl) {
+    deepCuts: {requirementBase, requirementStat, requirementValue: 290, price(lvl) {
+        return {mining_deeprock: Math.pow(lvl * 0.01 + 1.5, lvl) * buildNum(2.5, 'B')};
+    }, effect: [
+        {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(1 / 1.25, lvl)}
+    ]},
+    iridiumBombs: {cap: 7, requirementBase, requirementStat, requirementValue: 310, price(lvl) {
         return {mining_barBronze: Math.round(Math.pow(1.4, lvl) * buildNum(30, 'K')), mining_barIridium: lvl * 8 + 6};
     }, effect: [
         {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.23, lvl)}
+    ]},
+    oreBag: {requirementBase, cap: 12, requirementStat, requirementValue: 330, price(lvl) {
+        return {mining_deeprock: Math.pow(1.65, lvl) * buildNum(800, 'B'), mining_sulfur: Math.pow(1.9, lvl) * buildNum(450, 'T')};
+    }, effect: [
+        {name: 'currencyMiningOreTinCap', type: 'base', value: lvl => lvl * 12},
+        {name: 'currencyMiningOreIronCap', type: 'base', value: lvl => lvl * 10},
+        {name: 'currencyMiningOreTitaniumCap', type: 'base', value: lvl => lvl * 4},
+        {name: 'currencyMiningOrePlatinumCap', type: 'base', value: lvl => lvl * 4},
+    ]},
+    osmiumExpansion: {requirementBase, cap: 9, requirementStat, requirementValue: 350, price(lvl) {
+        return {mining_barShiny: Math.round(Math.pow(1.44, lvl) * (lvl + 3) * 25), mining_barIridium: Math.round(Math.pow(1.22, lvl) * (lvl + 3) * 8)};
+    }, effect: [
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
+        {name: 'currencyMiningOreOsmiumCap', type: 'base', value: lvl => lvl * 4},
+    ]},
+    osmiumCache: {cap: 7, requirementBase, requirementStat, requirementValue: 355, price(lvl) {
+        return {mining_scrap: Math.pow(6.75, lvl) * buildNum(900, 'SxD'), mining_deeprock: Math.pow(2.1, lvl) * buildNum(42, 'T')};
+    }, effect: [
+        {name: 'currencyMiningOreOsmiumCap', type: 'base', value: lvl => lvl * 2},
+        {name: 'currencyMiningOreOsmiumCap', type: 'mult', value: lvl => lvl + 1}
+    ]},
+    darkBombs: {cap: 10, requirementBase, requirementStat, requirementValue: 375, price(lvl) {
+        return {mining_barTitanium: Math.round(Math.pow(1.2, lvl) * 360), mining_barDarkIron: lvl * 6 + 2};
+    }, effect: [
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.55, lvl)},
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(1.75, lvl)},
+    ]},
+    colossalScrapStorage: {cap: 1, requirementBase, requirementStat, requirementValue: 400, price() {
+        return {mining_scrap: buildNum(1, 'V')};
+    }, effect: [
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(buildNum(1, 'M'), lvl)}
+    ]},
+    stoneDissolver: {cap: 50, requirementBase, requirementStat, requirementValue: 425, price(lvl) {
+        return {mining_scrap: Math.pow(lvl * 0.02 + 1.8, lvl) * buildNum(1, 'UV')};
+    }, effect: [
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+        {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(1 / 1.3, lvl)},
+    ]},
+    leadExpansion: {requirementBase, cap: 5, requirementStat, requirementValue: 450, price(lvl) {
+        return {mining_barDarkIron: Math.round(Math.pow(1.4, lvl) * (lvl + 3) * 4)};
+    }, effect: [
+        {name: 'miningOreCap', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyMiningOreLeadCap', type: 'base', value: lvl => lvl * 7},
     ]},
 }

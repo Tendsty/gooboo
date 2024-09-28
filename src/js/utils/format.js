@@ -56,7 +56,7 @@ function formatNum(amount, showDecimals = false) {
     }
 
     if (numBase < 4) {
-        return negativePrefix + Math.round(amount);
+        return negativePrefix + Math.floor(amount);
     } else if (Math.floor(numBase / 3) < numFormatters.length) {
         const tempVal = amount / Math.pow(10, Math.floor(numBase / 3) * 3);
         return negativePrefix + tempVal.toPrecision(4) + numFormatters[Math.floor(numBase / 3)];
@@ -71,24 +71,27 @@ function formatNum(amount, showDecimals = false) {
  * @returns {String}
  */
 function formatTime(seconds, minimumUnit = 's') {
-    let min = ['s', 'm', 'h', 'd'].indexOf(minimumUnit);
+    let min = ['ms', 's', 'm', 'h', 'd'].indexOf(minimumUnit);
     let negativePrefix = '';
     if (seconds < 0) {
         seconds = Math.abs(seconds);
         negativePrefix = '-';
     }
-    if (seconds < 60 && min < 1) {
+    if (seconds < 1 && min < 1) {
+        // display milliseconds only
+        return negativePrefix + Math.floor(seconds * 1000) + 'ms';
+    } else if (seconds < 60 && min < 2) {
         // display seconds only
         return negativePrefix + Math.floor(seconds) + 's';
-    } else if (seconds < 3600 && min < 2) {
+    } else if (seconds < 3600 && min < 3) {
         // display minutes and seconds
-        return negativePrefix + Math.floor(seconds / 60) + 'm' + (min < 1 ? (' ' + (Math.floor(seconds % 60) < 10 ? '0' : '') + Math.floor(seconds % 60) + 's') : '');
-    } else if (seconds < 86400 && min < 3) {
+        return negativePrefix + Math.floor(seconds / 60) + 'm' + (min < 2 ? (' ' + (Math.floor(seconds % 60) < 10 ? '0' : '') + Math.floor(seconds % 60) + 's') : '');
+    } else if (seconds < 86400 && min < 4) {
         // display hours and minutes
-        return negativePrefix + Math.floor(seconds / 3600) + 'h' + (min < 2 ? (' ' + (Math.floor((seconds % 3600) / 60) < 10 ? '0' : '') + Math.floor((seconds % 3600) / 60) + 'm') : '');
+        return negativePrefix + Math.floor(seconds / 3600) + 'h' + (min < 3 ? (' ' + (Math.floor((seconds % 3600) / 60) < 10 ? '0' : '') + Math.floor((seconds % 3600) / 60) + 'm') : '');
     } else if (seconds < 8640000) {
         // display days and hours
-        return negativePrefix + Math.floor(seconds / 86400) + 'd' + (min < 3 ? (' ' + (Math.floor((seconds % 86400) / 3600) < 10 ? '0' : '') + Math.floor((seconds % 86400) / 3600) + 'h') : '');
+        return negativePrefix + Math.floor(seconds / 86400) + 'd' + (min < 4 ? (' ' + (Math.floor((seconds % 86400) / 3600) < 10 ? '0' : '') + Math.floor((seconds % 86400) / 3600) + 'h') : '');
     }
     else {
         // display days only

@@ -9,6 +9,14 @@ export default {
     name: 'Goldhammer',
     description: 'Stelle die bestmögliche Spitzhacke her'
   },
+  village_ingredientBox: {
+    name: 'Zutatenkiste',
+    description: 'Enthält besondere Zutaten, welche nur in diesen Kisten gefunden werden können'
+  },
+  horde_manaPotion: {
+    name: 'Manatrank',
+    description: 'Stellt 50% vom maximalen Mana wieder her'
+  },
   farm_basic: {
     name: 'Einfacher Dünger',
     description: ''
@@ -33,6 +41,10 @@ export default {
     name: 'Saftiger Dünger',
     description: ''
   },
+  farm_dissolving: {
+    name: 'Pflanzenauflöser',
+    description: ''
+  },
   farm_potatoWater: {
     name: 'Kartoffelwasser',
     description: ''
@@ -51,6 +63,18 @@ export default {
   },
   farm_premium: {
     name: 'Premiumdünger',
+    description: ''
+  },
+  farm_analyzing: {
+    name: 'Analysedünger',
+    description: ''
+  },
+  farm_superJuicy: {
+    name: 'Super-saftig',
+    description: ''
+  },
+  farm_pellets: {
+    name: 'Pellets',
     description: ''
   },
   farm_sunshine: {

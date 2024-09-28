@@ -2,7 +2,13 @@
   <div>
     <slot name="header"></slot>
     <div class="d-flex justify-center align-center ma-1">
-      <price-tag class="ma-1" v-for="(amount, currencyName) in prestigeGain" :key="currencyName" :currency="currencyName" :amount="amount" add></price-tag>
+      <price-tag class="ma-1" v-for="(item, currencyName) in prestigeGain" :key="currencyName" :currency="currencyName" :amount="item.total" add>
+        <alert-text type="info" v-if="item.showDescription">{{ $vuetify.lang.t(`$vuetify.prestigeDescription.${ currencyName }`) }}</alert-text>
+        <template v-if="item.gainMult">
+          <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
+          <stat-breakdown :name="item.gainMult" :base="item.base ? item.base : null"></stat-breakdown>
+        </template>
+      </price-tag>
     </div>
     <card-overview v-if="canSeeCards" :feature="feature"></card-overview>
     <div class="d-flex justify-center align-center ma-1">
@@ -23,16 +29,19 @@
         <div>{{ $vuetify.lang.t(`$vuetify.gooboo.prestigeDescription`) }}</div>
       </gb-tooltip>
     </div>
+    <slot name="footer"></slot>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import PriceTag from '../../render/PriceTag.vue';
+import StatBreakdown from '../../render/StatBreakdown.vue';
 import CardOverview from '../card/CardOverview.vue';
+import AlertText from '../render/AlertText.vue';
 
 export default {
-  components: { CardOverview, PriceTag },
+  components: { CardOverview, PriceTag, StatBreakdown, AlertText },
   data: () => ({
     subfeatureColor: ['light-green', 'yellow', 'orange', 'red', 'purple'],
     selectedSubfeature: 0
@@ -49,7 +58,7 @@ export default {
     }
   },
   mounted() {
-    this.selectedSubfeature = this.$store.state.system.features[this.feature].currentSubfeature;
+    this.selectedSubfeature = this.$store.state.system.features[this.feature].nextSubfeature;
   },
   computed: {
     ...mapState({
@@ -74,15 +83,25 @@ export default {
   methods: {
     prestige() {
       if (this.$store.state.system.settings.confirm.items.prestige.value) {
+        let gain = {};
+        for (const [key, elem] of Object.entries(this.prestigeGain)) {
+          gain[key] = elem.total;
+        }
         this.$store.commit('system/updateKey', {key: 'confirm', value: {
           type: 'prestige',
           feature: this.feature,
           subfeature: this.selectedSubfeature,
-          gain: this.prestigeGain,
+          gain
         }});
       } else {
         this.$store.dispatch(`${this.feature}/prestige`, this.selectedSubfeature);
       }
+    }
+  },
+  watch: {
+    selectedSubfeature(newVal) {
+      this.$store.commit('system/updateNextSubfeature', {key: this.feature, value: newVal});
+      this.$emit('updateSelectedSubfeature', newVal);
     }
   }
 }

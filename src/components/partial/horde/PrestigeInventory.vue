@@ -12,7 +12,7 @@ import HeirloomList from './HeirloomList.vue';
 export default {
   components: { InventoryTemplate, HeirloomList },
   data: () => ({
-    currencies: ['horde_soulEmpowered', 'horde_crown']
+    currencies: ['horde_soulEmpowered', 'horde_crown', 'horde_courage']
   }),
   computed: {
     ...mapState({
@@ -21,7 +21,10 @@ export default {
     prestigeStone() {
       let arr = [];
       if (this.$store.state.stat.horde_maxZone.total >= 40) {
-        arr.push({currency: 'horde_soulEmpowered', stat: 'horde_bestPrestige'});
+        arr.push({currency: 'horde_soulEmpowered', stat: 'horde_bestPrestige0'});
+      }
+      if (this.$store.state.unlock.hordeAreaMonkeyJungle.see) {
+        arr.push({currency: 'horde_courage', stat: 'horde_bestPrestige1'});
       }
       return arr;
     }

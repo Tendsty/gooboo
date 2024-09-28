@@ -1,5 +1,6 @@
-import { SECONDS_PER_DAY, SECONDS_PER_HOUR } from "../../constants";
+import { SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "../../constants";
 import { buildNum } from "../../utils/format";
+import { getSequence } from "../../utils/math";
 
 export default {
     dagger: {
@@ -13,13 +14,15 @@ export default {
                 {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 4 + 6}
             ];
         },
-        active() {
+        active(lvl) {
             return [
-                {type: 'damagePhysic', value: 3.75}
+                {type: 'buff', value: 40, effect: [
+                    {type: 'base', name: 'hordeAttack', value: lvl * 5 + 30}
+                ]}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 8,
+        cooldown: () => 300,
         icon: 'mdi-knife-military',
         activeIcon: 'mdi-knife-military',
         activeColor: 'red'
@@ -37,7 +40,7 @@ export default {
         },
         active() {
             return [
-                {type: 'heal', value: 0.225}
+                {type: 'heal', value: 0.225, int: 0.01}
             ];
         },
         activeType: 'combat',
@@ -96,8 +99,9 @@ export default {
         findZone: 8,
         findChance: 1 / 4000,
         price(lvl) {
-            return Math.pow(8, lvl - 1) * 80;
+            return Math.pow(16, getSequence(1, lvl - 1)) * 80;
         },
+        cap: 4,
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl + 2}
@@ -129,7 +133,7 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'damagePhysic', value: 7 + lvl * 0.5}
+                {type: 'damagePhysic', value: 7.5, str: 0.1, canCrit: 0.1 * lvl}
             ];
         },
         activeType: 'combat',
@@ -151,8 +155,8 @@ export default {
         },
         active() {
             return [
-                {type: 'damageMagic', value: 4.5},
-                {type: 'heal', value: 0.03}
+                {type: 'damageMagic', value: 4.5, int: 0.08},
+                {type: 'heal', value: 0.03, int: 0.002}
             ];
         },
         activeType: 'combat',
@@ -174,7 +178,7 @@ export default {
         },
         active() {
             return [
-                {type: 'permanentStat', stat: 'hordeItemChance', value: 0.25}
+                {type: 'permanentStat', stat: 'hordeItemChance_mult', value: 0.25}
             ];
         },
         activeType: 'utility',
@@ -221,8 +225,10 @@ export default {
         },
         active() {
             return [
-                {type: 'damageMagic', value: 13.5},
-                {type: 'stun', value: 14}
+                {type: 'damageMagic', value: 13.5, int: 0.18},
+                {type: 'buff', value: 20, effect: [
+                    {type: 'base', name: 'hordeCritChance', value: 0.5}
+                ]}
             ];
         },
         activeType: 'combat',
@@ -245,12 +251,14 @@ export default {
         },
         active() {
             return [
-                {type: 'heal', value: 0.015},
-                {type: 'stun', value: 2}
+                {type: 'heal', value: 0.65, int: 0.02},
+                {type: 'buff', value: 210, effect: [
+                    {type: 'base', name: 'hordeRecovery', value: 0.15}
+                ]}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 9,
+        cooldown: () => 1800,
         icon: 'mdi-campfire',
         activeIcon: 'mdi-campfire',
         activeColor: 'orange-red'
@@ -271,11 +279,11 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'removeAttack', value: 0.55}
+                {type: 'removeAttack', value: 0.4}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 720,
+        cooldown: () => 1200,
         icon: 'mdi-snowflake',
         activeIcon: 'mdi-snowflake',
         activeColor: 'light-blue'
@@ -320,8 +328,9 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'heal', value: 0.12},
-                {type: 'stun', value: 10}
+                {type: 'buff', value: 5, effect: [
+                    {type: 'mult', name: 'hordePhysicTaken', value: 0}
+                ]}
             ];
         },
         activeType: 'combat',
@@ -345,8 +354,8 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'damageBio', value: 4.25 + lvl * 0.25},
-                {type: 'poison', value: 0.2}
+                {type: 'damageBio', value: 4.25 + lvl * 0.25, int: 0.1},
+                {type: 'poison', value: 0.2, int: 0.01}
             ];
         },
         activeType: 'combat',
@@ -369,7 +378,7 @@ export default {
         },
         active() {
             return [
-                {type: 'damageMagic', value: 25}
+                {type: 'damageMagic', value: 25, int: 0.4}
             ];
         },
         activeType: 'combat',
@@ -392,7 +401,7 @@ export default {
         },
         active() {
             return [
-                {type: 'permanentStat', stat: 'hordeAttack', value: 0.1}
+                {type: 'permanentStat', stat: 'hordeAttack_mult', value: 0.1}
             ];
         },
         activeType: 'utility',
@@ -415,8 +424,7 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'removeAttack', value: 0.08},
-                {type: 'stun', value: 5 + lvl}
+                {type: 'stun', value: 7 + lvl}
             ];
         },
         activeType: 'combat',
@@ -441,9 +449,9 @@ export default {
         },
         active() {
             return [
-                {type: 'removeAttack', value: 0.04},
+                {type: 'maxdamagePhysic', value: 0.05, str: 0.0004},
                 {type: 'divisionShield', value: 8},
-                {type: 'stun', value: 7}
+                {type: 'stun', value: 3}
             ];
         },
         activeType: 'combat',
@@ -488,13 +496,13 @@ export default {
         cap: 6,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.05},
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.02},
                 {isPositive: false, type: 'base', name: 'hordeBioConversion', value: 0.5}
             ];
         },
         active(lvl) {
             return [
-                {type: 'poison', value: lvl * 0.01 + 0.19}
+                {type: 'poison', value: lvl * 0.01 + 0.19, int: 0.01}
             ];
         },
         activeType: 'combat',
@@ -542,8 +550,8 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'damageBio', value: 2.6},
-                {type: 'poison', value: 0.1}
+                {type: 'damageBio', value: 2.6, int: 0.05},
+                {type: 'poison', value: 0.1, int: 0.005}
             ];
         },
         activeType: 'combat',
@@ -619,7 +627,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'damagePhysic', value: 7.35}
+                {type: 'damagePhysic', value: 7.35, str: 0.12}
             ];
         },
         activeType: 'combat',
@@ -642,8 +650,8 @@ export default {
         },
         active() {
             return [
-                {type: 'damagePhysic', value: 0.8},
-                {type: 'damageMagic', value: 3.4},
+                {type: 'damagePhysic', value: 0.8, str: 0.04},
+                {type: 'damageMagic', value: 3.4, int: 0.08},
             ];
         },
         activeType: 'combat',
@@ -668,7 +676,7 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'damagePhysic', value: lvl * 0.25 + 4.5},
+                {type: 'damagePhysic', value: lvl * 0.25 + 4.5, str: 0.1},
                 {type: 'stun', value: 3}
             ];
         },
@@ -693,12 +701,12 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'damagePhysic', value: 1.5},
-                {type: 'damageBio', value: lvl * 0.2 + 1.3}
+                {type: 'damagePhysic', value: lvl * 0.2 + 2.3, str: 0.04},
+                {type: 'maxdamageBio', value: 0.05, int: 0.0004}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 5,
+        cooldown: () => 15,
         icon: 'mdi-content-cut',
         activeIcon: 'mdi-content-cut',
         activeColor: 'blue-grey'
@@ -744,7 +752,7 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'heal', value: 0.01 * lvl + 0.44},
+                {type: 'heal', value: 0.01 * lvl + 0.44, int: 0.02},
                 {type: 'removeStun', value: null},
                 {type: 'stun', value: 20}
             ];
@@ -765,7 +773,7 @@ export default {
         cap: 8,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.35},
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.125},
                 {isPositive: false, type: 'mult', name: 'hordeAttack', value: 0.25},
                 {isPositive: true, type: 'base', name: 'hordeBioAttack', value: 0.15}
             ];
@@ -773,11 +781,14 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'heal', value: 0.05 + lvl * 0.0025}
+                {type: 'heal', value: 0.14 + lvl * 0.0075, int: 0.008},
+                {type: 'buff', value: 12, effect: [
+                    {type: 'mult', name: 'hordeToxic', value: 2}
+                ]}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 16,
+        cooldown: () => 130,
         icon: 'mdi-bird',
         activeIcon: 'mdi-feather',
         activeColor: 'skyblue'
@@ -823,7 +834,7 @@ export default {
         },
         active() {
             return [
-                {type: 'removeAttack', value: 0.7},
+                {type: 'removeAttack', value: 0.25},
                 {type: 'stun', value: 50}
             ];
         },
@@ -848,7 +859,7 @@ export default {
         active() {
             return [
                 {type: 'removeAttack', value: 0.1},
-                {type: 'heal', value: 0.15}
+                {type: 'heal', value: 0.15, int: 0.007}
             ];
         },
         activeType: 'combat',
@@ -875,7 +886,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'damagePhysic', value: 6.66}
+                {type: 'damagePhysic', value: 6.66, str: 0.0666, int: 0.0666}
             ];
         },
         activeType: 'combat',
@@ -948,7 +959,16 @@ export default {
         active() {
             return [
                 {type: 'removeAttack', value: 0.8},
-                {type: 'silence', value: 90}
+                {type: 'silence', value: 90},
+                {type: 'buff', value: 300, effect: [
+                    {type: 'base', name: 'hordeCritChance', value: 0.75},
+                    {type: 'base', name: 'hordeCritMult', value: 3},
+                    {type: 'base', name: 'hordeSpellblade', value: 6.5},
+                    {type: 'base', name: 'hordeCutting', value: 0.2},
+                    {type: 'base', name: 'hordeShieldbreak', value: 15},
+                    {type: 'base', name: 'hordeStunResist', value: 15},
+                    {type: 'base', name: 'hordeRecovery', value: 0.25}
+                ]}
             ];
         },
         activeType: 'combat',
@@ -974,7 +994,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'heal', value: 0.75},
+                {type: 'heal', value: 0.75, int: 0.03},
                 {type: 'revive', value: 1}
             ];
         },
@@ -999,13 +1019,13 @@ export default {
         },
         active() {
             return [
-                {type: 'heal', value: 0.02},
-                {type: 'removeAttack', value: 0.01},
+                {type: 'heal', value: 0.04, int: 0.002},
+                {type: 'removeAttack', value: 0.02},
                 {type: 'stun', value: 2}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 11,
+        cooldown: () => 22,
         icon: 'mdi-shield-alert',
         activeIcon: 'mdi-alert-octagram',
         activeColor: 'wooden'
@@ -1019,14 +1039,14 @@ export default {
         cap: 6,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.15},
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.05},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
             ];
         },
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'poison', value: lvl * 0.04 + 0.16}
+                {type: 'poison', value: lvl * 0.04 + 0.16, int: 0.01}
             ];
         },
         activeType: 'combat',
@@ -1052,7 +1072,8 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'damageBio', value: 9 + lvl * 0.3}
+                {type: 'maxdamageBio', value: 0.12, int: 0.001},
+                {type: 'damageBio', value: 5 + lvl * 0.3}
             ];
         },
         activeType: 'combat',
@@ -1078,11 +1099,14 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'removeAttack', value: 0.07 + lvl * 0.01}
+                {type: 'buff', value: lvl * 2 + 14, effect: [
+                    {type: 'mult', name: 'hordeAttack', value: 1.5},
+                    {type: 'mult', name: 'hordeHealth', value: 1.5}
+                ]}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 28,
+        cooldown: () => 110,
         icon: 'mdi-needle',
         activeIcon: 'mdi-needle',
         activeColor: 'cyan'
@@ -1104,11 +1128,13 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'stun', value: 40}
+                {type: 'buff', value: 5, effect: [
+                    {type: 'mult', name: 'hordeMagicTaken', value: 0}
+                ]}
             ];
         },
         activeType: 'combat',
-        cooldown: lvl => 280 - lvl * 10,
+        cooldown: lvl => 90 - lvl * 6,
         icon: 'mdi-glasses',
         activeIcon: 'mdi-magnify',
         activeColor: 'pale-blue'
@@ -1128,14 +1154,15 @@ export default {
             ];
         },
         masteryBoost: 0.25,
-        active(lvl) {
+        active() {
             return [
-                {type: 'damageBio', value: 7.4 + lvl * 0.1},
-                {type: 'poison', value: 0.45}
+                {type: 'buff', value: 5, effect: [
+                    {type: 'mult', name: 'hordeBioTaken', value: 0}
+                ]}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 96,
+        cooldown: lvl => 90 - lvl * 6,
         icon: 'mdi-microscope',
         activeIcon: 'mdi-microscope',
         activeColor: 'teal'
@@ -1155,7 +1182,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentStat', stat: 'hordeHealth', value: 0.15}
+                {type: 'permanentStat', stat: 'hordeHealth_mult', value: 0.15}
             ];
         },
         activeType: 'utility',
@@ -1180,11 +1207,12 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'damageBio', value: 1.68 + lvl * 0.02}
+                {type: 'maxdamageBio', value: 0.08, str: 0.0007},
+                {type: 'damageBio', value: 1.68 + lvl * 0.02, int: 0.03}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 5,
+        cooldown: () => 30,
         icon: 'mdi-box-cutter',
         activeIcon: 'mdi-box-cutter',
         activeColor: 'wooden'
@@ -1230,7 +1258,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentStat', stat: 'currencyHordeBoneGain', value: 0.18}
+                {type: 'permanentStat', stat: 'currencyHordeBoneGain_mult', value: 0.18}
             ];
         },
         activeType: 'utility',
@@ -1283,7 +1311,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'heal', value: 0.1},
+                {type: 'heal', value: 0.1, int: 0.005},
                 {type: 'antidote', value: 1},
                 {type: 'removeStun', value: null}
             ];
@@ -1311,7 +1339,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentStat', stat: 'currencyHordeMonsterPartGain', value: 0.225}
+                {type: 'permanentStat', stat: 'currencyHordeMonsterPartGain_mult', value: 0.225}
             ];
         },
         activeType: 'utility',
@@ -1328,8 +1356,6 @@ export default {
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'mult', name: 'hordePhysicTaken', value: 1 / 1.8},
-                {isPositive: true, type: 'mult', name: 'hordeMagicTaken', value: 1 / 1.8},
                 {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl * 2 + 34},
                 {isPositive: true, type: 'base', name: 'hordeStunResist', value: 12},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
@@ -1338,7 +1364,7 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'heal', value: 0.12},
+                {type: 'heal', value: 0.12, int: 0.006},
                 {type: 'divisionShield', value: lvl + 11}
             ];
         },
@@ -1357,13 +1383,13 @@ export default {
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.04 + 1.76},
-                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.02 + 0.78},
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.01 + 0.49},
                 {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 2}
             ];
         },
         active() {
             return [
-                {type: 'damageMagic', value: 3.65},
+                {type: 'damageMagic', value: 3.65, int: 0.11},
                 {type: 'divisionShield', value: 2}
             ];
         },
@@ -1382,7 +1408,7 @@ export default {
         cap: 21,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.175},
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.1},
                 {isPositive: true, type: 'base', name: 'hordeCutting', value: 0.06},
                 {isPositive: false, type: 'mult', name: 'hordeRecovery', value: 0},
                 {isPositive: false, type: 'mult', name: 'hordeDivisionShield', value: 0},
@@ -1392,8 +1418,11 @@ export default {
         masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'poison', value: 24},
-                {type: 'silence', value: lvl + 29}
+                {type: 'poison', value: 24, str: 0.25, int: 0.25},
+                {type: 'silence', value: lvl + 29},
+                {type: 'buff', value: 35, effect: [
+                    {type: 'base', name: 'hordeCutting', value: 0.1}
+                ]}
             ];
         },
         activeType: 'combat',
@@ -1420,7 +1449,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'damageMagic', value: 38}
+                {type: 'damageMagic', value: 38, int: 0.75}
             ];
         },
         activeType: 'combat',
@@ -1443,7 +1472,7 @@ export default {
         },
         active() {
             return [
-                {type: 'damageBio', value: 12.5},
+                {type: 'maxdamageBio', value: 0.125},
                 {type: 'heal', value: 0.125}
             ];
         },
@@ -1468,7 +1497,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentStat', stat: 'currencyHordeSoulCorruptedGain', value: 0.03}
+                {type: 'permanentStat', stat: 'currencyHordeSoulCorruptedGain_mult', value: 0.03}
             ];
         },
         activeType: 'utility',
@@ -1477,36 +1506,91 @@ export default {
         activeIcon: 'mdi-rhombus',
         activeColor: 'light-blue'
     },
-    firework: {
+    hourglass: {
         findZone: 177,
         findChance: 1 / buildNum(40, 'B'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(975, 'M');
+            return Math.pow(4, lvl - 1) * buildNum(975, 'M');
+        },
+        cap: 11,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeHaste', value: 15}
+            ];
+        },
+        active(lvl) {
+            return [
+                {type: 'buff', value: 45, effect: [
+                    {type: 'base', name: 'hordeHaste', value: 50},
+                    {type: 'base', name: 'hordeSpellblade', value: lvl * 0.05 + 1.45}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 20 * SECONDS_PER_MINUTE,
+        icon: 'mdi-timer-sand',
+        activeIcon: 'mdi-timer-sand-complete',
+        activeColor: 'pale-yellow'
+    },
+    glue: {
+        findZone: 184,
+        findChance: 1 / buildNum(80, 'B'),
+        price(lvl) {
+            return Math.pow(8, lvl - 1) * buildNum(1.75, 'B');
+        },
+        cap: 6,
+        stats() {
+            return [
+                {isPositive: true, type: 'mult', name: 'hordeAttack', value: 1.35},
+                {isPositive: false, type: 'base', name: 'hordeHaste', value: -30}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'maxdamageBio', value: 0.3, int: 0.0025},
+                {type: 'damageMagic', value: lvl * 0.5 + 7, int: 0.1}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 40,
+        icon: 'mdi-bottle-tonic',
+        activeIcon: 'mdi-liquid-spot',
+        activeColor: 'pale-green'
+    },
+    firework: {
+        findZone: 191,
+        findChance: 1 / buildNum(160, 'B'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * buildNum(3, 'B');
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 68},
                 {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.2},
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.02}
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.01}
             ];
         },
         active() {
             return [
-                {type: 'damageBio', value: 18},
-                {type: 'poison', value: 2.75}
+                {type: 'damageBio', value: 18, int: 0.35},
+                {type: 'poison', value: 2.75, int: 0.13},
+                {type: 'buff', value: 15, effect: [
+                    {type: 'base', name: 'hordeCritMult', value: 5.75}
+                ]}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 220,
+        cooldown: () => 290,
         icon: 'mdi-firework',
         activeIcon: 'mdi-firework',
         activeColor: 'pink-purple'
     },
     bowTie: {
-        findZone: 184,
-        findChance: 1 / buildNum(40, 'B'),
+        findZone: 198,
+        findChance: 1 / buildNum(320, 'B'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(975, 'M');
+            return Math.pow(2, lvl - 1) * buildNum(5, 'B');
         },
         stats(lvl) {
             return [
@@ -1518,7 +1602,7 @@ export default {
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'heal', value: 0.07},
+                {type: 'heal', value: 0.07, int: 0.003},
                 {type: 'divisionShield', value: 10}
             ];
         },
@@ -1528,11 +1612,36 @@ export default {
         activeIcon: 'mdi-bow-tie',
         activeColor: 'beige'
     },
-    mysticalAccelerator: {
-        findZone: 191,
-        findChance: 1 / buildNum(80, 'B'),
+    forbiddenStopwatch: {
+        findZone: 205,
+        findChance: 1 / buildNum(640, 'B'),
         price(lvl) {
-            return Math.pow(14, lvl - 1) * buildNum(1.75, 'B');
+            return Math.pow(6, lvl - 1) * buildNum(8, 'B');
+        },
+        cap: 6,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeHaste', value: 70},
+                {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'stun', value: lvl + 34}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 360,
+        icon: 'mdi-timer',
+        activeIcon: 'mdi-timer',
+        activeColor: 'purple'
+    },
+    mysticalAccelerator: {
+        findZone: 212,
+        findChance: 1 / buildNum(1.25, 'T'),
+        price(lvl) {
+            return Math.pow(14, lvl - 1) * buildNum(12.5, 'B');
         },
         cap: 5,
         stats() {
@@ -1542,7 +1651,7 @@ export default {
         },
         active() {
             return [
-                {type: 'permanentStat', stat: 'hordeShardChance', value: 0.35}
+                {type: 'permanentStat', stat: 'hordeShardChance_mult', value: 0.35}
             ];
         },
         activeType: 'utility',
@@ -1552,10 +1661,10 @@ export default {
         activeColor: 'teal'
     },
     blazingStaff: {
-        findZone: 198,
-        findChance: 1 / buildNum(160, 'B'),
+        findZone: 219,
+        findChance: 1 / buildNum(2.5, 'T'),
         price(lvl) {
-            return Math.pow(25, lvl - 1) * buildNum(3, 'B');
+            return Math.pow(25, lvl - 1) * buildNum(18, 'B');
         },
         cap: 4,
         stats() {
@@ -1564,9 +1673,13 @@ export default {
                 {isPositive: false, type: 'mult', name: 'hordeHealth', value: 0.5}
             ];
         },
+        masteryBoost: 0.25,
         active(lvl) {
             return [
-                {type: 'damageMagic', value: lvl * 3 + 25}
+                {type: 'damageMagic', value: lvl * 3 + 25, str: 0.6},
+                {type: 'buff', value: 12, effect: [
+                    {type: 'mult', name: 'hordeAttack', value: 1.4}
+                ]}
             ];
         },
         activeType: 'combat',
@@ -1574,6 +1687,297 @@ export default {
         icon: 'mdi-magic-staff',
         activeIcon: 'mdi-fire-alert',
         activeColor: 'orange'
+    },
+    shield: {
+        findZone: 226,
+        findChance: 1 / buildNum(5, 'T'),
+        price(lvl) {
+            return Math.pow(25, lvl - 1) * buildNum(25, 'B');
+        },
+        cap: 4,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeDefense', value: 0.004}
+            ];
+        },
+        active() {
+            return [
+                {type: 'buff', value: 8, effect: [
+                    {type: 'mult', name: 'hordePhysicTaken', value: 0.25},
+                    {type: 'mult', name: 'hordeMagicTaken', value: 0.25},
+                    {type: 'mult', name: 'hordeBioTaken', value: 0.25}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: (lvl) => 90 - lvl * 5,
+        icon: 'mdi-shield',
+        activeIcon: 'mdi-shield-plus',
+        activeColor: 'pale-blue'
+    },
+    armor: {
+        findZone: 233,
+        findChance: 1 / buildNum(10, 'T'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * buildNum(35, 'B');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 400 + buildNum(10.8, 'K')},
+                {isPositive: true, type: 'base', name: 'hordeDefense', value: 0.0025}
+            ];
+        },
+        active() {
+            return [
+                {type: 'divisionShield', value: 20}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 55,
+        icon: 'mdi-tshirt-crew',
+        activeIcon: 'mdi-shield-half-full',
+        activeColor: 'indigo'
+    },
+    natureStone: {
+        findZone: 240,
+        findChance: 1 / buildNum(20, 'T'),
+        price(lvl) {
+            return Math.pow(20, lvl - 1) * buildNum(50, 'B');
+        },
+        cap: 5,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeRecovery', value: 0.01},
+                {isPositive: true, type: 'base', name: 'hordeHealing', value: 0.3}
+            ];
+        },
+        active(lvl) {
+            return [
+                {type: 'maxdamageBio', value: 0.15, int: 0.0012},
+                {type: 'heal', value: lvl * 0.04 + 0.3, int: 0.025}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 130,
+        icon: 'mdi-alpha-x-circle',
+        activeIcon: 'mdi-heart-circle',
+        activeColor: 'light-green'
+    },
+    evergrowingVine: {
+        findZone: 247,
+        findChance: 1 / buildNum(40, 'T'),
+        price(lvl) {
+            return Math.pow(100, lvl - 1) * buildNum(75, 'B');
+        },
+        cap: 3,
+        stats() {
+            return [
+                {isPositive: true, type: 'mult', name: 'hordeHealth', value: 1.5},
+                {isPositive: true, type: 'base', name: 'hordeRecovery', value: 0.2},
+                {isPositive: false, type: 'mult', name: 'hordeDefense', value: 0},
+                {isPositive: false, type: 'mult', name: 'hordeDivisionShield', value: 0},
+                {isPositive: true, type: 'tag', name: 'hordePassiveRecovery', value: [0.1]}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'buff', value: lvl * 3 + 21, effect: [
+                    {type: 'base', name: 'hordeHealing', value: 0.25}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 150,
+        icon: 'mdi-lasso',
+        activeIcon: 'mdi-heart-multiple',
+        activeColor: 'green'
+    },
+    energyDrink: {
+        findZone: 254,
+        findChance: 1 / buildNum(80, 'T'),
+        price(lvl) {
+            return Math.pow(100, lvl - 1) * buildNum(140, 'B');
+        },
+        cap: 3,
+        stats() {
+            return [
+                {isPositive: true, type: 'mult', name: 'hordeHaste', value: 1.5},
+                {isPositive: false, type: 'mult', name: 'hordeCritMult', value: 0.5}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'buff', value: lvl + 7, effect: [
+                    {type: 'base', name: 'hordeCritChance', value: 0.35},
+                    {type: 'base', name: 'hordeCritMult', value: 0.8}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 48,
+        icon: 'mdi-beer',
+        activeIcon: 'mdi-lightning-bolt',
+        activeColor: 'amber'
+    },
+    dragonheart: {
+        findZone: 261,
+        findChance: 1 / buildNum(160, 'T'),
+        price(lvl) {
+            return Math.pow(2, lvl - 1) * buildNum(225, 'B');
+        },
+        cap: 21,
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeRecovery', value: lvl * 0.001 + 0.039},
+                {isPositive: true, type: 'base', name: 'hordeDefense', value: 0.002}
+            ];
+        },
+        active() {
+            return [
+                {type: 'buff', value: 14, effect: [
+                    {type: 'base', name: 'hordeDefense', value: 0.05}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 160,
+        icon: 'mdi-heart',
+        activeIcon: 'mdi-heart',
+        activeColor: 'pink-purple'
+    },
+    prism: {
+        findZone: 268,
+        findChance: 1 / buildNum(320, 'T'),
+        price(lvl) {
+            return Math.pow(12, lvl - 1) * buildNum(400, 'B');
+        },
+        cap: 8,
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'currencyHordeMysticalShardCap', value: lvl}
+            ];
+        },
+        active() {
+            return [
+                {type: 'maxdamageBio', value: 0.3, str: 0.002},
+                {type: 'damagePhysic', value: 15, str: 0.32},
+                {type: 'poison', value: 1.25, int: 0.06}
+            ];
+        },
+        activeCost: () => {
+            return {mysticalShard: 1};
+        },
+        activeType: 'combat',
+        cooldown: () => 330,
+        icon: 'mdi-mirror-variant',
+        activeIcon: 'mdi-mirror-variant',
+        activeColor: 'teal'
+    },
+    deathsword: {
+        findZone: 275,
+        findChance: 1 / buildNum(640, 'T'),
+        price(lvl) {
+            return Math.pow(25, lvl - 1) * buildNum(700, 'B');
+        },
+        cap: 5,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeExecute', value: 0.06}
+            ];
+        },
+        active() {
+            return [
+                {type: 'buff', value: 5, effect: [
+                    {type: 'base', name: 'hordeCutting', value: 0.15}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: (lvl) => 170 - 10 * lvl,
+        icon: 'mdi-sword',
+        activeIcon: 'mdi-skull',
+        activeColor: 'darker-grey'
+    },
+    needle: {
+        findZone: 282,
+        findChance: 1 / buildNum(1.25, 'Qa'),
+        price(lvl) {
+            return Math.pow(25, lvl - 1) * buildNum(1.2, 'T');
+        },
+        cap: 5,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeExecute', value: 0.04},
+                {isPositive: true, type: 'base', name: 'hordeCutting', value: 0.01}
+            ];
+        },
+        active() {
+            return [
+                {type: 'maxdamageBio', value: 0.45, str: 0.003}
+            ];
+        },
+        activeType: 'combat',
+        activeCost: () => {
+            return {health: 0.1};
+        },
+        cooldown: (lvl) => 275 - 15 * lvl,
+        icon: 'mdi-nail',
+        activeIcon: 'mdi-nail',
+        activeColor: 'pale-purple'
+    },
+    mine: {
+        findZone: 289,
+        findChance: 1 / buildNum(2.5, 'Qa'),
+        price(lvl) {
+            return Math.pow(8, lvl - 1) * buildNum(2, 'T');
+        },
+        cap: 9,
+        stats() {
+            return [
+                {isPositive: false, type: 'mult', name: 'hordeAttack', value: 1 / 1.25},
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.5},
+                {isPositive: true, type: 'base', name: 'hordeHaste', value: 20},
+                {isPositive: true, type: 'tag', name: 'hordeActiveDamageCrit', value: [0.3]}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'damagePhysic', value: lvl * 0.25 + 4.25, str: 0.13, canCrit: 1}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 42,
+        icon: 'mdi-mine',
+        activeIcon: 'mdi-mine',
+        activeColor: 'deep-orange'
+    },
+    maskOfJoy: {
+        findZone: 296,
+        findChance: 1 / buildNum(5, 'Qa'),
+        price(lvl) {
+            return Math.pow(25, lvl - 1) * buildNum(3.3, 'T');
+        },
+        cap: 5,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.15},
+                {isPositive: true, type: 'base', name: 'hordeHealing', value: 0.1},
+                {isPositive: true, type: 'tag', name: 'hordeActiveHealCrit', value: [0.1]}
+            ];
+        },
+        active() {
+            return [
+                {type: 'heal', value: 0.1, int: 0.005, canCrit: 0.4}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: (lvl) => 275 - 15 * lvl,
+        icon: 'mdi-drama-masks',
+        activeIcon: 'mdi-drama-masks',
+        activeColor: 'pale-green'
     },
 
     pawn: {
@@ -1591,7 +1995,7 @@ export default {
         },
         active() {
             return [
-                {type: 'damagePhysic', value: 2.7}
+                {type: 'damagePhysic', value: 2.7, str: 0.08}
             ];
         },
         activeType: 'combat',
@@ -1615,7 +2019,7 @@ export default {
         },
         active() {
             return [
-                {type: 'damageMagic', value: 4.15},
+                {type: 'damageMagic', value: 4.15, int: 0.1},
                 {type: 'stun', value: 2}
             ];
         },
@@ -1635,14 +2039,14 @@ export default {
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 500 + 7000},
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.025},
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.01},
                 {isPositive: true, type: 'base', name: 'hordeCutting', value: 0.01}
             ];
         },
         active() {
             return [
-                {type: 'damageBio', value: 8.75},
-                {type: 'poison', value: 0.2}
+                {type: 'maxdamageBio', value: 0.15, str: 0.0012},
+                {type: 'poison', value: 0.2, int: 0.01}
             ];
         },
         activeType: 'combat',
@@ -1688,7 +2092,7 @@ export default {
                 {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 28},
                 {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 200 + 2800},
                 {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: 0.6},
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.01},
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.005},
                 {isPositive: false, type: 'base', name: 'hordeMagicConversion', value: 0.4},
                 {isPositive: false, type: 'base', name: 'hordeBioConversion', value: 0.4}
             ];

@@ -7,11 +7,14 @@
   justify-content: space-between;
   width: 100%;
 }
+.boss-difficulty-field {
+  width: 200px;
+}
 </style>
 
 <template>
   <div class="ma-1">
-    <div class="d-flex justify-center align-center ma-1">
+    <div v-if="subfeature === 0" class="d-flex justify-center align-center ma-1">
       <v-btn icon :disabled="zone <= 1 || isFrozen || currentTower !== null" @click="zoneMin"><v-icon>mdi-skip-backward</v-icon></v-btn>
       <v-btn icon :disabled="zone <= 1 || isFrozen || currentTower !== null" @click="zonePrev10"><v-icon>mdi-step-backward-2</v-icon></v-btn>
       <v-btn icon :disabled="zone <= 1 || isFrozen || currentTower !== null" @click="zonePrev"><v-icon>mdi-step-backward</v-icon></v-btn>
@@ -21,7 +24,7 @@
       <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneNext10"><v-icon>mdi-step-forward-2</v-icon></v-btn>
       <v-btn icon :disabled="isMaxZone || isFrozen || currentTower !== null" @click="zoneMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
     </div>
-    <div class="d-flex flex-wrap justify-center align-center">
+    <div v-if="subfeature === 0" class="d-flex flex-wrap justify-center align-center">
       <gb-tooltip :min-width="0">
         <template v-slot:activator="{ on, attrs }">
           <v-chip @click="toggleTaunt" class="ma-1 boss-count-chip balloon-text-dynamic" :color="`${ isTaunted ? 'pale-red' : 'pale-green' } ${ themeModifier }`" v-bind="attrs" v-on="on">
@@ -86,6 +89,35 @@
         <div>{{ $vuetify.lang.t(`$vuetify.horde.tower.description`) }}</div>
       </gb-tooltip>
     </div>
+    <div v-if="subfeature === 1" class="d-flex justify-center align-center ma-1">
+      <div class="mx-2">{{ $vuetify.lang.t(`$vuetify.horde.area.${ currentArea }`) }}</div>
+      <v-icon class="mx-n1">mdi-circle-small</v-icon>
+      <div v-if="zone === 'endless'" class="mx-2">{{ $vuetify.lang.t('$vuetify.horde.area.zoneEndless') }}</div>
+      <div v-else-if="zone.slice(0, 4) === 'boss'" class="mx-2">{{ $vuetify.lang.t('$vuetify.horde.area.zoneBoss', $vuetify.lang.t(`$vuetify.horde.bossName.${ areaList[currentArea].zones[zone].boss[bossStage] }`)) }}</div>
+      <div v-else class="mx-2">{{ $vuetify.lang.t('$vuetify.horde.zone') }} {{ zone }}</div>
+      <v-btn icon @click="toggleMap"><v-icon>mdi-map</v-icon></v-btn>
+      <gb-tooltip :min-width="0">
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip class="mx-2 boss-count-chip balloon-text-dynamic" :color="`pale-green ${ themeModifier }`" v-bind="attrs" v-on="on">
+            <v-icon class="mr-1" size="14">mdi-emoticon-frown</v-icon>
+            <span v-if="enemyTimer < enemyRespawn">{{ $formatTime(enemyRespawn - enemyTimer) }}</span>
+            <div v-else class="d-flex align-center">
+              <v-icon v-if="enemyTimer >= (enemyRespawn * enemyRespawnMax)" class="mr-1">mdi-check-all</v-icon>
+              <v-icon v-else class="mr-1">mdi-check</v-icon>
+              <span>{{ $formatNum(Math.floor(enemyTimer / enemyRespawn)) }}</span>
+            </div>
+          </v-chip>
+        </template>
+        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.enemyRespawn`, $formatTime(enemyRespawn), $formatNum(enemyRespawnMax)) }}</div>
+      </gb-tooltip>
+    </div>
+    <div v-if="subfeature === 1 && showMap" class="d-flex flex-column justify-center align-center ma-1">
+      <div class="d-flex align-center mb-1">
+        <v-btn v-for="(area, name) in areaVisible" :key="`area-btn-${ name }`" class="mx-1" icon :color="area.color" @click="changeArea(name)"><v-icon>{{ area.icon }}</v-icon></v-btn>
+        <v-text-field v-if="canSeeBossDifficulty" dense class="ma-1 boss-difficulty-field" :disabled="isFrozen || isBossZone" type="number" step="1" min="0" max="999" :label="$vuetify.lang.t('$vuetify.horde.bossBonusDifficulty')" prefix="+" outlined hide-details v-model="bossBonusDifficulty"></v-text-field>
+      </div>
+      <area-map :name="selectedArea"></area-map>
+    </div>
     <v-card v-if="showTowers" class="ma-1 mt-2 pa-1">
       <div class="d-flex flex-wrap">
         <currency class="ma-1" name="horde_crown"></currency>
@@ -102,11 +134,20 @@
     <v-row no-gutters>
       <v-col cols="12" sm="6">
         <v-card min-height="52" class="d-flex flex-wrap ma-1 mb-2 pa-1">
-          <active class="ma-1" v-for="(item, key) in itemsActiveCombat" :key="'active-' + key" :name="key" :pretend="isFrozen"></active>
+          <active class="ma-1" v-for="(item, key) in itemsActiveCombat" :key="'active-' + key" :name="key" :pretend="isFrozen" show-autocast></active>
           <v-spacer></v-spacer>
           <active class="ma-1" v-for="(item, key) in itemsActiveUtility" :key="'active-' + key" :name="key" :pretend="isFrozen"></active>
         </v-card>
         <player-status class="ma-1"></player-status>
+        <v-card v-if="Object.keys(playerBuffParsed).length > 0" class="d-flex flex-wrap ma-1 mb-2 pa-1">
+          <gb-tooltip :min-width="0" v-for="(item, key) in playerBuffParsed" :key="`buff-${ key }`">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon large :color="item.color" v-bind="attrs" v-on="on">mdi-chevron-double-{{ item.positive ? 'up' : 'down' }}</v-icon>
+            </template>
+            <div class="mt-0">{{ $formatTime(item.time) }} / {{ $formatTime(item.maxTime) }}</div>
+            <display-row class="mt-0" v-for="(subitem, subkey) in item.effect" :key="`buff-effect-${ key }-${ subkey }`" :name="subitem.name" :type="subitem.type" :after="subitem.value"></display-row>
+          </gb-tooltip>
+        </v-card>
       </v-col>
       <v-col cols="12" sm="6">
         <v-card min-height="52" class="d-flex flex-wrap ma-1 mb-2 pa-1">
@@ -117,13 +158,20 @@
         <enemy-status class="ma-1"></enemy-status>
       </v-col>
     </v-row>
+    <div v-if="trinketDrop !== null" class="d-flex justify-center">
+      <trinket-item class="ma-1" style="width: 200px;" v-for="(item, key) in trinketDrop" :key="`trinket-drop-${ key }`" :name="item.name" :gain="item.amount" :index="key"></trinket-item>
+    </div>
     <alert-text v-if="showMonsterPartHint" class="ma-1" type="info">{{ $vuetify.lang.t('$vuetify.horde.monsterPartHint') }}</alert-text>
-    <div class="d-flex flex-wrap justify-center">
+    <div v-if="subfeature === 0" class="d-flex flex-wrap justify-center">
       <currency large class="ma-1" name="horde_bone"></currency>
       <currency class="ma-1" name="horde_monsterPart"></currency>
       <currency class="ma-1" name="horde_corruptedFlesh"></currency>
-      <currency class="ma-1" name="horde_mysticalShard" :customCap="maxMysticalShards > 0 ? maxMysticalShards : undefined"></currency>
+      <currency class="ma-1" name="horde_mysticalShard"></currency>
       <currency class="ma-1" name="horde_soulCorrupted"></currency>
+    </div>
+    <div v-else-if="subfeature === 1" class="d-flex flex-wrap justify-center">
+      <currency large class="ma-1" name="horde_blood"></currency>
+      <currency v-if="selectedClass === 'pirate'" class="ma-1" name="horde_lockpick"></currency>
     </div>
   </div>
 </template>
@@ -134,17 +182,27 @@ import { HORDE_ENEMY_RESPAWN_MAX, HORDE_ENEMY_RESPAWN_TIME, HORDE_KEYS_PER_TOWER
 import Currency from '../../render/Currency.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
+import DisplayRow from '../upgrade/DisplayRow.vue';
 import Active from './Active.vue';
+import AreaMap from './AreaMap.vue';
 import EnemyActive from './EnemyActive.vue';
 import EnemyStatus from './EnemyStatus.vue';
 import PlayerStatus from './PlayerStatus.vue';
 import TowerTile from './TowerTile.vue';
+import TrinketItem from './TrinketItem.vue';
 
 export default {
-  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText, EnemyActive, TowerTile },
+  components: { Active, PlayerStatus, EnemyStatus, Currency, StatBreakdown, AlertText, EnemyActive, TowerTile, AreaMap, DisplayRow, TrinketItem },
   data: () => ({
-    showTowers: false
+    showTowers: false,
+    showMap: false,
+    selectedArea: 'warzone',
+    bossBonusDifficulty: 0,
   }),
+  mounted() {
+    this.selectedArea = this.$store.state.horde.selectedArea;
+    this.bossBonusDifficulty = this.$store.state.horde.bossBonusDifficulty;
+  },
   computed: {
     ...mapState({
       combo: state => state.horde.combo,
@@ -161,13 +219,20 @@ export default {
       currentTower: state => state.horde.currentTower,
       towerKey: state => state.currency.horde_towerKey,
       canSeeHeirloom: state => state.unlock.hordeHeirlooms.see,
-      isTaunted: state => state.horde.taunt
+      canSeeBossDifficulty: state => state.unlock.hordeAreaMonkeyJungle.see,
+      isTaunted: state => state.horde.taunt,
+      subfeature: state => state.system.features.horde.currentSubfeature,
+      playerBuff: state => state.horde.playerBuff,
+      currentArea: state => state.horde.selectedArea,
+      areaList: state => state.horde.area,
+      trinketDrop: state => state.horde.trinketDrop,
+      bossStage: state => state.horde.bossStage,
+      selectedClass: state => state.horde.selectedClass,
     }),
     ...mapGetters({
       comboRequired: 'horde/comboRequired',
       comboRequiredBase: 'horde/comboRequiredBase',
       itemsActiveList: 'horde/itemsActiveList',
-      maxMysticalShards: 'horde/maxMysticalShards',
       canSpawnMiniboss: 'horde/canSpawnMiniboss',
     }),
     isMaxZone() {
@@ -187,9 +252,24 @@ export default {
     showMonsterPartHint() {
       return this.$store.state.stat.horde_maxZone.total >= 15 && this.$store.state.stat.horde_monsterPart.total <= 0;
     },
+    itemsActiveBase() {
+      if (this.subfeature === 1) {
+        let obj = {};
+        for (const [key] of Object.entries(this.$store.state.horde.skillActive)) {
+          const split = key.split('_');
+          if (split[0] === 'skill') {
+            obj[key] = this.$store.state.horde.fighterClass[this.selectedClass].skills[split[1]];
+          } else if (split[0] === 'trinket') {
+            obj[key] = this.$store.state.horde.trinket[split[1]];
+          }
+        }
+        return obj;
+      }
+      return this.itemsActiveList;
+    },
     itemsActiveCombat() {
       let obj = {};
-      for (const [key, elem] of Object.entries(this.itemsActiveList)) {
+      for (const [key, elem] of Object.entries(this.itemsActiveBase)) {
         if (elem.activeType !== 'utility') {
           obj[key] = elem;
         }
@@ -198,8 +278,17 @@ export default {
     },
     itemsActiveUtility() {
       let obj = {};
-      for (const [key, elem] of Object.entries(this.itemsActiveList)) {
+      for (const [key, elem] of Object.entries(this.itemsActiveBase)) {
         if (elem.activeType === 'utility') {
+          obj[key] = elem;
+        }
+      }
+      return obj;
+    },
+    areaVisible() {
+      let obj = {};
+      for (const [key, elem] of Object.entries(this.areaList)) {
+        if (elem.unlock === null || this.$store.state.unlock[elem.unlock].use) {
           obj[key] = elem;
         }
       }
@@ -247,6 +336,25 @@ export default {
     },
     hordeNostalgia() {
       return this.$store.getters['mult/get']('hordeNostalgia');
+    },
+    playerBuffParsed() {
+      let obj = {};
+      for (const [key, elem] of Object.entries(this.playerBuff)) {
+        let color = null;
+        const split = key.split('_');
+        if (split[0] === 'equipment') {
+          color = this.$store.state.horde.items[split[1]].activeColor;
+        } else if (split[0] === 'skill') {
+          color = this.$store.state.horde.fighterClass[this.selectedClass].skills[split[1]].color;
+        } else if (split[0] === 'trinket') {
+          color = this.$store.state.horde.trinket[split[1]].color;
+        }
+        obj[key] = {...elem, color};
+      }
+      return obj;
+    },
+    isBossZone() {
+      return this.subfeature === 1 && this.areaList[this.currentArea].zones[this.zone].type === 'boss';
     }
   },
   methods: {
@@ -292,8 +400,21 @@ export default {
     toggleTowers() {
       this.showTowers = !this.showTowers;
     },
+    toggleMap() {
+      this.showMap = !this.showMap;
+    },
     toggleTaunt() {
       this.$store.commit('horde/updateKey', {key: 'taunt', value: !this.isTaunted});
+    },
+    changeArea(name) {
+      this.selectedArea = name;
+    }
+  },
+  watch: {
+    bossBonusDifficulty(newVal) {
+      if (this.bossFight === 0 && newVal !== null && parseInt(newVal) >= 0 && parseInt(newVal) <= 999) {
+        this.$store.commit('horde/updateKey', {key: 'bossBonusDifficulty', value: parseInt(newVal)});
+      }
     }
   }
 }

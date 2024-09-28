@@ -37,9 +37,9 @@
         <template v-for="(amount, currency) in prestigeGain">
           <gb-tooltip v-if="currency === 'farm_exp'" :key="`currency-gain-${ currency }`" :min-width="0">
             <template v-slot:activator="{ on, attrs }">
-              <v-chip class="ma-1" label small color="cyan" :class="$vuetify.theme.dark ? 'theme--dark darken-3' : 'theme--light lighten-3'" v-bind="attrs" v-on="on">
+              <v-chip class="ma-1 px-2 balloon-text-dynamic" label small color="cyan" :class="$vuetify.theme.dark ? 'theme--dark darken-3' : 'theme--light lighten-3'" v-bind="attrs" v-on="on">
                 <v-icon size="12" class="mr-2">mdi-star</v-icon>
-                <span class="balloon-text-dynamic">+{{ $formatNum(amount) }}/d</span>
+                <span>+{{ $formatNum(amount) }}/d</span>
               </v-chip>
             </template>
             <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.cryolab.cropExp`) }}</div>

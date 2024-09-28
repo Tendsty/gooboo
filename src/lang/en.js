@@ -1,14 +1,15 @@
-import { en } from 'vuetify/lib/locale'
-import card from './en/card'
-import consumable from './en/consumable'
-import currency from './en/currency'
-import mult from './en/mult'
-import note from './en/note'
-import relic from './en/relic'
-import stat from './en/stat'
-import unlock from './en/unlock'
-import upgrade from './en/upgrade'
-import patchnote from './en/patchnote'
+import { en } from 'vuetify/lib/locale';
+import card from './en/card';
+import consumable from './en/consumable';
+import currency from './en/currency';
+import mult from './en/mult';
+import note from './en/note';
+import relic from './en/relic';
+import stat from './en/stat';
+import unlock from './en/unlock';
+import upgrade from './en/upgrade';
+import patchnote from './en/patchnote';
+import tag from './en/tag';
 
 export default {
   ...en,
@@ -23,6 +24,9 @@ export default {
     equip: 'Equip',
     unequip: 'Unequip',
     unequipAll: 'Unequip all',
+    select: 'Select',
+    deselect: 'Deselect',
+    take: 'Take',
     max: 'Max',
     maxed: 'Max',
     free: 'Free',
@@ -46,6 +50,7 @@ export default {
     saveManual: 'Save',
     saveExport: 'Export to file',
     saveImport: 'Load from file',
+    resetProgress: 'Reset progress',
     closeAll: 'Close all',
     draw: 'Draw',
     finish: 'Finish',
@@ -142,12 +147,28 @@ export default {
       key: 'The loaded savefile is missing required data',
       version: 'This file is from a newer version of the game (v{0}, current version: v{1})',
       testing: 'Files from the testing build cannot be used in the live version',
-      migration: 'An error occured while migrating from v{0} to v{1}'
+      testingVersion: 'Files from older testing builds cannot be used',
+      migration: 'An error occured while migrating from v{0} to v{1}',
+      checksum: 'Invalid checksum',
     }
   },
   duplicateTab: {
     title: 'Gooboo is already running in another tab',
     description: 'To prevent inconsistencies with your savefile, Gooboo can only run once. Please close this tab and return to the game on the existing tab.'
+  },
+  reset: {
+    feature: 'Want to start over? Here you can reset your progress for a single feature without touching other parts of the game.',
+    warning: 'This is NOT a prestige and there will be no rewards or refunds for doing this. Resets cannot be undone',
+    deleteSave: 'You can also delete your entire savefile here:',
+    deleteButton: 'Delete savefile'
+  },
+  prestigeDescription: {
+    mining_ember: 'Gain ember equal to a percentage of your current dweller depth',
+    village_blessing: 'Faith will be transformed into blessings',
+    village_shares: 'Gain shares equal to 0.1% of your current amount of copper coins',
+    horde_soulEmpowered: 'Corrupted souls will be transformed into empowered souls',
+    horde_courage: 'Gain courage when you reach level 10, and gain more for each level reached after',
+    gallery_cash: 'Gain cash based on your total amount of beauty gained this run',
   },
   confirm: {
     title: 'Confirm action',
@@ -170,13 +191,18 @@ export default {
     weatherChaosFishingRodBuy: 'You are about to buy the fishing rod "{0}", which costs rare currency. Are you sure you want to buy this?',
     summerFestivalCellBuy: 'You are about to buy a new island cell, which costs rare currency. Are you sure you want to buy this?',
     farmCrop: 'You are about to plant crops that cost rare currency. Are you sure you want to buy this?',
+    galleryMotivation: 'You are about to buy motivation, which cost rare currency. Are you sure you want to buy this?',
     treasure: 'You are about to buy a new treasure, which costs rare currency. Are you sure you want to buy this?',
     schoolExamPass: 'You are about to buy an exam pass, which cost rare currency. Are you sure you want to buy this?',
     treasureFragment: 'You are about to buy fragments, which cost rare currency. Are you sure you want to buy this?',
     treasureDelete: 'You are about to destroy a treasure, which will give fragments in return. Are you sure you want to buy this?',
     casinoBingoBuy: 'You are about to buy a bingo card, which costs rare currency. Are you sure you want to buy this?',
     casinoWheelSpin: 'You are about to spin the wheel of fortune, which costs rare currency. Are you sure you want to buy this?',
-    consumable: 'This action requires consumables that you do not have. Do you want to buy these for rare currency?'
+    consumable: 'This action requires consumables that you do not have. Do you want to buy these for rare currency?',
+    reset: {
+      text: 'Are you sure you want to reset the {0} feature? This action cannot be undone!',
+    },
+    resetAll: 'Are you sure you want to delete your savefile? This action cannot be undone!'
   },
   feature: {
     subfeature: 'Subfeature',
@@ -203,6 +229,8 @@ export default {
 
     // Subfeatures
     miningGas: 'Gas',
+    villageCrafting: 'Crafting',
+    hordeClasses: 'Classes',
     schoolLiterature: 'Literature',
     schoolHistory: 'History',
     schoolArt: 'Art',
@@ -226,6 +254,7 @@ export default {
     },
     horde: {
       0: 'Equipment',
+      1: 'Classes',
     },
     farm: {
       0: 'Garden',
@@ -236,13 +265,23 @@ export default {
   },
   unlock,
   mult,
+  tag,
   text: {
+    villageIngredientBoxGet: 'Receive 3 ingredient boxes',
+    hordeBattlePassUpgrade: 'New upgrade',
+    hordeBattlePassPrestigeUpgrade: 'New prestige upgrade',
     farmUnlockDna: 'Unlock all DNA upgrades from level 1 genes',
-    farmGnomeBoost: 'Nearby garden gnomes increase all crop gains by 10%',
+    farmGnomeBoost: 'Increase all harvest gain by 4% for each nearby garden gnome. Premium garden gnomes count as 2',
     farmLonelyGrow: 'Grow twice as fast if no other crops of this type are on the field',
-    farmFertileBoost: 'Increase all crop gains by 30% of fertilizer grow time reduction',
-    farmYieldConversion: 'Convert 60% of yield to other yield types (20% each)',
+    farmFertileBoost: 'Increase yield by 30% per sapphire cost of fertilizer',
+    farmYieldConversion: 'Gain 5% of yield to other yield types',
     farmFastPrestige: 'Prestige reduces crop level by 5 instead of resetting it to 0',
+    farmLuckyHarvest: '1% chance to receive 8x harvest gain',
+    farmSelfless: 'Increase yield by +5% for all crops',
+    farmUnyielding: '40% chance to replant this crop for free when harvested',
+    farmTeamwork: 'Having this gene on one crop of each type doubles all crop yield',
+    farmHunter: 'Resource rare drops native to this plant become hunted. Hunt chance is equal to 1% of your rare drop chance. Each time a hunt is successful, resource capacity is increased by 10% of the base value and base hunt chance gets reduced by 5%',
+    farmPatient: 'Increases yield by +3% per day passed since this gene was chosen, up to +180% at 60 days',
   },
   upgrade,
   currency,
@@ -319,6 +358,36 @@ export default {
       github: 'GitHub',
       website: 'Website',
       googlefonts: 'Google Fonts'
+    },
+    cheater: {
+      0: {
+        title: 'Honorable',
+        description: 'Played the game without any of the tools mentioned below',
+      },
+      100: {
+        title: 'Automated',
+        description: 'Used tools to automatically perform human-like actions, while still following the game\'s rules',
+      },
+      200: {
+        title: 'Cheater',
+        description: 'Edited game variables or used tools to achieve otherwise impossible results or predicted / altered outcomes',
+      },
+      selfMark: 'Set cheater status',
+      selfMarkDescription: 'You can mark yourself as a cheater here. This is purely visual and can be reversed at any time',
+      noDetected: 'No cheats detected',
+      featureDetected: 'Cheats were detected in the following features:',
+      featureDetected2: 'You can remove the cheater mark by fully resetting these features',
+      globalDetected: 'Cheats were detected and your savefile has been permanently marked',
+      selfMarkClick: 'If you were cheating and the game did not detect it properly, you can click to see options to mark yourself as cheater',
+    },
+    statistics: {
+      name: 'Statistics',
+      overview: 'Overview',
+      other: 'Other',
+      gained: 'Gained',
+      maxOwned: 'Highest amount',
+      currentTotal: 'current / total',
+      defaultPlayerName: 'Player',
     }
   },
   error: {
@@ -729,6 +798,12 @@ export default {
       ritualHintDescription: 'Chance to reveal a hint about either a slot or the amount of an ingredient. Hints are only given on successful new rituals. For each found hint, this chance is reduced by {0}%. Hints and the hint chance penalty reset when the hinted ritual is found.',
       clickToAdd: 'Click on ingredients to add them to the ritual',
       ingredientSizeDescription: 'Ingredient size allows you to find more ingredients per magical currency',
+      favouriteIngredient: {
+        title: 'Favourite ingredient',
+        description: 'You can select one ingredient as favourite, and each time you find an ingredient you also receive your favourite ingredient',
+        copy: 'Copy found ingredient',
+      },
+      sackDescription: 'Sacks can appear with high magic amounts, consume 10x more magic and contain 10x the amount of ingredients, split evenly among all available ones',
       newDescription: {
         empty: 'Here you can see if the current recipe is new (not succeeded before) or not',
         isNew: 'This is a new recipe and you will receive a night hunt token if it succeeds',
@@ -897,7 +972,7 @@ export default {
         },
         starShield: {
           name: 'Star shield',
-          description: 'The player gets 5 armor in the first 3 turns'
+          description: 'The player gets 5 defense in the first 3 turns'
         },
         coffee: {
           name: 'Coffee',
@@ -982,9 +1057,11 @@ export default {
     mining_0: 'Deepest ore mine rock broken',
     mining_1: 'Deepest gas giant rock broken',
     village_0: 'Maximum housing',
+    village_1: 'Crafting milestones hit',
     horde_0: 'Highest zone boss defeated',
+    horde_1: 'Battle pass level',
     farm_0: 'Sum of all crop levels',
-    gallery_0: 'Log5 of total beauty',
+    gallery_0: 'Log4 of total beauty',
     debug: 'Debug'
   },
   theme: {
@@ -1078,6 +1155,10 @@ export default {
       relativeUpgradeStats: {
         name: 'Relative upgrade stats',
         description: 'Shows the difference instead of before / after values'
+      },
+      useLegacyFarmSelect: {
+        name: 'Old farm selection',
+        description: 'Uses the old menu to select crops and buildings in the farm'
       }
     },
     automation: {
@@ -1191,12 +1272,24 @@ export default {
     zoneCleared: 'Zone cleared',
     zoneClearedTotal: 'Highest zone cleared',
     zone: 'Zone',
+    hordeMaxDifficulty: 'Difficulty cleared',
     hordeBasicLoot: 'Basic loot',
     hordeItemPermanent: 'Equipment effect',
+    hordeMastery: 'Equipment mastery',
+    hordeRest: 'Rest',
     hordeNostalgia: 'Nostalgia',
     hordeNostalgiaLost: 'Heirlooms found',
+    hordeClassMult: 'Class multiplier',
+    hordeClassLevel: 'Class level',
+    hordeBattlePass: 'Battle pass',
+    hordeEnergy: 'Energy',
+    hordeMana: 'Mana',
+    hordeTime: 'Time',
+    hordeSacrifice: 'Sacrifice',
     farmEarlyGame: 'First crops',
+    galleryCanvas: 'Canvas',
     cards: 'Cards',
+    cardsShiny: 'Shiny cards',
     treasure: 'Treasure',
     debug: 'Debug',
     bankInvestment: 'Investment',
@@ -1207,6 +1300,8 @@ export default {
     ritualPotionLevel: 'Potion level',
     ritualHint: 'Discovered hints',
     ritualIngredient: 'Bonus ingredient',
+    interest: 'Interest',
+    multiplier: 'Multiplier',
   },
 
   // Feature specific translations
@@ -1252,7 +1347,9 @@ export default {
       coal: 'Can be found at {0}m or below on each rocks first break',
       sulfur: 'Can be found at {0}m or below when hitting the deepest rock',
       niter: 'Can be found at {0}m or below on power of 10 rock breaks',
-      obsidian: 'Can be found at {0}m or below if your pickaxe is not enhanced'
+      obsidian: 'Can be found at {0}m or below if your pickaxe is not enhanced',
+      deeprock: 'Can be found at {0}m or below if the digits of the current depth add to 14 or higher',
+      glowshard: 'Can be found at {0}m or below, with a chance of 0.1% per meter below the limit. Obtaining one requires you to dig 1m deeper, this limit gets reduced each day by 10%',
     },
     rareEarthNotAffected: 'This resource is not affected by rare earth gain',
     scrapGainHint: 'You do not get scrap when hitting rocks you have never broken before. Sometimes it is smarter to stay on your current depth to collect more scrap instead of digging down immediately.',
@@ -1286,13 +1383,31 @@ export default {
       barSteel: 'Sharp',
       barTitanium: 'Excavator',
       barShiny: 'Rich',
-      barIridium: 'Molten'
+      barIridium: 'Molten',
+      barDarkIron: 'Void'
     },
     gasGain: {
       0: 'Gain ',
       1: '% of your obtainable ',
       2: ' when you break this rock. You can get up to ',
       3: ' in this depth'
+    },
+    beacon: {
+      noBeacon: 'No beacon',
+      clickToPlace: 'Click to place beacons',
+      selectToPlace: 'Select a beacon to place',
+      place: 'Place',
+      remove: 'Remove beacon',
+      removeDescription: 'You can remove a beacon at any time, but you\'ll need to wait 20 hours to remove another one',
+      removeCooldown: 'Wait {0} before you can remove beacons again',
+      piercing: 'Piercing beacon',
+      rich: 'Rich beacon',
+      wonder: 'Wonder beacon',
+      hope: 'Hope beacon',
+    },
+    anomaly: {
+      name: 'Anomaly',
+      toughness: 'This rock has 100x toughness',
     }
   },
   village: {
@@ -1322,6 +1437,48 @@ export default {
       religion: 'Religion',
       scanning: 'Scanning',
     },
+    crafting: {
+      unlockNew: 'New crafting recipe: ',
+      owned: '{0} owned',
+      changeStat: {
+        value: 'Increase value to {0}',
+        timeNeeded: 'Decrease crafting time to {0}'
+      },
+      nextEffect: 'Next craft effects',
+      special: {
+        description: 'Special crafts provide permanent bonuses when crafted and their progress does not reset on prestige. Their cost increases with every craft and they do not have milestones'
+      },
+      rope: 'Rope',
+      woodenPlanks: 'Wooden planks',
+      brick: 'Brick',
+      screws: 'Screws',
+      waterBottle: 'Water bottle',
+      cocktailGlass: 'Cocktail glass',
+      boomerang: 'Boomerang',
+      polishedGem: 'Polished gem',
+      oilLamp: 'Oil lamp',
+      shower: 'Shower',
+      pouch: 'Pouch',
+      cupboard: 'Cupboard',
+      weight: 'Weight',
+      scissors: 'Scissors',
+      herbTea: 'Herb tea',
+      glasses: 'Glasses',
+      arrows: 'Arrows',
+      bowl: 'Bowl',
+      chain: 'Chain',
+      spear: 'Spear',
+      goldenRing: 'Golden ring',
+      poisonedArrows: 'Poisoned arrows',
+      frostSpear: 'Frost spear',
+      spicySoup: 'Spicy soup',
+      stopwatch: 'Stopwatch',
+      smallChest: 'Small chest',
+      bush: 'Bush',
+      handSaw: 'Hand saw',
+      garage: 'Garage',
+      diamondRing: 'Diamond ring',
+    },
     buildings: 'Buildings',
     village: 'Village',
     pray: 'Pray',
@@ -1340,6 +1497,8 @@ export default {
     housingStat: 'Total housing constructed (first 25 per building)',
     coinNotAffected: 'Coins are not affected by "All resource gain"',
     faithNotAffected: 'Faith is not affected by "All resource gain" and "Mental resource gain"',
+    artisanDescription: 'Artisans can be assigned to craft items for you',
+    counterDescription: 'Counters can be used to sell crafted items to your villagers',
     offering: {
       name: 'Offerings',
       description: {
@@ -1356,6 +1515,7 @@ export default {
     food: 'Food',
     mental: 'Mental resources',
     loot: 'Loot',
+    specialIngredient: 'Special ingredients',
     foodConsume: 'Consuming up to {0} per second'
   },
   horde: {
@@ -1368,6 +1528,7 @@ export default {
     noLoadouts: 'No loadouts',
     monsterPartHint: 'Go to zone 10+ and reach enemy #101 to discover a new currency! That currency is essential to progess further, as it helps you raise your bone capacity.',
     enemyDescription: 'Each enemy in the same zone has x{0} attack, x{1} health and +{2}% bones compared to the previous enemy. This is enemy #{3} and has x{4} attack, x{5} health and +{6}% bones. All of these effects reset when you die.',
+    enemyDescriptionClasses: 'Each enemy in the same zone has x{0} attack, x{1} health and +{2}% blood compared to the previous enemy. This is enemy #{3} and has x{4} attack, x{5} health and +{6}% blood. All of these effects reset when you die.',
     enemySigil1: {
       s: 'Enemies in this zone have {0} sigil',
       p: 'Enemies in this zone have {0} sigils',
@@ -1391,7 +1552,8 @@ export default {
       text: 'Regular attacks happen every second and have the following damage distribution: ',
       physic: '{0}% physical',
       magic: '{0}% magical',
-      bio: '{0}% biological'
+      bio: '{0}% biological',
+      strengthAmp: 'Each point of strength increases the damage of your regular attacks by +{0}%, for a total of +{1}%. This increases the damage of your regular attacks to {2}.'
     },
     healthDescription: 'The amount of damage you can take before dying',
     respawnDescription: 'How much time you need to recover from dying',
@@ -1403,6 +1565,10 @@ export default {
     spellbladeDescription: 'Deal bonus magical damage after using an equipment effect. For equipment effects with a cooldown of below 10 seconds, this does not always work',
     cuttingDescription: 'Deal a percentage of your targets current health as biological damage after attacking',
     recoveryDescription: 'Heal a percentage of your missing health after killing an enemy',
+    defenseDescription: 'Reduce incoming damage by a percentage of your maximum health',
+    executeDescription: 'Instantly kill enemies if they are below a certain health threshold',
+    energyDescription: 'Some actives require energy to use. It refills automatically over time',
+    manaDescription: 'Some actives require mana to use. It refills slowly over time',
     boss: 'Boss',
     miniboss: 'Miniboss',
     minibossDescription: 'Minibosses appear in place of regular enemies and are a bit stronger. They hold valuable loot and up to 2 can be waiting at once. Defeating one also counts as defeating 4 regular enemies',
@@ -1418,9 +1584,13 @@ export default {
     stunResist: 'Recover faster from stuns',
     stunBoss: 'Bosses receive +2 stun resist',
     stunMiniboss: 'Minibosses receive +1 stun resist',
-    bossBioResist: 'Bosses only take 10% biological damage',
-    minibossBioResist: 'Minibosses only take 50% biological damage',
+    bossBioResist: 'Bosses only take 10% biological damage, but take 35% more magical damage',
+    minibossBioResist: 'Minibosses only take 50% biological damage, but take 10% more magical damage',
     enemyRespawn: 'Enemies take {0} to respawn and up to {1} enemies can be waiting. Defeating a boss immediately respawns all enemies',
+    bossBonusDifficulty: 'Boss difficulty',
+    bossNoReward: 'You can fight this boss again at any difficulty, but will not receive rewards for doing so',
+    energyIncompatible: 'Your currently selected class cannot use this trinket because it requires energy',
+    manaIncompatible: 'Your currently selected class cannot use this trinket because it requires mana',
     taunt: {
       title: 'Taunt mode',
       description: 'When taunted, enemies keep spawning even when none are waiting, but all enemies spawned early carry no loot. Taunting only works when trying to reach the boss',
@@ -1493,6 +1663,8 @@ export default {
       rainbow: 'Rainbow',
       drain: 'Drain',
       shocking: 'Shocking',
+      defense: 'Defense',
+      executing: 'Executing',
       berserk: 'Berserk',
       iceGiant: 'Ice giant',
       generic: 'Generic',
@@ -1500,12 +1672,14 @@ export default {
     corruption: {
       name: 'Corruption',
       effects: 'Effects',
-      power: 'Attack and health x',
-      sigil: 'Sigil +',
-      revive: 'Revive +'
+      power: 'Attack and health x{0}',
+      sigil: 'Sigil +{0}',
+      revive: 'Revive +{0}',
+      execute: 'Execute +{0}%'
     },
     activeCooldown: 'Active cooldown',
-    itemsEquipped: 'items equipped',
+    activeBuffFor: 'For {0}:',
+    itemsEquipped: 'equipment slots used',
     cleared: 'Cleared',
     fighting: 'Fighting',
     items: {
@@ -1573,10 +1747,24 @@ export default {
       bomb: 'Bomb',
       leechingStaff: 'Leeching staff',
       shatteredGem: 'Shattered gem',
+      hourglass: 'Hourglass',
+      glue: 'Glue',
       firework: 'Firework',
       bowTie: 'Bow tie',
+      forbiddenStopwatch: 'Forbidden stopwatch',
       mysticalAccelerator: 'Mystical accelerator',
       blazingStaff: 'Blazing staff',
+      shield: 'Shield',
+      armor: 'Armor',
+      natureStone: 'Nature stone',
+      evergrowingVine: 'Evergrowing vine',
+      energyDrink: 'Energy drink',
+      dragonheart: 'Dragonheart',
+      prism: 'Prism',
+      deathsword: 'Deathsword',
+      needle: 'Needle',
+      mine: 'Mine',
+      maskOfJoy: 'Mask of joy',
 
       // Chess pieces
       pawn: 'Pawn',
@@ -1599,6 +1787,18 @@ export default {
         0: 'Deal',
         1: 'biological damage'
       },
+      maxdamagePhysic: {
+        0: 'Deal',
+        1: 'enemy health physical damage'
+      },
+      maxdamageMagic: {
+        0: 'Deal',
+        1: 'enemy health magical damage'
+      },
+      maxdamageBio: {
+        0: 'Deal',
+        1: 'enemy health biological damage'
+      },
       heal: {
         0: 'Restore',
         1: 'health'
@@ -1606,6 +1806,10 @@ export default {
       bone: {
         0: 'Gain',
         1: 'highest zone bones'
+      },
+      blood: {
+        0: 'Gain',
+        1: 'highest difficulty blood'
       },
       monsterPart: {
         0: 'Gain',
@@ -1627,10 +1831,6 @@ export default {
         0: 'Remove',
         1: 'attack from the opponent'
       },
-      raiseAttack: {
-        0: 'Permanently increase attack by',
-        1: ''
-      },
       poison: {
         0: 'Apply',
         1: 'poison'
@@ -1644,6 +1844,11 @@ export default {
         2: ' by',
         1: '(until prestige)'
       },
+      gainStat: {
+        0: 'Permanently increase ',
+        2: ' by',
+        1: ''
+      },
       divisionShield: {
         0: 'Gain',
         1: 'division shield'
@@ -1651,6 +1856,22 @@ export default {
       removeDivisionShield: {
         0: 'Remove',
         1: 'division shield from the opponent'
+      },
+      executeKill: {
+        0: 'Kill an enemy below',
+        1: 'health'
+      },
+      refillEnergy: {
+        0: 'Restore',
+        1: 'energy'
+      },
+      refillMana: {
+        0: 'Restore',
+        1: 'mana'
+      },
+      buff: {
+        duration: 'Buff duration',
+        suffix: '(buff)',
       },
       reviveAll: 'Refill all revives',
       removeStun: 'Remove stuns',
@@ -1676,10 +1897,12 @@ export default {
       brick: 'Brick',
       heat: 'Heat',
       ice: 'Ice',
+      crystal: 'Crystal',
+      vitality: 'Vitality',
     },
     itemMastery: {
       name: 'Mastery',
-      description: 'Defeat bosses or minibosses at zone {0} or higher with this item equipped to earn mastery points. Higher zone bosses earn more mastery points.',
+      description: 'Defeat bosses or minibosses at zone {0} or higher with this equipment to earn mastery points. Higher zone bosses earn more mastery points.',
       gain: 'Receive {0} mastery points from bosses on this zone, and {1}% of that value ({2}) from minibosses',
       bonuses: 'Raise your mastery level to unlock bonuses for this equipment',
       current: 'This equipment has {0} / {1} mastery points',
@@ -1692,7 +1915,7 @@ export default {
     tower: {
       name: 'Towers',
       description: 'Towers are special places that require a tower key to enter. You can fight enemies for crowns and unique heirlooms until you die. Reach specific floors to permanently unlock new bonuses',
-      zoneDescription: 'Enemies in this tower on your highest reached floor are about as strong as a zone {0} enemy. They start at the power of a zone {1} enemy and gain {2} zones worth of stats every floor. Corruption is disabled in towers',
+      zoneDescription: 'Enemies in this tower on your highest reached floor are about as strong as a zone {0} enemy. They start at the power of a zone {1} enemy and gain {2} zones worth of stats every floor',
       floorTitle: 'Highest floor defeated',
       floorDescription: 'Defeat enemies on certain floors to unlock permanent bonuses:',
       rewardTitle: 'Rewards',
@@ -1705,6 +1928,169 @@ export default {
       brick: 'Brick tower',
       fire: 'Fire tower',
       ice: 'Ice tower',
+      danger: 'Danger tower',
+      toxic: 'Toxic tower',
+    },
+    classes: {
+      skill: 'Skill',
+      skillPointsLeft: '{0} skill point(s) left',
+      skillPointCost: 'Needs {0} skill points to level up',
+      skillTreeChoice: 'Here you can make a choice, picking one of these skills locks the other paths',
+      adventurer: {
+        name: 'Adventurer',
+        description: 'A versatile fighter that can deal with every situation'
+      },
+      archer: {
+        name: 'Archer',
+        description: 'A ranged fighter that focuses on critical strikes and consistent damage'
+      },
+      mage: {
+        name: 'Mage',
+        description: 'A fighter that utilizes spells to quickly deal with foes and allows autocasting'
+      },
+      knight: {
+        name: 'Knight',
+        description: 'A durable fighter that slowly takes down opponents, but can deal with strong enemies'
+      },
+      assassin: {
+        name: 'Assassin',
+        description: 'A nimble fighter that focuses on killing enemies quickly'
+      },
+      shaman: {
+        name: 'Shaman',
+        description: 'A fighter bound to nature that utilizes healing and poison to win fights'
+      },
+      pirate: {
+        name: 'Pirate',
+        description: 'The pirate may not be best combatant, but excels at looting'
+      },
+      undead: {
+        name: 'Undead',
+        description: 'A weak fighter that offsets this weakness with superior numbers'
+      },
+      cultist: {
+        name: 'Cultist',
+        description: 'A versatile fighter that specializes on one task at a time'
+      },
+      scholar: {
+        name: 'Scholar',
+        description: 'A supportive fighter that helps other classes'
+      }
+    },
+    battlePass: {
+      name: 'Battle pass',
+      quest: {
+        stat: 'Reach {0} {1}',
+        zone: 'Clear {0} zone {1}',
+        level: 'Reach level {0}',
+        boss: 'Defeat {0} (+{1})'
+      },
+      statType: {
+        base: 'base {0}',
+        total: 'total {0}',
+      }
+    },
+    enemyName: {
+      soldier: 'Soldier',
+      officer: 'Police officer',
+      hunter: 'Hunter',
+      sniper: 'Sniper',
+      strongMonkey: 'Strong monkey',
+      angryMonkey: 'Angry monkey',
+      dartMonkey: 'Dart monkey',
+      monkeyWizard: 'Monkey wizard',
+      monkeyDefender: 'Monkey defender',
+      monkeyMonk: 'Monkey Monk',
+      puppy: 'Puppy',
+      kitten: 'Kitten',
+      seal: 'Seal',
+      piglet: 'Piglet',
+      panda: 'Panda',
+      koala: 'Koala',
+      rabbit: 'Rabbit',
+      guineaPig: 'Guinea pig',
+    },
+    bossName: {
+      ohilio_guard1: 'Guard A',
+      ohilio_guard2: 'Guard B',
+      ohilio: 'ohilio',
+      chriz1: 'Chriz',
+      chriz2: 'Chriz',
+      mina: 'mina',
+    },
+    area: {
+      zoneEndless: 'Endless zone',
+      zoneBoss: 'Boss ({0})',
+      zone: 'Zone {0}',
+      difficulty: '{0} difficulty',
+      enemyAmount: '{0} enemies in this zone',
+      warzone: 'Warzone',
+      monkeyJungle: 'Monkey jungle',
+      loveIsland: 'Love island',
+    },
+    sign: {
+      sign_1: {
+        text: 'My aim is perfect, I never miss! You better watch out!',
+        signed: 'ohilio',
+      },
+      sign_2: {
+        text: 'Think you can hurt me? Never! I\'ll dodge everything, you won\' even be able to hit me! I\'m untouchable!',
+        signed: 'ohilio',
+      },
+      sign_3: {
+        text: 'I am the greatest, the best, perfect, undefeatable! Even my guards are nothing compared to me! You think you stand a chance against me? Hah! Prepare to die!',
+        signed: 'ohilio',
+      },
+      sign_4: {
+        text: 'After taking a close look at these cute animals, you notice they are not real. They are just will-o-wisps! But why are they here? To make you feel bad? No time to think about it, you need to fight to get past these animal spirits',
+        signed: '???',
+      },
+    },
+    quest: {
+      name: 'Quests',
+      description: 'Complete quests to advance your battle pass and unlock permanent rewards',
+      completed: '{0} completed',
+      allCompleted: 'All quests completed',
+    },
+    trinket: {
+      rarity: {
+        0: 'Unowned',
+        1: 'Common',
+        2: 'Uncommon',
+        3: 'Rare',
+        4: 'Epic',
+        5: 'Legendary',
+        6: 'Mythic',
+        7: 'Extraordinary',
+        8: 'Radiant',
+        9: 'Prismatic',
+        10: 'Finalized',
+        timeless: 'Timeless'
+      },
+      equipped: 'trinkets selected (equipped after prestige)',
+      vitality: 'Vitality',
+      energy: 'Energy',
+      magic: 'Magic',
+      fists: 'Fists',
+      sparks: 'Sparks',
+      haste: 'Haste',
+      precision: 'Precision',
+      wrath: 'Wrath',
+      strength: 'Strength',
+      toxins: 'Toxins',
+      wisdom: 'Wisdom',
+      extraction: 'Extraction',
+      learning: 'Learning',
+      preservation: 'Preservation',
+      energize: 'Energize',
+      automation: 'Automation',
+      cure: 'Cure',
+      duality: 'Duality',
+      love: 'Love',
+    },
+    sacrifice: {
+      name: 'Sacrifice',
+      description: 'Here you can temporarily sacrifice equipment slots to receive powerful bonuses in exchange'
     }
   },
   farm: {
@@ -1714,6 +2100,7 @@ export default {
     expToLevelUp: 'You need {0} more harvests to reach the next level',
     yield: 'Yield',
     rareDrops: 'Rare drops',
+    huntedRareDrops: 'Hunted rare drops',
     addRareDrop: 'Add rare drop ({0})',
     addRareDropAmount: '{0} amount',
     prestige: {
@@ -1766,7 +2153,12 @@ export default {
       grapes: 'Grapes',
       hops: 'Hops',
       violet: 'Violet',
-      goldenRose: 'Golden rose'
+      goldenRose: 'Golden rose',
+      sweetPotato: 'Sweet potato',
+      strawberry: 'Strawberry',
+      sesame: 'Sesame',
+      sunflower: 'Sunflower',
+      spinach: 'Spinach',
     },
     gene: {
       name: 'Gene',
@@ -1775,6 +2167,8 @@ export default {
       dnaDuplicate: 'Genes you choose do not appear on your next prestige. Not picking genes makes all 4 available on the next prestige',
       dnaBlocked: 'Blocked genes',
       hasUpgrade: 'Has gene upgrade',
+      lockOnField: 'This gene cannot be picked with this crop on the field',
+      basics: 'Basics',
       yield: 'Yield',
       gold: 'Gold',
       exp: 'Experience',
@@ -1790,17 +2184,25 @@ export default {
       mystery: 'Mystery',
       conversion: 'Conversion',
       prestige: 'Prestige',
-      rareDropChance: 'Discovery'
+      rareDropChance: 'Discovery',
+      lucky: 'Lucky',
+      finalize: 'Finalize',
+      selfless: 'Selfless',
+      unyielding: 'Unyielding',
+      teamwork: 'Teamwork',
+      hunter: 'Hunter',
+      patient: 'Patient',
     },
     fertilizerEffect: {
       vegetable: 'Vegetables only',
-      fruit: 'Fruits only',
+      berry: 'Berries only',
       grain: 'Grains only',
       flower: 'Flowers only'
     },
     building: {
       premium: 'Premium {0}',
       premiumOwned: 'Premium: {0} owned',
+      owned: '{0} owned',
       gardenGnome: {
         name: 'Garden gnome',
         description: 'Crops on the field may give gold on harvest when the garden gnome is placed on the field. The chance is based on crop grow time.',
@@ -1818,13 +2220,13 @@ export default {
       },
       pinwheel: {
         name: 'Pinwheel',
-        description: 'Increases the drop chance on the field by +1% for each unique crop in the surrounding 8 tiles',
-        descriptionPremium: 'Increases the drop chance on the field by +2% for each unique crop in the surrounding 8 tiles',
+        description: 'Increases the drop chance on the field by +0.015x for each unique crop in the surrounding 8 tiles',
+        descriptionPremium: 'Increases the drop chance on the field by +0.03x for each unique crop in the surrounding 8 tiles',
       },
       flag: {
         name: 'Flag',
-        description: 'Increases crop gain by +50% if they are in the correct position related to the flag. Vegetable: Top left, Fruit: Top right, Grain: Bottom left, Flower: Bottom right',
-        descriptionPremium: 'Increases crop gain by +100% if they are in the correct position related to the flag. Vegetable: Top left, Fruit: Top right, Grain: Bottom left, Flower: Bottom right',
+        description: 'Increases crop gain by +50% if they are in the correct position related to the flag. Vegetable: Top left, Berry: Top right, Grain: Bottom left, Flower: Bottom right',
+        descriptionPremium: 'Increases crop gain by +100% if they are in the correct position related to the flag. Vegetable: Top left, Berry: Top right, Grain: Bottom left, Flower: Bottom right',
       }
     }
   },
@@ -1834,6 +2236,7 @@ export default {
     colorSuffix: 'color',
     openPackage: 'Open',
     colorGainReduced: 'Additional gains are reduced to square root after 100 color',
+    drumCompounding: 'To be able to find this drum, you must also find all drums of previous colors in the same package. This reduces the effective chance of finding this drum',
     idea: {
       tier: 'Tier {0} idea',
       unlock: 'Unlock idea',
@@ -1844,6 +2247,7 @@ export default {
       sortWaste: 'Sort waste',
       advertise: 'Advertise',
       beImpatient: 'Be impatient',
+      beExcited: 'Be excited',
 
       makeLemonade: 'Make lemonade',
       growATree: 'Grow a tree',
@@ -1851,16 +2255,80 @@ export default {
       observeRainbow: 'Observe rainbow',
       buildRedReservoir: 'Build red reservoir',
       orderMassiveSafe: 'Order massive safe',
+      buyPen: 'Buy pen',
 
       drawOcean: 'Draw ocean',
       makeWine: 'Make wine',
       calculateOdds: 'Calculate odds',
       buildOrangeReservoir: 'Build orange reservoir',
       thinkHarder: 'Think harder',
+      paintFaster: 'Paint faster',
+      buyBrush: 'Buy brush',
+
+      harvestOranges: 'Harvest oranges',
+      pulverizeGold: 'Pulverize gold',
+      buildYellowReservoir: 'Build yellow reservoir',
+      paintForFun: 'Paint for fun',
+      printNewspaper: 'Print newspaper',
+      expandCanvas: 'Expand canvas',
+      hyperfocus: 'Hyperfocus',
+
+      cutGrass: 'Cut grass',
+      shapeClay: 'Shape clay',
+      buildGreenReservoir: 'Build green reservoir',
+      beMysterious: 'Be mysterious',
+
+      lookAtTheSky: 'Look at the sky',
+      chewBubblegum: 'Chew bubblegum',
+      buildBlueReservoir: 'Build blue reservoir',
     },
     nextInspiration: {
       0: 'Next ',
       1: ' in '
+    },
+    shapes: {
+      name: 'Shapes',
+      upgrades: 'Shape upgrades',
+      description: 'Drag a shape to an adjacent one to switch postitons, or click one to collect it. Collecting requires 5 shapes of the same type to be connected and the amount of shapes gained per shape is equal to the collection combo.',
+      cost: 'Each action costs',
+      special: {
+        name: 'Special shapes',
+        description: 'A special shape has a {0}% chance to appear instead of a regular shape, and special collections give {1}x shapes. There can only be one special shape on the grid',
+        bomb: 'All shapes in a + formation are special collected',
+        dice: 'All shapes that do not match the shape above (or below if at top row) this get rerolled',
+        accelerator: 'The surrounding 8 shapes are special collected. If all 8 of them are the same, spend all motivation to gain even more shapes',
+        sparkles: 'The 4 directly adjacent shapes get regular collected if possible and count as one big combo',
+        hourglass: 'Immediately get converters and packages, collect shapes to increase the time',
+        chest: 'Special collect 10 nearby shapes, the 8 surrounding ones and the ones to the left and right. If all 10 shapes are different, receive a special reward'
+      },
+      buyFor: {
+        0: 'Buy',
+        1: 'for'
+      },
+      reroll: 'Reroll the entire grid for',
+      unlock: 'Unlock shape: {0}',
+      circle: 'Circle',
+      rectangle: 'Rectangle',
+      triangle: 'Triangle',
+      star: 'Star',
+      ellipse: 'Ellipse',
+      heart: 'Heart',
+      square: 'Square',
+      octagon: 'Octagon',
+      pentagon: 'Pentagon',
+      hexagon: 'Hexagon',
+      bomb: 'Bomb',
+      dice: 'Dice',
+      accelerator: 'Accelerator',
+      sparkles: 'Sparkles',
+      hourglass: 'Hourglass',
+      chest: 'Chest',
+    },
+    canvas: {
+      name: 'Canvas',
+      description: 'Put colors on the canvas to slowly increase their canvas level, granting you permanent bonuses',
+      level: 'Canvas level',
+      untilNextLevel: '{0} until next level'
     }
   },
   gem: {

@@ -7,12 +7,12 @@ export default {
     }, effect: [
         {name: 'currencyFarmVegetableGain', type: 'mult', value: lvl => getSequence(2, lvl) * 0.5 + 1}
     ]},
-    biggerFruits: {type: 'premium', requirement() {
+    biggerBerries: {type: 'premium', requirement() {
         return store.state.upgrade.item.farm_seedBox.level >= 1;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 80};
     }, effect: [
-        {name: 'currencyFarmFruitGain', type: 'mult', value: lvl => getSequence(2, lvl) * 0.5 + 1}
+        {name: 'currencyFarmBerryGain', type: 'mult', value: lvl => getSequence(2, lvl) * 0.5 + 1}
     ]},
     biggerGrain: {type: 'premium', requirement() {
         return store.state.upgrade.item.farm_seedBox.level >= 2;

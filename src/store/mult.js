@@ -197,6 +197,7 @@ export default {
                 case 'currencyGain': {
                     for (const [key, elem] of Object.entries(rootState.currency)) {
                         if (elem.feature === o.feature && !blacklist.includes(key) &&
+                            (o.type === undefined || elem.type === o.type) &&
                             (o.subtype === undefined || elem.subtype === o.subtype)
                         ) {
                             group.push(rootGetters['currency/gainMultName'](...key.split('_')));
@@ -308,6 +309,8 @@ export default {
                 } else {
                     dispatch('removeKey', {name: 'hordeHeirloomChance', type: 'base', key: 'hordeNostalgia'});
                 }
+            } else if (name.slice(0, 5) === 'horde') {
+                dispatch('horde/updatePlayerCache', null, {root: true});
             }
         },
         updateTriggerCaches({ getters, dispatch }, o) {
