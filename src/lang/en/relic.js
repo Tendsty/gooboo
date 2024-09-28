@@ -91,6 +91,7 @@ export default {
   heatingBulb: 'Heating bulb',
   trashCan: 'Trash can',
   suitcase: 'Suitcase',
+  fakeSuitcase: 'Fake Suitcase',
   tropicalTent: 'Tropical tent',
   fruitBasket: 'Fruit basket',
   massiveGrain: 'Massive grain',

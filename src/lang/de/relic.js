@@ -91,6 +91,7 @@ export default {
   heatingBulb: 'Heizlampe',
   trashCan: 'Mülleimer',
   suitcase: 'Koffer',
+  fakeSuitcase: 'Koffer2',
   tropicalTent: 'Tropisches Zelt',
   fruitBasket: 'Obstkorb',
   massiveGrain: 'Riesiges Getreide',

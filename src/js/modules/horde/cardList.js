@@ -60,7 +60,7 @@ export default [
     ]},
 
     {id: 7, collection: 'maintainingSafety', reward: [
-        {name: 'hordeMaxItems', type: 'base', value: 1}
+        {name: 'hordeItemChance', type: 'mult', value: 1.6}
     ], color: 'pale-yellow', icons: [
         {"x": 0, "y": 1, "rotate": 90, "size": 2, "icon": "mdi-rectangle"},
         {"x": 0, "y": 0.35, "rotate": 0, "size": 1, "icon": "mdi-bag-personal"},
@@ -344,7 +344,8 @@ export default [
         {"x": 0.5, "y": 0.5, "rotate": 0, "size": 3, "icon": "mdi-minus"}
     ]},
     {id: 37, collection: 'againstTheCorruption', reward: [
-        {name: 'hordeMaxItems', type: 'base', value: 3},
+        {name: 'hordeAttack', type: 'mult', value: 1.75},
+        {name: 'hordeHealth', type: 'mult', value: 1.75},
         {name: 'hordeCorruption', type: 'mult', value: 1.15}
     ], color: 'brown', icons: [
         {"x": 0.25, "y": -0.6, "rotate": 0, "size": 1.75, "icon": "mdi-truck-cargo-container"},

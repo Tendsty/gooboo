@@ -91,6 +91,7 @@ export default {
   heatingBulb: '加热灯泡',
   trashCan: '垃圾箱',
   suitcase: '手提箱',
+  fakeSuitcase: '假手提箱',
   tropicalTent: '热带帐篷',
   fruitBasket: '水果篮',
   massiveGrain: '块状颗粒',

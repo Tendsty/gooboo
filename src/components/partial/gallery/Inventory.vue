@@ -4,7 +4,6 @@
       <currency class="ma-1" name="gallery_package"></currency>
       <v-btn class="ma-1" color="primary" :disabled="!canOpenPackage || isFrozen" @click="openPackages">{{ $vuetify.lang.t(`$vuetify.gallery.openPackage`) }}</v-btn>
     </div>
-    <beauty></beauty>
     <color class="ma-2" name="beauty"></color>
     <color v-for="color in availableColors" :key="`color-${color}`" class="ma-2" :name="color" :disabled="isFrozen"></color>
   </div>
@@ -14,10 +13,9 @@
 import { mapGetters, mapState } from 'vuex';
 import Currency from '../../render/Currency.vue';
 import Color from './Color.vue';
-import Beauty from './Beauty';
 
 export default {
-  components: { Color, Currency, Beauty },
+  components: { Color, Currency },
   computed: {
     ...mapState({
       isFrozen: state => state.cryolab.gallery.active
