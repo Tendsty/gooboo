@@ -41,8 +41,25 @@ export default {
             const fromColor = index < 1 ? 'beauty' : state.color[index - 1];
             return {
                 [`gallery_${fromColor}`]: Math.pow(10, index) * 1000,
-                gallery_converter: Math.pow(4, index) * 10
+                gallery_converter: Math.pow(16, index) * 10
             };
+        },
+        converterOverload: (state, getters, rootState) => (toColor) => {
+            const colorPrice = getters.conversionColorPrice(toColor);
+            const price = getters.conversionPrice(toColor);
+
+            const converterPercent = rootState.currency.gallery_converter.value / price.gallery_converter;
+            const colorPercent = rootState.currency[colorPrice.name].value / colorPrice.amount;
+            return Math.max(Math.pow(converterPercent / colorPercent, 0.25), 1);
+        },
+        conversionGain: (state, getters, rootState, rootGetters) => (toColor) => {
+            const colorPrice = getters.conversionColorPrice(toColor);
+            const price = getters.conversionPrice(toColor);
+
+            return Math.min(
+                rootState.currency.gallery_converter.value / price.gallery_converter,
+                rootState.currency[colorPrice.name].value / colorPrice.amount
+            ) * getters.converterOverload(toColor) * rootGetters['mult/get'](`gallery${ capitalize(toColor) }Conversion`);
         },
         prestigeGainBase: (state, getters, rootState) => {
             if (rootState.stat.gallery_beauty.value < buildNum(1, 'T')) {
@@ -213,14 +230,14 @@ export default {
                 dispatch('currency/gain', {feature: 'gallery', name: 'inspiration', amount: inspirationStart}, {root: true});
             }
         },
-        convertColor({ rootState, getters, rootGetters, dispatch }, o) {
+        convertColor({ getters, rootGetters, dispatch }, o) {
             const price = getters.conversionPrice(o.toColor);
             if (rootGetters['currency/canAfford'](price)) {
-                const colorPrice = getters.conversionColorPrice(o.toColor);
-                const converterMult = Math.min(
-                    rootState.currency.gallery_converter.value / price.gallery_converter,
-                    rootState.currency[colorPrice.name].value / colorPrice.amount
-                );
+                dispatch('currency/gain', {
+                    feature: 'gallery',
+                    name: o.toColor,
+                    amount: getters.conversionGain(o.toColor)
+                }, {root: true});
                 for (const [key, elem] of Object.entries(price)) {
                     if (key === 'gallery_converter') {
                         dispatch('currency/spendAll', {feature: key.split('_')[0], name: key.split('_')[1]}, {root: true});
@@ -228,12 +245,6 @@ export default {
                         dispatch('currency/spend', {feature: key.split('_')[0], name: key.split('_')[1], amount: elem}, {root: true});
                     }
                 }
-
-                dispatch('currency/gain', {
-                    feature: 'gallery',
-                    name: o.toColor,
-                    amount: converterMult * rootGetters['mult/get'](`gallery${ capitalize(o.toColor) }Conversion`)
-                }, {root: true});
             }
         },
         applyIdea({ state, dispatch }, o) {

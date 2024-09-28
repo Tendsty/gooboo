@@ -1,6 +1,6 @@
 <style scoped>
 .render-currency-small {
-  width: 220px;
+  width: 210px;
   font-size: 16px;
 }
 .render-currency-large {
