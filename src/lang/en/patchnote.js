@@ -477,6 +477,9 @@ export default {
     392: 'Fixed card power not properly resetting on prestige',
     393: 'Fixed the class courage gain multiplier not properly resetting on prestige',
     394: 'The conversion tooltip now states that all converters will be used',
+
+    // v1.5.2
+    395: 'Converter capacity per level of "Trash can"',
   },
   v: {
     1: {
