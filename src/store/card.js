@@ -242,8 +242,11 @@ export default {
         activateCards({ state, commit, dispatch }, feature) {
             state.feature[feature].cardEquipped.forEach(card => {
                 state.card[card].reward.forEach(eff => {
-                    dispatch('system/resetEffect', {type: eff.type, name: eff.name, multKey: `card_${card}`}, {root: true});
+                    dispatch('system/resetEffect', {type: eff.type, name: eff.name, multKey: `card_${ card }`}, {root: true});
                 });
+            });
+            state.feature[feature].powerReward.forEach(elem => {
+                dispatch('system/resetEffect', {type: elem.type, name: elem.name, multKey: `cardPower_${ feature }`}, {root: true});
             });
 
             commit('updateKey', {type: 'feature', name: feature, key: 'cardEquipped', value: [...state.feature[feature].cardSelected]});

@@ -136,6 +136,9 @@ export default {
         case 'hordeActive':
           cacheValue = this.$vuetify.lang.t(`$vuetify.horde.active.${this.name}.0`) + ' ' + this.$vuetify.lang.t(`$vuetify.horde.active.${this.name}.1`);
           break;
+        case 'hordeActiveCrit':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.horde.active.canCritDiff`);
+          break;
         case 'hordeBuff':
           cacheValue = this.$vuetify.lang.t(`$vuetify.horde.active.buff.duration`);
           break;

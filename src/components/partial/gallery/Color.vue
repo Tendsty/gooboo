@@ -82,11 +82,13 @@
             <v-btn color="primary" :disabled="!canAfford || disabled" @click="convertOne">{{ $vuetify.lang.t('$vuetify.gooboo.convert') }}</v-btn>
           </div>
         </template>
-        <div class="d-flex align-center mt-0">
+        <div class="d-flex justify-center align-center mt-0">
           <price-tag class="ma-1" v-for="(amount, currency) in conversionPrice" :key="currency" :currency="currency" :amount="amount"></price-tag>
           <v-icon class="ma-1">mdi-transfer-right</v-icon>
-          <price-tag class="ma-1" :currency="`gallery_${name}`" :amount="conversionMult" add></price-tag>
+          <price-tag class="ma-1" :currency="`gallery_${name}`" :amount="conversionGain" add></price-tag>
         </div>
+        <alert-text type="info">{{ $vuetify.lang.t('$vuetify.gallery.allConverterInfo') }}</alert-text>
+        <alert-text v-if="canAfford && converterOverload > 1" type="info">{{ $vuetify.lang.t('$vuetify.gallery.converterOverload', $formatNum(converterOverload, true)) }}</alert-text>
       </gb-tooltip>
       <v-icon v-if="showTransferArrow" class="color-generate-arrow">mdi-transfer-up</v-icon>
     </template>
@@ -150,12 +152,11 @@ export default {
     canAfford() {
       return this.$store.getters['currency/canAfford'](this.conversionPrice);
     },
-    conversionMult() {
-      const colorPrice = this.$store.getters['gallery/conversionColorPrice'](this.name);
-      return Math.max(1, Math.min(
-        this.$store.state.currency.gallery_converter.value / this.conversionPrice.gallery_converter,
-        this.$store.state.currency[colorPrice.name].value / colorPrice.amount
-      )) * this.$store.getters['mult/get'](`gallery${ this.statBaseName }Conversion`);
+    converterOverload() {
+      return this.$store.getters['gallery/converterOverload'](this.name);
+    },
+    conversionGain() {
+      return this.canAfford ? this.$store.getters['gallery/conversionGain'](this.name) : this.$store.getters['mult/get'](`gallery${ capitalize(this.name) }Conversion`);
     },
     isPremium() {
       if (this.name === 'beauty') {

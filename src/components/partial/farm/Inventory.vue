@@ -20,10 +20,12 @@
         </template>
       </div>
     </template>
-    <v-select v-else class="w-100" outlined hide-details clearable item-value="name" v-model="selectedPlaceable" :items="placeableList" @change="selectPlaceable">
-      <template v-slot:selection="{ item }"><placeable-select-display :item="item" is-simple></placeable-select-display></template>
-      <template v-slot:item="{ item }"><placeable-select-display :item="item"></placeable-select-display></template>
-    </v-select>
+    <div v-else class="ma-1">
+      <v-select class="w-100" outlined hide-details clearable item-value="name" v-model="selectedPlaceable" :items="placeableList" @change="selectPlaceable">
+        <template v-slot:selection="{ item }"><placeable-select-display :item="item" is-simple></placeable-select-display></template>
+        <template v-slot:item="{ item }"><placeable-select-display :item="item"></placeable-select-display></template>
+      </v-select>
+    </div>
     <div v-if="unlock.farmFertilizer.see && selectedCropName" class="d-flex flex-wrap justify-center ma-1">
       <consumable v-for="(item, key) in fertilizers" class="ma-1" :key="'fertilizer-' + key" :name="`farm_${key}`" :is-selected="selectedFertilizerName === key" @click="selectFertilizer(key)">
         <fertilizer-card :name="key"></fertilizer-card>
