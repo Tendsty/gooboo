@@ -136,7 +136,7 @@ export default {
     farm_14: 'Small lucky bugs. Also not stinky. Seem nice.',
     farm_15: 'Farm is peaceful. Almost forget mass killing at horde.',
     farm_16: 'Hunter of the garden. Keeps bugs in check.',
-    farm_17: 'Pinwheel interesting. Place unique crops nearby. 8 spots around pinwheel. Find more gold. On the entire field.',
+    farm_17: 'Pinwheel interesting. Place unique crops nearby. 8 spots around pinwheel. Find more rare drops. On the entire field.',
     farm_18: 'More fertilizers. More ways to spend gold and gems.',
     farm_19: 'Litte bees. Always working. And numerous.',
     farm_20: 'Flag complicated. Improves crops of a type. Type depends on position. Better read manual.',

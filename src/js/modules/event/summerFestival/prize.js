@@ -38,7 +38,7 @@ export default {
     farm_tropicalWater: {
         type: 'consumable',
         item: 'farm_tropicalWater',
-        amount: 5,
+        amount: 20,
         requirement() {
             return store.state.unlock.farmFertilizer.see;
         },

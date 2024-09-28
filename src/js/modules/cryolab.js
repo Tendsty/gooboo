@@ -8,11 +8,12 @@ const data = {
         {mining_crystalYellow: 'mining_bestPrestige1'},
     ],
     village: [
-        {village_blessing: 'village_bestPrestige'},
-        {village_blessing: 'village_bestPrestige'},
+        {village_blessing: 'village_bestPrestige0'},
+        {village_shares: 'village_bestPrestige1'},
     ],
     horde: [
-        {horde_soulEmpowered: 'horde_bestPrestige'},
+        {horde_soulEmpowered: 'horde_bestPrestige0'},
+        {horde_courage: 'horde_bestPrestige1'},
     ],
     farm: [
         {farm_exp: 'farm_bestPrestige'},
@@ -32,12 +33,17 @@ const effect = {
             {name: 'currencyVillageFaithGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
             {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
         ],
-        [],
+        [
+            {name: 'currencyVillageSharesGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
+        ],
     ],
     horde: [
         [
             {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
             {name: 'currencyHordeSoulCorruptedCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
+        ],
+        [
+            {name: 'currencyHordeCourageGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
         ],
     ],
     farm: [

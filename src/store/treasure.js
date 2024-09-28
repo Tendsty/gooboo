@@ -179,6 +179,7 @@ export default {
             Vue.set(state.effect[feature], o.name, {
                 unlock: o.unlock ?? null,
                 type: o.type ?? 'regular',
+                icon: o.icon ?? 'mdi-circle',
                 unique: o.unique ?? false,
                 value: o.value ?? 0
             });

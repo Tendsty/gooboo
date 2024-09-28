@@ -286,14 +286,13 @@ export default {
         color: 'lime',
         stats: lvl => {
             return {
-                health: {type: 'mult', amount: Math.pow(1.1, lvl)},
-                bioTaken: {type: 'mult', amount: Math.pow(0.8, lvl)},
+                bioTaken: {type: 'mult', amount: Math.pow(0.75, lvl)},
             };
         },
         active: {
-            effect(lvl) {
+            effect(lvl, boss) {
                 return [
-                    {type: 'heal', value: lvl * 0.025 + 0.075},
+                    {type: 'heal', value: (lvl * 0.025 + 0.075) / bossTimeMult(boss)},
                     {type: 'antidote', value: 1}
                 ];
             },
@@ -311,7 +310,8 @@ export default {
                 cutting: {type: 'base', amount: 0.002 * lvl},
                 bioConversion: {type: 'base', amount: 1.5 * lvl},
             };
-        }
+        },
+        exclude: ['executing']
     },
     spitting: {
         minZone: 56,
@@ -378,7 +378,7 @@ export default {
         active: {
             effect(lvl) {
                 return [
-                    {type: 'raiseAttack', value: lvl * 0.05 + 0.2}
+                    {type: 'gainStat', stat: 'attack_mult', value: lvl * 0.05 + 1.2}
                 ];
             },
             cooldown: () => 15,
@@ -432,7 +432,7 @@ export default {
             effect(lvl) {
                 return [
                     {type: 'damagePhysic', value: lvl * 0.6 + 1.55},
-                    {type: 'raiseAttack', value: 0.03}
+                    {type: 'gainStat', stat: 'attack_mult', value: 1.03}
                 ];
             },
             cooldown: () => 4,
@@ -545,6 +545,29 @@ export default {
             startCooldown: () => 9,
             uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
+    },
+    defense: {
+        minZone: 225,
+        icon: 'mdi-shield',
+        color: 'dark-blue',
+        stats: lvl => {
+            return {
+                health: {type: 'mult', amount: Math.pow(1.15, lvl)},
+                defense: {type: 'base', amount: lvl * 0.001},
+            };
+        }
+    },
+    executing: {
+        minZone: 275,
+        icon: 'mdi-skull',
+        color: 'pale-red',
+        stats: lvl => {
+            return {
+                attack: {type: 'mult', amount: Math.pow(1.15, lvl)},
+                execute: {type: 'base', amount: lvl * 0.05},
+            };
+        },
+        exclude: ['sharp']
     },
 
     // Tower-only sigils

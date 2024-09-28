@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     relic() {
-      return this.$store.state.relic[this.name];
+      return this.$store.state.relic.item[this.name];
     }
   }
 }

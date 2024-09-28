@@ -167,7 +167,7 @@ export default {
                 if (elem.requirement() && elem.pool[pool]) {
                     const elemBase = {...elem, ...elem.pool[pool]};
                     if (elemBase.weight !== null && !(
-                        (elemBase.type === 'relic' && rootState.relic[elemBase.item].found) ||
+                        (elemBase.type === 'relic' && rootState.relic.item[elemBase.item].found) ||
                         (elemBase.type === 'theme' && rootState.system.themes[elemBase.item].owned)
                     )) {
                         for (let i = 0; i < elem.times; i++) {
@@ -495,6 +495,7 @@ export default {
                     commit('nightHunt/updateKey', {key: 'performedRituals', value: []}, {root: true});
                     commit('nightHunt/updateKey', {key: 'ritualFamiliarity', value: {}}, {root: true});
                     commit('nightHunt/updateKey', {key: 'ritualHint', value: {}}, {root: true});
+                    commit('nightHunt/updateKey', {key: 'favouriteIngredient', value: 'copy'}, {root: true});
                     for (const [key, elem] of Object.entries(rootState.nightHunt.potion)) {
                         commit('nightHunt/updatePotionKey', {name: key, key: 'recipe', value: null}, {root: true});
                         if (elem.level > 0) {
@@ -853,7 +854,7 @@ export default {
             for (const [key, elem] of Object.entries(state.prize)) {
                 const elemBase = {...elem, ...elem.pool[pool]};
                 if (elem.requirement() && elem.pool[pool] && elemBase.weight === null && !(
-                    (elemBase.type === 'relic' && rootState.relic[elemBase.item].found) ||
+                    (elemBase.type === 'relic' && rootState.relic.item[elemBase.item].found) ||
                     (elemBase.type === 'theme' && rootState.system.themes[elemBase.item].owned)
                 )) {
                     for (let i = 0; i < elemBase.times; i++) {
@@ -875,6 +876,10 @@ export default {
                 }
             });
             commit('updateKey', {key: pool === 'merchant' ? 'shop_merchant' : 'shop_big', value: [...chosen, ...randomPrizes]});
+        },
+        giveTokens({ commit, dispatch }, o) {
+            dispatch('currency/gain', {feature: 'event', name: o.event + 'Token', amount: o.amount}, {root: true});
+            commit('stat/add', {feature: 'event', name: o.event + 'Highscore', value: o.amount}, {root: true});
         }
     }
 }

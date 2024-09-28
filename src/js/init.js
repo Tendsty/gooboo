@@ -36,7 +36,12 @@ function newGame(startTick = true) {
 
     store.commit('upgrade/initCache');
     store.commit('system/generatePlayerId');
-    store.dispatch('system/updateCurrentDay');
+
+    // Update current day
+    const newDay = getDay();
+    store.commit('system/updateKey', {key: 'currentDay', value: newDay});
+    store.commit('system/updateKey', {key: 'lastPlayedDays', value: [newDay]});
+
     store.dispatch('farm/applyEarlyGameBuff');
 
     if (startTick) {
@@ -123,6 +128,11 @@ function prepare() {
         if (module.consumable) {
             for (const [key, elem] of Object.entries(module.consumable)) {
                 store.commit('consumable/init', {feature: module.name, name: key, ...elem});
+            }
+        }
+        if (module.tag) {
+            for (const [key, elem] of Object.entries(module.tag)) {
+                store.commit('tag/init', {name: key, ...elem});
             }
         }
 

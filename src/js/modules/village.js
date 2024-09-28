@@ -2,6 +2,7 @@ import store from "../../store"
 import achievement from "./village/achievement";
 import upgradePrestige from "./village/upgradePrestige";
 import upgrade from "./village/upgrade";
+import upgrade2 from "./village/upgrade2";
 import upgradePremium from "./village/upgradePremium";
 import building from "./village/building";
 import { buildArray } from "../utils/array";
@@ -9,8 +10,10 @@ import relic from "./village/relic";
 import job from "./village/job";
 import offering from "./village/offering";
 import policy from "./village/policy";
-import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD, VILLAGE_MIN_HAPPINESS } from "../constants";
+import { SECONDS_PER_DAY, SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD, VILLAGE_MIN_HAPPINESS } from "../constants";
 import bookVillage from "./school/bookVillage";
+import craftingRecipe from "./village/craftingRecipe";
+import { randomRound } from "../utils/random";
 
 let upgradeBuilding = {};
 for (const [key, elem] of Object.entries(building)) {
@@ -21,70 +24,183 @@ export default {
     name: 'village',
     tickspeed: 1,
     unlockNeeded: 'villageFeature',
-    tick(seconds) {
+    tick(seconds, oldTime, newTime) {
         store.commit('stat/add', {feature: 'village', name: 'timeSpent', value: seconds});
-
-        store.dispatch('upgrade/tickQueue', {key: 'village_building', seconds: seconds * store.getters['mult/get']('queueSpeedVillageBuilding')});
-
-        const happiness = store.getters['mult/get']('villageHappiness');
-        const taxpayers = store.getters['mult/get']('villageTaxRate') * store.getters['village/employed'];
-
+        let diffs = {};
         store.getters['currency/list']('village', 'regular').filter(elem => !['village_coin', 'village_joy'].includes(elem)).forEach(currency => {
-            const name = currency.split('_')[1];
-            const gain = store.getters['mult/get'](store.getters['currency/gainMultName']('village', name));
+            const gain = store.getters['mult/get'](store.getters['currency/gainMultName'](...currency.split('_')));
             if (gain > 0) {
-                store.dispatch('currency/gain', {feature: 'village', name, amount: gain * seconds});
+                if (diffs[currency] === undefined) {
+                    diffs[currency] = 0;
+                }
+                diffs[currency] += gain * seconds;
             }
         });
 
-        if (store.state.stat.village_faith.total >= 50) {
-            store.commit('unlock/unlock', 'villagePrestige');
-        }
+        if (store.state.system.features.village.currentSubfeature === 0) {
+            store.dispatch('upgrade/tickQueue', {key: 'village_building', seconds: seconds * store.getters['mult/get']('queueSpeedVillageBuilding')});
 
-        if (taxpayers > 0) {
-            store.getters['currency/list']('village', 'regular', 'food').forEach(foodName => {
-                const food = foodName.split('_')[1];
-                const foodConsumed = Math.min(taxpayers * seconds, store.getters['currency/value']('village_' + food));
-                if (foodConsumed > 0) {
-                    store.dispatch('currency/spend', {feature: 'village', name: food, amount: foodConsumed});
-                    store.dispatch('currency/gain', {feature: 'village', name: 'coin', gainMult: true, amount: foodConsumed * VILLAGE_COINS_PER_FOOD});
+            const happiness = store.getters['mult/get']('villageHappiness');
+
+            if (store.state.stat.village_faith.total >= 50) {
+                store.commit('unlock/unlock', 'villagePrestige');
+            }
+
+            // Auto-gain 1% of offerings gained this run
+            const offeringGain = store.getters['village/offeringPerSecond'];
+            if (offeringGain > 0) {
+                let newOffering = store.state.village.offeringGen + offeringGain * seconds;
+                if (newOffering > 0) {
+                    store.dispatch('currency/gain', {feature: 'village', name: 'offering', amount: Math.floor(newOffering)});
+                    newOffering -= Math.floor(newOffering);
                 }
-            });
-        }
-
-        // Auto-gain 1% of offerings gained this run
-        const offeringGain = store.getters['village/offeringPerSecond'];
-        if (offeringGain > 0) {
-            let newOffering = store.state.village.offeringGen + offeringGain * seconds;
-            if (newOffering > 0) {
-                store.dispatch('currency/gain', {feature: 'village', name: 'offering', amount: Math.floor(newOffering)});
-                newOffering -= Math.floor(newOffering);
+                store.commit('village/updateKey', {key: 'offeringGen', value: newOffering});
             }
-            store.commit('village/updateKey', {key: 'offeringGen', value: newOffering});
-        }
 
-        const joyGain = store.getters['village/joyGainBase'];
-        if (joyGain > 0) {
-            store.dispatch('currency/gain', {feature: 'village', name: 'joy', gainMult: true, amount: joyGain * seconds});
-        }
-        if (happiness <= VILLAGE_MIN_HAPPINESS) {
-            store.commit('stat/increaseTo', {feature: 'village', name: 'minHappiness', value: 1});
-        }
-
-        const lootGain = store.getters['mult/get']('villageLootGain');
-        if (lootGain > 0) {
-            let newLoot = store.state.village.explorerProgress + seconds * lootGain / SECONDS_PER_HOUR;
-            if (newLoot >= 1) {
-                const lootDrops = Math.floor(newLoot);
-                store.dispatch('village/getLootDrops', lootDrops);
-                newLoot -= lootDrops;
+            const joyGain = store.getters['village/joyGainBase'];
+            if (joyGain > 0) {
+                store.dispatch('currency/gain', {feature: 'village', name: 'joy', gainMult: true, amount: joyGain * seconds});
             }
-            store.commit('village/updateKey', {key: 'explorerProgress', value: newLoot});
-            store.commit('unlock/unlock', 'villageLoot');
+            if (happiness <= VILLAGE_MIN_HAPPINESS) {
+                store.commit('stat/increaseTo', {feature: 'village', name: 'minHappiness', value: 1});
+            }
+
+            const lootGain = store.getters['mult/get']('villageLootGain');
+            if (lootGain > 0) {
+                let newLoot = store.state.village.explorerProgress + seconds * lootGain / SECONDS_PER_HOUR;
+                if (newLoot >= 1) {
+                    const lootDrops = Math.floor(newLoot);
+                    store.dispatch('village/getLootDrops', lootDrops);
+                    newLoot -= lootDrops;
+                }
+                store.commit('village/updateKey', {key: 'explorerProgress', value: newLoot});
+                store.commit('unlock/unlock', 'villageLoot');
+            }
+
+            store.commit('stat/increaseTo', {feature: 'village', name: 'highestPower', value: store.getters['mult/get']('villagePower')});
+        } else if (store.state.system.features.village.currentSubfeature === 1) {
+            for (let p = 0; p < 2; p++) {
+                for (const [key, elem] of Object.entries(store.state.village.crafting)) {
+                    if (elem.isCrafting && elem.prio === p) {
+                        let newProgress = elem.progress + seconds / elem.timeNeeded;
+                        const payments = Math.ceil(newProgress) - Math.ceil(elem.progress);
+                        if (payments > 0) {
+                            let maxAfford = payments;
+                            for (const [currency, value] of Object.entries(elem.price)) {
+                                const split = currency.split('_');
+                                if (elem.isSpecial) {
+                                    let newMaxAfford = 0;
+                                    let accumulatedPrice = 0;
+                                    while (newMaxAfford < maxAfford) {
+                                        accumulatedPrice += value(elem.owned + newMaxAfford);
+                                        if (split[0] === 'craft') {
+                                            if (store.state.village.crafting[split[1]].owned < accumulatedPrice) {
+                                                break;
+                                            }
+                                        } else {
+                                            // Can't afford any if cap is to small
+                                            if (store.state.currency[currency].cap !== null && store.state.currency[currency].cap < value(elem.owned + newMaxAfford)) {
+                                                break;
+                                            }
+                                            if ((store.state.currency[currency].value + (diffs[currency] ?? 0)) < accumulatedPrice) {
+                                                break;
+                                            }
+                                        }
+                                        newMaxAfford++;
+                                    }
+                                    maxAfford = newMaxAfford;
+                                } else {
+                                    if (split[0] === 'craft') {
+                                        maxAfford = Math.min(Math.floor((store.state.village.crafting[split[1]].owned) / value), maxAfford);
+                                    } else {
+                                        // Can't afford any if cap is to small
+                                        if (store.state.currency[currency].cap !== null && store.state.currency[currency].cap < value) {
+                                            maxAfford = 0;
+                                        }
+                                        maxAfford = Math.min(Math.floor((store.state.currency[currency].value + (diffs[currency] ?? 0)) / value), maxAfford);
+                                    }
+                                }
+                            }
+                            if (maxAfford > 0) {
+                                for (const [currency, value] of Object.entries(elem.price)) {
+                                    const split = currency.split('_');
+                                    let priceValue = 0;
+                                    if (elem.isSpecial) {
+                                        for (let i = 0; i < maxAfford; i++) {
+                                            priceValue += value(elem.owned + i);
+                                        }
+                                    } else {
+                                        priceValue = value * maxAfford;
+                                    }
+                                    if (split[0] === 'craft') {
+                                        store.commit('village/updateSubkey', {key: 'crafting', name: split[1], subkey: 'owned', value: store.state.village.crafting[split[1]].owned - priceValue});
+                                    } else {
+                                        if (diffs[currency] === undefined) {
+                                            diffs[currency] = 0;
+                                        }
+                                        diffs[currency] -= priceValue;
+                                    }
+                                }
+                            }
+                            if (maxAfford < payments) {
+                                newProgress = maxAfford + Math.ceil(elem.progress);
+                            }
+                        }
+                        if (newProgress >= 1) {
+                            store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'owned', value: elem.owned + Math.floor(newProgress)});
+                            store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'crafted', value: elem.crafted + Math.floor(newProgress)});
+                            if (elem.isSpecial) {
+                                store.dispatch('village/applySpecialCraftEffects', key);
+                            } else {
+                                store.dispatch('village/applyMilestoneEffects', key);
+                                store.dispatch('village/applyMilestoneGlobalLevel');
+                            }
+                            newProgress -= Math.floor(newProgress);
+                        }
+                        store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'progress', value: newProgress});
+                    }
+                    if (elem.isSelling && elem.prio === p && elem.sellPrice > 0 && elem.owned > 0) {
+                        const sold = Math.min(randomRound(seconds * elem.cacheSellChance), elem.owned);
+                        if (sold > 0) {
+                            store.dispatch('currency/gain', {feature: 'village', name: 'copperCoin', gainMult: true, amount: sold * elem.sellPrice});
+                            store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'owned', value: elem.owned - sold});
+                        }
+                    }
+                }
+            }
         }
 
-        store.commit('stat/increaseTo', {feature: 'village', name: 'highestPower', value: store.getters['mult/get']('villagePower')});
+        // Apply currency diffs
+        for (const [name, value] of Object.entries(diffs)) {
+            const split = name.split('_');
+            if (value > 0) {
+                store.dispatch('currency/gain', {feature: split[0], name: split[1], amount: value});
+            } else if (value < 0) {
+                store.dispatch('currency/spend', {feature: split[0], name: split[1], amount: -value});
+            }
+        }
 
+        if (store.state.system.features.village.currentSubfeature === 0) {
+            const taxpayers = store.getters['mult/get']('villageTaxRate') * store.getters['village/employed'];
+            if (taxpayers > 0) {
+                store.getters['currency/list']('village', 'regular', 'food').forEach(foodName => {
+                    const food = foodName.split('_')[1];
+                    const foodConsumed = Math.min(taxpayers * seconds, store.getters['currency/value']('village_' + food));
+                    if (foodConsumed > 0) {
+                        store.dispatch('currency/spend', {feature: 'village', name: food, amount: foodConsumed});
+                        store.dispatch('currency/gain', {feature: 'village', name: 'coin', gainMult: true, amount: foodConsumed * VILLAGE_COINS_PER_FOOD});
+                    }
+                });
+            }
+        }
+
+        // Get free boxes
+        if (store.state.unlock.villageSpecialIngredient.see) {
+            const dayDiff = Math.floor(newTime / (SECONDS_PER_DAY * 7)) - Math.floor(oldTime / (SECONDS_PER_DAY * 7));
+            if (dayDiff > 0) {
+                store.dispatch('consumable/gain', {name: 'village_ingredientBox', amount: dayDiff});
+            }
+        }
     },
     unlock: [
         'villageFeature',
@@ -102,22 +218,26 @@ export default {
         ].map(elem => 'villageUpgrade' + elem),
         ...buildArray(4).map(elem => 'villageOffering' + (elem + 1)),
         'villageLoot',
-        'villageCraftingSubfeature'
+        'villageCraftingSubfeature',
+        'villageSpecialIngredient'
     ],
     stat: {
-        maxBuilding: {},
+        maxBuilding: {showInStatistics: true},
         maxHousing: {},
         timeSpent: {display: 'time'},
-        bestPrestige: {},
-        prestigeCount: {},
-        totalOffering: {},
+        bestPrestige0: {showInStatistics: true},
+        bestPrestige1: {showInStatistics: true},
+        prestigeCount: {showInStatistics: true},
+        totalOffering: {showInStatistics: true},
         minHappiness: {},
-        bestOffering: {},
+        bestOffering: {showInStatistics: true},
         offeringAmount: {},
-        highestPower: {},
+        highestPower: {showInStatistics: true},
     },
     mult: {
         villageWorker: {baseValue: 1, round: true},
+        villageArtisan: {baseValue: 1, round: true},
+        villageCounter: {baseValue: 1, round: true},
         queueSpeedVillageBuilding: {baseValue: 1},
         villageTaxRate: {display: 'percent'},
         villageHappiness: {display: 'percent', baseValue: 1, min: VILLAGE_MIN_HAPPINESS},
@@ -125,6 +245,9 @@ export default {
         villagePollutionTolerance: {baseValue: 5, round: true},
         villagePower: {min: 0},
         villageOfferingPower: {},
+        villageIngredientCount: {baseValue: 1, round: true},
+        villageIngredientBoxAmount: {baseValue: 12, round: true},
+        villagePrestigeIncome: {group: ['currencyVillageFaithGain', 'currencyVillageFaithCap', 'currencyVillageSharesGain']},
 
         // Upgrade cap mults
         villageHousingCap: {},
@@ -174,6 +297,7 @@ export default {
                 return Math.min(taxpayers, nextAmount) * VILLAGE_COINS_PER_FOOD;
             }).reduce((a, b) => a + b, 0));
         }, timerIsEstimate: true},
+        copperCoin: {overcapMult: 0.5, color: 'orange', icon: 'mdi-circle-multiple', gainMult: {}, capMult: {baseValue: 4000}},
 
         // Basic material
         plantFiber: {subtype: 'material', overcapMult: 0.4, color: 'green', icon: 'mdi-leaf', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 2000}},
@@ -210,8 +334,15 @@ export default {
         loot4: {subtype: 'loot', color: 'amber', icon: 'mdi-trophy-variant'},
         loot5: {subtype: 'loot', color: 'red', icon: 'mdi-trophy-variant'},
 
+        // Special crafting ingredients
+        acidVial: {subtype: 'specialIngredient', color: 'lime', icon: 'mdi-test-tube'},
+        snowflake: {subtype: 'specialIngredient', color: 'cyan', icon: 'mdi-snowflake-variant'},
+        chiliBundle: {subtype: 'specialIngredient', color: 'red-orange', icon: 'mdi-chili-hot'},
+        gears: {subtype: 'specialIngredient', color: 'blue-grey', icon: 'mdi-cogs'},
+
         // Prestige currency
         blessing: {type: 'prestige', alwaysVisible: true, color: 'yellow', icon: 'mdi-flare'},
+        shares: {type: 'prestige', alwaysVisible: true, color: 'beige', icon: 'mdi-certificate', gainMult: {}},
         offering: {type: 'prestige', color: 'orange-red', icon: 'mdi-candle', gainMult: {display: 'perHour'}, showGainMult: true, gainTimerFunction() {
             return store.getters['village/offeringPerSecond'] * SECONDS_PER_HOUR;
         }, timerIsEstimate: true}
@@ -219,11 +350,19 @@ export default {
     upgrade: {
         ...upgradeBuilding,
         ...upgrade,
+        ...upgrade2,
         ...upgradePrestige,
         ...upgradePremium,
         ...bookVillage
     },
     note: [...buildArray(31).map(() => 'g'), 'system'],
+    consumable: {
+        ingredientBox: {
+            icon: 'mdi-gift',
+            color: 'indigo',
+            price: {gem_sapphire: 80}
+        }
+    },
     init() {
         for (const [key, elem] of Object.entries(job)) {
             store.commit('village/initJob', {name: key, ...elem});
@@ -233,6 +372,9 @@ export default {
         }
         for (const [key, elem] of Object.entries(policy)) {
             store.commit('village/initPolicy', {name: key, ...elem});
+        }
+        for (const [key, elem] of Object.entries(craftingRecipe)) {
+            store.commit('village/initCrafting', {name: key, ...elem});
         }
     },
     saveGame() {
@@ -272,6 +414,24 @@ export default {
             obj.offeringGen = store.state.village.offeringGen;
         }
 
+        // Add crafting stuff
+        let crafting = {};
+        for (const [key, elem] of Object.entries(store.state.village.crafting)) {
+            if (elem.crafted > 0 || elem.isCrafting || elem.isSelling || elem.sellPrice !== elem.baseValue || elem.progress > 0) {
+                crafting[key] = {
+                    isCrafting: elem.isCrafting,
+                    isSelling: elem.isSelling,
+                    sellPrice: elem.sellPrice,
+                    progress: elem.progress,
+                    owned: elem.owned,
+                    crafted: elem.crafted
+                };
+            }
+        }
+        if (Object.keys(crafting).length > 0) {
+            obj.crafting = crafting;
+        }
+
         return obj;
     },
     loadGame(data) {
@@ -295,6 +455,25 @@ export default {
                 if (store.state.village.policy[key] !== undefined) {
                     store.commit('village/updatePolicyKey', {name: key, key: 'value', value: elem});
                     store.dispatch('village/applyPolicyEffect', key);
+                }
+            }
+        }
+        if (data.crafting !== undefined) {
+            for (const [key, elem] of Object.entries(data.crafting)) {
+                if (store.state.village.crafting[key] !== undefined) {
+                    store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'isCrafting', value: elem.isCrafting});
+                    store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'isSelling', value: elem.isSelling});
+                    store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'sellPrice', value: elem.sellPrice});
+                    store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'progress', value: elem.progress});
+                    store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'owned', value: elem.owned});
+                    store.commit('village/updateSubkey', {key: 'crafting', name: key, subkey: 'crafted', value: elem.crafted});
+                    if (store.state.village.crafting[key].isSpecial) {
+                        if (elem.owned > 0) {
+                            store.dispatch('village/applySpecialCraftEffects', key);
+                        }
+                    } else {
+                        store.dispatch('village/applyMilestoneEffects', key);
+                    }
                 }
             }
         }

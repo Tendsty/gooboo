@@ -22,6 +22,9 @@ export default {
             if (dustBase > 1000) {
                 dustBase = Math.pow((dustBase - 900) / 100, 0.8) * 100 + 900;
             }
+            if (dustBase > 2000) {
+                dustBase = Math.pow((dustBase - 1900) / 100, 0.2) * 100 + 1900;
+            }
             return Math.round(dustBase * getters.dustMult);
         }
     },

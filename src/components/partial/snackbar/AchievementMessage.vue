@@ -40,7 +40,7 @@ export default {
       for (let i = this.message.oldValue; i < this.message.value; i++) {
         let name = this.achievement.relic[i];
         if (name) {
-          arr.push({...this.$store.state.relic[name], name});
+          arr.push({...this.$store.state.relic.item[name], name});
         }
       }
 

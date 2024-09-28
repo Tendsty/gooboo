@@ -122,9 +122,11 @@ export default {
                 timeNeeded: o.timeNeeded ?? (() => 1),
                 timeProgress: 0,
                 persistent: o.persistent ?? false,
+                alwaysActive: o.alwaysActive ?? false,
                 collapse: false,
                 note: o.note ?? null,
-                hideCap: o.hideCap ?? false
+                hideCap: o.hideCap ?? false,
+                onBuy: o.onBuy ?? (() => {})
             });
 
             // init queue if needed
@@ -190,6 +192,7 @@ export default {
             for (const [key] of Object.entries(state.queue)) {
                 commit('updateQueue', {key, value: []});
             }
+            commit('initCache');
         },
         init({ getters, rootGetters, commit }, o) {
             let cap = o.cap ?? null;
@@ -206,17 +209,8 @@ export default {
             state.item[o.name].effect.forEach(eff => {
                 dispatch('system/applyEffect', {type: eff.type, name: eff.name, multKey: `upgrade_${o.name}`, value: eff.value(state.item[o.name].level), trigger}, {root: true});
             });
-            if (trigger && o.name === 'mining_crystalDrill') {
-                dispatch('mining/updateDwellerStat', null, {root: true});
-            }
-            if (trigger && ['horde_mysticalBag', 'horde_collector'].includes(o.name)) {
-                dispatch('horde/checkPlayerHealth', null, {root: true});
-            }
-            if (trigger && o.name === 'farm_gardenGnome') {
-                dispatch('farm/applyEarlyGameBuff', null, {root: true});
-            }
-            if (trigger && ['farm_overgrowth', 'farm_groundSeeds'].includes(o.name)) {
-                dispatch('farm/updateFieldCaches', null, {root: true});
+            if (trigger) {
+                state.item[o.name].onBuy();
             }
         },
         applyReset({ state, dispatch }, name) {
@@ -285,7 +279,7 @@ export default {
 
             // Reset upgrades first
             for (const [key, elem] of Object.entries(state.item)) {
-                if (elem.feature === o.feature && elem.type === o.type && elem.bought > 0 && (elem.subfeature !== subfeature || !elem.persistent)) {
+                if (elem.feature === o.feature && elem.type === o.type && elem.bought > 0 && (elem.subfeature !== subfeature || !elem.persistent) && !elem.alwaysActive) {
                     commit('updateKey', {name: key, key: 'level', value: 0});
                     commit('updateKey', {name: key, key: 'bought', value: 0});
                     commit('updateKey', {name: key, key: 'timeProgress', value: 0});
@@ -307,6 +301,29 @@ export default {
             const queueKey = `${o.feature}_${o.type}`;
             if (state.queue[queueKey] !== undefined) {
                 commit('updateQueue', {key: queueKey, value: state.queue[queueKey].filter(elem => state.item[elem].persistent)});
+            }
+        },
+        resetAll({ state, commit, dispatch }, o) {
+            const subfeature = o.subfeature ?? 0;
+
+            // Reset upgrades first
+            for (const [key, elem] of Object.entries(state.item)) {
+                if (elem.feature === o.feature && elem.type === o.type && (elem.bought > 0 || elem.highestLevel > 0) && elem.subfeature === subfeature) {
+                    commit('updateKey', {name: key, key: 'level', value: 0});
+                    commit('updateKey', {name: key, key: 'bought', value: 0});
+                    commit('updateKey', {name: key, key: 'highestLevel', value: 0});
+                    commit('updateKey', {name: key, key: 'timeProgress', value: 0});
+                    dispatch('applyReset', key);
+                }
+            }
+
+            // Reset cache
+            commit('updateCacheKey', {...o, subfeature});
+
+            // Cleanup queue
+            const queueKey = `${o.feature}_${o.type}`;
+            if (state.queue[queueKey] !== undefined) {
+                commit('updateQueue', {key: queueKey, value: []});
             }
         },
         raiseLevel({ state, commit, dispatch }, name) {

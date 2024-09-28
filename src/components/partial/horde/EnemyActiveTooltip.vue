@@ -11,25 +11,15 @@
         <span v-else>{{ $formatNum(active.uses) }} / {{ $formatNum(maxUses) }}</span>
       </template>
     </div>
-    <div class="mt-0" v-for="(elem, key) in effect" :key="key">
-      <span v-if="elem.value === null">{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }`) }}</span>
-      <template v-else>
-        <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.0`) }}&nbsp;</span>
-        <span v-if="['revive', 'divisionShield'].includes(elem.type)">{{ $formatNum(elem.value) }}</span>
-        <span v-else-if="['stun', 'silence'].includes(elem.type)">{{ $formatTime(elem.value) }}</span>
-        <span v-else>{{ $formatNum(elem.value * 100, true) }}%</span>
-        <template v-if="!showBase">
-          <span v-if="elem.type === 'poison' || elem.type.substring(0, 6) === 'damage'"> ({{ $formatNum(elem.value * enemyAttack) }})</span>
-          <span v-else-if="elem.type === 'heal'"> ({{ $formatNum(elem.value * enemyMaxHealth) }})</span>
-        </template>
-        <span>&nbsp;{{ $vuetify.lang.t(`$vuetify.horde.active.${ elem.type }.1`) }}</span>
-      </template>
-    </div>
+    <active-tooltip v-for="(elem, key) in effect" :key="`active-effect-${ key }`" class="mt-0" :effect="elem" :attack="enemyAttack" :health="enemyMaxHealth"></active-tooltip>
   </div>
 </template>
 
 <script>
+import ActiveTooltip from './ActiveTooltip.vue';
+
 export default {
+  components: { ActiveTooltip },
   props: {
     name: {
       type: String,

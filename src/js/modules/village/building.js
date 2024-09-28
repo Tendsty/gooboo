@@ -995,8 +995,8 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(2.5, lvl) * buildNum(150, 'B'));
     }, effect: [
-        {name: 'villageMaterialGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
-        {name: 'villageMaterialCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)}
+        {name: 'villageMaterialGain', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
+        {name: 'villageMaterialCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
     ]},
     antiquarian: {icon: 'mdi-store', cap: 12, requirement() {
         return store.state.unlock.villageBuildings7.use;
@@ -1009,7 +1009,7 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(3, lvl) * buildNum(200, 'B'));
     }, effect: [
-        {name: 'currencyVillageCoinCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
+        {name: 'currencyVillageCoinCap', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
         {name: 'villageUpgradeAmbition', type: 'unlock', value: lvl => lvl >= 1},
         {name: 'villageUpgradeUnderstanding', type: 'unlock', value: lvl => lvl >= 2},
         {name: 'villageUpgradeCuriosity', type: 'unlock', value: lvl => lvl >= 3},

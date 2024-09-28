@@ -154,6 +154,12 @@ export default {
         {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(4, lvl)},
         {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1000, lvl)}
     ]},
+    combatLesson: {cap: 15, requirementBase, requirementStat, requirementValue: 120, price(lvl) {
+        return {horde_bone: Math.pow(lvl * 0.4 + 3.4, lvl) * buildNum(650, 'SpD')};
+    }, effect: [
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.22, lvl)}
+    ]},
     carving: {cap: 5, capMult: true, requirementBase, requirementStat, requirementValue: 125, price(lvl) {
         return {horde_bone: Math.pow(12, lvl) * buildNum(2, 'ND')};
     }, effect: [
@@ -164,10 +170,38 @@ export default {
         return {horde_mysticalShard: 25 * (lvl + 1)};
     }, effect: [
         {name: 'hordeMaxItems', type: 'base', value: lvl => lvl}
-    ]},
-    collector: {requirementBase, requirementStat, requirementValue: 175, price(lvl) {
-        return {horde_mysticalShard: lvl * 8 + 45};
+    ], onBuy() {
+        store.dispatch('horde/checkPlayerHealth');
+    }},
+    unlimitedAnger: {cap: 20, requirementBase, requirementStat, requirementValue: 145, price(lvl) {
+        return {horde_bone: Math.pow(lvl * 0.1 + 4.7, lvl) * buildNum(4, 'QaV')};
     }, effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.75, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
     ]},
+    strangePower: {requirementBase, requirementStat, requirementValue: 155, price(lvl) {
+        return {horde_mysticalShard: lvl * 4 + 28};
+    }, effect: [
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.35, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.35, lvl)}
+    ], onBuy() {
+        store.dispatch('horde/checkPlayerHealth');
+    }},
+    collector: {requirementBase, requirementStat, requirementValue: 165, price(lvl) {
+        return {horde_mysticalShard: lvl * 8 + 34};
+    }, effect: [
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.65, lvl)},
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1.85, lvl)}
+    ], onBuy() {
+        store.dispatch('horde/checkPlayerHealth');
+    }},
+    prepareTheSacrifice: {persistent: true, alwaysActive: true, cap: 4, requirementBase, requirementStat, requirementValue: 175, price(lvl) {
+        return {horde_mysticalShard: lvl * 40 + 20};
+    }, effect: [
+        {name: 'horde_mysticalBag', type: 'keepUpgrade', value: lvl => lvl >= 1},
+        {name: 'horde_strangePower', type: 'keepUpgrade', value: lvl => lvl >= 2},
+        {name: 'horde_collector', type: 'keepUpgrade', value: lvl => lvl >= 3},
+        {name: 'hordeSacrifice', type: 'unlock', value: lvl => lvl >= 4},
+    ], onBuy() {
+        store.dispatch('horde/checkPlayerHealth');
+    }},
 }

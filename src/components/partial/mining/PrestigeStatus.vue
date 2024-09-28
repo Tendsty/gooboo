@@ -72,16 +72,28 @@ export default {
       switch (this.subfeature) {
         case 0: {
           if (this.$store.getters['mining/dwellerGreenCrystal'] > 0) {
-            obj.mining_crystalGreen = this.$store.getters['mining/dwellerGreenCrystal'];
+            obj.mining_crystalGreen = {
+              base: this.$store.getters['mining/dwellerBaseGreenCrystal'],
+              total: this.$store.getters['mining/dwellerGreenCrystal'],
+              gainMult: 'currencyMiningCrystalGreenGain',
+            };
           }
           if (this.$store.getters['mult/get']('currencyMiningEmberGain') > 0) {
-            obj.mining_ember = this.$store.getters['mult/get']('currencyMiningEmberGain');
+            obj.mining_ember = {
+              total: this.$store.getters['mult/get']('currencyMiningEmberGain') * this.$store.state.stat[`mining_depthDweller${ this.subfeature }`].value,
+              showDescription: true,
+              gainMult: 'currencyMiningEmberGain',
+            };
           }
           break;
         }
         case 1: {
           if (this.$store.getters['mining/dwellerYellowCrystal'] > 0) {
-            obj.mining_crystalYellow = this.$store.getters['mining/dwellerYellowCrystal'];
+            obj.mining_crystalYellow = {
+              base: this.$store.getters['mining/dwellerBaseYellowCrystal'],
+              total: this.$store.getters['mining/dwellerYellowCrystal'],
+              gainMult: 'currencyMiningCrystalYellowGain',
+            };
           }
           break;
         }

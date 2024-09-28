@@ -53,8 +53,8 @@
           </gb-tooltip>
         </template>
         <v-icon class="mx-2">mdi-circle-small</v-icon>
-        <price-tag v-if="crop.cost > 0" currency="farm_gold" :amount="crop.cost"></price-tag>
-        <span v-else>{{ $vuetify.lang.t('$vuetify.gooboo.free') }}</span>
+        <price-tag v-for="(elem, key) in crop.cost" :key="`crop-cost-${ key }`" :currency="key" :amount="elem * cropCostMult"></price-tag>
+        <span v-if="Object.keys(crop.cost).length <= 0">{{ $vuetify.lang.t('$vuetify.gooboo.free') }}</span>
         <template v-if="unlock.farmFertilizer.use">
           <v-icon class="mx-2">mdi-circle-small</v-icon>
           <gb-tooltip :min-width="0">
@@ -76,19 +76,33 @@
           :key="'rare-drop-' + key"
           :item="item"
           :dropBase="cropGeneStats.mult.farmRareDropChance.baseValue"
-          :dropMult="cropGeneStats.mult.farmRareDropChance.multValue"
+          :dropMult="cropGeneStats.mult.farmRareDropChance.multValue * item.mult"
           :baseArray="cropGeneStats.mult.farmRareDropChance.baseArray"
-          :multArray="cropGeneStats.mult.farmRareDropChance.multArray"
+          :multArray="item.mult === 1 ? cropGeneStats.mult.farmRareDropChance.multArray : [...cropGeneStats.mult.farmRareDropChance.multArray, {name: 'multiplier', value: item.mult}]"
         ></crop-rare-drop>
         <crop-rare-drop
           class="ml-1"
           v-for="(item, key) in cropGeneStats.rareDrop"
           :key="'rare-drop-' + key"
-          :item="{name: key, type: 'currency', chance: dnaRareDropChance, value: item}"
+          :item="{name: item.name, type: 'currency', chance: item.chance, value: item.amount, found: true}"
           :dropBase="cropGeneStats.mult.farmRareDropChance.baseValue"
-          :dropMult="cropGeneStats.mult.farmRareDropChance.multValue"
+          :dropMult="cropGeneStats.mult.farmRareDropChance.multValue * item.mult"
           :baseArray="cropGeneStats.mult.farmRareDropChance.baseArray"
-          :multArray="cropGeneStats.mult.farmRareDropChance.multArray"
+          :multArray="item.mult === 1 ? cropGeneStats.mult.farmRareDropChance.multArray : [...cropGeneStats.mult.farmRareDropChance.multArray, {name: 'multiplier', value: item.mult}]"
+        ></crop-rare-drop>
+      </div>
+      <div v-if="cropGeneStats.tag.includes('farmHunter') && rareDropsHunted.length > 0" class="blue--text mt-4 mb-2" :class="$vuetify.theme.dark ? 'text--lighten-2' : 'text--darken-3'">
+        <div>{{ $vuetify.lang.t('$vuetify.farm.huntedRareDrops') }}:</div>
+        <crop-rare-drop
+          class="ml-1"
+          v-for="(item, key) in rareDropsHunted"
+          :key="'rare-drop-' + key"
+          :item="item"
+          :dropBase="cropGeneStats.mult.farmRareDropChance.baseValue"
+          :dropMult="cropGeneStats.mult.farmRareDropChance.multValue * cropGeneStats.mult.farmHuntChance.multValue * item.mult"
+          :baseArray="cropGeneStats.mult.farmRareDropChance.baseArray"
+          :multArray="item.mult === 1 ? [...cropGeneStats.mult.farmRareDropChance.multArray, ...cropGeneStats.mult.farmHuntChance.multArray] : [...cropGeneStats.mult.farmRareDropChance.multArray, ...cropGeneStats.mult.farmHuntChance.multArray, {name: 'multiplier', value: item.mult}]"
+          is-hunt
         ></crop-rare-drop>
       </div>
       <div class="d-flex flex-wrap align-end justify-space-between" v-if="unlock.farmCropExp.use" key="crop-level-prestige">
@@ -126,7 +140,16 @@
       <div v-if="currentGenePicker !== null" key="crop-gene-picker">
         <div class="text-center mt-2">{{ $vuetify.lang.t('$vuetify.farm.gene.pickLevel', genePickerLevel) }}:</div>
         <div class="d-flex flex-wrap justify-center">
-          <gene-icon v-for="geneName in currentGenePicker" class="ma-1" style="cursor: pointer;" @click="pickGene(geneName)" :key="`gene-pick-${ geneName }`" :name="geneName" show-upgrade></gene-icon>
+          <gene-icon
+            v-for="geneName in currentGenePicker"
+            class="ma-1"
+            :disabled="gene[geneName].lockOnField && cropCount > 0"
+            @click="pickGene(geneName)"
+            :key="`gene-pick-${ geneName }`"
+            :name="geneName"
+            clickable
+            show-upgrade
+          ></gene-icon>
         </div>
       </div>
       <div v-if="unlock.farmCropExp.use" class="d-flex justify-center mt-2" key="crop-dna-display">
@@ -148,6 +171,7 @@
           </div>
         </gb-tooltip>
       </div>
+      <gene-upgrade v-if="unlock.farmCropExp.use" class="ma-1 flex-grow-1" style="margin-left: 60px !important;" :crop="name" name="basics"></gene-upgrade>
       <div v-for="geneName in crop.genes" class="d-flex align-center" :key="`gene-taken-${ geneName }`">
         <gene-icon class="ma-1" :name="geneName"></gene-icon>
         <div v-if="geneName === 'dna'" class="ma-1 flex-grow-1">
@@ -187,7 +211,8 @@ export default {
       icons: state => state.farm.cropUpgradeIcons,
       currency: state => state.currency,
       unlock: state => state.unlock,
-      isFrozen: state => state.cryolab.farm.active
+      isFrozen: state => state.cryolab.farm.active,
+      gene: state => state.farm.gene,
     }),
     ...mapGetters({
       currentPrestigeLevel: 'farm/currentPrestigeLevel',
@@ -236,8 +261,14 @@ export default {
     cropFertilizerCost() {
       return this.$store.getters['farm/cropFertilizerCost'](this.name);
     },
+    cropCostMult() {
+      return this.$store.getters['mult/get']('farmCropCost', 1, this.cropGeneStats.mult.farmCropCost.multValue);
+    },
     rareDrops() {
-      return this.crop.rareDrop.filter(elem => elem.found);
+      return this.crop.rareDrop.filter(elem => elem.found || this.$store.getters['mult/get']('farmRareDropChance', elem.chance) >= -0.1);
+    },
+    rareDropsHunted() {
+      return this.rareDrops.filter(elem => elem.type === 'currency');
     },
     yieldMultName() {
       return 'currencyFarm' + capitalize(this.crop.type) + 'Gain';
@@ -288,9 +319,6 @@ export default {
     cropGeneStats() {
       return this.$store.getters['farm/cropGeneStats'](this.name, this.$store.state.farm.selectedFertilizerName);
     },
-    dnaRareDropChance() {
-      return this.$store.getters['farm/dnaRareDropChance'](this.name);
-    },
     dnaNext() {
       return this.$store.getters['farm/cropDnaGain'](this.crop.level);
     },
@@ -311,7 +339,9 @@ export default {
       }
     },
     pickGene(name) {
-      this.$store.dispatch('farm/pickGene', {crop: this.name, gene: name});
+      if (!this.gene[name].lockOnField || this.cropCount <= 0) {
+        this.$store.dispatch('farm/pickGene', {crop: this.name, gene: name});
+      }
     }
   }
 }

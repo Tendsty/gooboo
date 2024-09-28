@@ -34,15 +34,23 @@ export default {
 
     // Tower-exclusive heirlooms
     brick: {minZone: Infinity, color: 'cherry', icon: 'mdi-wall', effect: [
-        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'hordeCritMult', type: 'base', value: lvl => Math.pow(lvl, 0.5) * 0.01}
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
+        {name: 'hordeCritMult', type: 'base', value: lvl => (Math.pow(lvl / 10 + 1, 0.4) - 1) * 0.01}
     ]},
     heat: {minZone: Infinity, color: 'orange-red', icon: 'mdi-fire', effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'hordeCritChance', type: 'base', value: lvl => Math.log(lvl + 1) * 0.01}
+        {name: 'hordeAttack', type: 'mult', value: lvl => lvl * 0.05 + 1},
+        {name: 'hordeCritChance', type: 'base', value: lvl => Math.log(lvl / 10 + 1) * 0.008}
     ]},
     ice: {minZone: Infinity, color: 'skyblue', icon: 'mdi-snowflake-variant', effect: [
-        {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.1 + 1},
-        {name: 'hordeRecovery', type: 'base', value: lvl => Math.log(lvl + 1) * 0.003}
+        {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.05 + 1},
+        {name: 'hordeRecovery', type: 'base', value: lvl => Math.log(lvl / 10 + 1) * 0.003}
+    ]},
+    crystal: {minZone: Infinity, color: 'indigo', icon: 'mdi-billiards-rack', effect: [
+        {name: 'hordeShardChance', type: 'mult', value: lvl => lvl * 0.001 + 1},
+        {name: 'currencyHordeMysticalShardCap', type: 'base', value: lvl => Math.floor(Math.log(lvl + 2))}
+    ]},
+    vitality: {minZone: Infinity, color: 'light-green', icon: 'mdi-heart-multiple', effect: [
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => lvl * 0.001 + 1},
+        {name: 'hordeHealing', type: 'mult', value: lvl => Math.log(lvl + 1) * 0.1 + 1}
     ]},
 }

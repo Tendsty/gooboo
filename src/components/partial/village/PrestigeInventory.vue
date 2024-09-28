@@ -9,7 +9,7 @@ import InventoryTemplate from '../prestige/InventoryTemplate.vue';
 export default {
   components: { InventoryTemplate },
   data: () => ({
-    currencies: ['village_blessing']
+    currencies: ['village_blessing', 'village_shares']
   }),
   computed: {
     ...mapState({
@@ -18,7 +18,10 @@ export default {
     prestigeStone() {
       let arr = [];
       if (this.$store.state.unlock.villageBuildings4.see) {
-        arr.push({currency: 'village_blessing', stat: 'village_bestPrestige'});
+        arr.push({currency: 'village_blessing', stat: 'village_bestPrestige0'});
+      }
+      if (this.$store.state.unlock.villageSpecialIngredient.see) {
+        arr.push({currency: 'village_shares', stat: 'village_bestPrestige1'});
       }
       return arr;
     }

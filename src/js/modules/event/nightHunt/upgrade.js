@@ -23,7 +23,8 @@ export default {
     }, price(lvl) {
         return {event_essence: Math.pow(1000 * Math.pow(10, lvl), lvl) * buildNum(100, 'K')};
     }, effect: [
-        {name: 'nightHuntFindableIngredients', type: 'base', value: lvl => lvl}
+        {name: 'nightHuntFindableIngredients', type: 'base', value: lvl => lvl},
+        {name: 'nightHuntFavouriteIngredientSize', type: 'base', value: lvl => lvl},
     ]},
     ritualChalk: {type: 'nightHunt', cap: 3, requirement() {
         return store.state.upgrade.item.event_biggerCauldron.level > 0;
@@ -48,22 +49,22 @@ export default {
     ]},
 
     // topaz upgrades
-    mystifier: {type: 'nightHunt', cap: 5, price(lvl) {
-        return {gem_topaz: lvl * 100 + 250};
+    mystifier: {type: 'nightHunt', price(lvl) {
+        return {gem_topaz: lvl * 125 + 100};
     }, effect: [
         {name: 'currencyEventEssenceGain', type: 'mult', value: lvl => Math.pow(3, lvl)}
     ]},
-    bundle: {type: 'nightHunt', cap: 2, price(lvl) {
-        return {gem_topaz: lvl * 600 + 400};
+    bundle: {type: 'nightHunt', price(lvl) {
+        return {gem_topaz: lvl * 250 + 350};
     }, effect: [
-        {name: 'nightHuntIngredientSize', type: 'base', value: lvl => lvl}
+        {name: 'nightHuntIngredientSize', type: 'base', value: lvl => lvl * 3},
+        {name: 'nightHuntFavouriteIngredientSize', type: 'base', value: lvl => lvl},
     ]},
-    bagOfCandy: {type: 'nightHunt', cap: 3, requirement() {
+    bagOfCandy: {type: 'nightHunt', requirement() {
         return store.state.upgrade.item.event_ritualChalk.level > 0;
     }, price(lvl) {
-        return {gem_topaz: lvl * 200 + 300};
+        return {gem_topaz: lvl * 200 + 200};
     }, effect: [
-        {name: 'nightHuntBonusIngredientCount', type: 'base', value: lvl => lvl},
         {name: 'nightHuntBonusIngredientAmount', type: 'base', value: lvl => lvl}
     ]},
 }
