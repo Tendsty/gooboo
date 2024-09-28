@@ -9,7 +9,7 @@ export default {
     description: 'Maximale Gasriesentiefe'
   },
   mining_maxDepthSpeedrun: {
-    achievement: 'Tieflauf',
+    achievement: 'Tiefenlauf',
     description: 'Maximale Tiefe in unter 15 Minuten'
   },
   mining_depthDwellerCap0: {
@@ -69,6 +69,15 @@ export default {
   mining_timeSpent: {
     description: 'Zeit verbracht'
   },
+  mining_bestPrestige0: {
+    description: 'Meiste grüne Kristalle in einem Prestige'
+  },
+  mining_bestPrestige1: {
+    description: 'Meiste gelbe Kristalle in einem Prestige'
+  },
+  mining_prestigeCount: {
+    description: 'Prestigeanzahl'
+  },
 
   // Village stats
   village_maxBuilding: {
@@ -126,11 +135,23 @@ export default {
   village_timeSpent: {
     description: 'Zeit verbracht'
   },
+  village_bestPrestige0: {
+    description: 'Meiste Segen in einem Prestige'
+  },
+  village_bestPrestige1: {
+    description: 'Meiste Aktien in einem Prestige'
+  },
+  village_prestigeCount: {
+    description: 'Prestigeanzahl'
+  },
 
   // Horde stats
   horde_maxZone: {
     achievement: 'Entdecker',
     description: 'Maximale Zone'
+  },
+  horde_maxDifficulty: {
+    description: 'Maximale Schwierigkeit'
   },
   horde_maxZoneSpeedrun: {
     achievement: 'Schnelle Schläge',
@@ -156,6 +177,10 @@ export default {
     achievement: 'Seelenhirte',
     description: 'Korrupte Seelen erhalten'
   },
+  horde_maxCorruptionKill: {
+    achievement: 'Das Böse herausfordern',
+    description: 'Gegner mit der höchsten Korruption besiegt'
+  },
   horde_maxMastery: {
     achievement: 'Einseitig begabt',
     description: 'Höchste Meisterungsstufe'
@@ -173,6 +198,15 @@ export default {
   },
   horde_timeSpent: {
     description: 'Zeit verbracht'
+  },
+  horde_bestPrestige0: {
+    description: 'Meiste korrupte Seelen in einem Prestige'
+  },
+  horde_bestPrestige1: {
+    description: 'Meiste Courage in einem Prestige'
+  },
+  horde_prestigeCount: {
+    description: 'Prestigeanzahl'
   },
 
   // Farm stats
@@ -192,9 +226,9 @@ export default {
     achievement: 'Vegetarier',
     description: 'Gemüse erhalten'
   },
-  farm_fruit: {
-    achievement: 'Fruitarier',
-    description: 'Früchte erhalten'
+  farm_berry: {
+    achievement: 'Rote Beere',
+    description: 'Beeren erhalten'
   },
   farm_grain: {
     achievement: 'Bäcker',
@@ -216,6 +250,9 @@ export default {
   },
   farm_butterflyMax: {
     description: 'Höchste Schmetterlingsmenge'
+  },
+  farm_totalMystery: {
+    description: 'Mysterium'
   },
 
   // Gallery stats
@@ -256,8 +293,27 @@ export default {
     achievement: 'Dam dam dam',
     description: 'Höchste Rote Farbtrommelmenge'
   },
+  gallery_shapeComboTotal: {
+    achievement: 'Sammler',
+    description: 'Formen gesammelt'
+  },
+  gallery_shapeComboHighest: {
+    achievement: 'Genie',
+    description: 'Höchste Formenkombo'
+  },
+  gallery_canvasLevelTotal: {
+    achievement: 'Visionär',
+    description: 'Gesamte Leinwandstufe'
+  },
+  gallery_hourglassHighest: {
+    achievement: 'Geliehene Zeit',
+    description: 'Erreiche 1d an Stundenglaszeit'
+  },
   gallery_timeSpent: {
     description: 'Zeit verbracht'
+  },
+  gallery_prestigeCount: {
+    description: 'Prestigeanzahl'
   },
 
   // Meta stats

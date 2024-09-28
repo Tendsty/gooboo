@@ -425,6 +425,9 @@
               <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveImport') }}</v-list-item-title>
             </v-list-item>
           </label>
+          <v-list-item @click="changeScreen('resetProgress')">
+            <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.resetProgress') }}</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-menu>
       <v-btn data-cy="settings-button" icon @click="changeScreen('settings')">
@@ -488,8 +491,10 @@ import { mapGetters, mapState } from 'vuex';
 import FeatureTile from './components/partial/main/FeatureTile.vue';
 import NewGame from './components/view/NewGame.vue';
 import OfflineSummary from './components/view/OfflineSummary.vue';
+import ResetProgress from './components/view/ResetProgress.vue';
 import Mining from './components/view/Mining.vue';
 import Info from './components/view/Info.vue';
+import StatOverview from './components/view/StatOverview.vue';
 import TabDuplicate from './components/view/TabDuplicate.vue';
 import Patchnote from './components/view/Patchnote.vue';
 import Settings from './components/view/Settings.vue';
@@ -535,8 +540,10 @@ export default {
   components: {
     NewGame,
     OfflineSummary,
+    ResetProgress,
     Mining,
     Info,
+    StatOverview,
     TabDuplicate,
     Patchnote,
     Settings,
@@ -687,8 +694,8 @@ export default {
       this.$store.commit('system/resetAutosaveTimer');
     },
     exportSave() {
-      exportFile();
       this.$store.commit('system/updateKey', {key: 'backupTimer', value: 0});
+      exportFile();
     },
     importSave() {
       let file = document.getElementById('gooboo-savefile-input').files[0];

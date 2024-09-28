@@ -11,7 +11,13 @@ import { buildArray } from "../utils/array";
 export default {
     name: 'card',
     unlockNeeded: 'cardFeature',
-    unlock: ['cardFeature'],
+    unlock: ['cardFeature', 'cardShiny'],
+    mult: {
+        cardShinyChance: {display: 'percent', baseValue: 0.1},
+    },
+    currency: {
+        shinyDust: {color: 'pale-light-blue', icon: 'mdi-shimmer'}
+    },
     note: buildArray(2).map(() => 'g'),
     init() {
         for (const [name, feature] of Object.entries({
@@ -52,6 +58,12 @@ export default {
             if (elem.amount > 0) {
                 obj.card[key] = elem.amount;
             }
+            if (elem.foundShiny) {
+                if (obj.shiny === undefined) {
+                    obj.shiny = [];
+                }
+                obj.shiny.push(key);
+            }
         }
         for (const [key, elem] of Object.entries(store.state.card.feature)) {
             if (elem.cardSelected.length > 0 || elem.cardEquipped.length > 0) {
@@ -76,6 +88,11 @@ export default {
                     store.commit('card/updateKey', {type: 'feature', name: key, key: 'cardEquipped', value: elem.cardEquipped});
                 }
             }
+        }
+        if (data.shiny) {
+            data.shiny.forEach(elem => {
+                store.commit('card/updateKey', {type: 'card', name: elem, key: 'foundShiny', value: true});
+            });
         }
         store.dispatch('card/calculateCaches');
     }

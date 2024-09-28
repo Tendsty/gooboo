@@ -47,6 +47,8 @@ export default {
           return 'mdi-glasses';
         case 'appearance':
           return 'mdi-flower';
+        case 'anticheat':
+          return 'mdi-close-network';
       }
       return null;
     },
@@ -74,6 +76,8 @@ export default {
           return 'pale-purple';
         case 'appearance':
           return 'deep-purple';
+        case 'anticheat':
+          return 'dark-grey';
       }
       return null;
     },

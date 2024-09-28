@@ -4,6 +4,7 @@
     <span v-if="['mult', 'summerFestivalBuildingMult'].includes(type)">{{ $formatNum(isDividing ? (1 / value) : value, true) }}</span>
     <span v-else-if="display === 'percent'">{{ $formatNum(baseValue * 100, true) }}%</span>
     <span v-else-if="display === 'time'">{{ $formatTime(value) }}</span>
+    <span v-else-if="display === 'timeMs'">{{ $formatTime(value, 'ms') }}</span>
     <span v-else-if="display === 'perSecond'">{{ $formatNum(baseValue, !round) }}/s</span>
     <span v-else-if="display === 'perHour'">{{ $formatNum(baseValue, !round) }}/h</span>
     <span v-else-if="display === 'temperature'">{{ $formatNum(baseValue, !round) }}°C</span>
@@ -46,7 +47,7 @@ export default {
     display() {
       if (this.type === 'hordeActive') {
         return ['revive', 'divisionShield'].includes(this.mult) ? 'number' : (['stun', 'silence'].includes(this.mult) ? 'time' : 'percent');
-      } else if (this.type === 'hordeCooldown') {
+      } else if (this.type === 'hordeCooldown' || this.type === 'hordeBuff') {
         return 'time';
       } else if (this.mult === 'pearlChance') {
         return 'percent';

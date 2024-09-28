@@ -13,7 +13,8 @@ export default {
         potion: {},
         performedRituals: [],
         ritualFamiliarity: {},
-        ritualHint: {}
+        ritualHint: {},
+        favouriteIngredient: 'copy',
     },
     getters: {
         ritualCost: (state, getters) => {
@@ -188,16 +189,22 @@ export default {
             commit('updateKey', {key: 'performedRituals', value: []});
             commit('updateKey', {key: 'ritualFamiliarity', value: {}});
             commit('updateKey', {key: 'ritualHint', value: {}});
+            commit('updateKey', {key: 'favouriteIngredient', value: 'copy'});
             for (const [key] of Object.entries(state.potion)) {
                 commit('updatePotionKey', {name: key, key: 'recipe', value: null});
                 commit('updatePotionKey', {name: key, key: 'level', value: 0});
             }
         },
-        addChangedCurrency({ state, rootState, rootGetters, commit }, amount = 1) {
+        addChangedCurrency({ state, rootState, rootGetters, commit }, o) {
             const currencyList = Object.keys(state.ingredientStat).slice(0, rootGetters['mult/get']('nightHuntFindableIngredients'));
             let targetList = Object.keys(rootState.currency).filter(key => key.split('_')[0] !== 'event' && state.changedCurrency[key] === undefined && rootState.stat[key].total > 0);
 
-            for (let i = 0; i < amount && targetList.length > 0; i++) {
+            for (let i = 0; i < o.sack && targetList.length > 0; i++) {
+                const targetIndex = randomInt(0, targetList.length - 1);
+                commit('updateSubkey', {key: 'changedCurrency', subkey: targetList[targetIndex], value: 'sack'});
+                targetList.splice(targetIndex, 1);
+            }
+            for (let i = 0; i < o.random && targetList.length > 0; i++) {
                 const targetIndex = randomInt(0, targetList.length - 1);
                 commit('updateSubkey', {key: 'changedCurrency', subkey: targetList[targetIndex], value: randomElem(currencyList)});
                 targetList.splice(targetIndex, 1);
@@ -206,7 +213,31 @@ export default {
         claimChangedCurrency({ state, rootGetters, commit, dispatch }, name) {
             const claimedName = state.changedCurrency[name];
             if (claimedName !== undefined) {
-                dispatch('currency/gain', {feature: 'event', name: claimedName, amount: rootGetters['mult/get']('nightHuntIngredientSize')}, {root: true});
+                if (claimedName === 'sack') {
+                    const currencyList = Object.keys(state.ingredientStat).slice(0, rootGetters['mult/get']('nightHuntFindableIngredients'));
+                    let amount = rootGetters['mult/get']('nightHuntIngredientSize') * 10;
+                    if (state.favouriteIngredient === 'copy') {
+                        amount += rootGetters['mult/get']('nightHuntFavouriteIngredientSize') * 10;
+                    }
+                    const amountPerIngredient = Math.floor(amount / currencyList.length);
+                    const amountLeft = amount - amountPerIngredient;
+                    if (amountPerIngredient > 0) {
+                        currencyList.forEach(elem => {
+                            dispatch('currency/gain', {feature: 'event', name: elem, amount: amountPerIngredient}, {root: true});
+                        });
+                    }
+                    shuffleArray(currencyList).slice(0, amountLeft).forEach(elem => {
+                        dispatch('currency/gain', {feature: 'event', name: elem, amount: 1}, {root: true});
+                    });
+                    if (state.favouriteIngredient !== 'copy' && rootGetters['mult/get']('nightHuntFavouriteIngredientSize') > 0) {
+                        dispatch('currency/gain', {feature: 'event', name: state.favouriteIngredient, amount: rootGetters['mult/get']('nightHuntFavouriteIngredientSize') * 10}, {root: true});
+                    }
+                } else {
+                    dispatch('currency/gain', {feature: 'event', name: claimedName, amount: rootGetters['mult/get']('nightHuntIngredientSize')}, {root: true});
+                    if (rootGetters['mult/get']('nightHuntFavouriteIngredientSize') > 0) {
+                        dispatch('currency/gain', {feature: 'event', name: state.favouriteIngredient === 'copy' ? claimedName : state.favouriteIngredient, amount: rootGetters['mult/get']('nightHuntFavouriteIngredientSize')}, {root: true});
+                    }
+                }
                 let newObj = {};
                 for (const [key, elem] of Object.entries(state.changedCurrency)) {
                     if (key !== name) {
@@ -223,8 +254,9 @@ export default {
                 const potionRecipe = getters.ritualRecipe;
                 const ritualKey = state.ritualIngredients.join(',');
                 const tier = state.ritualIngredients.length;
-                let rngGen = rootGetters['system/getRng']('nightHunt_ritual');
-                commit('system/nextRng', {name: 'nightHunt_ritual', amount: 1}, {root: true});
+                const rngSeed = `nightHunt_ritual${ potionRecipe ? ('_' + potionRecipe) : '' }`;
+                let rngGen = rootGetters['system/getRng'](rngSeed);
+                commit('system/nextRng', {name: rngSeed, amount: 1}, {root: true});
                 const stabilityChance = rngGen();
 
                 // Do not lose base resources if the ritual is really stable (100% - 200%)
@@ -247,7 +279,7 @@ export default {
                     if (chance(stats.nightHuntRitualSuccessChance, rngGen())) {
                         if (!getters.ritualPerformed) {
                             if (!potionRecipe) {
-                                dispatch('currency/gain', {feature: 'event', name: 'nightHuntToken', amount: 1}, {root: true});
+                                dispatch('event/giveTokens', {event: 'nightHunt', amount: 1}, {root: true});
                                 dispatch('note/find', 'event_29', {root: true});
                                 canAddHint = true;
                             }
@@ -257,7 +289,7 @@ export default {
                         if (potionRecipe) {
                             commit('updatePotionKey', {name: potionRecipe, key: 'level', value: state.potion[potionRecipe].level + 1});
                             dispatch('applyPotionEffects', potionRecipe);
-                            dispatch('currency/gain', {feature: 'event', name: 'nightHuntToken', amount: tier * 2}, {root: true});
+                            dispatch('event/giveTokens', {event: 'nightHunt', amount: tier * 2}, {root: true});
                             dispatch('note/find', 'event_28', {root: true});
 
                             // Remove the hint if you found the recipe

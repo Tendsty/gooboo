@@ -7,7 +7,12 @@ const summerTable = {'EV-0014': 0.6, 'EV-0015': 0.6, 'EV-0016': 0.6, 'EV-0017': 
 const winterTable = {'EV-0024': 0.6, 'EV-0025': 0.6, 'EV-0026': 0.6, 'EV-0027': 0.6};
 
 export default {
-    feature: {prefix: 'EV', reward: [{name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 5}], unlock: 'eventFeature'},
+    feature: {
+        prefix: 'EV',
+        reward: [{name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 5}],
+        shinyReward: [{name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 5}],
+        unlock: 'eventFeature'
+    },
     collection: {
         weekendTrip: {reward: [
             {name: 'currencyGemTopazCap', type: 'base', value: 50}

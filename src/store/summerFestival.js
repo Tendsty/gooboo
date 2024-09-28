@@ -629,7 +629,7 @@ export default {
                         dispatch('currency/spend', {feature: split[0], name: split[1], amount: elem.amount}, {root: true});
                     }
                 });
-                dispatch('currency/gain', {feature: 'event', name: 'summerFestivalToken', amount: getters.questTokenGain}, {root: true});
+                dispatch('event/giveTokens', {event: 'summerFestival', amount: getters.questTokenGain}, {root: true});
                 commit('updateKey', {key: 'questsCompleted', value: state.questsCompleted + 1});
                 if (state.questsCompleted <= 50 && state.questsCompleted % 5 === 0) {
                     commit('updateKey', {key: 'freeExpansion', value: state.freeExpansion + 1});

@@ -75,11 +75,27 @@ export default {
     }, effect: [
         {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
+    crystalOsmiumStorage: {type: 'prestige', cap: 16, requirement() {
+        return store.state.stat.mining_maxDepth0.total >= 350;
+    }, price(lvl) {
+        return {mining_crystalGreen: Math.pow(1.4, lvl) * buildNum(2.6, 'T')};
+    }, effect: [
+        {name: 'currencyMiningOreOsmiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
+    ]},
+    crystalLeadStorage: {type: 'prestige', cap: 16, requirement() {
+        return store.state.stat.mining_maxDepth0.total >= 450;
+    }, price(lvl) {
+        return {mining_crystalGreen: Math.pow(1.4, lvl) * buildNum(2.6, 'T')};
+    }, effect: [
+        {name: 'currencyMiningOreLeadCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
+    ]},
     crystalDrill: {type: 'prestige', cap: 90, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 5, price(lvl) {
         return {mining_crystalGreen: Math.pow(lvl * 0.01 + 1.5, lvl) * 30};
     }, effect: [
         {name: 'miningDepthDwellerMax', type: 'mult', value: lvl => lvl * 0.1 + 1}
-    ]},
+    ], onBuy() {
+        store.dispatch('mining/updateDwellerStat');
+    }},
     crystalDetector: {type: 'prestige', requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 10, price(lvl) {
         return {mining_crystalGreen: Math.pow(1.4, lvl) * 40};
     }, effect: [
@@ -103,14 +119,14 @@ export default {
     }, effect: [
         {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(1 / 1.2, lvl)}
     ]},
-    crystalRefinery: {type: 'prestige', requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 25, price(lvl) {
+    crystalRefinery: {type: 'prestige', cap: 50, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 25, price(lvl) {
         return {mining_crystalGreen: Math.pow(1.4, lvl) * 650};
     }, effect: [
         {name: 'miningOreGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.1 + 1)},
         {name: 'miningRareEarthGain', type: 'mult', value: lvl => Math.pow(1.05, lvl)},
         {name: 'miningOreQuality', type: 'mult', value: lvl => lvl * 0.05 + 1}
     ]},
-    crystalSmeltery: {type: 'prestige', requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 30, price(lvl) {
+    crystalSmeltery: {type: 'prestige', cap: 100, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 30, price(lvl) {
         return {mining_crystalGreen: Math.pow(1.4, lvl) * 3300};
     }, effect: [
         {name: 'miningSmelteryTemperature', type: 'base', value: lvl => 10 * lvl},
@@ -127,7 +143,7 @@ export default {
     }, effect: [
         {name: 'currencyMiningResinGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
     ]},
-    crystalSalt: {type: 'prestige', requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 50, price(lvl) {
+    crystalSalt: {type: 'prestige', cap: 50, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 50, price(lvl) {
         return {mining_crystalGreen: Math.pow(1.4, lvl) * buildNum(1.1, 'M')};
     }, effect: [
         {name: 'currencyMiningSaltGain', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.2 + 1)}
@@ -152,8 +168,8 @@ export default {
     }, effect: [
         {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(1.5, lvl) * (lvl * 0.5 + 1)}
     ]},
-    crystalExpansion: {type: 'prestige', cap: 7, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 150, price(lvl) {
-        return {mining_crystalGreen: Math.pow(10, lvl) * buildNum(25, 'T')};
+    crystalExpansion: {type: 'prestige', cap: 9, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 150, price(lvl) {
+        return {mining_crystalGreen: Math.pow(10, lvl) * Math.pow(1000, Math.max(0, lvl - 6)) * buildNum(25, 'T')};
     }, effect: [
         {name: 'currencyMiningOreAluminiumCap', type: 'mult', value: lvl => lvl >= 1 ? 1000 : null},
         {name: 'currencyMiningOreCopperCap', type: 'mult', value: lvl => lvl >= 2 ? 1000 : null},
@@ -161,7 +177,38 @@ export default {
         {name: 'currencyMiningOreIronCap', type: 'mult', value: lvl => lvl >= 4 ? 1000 : null},
         {name: 'currencyMiningOreTitaniumCap', type: 'mult', value: lvl => lvl >= 5 ? 1000 : null},
         {name: 'currencyMiningOrePlatinumCap', type: 'mult', value: lvl => lvl >= 6 ? 1000 : null},
-        {name: 'currencyMiningOreAluminiumCap', type: 'mult', value: lvl => lvl >= 7 ? 1000 : null}
+        {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl >= 7 ? 1000 : null},
+        {name: 'currencyMiningOreOsmiumCap', type: 'mult', value: lvl => lvl >= 8 ? 1000 : null},
+        {name: 'currencyMiningOreLeadCap', type: 'mult', value: lvl => lvl >= 9 ? 1000 : null}
+    ]},
+    crystalTnt: {cap: 25, type: 'prestige', requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 175, price(lvl) {
+        return {mining_crystalGreen: Math.pow(10, lvl) * buildNum(6, 'Qa')};
+    }, effect: [
+        {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(0.5, lvl)}
+    ]},
+    crystalBeacon: {type: 'prestige', cap: 4, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 200, price(lvl) {
+        return {mining_crystalGreen: Math.pow(buildNum(1, 'M'), lvl) * buildNum(1, 'Sx')};
+    }, effect: [
+        {name: 'miningBeaconPiercing', type: 'base', value: lvl => lvl >= 1 ? 1 : null},
+        {name: 'miningBeaconRich', type: 'base', value: lvl => lvl >= 2 ? 1 : null},
+        {name: 'miningBeaconWonder', type: 'base', value: lvl => lvl >= 3 ? 1 : null},
+        {name: 'miningBeaconHope', type: 'base', value: lvl => lvl >= 4 ? 1 : null},
+    ]},
+    crystalNiter: {type: 'prestige', requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 225, price(lvl) {
+        return {mining_crystalGreen: Math.pow(lvl * 0.02 + 1.4, lvl) * buildNum(3, 'Sx')};
+    }, effect: [
+        {name: 'currencyMiningNiterGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+    ]},
+    crystalBunker: {type: 'prestige', cap: 20, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 250, price(lvl) {
+        return {mining_crystalGreen: Math.pow(4.5, lvl) * buildNum(65, 'Sx')};
+    }, effect: [
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(1.2, lvl) * (lvl * 0.4 + 1)},
+        {name: 'miningOreCap', type: 'mult', value: lvl => lvl * 0.2 + 1},
+    ]},
+    crystalOreBag: {type: 'prestige', cap: 40, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 300, price(lvl) {
+        return {mining_crystalGreen: Math.pow(1.2, lvl) * buildNum(1, 'Sp')};
+    }, effect: [
+        {name: 'miningOreCap', type: 'base', value: lvl => lvl}
     ]},
 
     crystalSpikes: {type: 'prestige', requirement() {

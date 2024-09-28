@@ -1,7 +1,7 @@
 import Vue from "vue";
-import { MINING_COAL_DEPTH, MINING_CRAFTING_COMPRESSION, MINING_DWELLER_OVERFLOW, MINING_ENHANCEMENT_BARS, MINING_ENHANCEMENT_FINAL, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_SALT_DEPTH, MINING_SMELTERY_TEMPERATURE_SPEED, MINING_SULFUR_DEPTH } from "../js/constants";
+import { MINING_COAL_DEPTH, MINING_CRAFTING_COMPRESSION, MINING_DEEPROCK_DEPTH, MINING_DWELLER_OVERFLOW, MINING_ENHANCEMENT_BARS, MINING_ENHANCEMENT_FINAL, MINING_GLOWSHARD_DEPTH, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_SALT_DEPTH, MINING_SMELTERY_TEMPERATURE_SPEED, MINING_SULFUR_DEPTH, SECONDS_PER_HOUR } from "../js/constants";
 import { buildNum, capitalize } from "../js/utils/format";
-import { deltaLinear, logBase } from "../js/utils/math";
+import { deltaLinear, digitSum, logBase } from "../js/utils/math";
 import { randomFloat } from "../js/utils/random";
 
 export default {
@@ -17,15 +17,19 @@ export default {
             neon: 41,
             argon: 91,
             krypton: 151,
-            xenon: 221,
-            radon: 301,
+            xenon: 301,
+            radon: 601,
         },
         breaks: [],
         ingredientList: [],
         resin: 0,
         enhancement: {},
         enhancementBars: 0,
-        enhancementIngredient: null
+        enhancementIngredient: null,
+        glowshardLimit: 0,
+        beacon: {},
+        beaconPlaced: {},
+        beaconCooldown: 0,
     },
     getters: {
         damage: (state, getters, rootState, rootGetters) => {
@@ -37,13 +41,14 @@ export default {
             return Math.ceil(Math.pow(incrementValue, depth) * Math.pow(depth * 0.1 + 1, 2) * baseValue);
         },
         depthBaseToughness: (state, getters, rootState) => (depth) => {
-            return (depth < 10 || rootState.system.features.mining.currentSubfeature === 1) ? 0 : (Math.pow(1.82, depth) * (depth * 0.01 - 0.09) * 0.25 * Math.pow(depth * 0.1 + 1, 2) * (depth > 250 ? Math.pow(depth * 0.02 - 4, depth - 250) : 1));
+            return Math.min(buildNum(1, 'C'), (depth < 10 || rootState.system.features.mining.currentSubfeature === 1) ? 0 : (Math.pow(1.82, depth) * (depth * 0.01 - 0.09) * 0.25 * Math.pow(depth * 0.1 + 1, 2) * (depth > 150 ? Math.pow(depth * 0.002 + 0.7, depth - 150) : 1) * ((depth >= 300 && (depth % 10 === 0) ? 100 : 1))));
         },
         depthToughness: (state, getters, rootState, rootGetters) => (depth) => {
             return rootGetters['mult/get']('miningToughness', (getters.depthBaseToughness(depth)));
         },
-        depthBaseScrap: () => (depth) => {
-            return Math.ceil(Math.pow(1.2, depth) * Math.pow(depth * 0.2 + 1.2, 2) * 2);
+        depthBaseScrap: (state, getters, rootState) => (depth) => {
+            const subfeature = rootState.system.features.mining.currentSubfeature;
+            return Math.ceil(Math.pow(1.2, depth) * Math.pow(depth * 0.2 + 1.2, 2) * (subfeature === 1 ? 0.1 : 2));
         },
         depthScrap: (state, getters, rootState, rootGetters) => (depth) => {
             return rootGetters['mult/get']('currencyMiningScrapGain', getters.depthBaseScrap(depth));
@@ -82,6 +87,12 @@ export default {
                 case 'obsidian':
                     amount = Math.pow(1.05, state.depth - MINING_OBSIDIAN_DEPTH);
                     break;
+                case 'deeprock':
+                    amount = Math.pow(1.05, state.depth - MINING_DEEPROCK_DEPTH) * Math.pow(1.5, digitSum(state.depth) - 14);
+                    break;
+                case 'glowshard':
+                    amount = 10;
+                    break;
             }
             return amount;
         },
@@ -110,6 +121,12 @@ export default {
             }
             if (state.depth >= MINING_OBSIDIAN_DEPTH && getters.enhancementLevel <= 0) {
                 obj.obsidian = getters.rareDropFinal('obsidian');
+            }
+            if (state.depth >= MINING_DEEPROCK_DEPTH && digitSum(state.depth) >= 14) {
+                obj.deeprock = getters.rareDropFinal('deeprock');
+            }
+            if (state.depth >= (MINING_GLOWSHARD_DEPTH + state.glowshardLimit)) {
+                obj.glowshard = getters.rareDropFinal('glowshard');
             }
             return obj;
         },
@@ -250,23 +267,35 @@ export default {
         dwellerLimit: (state, getters, rootState, rootGetters) => {
             return rootState.stat[`mining_maxDepth${rootState.system.features.mining.currentSubfeature}`].value * rootGetters['mult/get']('miningDepthDwellerMax');
         },
-        dwellerGreenCrystal: (state, getters, rootState) => {
-            const baseValue = Math.floor(rootState.stat.mining_depthDweller0.value * 2);
-            const capValue = Math.floor(rootState.stat.mining_depthDwellerCap0.value * 2);
-            const bonusPercent = capValue > 0 ? (baseValue / capValue) : 1;
-            return getters.dwellerGain(capValue, 0) * bonusPercent;
+        dwellerStats: (state, getters, rootState) => (subfeature) => {
+            const baseValue = Math.floor(rootState.stat[`mining_depthDweller${ subfeature }`].value * 2);
+            const capValue = Math.floor(rootState.stat[`mining_depthDwellerCap${ subfeature }`].value * 2);
+            return {cap: capValue, bonus: capValue > 0 ? (baseValue / capValue) : 1};
         },
-        dwellerYellowCrystal: (state, getters, rootState) => {
-            const baseValue = Math.floor(rootState.stat.mining_depthDweller1.value * 2);
-            const capValue = Math.floor(rootState.stat.mining_depthDwellerCap1.value * 2);
-            const bonusPercent = capValue > 0 ? (baseValue / capValue) : 1;
-            return getters.dwellerGain(capValue, 1) * bonusPercent;
+        dwellerBaseGreenCrystal: (state, getters) => {
+            const stats = getters.dwellerStats(0);
+            return getters.dwellerBaseGain(stats.cap) * stats.bonus;
+        },
+        dwellerGreenCrystal: (state, getters) => {
+            const stats = getters.dwellerStats(0);
+            return getters.dwellerGain(stats.cap, 0) * stats.bonus;
+        },
+        dwellerBaseYellowCrystal: (state, getters) => {
+            const stats = getters.dwellerStats(1);
+            return getters.dwellerBaseGain(stats.cap) * stats.bonus;
+        },
+        dwellerYellowCrystal: (state, getters) => {
+            const stats = getters.dwellerStats(1);
+            return getters.dwellerGain(stats.cap, 1) * stats.bonus;
         },
         crystalColor: () => (subfeature) => {
             return ['Green', 'Yellow'][subfeature];
         },
+        dwellerBaseGain: () => (steps) => {
+            return Math.pow(1.15, steps / 2) * steps * 7;
+        },
         dwellerGain: (state, getters, rootState, rootGetters) => (steps, subfeature) => {
-            return rootGetters['mult/get'](`currencyMiningCrystal${ getters.crystalColor(subfeature) }Gain`, Math.pow(1.15, steps / 2) * steps * 7);
+            return rootGetters['mult/get'](`currencyMiningCrystal${ getters.crystalColor(subfeature) }Gain`, getters.dwellerBaseGain(steps));
         },
         currentBreaks: (state) => {
             return state.breaks.length >= state.depth ? state.breaks[state.depth - 1] : 0;
@@ -316,6 +345,33 @@ export default {
             }
             const dwellerSpeed = rootGetters['mult/get']('miningDepthDwellerSpeed') / dwellerLimit;
             return logBase((amount - MINING_DWELLER_OVERFLOW - dwellerLimit) / -(MINING_DWELLER_OVERFLOW + dwellerLimit - rootState.stat[`mining_depthDwellerCap${rootState.system.features.mining.currentSubfeature}`].value), 1 - dwellerSpeed);
+        },
+        depthBeacon: (state, getters, rootState) => (depth) => {
+            if (rootState.system.features.mining.currentSubfeature !== 0) {
+                return null;
+            }
+            let beacon = null;
+            let beaconLevel = 0;
+            for (const [key, elem] of Object.entries(state.beaconPlaced)) {
+                const level = parseInt(key);
+                if ((depth >= level && depth <= (level + state.beacon[elem].range - 1)) && level > beaconLevel) {
+                    beacon = elem;
+                    beaconLevel = level;
+                }
+            }
+            return beacon;
+        },
+        currentDepthBeacon: (state, getters) => {
+            return getters.depthBeacon(state.depth);
+        },
+        beaconOwned: (state, getters, rootState, rootGetters) => (name) => {
+            let amount = rootGetters['mult/get'](state.beacon[name].ownedMult);
+            for (const [, elem] of Object.entries(state.beaconPlaced)) {
+                if (elem === name) {
+                    amount--;
+                }
+            }
+            return amount;
         }
     },
     mutations: {
@@ -349,8 +405,20 @@ export default {
                 effect: o.effect ?? []
             });
         },
+        initBeacon(state, o) {
+            Vue.set(state.beacon, o.name, {
+                ownedMult: o.ownedMult,
+                range: o.range ?? 1,
+                color: o.color ?? 'grey',
+                level: 0,
+                effect: o.effect ?? []
+            });
+        },
         updateKey(state, o) {
             Vue.set(state, o.key, o.value);
+        },
+        updateSubkey(state, o) {
+            Vue.set(state[o.name], o.key, o.value);
         },
         updateSmelteryKey(state, o) {
             Vue.set(state.smeltery[o.name], o.key, o.value);
@@ -360,6 +428,9 @@ export default {
         },
         updateIngredientKey(state, o) {
             Vue.set(state.ingredientList[o.index], o.key, o.value);
+        },
+        updateBeaconKey(state, o) {
+            Vue.set(state.beacon[o.name], o.key, o.value);
         },
         addIngredient(state, name) {
             state.ingredientList.push({name, compress: 0});
@@ -393,6 +464,8 @@ export default {
             for (const [key] of Object.entries(state.enhancement)) {
                 commit('updateEnhancementKey', {name: key, key: 'level', value: 0});
             }
+            commit('updateKey', {key: 'beaconPlaced', value: {}});
+            commit('updateKey', {key: 'beaconCooldown', value: 0});
         },
         craftPickaxe({ state, rootState, getters, commit, dispatch, rootGetters }, consumables = {}) {
             const subfeature = rootState.system.features.mining.currentSubfeature;
@@ -451,7 +524,7 @@ export default {
         prestige({ state, rootState, getters, rootGetters, commit, dispatch }, subfeature) {
             const currentSubfeature = rootState.system.features.mining.currentSubfeature;
             const prestigeGain = [getters.dwellerGreenCrystal, getters.dwellerYellowCrystal][currentSubfeature];
-            const emberGain = rootGetters['mult/get']('currencyMiningEmberGain');
+            const emberGain = Math.floor(rootGetters['mult/get']('currencyMiningEmberGain') * rootState.stat[`mining_depthDweller${ currentSubfeature }`].value);
             if (prestigeGain > 0) {
                 commit('stat/increaseTo', {feature: 'mining', name: 'bestPrestige' + currentSubfeature, value: prestigeGain}, {root: true});
                 commit('stat/add', {feature: 'mining', name: 'prestigeCount', value: 1}, {root: true});
@@ -487,6 +560,7 @@ export default {
             if (state.resin > rootGetters['mult/get']('miningResinMax')) {
                 commit('updateKey', {key: 'resin', value: rootGetters['mult/get']('miningResinMax')});
             }
+            dispatch('applyBeaconEffects');
         },
         addToSmeltery({ state, getters, commit, dispatch }, o) {
             const smeltery = state.smeltery[o.name];
@@ -551,6 +625,45 @@ export default {
                 rootState.stat[`mining_depthDweller${ subfeature }`].value,
                 getters.dwellerLimit
             )}, {root: true});
+        },
+        placeBeacon({ state, getters, commit, dispatch }, o) {
+            if (state.beaconPlaced[o.depth] === undefined && getters.beaconOwned(o.beacon) >= 1) {
+                commit('updateSubkey', {name: 'beaconPlaced', key: o.depth, value: o.beacon});
+                dispatch('applyBeaconEffects');
+            }
+        },
+        removeBeacon({ state, commit, dispatch }, depth) {
+            if (state.beaconCooldown <= 0) {
+                let newObj = {};
+                for (const [key, elem] of Object.entries(state.beaconPlaced)) {
+                    if (parseInt(key) !== depth) {
+                        newObj[key] = elem;
+                    }
+                }
+                commit('updateKey', {key: 'beaconCooldown', value: SECONDS_PER_HOUR * 20});
+                commit('updateKey', {key: 'beaconPlaced', value: newObj});
+                dispatch('applyBeaconEffects');
+            }
+        },
+        applyBeaconEffects({ state, getters, dispatch }) {
+            // Reset effects first
+            let effects = [];
+            for (const [key, elem] of Object.entries(state.beacon)) {
+                effects.push(...elem.effect.map(el => {
+                    return {...el, key};
+                }));
+            }
+            effects.forEach(effect => {
+                dispatch('system/resetEffect', {type: effect.type, name: effect.name, multKey: `miningBeacon_${ effect.key }`}, {root: true});
+            });
+
+            // Then apply current one (if it exists)
+            const beacon = getters.currentDepthBeacon;
+            if (beacon) {
+                state.beacon[beacon].effect.forEach(effect => {
+                    dispatch('system/applyEffect', {type: effect.type, name: effect.name, multKey: `miningBeacon_${ beacon }`, value: effect.value(state.beacon[beacon].level), trigger: false}, {root: true});
+                });
+            }
         }
     }
 }

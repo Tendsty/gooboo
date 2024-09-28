@@ -38,7 +38,7 @@ export default {
     farm_superFlower: {
         type: 'consumable',
         item: 'farm_superFlower',
-        amount: 5,
+        amount: 20,
         requirement() {
             return store.state.unlock.farmFertilizer.see;
         },

@@ -1,4 +1,4 @@
-export { logBase, getSequence, splicedLinear, splicedPow, splicedPowLinear, deltaLinear }
+export { logBase, getSequence, splicedLinear, splicedPow, splicedPowLinear, deltaLinear, digitSum }
 
 /**
  * Returns the logarithm of a number
@@ -35,4 +35,8 @@ function splicedPowLinear(exponent, increase, breakpoint, value) {
 function deltaLinear(base, increase, amount = 1, skip = 0) {
     const finalBase = increase * skip + base;
     return (finalBase + ((amount - 1) * increase / 2)) * amount;
+}
+
+function digitSum(num) {
+    return `${num}`.split('').reduce((acc, n) => acc += parseInt(n), 0);
 }

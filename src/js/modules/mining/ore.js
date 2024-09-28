@@ -63,5 +63,23 @@ export default {
         modulo: 17,
         baseAmount: 0.00000128,
         amountMult: 1.05
+    },
+    oreOsmium: {
+        power: buildNum(1.75, 'M'),
+        impurity: 6,
+        minDepth: 350,
+        maxDepth: 525,
+        modulo: 23,
+        baseAmount: 0.000000256,
+        amountMult: 1.05
+    },
+    oreLead: {
+        power: buildNum(12.5, 'M'),
+        impurity: 7.5,
+        minDepth: 450,
+        maxDepth: 650,
+        modulo: 29,
+        baseAmount: 0.0000000512,
+        amountMult: 1.05
     }
 }

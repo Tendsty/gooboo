@@ -21,7 +21,7 @@
       <v-badge bordered overlap bottom :value="item.level > 0" :content="'+' + item.level" color="success">
         <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.treasure.tierItem`, item.tier + 1)">
           <template v-slot:activator="{ on, attrs }">
-            <v-icon class="balloon-text-black" :size="$vuetify.breakpoint.xsOnly ? 24 : 40" :color="itemColor" v-bind="attrs" v-on="on">{{ item.icon }}</v-icon>
+            <v-icon class="balloon-text-black" :size="$vuetify.breakpoint.xsOnly ? 24 : 40" :color="itemColor" v-bind="attrs" v-on="on">{{ effectObj[effectToFeature[item.effect[0]]][item.effect[0]].icon }}</v-icon>
           </template>
           <div class="d-flex align-center mt-0" v-for="(effect, index) in item.effect" :key="effect">
             <v-icon small class="mr-2">{{ featureIcon[effectToFeature[effect]].icon }}</v-icon>
@@ -58,6 +58,7 @@ export default {
       upgrading: state => state.treasure.upgrading,
       deleting: state => state.treasure.deleting,
       effectToFeature: state => state.treasure.effectToFeature,
+      effectObj: state => state.treasure.effect,
       featureIcon: state => state.system.features
     }),
     item() {
@@ -89,7 +90,7 @@ export default {
         return [];
       }
       return this.item.effect.map((el, i) => this.$store.getters['treasure/effectValue'](
-        this.$store.state.treasure.effect[this.effectToFeature[el]][el].value * this.itemType.slots[i].power,
+        this.effectObj[this.effectToFeature[el]][el].value * this.itemType.slots[i].power,
         this.item.tier,
         this.item.level + 1,
         this.item.type

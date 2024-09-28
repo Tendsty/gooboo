@@ -222,7 +222,7 @@ export default {
           after: this.isMax ? null : elem.value(lvl + 1)
         };
       }).filter(elem => {
-        const isBool = ['unlock', 'farmSeed', 'keepUpgrade', 'findConsumable', 'galleryIdea'].includes(elem.type);
+        const isBool = ['unlock', 'keepUpgrade', 'villageCraft', 'farmSeed', 'findConsumable', 'galleryIdea', 'galleryShape'].includes(elem.type);
         return (isBool && !elem.before && elem.after) || (!isBool && elem.before !== elem.after);
       });
     },
@@ -238,7 +238,7 @@ export default {
           after: this.isMax ? null : elem.value(lvl + 1)
         };
       }).filter(elem => {
-        const isBool = ['unlock', 'farmSeed', 'keepUpgrade', 'findConsumable', 'galleryIdea'].includes(elem.type);
+        const isBool = ['unlock', 'keepUpgrade', 'villageCraft', 'farmSeed', 'findConsumable', 'galleryIdea', 'galleryShape'].includes(elem.type);
         return (isBool && !elem.before && elem.after) || (!isBool && elem.before !== elem.after);
       });
     },

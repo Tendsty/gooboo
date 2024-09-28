@@ -28,7 +28,15 @@
         <div>{{ $vuetify.lang.t('$vuetify.horde.recoveryDescription') }}</div>
         <stat-breakdown v-if="isPlayer" name="hordeRecovery"></stat-breakdown>
       </gb-tooltip>
+      <gb-tooltip key="status-defense" v-if="defense > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeDefense')">
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip label small :color="`dark-blue ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-shield</v-icon>{{ $formatNum(defense * 100, true) }}%</v-chip>
+        </template>
+        <div>{{ $vuetify.lang.t('$vuetify.horde.defenseDescription') }}</div>
+        <stat-breakdown v-if="isPlayer" name="hordeDefense"></stat-breakdown>
+      </gb-tooltip>
     </div>
+    <slot name="between"></slot>
     <div class="d-flex flex-wrap my-1 mx-n1">
       <gb-tooltip key="status-attack" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeAttack')">
         <template v-slot:activator="{ on, attrs }">
@@ -39,7 +47,8 @@
           <span>{{ $vuetify.lang.t('$vuetify.horde.attackConversion.text') }}</span>
           <span v-for="(amount, type, index) in damageDistribution" :key="`damage-distribution-${ type }`">{{ index > 0 ? ', ' : '' }}{{ $vuetify.lang.t(`$vuetify.horde.attackConversion.${ type }`, $formatNum(amount * 100, true)) }}</span>
         </div>
-        <stat-breakdown v-if="isPlayer" name="hordeAttack"></stat-breakdown>
+        <div v-if="isPlayer && strength > 0">{{ $vuetify.lang.t('$vuetify.horde.attackConversion.strengthAmp', $formatNum(strengthAmp * 100), $formatNum(strengthAmp * 100 * strength), $formatNum(attack * (strengthAmp * strength + 1))) }}</div>
+        <stat-breakdown v-if="isPlayer" name="hordeAttack" :base="playerBaseAttack"></stat-breakdown>
       </gb-tooltip>
       <gb-tooltip key="status-first-strike" v-if="firstStrike > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeFirstStrike')">
         <template v-slot:activator="{ on, attrs }">
@@ -69,7 +78,7 @@
             <v-icon class="mr-2">mdi-motion</v-icon>
             {{ $formatNum(critChance * 100) }}%
             <v-icon>mdi-circle-small</v-icon>
-            x{{ $formatNum(critMult + 1, true) }}
+            x{{ $formatNum(critMult, true) }}
           </v-chip>
         </template>
         <h3 class="text-center mt-0">{{ $vuetify.lang.t('$vuetify.horde.stat.crit') }}</h3>
@@ -110,6 +119,13 @@
         </template>
         <div>{{ $vuetify.lang.t('$vuetify.horde.toxicDescription') }}</div>
         <stat-breakdown v-if="isPlayer" name="hordeToxic"></stat-breakdown>
+      </gb-tooltip>
+      <gb-tooltip key="status-execute" v-if="execute > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeExecute')">
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`pale-red ${ themeModifier }`" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-skull</v-icon>{{ $formatNum(execute * 100, true) }}%</v-chip>
+        </template>
+        <div>{{ $vuetify.lang.t('$vuetify.horde.executeDescription') }}</div>
+        <stat-breakdown v-if="isPlayer" name="hordeExecute"></stat-breakdown>
       </gb-tooltip>
       <gb-tooltip key="status-silence" v-if="silence > 0" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
@@ -161,6 +177,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { HORDE_DAMAGE_INCREASE_PER_STRENGTH } from '../../../js/constants';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 
@@ -207,6 +224,16 @@ export default {
     cutting: {
       type: Number,
       required: true
+    },
+    defense: {
+      type: Number,
+      required: false,
+      default: 0
+    },
+    execute: {
+      type: Number,
+      required: false,
+      default: 0
     },
     divisionShield: {
       type: Number,
@@ -298,7 +325,8 @@ export default {
   computed: {
     ...mapState({
       bossFight: state => state.horde.bossFight,
-      canSeeDamageTypes: state => state.unlock.hordeDamageTypes.see
+      canSeeDamageTypes: state => state.unlock.hordeDamageTypes.see,
+      strength: state => state.horde.cachePlayerStats.strength
     }),
     tooltipWidth() {
       return this.isPlayer ? undefined : 0;
@@ -326,6 +354,12 @@ export default {
         }
       });
       return obj;
+    },
+    playerBaseAttack() {
+      return this.$store.getters['horde/playerBaseStats'].attack;
+    },
+    strengthAmp() {
+      return HORDE_DAMAGE_INCREASE_PER_STRENGTH;
     }
   }
 }

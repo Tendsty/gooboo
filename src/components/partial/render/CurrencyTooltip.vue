@@ -32,7 +32,7 @@
     </template>
     <template v-if="!hideDetails && currency.showGainMult && (gainBase !== null || baseArray.length > 0 || gainAmount > 0)">
       <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
-      <stat-breakdown :name="gainName" :base="gainBase" :base-array="baseArray" :mult-array="multArray"></stat-breakdown>
+      <stat-breakdown :name="gainName" :base="gainBase" :base-array="baseArray" :mult-array="multArray" :bonus-array="bonusArray"></stat-breakdown>
     </template>
     <template v-if="!hideDetails && currency.cap !== null">
       <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.capacity') }}</div>
@@ -79,6 +79,11 @@ export default {
       default: (() => [])
     },
     multArray: {
+      type: Array,
+      required: false,
+      default: (() => [])
+    },
+    bonusArray: {
       type: Array,
       required: false,
       default: (() => [])

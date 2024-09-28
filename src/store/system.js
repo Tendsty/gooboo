@@ -1,13 +1,16 @@
 import Vue from "vue";
 import { tick } from "../js/tick";
-import { getDay } from "../js/utils/date";
 import { randomHex } from "../js/utils/random";
 import seedrandom from "seedrandom";
+import { LOCAL_STORAGE_NAME } from "../js/constants";
 
 export default {
     namespaced: true,
     state: {
-        version: '1.4.2',
+        version: '1.5.0',
+        cheaterSelfMark: 0,
+        cheatDetected: {},
+        lastPlayedDays: [],
         patchnote: {},
         timestamp: null,
         screen: 'newGame',
@@ -17,6 +20,7 @@ export default {
                 unlock: null,
                 subfeatures: ['miningGasSubfeature'],
                 currentSubfeature: 0,
+                nextSubfeature: 0,
                 icon: 'mdi-pickaxe',
                 offlineStat: ['mining_maxDepth0', 'mining_maxDepth1', 'mining_depthDwellerCap0', 'mining_depthDwellerCap1'],
                 main: true
@@ -25,14 +29,16 @@ export default {
                 unlock: 'villageFeature',
                 subfeatures: ['villageCraftingSubfeature'],
                 currentSubfeature: 0,
+                nextSubfeature: 0,
                 icon: 'mdi-home-group',
                 offlineStat: ['village_maxBuilding'],
                 main: true
             },
             horde: {
                 unlock: 'hordeFeature',
-                subfeatures: [],
+                subfeatures: ['hordeClassesSubfeature'],
                 currentSubfeature: 0,
+                nextSubfeature: 0,
                 icon: 'mdi-account-group',
                 offlineStat: ['horde_maxZone', 'horde_totalMastery'],
                 main: true
@@ -41,6 +47,7 @@ export default {
                 unlock: 'farmFeature',
                 subfeatures: [],
                 currentSubfeature: 0,
+                nextSubfeature: 0,
                 icon: 'mdi-barn',
                 offlineStat: [],
                 main: true
@@ -49,6 +56,7 @@ export default {
                 unlock: 'galleryFeature',
                 subfeatures: [],
                 currentSubfeature: 0,
+                nextSubfeature: 0,
                 icon: 'mdi-image-frame',
                 offlineStat: [],
                 main: true
@@ -179,6 +187,13 @@ export default {
                     },
                     relativeUpgradeStats: {
                         unlock: null,
+                        hasDescription: true,
+                        type: 'switch',
+                        value: false,
+                        defaultValue: false
+                    },
+                    useLegacyFarmSelect: {
+                        unlock: 'farmFeature',
                         hasDescription: true,
                         type: 'switch',
                         value: false,
@@ -396,7 +411,8 @@ export default {
         farmHint: false,
         tutorial: {},
         cachePage: {},
-        playerId: null
+        playerId: null,
+        playerName: null,
     },
     getters: {
         mainFeatures: (state, getters, rootState) => {
@@ -452,23 +468,35 @@ export default {
                 case 'mining': {
                     switch (state.features.mining.currentSubfeature) {
                         case 0:
-                            return rootState.stat.mining_maxDepth0.total > 300;
+                            return rootState.stat.mining_maxDepth0.total > 475;
                         case 1:
                             return rootState.stat.mining_maxDepth1.total > 160;
                     }
                     break;
                 }
                 case 'village': {
-                    return rootState.upgrade.item.village_windTurbine.highestLevel > 0;
+                    switch (state.features.village.currentSubfeature) {
+                        case 0:
+                            return rootState.upgrade.item.village_windTurbine.highestLevel > 0;
+                        case 1:
+                            return rootState.upgrade.item.village_marbleBin.highestLevel > 0;
+                    }
+                    break;
                 }
                 case 'horde': {
-                    return rootState.stat.horde_maxZone.total > 200;
+                    switch (state.features.horde.currentSubfeature) {
+                        case 0:
+                            return rootState.stat.horde_maxZone.total > 300;
+                        case 1:
+                            return rootState.unlock.hordeEndOfContent.use;
+                    }
+                    break;
                 }
                 case 'farm': {
-                    return rootState.upgrade.item.farm_seedBox.highestLevel >= 19;
+                    return rootState.upgrade.item.farm_seedBox.highestLevel >= 24;
                 }
                 case 'gallery': {
-                    return rootState.stat["gallery_deep-orange"].total > 0;
+                    return rootState.stat.gallery_brown.total > 0;
                 }
                 default:
                     return false;
@@ -484,6 +512,28 @@ export default {
                 }
             }
             return null;
+        },
+        cheetahState: (state) => {
+            let highest = 0;
+            for (const [, elem] of Object.entries(state.cheatDetected)) {
+                if (elem.severity > highest) {
+                    highest = elem.severity;
+                }
+            }
+            return highest;
+        },
+        cheetahBreakdown: (state) => {
+            let obj = {};
+            for (const [key, elem] of Object.entries(state.cheatDetected)) {
+                const feature = key.split('_')[1];
+                if (obj[feature] === undefined) {
+                    obj[feature] = 0;
+                }
+                if (elem.severity > obj[feature]) {
+                    obj[feature] = elem.severity;
+                }
+            }
+            return obj;
         }
     },
     mutations: {
@@ -543,6 +593,9 @@ export default {
         updateSubfeature(state, o) {
             Vue.set(state.features[o.key], 'currentSubfeature', o.value);
         },
+        updateNextSubfeature(state, o) {
+            Vue.set(state.features[o.key], 'nextSubfeature', o.value);
+        },
         updateKeybind(state, o) {
             Vue.set(state.keybinds, o.name, o.value);
         },
@@ -575,10 +628,34 @@ export default {
             if (state.playerId === null) {
                 state.playerId = randomHex(16);
             }
+        },
+        registerCheat(state, o) {
+            const key = (o.modid ?? 'gooboo') + '_' + (o.feature ?? 'meta') + '_' + o.name;
+            const severity = o.severity ?? 200;
+            if (state.cheatDetected[key] === undefined) {
+                console.warn(`Cheat detected: ${ key } - severity ${ severity }`);
+                Vue.set(state.cheatDetected, key, {version: state.version, severity});
+            }
+            if (state.cheatDetected[key] !== undefined && state.cheatDetected[key].severity < severity) {
+                console.warn(`Cheat severity increased: ${ key } - severity ${ severity }`);
+                Vue.set(state.cheatDetected[key], 'severity', severity);
+            }
+        },
+        reformFeature(state, feature) {
+            let newCheatObj = {};
+            for (const [key, elem] of Object.entries(state.cheatDetected)) {
+                if (key.split('_')[1] !== feature) {
+                    newCheatObj[key] = elem;
+                }
+            }
+            Vue.set(state, 'cheatDetected', newCheatObj);
         }
     },
     actions: {
         cleanState({ state, commit }) {
+            commit('updateKey', {key: 'cheaterSelfMark', value: 0});
+            commit('updateKey', {key: 'cheatDetected', value: {}});
+            commit('updateKey', {key: 'lastPlayedDays', value: []});
             commit('updateKey', {key: 'notification', value: []});
             commit('updateKey', {key: 'keybindCurrent', value: null});
             commit('updateKey', {key: 'autosaveTimer', value: null});
@@ -595,6 +672,7 @@ export default {
             commit('updateKey', {key: 'rng', value: {}});
             commit('updateKey', {key: 'cachePage', value: {}});
             commit('updateKey', {key: 'playerId', value: null});
+            commit('updateKey', {key: 'playerName', value: null});
 
             for (const [key, elem] of Object.entries(state.features)) {
                 if (elem.currentSubfeature !== undefined) {
@@ -642,6 +720,11 @@ export default {
                         }
                     }
                     break;
+                case 'tag':
+                    if (o.value !== null) {
+                        commit('tag/set', {name: o.name, key: o.multKey, value: o.value}, {root: true});
+                    }
+                    break;
                 case 'keepUpgrade':
                     if (o.value) {
                         dispatch('upgrade/makePersistent', o.name, {root: true});
@@ -654,6 +737,11 @@ export default {
                     break;
                 case 'villageJob':
                     commit('village/updateJobKey', {name: o.name, key: 'max', value: o.value}, {root: true});
+                    break;
+                case 'villageCraft':
+                    if (o.value) {
+                        commit('village/updateSubkey', {key: 'crafting', name: o.name, subkey: 'unlocked', value: true}, {root: true});
+                    }
                     break;
                 case 'farmSeed':
                     if (o.value) {
@@ -674,6 +762,11 @@ export default {
                         commit('gallery/updateIdeaKey', {name: o.name, key: 'owned', value: true}, {root: true});
                     }
                     break;
+                case 'galleryShape':
+                    if (o.value) {
+                        commit('gallery/updateShapeKey', {name: o.name, key: 'unlocked', value: true}, {root: true});
+                    }
+                    break;
                 default:
                     break;
             }
@@ -692,8 +785,14 @@ export default {
                 case 'unlock':
                     commit('unlock/reset', o.name, {root: true});
                     break;
+                case 'tag':
+                    commit('tag/reset', {name: o.name, key: o.multKey}, {root: true});
+                    break;
                 case 'villageJob':
                     commit('village/updateJobKey', {name: o.name, key: 'max', value: 0}, {root: true});
+                    break;
+                case 'villageCraft':
+                    commit('village/updateSubkey', {key: 'crafting', name: o.name, subkey: 'unlocked', value: false}, {root: true});
                     break;
                 default:
                     break;
@@ -774,19 +873,165 @@ export default {
                 dispatch('farm/updateGrownHint', null, {root: true});
             }
         },
-        updateCurrentDay({ state, rootState, commit, dispatch }) {
-            const oldDay = state.currentDay;
-            const newDay = getDay();
-            commit('updateKey', {key: 'currentDay', value: newDay});
-            if (rootState.unlock.eventFeature.see && oldDay !== null && oldDay !== newDay) {
-                dispatch('event/dayChange', {start: oldDay, end: newDay}, {root: true});
-            }
-        },
         buyTheme({ state, rootGetters, commit, dispatch }, name) {
             const theme = state.themes[name];
             if (!theme.owned && theme.price !== null && rootGetters['currency/value']('gem_amethyst') >= theme.price) {
                 commit('updateThemeKey', {name, key: 'owned', value: true});
                 dispatch('currency/spend', {feature: 'gem', name: 'amethyst', amount: theme.price}, {root: true});
+            }
+        },
+        resetFeatureProgress({ state, rootState, commit, dispatch }, o) {
+            if (o.feature !== 'school') {
+                commit('system/updateSubfeature', {key: o.feature, value: 0}, {root: true});
+                for (let i = 0, n = state.features[o.feature].subfeatures.length + 1; i < n; i++) {
+                    dispatch('upgrade/resetAll', {feature: o.feature, subfeature: i, type: 'regular'}, {root: true});
+                    if (o.feature === 'village' && i === 0) {
+                        dispatch('upgrade/resetAll', {feature: o.feature, subfeature: i, type: 'building'}, {root: true});
+                    }
+                    if (o.feature === 'gallery' && i === 0) {
+                        dispatch('upgrade/resetAll', {feature: o.feature, subfeature: i, type: 'shape'}, {root: true});
+                    }
+                    if (o.feature !== 'farm') {
+                        dispatch('upgrade/resetAll', {feature: o.feature, subfeature: i, type: 'prestige'}, {root: true});
+                    }
+                }
+                dispatch('currency/reset', {feature: o.feature}, {root: true});
+                dispatch('card/resetCards', o.feature, {root: true});
+                dispatch('stat/resetAll', o.feature, {root: true});
+            }
+
+            // Feature specific effects before state wipe
+            if (o.feature === 'mining') {
+                for (const [key, elem] of Object.entries(rootState.mining.enhancement)) {
+                    if (elem.level > 0) {
+                        commit('mining/updateEnhancementKey', {name: key, key: 'level', value: 0}, {root: true});
+                        dispatch('mining/resetEnhancement', key, {root: true});
+                    }
+                }
+            }
+            if (o.feature === 'horde') {
+                for (const [key, elem] of Object.entries(rootState.horde.items)) {
+                    if (elem.equipped) {
+                        dispatch('horde/unequipItem', key, {root: true});
+                    }
+                }
+                for (const [key] of Object.entries(rootState.horde.itemStatMult)) {
+                    const split = key.split('_');
+                    dispatch('system/resetEffect', {type: split[1], name: split[0], multKey: `hordeItemPermanent`}, {root: true});
+                }
+                for (const [key, elem] of Object.entries(rootState.horde.heirloom)) {
+                    elem.effect.forEach(eff => {
+                        dispatch('system/resetEffect', {type: eff.type, name: eff.name, multKey: `hordeHeirloom_${ key }`}, {root: true});
+                    });
+                }
+                for (const [name, skill] of Object.entries(rootState.horde.fighterClass[rootState.horde.selectedClass].skills)) {
+                    if (skill.type !== 'active') {
+                        skill.effect.forEach(eff => {
+                            dispatch('system/resetEffect', {
+                                type: eff.type,
+                                name: eff.name,
+                                multKey: `hordeSkill_${name}`
+                            }, {root: true});
+                        });
+                    }
+                }
+            }
+
+            // Clean state
+            dispatch(`${ o.feature }/cleanState`, null, {root: true});
+
+            // Clear cheater status
+            commit('reformFeature', o.feature);
+
+            // Feature specific effects after state wipe
+            if (o.feature === 'mining') {
+                dispatch('mining/applyBeaconEffects', null, {root: true});
+            }
+            if (o.feature === 'village') {
+                for (const [key] of Object.entries(rootState.village.job)) {
+                    dispatch('village/applyJobEffect', key, {root: true});
+                }
+                for (const [key] of Object.entries(rootState.village.policy)) {
+                    dispatch('village/applyPolicyEffect', key, {root: true});
+                }
+                for (const [key, elem] of Object.entries(rootState.village.crafting)) {
+                    if (elem.isSpecial) {
+                        elem.effect.forEach(reward => {
+                            dispatch('system/resetEffect', {type: reward.type, name: reward.name, multKey: `villageSpecialCraft_${ key }`}, {root: true});
+                        });
+                    }
+                }
+                dispatch('village/applyOfferingEffect', null, {root: true});
+                dispatch('upgrade/updateVillageStats', null, {root: true});
+            }
+            if (o.feature === 'horde') {
+                dispatch('horde/resetStats', null, {root: true});
+                dispatch('horde/updateNostalgia', null, {root: true});
+                dispatch('horde/applyClassEffects', null, {root: true});
+                dispatch('horde/applyClassLevelEffects', null, {root: true});
+                dispatch('mult/updateExternalCaches', 'hordeNostalgia', {root: true});
+
+                for (const [key] of Object.entries(rootState.horde.trinket)) {
+                    dispatch('horde/removeTrinketEffects', key, {root: true})
+                }
+
+                // Reset tower rewards
+                for (const [name, tower] of Object.entries(rootState.horde.tower)) {
+                    for (const [floor, reward] of Object.entries(tower.reward)) {
+                        dispatch('system/resetEffect', {type: reward.type, name: reward.name, multKey: `hordeTower_${ name }_${ floor }`}, {root: true});
+                    }
+                }
+
+                // Reset battle pass rewards
+                dispatch('system/resetEffect', {type: 'mult', name: 'hordeAttack', multKey: `hordeBattlePass`}, {root: true});
+                dispatch('system/resetEffect', {type: 'mult', name: 'hordeHealth', multKey: `hordeBattlePass`}, {root: true});
+                dispatch('system/resetEffect', {type: 'mult', name: 'currencyHordeBoneGain', multKey: `hordeBattlePass`}, {root: true});
+                dispatch('system/resetEffect', {type: 'mult', name: 'currencyHordeBloodGain', multKey: `hordeBattlePass`}, {root: true});
+                dispatch('system/resetEffect', {type: 'mult', name: 'currencyHordeSoulCorruptedGain', multKey: `hordeBattlePass`}, {root: true});
+                dispatch('system/resetEffect', {type: 'mult', name: 'currencyHordeCourageGain', multKey: `hordeBattlePass`}, {root: true});
+                for (const [key, elem] of Object.entries(rootState.horde.battlePassEffect)) {
+                    elem.effect.forEach(effect => {
+                        dispatch('system/resetEffect', {
+                            type: effect.type,
+                            name: effect.name,
+                            multKey: `hordeBattlePass_${ key }`
+                        }, {root: true});
+                    });
+                }
+
+                dispatch('horde/updateEnergy', null, {root: true});
+                dispatch('horde/updateMana', null, {root: true});
+                dispatch('horde/updateActiveTimer', 0, {root: true});
+                dispatch('horde/updateMaxDifficulty', null, {root: true});
+                dispatch('horde/updateMysticalShardCap', null, {root: true});
+                dispatch('horde/updateSacrifice', null, {root: true});
+            }
+            if (o.feature === 'farm') {
+                commit('farm/initField', null, {root: true});
+                dispatch('farm/applyEarlyGameBuff', null, {root: true});
+                dispatch('farm/applyCropPrestige', null, {root: true});
+                dispatch('farm/applyGeneEffects', null, {root: true});
+            }
+            if (o.feature === 'gallery') {
+                for (const [key] of Object.entries(rootState.gallery.idea)) {
+                    dispatch('gallery/applyIdeaReset', key, {root: true});
+                }
+                for (const [key] of Object.entries(rootState.gallery.colorData)) {
+                    dispatch('gallery/applyCanvasLevel', {name: key}, {root: true});
+                }
+                commit('gallery/initShapeGrid', null, {root: true});
+            }
+
+            // Make sure premium buildings and relics get applied correctly
+            for (const [key, elem] of Object.entries(rootState.upgrade.item)) {
+                if (elem.feature === o.feature && elem.type === 'premium') {
+                    dispatch('upgrade/apply', {name: key}, {root: true});
+                }
+            }
+            for (const [key, elem] of Object.entries(rootState.relic.item)) {
+                if (elem.feature.includes(o.feature) && elem.found) {
+                    dispatch('relic/apply', {name: key, onFind: true}, {root: true});
+                }
             }
         },
         confirmAction({ state, dispatch }) {
@@ -830,6 +1075,10 @@ export default {
                     }
                     break;
                 }
+                case 'galleryMotivation': {
+                    dispatch('gallery/buyMotivation', null, {root: true});
+                    break;
+                }
                 case 'schoolExamPass': {
                     dispatch('school/buyPass', null, {root: true});
                     break;
@@ -868,11 +1117,28 @@ export default {
                             dispatch('mining/craftPickaxe', state.confirm.consumable, {root: true});
                             break;
                         }
+                        case 'openIngredientBox': {
+                            dispatch('village/openIngredientBox', null, {root: true});
+                            break;
+                        }
+                        case 'useManaPotion': {
+                            dispatch('horde/useManaPotion', null, {root: true});
+                            break;
+                        }
                         case 'fastPrestige': {
                             dispatch('gem/fastPrestige', state.confirm.prestige, {root: true});
                             break;
                         }
                     }
+                    break;
+                }
+                case 'reset': {
+                    dispatch('resetFeatureProgress', state.confirm);
+                    break;
+                }
+                case 'resetAll': {
+                    localStorage.removeItem(LOCAL_STORAGE_NAME);
+                    location.reload();
                     break;
                 }
             }

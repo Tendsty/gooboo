@@ -1,5 +1,5 @@
 import store from "../../../store";
-import { refundCurrency, removeCurrency, removeRelic, removeUpgrade, replaceTreasureEffect } from "./helper";
+import { removeCurrency, removeRelic, removeUpgrade, replaceTreasureEffect } from "./helper";
 
 export default function(save) {
     if (save.horde) {
@@ -54,7 +54,9 @@ export default function(save) {
         });
 
         save = removeCurrency(save, 'horde_bone');
-        save = refundCurrency(save, 'horde_soulEmpowered');
+        if (save.currency.horde_soulEmpowered !== undefined && save.stat.horde_soulEmpowered !== undefined) {
+            save.currency.horde_soulEmpowered = save.stat.horde_soulEmpowered.total;
+        }
 
         // Multiply all souls by 1000 to match the new increased gains
         if (save.currency.horde_soulCorrupted !== undefined) {

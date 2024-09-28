@@ -1,6 +1,6 @@
 import Vue from "vue"
 import { capitalize } from "../js/utils/format";
-import { randomRound } from "../js/utils/random";
+import { chance, randomRound } from "../js/utils/random";
 
 const fieldWidth = 7;
 const fieldHeight = 7;
@@ -45,6 +45,8 @@ export default {
             5: ['grow', 'overgrow', 'giant', 'grass'],
             10: ['dna', 'gnome', 'lonely', 'fertile'],
             15: ['mystery', 'conversion', 'prestige', 'rareDropChance'],
+            20: ['lucky', 'finalize', 'selfless', 'unyielding'],
+            25: ['teamwork', 'hunter', 'patient'],
         },
         fertilizer: {},
         selectedCropName: null,
@@ -62,11 +64,14 @@ export default {
         },
         baseGoldChance: (state) => (name) => {
             const crop = state.crop[name];
-            return Math.pow(crop.grow, 0.5) * 0.008;
+            return (crop.grow >= 240 ? (Math.pow(crop.grow, 0.7) / Math.pow(240, 0.7)) : (Math.pow(crop.grow, 0.9) / Math.pow(240, 0.9))) * 0.08137;
         },
-        cropFertilizerCost: (state) => (name) => {
+        cropFertilizerCost: (state, getters, rootState, rootGetters) => (name) => {
             const crop = state.crop[name];
-            return Math.ceil(Math.pow(crop.grow, 0.4) * 0.12 + (crop.cost > 0 ? (Math.pow(crop.cost, 0.8) * 0.5) : 0));
+            const goldCost = crop.cost.farm_gold ?? 0;
+            const baseCost = Math.ceil(Math.pow(crop.grow, 0.4) * 0.12 + (goldCost > 0 ? (Math.pow(goldCost, 0.8) * 0.5) : 0));
+            const stats = getters.cropGeneStats(name);
+            return rootGetters['mult/get']('farmFertilizerCost', baseCost + stats.mult.farmFertilizerCost.baseValue, stats.mult.farmFertilizerCost.multValue);
         },
         currentPrestigeLevel: (state) => {
             let totalPrestige = 0;
@@ -83,7 +88,7 @@ export default {
         plantPrice: (state, getters, rootState, rootGetters) => (selectedCell = null, replace = false) => {
             let fertilizerPrice = {};
             let cells = [];
-            let goldPrice = 0;
+            let plantPrice = {};
             if (selectedCell) {
                 cells.push(selectedCell);
             } else {
@@ -102,7 +107,13 @@ export default {
             cells.forEach(coords => {
                 const cell = state.field[coords.y][coords.x];
                 const crop = replace ? cell.crop : state.selectedCropName;
-                goldPrice += state.crop[crop].cost;
+                const costMult = rootGetters['mult/get']('farmCropCost', 1, getters.cropGeneStats(crop).mult.farmCropCost.multValue);
+                for (const [key, elem] of Object.entries(state.crop[crop].cost)) {
+                    if (plantPrice[key] === undefined) {
+                        plantPrice[key] = 0;
+                    }
+                    plantPrice[key] += elem * costMult;
+                }
                 const fertilizer = replace ? cell.fertilizer : state.selectedFertilizerName;
                 if (fertilizer !== null) {
                     const fertilizerName = 'farm_' + fertilizer;
@@ -114,11 +125,11 @@ export default {
             });
 
             let price = rootGetters['consumable/priceMultiple'](fertilizerPrice).price;
-            if (goldPrice > 0) {
-                if (price.farm_gold === undefined) {
-                    price.farm_gold = 0;
+            for (const [key, elem] of Object.entries(plantPrice)) {
+                if (price[key] === undefined) {
+                    price[key] = 0;
                 }
-                price.farm_gold += goldPrice;
+                price[key] += elem;
             }
 
             return price;
@@ -129,22 +140,20 @@ export default {
         cropDnaGain: () => (level) => {
             return level * 4 + 14;
         },
-        dnaRareDropChance: (state) => (name) => {
-            const crop = state.crop[name];
-            return (Math.pow(crop.grow / 10, 0.7) + Math.pow(crop.cost * 3, 0.65)) * 0.002 * Math.pow(crop.cost * 1.5 + 1, 0.6);
-        },
         cropGeneStats: (state, getters, rootState) => (name, fertilizer = null) => {
             let stats = {
                 mult: {},
-                rareDrop: {},
+                rareDrop: [],
                 tag: []
             };
-            ['farmCropGain', 'farmGoldChance', 'farmExperience', 'farmRareDropChance', 'farmGrow', 'farmOvergrow'].forEach(elem => {
+            ['farmCropGain', 'farmGoldChance', 'farmExperience', 'farmRareDropChance', 'farmGrow', 'farmOvergrow', 'farmCropCost', 'farmFertilizerCost', 'farmLuckyHarvestMult', 'farmHuntChance'].forEach(elem => {
                 stats.mult[elem] = {baseValue: 0, baseArray: [], multValue: 1, multArray: []};
             });
             const crop = state.crop[name];
+            const goldCost = crop.cost.farm_gold ?? 0;
             const allGain = ['farmCropGain', 'farmGoldChance', 'farmExperience', 'farmRareDropChance'];
             let active = {};
+            let cardPower = 0;
             crop.cardEquipped.forEach(elem => {
                 if (active[elem]) {
                     active[elem]++;
@@ -154,6 +163,7 @@ export default {
             });
             for (const [card, amount] of Object.entries(active)) {
                 const cardItem = rootState.card.card[card];
+                cardPower += cardItem.power;
                 cardItem.reward.forEach(effect => {
                     let value = effect.value;
                     if (['base', 'bonus'].includes(effect.type)) {
@@ -167,10 +177,7 @@ export default {
                     }
                     switch (effect.type) {
                         case 'addRareDrop': {
-                            if (stats.rareDrop[effect.name] === undefined) {
-                                stats.rareDrop[effect.name] = 0;
-                            }
-                            stats.rareDrop[effect.name] += value;
+                            stats.rareDrop.push({name: effect.name, amount: value, chance: effect.chance, mult: effect.mult ?? 1});
                             break;
                         }
                         case 'base': {
@@ -198,28 +205,52 @@ export default {
                     }
                 });
             }
+            if (cardPower > 0) {
+                rootState.card.feature.farm.powerReward.forEach(effect => {
+                    const value = effect.value(cardPower);
+                    switch (effect.type) {
+                        case 'base': {
+                            if (stats.mult[effect.name]) {
+                                stats.mult[effect.name].baseValue += value;
+                                stats.mult[effect.name].baseArray.push({name: `cardPower_farm`, value: value});
+                            }
+                            break;
+                        }
+                        case 'mult': {
+                            if (effect.name === 'farmAllGain') {
+                                allGain.forEach(mult => {
+                                    stats.mult[mult].multValue *= value;
+                                    stats.mult[mult].multArray.push({name: `cardPower_farm`, value: value});
+                                });
+                            } else if (stats.mult[effect.name]) {
+                                stats.mult[effect.name].multValue *= value;
+                                stats.mult[effect.name].multArray.push({name: `cardPower_farm`, value: value});
+                            }
+                            break;
+                        }
+                        default:
+                            console.warn(`Unknown card power effect ${ effect.type }`);
+                            break;
+                    }
+                });
+            }
             crop.genes.forEach(elem => {
                 state.gene[elem].effect.forEach(effect => {
                     switch (effect.type) {
                         case 'text': {
                             stats.tag.push(effect.name);
                             if (effect.name === 'farmFertileBoost' && fertilizer !== null) {
-                                const fertilizerGrow = state.fertilizer[fertilizer].effect.farmGrow ?? 1;
-                                if (fertilizerGrow < 1) {
-                                    const fertilizerBoost = (1 / fertilizerGrow - 1) * 0.3 + 1;
-                                    allGain.forEach(mult => {
-                                        stats.mult[mult].multValue *= fertilizerBoost;
-                                        stats.mult[mult].multArray.push({name: `farmGene_${ elem }`, value: fertilizerBoost});
-                                    });
+                                const fertilizerPrice = rootState.consumable['farm_' + fertilizer].price;
+                                if (fertilizerPrice !== null && fertilizerPrice.gem_sapphire > 0) {
+                                    const fertilizerBoost = fertilizerPrice.gem_sapphire * 0.3 + 1;
+                                    stats.mult.farmCropGain.multValue *= fertilizerBoost;
+                                    stats.mult.farmCropGain.multArray.push({name: `farmGene_${ elem }`, value: fertilizerBoost});
                                 }
                             }
                             break;
                         }
                         case 'addRareDrop': {
-                            if (stats.rareDrop[effect.name] === undefined) {
-                                stats.rareDrop[effect.name] = 0;
-                            }
-                            stats.rareDrop[effect.name] = effect.value;
+                            stats.rareDrop.push({name: effect.name, amount: effect.value, chance: effect.chance, mult: effect.mult ?? 1});
                             break;
                         }
                         case 'base': {
@@ -251,9 +282,11 @@ export default {
                 state.gene[key].upgrade.forEach(effect => {
                     switch (effect.type) {
                         case 'addRareDropAmount': {
-                            if (stats.rareDrop[effect.name] !== undefined) {
-                                stats.rareDrop[effect.name] += effect.value(elem);
-                            }
+                            stats.rareDrop.forEach(rdrop => {
+                                if (rdrop.name === effect.name) {
+                                    rdrop.amount += effect.value(elem);
+                                }
+                            });
                             break;
                         }
                         case 'base': {
@@ -281,6 +314,14 @@ export default {
                     }
                 });
             }
+            stats.rareDrop.forEach(rdrop => {
+                rdrop.mult *= (Math.pow(crop.grow / 10, 0.7) + Math.pow(goldCost * 3, 0.65)) * 0.025 * Math.pow(goldCost * 1.5 + 1, 0.6);
+            });
+            if (stats.tag.includes('farmPatient') && crop.patientStacks > 0) {
+                const multValue = crop.patientStacks * 0.03 + 1;
+                stats.mult.farmCropGain.multValue *= multValue;
+                stats.mult.farmCropGain.multArray.push({name: `farmGene_patient`, value: multValue});
+            }
             if (fertilizer) {
                 for (const [mult, value] of Object.entries(state.fertilizer[fertilizer].effect)) {
                     stats.mult[mult].multValue *= value;
@@ -301,12 +342,13 @@ export default {
             }
         },
         initCrop(state, o) {
-            const cost = o.cost ?? 0;
+            const cost = o.cost ?? {};
+            const goldCost = cost.farm_gold ?? 0;
             const tier = o.tier ?? 0;
             const rareDrop = o.rareDrop ? o.rareDrop.map(elem => {
-                return {...elem, found: false};
+                return {...elem, mult: elem.mult ?? 1, found: false, hunter: 0};
             }) : [];
-            const baseExpMult = 1 / Math.pow(cost + 1, 0.6) / Math.pow(o.grow / 10, 0.7);
+            const baseExpMult = 1 / Math.pow(goldCost + 1, 0.6) / Math.pow(o.grow / 10, 0.7);
             Vue.set(state.crop, o.name, {
                 found: o.found ?? false,
                 foundDefault: o.found ?? false,
@@ -314,7 +356,7 @@ export default {
                 color: o.color ?? 'green',
                 cost,
                 grow: o.grow ?? 60,
-                yield: o.yield ?? ((Math.pow(o.grow / 10, 0.7) + Math.pow(cost * 3, 0.65)) * Math.pow(0.9, rareDrop.length) * 11 * Math.pow(1.05, tier) * Math.pow(cost * 1.5 + 1, 0.6)),
+                yield: o.yield ?? ((Math.pow(o.grow / 10, 0.7) + Math.pow(goldCost * 3, 0.65)) * Math.pow(0.9, rareDrop.length) * 11 * Math.pow(1.05, tier) * Math.pow(goldCost * 1.5 + 1, 0.6)),
                 rareDrop,
                 level: 0,
                 levelMax: 0,
@@ -325,9 +367,10 @@ export default {
                 cardEquipped: [],
                 upgrades: {},
                 exp: 0,
-                baseExp: Math.pow(1.5, tier) * 60 * baseExpMult,
+                baseExp: Math.pow(1.6, tier) * 60 * baseExpMult,
                 baseExpMult,
-                type: o.type
+                type: o.type,
+                patientStacks: 0
             });
         },
         initBuilding(state, o) {
@@ -343,7 +386,8 @@ export default {
             Vue.set(state.gene, o.name, {
                 icon: o.icon ?? 'mdi-dna',
                 effect: o.effect ?? (() => []),
-                upgrade: o.upgrade ?? (() => [])
+                upgrade: o.upgrade ?? (() => []),
+                lockOnField: o.lockOnField ?? false
             });
         },
         initFertilizer(state, o) {
@@ -404,6 +448,9 @@ export default {
         },
         findCropRareDrop(state, o) {
             Vue.set(state.crop[o.name].rareDrop[o.index], 'found', true);
+        },
+        huntCropRareDrop(state, o) {
+            Vue.set(state.crop[o.name].rareDrop[o.index], 'hunter', o.value);
         }
     },
     actions: {
@@ -427,26 +474,49 @@ export default {
                 commit('updateCropKey', {name: key, key: 'cardEquipped', value: []});
                 commit('updateCropKey', {name: key, key: 'upgrades', value: {}});
                 commit('updateCropKey', {name: key, key: 'found', value: elem.foundDefault});
+                commit('updateCropKey', {name: key, key: 'patientStacks', value: 0});
+            }
+
+            for (const [key] of Object.entries(state.building)) {
+                commit('updateBuildingKey', {name: key, key: 'max', value: 0});
+                commit('updateBuildingKey', {name: key, key: 'maxPremium', value: 0});
+                commit('updateBuildingKey', {name: key, key: 'cacheAmount', value: 0});
+                commit('updateBuildingKey', {name: key, key: 'cachePremium', value: 0});
             }
         },
         plantCrop({ state, rootState, getters, rootGetters, commit, dispatch }, o) {
             const field = state.field[o.y][o.x];
             const crop = state.crop[o.crop];
-            const price = crop.cost;
+            const costMult = rootGetters['mult/get']('farmCropCost', 1, getters.cropGeneStats(o.crop).mult.farmCropCost.multValue);
+            let price = {};
+            for (const [key, elem] of Object.entries(crop.cost)) {
+                price[key] = elem * costMult;
+            }
             let fertilizerPrice = {};
+            let canAfford = true;
             if (o.fertilizer !== null) {
                 fertilizerPrice['farm_' + o.fertilizer] = getters.cropFertilizerCost(o.crop);
+                for (const [key, elem] of Object.entries(rootGetters['consumable/priceMultiple'](fertilizerPrice).price)) {
+                    if (price[key] === undefined) {
+                        price[key] = 0;
+                    }
+                    price[key] += elem;
+                }
             }
-            if (field !== null && field.type === null && (
-                price <= 0 || rootGetters['currency/value']('farm_gold') >= price
-            ) && (
+            for (const [key, elem] of Object.entries(price)) {
+                if (rootGetters['currency/value'](key) < elem) {
+                    canAfford = false;
+                }
+            }
+            if (field !== null && field.type === null && canAfford && (
                 o.fertilizer === null || (rootGetters['consumable/canAffordMultiple'](fertilizerPrice) && (state.fertilizer[o.fertilizer].type === 'all' || state.fertilizer[o.fertilizer].type === state.crop[o.crop].type))
             )) {
                 if (o.fertilizer !== null) {
                     dispatch('consumable/useMultiple', fertilizerPrice, {root: true});
                 }
-                if (price > 0) {
-                    dispatch('currency/spend', {feature: 'farm', name: 'gold', amount: price}, {root: true});
+                for (const [key, elem] of Object.entries(crop.cost)) {
+                    const split = key.split('_');
+                    dispatch('currency/spend', {feature: split[0], name: split[1], amount: elem * costMult}, {root: true});
                 }
                 commit('updateField', {x: o.x, y: o.y, value: {
                     type: 'crop',
@@ -473,7 +543,9 @@ export default {
                 const rngGen = rootGetters['system/getRngById'](`farmCrop_${ o.crop }`, field.rng);
                 const geneStats = getters.cropGeneStats(field.crop, field.fertilizer);
 
-                const allGainBoost = 0.1 * (field.buildingEffect.gnomeBoost ?? 0) / field.time + 1;
+                const allGainBoost =
+                    (0.04 * (field.buildingEffect.gnomeBoost ?? 0) / field.time + 1) *
+                    ((geneStats.tag.includes('farmLuckyHarvest') && chance(0.01, rngGen())) ? rootGetters['mult/get']('farmLuckyHarvestMult', geneStats.mult.farmLuckyHarvestMult.baseValue) : 1);
 
                 // Gain currency based on crop type
                 const gainAmount = rootGetters['mult/get'](
@@ -481,12 +553,18 @@ export default {
                     crop.yield + geneStats.mult.farmCropGain.baseValue,
                     (((field.buildingEffect.flag ?? 0) / field.time) * 0.5 + 1) * geneStats.mult.farmCropGain.multValue
                 ) * allGainBoost * field.grow;
+                dispatch('currency/gain', {feature: 'farm', name: crop.type, amount: gainAmount}, {root: true});
                 if (geneStats.tag.includes('farmYieldConversion')) {
-                    ['vegetable', 'fruit', 'grain', 'flower'].forEach(croptype => {
-                        dispatch('currency/gain', {feature: 'farm', name: croptype, amount: gainAmount * (crop.type === croptype ? 0.4 : 0.2)}, {root: true});
+                    ['vegetable', 'berry', 'grain', 'flower'].forEach(croptype => {
+                        if (crop.type !== croptype) {
+                            const conversionAmount = rootGetters['mult/get'](
+                                'currencyFarm' + capitalize(croptype) + 'Gain',
+                                crop.yield + geneStats.mult.farmCropGain.baseValue,
+                                (((field.buildingEffect.flag ?? 0) / field.time) * 0.5 + 1) * geneStats.mult.farmCropGain.multValue
+                            ) * allGainBoost * field.grow;
+                            dispatch('currency/gain', {feature: 'farm', name: croptype, amount: conversionAmount * 0.05}, {root: true});
+                        }
                     });
-                } else {
-                    dispatch('currency/gain', {feature: 'farm', name: crop.type, amount: gainAmount}, {root: true});
                 }
 
                 // Chance to gain gold
@@ -503,21 +581,22 @@ export default {
                 }
 
                 // Chance to gain rare drops
-                let geneDrops = [];
-                for (const [name, elem] of Object.entries(geneStats.rareDrop)) {
-                    geneDrops.push({
-                        name,
+                let geneDrops = geneStats.rareDrop.map(elem => {
+                    return {
+                        name: elem.name,
                         type: 'currency',
-                        chance: getters.dnaRareDropChance(field.crop),
-                        value: elem,
+                        chance: elem.chance,
+                        mult: elem.mult,
+                        value: elem.amount,
                         found: true
-                    });
-                }
+                    };
+                });
+                const pinwheelMult = (((field.buildingEffect.pinwheel ?? 0) / field.time) * 0.015) + 1;
                 [...crop.rareDrop, ...geneDrops].forEach((elem, index) => {
                     const times = randomRound(rootGetters['mult/get'](
                         'farmRareDropChance',
-                        elem.chance + (((field.buildingEffect.pinwheel ?? 0) / field.time) * 0.01) + geneStats.mult.farmRareDropChance.baseValue,
-                        geneStats.mult.farmRareDropChance.multValue
+                        elem.chance + geneStats.mult.farmRareDropChance.baseValue,
+                        geneStats.mult.farmRareDropChance.multValue * pinwheelMult * elem.mult
                     ) * allGainBoost * field.grow, rngGen());
                     if (times > 0) {
                         switch (elem.type) {
@@ -540,18 +619,32 @@ export default {
                     }
                 });
 
+                // Chance to gain hunted rare drops
+                if (geneStats.tag.includes('farmHunter')) {
+                    crop.rareDrop.forEach((elem, index) => {
+                        const found = chance(rootGetters['mult/get'](
+                            'farmHuntChance',
+                            elem.chance + geneStats.mult.farmRareDropChance.baseValue + geneStats.mult.farmHuntChance.baseValue - elem.hunter * 0.05,
+                            geneStats.mult.farmRareDropChance.multValue * geneStats.mult.farmHuntChance.multValue * pinwheelMult * elem.mult
+                        ) * allGainBoost * field.grow, rngGen());
+                        if (found) {
+                            commit('huntCropRareDrop', {name: field.crop, index, value: elem.hunter + 1});
+                            dispatch('applyGeneEffects');
+                        }
+                    });
+                }
+
                 // Add exp if unlocked
                 if (rootState.unlock.farmCropExp.use) {
                     dispatch('getCropExp', {crop: field.crop, value: rootGetters['mult/get'](
                         'farmExperience',
-                        getters.baseGoldChance(field.crop) + geneStats.mult.farmExperience.baseValue,
+                        geneStats.mult.farmExperience.baseValue,
                         (((field.buildingEffect.lectern ?? 0) / field.time) * 2 + 1) * geneStats.mult.farmExperience.multValue
                     ) * allGainBoost * field.grow});
                 }
 
                 // Add stats
                 commit('stat/add', {feature: 'farm', name: 'harvests', value: 1}, {root: true});
-                commit('stat/increaseTo', {feature: 'farm', name: 'maxOvergrow', value: field.grow}, {root: true});
 
                 // Unlock new notes
                 const note = notes[field.crop];
@@ -560,7 +653,14 @@ export default {
                 }
 
                 // Clear field
-                commit('updateField', {x: o.x, y: o.y, value: {...emptyField, color: field.color}});
+                const freeReplant = geneStats.tag.includes('farmUnyielding') && chance(0.4, rngGen());
+                if (freeReplant) {
+                    commit('updateFieldKey', {x: o.x, y: o.y, key: 'grow', value: 0});
+                    commit('updateFieldKey', {x: o.x, y: o.y, key: 'rng', value: rootState.system.rng[`farmCrop_${ field.crop }`] ?? 0});
+                    commit('system/nextRng', {name: `farmCrop_${ field.crop }`, amount: 1}, {root: true});
+                } else {
+                    commit('updateField', {x: o.x, y: o.y, value: {...emptyField, color: field.color}});
+                }
                 dispatch('updateGrownHint');
 
                 if (!o.skipCache) {
@@ -717,6 +817,8 @@ export default {
         applyCropPrestige({ getters, dispatch }) {
             if (getters.currentPrestigeLevel > 0) {
                 dispatch('mult/setMult', {name: 'farmCropGain', key: 'prestige', value: getters.prestigeMult(getters.currentPrestigeLevel)}, {root: true});
+            } else {
+                dispatch('mult/removeKey', {name: 'farmCropGain', key: 'prestige', type: 'mult'}, {root: true});
             }
         },
         updateCropGlobalLevel({ state, dispatch }) {
@@ -752,6 +854,7 @@ export default {
         pickGene({ state, commit, dispatch }, o) {
             commit('updateCropKey', {name: o.crop, key: 'genes', value: [...state.crop[o.crop].genes, o.gene] });
             dispatch('updateFieldCaches');
+            dispatch('applyGeneEffects');
         },
         buyDnaUpgrade({ state, getters, commit, dispatch }, o) {
             const crop = state.crop[o.crop];
@@ -865,7 +968,7 @@ export default {
                         flags.forEach(flag => {
                             if (
                                 (crop.type === 'vegetable' && x < flag.x && y < flag.y) ||
-                                (crop.type === 'fruit' && x > flag.x && y < flag.y) ||
+                                (crop.type === 'berry' && x > flag.x && y < flag.y) ||
                                 (crop.type === 'grain' && x < flag.x && y > flag.y) ||
                                 (crop.type === 'flower' && x > flag.x && y > flag.y)
                             ) {
@@ -882,6 +985,50 @@ export default {
                     }
                 });
             });
+        },
+        applyGeneEffects({ state, rootState, dispatch }) {
+            // Apply gene upgrades
+            let selflessAmount = 0
+            let teamworkActive = {
+                vegetable: false,
+                berry: false,
+                grain: false,
+                flower: false
+            };
+            for (const [, elem] of Object.entries(state.crop)) {
+                if (elem.genes.includes('selfless')) {
+                    selflessAmount++;
+                }
+                if (elem.genes.includes('teamwork')) {
+                    teamworkActive[elem.type] = true;
+                }
+            }
+            if (selflessAmount > 0) {
+                dispatch('mult/setMult', {name: 'farmCropGain', key: 'farmGene_selfless', value: selflessAmount * 0.05 + 1}, {root: true});
+            } else {
+                dispatch('mult/removeKey', {name: 'farmCropGain', key: 'farmGene_selfless', type: 'mult'}, {root: true});
+            }
+            if (teamworkActive.vegetable && teamworkActive.berry && teamworkActive.grain && teamworkActive.flower) {
+                dispatch('mult/setMult', {name: 'farmCropGain', key: 'farmGene_teamwork', value: 2}, {root: true});
+            } else {
+                dispatch('mult/removeKey', {name: 'farmCropGain', key: 'farmGene_teamwork', type: 'mult'}, {root: true});
+            }
+            let effect = {};
+            for (const [, elem] of Object.entries(state.crop)) {
+                elem.rareDrop.forEach(item => {
+                    if (item.type === 'currency' && item.hunter > 0) {
+                        if (effect[item.name] === undefined) {
+                            effect[item.name] = 0;
+                        }
+                        effect[item.name] += item.hunter;
+                    }
+                });
+            }
+            for (const [key, elem] of Object.entries(effect)) {
+                const split = key.split('_');
+                const capName = `currency${ capitalize(split[0]) + capitalize(split[1]) }Cap`;
+                dispatch('mult/setBase', {name: capName, key: 'farmGene_hunter', value: Math.round(rootState.mult.items[capName].baseValue / 10) * elem}, {root: true});
+            }
         }
     }
 }

@@ -9,12 +9,13 @@
     <template v-slot:activator="{ on, attrs }">
       <v-badge dot overlap bordered :color="curr.color" :value="multWarning">
         <div class="v-chip v-chip--label v-size--small px-2 balloon-text-dynamic" :class="[{'price-tag-highlight': highlight}, $vuetify.theme.dark ? 'theme--dark darken-3' : 'theme--light lighten-3', curr.color, $vnode.data.staticClass]" v-bind="attrs" v-on="on">
-          <v-icon size="16" class="mr-2">{{ curr.icon }}</v-icon>
+          <v-icon size="16" class="mr-2" :aria-label="$vuetify.lang.t(`$vuetify.currency.${ currency }.name`)">{{ curr.icon }}</v-icon>
           <span :class="costClass">{{ (add && amount >= 0) ? '+' : '' }}{{ $formatNum(amount) }}<slot name="suffix"></slot></span>
         </div>
       </v-badge>
     </template>
     <currency-tooltip :name="currency" :needed="add ? null : amount" hide-details :show-mult-warning="multWarning"></currency-tooltip>
+    <slot></slot>
   </gb-tooltip>
   <v-chip v-else small label>
     <v-icon>mdi-help</v-icon>

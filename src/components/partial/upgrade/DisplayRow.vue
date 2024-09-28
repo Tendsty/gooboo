@@ -1,9 +1,10 @@
 <template>
   <div v-if="isSimple" class="text-center">{{ text }}</div>
-  <div v-else class="d-flex">
+  <div v-else-if="type === 'tag'">{{ this.$vuetify.lang.t(`$vuetify.tag.${ name }`, ...tagArgs) }}</div>
+  <div v-else class="d-flex align-center">
     <v-icon v-if="showIcon && featureIcon" small class="mr-2">{{ featureIcon }}</v-icon>
-    <div class="flex-grow-1">{{ text }}{{ showStar ? '*' : '' }}:</div>
-    <div v-if="showRelative">
+    <div class="flex-grow-1">{{ text }}{{ showStar ? '*' : '' }}{{ isBuff ? ` ${ $vuetify.lang.t(`$vuetify.horde.active.buff.suffix`) }` : '' }}:</div>
+    <div class="pl-1" v-if="showRelative">
       <mult-stat :mult="name" :type="type" :value="relativeValue"></mult-stat>
     </div>
     <div v-else class="flex-grow-1 d-flex" :class="(before !== null && after !== null) ? 'justify-space-between' : 'justify-end'">
@@ -28,10 +29,10 @@ export default {
   }),
   computed: {
     isSimple() {
-      return ['unlock', 'keepUpgrade', 'farmSeed', 'findConsumable', 'galleryIdea', 'text'].includes(this.type);
+      return ['unlock', 'keepUpgrade', 'villageCraft', 'farmSeed', 'findConsumable', 'galleryIdea', 'galleryShape', 'text'].includes(this.type);
     },
     hidePrefix() {
-      return ['hordeActive', 'hordeCooldown'].includes(this.type);
+      return ['hordeActive', 'hordeBuff', 'hordeCooldown'].includes(this.type);
     },
     showRelative() {
       return this.$store.state.system.settings.general.items.relativeUpgradeStats.value;
@@ -45,6 +46,28 @@ export default {
         return feature === 'meta' ? 'mdi-earth' : this.$store.state.system.features[feature].icon;
       }
       return null;
+    },
+    tagArgs() {
+      if (this.type !== 'tag') {
+        return [];
+      }
+      const types = this.$store.state.tag[this.name].params;
+      return (this.after !== null ? this.after : this.before).map((el, i) => {
+        switch (types[i]) {
+          case 'number':
+            return this.$formatNum(el, true);
+          case 'time':
+            return this.$formatTime(el);
+          case 'percent':
+            return this.$formatNum(el * 100, true) + '%';
+          case 'perSecond':
+            return this.$formatNum(el, true) + '/s';
+          case 'mult':
+            return this.$formatNum(el, true) + 'x';
+          default:
+            return el;
+        }
+      });
     }
   },
   props: {
@@ -73,6 +96,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    isBuff: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   created() {
@@ -81,7 +109,7 @@ export default {
 
     if (text !== undefined) {
       this.text = text;
-    } else {
+    } else if (this.type !== 'tag') {
       let cacheValue = '';
       switch (this.type) {
         case 'unlock':
@@ -99,11 +127,17 @@ export default {
         case 'farmSeed':
           cacheValue = this.$vuetify.lang.t(`$vuetify.farm.unlockSeed`) + ': ' + this.$vuetify.lang.t(`$vuetify.farm.crop.${this.name}`);
           break;
+        case 'villageCraft':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.village.crafting.unlockNew`) + this.$vuetify.lang.t(`$vuetify.village.crafting.${this.name}`);
+          break;
         case 'villageJob':
           cacheValue = this.$vuetify.lang.t(`$vuetify.village.job.${this.name}`);
           break;
         case 'hordeActive':
           cacheValue = this.$vuetify.lang.t(`$vuetify.horde.active.${this.name}.0`) + ' ' + this.$vuetify.lang.t(`$vuetify.horde.active.${this.name}.1`);
+          break;
+        case 'hordeBuff':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.horde.active.buff.duration`);
           break;
         case 'hordeCooldown':
           cacheValue = this.$vuetify.lang.t(`$vuetify.horde.activeCooldown`);
@@ -122,6 +156,9 @@ export default {
           break;
         case 'galleryIdea':
           cacheValue = this.$vuetify.lang.t(`$vuetify.gallery.idea.unlock`) + ': ' + this.$vuetify.lang.t(`$vuetify.gallery.idea.${this.name}`);
+          break;
+        case 'galleryShape':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.gallery.shapes.unlock`, this.$vuetify.lang.t(`$vuetify.gallery.shapes.${this.name}`));
           break;
         case 'summerFestivalBuildingBase':
         case 'summerFestivalBuildingMult':

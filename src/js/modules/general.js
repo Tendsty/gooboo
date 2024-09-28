@@ -63,35 +63,35 @@ export default {
     unlock: ['generalFeature', 'generalOrladeeSubfeature', 'generalOppenschroeSubfeature', 'generalBelluxSubfeature', 'generalOnocluaSubfeature', 'generalOmnisolixSubfeature'],
     note: ['g', ...buildArray(31).map(() => 'grobodal'), ...buildArray(9).map(() => 'orladee')],
     relic: {
-        torch: {icon: 'mdi-torch', color: 'orange', effect: [
+        torch: {icon: 'mdi-torch', feature: ['general', 'mining', 'village'], color: 'orange', effect: [
             {name: 'miningCardCap', type: 'base', value: 1},
             {name: 'villageCardCap', type: 'base', value: 1}
         ]},
-        purpleHeart: {icon: 'mdi-heart', color: 'purple', effect: [
+        purpleHeart: {icon: 'mdi-heart', feature: ['general', 'horde'], color: 'purple', effect: [
             {name: 'hordeHealth', type: 'mult', value: 1.5},
             {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: 1.2}
         ]},
-        rottenLeaf: {icon: 'mdi-leaf', color: 'brown', effect: [
+        rottenLeaf: {icon: 'mdi-leaf', feature: ['general', 'farm'], color: 'brown', effect: [
             {name: 'farmCropGain', type: 'mult', value: 1.75},
             {name: 'farmExperience', type: 'mult', value: 1.2},
             {name: 'farmOvergrow', type: 'base', value: 0.1}
         ]},
-        stonepiercer: {icon: 'mdi-screwdriver', color: 'cherry', effect: [
+        stonepiercer: {icon: 'mdi-screwdriver', feature: ['general', 'mining'], color: 'cherry', effect: [
             {name: 'miningDamage', type: 'mult', value: 2.25}
         ]},
-        consolationPrize: {icon: 'mdi-seal-variant', color: 'lighter-grey', effect: [
+        consolationPrize: {icon: 'mdi-seal-variant', feature: ['general', 'village', 'horde', 'farm'], color: 'lighter-grey', effect: [
             {name: 'villageResourceGain', type: 'mult', value: 1.4},
             {name: 'hordeItemMasteryGain', type: 'mult', value: 1.4},
             {name: 'farmExperience', type: 'mult', value: 1.4}
         ]},
-        prettyLamp: {icon: 'mdi-vanity-light', color: 'light-blue', effect: [
+        prettyLamp: {icon: 'mdi-vanity-light', feature: ['general', 'gallery'], color: 'light-blue', effect: [
             {name: 'galleryInspirationStart', type: 'base', value: 3},
             {name: 'thinkHarder', type: 'galleryIdea', value: true},
         ]},
-        chessboard: {icon: 'mdi-checkerboard', color: 'grey', effect: [
+        chessboard: {icon: 'mdi-checkerboard', feature: ['general', 'horde'], color: 'grey', effect: [
             {name: 'hordeChessItems', type: 'unlock', value: true},
         ]},
-        iridiscentFlower: {icon: 'mdi-flower-pollen', color: 'pink', effect: [
+        iridiscentFlower: {icon: 'mdi-flower-pollen', feature: ['general', 'cryolab'], color: 'pink', effect: [
             {name: 'cryolabMaxFeatures', type: 'base', value: 1},
         ]},
     },
