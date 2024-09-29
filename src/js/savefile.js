@@ -26,8 +26,10 @@ import v1_4_1 from "./modules/migration/v1_4_1";
 import { simpleHash } from "./utils/random";
 import v1_5_0 from "./modules/migration/v1_5_0";
 import v1_5_1 from "./modules/migration/v1_5_1";
+import v1_5_3 from "./modules/migration/v1_5_3";
 
 const migrations = {
+    '1.5.3': v1_5_3,
     '1.5.1': v1_5_1,
     '1.5.0': v1_5_0,
     '1.4.1': v1_4_1,
@@ -66,7 +68,7 @@ function cleanStore() {
 }
 
 function migrate(file) {
-    for (const [version, migration] of Object.entries(migrations)) {
+    for (const [version, migration] of Object.entries(migrations).reverse()) {
         if (semverCompare(file.version, version) === -1) {
             file = migration(file);
         }
