@@ -45,9 +45,9 @@ export default function(save) {
     //Fix Merchant items
     if (save.event && save.event.shop_merchant.length > 0){
          save.event.shop_merchant.forEach(elem => {
-            if (elem.data !== null && elem.data.effect.length > 0) {
+            if (save.event.shop_merchant[elem].data !== null && save.event.shop_merchant[elem].data.effect.length > 0) {
                 elem.data.effect.forEach(effect => {
-                    effect.replace("currencyFarmFruitGain","currencyFarmBerryGain")
+                    save.event.shop_merchant[elem].data.effect[effect].replace("currencyFarmFruitGain","currencyFarmBerryGain")
                 });
             }
         });
@@ -56,7 +56,7 @@ export default function(save) {
     //some might have bought it
     if (save.treasure && save.treasure.newItem && save.treasure.newItem.effect.length > 0 ){
         save.treasure.newItem.effect.forEach(effect => {
-            effect.replace("currencyFarmFruitGain","currencyFarmBerryGain")
+            save.treasure.newItem.effect[effect].replace("currencyFarmFruitGain","currencyFarmBerryGain")
         });
     }    
 
