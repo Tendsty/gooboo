@@ -19,10 +19,10 @@ export default function(save) {
             }
         });
 
-        let minCurrentAmount
+        let minCurrentAmount = 0;
         ['knowledge', 'science', 'joy'].forEach(elem => {
             if (save.village.offering[elem] !== undefined) {
-                minCurrentAmount = save.village.offering[elem][1] * 20;
+                minCurrentAmount += save.village.offering[elem][1] * 20;
             }
         });
 
