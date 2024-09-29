@@ -5,17 +5,17 @@ export default function(save) {
         let currentAmount = save.stat.village_offeringMax[1];
         ['plantFiber', 'wood', 'stone'].forEach(elem => {
             if (save.village.offering[elem] !== undefined) {
-                currentAmount -= save.village.offering[elem].upgradeBought;
+                currentAmount -= save.village.offering[elem][1];
             }
         });
         ['coin', 'metal', 'water'].forEach(elem => {
             if (save.village.offering[elem] !== undefined) {
-                currentAmount -= save.village.offering[elem].upgradeBought * 3;
+                currentAmount -= save.village.offering[elem][1] * 3;
             }
         });
         ['glass', 'hardwood', 'gem'].forEach(elem => {
             if (save.village.offering[elem] !== undefined) {
-                currentAmount -= save.village.offering[elem].upgradeBought * 8;
+                currentAmount -= save.village.offering[elem][1] * 8;
             }
         });
         //No need to reapply to those 3
