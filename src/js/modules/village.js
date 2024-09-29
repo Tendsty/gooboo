@@ -391,7 +391,7 @@ export default {
             obj.offering = {};
             for (const [key, elem] of Object.entries(store.state.village.offering)) {
                 if (elem.offeringBought > 0 || elem.upgradeBought > 0) {
-                    obj.offering[key] = {offeringBought: elem.offeringBought, upgradeBought: elem.upgradeBought};
+                    obj.offering[key] = [elem.offeringBought, elem.upgradeBought];
                 }
             }
         }
@@ -445,8 +445,8 @@ export default {
         if (data.offering !== undefined) {
             for (const [key, elem] of Object.entries(data.offering)) {
                 if (store.state.village.offering[key] !== undefined) {
-                    store.commit('village/updateOfferingKey', {name: key, key: 'offeringBought', value: elem.offeringBought});
-                    store.commit('village/updateOfferingKey', {name: key, key: 'upgradeBought', value: elem.upgradeBought});
+                    store.commit('village/updateOfferingKey', {name: key, key: 'offeringBought', value: elem[0]});
+                    store.commit('village/updateOfferingKey', {name: key, key: 'upgradeBought', value: elem[1]});
                 }
             }
         }

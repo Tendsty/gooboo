@@ -39,7 +39,7 @@
       <span class="indigo--text" :class="`text--${ themeModifier }`" v-if="effect.int !== undefined">+{{ $formatNum(effect.int * healingMult * 100, true) }}% <v-icon size="12" :color="`indigo ${ themeModifier }`">mdi-lightbulb-on</v-icon></span>
       <span>)</span>
     </div>
-    <div v-if="critEffect > 0" class="ml-2 mt-n1">(can crit at {{ $formatNum(critEffect * 100) }}% efficiency)</div>
+    <div v-if="critEffect > 0" class="ml-2 mt-n1">({{ $vuetify.lang.t(`$vuetify.horde.active.canCrit`, $formatNum(critEffect * 100)) }})</div>
   </div>
 </template>
 

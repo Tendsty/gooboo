@@ -243,6 +243,8 @@ export default {
           elem.effect.forEach((buff, bindex) => {
             buffs.push({type: buff.type, name: buff.name, before: buff.value, after: after[key].effect[bindex].value, isBuff: true});
           });
+        } else if (elem.type === 'hordeActive' && elem.canCrit !== undefined) {
+          buffs.push({type: 'hordeActiveCrit', name: elem.name, before: elem.canCrit, after: after[key].canCrit, isBuff: false});
         }
         return {type: elem.type, name: elem.name, before: elem.value, after: after[key].value, isBuff: false};
       });

@@ -862,6 +862,11 @@ export default {
                     }
                 });
 
+                if (state.chosenActive === name) {
+                    commit('updateKey', {key: 'chosenActive', value: null});
+                }
+                commit('updateKey', {key: 'autocast', value: state.autocast.filter(el => el !== name)});
+
                 dispatch('updateMysticalShardCap');
                 dispatch('resetStats');
             }
@@ -1376,8 +1381,6 @@ export default {
                     }
                 }
             }
-            dispatch('applyClassEffects');
-            dispatch('applyClassLevelEffects');
 
             // Switch classes
             if (subfeature === 1) {
@@ -1391,6 +1394,9 @@ export default {
                     });
                 }
             }
+
+            dispatch('applyClassEffects');
+            dispatch('applyClassLevelEffects');
 
             dispatch('card/activateCards', 'horde', {root: true});
 
