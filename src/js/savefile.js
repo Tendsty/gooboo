@@ -26,17 +26,19 @@ import v1_4_1 from "./modules/migration/v1_4_1";
 import { simpleHash } from "./utils/random";
 import v1_5_0 from "./modules/migration/v1_5_0";
 import v1_5_1 from "./modules/migration/v1_5_1";
+import v1_5_3 from "./modules/migration/v1_5_3";
 
 const migrations = {
-    '1.5.1': v1_5_1,
-    '1.5.0': v1_5_0,
-    '1.4.1': v1_4_1,
-    '1.4.0': v1_4_0,
-    '1.3.5': v1_3_5,
-    '1.3.4': v1_3_4,
-    '1.3.0': v1_3_0,
+    '1.1.0': v1_1_0,
     '1.1.2': v1_1_2,
-    '1.1.0': v1_1_0
+    '1.3.0': v1_3_0,
+    '1.3.4': v1_3_4,
+    '1.3.5': v1_3_5,
+    '1.4.0': v1_4_0,
+    '1.4.1': v1_4_1,
+    '1.5.0': v1_5_0,
+    '1.5.1': v1_5_1,
+    '1.5.3': v1_5_3,
 };
 
 export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }
