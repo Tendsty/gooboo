@@ -18,7 +18,16 @@ export default function(save) {
                 currentAmount -= save.village.offering[elem][1] * 8;
             }
         });
-        //No need to reapply to those 3
+
+        let minCurrentAmount
+        ['knowledge', 'science', 'joy'].forEach(elem => {
+            if (save.village.offering[elem] !== undefined) {
+                minCurrentAmount = save.village.offering[elem][1] * 20;
+            }
+        });
+
+        currentAmount = Math.max(currentAmount, minCurrentAmount); //if stat have any problems
+        
         save.currency.village_offering = currentAmount;
         
         if (save.village.offering.knowledge !== undefined) {
