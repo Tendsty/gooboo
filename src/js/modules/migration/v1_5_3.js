@@ -43,7 +43,7 @@ export default function(save) {
     }
 
     //Fix Merchant items
-    if (save.event && save.event.shop_merchant){
+    if (save.event && save.event.shop_merchant.length > 1){
          save.event.shop_merchant.forEach(elem => {
             if (elem.data !== null && elem.data.effect.length > 1) {
                 elem.data.effect.forEach(effect => {
