@@ -18,8 +18,9 @@ export default function(save) {
                 currentAmount -= save.village.offering[elem].upgradeBought * 8;
             }
         });
+        //No need to reapply to those 3
         save.currency.village_offering = currentAmount;
-
+        
         if (save.village.offering.knowledge !== undefined) {
             save.village.offering.knowledge[1] = 0;
         }
