@@ -2,7 +2,7 @@ export default function(save) {
   
     // Fix offerings
     if (save.village && save.village.offering && save.currency.village_offering === undefined) {
-        let currentAmount = save.stat.village_offeringMax[1];
+        let currentAmount = save.stat.village_offering[1];
         ['plantFiber', 'wood', 'stone'].forEach(elem => {
             if (save.village.offering[elem] !== undefined) {
                 currentAmount -= save.village.offering[elem][1];
