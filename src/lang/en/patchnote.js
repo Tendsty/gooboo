@@ -482,7 +482,8 @@ export default {
     395: 'Converter capacity per level of "Trash can"',
 
     // v1.5.3
-    396: 'Fixed a bug that made the offerings unusable when updating directly from a version prior v1.5.0 to v1.5.1 or later',
+    396: 'Fixed a bug that made the offerings unusable',
+    397: 'The merchant tried to sell you invisible items, these are now visible again',
   },
   v: {
     1: {
