@@ -480,6 +480,9 @@ export default {
 
     // v1.5.2
     395: 'Konverter-Kapazität pro "Mülleimer"-Stufe',
+
+    // v1.5.3
+    396: 'Ein Fehler wurde behoben, der die Opfergaben unbrauchbar machte, wenn man direkt von einer Version vor v1.5.0 auf v1.5.1 oder später aktualisierte',
   },
   v: {
     1: {
