@@ -6,6 +6,12 @@ export default {
                 type: 'bugfix',
                 text: '396'
             },
-        ]
+        ],
+        event: [
+            {
+                type: 'bugfix',
+                text: '397'
+            },
+        ],
     }
 }
