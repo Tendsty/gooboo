@@ -258,7 +258,7 @@ export default {
     191: 'Knöpfe zum Vor- / Rückwärtsgehen von 10 Zonen wurden hinzugefügt',
     192: 'Die Notizen-UI wurde in der Desktopansicht verändert - Notizen werden jetzt durch Herüberfahren mit der Maus oder Klick gelesen',
     193: 'Eine neue Notizart wurde hinzugefügt, welche nicht mit Characteren oder Geschichte vom Spiel verbunden sind',
-    194: 'Relikte mit Bonuswerten zeigen jetzt die Funktion an, von der der Wert stammt',
+    194: ' mit Bonuswerten zeigen jetzt die Funktion an, von der der Wert stammt',
     195: 'Opfergaben haben jetzt einen Indikator mit Tooltip, wenn sie im aktuellen Durchlauf noch nicht freigeschaltet sind',
     196: 'Die Offline-Zusammenfassung wird jetzt immer bei einer neuen Version angezeigt',
     197: 'Buch-Verbesserungen zeigen jetzt die verbundene Verbesserung an',
@@ -482,7 +482,8 @@ export default {
     395: 'Konverter-Kapazität pro "Mülleimer"-Stufe',
 
     // v1.5.3
-    396: 'Ein Fehler wurde behoben, der die Opfergaben unbrauchbar machte, wenn man direkt von einer Version vor v1.5.0 auf v1.5.1 oder später aktualisierte',
+    396: 'Ein Fehler wurde behoben, der die Opfergaben unbrauchbar machte',
+    397: 'Der Händler hat euch unsichtbare Items andrehen wollen, diese sind jetzt wieder sichtbar',
   },
   v: {
     1: {
