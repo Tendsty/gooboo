@@ -480,6 +480,9 @@ export default {
 
     // v1.5.2
     395: 'Converter capacity per level of "Trash can"',
+
+    // v1.5.3
+    396: 'Fixed a bug that made the offerings unusable when updating directly from a version prior v1.5.0 to v1.5.1 or later',
   },
   v: {
     1: {
