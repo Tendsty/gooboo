@@ -1,6 +1,9 @@
 export default {
   cardPack: 'Kartenpaket',
   cardsSuffix: '-Karten',
+  cardPower: 'Kartenkraft',
+  cardPowerValue: '{0} Kartenkraft',
+  cardPowerDescription: 'Die Kartenkraft aller aktiven Karten wird addiert und erhöht grundlegende Werte der Funktion',
   notFound: 'Keine Karten gefunden',
   fullCollectionReward: 'Belohnung für volle Sammlung',
   canFind: 'Diese Karte kann in folgenden Paketen gefunden werden',
@@ -150,7 +153,7 @@ export default {
     'FA-0008': 'Lebensmittel-Transport',
     'FA-0009': 'Warmes Gewächshaus',
     'FA-0010': 'Fruchtsmoothie',
-    'FA-0011': 'Backereiverkauf',
+    'FA-0011': 'Bäckereiverkauf',
     'FA-0012': 'Eiswagen',
     'FA-0013': 'Fastfood-Bestellung',
     'FA-0014': 'Festmahl',

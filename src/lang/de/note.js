@@ -136,7 +136,7 @@ export default {
     farm_14: 'Kleine Glückskäfer. Stinken auch nicht. Wirken gut.',
     farm_15: 'Bauernhof ist friedlich. Fast Gemetzel bei der Horde vergessen.',
     farm_16: 'Jäger des Gartens. Hält Käfer unter Kontrolle.',
-    farm_17: 'Windrad interessant. Setze einzigartige Pflanzen daneben. 8 Plätze um Windrad. Finde mehr Gold. Auf dem gesamten Feld.',
+    farm_17: 'Windrad interessant. Setze einzigartige Pflanzen daneben. 8 Plätze um Windrad. Finde mehr seltenen Ertrag. Auf dem gesamten Feld.',
     farm_18: 'Mehr Dünger. Mehr Arten Gold und Edelsteine auszugeben.',
     farm_19: 'Kleine Bienen. Immer am arbeiten. Und zahlreich.',
     farm_20: 'Flagge kompliziert. Verstärkt bestimmte Pflanzenarten. Art hängt von der Position ab. Besser Anleitung lesen.',

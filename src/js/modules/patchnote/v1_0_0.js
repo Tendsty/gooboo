@@ -91,5 +91,11 @@ export default {
                 text: 'addedFeature',
             }
         ],
+        mining_1: [
+            {
+                type: 'new',
+                text: 'addedSubfeature'
+            }
+        ],
     }
 }

@@ -1,10 +1,10 @@
 <style scoped>
 .render-currency-small {
-  width: 200px;
+  width: 210px;
   font-size: 16px;
 }
 .render-currency-large {
-  width: 360px;
+  width: 380px;
   font-size: 16px;
 }
 .currency-border {
@@ -114,7 +114,7 @@
         </div>
       </div>
     </template>
-    <currency-tooltip :name="name" :gain-base="gainBase" :base-array="baseArray" :mult-array="multArray">
+    <currency-tooltip :name="name" :gain-base="gainBase" :base-array="baseArray" :mult-array="multArray" :bonus-array="bonusArray">
       <slot></slot>
     </currency-tooltip>
   </gb-tooltip>
@@ -176,6 +176,11 @@ export default {
       required: false,
       default: (() => [])
     },
+    bonusArray: {
+      type: Array,
+      required: false,
+      default: (() => [])
+    },
     hideLabels: {
       type: Boolean,
       required: false,
@@ -193,7 +198,9 @@ export default {
       return this.$store.state.currency[this.name];
     },
     icon() {
-      if (this.$store.state.nightHunt.changedCurrency[this.name] !== undefined) {
+      if (this.$store.state.nightHunt.changedCurrency[this.name] === 'sack') {
+        return 'mdi-sack';
+      } else if (this.$store.state.nightHunt.changedCurrency[this.name] !== undefined) {
         return this.$store.state.currency['event_' + this.$store.state.nightHunt.changedCurrency[this.name]].icon;
       }
       return this.currency.icon;

@@ -10,18 +10,35 @@ export default {
         job: {},
         offering: {},
         policy: {},
+        crafting: {},
         explorerProgress: 0,
         offeringGen: 0
     },
     getters: {
         employed: (state) => {
             let worker = 0;
-
             for (const [, elem] of Object.entries(state.job)) {
                 worker += elem.amount * elem.needed;
             }
-
             return worker;
+        },
+        artisansActive: (state) => {
+            let active = 0;
+            for (const [, elem] of Object.entries(state.crafting)) {
+                if (elem.isCrafting) {
+                    active++;
+                }
+            }
+            return active;
+        },
+        countersActive: (state) => {
+            let active = 0;
+            for (const [, elem] of Object.entries(state.crafting)) {
+                if (elem.isSelling) {
+                    active++;
+                }
+            }
+            return active;
         },
         unemployed: (state, getters, rootState, rootGetters) => {
             return rootGetters['mult/get']('villageWorker') - getters.employed;
@@ -52,6 +69,10 @@ export default {
         },
         offeringPerSecond: (state, getters, rootState) => {
             return rootState.stat.village_offeringAmount.value * 0.01 / SECONDS_PER_HOUR;
+        },
+        sharesGain: (state, getters, rootState, rootGetters) => {
+            const val = rootState.currency.village_copperCoin.value / 1000;
+            return val >= 10 ? rootGetters['mult/get']('currencyVillageSharesGain', val) : 0;
         }
     },
     mutations: {
@@ -82,8 +103,34 @@ export default {
                 effect: o.effect ?? []
             });
         },
+        initCrafting(state, o) {
+            Vue.set(state.crafting, o.name, {
+                icon: o.icon ?? 'mdi-square',
+                color: o.color ?? 'grey',
+                price: o.price ?? {},
+                baseValue: o.value ?? 10,
+                value: o.value ?? 10,
+                baseTimeNeeded: o.timeNeeded ?? 60,
+                timeNeeded: o.timeNeeded ?? 60,
+                milestone: o.milestone ?? {},
+                prio: o.prio ?? 0,
+                isSpecial: o.isSpecial ?? false,
+                effect: o.effect ?? [],
+                unlocked: false,
+                isCrafting: false,
+                isSelling: false,
+                sellPrice: o.value ?? 10,
+                cacheSellChance: 0,
+                progress: 0,
+                owned: 0,
+                crafted: 0
+            });
+        },
         updateKey(state, o) {
             Vue.set(state, o.key, o.value);
+        },
+        updateSubkey(state, o) {
+            Vue.set(state[o.key][o.name], o.subkey, o.value);
         },
         updateJobKey(state, o) {
             Vue.set(state.job[o.name], o.key, o.value);
@@ -106,6 +153,18 @@ export default {
             }
             for (const [key] of Object.entries(state.policy)) {
                 commit('updatePolicyKey', {name: key, key: 'value', value: 0});
+            }
+            for (const [key, elem] of Object.entries(state.crafting)) {
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'value', value: elem.baseValue});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'timeNeeded', value: elem.baseTimeNeeded});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'unlocked', value: false});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'isCrafting', value: false});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'isSelling', value: false});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'sellPrice', value: elem.baseValue});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'cacheSellChance', value: 0});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'progress', value: 0});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'owned', value: 0});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'crafted', value: 0});
             }
             commit('updateKey', {key: 'explorerProgress', value: 0});
             commit('updateKey', {key: 'offeringGen', value: 0});
@@ -141,11 +200,12 @@ export default {
             // Update mults
             dispatch('applyJobEffect', o.name);
         },
-        prestige({ state, rootState, commit, dispatch }, subfeature) {
-            const prestigeGain = rootState.currency.village_faith.value;
-            commit('stat/increaseTo', {feature: 'village', name: 'bestPrestige', value: prestigeGain}, {root: true});
+        prestige({ state, getters, rootState, commit, dispatch }, subfeature) {
+            const currentSubfeature = rootState.system.features.village.currentSubfeature;
+            const prestigeGain = [rootState.currency.village_faith.value, getters.sharesGain][currentSubfeature];
+            commit('stat/increaseTo', {feature: 'village', name: 'bestPrestige' + currentSubfeature, value: prestigeGain}, {root: true});
             commit('stat/add', {feature: 'village', name: 'prestigeCount', value: 1}, {root: true});
-            dispatch('currency/gain', {feature: 'village', name: 'blessing', amount: prestigeGain}, {root: true});
+            dispatch('currency/gain', {feature: 'village', name: ['blessing', 'shares'][currentSubfeature], amount: prestigeGain}, {root: true});
 
             // Unassign all workers
             for (const [key] of Object.entries(state.job)) {
@@ -162,6 +222,17 @@ export default {
                 if (elem.value !== 0) {
                     commit('updatePolicyKey', {name: key, key: 'value', value: 0});
                     dispatch('applyPolicyEffect', key);
+                }
+            }
+
+            // Reset all crafts
+            for (const [key, elem] of Object.entries(state.crafting)) {
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'isCrafting', value: false});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'isSelling', value: false});
+                commit('updateSubkey', {key: 'crafting', name: key, subkey: 'cacheSellChance', value: 0});
+                if (!elem.isSpecial) {
+                    commit('updateSubkey', {key: 'crafting', name: key, subkey: 'progress', value: 0});
+                    commit('updateSubkey', {key: 'crafting', name: key, subkey: 'owned', value: 0});
                 }
             }
 
@@ -296,6 +367,50 @@ export default {
             const weights = getters.lootWeights;
             for (let i = 0; i < amount; i++) {
                 dispatch('currency/gain', {feature: 'village', name: 'loot' + weightSelect(weights), amount: 1}, {root: true});
+            }
+        },
+        applyMilestoneEffects({ state, commit, dispatch }, name) {
+            const craft = state.crafting[name];
+            commit('updateSubkey', {key: 'crafting', name, subkey: 'value', value: craft.baseValue});
+            commit('updateSubkey', {key: 'crafting', name, subkey: 'timeNeeded', value: craft.baseTimeNeeded});
+            for (const [crafts, reward] of Object.entries(craft.milestone)) {
+                if (craft.crafted >= parseInt(crafts)) {
+                    if (reward.type === 'changeStat') {
+                        commit('updateSubkey', {key: 'crafting', name, subkey: reward.name, value: reward.value});
+                    } else {
+                        dispatch('system/applyEffect', {type: reward.type, name: reward.name, multKey: `villageMilestone_${ name }_${ crafts }`, value: reward.value, trigger: true}, {root: true});
+                    }
+                }
+            }
+            commit('updateSubkey', {key: 'crafting', name, subkey: 'cacheSellChance', value: 0.01 * Math.pow(craft.value / craft.sellPrice, 2)});
+        },
+        applyMilestoneGlobalLevel({ state, dispatch }) {
+            let totalMilestones = 0;
+            for (const [, elem] of Object.entries(state.crafting)) {
+                for (const [crafts] of Object.entries(elem.milestone)) {
+                    if (elem.crafted >= parseInt(crafts)) {
+                        totalMilestones++;
+                    }
+                }
+            }
+            dispatch('meta/globalLevelPart', {key: 'village_1', amount: totalMilestones}, {root: true});
+        },
+        applySpecialCraftEffects({ state, dispatch }, name) {
+            const craft = state.crafting[name];
+            craft.effect.forEach(reward => {
+                dispatch('system/applyEffect', {type: reward.type, name: reward.name, multKey: `villageSpecialCraft_${ name }`, value: reward.value(craft.owned), trigger: true}, {root: true});
+            });
+        },
+        openIngredientBox({ rootGetters, commit, dispatch }) {
+            if (rootGetters['consumable/canAfford']('village_ingredientBox')) {
+                let rngGen = rootGetters['system/getRng']('village_ingredientBox');
+                const ingredients = ['acidVial', 'snowflake', 'chiliBundle', 'gears'];
+                const weights = [20, 14, 11, 9].slice(0, rootGetters['mult/get']('villageIngredientCount'));
+                for (let i = 0, n = rootGetters['mult/get']('villageIngredientBoxAmount'); i < n; i++) {
+                    dispatch('currency/gain', {feature: 'village', name: ingredients[weightSelect(weights, rngGen())], amount: 1}, {root: true});
+                }
+                commit('system/nextRng', {name: 'village_ingredientBox', amount: 1}, {root: true});
+                dispatch('consumable/use', 'village_ingredientBox', {root: true});
             }
         }
     }

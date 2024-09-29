@@ -1,5 +1,6 @@
 import store from "../../../store";
 import { buildNum } from "../../utils/format";
+import { getSequence } from "../../utils/math";
 
 export default {
     arch: {type: 'prestige', price(lvl) {
@@ -171,7 +172,7 @@ export default {
     }, price(lvl) {
         return {village_blessing: Math.pow(1.65, lvl) * buildNum(800, 'M')};
     }, effect: [
-        {name: 'villageLootGain', type: 'mult', value: lvl => Math.pow(1.15, lvl) * (lvl * 0.15 + 1)}
+        {name: 'villageLootGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.1 + 1)}
     ]},
     holyChisel: {type: 'prestige', requirement() {
         return store.state.unlock.villageBuildings7.see;
@@ -179,5 +180,102 @@ export default {
         return {village_blessing: Math.pow(0.05 * lvl + 1.5, lvl) * buildNum(2.5, 'B')};
     }, effect: [
         {name: 'villageLootQuality', type: 'base', value: lvl => lvl * 2}
+    ]},
+
+    hireArtisans: {type: 'prestige', requirement() {
+        return store.state.unlock.villageCraftingSubfeature.see;
+    }, price(lvl) {
+        return {village_shares: Math.pow(10, getSequence(1, lvl)) * 10};
+    }, effect: [
+        {name: 'villageArtisan', type: 'base', value: lvl => lvl}
+    ]},
+    hireWorkers: {type: 'prestige', requirement() {
+        return store.state.unlock.villageCraftingSubfeature.see;
+    }, price(lvl) {
+        return {village_shares: Math.pow(lvl * 0.02 + 1.65, lvl) * 5};
+    }, effect: [
+        {name: 'villageMaterialGain', type: 'mult', value: lvl => Math.pow(1.05, lvl) * (lvl * 0.05 + 1)}
+    ]},
+    hireAccountants: {type: 'prestige', requirement() {
+        return store.state.unlock.villageCraftingSubfeature.see;
+    }, price(lvl) {
+        return {village_shares: Math.pow(1.9, lvl) * 8};
+    }, effect: [
+        {name: 'currencyVillageCopperCoinCap', type: 'mult', value: lvl => Math.pow(1.75, lvl)}
+    ]},
+    recipeBook: {type: 'prestige', cap: 6, requirement() {
+        return store.state.unlock.villageCraftingSubfeature.see;
+    }, price(lvl) {
+        return {village_shares: Math.pow(2.5, lvl) * 60};
+    }, effect: [
+        {name: 'arrows', type: 'villageCraft', value: lvl => lvl >= 1},
+        {name: 'bowl', type: 'villageCraft', value: lvl => lvl >= 2},
+        {name: 'smallChest', type: 'villageCraft', value: lvl => lvl >= 3},
+        {name: 'chain', type: 'villageCraft', value: lvl => lvl >= 4},
+        {name: 'spear', type: 'villageCraft', value: lvl => lvl >= 5},
+        {name: 'goldenRing', type: 'villageCraft', value: lvl => lvl >= 6},
+    ]},
+    adCampaign: {type: 'prestige', requirement() {
+        return store.state.unlock.villageCraftingSubfeature.see;
+    }, price(lvl) {
+        return {village_shares: Math.pow(lvl * 0.05 + 1.9, lvl) * 80};
+    }, effect: [
+        {name: 'currencyVillageCopperCoinGain', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.2 + 1)}
+    ]},
+    hireExplorers: {type: 'prestige', cap: 4, requirement() {
+        return store.state.unlock.villageCraftingSubfeature.see;
+    }, price(lvl) {
+        return {village_shares: Math.pow(15, getSequence(1, lvl)) * 575};
+    }, effect: [
+        {name: 'villageSpecialIngredient', type: 'unlock', value: lvl => lvl >= 1},
+        {name: 'villageIngredientCount', type: 'base', value: lvl => lvl > 1 ? (lvl - 1) : null},
+        {name: 'villageIngredientBoxAmount', type: 'base', value: lvl => lvl > 1 ? (4 * (lvl - 1)) : null},
+        {name: 'poisonedArrows', type: 'villageCraft', value: lvl => lvl >= 1},
+        {name: 'frostSpear', type: 'villageCraft', value: lvl => lvl >= 2},
+        {name: 'spicySoup', type: 'villageCraft', value: lvl => lvl >= 3},
+        {name: 'stopwatch', type: 'villageCraft', value: lvl => lvl >= 4},
+        {name: 'villageIngredientBoxGet', type: 'text', value: lvl => lvl},
+    ], onBuy() {
+        store.dispatch('consumable/gain', {name: 'village_ingredientBox', amount: 3});
+    }},
+    hireGardeners: {type: 'prestige', requirement() {
+        return store.state.upgrade.item.village_woodBin.highestLevel >= 1;
+    }, price(lvl) {
+        return {village_shares: Math.pow(1.75, lvl) * 140};
+    }, effect: [
+        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
+    ]},
+    hireMiners: {type: 'prestige', requirement() {
+        return store.state.upgrade.item.village_metalBin.highestLevel >= 1;
+    }, price(lvl) {
+        return {village_shares: Math.pow(1.75, lvl) * 220};
+    }, effect: [
+        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageMetalGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageStoneCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
+    ]},
+    hireBartenders: {type: 'prestige', requirement() {
+        return store.state.upgrade.item.village_glassBin.highestLevel >= 1;
+    }, price(lvl) {
+        return {village_shares: Math.pow(1.75, lvl) * 335};
+    }, effect: [
+        {name: 'currencyVillageWaterGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageGlassGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageWaterCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageGlassCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
+    ]},
+    hireExperts: {type: 'prestige', requirement() {
+        return store.state.upgrade.item.village_gemBin.highestLevel >= 1;
+    }, price(lvl) {
+        return {village_shares: Math.pow(1.75, lvl) * 520};
+    }, effect: [
+        {name: 'currencyVillageHardwoodGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageGemGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyVillageHardwoodCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageGemCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
     ]},
 }

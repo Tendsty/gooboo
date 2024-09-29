@@ -16,8 +16,11 @@
         <v-icon class="ma-1" v-bind="attrs" v-on="on">{{ item.icon }}</v-icon>
       </template>
       <div class="mt-0" v-for="(elem, key) in stats" :key="key">
-        <mult-stat :mult="elem.name" :type="elem.type" :value="elem.value"></mult-stat>
-        <span>&nbsp;<mult-name :name="elem.name"></mult-name></span>
+        <span v-if="elem.type === 'tag'">{{ $vuetify.lang.t(`$vuetify.tag.${ elem.name }`, ...elem.value) }}</span>
+        <template v-else>
+          <mult-stat :mult="elem.name" :type="elem.type" :value="elem.value"></mult-stat>
+          <span>&nbsp;<mult-name :name="elem.name"></mult-name></span>
+        </template>
       </div>
     </gb-tooltip>
     <active class="ma-1" :pretend="isPretend" :name="name"></active>
@@ -86,7 +89,10 @@
     </v-card-subtitle>
     <v-card-text class="px-4 py-0">
       <div v-for="(elem, key) in stats" :key="key">
-        <mult-stat :mult="elem.name" :type="elem.type" :value="elem.value"></mult-stat>&nbsp;<mult-name :name="elem.name"></mult-name>
+        <span v-if="elem.type === 'tag'">{{ $vuetify.lang.t(`$vuetify.tag.${ elem.name }`, ...elem.value) }}</span>
+        <template v-else>
+          <mult-stat :mult="elem.name" :type="elem.type" :value="elem.value"></mult-stat>&nbsp;<mult-name :name="elem.name"></mult-name>
+        </template>
       </div>
     </v-card-text>
     <v-card-actions>
@@ -100,7 +106,7 @@
             </v-btn>
           </div>
         </template>
-        <display-row class="mt-0" v-for="(item, key) in statDiff" :key="key" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
+        <display-row class="mt-0" v-for="(item, key) in statDiff" :key="key" :name="item.name" :type="item.type" :before="item.before" :after="item.after" :is-buff="item.isBuff"></display-row>
         <price-tag currency="horde_monsterPart" :amount="upgradePrice"></price-tag>
       </gb-tooltip>
       <v-chip key="item-max-full" disabled label small class="ml-2 px-2" style="text-transform: uppercase;" v-else-if="isMaxed">{{ $vuetify.lang.t('$vuetify.gooboo.maxed') }}</v-chip>
@@ -180,11 +186,36 @@ export default {
               }
             } else if (elem.type === 'mult' && elem.value > 0) {
               value = Math.pow(value, masteryMult);
+            } else if (elem.type === 'tag') {
+              value = value.map(el => el * masteryMult);
             }
           }
           return {...elem, value};
         });
       }
+      obj = obj.map(elem => {
+        if (elem.type === 'tag') {
+          const types = this.$store.state.tag[elem.name].params;
+          return {...elem, value: elem.value.map((el, i) => {
+            switch (types[i]) {
+              case 'number':
+                return this.$formatNum(el, true);
+              case 'time':
+                return this.$formatTime(el);
+              case 'percent':
+                return this.$formatNum(el * 100, true) + '%';
+              case 'perSecond':
+                return this.$formatNum(el, true) + '/s';
+              case 'mult':
+                return this.$formatNum(el, true) + 'x';
+              default:
+                return el;
+            }
+          })};
+        } else {
+          return elem;
+        }
+      });
       return obj;
     },
     itemsFull() {
@@ -204,11 +235,20 @@ export default {
     },
     statDiff() {
       let after = [...this.item.stats(this.item.level + 1), ...this.item.active(this.item.level + 1), {value: this.item.cooldown(this.item.level + 1)}];
-      return [...this.item.stats(this.item.level), ...this.item.active(this.item.level).map(elem => {
-        return {...elem, type: 'hordeActive', name: elem.type};
+      let buffs = [];
+      const stats = [...this.item.stats(this.item.level), ...this.item.active(this.item.level).map(elem => {
+        return {...elem, type: elem.type === 'buff' ? 'hordeBuff' : 'hordeActive', name: elem.type};
       }), {type: 'hordeCooldown', name: 'cooldown', value: this.item.cooldown(this.item.level)}].map((elem, key) => {
-        return {type: elem.type, name: elem.name, before: elem.value, after: after[key].value}
-      }).filter(elem => elem.before !== elem.after);
+        if (elem.type === 'hordeBuff') {
+          elem.effect.forEach((buff, bindex) => {
+            buffs.push({type: buff.type, name: buff.name, before: buff.value, after: after[key].effect[bindex].value, isBuff: true});
+          });
+        } else if (elem.type === 'hordeActive' && elem.canCrit !== undefined) {
+          buffs.push({type: 'hordeActiveCrit', name: elem.name, before: elem.canCrit, after: after[key].canCrit, isBuff: false});
+        }
+        return {type: elem.type, name: elem.name, before: elem.value, after: after[key].value, isBuff: false};
+      });
+      return [...stats, ...buffs].filter(elem => elem.before !== elem.after);
     },
     masteryZoneNeeded() {
       return Math.max(75, this.item.findZone + 25);
@@ -218,7 +258,7 @@ export default {
     },
     masteryPercent() {
       const before = this.item.masteryLevel > 0 ? this.$store.getters['horde/masteryRequired'](this.name, this.item.masteryLevel - 1) : 0;
-      return 100 * (this.item.masteryPoint - before) / this.masteryNeeded;
+      return 100 * (this.item.masteryPoint - before) / (this.masteryNeeded - before);
     },
     canUseActive() {
       return this.item.equipped && !this.item.passive;
@@ -242,7 +282,7 @@ export default {
       return this.$store.getters['mult/get']('hordeItemMasteryGain', this.masteryGainBase);
     },
     masteryGainMiniboss() {
-      return this.masteryGainBase * HORDE_MASTERY_MINIBOSS_MULT;
+      return this.masteryGainBoss * HORDE_MASTERY_MINIBOSS_MULT;
     },
     masteryMinibossMult() {
       return HORDE_MASTERY_MINIBOSS_MULT;

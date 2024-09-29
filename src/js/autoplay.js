@@ -470,7 +470,7 @@ function autoplayTicks(newTime, oldTime) {
 
     if (store.state.unlock.hordeFeature.use) {
         let hasMonsterPartGoal = false;
-        const monsterPartFarmZone = Math.max(store.state.stat.horde_maxZone.value - 3, 10);
+        const monsterPartFarmZone = Math.max(store.state.stat.horde_maxZone.value - 6, 10);
         if (store.state.stat.horde_maxZone.value >= 13) {
             const maxMonsterPartGoal = Math.min(
                 store.state.currency.horde_monsterPart.cap, // Requirement cannot exceed resource cap
@@ -603,7 +603,7 @@ function autoplayTicks(newTime, oldTime) {
             // Determine needed resource based on which currency has the lowest amount
             let chosenType = 'vegetable';
             let chosenAmount = store.getters['currency/value']('farm_vegetable');
-            ['fruit', 'grain', 'flower'].forEach((elem, index) => {
+            ['berry', 'grain', 'flower'].forEach((elem, index) => {
                 const seedValue = store.getters['currency/value']('farm_' + elem);
                 if (store.state.upgrade.item.farm_seedBox.level > index && seedValue < chosenAmount) {
                     chosenType = elem;

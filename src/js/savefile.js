@@ -23,8 +23,13 @@ import v1_3_4 from "./modules/migration/v1_3_4";
 import v1_3_5 from "./modules/migration/v1_3_5";
 import v1_4_0 from "./modules/migration/v1_4_0";
 import v1_4_1 from "./modules/migration/v1_4_1";
+import { simpleHash } from "./utils/random";
+import v1_5_0 from "./modules/migration/v1_5_0";
+import v1_5_1 from "./modules/migration/v1_5_1";
 
 const migrations = {
+    '1.5.1': v1_5_1,
+    '1.5.0': v1_5_0,
     '1.4.1': v1_4_1,
     '1.4.0': v1_4_0,
     '1.3.5': v1_3_5,
@@ -142,6 +147,32 @@ function decodeFile(file, showErrors = true) {
         return null;
     }
 
+    // Check if loaded from different testing build
+    if (APP_TESTING && file.testing && file.version !== store.state.system.version) {
+        if (showErrors) {
+            store.commit('system/addNotification', {color: 'error', timeout: -1, message: {
+                type: 'import',
+                error: 'testingVersion'
+            }});
+        }
+        return null;
+    }
+
+    // Check for invalid checksum
+    // eslint-disable-next-line no-unused-vars
+    const {checksum: _, ...rawFile} = file;
+    if (semverCompare(file.version, '1.5.0') === 1 && simpleHash(JSON.stringify(rawFile)) !== file.checksum) {
+        if (showErrors) {
+            store.commit('system/addNotification', {color: APP_TESTING ? 'warning' : 'error', timeout: -1, message: {
+                type: 'import',
+                error: 'checksum'
+            }});
+        }
+        if (!APP_TESTING) {
+            return null;
+        }
+    }
+
     return file;
 }
 
@@ -162,11 +193,15 @@ function loadFile(file) {
         return;
     }
 
-    ['timestamp', 'currentDay', 'theme', 'backupTimer', 'playerId', 'noteHint'].forEach(elem => {
+    ['timestamp', 'currentDay', 'lastPlayedDays', 'theme', 'backupTimer', 'playerId', 'noteHint', 'cheaterSelfMark', 'cheatDetected'].forEach(elem => {
         if (save[elem]) {
             store.commit('system/updateKey', {key: elem, value: save[elem]});
         }
     });
+
+    if (save.playerName) {
+        store.commit('system/updateKey', {key: 'playerName', value: decodeURIComponent(save.playerName)})
+    }
 
     // Generic systems
     if (save.themesOwned) {
@@ -188,6 +223,11 @@ function loadFile(file) {
             store.commit('system/updateSubfeature', {key, value: elem});
         }
     }
+    if (save.nextSubfeature) {
+        for (const [key, elem] of Object.entries(save.nextSubfeature)) {
+            store.commit('system/updateNextSubfeature', {key, value: elem});
+        }
+    }
     if (save.note) {
         save.note.forEach(name => {
             Vue.set(store.state.note[name], 'found', true);
@@ -198,6 +238,33 @@ function loadFile(file) {
             if (store.state.unlock[key] !== undefined) {
                 Vue.set(store.state.unlock[key], 'see', true);
                 Vue.set(store.state.unlock[key], 'use', !!elem);
+            }
+
+            // Detect unobtainable unlocks
+            const illegalUnlocks = {
+                debugFeature: 'meta',
+                relicMuseum: 'relic',
+                treasureSpecialEffect: 'treasure',
+                treasureDual: 'treasure',
+                cardShiny: 'card',
+                generalOrladeeSubfeature: 'general',
+                generalOppenschroeSubfeature: 'general',
+                generalBelluxSubfeature: 'general',
+                generalOnocluaSubfeature: 'general',
+                generalOmnisolixSubfeature: 'general',
+                hordeChessItems: 'horde',
+                hordeClassAssassin: 'horde',
+                hordeClassShaman: 'horde',
+                hordeClassUndead: 'horde',
+                hordeClassCultist: 'horde',
+                hordeClassScholar: 'horde',
+            };
+            if (Object.keys(illegalUnlocks).includes(key)) {
+                store.commit('system/registerCheat', {
+                    feature: illegalUnlocks[key] ?? 'meta',
+                    name: 'illegalunlock:' + key,
+                    severity: 200
+                });
             }
         }
     }
@@ -250,8 +317,8 @@ function loadFile(file) {
     }
     if (save.relic) {
         save.relic.forEach(elem => {
-            if (store.state.relic[elem]) {
-                Vue.set(store.state.relic[elem], 'found', true);
+            if (store.state.relic.item[elem]) {
+                Vue.set(store.state.relic.item[elem], 'found', true);
                 store.dispatch('relic/apply', {name: elem});
             }
         });
@@ -332,9 +399,18 @@ function loadFile(file) {
 
     // Update currency mults
     if (save.currency) {
-        for (const [key] of Object.entries(save.currency)) {
+        for (const [key, elem] of Object.entries(save.currency)) {
             if (store.state.currency[key] !== undefined) {
                 store.dispatch('currency/updateCurrencyMult', key);
+
+                // Detect some cheats
+                if (save.stat[key] && elem > (save.stat[key][1] * 1.5)) {
+                    store.commit('system/registerCheat', {
+                        feature: store.state.currency[key].feature,
+                        name: 'currencyoverstat:' + key.replace('_', '').toLowerCase(),
+                        severity: 200
+                    });
+                }
             }
         }
     }
@@ -362,14 +438,18 @@ function getSavefile() {
         version: store.state.system.version,
         timestamp: store.state.system.timestamp,
         currentDay: store.state.system.currentDay,
+        lastPlayedDays: store.state.system.lastPlayedDays,
         theme: store.state.system.theme,
         backupTimer: store.state.system.backupTimer,
         playerId: store.state.system.playerId,
         themesOwned: [],
         completedTutorial: [],
+        cheaterSelfMark: store.state.system.cheaterSelfMark,
+        cheatDetected: store.state.system.cheatDetected,
 
         // Generic systems
         subfeature: {},
+        nextSubfeature: {},
         unlock: {},
         currency: {},
         stat: {},
@@ -384,6 +464,10 @@ function getSavefile() {
         rng: {},
         cachePage: {}
     };
+
+    if (store.state.system.playerName !== null) {
+        save.playerName = encodeURIComponent(store.state.system.playerName);
+    }
 
     if (APP_TESTING) {
         save.testing = true;
@@ -403,6 +487,9 @@ function getSavefile() {
     for (const [key, elem] of Object.entries(store.state.system.features)) {
         if (elem.currentSubfeature > 0) {
             save.subfeature[key] = elem.currentSubfeature;
+        }
+        if (elem.nextSubfeature > 0) {
+            save.nextSubfeature[key] = elem.nextSubfeature;
         }
     }
     for (const [key, elem] of Object.entries(store.state.unlock)) {
@@ -432,7 +519,7 @@ function getSavefile() {
             save.upgradeQueue[key] = [...elem];
         }
     }
-    for (const [key, elem] of Object.entries(store.state.relic)) {
+    for (const [key, elem] of Object.entries(store.state.relic.item)) {
         if (elem.found) {
             save.relic.push(key);
         }
@@ -498,6 +585,8 @@ function getSavefile() {
     if (store.state.system.timeMult > 1) {
         save.timeMult = store.state.system.timeMult;
     }
+
+    save.checksum = simpleHash(JSON.stringify(save));
 
     return encodeFile(save);
 }

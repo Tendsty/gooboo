@@ -1,5 +1,5 @@
-import Vue from "vue"
-import { weightSelect } from "../js/utils/random";
+import Vue from "vue";
+import { chance, weightSelect } from "../js/utils/random";
 
 export default {
     namespaced: true,
@@ -21,8 +21,10 @@ export default {
                 id: o.id,
                 group: o.group ?? null,
                 instant: o.instant ?? false,
-                reward: o.reward,
+                power: o.power ?? 0,
+                reward: o.reward ?? [],
                 amount: 0,
+                foundShiny: false,
                 collection: o.collection,
                 color: o.color ?? 'red',
                 icons: o.icons ?? []
@@ -34,7 +36,8 @@ export default {
                 name: o.name,
                 reward: o.reward,
                 cards: [],
-                cacheCards: 0
+                cacheCards: 0,
+                cacheShinyCards: 0
             });
         },
         initPack(state, o) {
@@ -46,11 +49,15 @@ export default {
                 cacheContent.push(key);
             }
 
+            const amount = o.amount ?? 1;
+            const shinyPrice = (o.price !== null) ? Math.ceil(o.price / amount) : null;
+
             Vue.set(state.pack, o.name, {
                 feature: o.feature ?? null,
                 price: o.price ?? null,
+                shinyPrice,
                 unlock: o.unlock ?? null,
-                amount: o.amount ?? 1,
+                amount,
                 content: o.content,
                 cacheWeight,
                 cacheWeightTotal: cacheWeight.reduce((a, b) => a + b),
@@ -60,10 +67,13 @@ export default {
         initFeature(state, o) {
             Vue.set(state.feature, o.name, {
                 prefix: o.prefix,
-                reward: o.reward,
+                reward: o.reward ?? [],
+                shinyReward: o.shinyReward ?? [],
+                powerReward: o.powerReward ?? [],
                 cardSelected: [],
                 cardEquipped: [],
-                cacheCards: 0
+                cacheCards: 0,
+                cacheShinyCards: 0
             });
         },
         updateKey(state, o) {
@@ -77,11 +87,13 @@ export default {
             }
             for (const [key] of Object.entries(state.collection)) {
                 commit('updateKey', {type: 'collection', name: key, key: 'cacheCards', value: 0});
+                commit('updateKey', {type: 'collection', name: key, key: 'cacheShinyCards', value: 0});
             }
             for (const [key] of Object.entries(state.feature)) {
                 commit('updateKey', {type: 'feature', name: key, key: 'cardSelected', value: []});
                 commit('updateKey', {type: 'feature', name: key, key: 'cardEquipped', value: []});
                 commit('updateKey', {type: 'feature', name: key, key: 'cacheCards', value: 0});
+                commit('updateKey', {type: 'feature', name: key, key: 'cacheShinyCards', value: 0});
             }
         },
         buyPack({ state, rootState, rootGetters, dispatch }, o) {
@@ -97,13 +109,18 @@ export default {
             let content = {};
             for (let i = 0, n = o.amount; i < n; i++) {
                 let rngGen = rootGetters['system/getRng']('cardPack_' + o.name);
+                let rngGenShiny = rootGetters['system/getRng']('cardPackShiny_' + o.name);
                 for (let j = 0, m = pack.amount; j < m; j++) {
                     const cardChosen = pack.cacheContent[weightSelect(pack.cacheWeight, rngGen())];
                     const card = state.card[cardChosen];
                     if (content[cardChosen] === undefined) {
-                        content[cardChosen] = {amount: 0, isNew: card.amount <= 0};
+                        content[cardChosen] = {amount: 0, shiny: 0, isNew: card.amount <= 0};
                     }
                     content[cardChosen].amount++;
+                    const gotShiny = rootState.unlock.cardShiny.use && chance(rootGetters['mult/get']('cardShinyChance'), rngGenShiny());
+                    if (gotShiny) {
+                        content[cardChosen].shiny++;
+                    }
                     if (card.amount <= 0) {
                         const feature = state.feature[card.feature];
                         const collection = state.collection[card.collection];
@@ -154,8 +171,26 @@ export default {
                     } else {
                         commit('updateKey', {type: 'card', name: cardChosen, key: 'amount', value: card.amount + 1});
                     }
+                    if (gotShiny) {
+                        if (card.foundShiny) {
+                            // get shiny dust
+                            dispatch('currency/gain', {feature: 'card', name: 'shinyDust', amount: 1}, {root: true});
+                        } else {
+                            // find shiny card
+                            commit('updateKey', {type: 'card', name: cardChosen, key: 'foundShiny', value: true});
+
+                            const feature = state.feature[card.feature];
+                            const collection = state.collection[card.collection];
+                            commit('updateKey', {type: 'collection', name: card.collection, key: 'cacheShinyCards', value: collection.cacheShinyCards + 1});
+                            commit('updateKey', {type: 'feature', name: card.feature, key: 'cacheShinyCards', value: feature.cacheShinyCards + 1});
+                            dispatch('applyFeatureEffects', card.feature);
+                        }
+                    }
                 }
                 commit('system/nextRng', {name: 'cardPack_' + o.name, amount: 1}, {root: true});
+                if (rootState.unlock.cardShiny.use) {
+                    commit('system/nextRng', {name: 'cardPackShiny_' + o.name, amount: 1}, {root: true});
+                }
             }
             if (o.notify && rootState.system.settings.notification.items.cardPackContent.value) {
                 commit('system/addNotification', {color: 'success', timeout: 5000, message: {
@@ -172,20 +207,30 @@ export default {
             // Reset existing caches
             for (const [key] of Object.entries(state.collection)) {
                 commit('updateKey', {type: 'collection', name: key, key: 'cacheCards', value: 0});
+                commit('updateKey', {type: 'collection', name: key, key: 'cacheShinyCards', value: 0});
             }
             for (const [key] of Object.entries(state.feature)) {
                 commit('updateKey', {type: 'feature', name: key, key: 'cacheCards', value: 0});
+                commit('updateKey', {type: 'feature', name: key, key: 'cacheShinyCards', value: 0});
             }
             for (const [, elem] of Object.entries(state.card)) {
                 if (elem.amount > 0) {
                     commit('updateKey', {type: 'collection', name: elem.collection, key: 'cacheCards', value: state.collection[elem.collection].cacheCards + 1});
                     commit('updateKey', {type: 'feature', name: elem.feature, key: 'cacheCards', value: state.feature[elem.feature].cacheCards + 1});
                 }
+                if (elem.foundShiny) {
+                    commit('updateKey', {type: 'collection', name: elem.collection, key: 'cacheShinyCards', value: state.collection[elem.collection].cacheShinyCards + 1});
+                    commit('updateKey', {type: 'feature', name: elem.feature, key: 'cacheShinyCards', value: state.feature[elem.feature].cacheShinyCards + 1});
+                }
             }
             for (const [collKey, collElem] of Object.entries(state.collection)) {
                 if (collElem.cacheCards >= collElem.cards.length) {
                     collElem.reward.forEach(elem => {
                         dispatch('system/applyEffect', {type: elem.type, name: elem.name, multKey: `cardCollection_${ collKey }`, value: elem.value, trigger: false}, {root: true});
+                    });
+                } else {
+                    collElem.reward.forEach(elem => {
+                        dispatch('system/resetEffect', {type: elem.type, name: elem.name, multKey: `cardCollection_${ collKey }`}, {root: true});
                     });
                 }
             }
@@ -197,8 +242,11 @@ export default {
         activateCards({ state, commit, dispatch }, feature) {
             state.feature[feature].cardEquipped.forEach(card => {
                 state.card[card].reward.forEach(eff => {
-                    dispatch('system/resetEffect', {type: eff.type, name: eff.name, multKey: `card_${card}`}, {root: true});
+                    dispatch('system/resetEffect', {type: eff.type, name: eff.name, multKey: `card_${ card }`}, {root: true});
                 });
+            });
+            state.feature[feature].powerReward.forEach(elem => {
+                dispatch('system/resetEffect', {type: elem.type, name: elem.name, multKey: `cardPower_${ feature }`}, {root: true});
             });
 
             commit('updateKey', {type: 'feature', name: feature, key: 'cardEquipped', value: [...state.feature[feature].cardSelected]});
@@ -240,8 +288,10 @@ export default {
                 }
             });
 
+            let cardPower = 0;
             for (const [card, amount] of Object.entries(active)) {
                 let cardItem = state.card[card];
+                cardPower += (cardItem.power + (cardItem.foundShiny ? 1 : 0)) * amount;
                 cardItem.reward.forEach(elem => {
                     let value = elem.value;
                     if (['base', 'bonus'].includes(elem.type)) {
@@ -255,6 +305,11 @@ export default {
                     }
                     dispatch('system/applyEffect', {type: elem.type, name: elem.name, multKey: `card_${card}`, value, trigger: false}, {root: true});
                 });
+                if (cardPower > 0) {
+                    state.feature[feature].powerReward.forEach(elem => {
+                        dispatch('system/applyEffect', {type: elem.type, name: elem.name, multKey: `cardPower_${ feature }`, value: elem.value(cardPower), trigger: false}, {root: true});
+                    });
+                }
             }
         },
         applyFeatureEffects({ state, dispatch }, feature) {
@@ -262,7 +317,32 @@ export default {
                 state.feature[feature].reward.forEach(reward => {
                     dispatch('system/applyEffect', {type: reward.type, name: reward.name, multKey: `cards_${ feature }`, value: reward.value(state.feature[feature].cacheCards), trigger: true}, {root: true});
                 });
+            } else {
+                state.feature[feature].reward.forEach(reward => {
+                    dispatch('system/resetEffect', {type: reward.type, name: reward.name, multKey: `cards_${ feature }`}, {root: true});
+                });
             }
+            if (state.feature[feature].cacheShinyCards > 0) {
+                state.feature[feature].shinyReward.forEach(reward => {
+                    dispatch('system/applyEffect', {type: reward.type, name: reward.name, multKey: `cardsShiny_${ feature }`, value: reward.value(state.feature[feature].cacheShinyCards), trigger: true}, {root: true});
+                });
+            } else {
+                state.feature[feature].shinyReward.forEach(reward => {
+                    dispatch('system/resetEffect', {type: reward.type, name: reward.name, multKey: `cardsShiny_${ feature }`}, {root: true});
+                });
+            }
+        },
+        resetCards({ state, commit, dispatch }, feature) {
+            state.feature[feature].cardEquipped.forEach(card => {
+                state.card[card].reward.forEach(eff => {
+                    dispatch('system/resetEffect', {type: eff.type, name: eff.name, multKey: `card_${card}`}, {root: true});
+                });
+            });
+            state.feature[feature].powerReward.forEach(elem => {
+                dispatch('system/resetEffect', {type: elem.type, name: elem.name, multKey: `cardPower_${ feature }`}, {root: true});
+            });
+            commit('updateKey', {type: 'feature', name: feature, key: 'cardEquipped', value: []});
+            commit('updateKey', {type: 'feature', name: feature, key: 'cardSelected', value: []});
         }
     }
 }

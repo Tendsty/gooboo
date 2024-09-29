@@ -12,7 +12,8 @@ export default {
                 display: o.display ?? 'number',
                 default: o.value ?? 0,
                 value: o.value ?? 0,
-                total: o.value ?? 0
+                total: o.value ?? 0,
+                showInStatistics: o.showInStatistics ?? false
             });
         },
         add(state, o) {
@@ -44,6 +45,14 @@ export default {
             for (const [key, elem] of Object.entries(state)) {
                 if (elem.feature === o.feature && elem.type === o.type) {
                     commit('updateKey', {name: key, key: 'value', value: elem.default});
+                }
+            }
+        },
+        resetAll({ state, commit }, feature) {
+            for (const [key, elem] of Object.entries(state)) {
+                if (elem.feature === feature) {
+                    commit('updateKey', {name: key, key: 'value', value: elem.default});
+                    commit('updateKey', {name: key, key: 'total', value: elem.default});
                 }
             }
         }

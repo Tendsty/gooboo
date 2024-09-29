@@ -159,7 +159,7 @@ export default {
   components: { Currency, Ingredient, Consumable, StatBreakdown, PriceTag, Smeltery, AlertText },
   data: () => ({
     subfeatureCurrencies: [
-      ['mining_resin', 'mining_granite', 'mining_salt', 'mining_coal', 'mining_sulfur', 'mining_niter', 'mining_obsidian'],
+      ['mining_resin', 'mining_granite', 'mining_salt', 'mining_coal', 'mining_sulfur', 'mining_niter', 'mining_obsidian', 'mining_deeprock', 'mining_glowshard'],
       ['mining_smoke']
     ]
   }),

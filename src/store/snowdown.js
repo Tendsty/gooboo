@@ -475,7 +475,7 @@ export default {
                     }
                     // Get currency rewards
                     dispatch('currency/gain', {feature: 'event', name: 'snowball', amount: Math.round(rootGetters['mult/get']('snowdownLootRating', 3, 3))}, {root: true});
-                    dispatch('currency/gain', {feature: 'event', name: 'snowdownToken', amount: Math.floor(rootGetters['mult/get']('snowdownLootRating', state.fight * 3.5 + 50, 0.05))}, {root: true});
+                    dispatch('event/giveTokens', {event: 'snowdown', amount: Math.floor(rootGetters['mult/get']('snowdownLootRating', state.fight * 3.5 + 50, 0.05))}, {root: true});
 
                     commit('updateKey', {key: 'fight', value: state.fight + 1});
                     commit('updateKey', {key: 'rewardProducer', value: true});

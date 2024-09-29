@@ -43,7 +43,7 @@ export default {
         let obj = {};
         for (const [key, elem] of Object.entries(store.state.school)) {
             if (elem.grade > 0 || elem.progress > 0) {
-                obj[key] = {grade: elem.grade, currentGrade: elem.currentGrade, progress: elem.progress};
+                obj[key] = [elem.grade, elem.currentGrade, elem.progress];
             }
         }
         return obj;
@@ -51,9 +51,9 @@ export default {
     loadGame(data) {
         for (const [key, elem] of Object.entries(data)) {
             if (store.state.school[key] !== undefined) {
-                store.commit('school/updateKey', {name: key, key: 'grade', value: elem.grade});
-                store.commit('school/updateKey', {name: key, key: 'currentGrade', value: elem.currentGrade});
-                store.commit('school/updateKey', {name: key, key: 'progress', value: elem.progress});
+                store.commit('school/updateKey', {name: key, key: 'grade', value: elem[0]});
+                store.commit('school/updateKey', {name: key, key: 'currentGrade', value: elem[1]});
+                store.commit('school/updateKey', {name: key, key: 'progress', value: elem[2]});
             }
         }
     }

@@ -14,7 +14,10 @@
       {{ $formatNum(item.amount - 1) }}
     </div>
     <div class="flex-grow-1">
-      <div>{{ $vuetify.lang.t(`$vuetify.card.card.${item.name}`) }}</div>
+      <div>
+        <span>{{ $vuetify.lang.t(`$vuetify.card.card.${item.name}`) }}</span>
+        <span v-if="item.power > 0">&nbsp;(+{{ item.power }})</span>
+      </div>
       <div class="card-reward" v-for="(reward, rkey) in item.reward" :key="rkey">
         <span v-if="reward.type === 'addRareDrop'">{{ $vuetify.lang.t(`$vuetify.farm.addRareDrop`, $vuetify.lang.t(`$vuetify.currency.${ reward.name }.name`)) }}: +{{ $formatNum(reward.value) }}</span>
         <span v-else><mult-name :name="reward.name"></mult-name> <mult-stat :mult="reward.name" :type="reward.type" :value="reward.value"></mult-stat></span>
@@ -25,7 +28,8 @@
 
 <script>
 import MultName from '../../render/MultName.vue';
-import MultStat from '../render/MultStat.vue'
+import MultStat from '../render/MultStat.vue';
+
 export default {
   components: { MultStat, MultName },
   props: {

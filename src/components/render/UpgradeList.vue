@@ -19,7 +19,7 @@
 <template>
   <div v-if="items.length > 0">
     <div class="d-flex upgrade-pagination justify-center align-center bg-tile-default rounded-b elevation-2 mx-2" :class="{'upgrade-pagination-mobile': $vuetify.breakpoint.smAndDown && !noTabs, 'upgrade-pagination-mobile-notabs': $vuetify.breakpoint.smAndDown && noTabs, 'pr-10': showQueueSpeed}" v-if="pages > 1 || requirementStat.length > 0">
-      <v-pagination v-if="pages > 1" v-model="page" :length="pages"></v-pagination>
+      <v-pagination v-if="pages > 1" v-model="page" :length="pages" :total-visible="7"></v-pagination>
       <gb-tooltip v-for="item in requirementFiltered" :key="item.key" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
           <v-chip small label class="flex-shrink-0 ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-1">mdi-chevron-double-up</v-icon>{{ $formatNum(requirementNext[item.key]) }}</v-chip>

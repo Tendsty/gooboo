@@ -60,7 +60,7 @@
       <gb-tooltip :min-width="0">
         <template v-slot:activator="{ on, attrs }">
           <div class="ma-1" v-bind="attrs" v-on="on">
-            <v-btn @click="enterTower" :disabled="!canEnter" small color="primary">{{ $vuetify.lang.t(`$vuetify.horde.tower.enter`) }}</v-btn>
+            <v-btn @click="enterTower" :disabled="isFrozen || !canEnter" small color="primary">{{ $vuetify.lang.t(`$vuetify.horde.tower.enter`) }}</v-btn>
           </div>
         </template>
         <div class="mt-0">
@@ -90,7 +90,8 @@ export default {
   computed: {
     ...mapState({
       crown: state => state.currency.horde_crown,
-      heirloomList: state => state.horde.heirloom
+      heirloomList: state => state.horde.heirloom,
+      isFrozen: state => state.cryolab.horde.active,
     }),
     tower() {
       return this.$store.state.horde.tower[this.name];

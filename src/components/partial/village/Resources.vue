@@ -1,9 +1,10 @@
 <template>
   <div>
     <div class="d-flex flex-wrap justify-center ma-1">
-      <currency large class="ma-1" name="village_coin" :baseArray="foodConversion">
+      <currency v-if="subfeature === 0" large class="ma-1" name="village_coin" :baseArray="foodConversion">
         <alert-text type="info">{{ $vuetify.lang.t('$vuetify.village.coinNotAffected') }}</alert-text>
       </currency>
+      <currency v-else-if="subfeature === 1" large class="ma-1" name="village_copperCoin"></currency>
     </div>
     <div v-if="stat.village_wood.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.material`) }}</div>
     <div class="d-flex flex-wrap justify-center ma-1">
@@ -11,14 +12,14 @@
         <currency :key="item" class="ma-1" :class="{'premium-glow': upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}" :name="item"></currency>
       </template>
     </div>
-    <div v-if="stat.village_grain.total > 0 || stat.village_fruit.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.food`) }}</div>
-    <div class="d-flex flex-wrap justify-center ma-1">
+    <div v-if="subfeature === 0 && (stat.village_grain.total > 0 || stat.village_fruit.total > 0)" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.food`) }}</div>
+    <div v-if="subfeature === 0" class="d-flex flex-wrap justify-center ma-1">
       <template v-for="item in food">
         <currency :key="item" class="ma-1" :name="item">{{ $vuetify.lang.t(`$vuetify.village.foodConsume`, $formatNum(foodConsumption, true)) }}</currency>
       </template>
     </div>
-    <div v-if="stat.village_knowledge.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.mental`) }}</div>
-    <div class="d-flex flex-wrap justify-center ma-1">
+    <div v-if="subfeature === 0 && stat.village_knowledge.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.mental`) }}</div>
+    <div v-if="subfeature === 0" class="d-flex flex-wrap justify-center ma-1">
       <template v-for="item in mental">
         <currency
           :key="item"
@@ -31,7 +32,7 @@
         </currency>
       </template>
     </div>
-    <template v-if="canSeeLoot">
+    <template v-if="subfeature === 0 && canSeeLoot">
       <div class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.loot`) }}</div>
       <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.village.loot')">
         <template v-slot:activator="{ on, attrs }">
@@ -75,18 +76,26 @@
         </template>
       </div>
     </template>
+    <template v-if="subfeature === 1 && canSeeSpecialIngredients">
+      <div class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.specialIngredient`) }}</div>
+      <div class="d-flex flex-wrap justify-center ma-1">
+        <currency v-for="item in specialIngredient" :key="item" class="ma-1" :name="item"></currency>
+      </div>
+      <div class="d-flex justify-center"><consumable name="village_ingredientBox" @click="openIngredientBox"></consumable></div>
+    </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
 import { SECONDS_PER_HOUR, VILLAGE_COINS_PER_FOOD } from '../../../js/constants';
+import Consumable from '../../render/Consumable.vue';
 import Currency from '../../render/Currency.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 
 export default {
-  components: { Currency, StatBreakdown, AlertText },
+  components: { Currency, StatBreakdown, AlertText, Consumable },
   data: () => ({
     mental_premium: ['village_knowledge', 'village_science']
   }),
@@ -95,7 +104,8 @@ export default {
       stat: state => state.stat,
       upgrade: state => state.upgrade.item,
       currency: state => state.currency,
-      explorerProgress: state => state.village.explorerProgress
+      explorerProgress: state => state.village.explorerProgress,
+      subfeature: state => state.system.features.village.currentSubfeature
     }),
     ...mapGetters({
       list: 'currency/list',
@@ -117,8 +127,14 @@ export default {
     loot() {
       return this.list('village', 'regular', 'loot');
     },
+    specialIngredient() {
+      return this.list('village', 'regular', 'specialIngredient');
+    },
     canSeeLoot() {
       return this.$store.state.unlock.villageLoot.see;
+    },
+    canSeeSpecialIngredients() {
+      return this.$store.state.unlock.villageSpecialIngredient.see;
     },
     lootTotalWeight() {
       let total = 0;
@@ -144,6 +160,22 @@ export default {
         const nextAmount = this.$store.getters['currency/value']('village_' + food) + this.$store.getters['mult/get'](this.$store.getters['currency/gainMultName']('village', food));
         return {name: 'villageFood_' + food, value: Math.min(taxpayers, nextAmount) * VILLAGE_COINS_PER_FOOD};
       }).filter(elem => elem.value > 0);
+    }
+  },
+  methods: {
+    openIngredientBox() {
+      const consumables = {village_ingredientBox: 1};
+      const price = this.$store.getters['consumable/priceMultiple'](consumables).price;
+      if (this.$store.state.system.settings.confirm.items.gem.value && this.$store.getters['currency/contains'](price, 'gem')) {
+        this.$store.commit('system/updateKey', {key: 'confirm', value: {
+          type: 'consumable',
+          subtype: 'openIngredientBox',
+          consumable: consumables,
+          price: this.$store.getters['currency/filterPrice'](price, 'gem'),
+        }});
+      } else {
+        this.$store.dispatch('village/openIngredientBox');
+      }
     }
   }
 }
