@@ -489,7 +489,7 @@ export default {
         let smelteryData = {};
         for (const [key, elem] of Object.entries(store.state.mining.smeltery)) {
             if (elem.total > 0) {
-                smelteryData[key] = {progress: elem.progress, stored: elem.stored, total: elem.total};
+                smelteryData[key] = [elem.progress, elem.stored, elem.total];
             }
         }
         if (Object.keys(smelteryData).length > 0) {
@@ -524,9 +524,9 @@ export default {
         if (data.smeltery !== undefined) {
             for (const [key, elem] of Object.entries(data.smeltery)) {
                 if (store.state.mining.smeltery[key] !== undefined) {
-                    store.commit('mining/updateSmelteryKey', {name: key, key: 'progress', value: elem.progress});
-                    store.commit('mining/updateSmelteryKey', {name: key, key: 'stored', value: elem.stored});
-                    store.commit('mining/updateSmelteryKey', {name: key, key: 'total', value: elem.total});
+                    store.commit('mining/updateSmelteryKey', {name: key, key: 'progress', value: elem[0]});
+                    store.commit('mining/updateSmelteryKey', {name: key, key: 'stored', value: elem[1]});
+                    store.commit('mining/updateSmelteryKey', {name: key, key: 'total', value: elem[2]});
                 }
             }
         }

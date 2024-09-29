@@ -45,7 +45,7 @@ export default {
       return this.$store.state.mult.items[this.mult];
     },
     display() {
-      if (this.type === 'hordeActive') {
+      if (this.type === 'hordeActive' || this.type === 'hordeActiveCrit') {
         return ['revive', 'divisionShield'].includes(this.mult) ? 'number' : (['stun', 'silence'].includes(this.mult) ? 'time' : 'percent');
       } else if (this.type === 'hordeCooldown' || this.type === 'hordeBuff') {
         return 'time';

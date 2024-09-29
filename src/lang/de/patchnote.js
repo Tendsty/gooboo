@@ -468,6 +468,18 @@ export default {
     385: 'Es kann nun eine Zutat als Lieblingszutat markiert werden',
     386: 'Säcke tauchen nun bei hohen Magiemengen auf',
     387: 'Sämtliche Ausrüstung in der Horde wurde abgelegt, vergiss\' nicht sie neu anzulegen!',
+
+    // v1.5.1
+    388: 'Ausrüstung mit steigender kritischer Effizienz zeigen das nun beim Verbessern an',
+    389: 'Ein Fehler wurde behoben, wo bei manchen Browsern alle Währungen in einer Spalte dargestellt wurden',
+    390: 'Konverter pro Farbstufe gebraucht',
+    391: 'Du erhältst nun mehr Farbe beim Umwandeln, wenn du deutlich mehr Konverter als nötige Farbe hast',
+    392: 'Kartenkraft wird nun korrekt beim Prestige zurückgesetzt',
+    393: 'Der Courage-Multiplikator einzelner Klassen wird nun korrekt beim Prestige zurückgesetzt',
+    394: 'Der Tooltip bei der Umwandlung zeigt nun an, dass alle Konverter verbraucht werden',
+
+    // v1.5.2
+    395: 'Konverter-Kapazität pro "Mülleimer"-Stufe',
   },
   v: {
     1: {

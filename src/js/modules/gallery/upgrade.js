@@ -62,7 +62,7 @@ export default {
     }, price(lvl) {
         return {gallery_beauty: Math.pow(15, lvl) * buildNum(350, 'M')};
     }, effect: [
-        {name: 'currencyGalleryConverterCap', type: 'mult', value: lvl => Math.pow(1.5, lvl)}
+        {name: 'currencyGalleryConverterCap', type: 'mult', value: lvl => Math.pow(1.9, lvl)}
     ]},
     orangeConversion: {cap: 10, requirement() {
         return store.state.stat.gallery_orange.total > 0;
