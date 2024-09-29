@@ -1447,6 +1447,9 @@ export default {
       special: {
         description: 'Spezielle Gegenstände bieten permanente Effekte, wenn sie hergestellt werden und der Fortschritt wird beim Prestige nicht zurückgesetzt. Deren Kosten steigt mit jeder Herstellung und sie haben keine Meilensteine'
       },
+      crafts: '{0} / {1} hergestellt',
+      sellEvery: 'Verkaufe 1 alle ~{0}',
+      sellPrice: 'Verkaufspreis (Wert: {0})',
       rope: 'Seil',
       woodenPlanks: 'Holzbretter',
       brick: 'Ziegel',
