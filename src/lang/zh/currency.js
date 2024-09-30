@@ -1,12 +1,12 @@
 export default {
-  overcapGain: '由于达到上限，收入减少至 {0}%',
-  overcapNoGain: '由于超过上限没有收入',
+  overcapGain: '由于达到上限，收益减少至 {0}%',
+  overcapNoGain: '由于超过上限无法获得',
   benefitLoss: '购买这个会导致利益损失',
-  gainTimerNeeded: '距离可以负担得起还有 {0}',
+  gainTimerNeeded: '距离买得起还有 {0}',
   capTimerNeeded: '距离达到容量上限还有 {0}',
   overcapTimerNeeded: '距离达到下一个容量等级还有 {0}',
 
-  // Premium currencies
+  // 声望货币 Premium currencies
   gem_ruby: {
     name: '红宝石',
     description: '闪亮的红色宝石，可以兑换强大的永久升级',
@@ -37,7 +37,7 @@ export default {
     description: '',
   },
 
-  // Event currencies
+  // 事件货币 Event currencies
   event_wax: {
     name: '蜡',
     description: '用于制作蜡烛的天然蜡',
@@ -304,7 +304,7 @@ export default {
     description: '让每个人都温暖舒适',
   },
 
-  // Feature currencies
+  // 模块货币 Feature currencies
   mining_scrap: {
     name: '废料',
     description:
@@ -442,6 +442,10 @@ export default {
     name: '金币',
     description: '通过向村民出售食物赚取金币',
   },
+  village_copperCoin: {
+    name: '铜币',
+    description: '通过向村民出售工艺品赚取铜币'
+  },
   village_wood: {
     name: '木头',
     description: '从附近树木采伐的原木',
@@ -510,6 +514,10 @@ export default {
     name: '祝福',
     description:
       '村民们的希望终于成真了！ 未来一切都会更好！ 随着时间的推移，它会变得更容易！',
+  },
+  village_shares: {
+    name: '股票',
+    description: '投资赚大钱！'
   },
   village_offering: {
     name: '供品',
@@ -581,6 +589,10 @@ export default {
     name: '强大的灵魂',
     description: '以前腐化的灵魂通过复杂的仪式得到净化和强化',
   },
+  horde_courage: {
+    name: '勇气',
+    description: '面对无尽的部落时，勇敢是一种非常需要的美德'
+  },
   horde_crown: {
     name: '王冠',
     description: '他们曾经统治着塔楼，但现在已被废黜',
@@ -589,13 +601,17 @@ export default {
     name: '塔楼钥匙',
     description: '一把可以让你进入塔楼的稀有钥匙',
   },
+  horde_blood: {
+    name: '血液',
+    description: '噢喔哦!'
+  },
   farm_vegetable: {
     name: '蔬菜',
     description: '多吃蔬菜!',
   },
-  farm_fruit: {
-    name: '水果',
-    description: '这个农场肥沃的土壤赋予了水果浓郁的味道',
+  farm_berry: {
+    name: '浆果',
+    description: '这个农场肥沃的土壤赋予了浆果浓郁的味道'
   },
   farm_grain: {
     name: '粮食',
@@ -649,6 +665,10 @@ export default {
     name: '金色花瓣',
     description:
       '这种极其罕见的花瓣只能在玫瑰上找到。 有传言说带有这些花瓣的玫瑰看起来比其他玫瑰颜色更深',
+  },
+  farm_smallSeed: {
+    name: '小种子',
+    description: ''
   },
   gallery_beauty: {
     name: '美丽',
@@ -759,8 +779,56 @@ export default {
     description: '',
   },
   gallery_pinkDrum: {
-    name: '粉红鼓',
+    name: '粉红色鼓',
     description: '',
+  },
+  gallery_motivation: {
+    name: '表情',
+    description: ''
+  },
+  gallery_mysteryShape: {
+    name: '神秘形状',
+    description: '这是什么形状？它看起来很奇怪，仿佛不属于这个次元'
+  },
+  gallery_circle: {
+    name: '圆形',
+    description: ''
+  },
+  gallery_rectangle: {
+    name: '矩形',
+    description: ''
+  },
+  gallery_triangle: {
+    name: '三角形',
+    description: '小心，很危险'
+  },
+  gallery_star: {
+    name: '星星',
+    description: ''
+  },
+  gallery_ellipse: {
+    name: '椭圆',
+    description: ''
+  },
+  gallery_heart: {
+    name: '心形',
+    description: '<3'
+  },
+  gallery_square: {
+    name: '正方形',
+    description: ''
+  },
+  gallery_octagon: {
+    name: '八边形',
+    description: ''
+  },
+  gallery_pentagon: {
+    name: '五角星',
+    description: '这是一个形状，而不是建筑'
+  },
+  gallery_hexagon: {
+    name: '六边形',
+    description: ''
   },
   gallery_cash: {
     name: '现金',

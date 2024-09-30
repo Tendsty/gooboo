@@ -1,0 +1,15 @@
+export default {
+  hordeEnergyToStr: '当前每点能量 +{0} 力量',
+  hordeEnergyToEnergyReg: '每失去一点能量 +{0} 能量恢复',
+  hordeEnergyOnCrit: '+{0} energy on critical hit',
+  hordeHealOnCrit: 'Heal {0} maximum health on critical hit',
+  hordeRestoreCooldownOnCrit: 'Reduce cooldowns by {0} on critical hit',
+  hordeBloodOnCrit: 'Gain {0} enemy blood on critical hit',
+  hordeManaRest: 'Gain {1} mana regeneration after not using actives for {0}',
+  hordeManasteal: 'Gain {0} mana on kill',
+  hordePassiveRecovery: 'Apply {0} of recovery each second',
+  hordeActiveDamageCrit: 'Damaging actives can crit at {0} efficiency',
+  hordeActiveHealCrit: 'Healing actives can crit at {0} efficiency',
+  hordeAttackAfterTime: 'Gain +{0} attack per minute in the same fight',
+  hordeStrIntAfterTime: 'Gain {0} strength and intelligence per minute in the same fight',
+}

@@ -69,6 +69,15 @@ export default {
   mining_timeSpent: {
     description: '花费的时间'
   },
+  mining_bestPrestige0: {
+    description: '最高声望（矿井）'
+  },
+  mining_bestPrestige1: {
+    description: '最高声望（气态）'
+  },
+  mining_prestigeCount: {
+    description: '声望次数'
+  },
 
   // Village stats
   village_maxBuilding: {
@@ -126,15 +135,27 @@ export default {
   village_timeSpent: {
     description: '花费的时间'
   },
+  village_bestPrestige0: {
+    description: '最高声望（工人）'
+  },
+  village_bestPrestige1: {
+    description: '最高声望（工艺）'
+  },
+  village_prestigeCount: {
+    description: '声望次数'
+  },
 
   // Horde stats
   horde_maxZone: {
     achievement: '探险家',
     description: '最大区域'
   },
+  horde_maxDifficulty: {
+    description: '最大难度'
+  },
   horde_maxZoneSpeedrun: {
     achievement: '迅捷出击',
-    description: '30分钟内达到最大区域'
+    description: '30分钟内达到的最大区域'
   },
   horde_totalDamage: {
     achievement: '杀手',
@@ -173,6 +194,15 @@ export default {
   },
   horde_timeSpent: {
     description: '花费的时间'
+  },
+  horde_bestPrestige0: {
+    description: '最高声望（装备）'
+  },
+  horde_bestPrestige1: {
+    description: '最高声望（职业）'
+  },
+  horde_prestigeCount: {
+    description: '声望次数'
   },
 
   // Farm stats
@@ -256,8 +286,27 @@ export default {
     achievement: '笨蛋笨蛋笨蛋',
     description: '最高红鼓数量'
   },
+  gallery_shapeComboTotal: {
+    achievement: '收集家',
+    description: '总计收集的形状'
+  },
+  gallery_shapeComboHighest: {
+    achievement: '天才',
+    description: '最高形状连接组合数'
+  },
+  gallery_canvasLevelTotal: {
+    achievement: '远见',
+    description: '画布总等级'
+  },
+  gallery_hourglassHighest: {
+    achievement: '无聊的时间',
+    description: '沙漏时间达到 1d '
+  },
   gallery_timeSpent: {
     description: '花费的时间'
+  },
+  gallery_prestigeCount: {
+    description: '声望次数'
   },
 
   // Meta stats

@@ -1,6 +1,9 @@
 export default {
   cardPack: '卡包',
   cardsSuffix: ' 卡片',
+  cardPower: '卡片力量',
+  cardPowerValue: '{0} 卡片力量',
+  cardPowerDescription: '所有激活的卡片都添加了卡片力量，能够增加对应模块的基础数值',
   notFound: '未找到卡片',
   fullCollectionReward: '集齐奖励',
   canFind: '这张卡可以在以下卡包中找到',
@@ -10,7 +13,7 @@ export default {
   onActive: '当激活时',
   onDuplicate: '当重复',
   activeDescription:
-    '可以装备重复的卡牌，并将在下一个声望时消耗卡片以激活其效果。 这些效果会一直保持有效，直到您再次获得声望为止。',
+    '同一张卡牌不能重复装备，将在下一个声望时消耗卡片以激活其效果。 这些效果会一直保持有效，直到您再次获得声望为止。',
   equipTutorial: {
     description:
       '您收集了第一张卡片！ 大多数卡片在激活时都会产生效果，要启用它，您必须执行以下操作:',
