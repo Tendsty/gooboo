@@ -134,12 +134,11 @@ export default {
     startExam(name) {
       if (this.$store.getters['currency/value']('school_examPass') >= 1) {
         this.$store.dispatch('currency/spend', {feature: 'school', name: 'examPass', amount: 1});
-        // this.timer = SCHOOL_EXAM_TIME + 1;
-        // this.score = 0;
+        this.timer = SCHOOL_EXAM_TIME + 1;
+        this.score = 0;
         this.playing = name;
         this.mode = 'exam';
-        // this.intervalId = setInterval(this.tickTimer, 1000);
-        this.updateScore(500);
+        this.intervalId = setInterval(this.tickTimer, 1000);
       }
     },
     tickTimer() {
