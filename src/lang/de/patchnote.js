@@ -480,6 +480,11 @@ export default {
 
     // v1.5.2
     395: 'Konverter-Kapazität pro "Mülleimer"-Stufe',
+
+    // v1.5.3
+    396: 'Ein Fehler wurde behoben, bei dem Opfergaben nicht mehr funktionieren, wenn man gewisse Versionen überspringt',
+    397: 'Eventschätze werden jetzt korrekt im Shop angezeigt',
+    398: 'Ein Fehler wurde behoben, wo manche Meilensteine die falsche Belohnung angezeigt haben',
   },
   v: {
     1: {
