@@ -480,6 +480,11 @@ export default {
 
     // v1.5.2
     395: 'Converter capacity per level of "Trash can"',
+
+    // v1.5.3
+    396: 'Fixed a bug with offerings breaking when updating multiple versions at once',
+    397: 'Bugged treasures from event rewards are now displayed correctly',
+    398: 'Fixed a bug where crafting milestones displayed the wrong rewards',
   },
   v: {
     1: {

@@ -94,19 +94,19 @@
             @click="toggleSelling"
             :disabled="isFrozen || !craftObj.isSelling && currentCounter >= maxCounter"
           ><v-icon>{{ craftObj.isSelling ? 'mdi-currency-usd' : 'mdi-currency-usd-off' }}</v-icon></v-btn>
-          <v-text-field type="number" :label="`Sell price (Value: ${ craftObj.value })`" min="1" outlined hide-details v-model="sellPrice"></v-text-field>
-          <div class="text-center" style="min-width: 175px;">Sell 1 every ~{{ $formatTime(Math.round(1 / Math.min(craftObj.cacheSellChance, 1))) }}</div>
+          <v-text-field type="number" :label="$vuetify.lang.t('$vuetify.village.crafting.sellPrice', $formatNum(craftObj.value))" min="1" outlined hide-details v-model="sellPrice"></v-text-field>
+          <div class="text-center" style="min-width: 175px;">{{ $vuetify.lang.t('$vuetify.village.crafting.sellEvery', $formatTime(Math.round(1 / Math.min(craftObj.cacheSellChance, 1)))) }}</div>
         </div>
         <v-progress-linear v-if="currentMilestone !== null" class="rounded mt-2" color="blue" height="24" :value="milestonePercent">
           <div class="d-flex w-100 justify-space-between align-center ma-1">
-            <span>{{ craftObj.crafted }} /  {{ currentMilestone.needed }} crafts:</span>
-            <span v-if="currentMilestone.type === 'changeStat'">{{ $vuetify.lang.t(`$vuetify.village.crafting.changeStat.${ currentMilestone.name }`, currentMilestone.name === 'timeNeeded' ? $formatTime(currentMilestone.value) : $formatNum(currentMilestone.value)) }}</span>
-            <display-row v-else :type="currentMilestone.type" :name="currentMilestone.name" :after="currentMilestone.value"></display-row>
+            <span>{{ $vuetify.lang.t('$vuetify.village.crafting.crafts', $formatNum(craftObj.crafted), $formatNum(currentMilestone.needed)) }}:</span>
+            <span v-if="currentMilestone.type === 'changeStat'" :key="`milestone-reward-stat-${selectedCraft}-${currentMilestone.needed}`">{{ $vuetify.lang.t(`$vuetify.village.crafting.changeStat.${ currentMilestone.name }`, currentMilestone.name === 'timeNeeded' ? $formatTime(currentMilestone.value) : $formatNum(currentMilestone.value)) }}</span>
+            <display-row v-else :key="`milestone-reward-other-${selectedCraft}-${currentMilestone.needed}`" :type="currentMilestone.type" :name="currentMilestone.name" :after="currentMilestone.value"></display-row>
           </div>
         </v-progress-linear>
         <div v-if="craftObj.isSpecial">
           <div class="text-center">{{ $vuetify.lang.t('$vuetify.village.crafting.nextEffect') }}:</div>
-          <display-row v-for="(item, key) in display" :key="`craft-reward-${item.name}-${item.type}-${key}`" :type="item.type" :name="item.name" :before="item.before" :after="item.after"></display-row>
+          <display-row v-for="(item, key) in display" :key="`craft-reward-${selectedCraft}-${item.name}-${item.type}-${key}`" :type="item.type" :name="item.name" :before="item.before" :after="item.after"></display-row>
         </div>
       </v-card-text>
       <gb-tooltip v-if="craftObj.isSpecial" :min-width="0">

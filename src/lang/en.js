@@ -1448,6 +1448,9 @@ export default {
       special: {
         description: 'Special crafts provide permanent bonuses when crafted and their progress does not reset on prestige. Their cost increases with every craft and they do not have milestones'
       },
+      crafts: '{0} / {1} crafts',
+      sellEvery: 'Sell 1 every ~{0}',
+      sellPrice: 'Sell price (Value: {0})',
       rope: 'Rope',
       woodenPlanks: 'Wooden planks',
       brick: 'Brick',
