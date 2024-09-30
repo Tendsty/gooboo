@@ -1107,6 +1107,9 @@ export default {
       nextMainFeature: {
         name: 'Next main feature'
       },
+      togglePause: {
+        name: 'Toggle pause state'
+      },
       debugSkip1m: {
         name: 'Skip 1 minute'
       },
