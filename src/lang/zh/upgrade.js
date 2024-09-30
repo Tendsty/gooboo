@@ -470,6 +470,9 @@ export default {
   horde_lastWill: '遗愿',
   horde_combatStudies: '战斗研究',
   horde_boneChamber: '骨室',
+  horde_deepHatred: '深仇大恨',
+  horde_spiritLure: '精神诱惑',
+  horde_mysticalCondenser: '神秘冷凝器',
 
   horde_precision: '精确',
   horde_resolve: '解决',
@@ -652,6 +655,7 @@ export default {
   gallery_rainbowJar: '彩虹罐',
   gallery_trashContainer: '垃圾箱',
   gallery_orangeCrayon: '橙色蜡笔',
+  gallery_shapes: '形状',
   gallery_headstart: '抢先一步',
   gallery_forklift: '叉车',
   gallery_redCrate: '红色箱子',

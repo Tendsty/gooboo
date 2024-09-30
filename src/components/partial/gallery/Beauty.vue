@@ -118,10 +118,10 @@ export default {
       return this.currency.icon;
     },
     globalLevel() {
-      return Math.floor(logBase(this.totalBeauty, 5));
+      return Math.floor(logBase(this.totalBeauty, 4));
     },
     nextTotalBeauty() {
-      return Math.exp((this.globalLevel+1)*Math.log(5));
+      return Math.exp((this.globalLevel+1)*Math.log(4));
     },
     percent() {
       return 100 * this.totalBeauty / this.nextTotalBeauty;
