@@ -1358,7 +1358,7 @@ export default {
     ritualHint: '发现提示',
     ritualIngredient: '奖励成分',
     interest: '利息',
-    multiplier: '乘积',
+    multiplier: '倍数',
   },
 
   // Feature specific translations
@@ -2407,12 +2407,12 @@ export default {
       cost: '每次行动花费',
       special: {
         name: '特殊形状',
-        description: '一些特殊的形状，{0}% 几率代替普通形状出现，能够特殊收集（{1}倍形状）。在表格中同时只能出现一个特殊形状',
+        description: '一些特殊的形状，{0}% 几率代替普通形状出现，特殊收集时收集 {1} 倍形状。在表格中同时只能出现一个特殊形状',
         bomb: '以此为中心 + 形状的所有形状被特殊收集',
         dice: '刷新所有和骰子上方形状（如果骰子在顶层则是骰子下方形状）不一致的形状',
         accelerator: '特殊收集周围8个形状。如果这8个形状都相同，消耗所有表情获得更多的形状',
-        sparkles: '普通收集相邻的4个形状（如果存在），并视为一颗大炸弹',
-        hourglass: 'Immediately get converters and packages, collect shapes to increase the time',
+        sparkles: '普通收集相邻的4个形状（如果存在），并视为整个组合',
+        hourglass: '立刻获得转换器和包裹，收集形状来增加时间',
         chest: '特殊收集附近10个形状，包括周围8个和再往左右各一个。如果这10个形状都不同，获得一份特殊奖励'
       },
       buyFor: {
@@ -2434,7 +2434,7 @@ export default {
       bomb: '炸弹',
       dice: '骰子',
       accelerator: '加速器',
-      sparkles: '火花',
+      sparkles: '闪耀',
       hourglass: '沙漏',
       chest: '宝箱',
     },

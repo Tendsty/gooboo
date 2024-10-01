@@ -219,24 +219,24 @@ export default {
     description: '最高作物声望'
   },
   farm_vegetable: {
-    achievement: '素食主义者',
-    description: '获得的蔬菜'
+    achievement: '蔬菜主义者',
+    description: '收获的蔬菜'
   },
-  farm_fruit: {
-    achievement: '果食主义者',
-    description: '获得的水果'
+  farm_berry: {
+    achievement: '浆果主义者',
+    description: '收获的浆果'
   },
   farm_grain: {
     achievement: '面包师',
-    description: '获得的谷物'
+    description: '收获的粮食'
   },
   farm_flower: {
     achievement: '花店老板',
-    description: '获得的鲜花'
+    description: '收获的鲜花'
   },
   farm_gold: {
     achievement: '单片眼镜',
-    description: '获得的黄金'
+    description: '收获的黄金'
   },
   farm_bugMax: {
     description: '最高虫子数量'
@@ -292,7 +292,7 @@ export default {
   },
   gallery_shapeComboHighest: {
     achievement: '天才',
-    description: '最高形状连接组合数'
+    description: '最大形状组合数'
   },
   gallery_canvasLevelTotal: {
     achievement: '远见',
