@@ -76,6 +76,9 @@
       </tr>
     </table>
     <div class="d-flex flex-wrap justify-center align-center ma-1">
+      <price-tag class="ma-1" v-for="(value, shape) in gridStat" :key="`grid-stat-${ shape }`" :currency="`gallery_${ shape }`" :amount="value"></price-tag>
+    </div>
+    <div class="d-flex flex-wrap justify-center align-center ma-1">
       <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.gallery.shapes.name')">
         <template v-slot:activator="{ on, attrs }">
           <v-icon class="ma-1" v-bind="attrs" v-on="on">mdi-help-circle</v-icon>
@@ -183,6 +186,24 @@ export default {
     },
     canBuyMotivation() {
       return this.$store.state.unlock.galleryShape.use && this.$store.getters['currency/value']('gem_sapphire') >= GALLERY_MOTIVATION_BUY_COST && this.$store.getters['currency/value']('gallery_motivation') < 10;
+    },
+    gridStat() {
+      const shapes =  {};
+      for(const i in this.$store.state.gallery.shape) {
+        const shape = this.$store.state.gallery.shape[i];
+        if(shape.unlocked && !shape.isSpecial) {
+          shapes[i] = 0;
+        }
+      }
+      for(const row of this.shapeGrid) {
+        for(const cell of row) {
+          if(shapes[cell]!==undefined) shapes[cell]++;
+        }
+      }
+      for(const i in shapes) {
+        if(!shapes[i]) delete shapes[i];
+      }
+      return shapes;
     }
   },
   methods: {
