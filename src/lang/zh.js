@@ -1642,8 +1642,8 @@ export default {
       '使用装备效果后造成额外魔法伤害。 对于冷却时间低于 10 秒的装备效果，这并不总是有效',
     cuttingDescription: '攻击后对目标当前生命值造成一定百分比的生物伤害',
     recoveryDescription: '杀死敌人后恢复一定百分比的损失生命值',
-    defenseDescription: 'Reduce incoming damage by a percentage of your maximum health',
-    executeDescription: 'Instantly kill enemies if they are below a certain health threshold',
+    defenseDescription: '根据你的最大生命值的一定百分比减少受到的伤害',
+    executeDescription: '直接击杀低于某个生命值阈值的敌人',
     energyDescription: '一些主动技能需要能量才能使用。它会随着时间推移自动回复',
     manaDescription: '一些主动技能需要魔力才能使用。它会随着时间推移自动回复',
     boss: 'Boss',
@@ -1667,10 +1667,10 @@ export default {
     minibossBioResist: '小 Boss 只受到 50% 的生物伤害，但受到额外10%的魔法伤害',
     enemyRespawn:
       '敌人需要 {0} 时间才能重生，最多可以等待 {1} 个敌人。 击败 Boss 后所有敌人都会立即重生',
-    bossBonusDifficulty: 'Boss difficulty',
-    bossNoReward: 'You can fight this boss again at any difficulty, but will not receive rewards for doing so',
-    energyIncompatible: 'Your currently selected class cannot use this trinket because it requires energy',
-    manaIncompatible: 'Your currently selected class cannot use this trinket because it requires mana',
+    bossBonusDifficulty: 'Boss 难度',
+    bossNoReward: '你可以重新挑战任意难度的该Boss，不过不会获得任何奖励',
+    energyIncompatible: '该饰品需要能量，当前职业无法使用',
+    manaIncompatible: '该饰品需要魔力，当前职业无法使用',
     taunt: {
       title: '嘲讽模式',
       description:
@@ -2347,7 +2347,7 @@ export default {
     colorGainReduced: '100 颜色后额外增益减少为平方根',
     drumCompounding: '为了找到这个鼓，你必须先找到之前所有颜色的鼓。这会减少你找到这个鼓的几率',
     allConverterInfo: '转换颜色总是会消耗所有转换器',
-    converterOverload: 'You have way more converters than color for this conversion, resulting in x{0} conversion gain',
+    converterOverload: '此转换的转换器比颜色多得多，从而产生 x{0} 转换增益',
     idea: {
       tier: '层 {0} 创意',
       unlock: '解锁创意',

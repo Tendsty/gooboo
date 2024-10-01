@@ -691,6 +691,8 @@ export default {
   gallery_prettyColors: '漂亮的颜色',
   gallery_prettyConverter: '漂亮的转换器',
   gallery_prettyCash: '漂亮的零钱',
+  gallery_prettyShapes: '漂亮的形状',
+  gallery_prettyCanvas: '漂亮的画布',
   gallery_prettyRed: '漂亮的红色',
   gallery_prettyOrange: '漂亮的橙色',
   gallery_prettyYellow: '漂亮的黄色',
