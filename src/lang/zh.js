@@ -1333,7 +1333,7 @@ export default {
     hordeBasicLoot: '基础战利品',
     hordeItemPermanent: '永久效果',
     hordeMastery: '装备精通',
-    hordeRest: 'Rest',
+    hordeRest: '休眠',
     hordeNostalgia: '怀旧之情',
     hordeNostalgiaLost: '发现传家宝',
     hordeClassMult: '职业增益',
