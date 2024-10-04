@@ -843,8 +843,8 @@ export default {
     description: '它散发出一种奇怪的能量，仿佛可以改变时间本身',
   },
   school_examPass: {
-    name: '考试通过',
-    description: '奇怪的是，我们原来的学校不需要它们。 这里需要他们参加考试',
+    name: '准考证',
+    description: '奇怪的是，我们原来的学校不需要它们。这里需要他们参加考试',
   },
   treasure_fragment: {
     name: '片段',

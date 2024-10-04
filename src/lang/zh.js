@@ -203,7 +203,7 @@ export default {
     treasure:
       '您将要购买一件新的宝藏，该宝藏需要花费稀有货币。 您确定要购买这个吗？',
     schoolExamPass:
-      '您将要购买一张考试通行证，这需要花费稀有货币。 您确定要购买这个吗？',
+      '您将要购买一张准考证，这需要花费稀有货币。 您确定要购买这个吗？',
     treasureFragment:
       '您将要购买碎片，这需要花费稀有货币。 您确定要购买这个吗？',
     treasureDelete:
@@ -426,8 +426,8 @@ export default {
     },
     subjectBookGain: '每个解锁的科目每小时都会提供 10 本书，无论年级如何。',
     passCapGain:
-      '您每天都会获得一张新的考试通行证（{0} 中的下一个考试通行证），并且每 10 个全局级别都会获得一张新的考试通行证。',
-    buyPass: '购买一张考试通行证花费',
+      '您每天都会获得一张新的准考证（{0} 中的下一个准考证），并且每 10 个全局级别都会获得一张新的准考证。',
+    buyPass: '购买一张准考证花费',
     library: '图书馆',
     practice: '练习',
     practiceDescription:
@@ -826,29 +826,29 @@ export default {
       potions: '药水',
       performRitual: '进行仪式',
       performRitualDescription:
-        '消耗所有选定的成分来执行仪式。 如果找到正确的成分组合，即可解锁新药水。 位置也很重要！',
-      asBonusIngredient: '一个好的成分',
+        '消耗所有选定的成分来执行仪式。 如果找到正确的成分组合，即可解锁新药水。位置也很重要！',
+      asBonusIngredient: '作为加成成分',
       findablePotions: '此层可找到的药水',
       ritualStabilityDescription: '稳定性会影响基于百分比的批量几率:',
       ritualStabilityDescription1:
-        '100% - 200%: 保留基础成分的几率 (当前 {0}%)',
-      ritualStabilityDescription2: '0% - 100%: 保留奖励成分的几率 (当前 {0}%)',
+        '100% - 200%: 保留基底成分的几率 (当前 {0}%)',
+      ritualStabilityDescription2: '0% - 100%: 保留加成成分的几率 (当前 {0}%)',
       ritualStabilityDescription3:
-        '-100% - 0%: 仪式有几率失败而不会获得任何奖励 (当前 {0}%)',
+        '-100% - 0%: 仪式失败而不会获得任何奖励的几率 (当前 {0}%)',
       ritualSuccessDescription:
-        '一次成功的仪式将产生用于新仪式的夜间狩猎代币，并有可能找到新的药水。 对已知药水进行成功的仪式会提高其等级，产生夜间狩猎代币，并使该药水更难达到下一个等级。',
+        '一次成功的仪式将产生用于新仪式的夜间狩猎代币，并有可能找到新的药水。对已知药水进行成功的仪式会提高其等级，产生夜间狩猎代币，并使该药水更难达到下一个等级。',
       ritualFamiliarityDescription:
-        '如果该仪式失败，则将该仪式的稳定性和成功几率提高一定量。 此奖励会在仪式成功时叠加并重置。',
+        '如果该仪式失败，则将该仪式的稳定性和成功几率提高一定量。这些奖励能够叠加，并在仪式成功时重置。',
       ritualHintDescription:
-        '有几率揭示有关插槽或成分数量的提示。 仅对成功的新仪式给出提示。 对于每个找到的提示，此几率会降低 {0}%。 当发现暗示的仪式时，提示和提示几率惩罚会重置。',
+        '有几率出现药水配方的成分插槽或数量的提示。仅对成功的新仪式给出提示。每找到一个提示，此几率会降低 {0}%。 当提示的仪式被发现时，提示和提示几率惩罚会重置。',
       clickToAdd: '单击成分将其添加到仪式中',
-      ingredientSizeDescription: '成分尺寸可让您以每种魔法货币找到更多成分',
+      ingredientSizeDescription: '成分分量可让你用每份魔法货币找到更多成分',
       favouriteIngredient: {
-        title: '偏好原料',
-        description: '你可以选择一种原料作为偏好原料，每当你找到一份原料，你会同时获得一份你的偏好原料',
-        copy: '复制找到的原料',
+        title: '偏好成分',
+        description: '你可以选择一种成分作为偏好成分，每当你找到一份成分，你会同时获得一份你的偏好成分',
+        copy: '复制找到的成分',
       },
-      sackDescription: 'Sacks can appear with high magic amounts, consume 10x more magic and contain 10x the amount of ingredients, split evenly among all available ones',
+      sackDescription: '魔法数量很大的时候会出现袋子，消耗10x魔法找到10x成分，平均分配可以找到的所有成分',
       newDescription: {
         empty: '在这里你可以看到当前配方是否是新的（之前没有成功过）',
         isNew: '这是一个新配方，如果成功，您将收到夜间狩猎代币',
@@ -1355,8 +1355,8 @@ export default {
     cryolab: '冷冻实验室',
     ritualTier: '仪式层级',
     ritualPotionLevel: '药水等级',
-    ritualHint: '发现提示',
-    ritualIngredient: '奖励成分',
+    ritualHint: '仪式提示',
+    ritualIngredient: '仪式成分',
     interest: '利息',
     multiplier: '倍数',
   },

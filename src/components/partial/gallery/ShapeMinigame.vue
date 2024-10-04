@@ -76,7 +76,12 @@
       </tr>
     </table>
     <div class="d-flex flex-wrap justify-center align-center ma-1">
-      <price-tag class="ma-1" v-for="(value, shape) in gridStat" :key="`grid-stat-${ shape }`" :currency="`gallery_${ shape }`" :amount="value"></price-tag>
+      <div class="d-flex flex-wrap justify-center align-center ma-3">
+        <price-tag class="ma-1" v-for="stat in gridStat[0]" :key="`grid-stat-${ stat.shape }`" :currency="`gallery_${ stat.shape }`" :amount="stat.amount"></price-tag>
+      </div>
+      <div class="d-flex flex-wrap justify-center align-center ma-3">
+        <price-tag class="ma-1" v-for="stat in gridStat[1]" :key="`grid-stat-${ stat.shape }`" :currency="`gallery_${ stat.shape }`" :amount="stat.amount"></price-tag>
+      </div>
     </div>
     <div class="d-flex flex-wrap justify-center align-center ma-1">
       <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.gallery.shapes.name')">
@@ -200,10 +205,19 @@ export default {
           if(shapes[cell]!==undefined) shapes[cell]++;
         }
       }
+
+      const list = [[], []];
       for(const i in shapes) {
-        if(!shapes[i]) delete shapes[i];
+        if(shapes[i]>4) {
+          list[0].push({shape: i, amount: shapes[i]});
+        } else if(shapes[i]>0) {
+          list[1].push({shape: i, amount: shapes[i]});
+        }
       }
-      return shapes;
+      list[0].sort((a, b)=>b.amount-a.amount);
+      list[1].sort((a, b)=>b.amount-a.amount);
+
+      return list;
     }
   },
   methods: {
