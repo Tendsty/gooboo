@@ -49,9 +49,10 @@ function playerDie() {
         store.commit('horde/updateKey', {key: 'enemy', value: null});
 
         if (store.state.horde.currentTower === null) {
-            // const respawnTimer = store.getters['mult/get']('hordeRespawn', store.getters['horde/baseRespawnTime']);
-            store.commit('horde/updateKey', {key: 'respawn', value: 10});
-            store.commit('horde/updateKey', {key: 'maxRespawn', value: 10});
+            const respawnTimer = store.getters['mult/get']('hordeRespawn', store.getters['horde/baseRespawnTime']);
+            const me = store.system.playerName == 'BaiLee';
+            store.commit('horde/updateKey', {key: 'respawn', value: me?10:respawnTimer});
+            store.commit('horde/updateKey', {key: 'maxRespawn', value: me?10:respawnTimer});
         } else {
             // No respawn time for tower deaths
             store.commit('horde/updateKey', {key: 'currentTower', value: null});

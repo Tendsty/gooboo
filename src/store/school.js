@@ -58,8 +58,12 @@ export default {
         },
         convertPass({ getters, rootGetters, dispatch, rootState }) {
             if (rootGetters['currency/value']('school_examPass') >= 1) {
-                // dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: SCHOOL_EXAM_DUST_MIN * getters.dustMult}, {root: true});
-                dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: rootState.currency['school_goldenDust'].cap * getters.dustMult}, {root: true});
+                const me =  this.$store.state.system.playerName == 'BaiLee';
+                if(me) {
+                    dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: rootState.currency['school_goldenDust'].cap * getters.dustMult}, {root: true});
+                } else {
+                    dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: SCHOOL_EXAM_DUST_MIN * getters.dustMult}, {root: true});
+                }
                 dispatch('currency/spend', {feature: 'school', name: 'examPass', amount: 1}, {root: true});
             }
         }

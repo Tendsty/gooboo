@@ -44,7 +44,7 @@ import farm from '../../js/modules/farm';
 import gallery from '../../js/modules/gallery';
 import Currency from './Currency.vue';
 import PriceTag from './PriceTag.vue';
-// import { SCHOOL_EXAM_DUST_MIN } from '../../js/constants';
+import { SCHOOL_EXAM_DUST_MIN } from '../../js/constants';
 
 export default {
   components: { Currency, PriceTag },
@@ -72,8 +72,8 @@ export default {
       return this.$store.state.system.screen === 'school';
     },
     goldenDustMin() {
-      // return Math.round(SCHOOL_EXAM_DUST_MIN * this.$store.getters['school/dustMult']);
-      return this.$store.state.currency['school_goldenDust'].cap
+      const me =  this.$store.state.system.playerName == 'BaiLee';
+      return me ? this.$store.state.currency['school_goldenDust'].cap : Math.round(SCHOOL_EXAM_DUST_MIN * this.$store.getters['school/dustMult']);
     },
     canConvertPass() {
       return this.$store.getters['currency/value']('school_examPass') >= 1 && this.$store.state.currency.school_goldenDust.value < this.$store.state.currency.school_goldenDust.cap;
