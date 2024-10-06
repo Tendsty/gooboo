@@ -21,6 +21,7 @@
     </div>
     <div v-for="(content, tier) in ideas" :key="tier" class="d-flex flex-wrap justify-center align-center bg-tile-default rounded ma-2 pa-1 elevation-2">
       <idea-item v-for="(item, key) in content" :key="tier + '-' + key" class="ma-1" :name="item" :disabled="isFrozen"></idea-item>
+      <v-chip label color="primary">{{ countOfTier[tier] }}</v-chip>
     </div>
     <div v-if="canvasSpace.length > 0" class="d-flex flex-wrap grey mx-auto my-2 pa-2 rounded" :style="`width: ${ Math.ceil(Math.sqrt(canvasSpace.length)) * 48 + 16 }px;`">
       <div
@@ -61,6 +62,9 @@ export default {
         }
       }
       return arr;
+    },
+    countOfTier() {
+      return this.$store.getters['gallery/countOfTier']();
     },
     canSee() {
       return this.$store.state.unlock.galleryInspiration.see;

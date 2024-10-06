@@ -96,6 +96,13 @@ export default {
 
             return previousTierCount >= (currentTierCount * 2);
         },
+        countOfTier: (state) => () => {
+            const count = [0, 0, 0, 0, 0, 0];
+            for (const [, elem] of Object.entries(state.idea)) {
+                count[elem.tier-1] += elem.level;
+            }
+            return count;
+        },
         shapeWeights: (state) => {
             let arr = [];
             for (const [key, elem] of Object.entries(state.shape)) {
