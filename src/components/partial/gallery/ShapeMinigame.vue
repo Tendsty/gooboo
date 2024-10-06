@@ -75,12 +75,12 @@
         </td>
       </tr>
     </table>
-    <div class="d-flex flex-wrap justify-center align-center ma-1">
-      <div class="d-flex flex-wrap justify-center align-center ma-3">
-        <price-tag class="ma-1" v-for="stat in gridStat[0]" :key="`grid-stat-${ stat.shape }`" :currency="`gallery_${ stat.shape }`" :amount="stat.amount"></price-tag>
+    <div class="d-flex flex-wrap justify-center align-center">
+      <div class="d-flex flex-wrap justify-center align-center ma-2">
+        <price-tag class="ma-1" v-for="(stat, index) in gridStat[0]" :key="`grid-stat-${ index }`" :currency="`gallery_${ stat.shape }`" :amount="stat.amount" :add="stat.upgrade"></price-tag>
       </div>
-      <div class="d-flex flex-wrap justify-center align-center ma-3">
-        <price-tag class="ma-1" v-for="stat in gridStat[1]" :key="`grid-stat-${ stat.shape }`" :currency="`gallery_${ stat.shape }`" :amount="stat.amount"></price-tag>
+      <div class="d-flex flex-wrap justify-center align-center ma-2">
+        <price-tag class="ma-1" v-for="(stat, index) in gridStat[1]" :key="`grid-stat-${ index }`" :currency="`gallery_${ stat.shape }`" :amount="stat.amount" :add="stat.upgrade"></price-tag>
       </div>
     </div>
     <div class="d-flex flex-wrap justify-center align-center ma-1">
@@ -144,6 +144,18 @@ import { GALLERY_MOTIVATION_BUY_AMOUNT, GALLERY_MOTIVATION_BUY_COST, GALLERY_RER
 import Currency from '../../render/Currency.vue';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+const shapeUpgrades = {
+  circle: ['bigCircle', 'wellDrawnCircle'],
+  rectangle: ['bigRectangle', 'wellDrawnRectangle'],
+  triangle: ['creativity', 'wellDrawnTriangle'],
+  star: ['luckyStar', 'wellDrawnStar'],
+  ellipse: ['bigEllipse', 'wellDrawnEllipse'],
+  heart: ['bigHeart', 'wellDrawnHeart'],
+  square: ['bigSquare', 'wellDrawnSquare'],
+  octagon: ['bigOctagon', 'wellDrawnOctagon'],
+  pentagon: ['bigPentagon', 'wellDrawnPentagon'],
+  hexagon: ['bigHexagon', 'wellDrawnHexagon'],
+};
 
 export default {
   components: { Currency, PriceTag, StatBreakdown },
@@ -208,15 +220,16 @@ export default {
 
       const list = [[], []];
       for(const i in shapes) {
+        const stat = {shape: i, amount: shapes[i]};
+        stat.upgrade = this.$store.getters['upgrade/canAfford']('gallery', shapeUpgrades[i][0]) || this.$store.getters['upgrade/canAfford']('gallery', shapeUpgrades[i][1]);
         if(shapes[i]>4) {
-          list[0].push({shape: i, amount: shapes[i]});
-        } else if(shapes[i]>0) {
-          list[1].push({shape: i, amount: shapes[i]});
+          list[0].push(stat);
+        } else {
+          list[1].push(stat);
         }
       }
       list[0].sort((a, b)=>b.amount-a.amount);
       list[1].sort((a, b)=>b.amount-a.amount);
-
       return list;
     }
   },
