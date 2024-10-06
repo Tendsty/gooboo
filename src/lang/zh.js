@@ -827,14 +827,14 @@ export default {
       performRitual: '进行仪式',
       performRitualDescription:
         '消耗所有选定的成分来执行仪式。 如果找到正确的成分组合，即可解锁新药水。位置也很重要！',
-      asBonusIngredient: '作为加成成分',
+      asBonusIngredient: '作为奖励成分',
       findablePotions: '此层可找到的药水',
       ritualStabilityDescription: '稳定性会影响基于百分比的批量几率:',
       ritualStabilityDescription1:
         '100% - 200%: 保留基底成分的几率 (当前 {0}%)',
-      ritualStabilityDescription2: '0% - 100%: 保留加成成分的几率 (当前 {0}%)',
+      ritualStabilityDescription2: '0% - 100%: 保留奖励成分的几率 (当前 {0}%)',
       ritualStabilityDescription3:
-        '-100% - 0%: 仪式失败而不会获得任何奖励的几率 (当前 {0}%)',
+        '-100% - 0%: 仪式失败但不会获得任何奖励的几率 (当前 {0}%)',
       ritualSuccessDescription:
         '一次成功的仪式将产生用于新仪式的夜间狩猎代币，并有可能找到新的药水。对已知药水进行成功的仪式会提高其等级，产生夜间狩猎代币，并使该药水更难达到下一个等级。',
       ritualFamiliarityDescription:
