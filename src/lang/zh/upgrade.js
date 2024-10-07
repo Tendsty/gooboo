@@ -508,7 +508,7 @@ export default {
   horde_ancientReaping: '古老的收割',
   horde_ancientRemembrance: '古老的回忆',
   horde_ancientExpertise: '古老的经验',
-  horde_ancientMystery: '古老的精通',
+  horde_ancientMystery: '古老的神秘',
 
   // Horde books
   horde_bookTraining: '书籍: 训练',
