@@ -70,7 +70,7 @@ export default {
     description: '花费的时间'
   },
   mining_bestPrestige0: {
-    description: '最高声望（矿井）'
+    description: '最高声望（矿山）'
   },
   mining_bestPrestige1: {
     description: '最高声望（气态）'
@@ -139,10 +139,10 @@ export default {
     description: '最高声望（工人）'
   },
   village_bestPrestige1: {
-    description: '最高声望（制作）'
+    description: '最高声望（工匠）'
   },
   village_prestigeCount: {
-    description: '声望次数'
+    description: '声望'
   },
 
   // Horde stats
@@ -151,7 +151,7 @@ export default {
     description: '最大区域'
   },
   horde_maxDifficulty: {
-    description: '最大难度'
+    description: '最高难度'
   },
   horde_maxZoneSpeedrun: {
     achievement: '迅捷出击',
@@ -176,6 +176,10 @@ export default {
   horde_soulCorrupted: {
     achievement: '灵魂的牧者',
     description: '获得的腐化灵魂'
+  },
+  horde_maxCorruptionKill: {
+    achievement: '挑战邪恶',
+    description: '击败的最高腐化敌人'
   },
   horde_maxMastery: {
     achievement: '一招',
@@ -202,7 +206,7 @@ export default {
     description: '最高声望（职业）'
   },
   horde_prestigeCount: {
-    description: '声望次数'
+    description: '声望'
   },
 
   // Farm stats
@@ -245,7 +249,10 @@ export default {
     description: '最高瓢虫数量'
   },
   farm_butterflyMax: {
-    description: '最奥蝴蝶数量'
+    description: '最高蝴蝶数量'
+  },
+  farm_totalMystery: {
+    description: '神秘'
   },
 
   // Gallery stats
@@ -280,7 +287,7 @@ export default {
   },
   gallery_packageMax: {
     achievement: '纸板堡垒',
-    description: '最高包包数量'
+    description: '最高包裹数量'
   },
   gallery_redDrumMax: {
     achievement: '笨蛋笨蛋笨蛋',
@@ -306,7 +313,7 @@ export default {
     description: '花费的时间'
   },
   gallery_prestigeCount: {
-    description: '声望次数'
+    description: '声望'
   },
 
   // Meta stats

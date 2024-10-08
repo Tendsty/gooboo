@@ -101,7 +101,7 @@ export default {
         {name: 'gallery_greenLuck', type: 'keepUpgrade', value: true},
         {name: 'buildBlueReservoir', type: 'galleryIdea', value: true}
     ]},
-    purpleBalloon: {icon: 'mdi-balloon', color: 'blue', effect: [
+    purpleBalloon: {icon: 'mdi-balloon', color: 'purple', effect: [
         {name: 'gallery_purplePower', type: 'keepUpgrade', value: true},
         {name: 'gallery_purpleConversion', type: 'keepUpgrade', value: true}
     ]},

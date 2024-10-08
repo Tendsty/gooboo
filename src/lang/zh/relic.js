@@ -1,6 +1,6 @@
 export default {
-  relics: 'Relics',
-  museum: 'Museum',
+  relics: '圣遗物',
+  museum: '博物馆',
 
   torch: '火炬',
   purpleHeart: '紫心勋章',
@@ -78,7 +78,7 @@ export default {
   pencil: '铅笔',
   smallBrush: '小刷子',
   strangePills: '奇怪的药丸',
-  strangeScroll: '奇怪的卷纸',
+  strangeScroll: '奇怪的卷轴',
   printingPress: '印刷机',
   yellowprint: '黄色印花',
   greenBalloon: '绿色气球',

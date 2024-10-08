@@ -2039,7 +2039,7 @@ export default {
         description: '能应对任何状况的战斗者'
       },
       archer: {
-        name: '弓箭手',
+        name: '射手',
         description: '专注于暴击和持续伤害的远程战斗者'
       },
       mage: {

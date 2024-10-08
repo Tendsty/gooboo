@@ -343,6 +343,14 @@ export default {
     name: '铱矿石',
     description: '衣……什么？ 您以前从未听说过这个，它还能用来做什么吗？',
   },
+  mining_oreOsmium: {
+    name: '锇矿石',
+    description: ''
+  },
+  mining_oreLead: {
+    name: '铅矿石',
+    description: ''
+  },
   mining_granite: {
     name: '花岗岩',
     description:

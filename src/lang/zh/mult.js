@@ -161,7 +161,7 @@ export default {
   "galleryLight-blueConversion": '浅蓝色转换',
   "galleryLight-blueDrumChance": '浅蓝色鼓几率',
   galleryPinkConversion: '粉色转换',
-  galleryPinkDrumChance: '粉红鼓几率',
+  galleryPinkDrumChance: '粉色鼓几率',
   galleryShapeGain: '形状增益',
   gallerySpecialShapeChance: '特殊形状几率',
   gallerySpecialShapeMult: '特殊收集倍数',
