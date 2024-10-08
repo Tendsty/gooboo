@@ -139,7 +139,7 @@ export default {
     description: '最高声望（工人）'
   },
   village_bestPrestige1: {
-    description: '最高声望（工艺）'
+    description: '最高声望（制作）'
   },
   village_prestigeCount: {
     description: '声望次数'

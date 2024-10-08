@@ -369,6 +369,14 @@ export default {
     name: '黑曜石',
     description: '美丽的紫色碎片，它们看起来很脆弱',
   },
+  mining_deeprock: {
+    name: '深岩',
+    description: ''
+  },
+  mining_glowshard: {
+    name: '辉光碎片',
+    description: ''
+  },
   mining_barAluminium: {
     name: '铝锭',
     description: '许多中的第一个',
@@ -392,6 +400,10 @@ export default {
   mining_barIridium: {
     name: '铱锭',
     description: '这家伙到底有什么奇怪的属性……',
+  },
+  mining_barDarkIron: {
+    name: '黑铁锭',
+    description: ''
   },
   mining_ember: {
     name: '余烬',
@@ -444,7 +456,7 @@ export default {
   },
   village_copperCoin: {
     name: '铜币',
-    description: '通过向村民出售工艺品赚取铜币'
+    description: '通过向村民出售制品赚取铜币'
   },
   village_wood: {
     name: '木头',
@@ -517,7 +529,7 @@ export default {
   },
   village_shares: {
     name: '股票',
-    description: '投资赚大钱！'
+    description: '投资赚更多的钱！'
   },
   village_offering: {
     name: '供品',
@@ -564,6 +576,22 @@ export default {
     name: '神话战利品',
     description: '你以为这些已经永远消失了',
   },
+  village_acidVial: {
+    name: '酸液瓶',
+    description: '小心!'
+  },
+  village_snowflake: {
+    name: '雪花',
+    description: ''
+  },
+  village_chiliBundle: {
+    name: '辣椒包',
+    description: ''
+  },
+  village_gears: {
+    name: '齿轮',
+    description: ''
+  },
   horde_bone: {
     name: '骨头',
     description: '你杀死的敌人的骸骨',
@@ -604,6 +632,10 @@ export default {
   horde_blood: {
     name: '血液',
     description: '噢喔哦!'
+  },
+  horde_lockpick: {
+    name: '撬锁器',
+    description: '允许你从已经被击败的boss那里获得饰品。海盗专属'
   },
   farm_vegetable: {
     name: '蔬菜',
@@ -783,7 +815,7 @@ export default {
     description: '',
   },
   gallery_motivation: {
-    name: '表情',
+    name: '动机',
     description: ''
   },
   gallery_mysteryShape: {
@@ -839,15 +871,19 @@ export default {
     description: '搬运这些重书很困难',
   },
   school_goldenDust: {
-    name: '金尘',
+    name: '金色的灰尘',
     description: '它散发出一种奇怪的能量，仿佛可以改变时间本身',
   },
   school_examPass: {
     name: '准考证',
     description: '奇怪的是，我们原来的学校不需要它们。这里需要他们参加考试',
   },
+  card_shinyDust: {
+    name: '闪亮的灰尘',
+    description: ''
+  },
   treasure_fragment: {
-    name: '片段',
+    name: '碎片',
     description: '破碎的宝藏碎片',
   },
 };

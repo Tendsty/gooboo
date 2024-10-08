@@ -3,7 +3,7 @@ export default {
   cardsSuffix: ' 卡片',
   cardPower: '卡片力量',
   cardPowerValue: '{0} 卡片力量',
-  cardPowerDescription: '所有激活的卡片都添加了卡片力量，能够增加对应模块的基础数值',
+  cardPowerDescription: '所有激活的卡片都添加了卡片力量，能够增加对应功能的基础属性',
   notFound: '未找到卡片',
   fullCollectionReward: '集齐奖励',
   canFind: '这张卡可以在以下卡包中找到',

@@ -10,12 +10,12 @@ export default {
     description: '为这门手艺找到最好的镐',
   },
   village_ingredientBox: {
-    name: '原料盒',
+    name: '原料箱',
     description: '包含一些只能在这里找到的特殊原料'
   },
   horde_manaPotion: {
     name: '魔力药剂',
-    description: '恢复50%最大魔力'
+    description: '恢复50%最大魔力值'
   },
   farm_basic: {
     name: '基础肥料',

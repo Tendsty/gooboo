@@ -472,7 +472,7 @@ export default {
   horde_boneChamber: '骨室',
   horde_deepHatred: '深仇大恨',
   horde_spiritLure: '精神诱惑',
-  horde_mysticalCondenser: '神秘冷凝器',
+  horde_mysticalCondenser: '神秘电容器',
 
   horde_precision: '精确',
   horde_resolve: '解决',
@@ -718,7 +718,7 @@ export default {
 
   // Treasure premium upgrades
   treasure_moreSlots: '更多插槽',
-  treasure_moreFragments: '更多片段',
+  treasure_moreFragments: '更多碎片',
 
   // Event upgrades
   event_firefly: '萤火虫',
