@@ -32,7 +32,7 @@
       </template>
     </div>
     <div v-if="hasBreakdown" class="ml-2 mt-n1">
-      <span>({{ $formatNum(effect.value * healingMult * 100, true) }}% base</span>
+      <span>(基础 {{ $formatNum(effect.value * healingMult * 100, true) }}%</span>
       <span v-if="effect.str !== undefined">,&nbsp;</span>
       <span class="orange-red--text" :class="`text--${ themeModifier }`" v-if="effect.str !== undefined">+{{ $formatNum(effect.str * healingMult * 100, true) }}% <v-icon size="12" :color="`orange-red ${ themeModifier }`">mdi-arm-flex</v-icon></span>
       <span v-if="effect.int !== undefined">,&nbsp;</span>

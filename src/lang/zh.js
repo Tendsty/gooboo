@@ -1114,7 +1114,7 @@ export default {
     village_0: '最大容纳量',
     village_1: '到达制作里程碑数',
     horde_0: '击败最高区域首领',
-    horde_1: '战争通行证等级',
+    horde_1: '战役通行证等级',
     farm_0: '所有作物等级的总和',
     gallery_0: 'Log4 总计美丽',
     debug: '调试',
@@ -1338,7 +1338,7 @@ export default {
     hordeNostalgiaLost: '发现传家宝',
     hordeClassMult: '职业倍数',
     hordeClassLevel: '职业等级',
-    hordeBattlePass: '战争通行证',
+    hordeBattlePass: '战役通行证',
     hordeEnergy: '能量',
     hordeMana: '魔力',
     hordeTime: '时间',
@@ -2076,7 +2076,7 @@ export default {
       }
     },
     battlePass: {
-      name: '战争通行证',
+      name: '战役通行证',
       quest: {
         stat: '到达 {0} {1}',
         zone: '清除 {0} 区域 {1}',
@@ -2111,9 +2111,9 @@ export default {
     bossName: {
       ohilio_guard1: '守卫 A',
       ohilio_guard2: '守卫 B',
-      ohilio: '俄亥俄',
-      chriz1: '克丽丝',
-      chriz2: '克丽丝',
+      ohilio: '奥西利欧',
+      chriz1: '克里兹',
+      chriz2: '克里兹',
       mina: '米娜',
     },
     area: {
@@ -2122,22 +2122,22 @@ export default {
       zone: '区域 {0}',
       difficulty: '{0} 难度',
       enemyAmount: '这个区域有 {0} 敌人',
-      warzone: '战场',
+      warzone: '战区',
       monkeyJungle: '猴子丛林',
       loveIsland: '爱之岛',
     },
     sign: {
       sign_1: {
         text: '我的追求是完美的，我从不失手！你最好小心点！',
-        signed: '俄亥俄',
+        signed: '奥西利欧',
       },
       sign_2: {
         text: '你觉得你能伤害我? 不可能! 我将闪避一切, 你根本碰不到我! 我是无法触碰的!',
-        signed: '俄亥俄',
+        signed: '奥西利欧',
       },
       sign_3: {
         text: '我是最伟大的，最强的，完美的，不可战胜的！连我的守卫都比不上我！你觉得你有机会对付我吗？哈！受死吧!',
-        signed: '俄亥俄',
+        signed: '奥西利欧',
       },
       sign_4: {
         text: '在你仔细观察了这些可爱的动物之后，你发现它们不是真实的。它们只是鬼火的存在！但它们为何在那? 让你难受? 没时间思考了, 你必须战斗客服这些动物精神',
@@ -2146,7 +2146,7 @@ export default {
     },
     quest: {
       name: '任务',
-      description: '完成任务提高战争通行证并解锁永久奖励',
+      description: '完成任务提高战役通行证并解锁永久奖励',
       completed: '已完成 {0}',
       allCompleted: '全部完成',
     },
