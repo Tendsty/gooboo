@@ -415,7 +415,7 @@ export default {
   },
   mining_ember: {
     name: '余烬',
-    description: '小心，天气还很热！',
+    description: '小心，它还很烫！',
   },
   mining_resin: {
     name: '树脂',
@@ -428,7 +428,7 @@ export default {
   },
   mining_smoke: {
     name: '烟雾',
-    description: '这里呼吸越来越困难，这烟比普通烟更重',
+    description: '呼吸越来越困难了，这里的烟雾比一般的更浓',
   },
   mining_helium: {
     name: '氦',
