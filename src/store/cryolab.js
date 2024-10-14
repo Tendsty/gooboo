@@ -84,7 +84,7 @@ export default {
             (o.effect ?? [[]]).forEach((effect, subfeature) => {
                 const activeMultName = `${ o.name }CryolabActive${ subfeature }`;
                 const passiveMultName = `${ o.name }CryolabPassive${ subfeature }`;
-                const featureMult = o.name === 'village' ? 0.4 : 1;
+                const featureMult = 1;
                 modifiedEffect.push([
                     {name: activeMultName, type: 'base', value: lvl => lvl * featureMult * 0.02},
                     {name: passiveMultName, type: 'base', value: lvl => lvl * featureMult * 0.01},
