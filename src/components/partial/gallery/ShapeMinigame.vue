@@ -133,6 +133,16 @@
           <price-tag currency="gem_sapphire" :amount="motivationBuyCost"></price-tag>
         </div>
       </gb-tooltip>
+      <gb-tooltip :min-width="0">
+        <template v-slot:activator="{ on, attrs }">
+          <div v-bind="attrs" v-on="on">
+              <v-btn class="ma-1" width="36" min-width="36" color="primary" @click="cheatAccelerator"><v-icon>mdi-rotate-orbit</v-icon></v-btn>
+          </div>
+        </template>
+        <div class="mt-0">
+          <span>将左上角的形状变为加速器</span>
+        </div>
+      </gb-tooltip>
       <currency v-for="item in currencies.slice(1)" :key="item" class="ma-1" :name="item" :gainBase="1"></currency>
     </div>
   </div>
@@ -286,6 +296,9 @@ export default {
       } else {
         this.$store.dispatch('gallery/buyMotivation');
       }
+    },
+    cheatAccelerator(){
+      this.$store.dispatch('gallery/cheatAccelerator');
     }
   }
 }
