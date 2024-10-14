@@ -306,7 +306,7 @@ export default {
     description: '画布总等级'
   },
   gallery_hourglassHighest: {
-    achievement: '无聊的时间',
+    achievement: '借来的时间',
     description: '沙漏时间达到 1d '
   },
   gallery_timeSpent: {

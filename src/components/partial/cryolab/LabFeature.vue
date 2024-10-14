@@ -7,7 +7,7 @@
           <v-progress-linear class="rounded" height="20" :value="expPercent" v-bind="attrs" v-on="on">{{ $vuetify.lang.t('$vuetify.gooboo.level') }} {{ level }} ({{ $formatNum(expPercent, true) }}%)</v-progress-linear>
         </template>
         <template v-if="expGain > 0">
-          <div>{{ $vuetify.lang.t(`$vuetify.cryolab.expDescription`, $formatNum(exp), $formatNum(expNeeded), $formatNum(expGain)) }}</div>
+          <div>{{ $vuetify.lang.t(`$vuetify.cryolab.expDescription`, $formatNum(exp), $formatNum(expNeeded), $formatNum(expGain), parseFloat((expNeeded-exp)/expGain).toFixed(2))}}</div>
           <div>{{ $vuetify.lang.t(`$vuetify.cryolab.expDescription2`) }}</div>
         </template>
         <alert-text v-else type="error">{{ $vuetify.lang.t(`$vuetify.cryolab.expNoGain`) }}</alert-text>
