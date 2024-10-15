@@ -133,7 +133,7 @@
           <price-tag currency="gem_sapphire" :amount="motivationBuyCost"></price-tag>
         </div>
       </gb-tooltip>
-      <gb-tooltip :min-width="0">
+      <gb-tooltip :min-width="0" v-if="unlockedAllShapes">
         <template v-slot:activator="{ on, attrs }">
           <div v-bind="attrs" v-on="on">
               <v-btn class="ma-1" width="36" min-width="36" color="primary" @click="cheatAccelerator"><v-icon>mdi-rotate-orbit</v-icon></v-btn>
@@ -241,6 +241,9 @@ export default {
       list[0].sort((a, b)=>b.amount-a.amount);
       list[1].sort((a, b)=>b.amount-a.amount);
       return list;
+    },
+    unlockedAllShapes() {
+      return this.$store.state.gallery.shape.hexagon.unlocked && this.$store.state.gallery.shape.chest.unlocked
     }
   },
   methods: {
