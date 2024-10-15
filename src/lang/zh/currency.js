@@ -863,7 +863,7 @@ export default {
     description: ''
   },
   gallery_pentagon: {
-    name: '五角星',
+    name: '五边形',
     description: '这是一个形状，而不是建筑'
   },
   gallery_hexagon: {

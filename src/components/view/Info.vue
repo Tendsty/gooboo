@@ -68,6 +68,50 @@
       </v-card-actions>
     </v-card>
     <v-card class="ma-2">
+      <v-card-title class="justify-center">汉化基础</v-card-title>
+      <v-card-text>本游戏由锅巴汉化组引入，汉化基础继承自锅巴汉化组，部分汉化略有不同。</v-card-text>
+      <v-card-actions class="flex-wrap justify-end">
+        <v-btn class="ma-1" color="primary" target="_blank" href="https://gityxs.github.io/gooboo/"><v-icon class="mr-2">mdi-open-in-new</v-icon>锅巴版gooboo</v-btn>
+        <v-btn class="ma-1" color="#ea4d89" target="_blank" href="https://gityxs.github.io/gooboo/"><v-icon class="mr-2">mdi-open-in-new</v-icon>gooboo介绍</v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-card class="ma-2">
+      <v-card-title class="justify-center">本网站</v-card-title>
+      <v-card-subtitle class="text-center">架设者是 BaiLee</v-card-subtitle>
+      <v-card-text>Gooboo CN QQ群：468760729 欢迎加入讨论。下方可以查看玩家自己填写的 Excel Wiki 和 Word FAQ，纯手工录入，若有错误和遗漏在所难免，也欢迎加入QQ群共同编辑。</v-card-text>
+      <v-card-text>以下是本网站和原版网站在游玩时的不同之处</v-card-text>
+      <v-card-text>
+        <span class="d-flex ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">显示</v-chip>
+          <span>画廊的全局等级进度</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">显示</v-chip>
+          <span>画廊的灵感每层使用数</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">显示</v-chip>
+          <span>画廊的形状游戏显示各个形状的个数</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">显示</v-chip>
+          <span>冷冻实验室显示升级所需天数</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="green">辅助</v-chip>
+          <span>画廊生产加速器（解锁完所有形状后出现）</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
+          <span>村庄冻结收益 40% -> 100%（作者于v1.5.0削弱）</span>
+        </span>
+      </v-card-text>
+      <v-card-actions class="flex-wrap justify-end">
+        <v-btn class="ma-1" color="primary" target="_blank" href="https://docs.qq.com/sheet/DQlNPSHdVVkdxZ0l4?tab=pifj5o"><v-icon class="mr-2">mdi-open-in-new</v-icon>WIKI</v-btn>
+        <v-btn class="ma-1" color="primary" target="_blank" href="https://docs.qq.com/doc/DQlNoUk9kZWFnYVVZ"><v-icon class="mr-2">mdi-open-in-new</v-icon>FAQ</v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-card class="ma-2">
       <v-card-title class="justify-center">{{ $vuetify.lang.t('$vuetify.info.numberFormatting') }}</v-card-title>
       <v-card-text>
         <div class="ma-1">{{ $vuetify.lang.t('$vuetify.info.numberFormattingDescription') }}</div>

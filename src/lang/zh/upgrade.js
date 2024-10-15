@@ -664,8 +664,8 @@ export default {
   gallery_wellDrawnSquare: '画得很好的正方形',
   gallery_bigOctagon: '大八边形',
   gallery_wellDrawnOctagon: '画得很好的八边形',
-  gallery_bigPentagon: '大五角星',
-  gallery_wellDrawnPentagon: '画得很好的五角星',
+  gallery_bigPentagon: '大五边形',
+  gallery_wellDrawnPentagon: '画得很好的五边形',
   gallery_bigHexagon: '大六边形',
   gallery_wellDrawnHexagon: '画得很好的六边形',
 
