@@ -41,7 +41,7 @@ const migrations = {
     '1.5.3': v1_5_3,
 };
 
-export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }
+export { checkLocal, saveLocal, loadFile, exportFile, exportFileString, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }
 const semverCompare = require('semver/functions/compare');
 
 /**
@@ -425,6 +425,14 @@ function exportFile(file) {
         file = getSavefile();
     }
     download(file, getSavefileName(), 'text/plain');
+}
+
+function exportFileString() {
+    const file = getSavefile();
+    navigator.clipboard.writeText(file)
+    store.commit('system/addNotification', {color: 'success', timeout: 5000, message: {
+        type: 'copy',
+    }});
 }
 
 function getSavefileName() {

@@ -420,6 +420,11 @@
               <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveExport') }}</v-list-item-title>
             </v-badge>
           </v-list-item>
+          <v-list-item @click="copySavedata">
+            <v-badge :value="backupHint" color="red" dot>
+              <v-list-item-title>复制存档数据</v-list-item-title>
+            </v-badge>
+          </v-list-item>
           <label for="gooboo-savefile-input">
             <v-list-item class="v-list-item--link" role="menuitem">
               <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveImport') }}</v-list-item-title>
@@ -449,6 +454,7 @@
         <achievement-message v-if="message.type === 'achievement'" :message="message"></achievement-message>
         <feature-message v-else-if="message.type === 'feature'" :message="message"></feature-message>
         <save-message v-else-if="message.type === 'save'" :message="message"></save-message>
+        <copydata-message v-else-if="message.type === 'copy'" :message="message"></copydata-message>
         <import-message v-else-if="message.type === 'import'" :message="message"></import-message>
         <note-message v-else-if="message.type === 'note'" :message="message"></note-message>
         <error-message v-else-if="message.type === 'error'" :message="message"></error-message>
@@ -513,12 +519,13 @@ import General from './components/view/General.vue';
 import Event from './components/view/Event.vue';
 import Treasure from './components/view/Treasure.vue';
 import Cryolab from './components/view/Cryolab.vue';
-import { cleanStore, decodeFile, exportFile, saveLocal } from './js/savefile';
+import { cleanStore, decodeFile, exportFile, exportFileString, saveLocal } from './js/savefile';
 import NextTile from './components/partial/main/NextTile.vue';
 import VSnackbars from 'v-snackbars'
 import AchievementMessage from './components/partial/snackbar/AchievementMessage.vue';
 import FeatureMessage from './components/partial/snackbar/FeatureMessage.vue';
 import SaveMessage from './components/partial/snackbar/SaveMessage.vue';
+import CopydataMessage from './components/partial/snackbar/CopydataMessage.vue';
 import NoteMessage from './components/partial/snackbar/NoteMessage.vue';
 import CurrentNote from './components/render/CurrentNote.vue';
 import ErrorMessage from './components/partial/snackbar/ErrorMessage.vue';
@@ -568,6 +575,7 @@ export default {
     AchievementMessage,
     FeatureMessage,
     SaveMessage,
+    CopydataMessage,
     NoteMessage,
     CurrentNote,
     ErrorMessage,
@@ -696,6 +704,10 @@ export default {
     exportSave() {
       this.$store.commit('system/updateKey', {key: 'backupTimer', value: 0});
       exportFile();
+    },
+    copySavedata() {
+      this.$store.commit('system/updateKey', {key: 'backupTimer', value: 0});
+      exportFileString();
     },
     importSave() {
       let file = document.getElementById('gooboo-savefile-input').files[0];
