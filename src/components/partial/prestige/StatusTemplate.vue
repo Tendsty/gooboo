@@ -71,7 +71,7 @@ export default {
     subfeatures() {
       return [0, ...this.$store.state.system.features[this.feature].subfeatures.map((unlock, key) => {
         return {unlock, key: key + 1};
-      }).filter(elem => this.$store.state.unlock[elem.unlock].see).map(elem => elem.key)];
+      }).filter(elem => this.$store.state.unlock[elem.unlock].see && this.$store.state.meta.globalLevel>=this.$store.state.meta.globalLevelUnlocks[elem.unlock]).map(elem => elem.key)];
     },
     hasPrestigeGain() {
       return Object.keys(this.prestigeGain).length > 0;

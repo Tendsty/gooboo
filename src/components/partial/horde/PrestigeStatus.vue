@@ -43,6 +43,8 @@ export default {
       subfeature: state => state.system.features.horde.currentSubfeature,
       isFrozen: state => state.cryolab.horde.active,
       unlock: state => state.unlock,
+      globalLevel: state => state.meta.globalLevel,
+      globalLevelUnlocks: state => state.meta.globalLevelUnlocks
     }),
     prestigeGain() {
       let obj = {};
@@ -82,7 +84,7 @@ export default {
       return this.selectedSubfeature === 0 && this.unlock.hordeSacrifice.see;
     },
     canSeeClasses() {
-      return this.selectedSubfeature === 1 && this.unlock.hordeClassesSubfeature.see;
+      return this.selectedSubfeature === 1 && this.unlock.hordeClassesSubfeature.see  && this.globalLevelUnlocks.hordeClassesSubfeature < this.globalLevel;
     },
     maxSacrifice() {
       return this.$store.getters['mult/get']('hordeMaxSacrifice');
