@@ -110,10 +110,10 @@ export default {
                     dispatch('note/find', 'cryolab_1', {root: true});
                 }
 
-                commit('updateSubfeatureKey', {name: o.feature, sub, key: 'exp', value: exp});
+                commit('updateSubfeatureKey', {name: o.feature, subfeature: sub, key: 'exp', value: exp});
                 if (newLevel > oldLevel) {
-                    commit('updateSubfeatureKey', {name: o.feature, sub, key: 'level', value: newLevel});
-                    dispatch('applyLevelEffects', {feature: o.feature, sub});
+                    commit('updateSubfeatureKey', {name: o.feature, subfeature: sub, key: 'level', value: newLevel});
+                    dispatch('applyLevelEffects', {feature: o.feature, subfeature: sub});
                 }
             })
         },
