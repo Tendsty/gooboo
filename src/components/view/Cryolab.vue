@@ -3,7 +3,7 @@
     <div class="d-flex justify-center ma-2">
       <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.mult.cryolabMaxFeatures`)">
         <template v-slot:activator="{ on, attrs }">
-          <span v-bind="attrs" v-on="on">{{ $vuetify.lang.t('$vuetify.cryolab.frozen', currentFrozen, maxFrozen) }}</span>
+          <span v-bind="attrs" v-on="on">{{ $vuetify.lang.t('$vuetify.cryolab.frozen', currentFrozen, maxFrozen) }}{{ cheater ? '（检测到你的冻结数超出最大可冻结数，所有冻结收益强制为0）' : '' }}</span>
         </template>
         <stat-breakdown name="cryolabMaxFeatures"></stat-breakdown>
       </gb-tooltip>
@@ -38,6 +38,9 @@ export default {
     },
     maxFrozen() {
       return this.$store.getters['mult/get']('cryolabMaxFeatures');
+    },
+    cheater() {
+      return this.currentFrozen > this.maxFrozen;
     }
   }
 }

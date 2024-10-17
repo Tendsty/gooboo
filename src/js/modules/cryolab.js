@@ -59,6 +59,10 @@ export default {
     tickspeed: 1,
     unlockNeeded: 'cryolabFeature',
     tick(seconds) {
+        // 修改存档多个冷冻的直接不生效
+        if(Object.values(store.state.cryolab).filter(elem=>elem.active).length > store.getters['mult/get']('cryolabMaxFeatures')) {
+            return
+        }
         for (const [key, elem] of Object.entries(store.state.cryolab)) {
             if (elem.active) {
                 const expGain = store.getters['cryolab/expGain'](key);
