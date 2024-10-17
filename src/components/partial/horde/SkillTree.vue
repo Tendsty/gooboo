@@ -26,7 +26,10 @@
       <div class="class-level-current red rounded-circle d-flex justify-center align-center balloon-text-dynamic flex-shrink-0">{{ currentLevel }}</div>
       <v-progress-linear class="rounded-r ml-n1" color="red" height="20" :value="expProgress * 100">{{ $formatTime(expTime) }} ({{ $formatNum(expProgress * 100) }}%)</v-progress-linear>
     </div>
-    <div class="text-center">{{ $vuetify.lang.t('$vuetify.horde.classes.skillPointsLeft', skillPoints) }}</div>
+    <div class="d-flex align-center ma-2" style="justify-content: center;">
+      <div class="text-center ml-4 mr-4">{{ $vuetify.lang.t('$vuetify.horde.classes.skillPointsLeft', skillPoints) }}</div>
+      <v-btn color="red" v-if="isMe" @click="resetPoints">重置技能点</v-btn>
+    </div>
     <v-card
       v-for="(skillRow, key) in skillTree"
       :key="`skill-row-${ key }`"
@@ -80,7 +83,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import SkillButton from './SkillButton.vue';
 
 export default {
@@ -183,6 +186,9 @@ export default {
       skillPoints: state => state.horde.skillPoints,
       skillLevel: state => state.horde.skillLevel,
     }),
+    ...mapGetters({
+      isMe: 'system/isMe',
+    }),
     selectedClass() {
       return this.$store.state.horde.fighterClass[this.$store.state.horde.selectedClass];
     },
@@ -206,6 +212,11 @@ export default {
     },
     expTime() {
       return Math.ceil((1 - this.expProgress) * this.$store.getters['horde/expDifficulty'](this.currentLevel));
+    }
+  },
+  methods: {
+    resetPoints() {
+      this.$store.dispatch('horde/resetSkillPoints');
     }
   }
 }
