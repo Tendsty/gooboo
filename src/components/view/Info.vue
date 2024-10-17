@@ -106,6 +106,14 @@
           <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
           <span>村庄冻结收益 40% -> 100%（作者于v1.5.0削弱）</span>
         </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">反作弊</v-chip>
+          <span>无法通过修改存档来提前解锁子功能</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">反作弊</v-chip>
+          <span>无法通过修改存档来设置多个冷冻实验室，此时冷冻收益强制为0</span>
+        </span>
       </v-card-text>
       <v-card-actions class="flex-wrap justify-end">
         <v-btn class="ma-1" color="primary" target="_blank" href="https://docs.qq.com/sheet/DQlNPSHdVVkdxZ0l4?tab=pifj5o"><v-icon class="mr-2">mdi-open-in-new</v-icon>WIKI</v-btn>
