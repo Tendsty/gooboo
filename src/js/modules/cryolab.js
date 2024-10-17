@@ -67,7 +67,7 @@ export default {
             if (elem.active) {
                 const expGain = store.getters['cryolab/expGain'](key);
                 if (expGain > 0) {
-                    store.dispatch('cryolab/gainExp', {feature: key, amount: expGain * seconds / SECONDS_PER_DAY});
+                    store.dispatch('cryolab/gainExp', {feature: key, seconds});
                 }
             }
             const prestigeGain = store.getters['cryolab/prestigeGain'](key);

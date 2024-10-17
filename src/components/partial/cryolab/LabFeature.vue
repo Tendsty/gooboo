@@ -2,18 +2,18 @@
   <v-card>
     <v-card-title class="pa-2 justify-center">{{ $vuetify.lang.t(`$vuetify.feature.${ name }`) }}</v-card-title>
     <v-card-text class="py-0">
-      <gb-tooltip>
+      <gb-tooltip v-for="sub in subfeatures" :key="sub">
         <template v-slot:activator="{ on, attrs }">
-          <v-progress-linear class="rounded" height="20" :value="expPercent" v-bind="attrs" v-on="on">{{ $vuetify.lang.t('$vuetify.gooboo.level') }} {{ level }} ({{ $formatNum(expPercent, true) }}%)</v-progress-linear>
+          <v-progress-linear class="rounded" height="20" :value="expPercentAll[sub]" v-bind="attrs" v-on="on">{{ $vuetify.lang.t('$vuetify.gooboo.level') }}{{ feature.level[sub] }} ({{ $formatNum(expPercentAll[sub], true) }}%)</v-progress-linear>
         </template>
-        <template v-if="expGain > 0">
-          <div>{{ $vuetify.lang.t(`$vuetify.cryolab.expDescription`, $formatNum(exp), $formatNum(expNeeded), $formatNum(expGain), parseFloat((expNeeded-exp)/expGain).toFixed(2))}}</div>
+        <template v-if="expGain[sub] > 0">
+          <div>{{ $vuetify.lang.t(`$vuetify.cryolab.expDescription`, $formatNum(feature.exp[sub]), $formatNum(expNeededAll[sub]), $formatNum(expGain[sub]), parseFloat((expNeededAll[sub]-feature.exp[sub])/expGain[sub]).toFixed(2))}}</div>
           <div>{{ $vuetify.lang.t(`$vuetify.cryolab.expDescription2`) }}</div>
         </template>
         <alert-text v-else type="error">{{ $vuetify.lang.t(`$vuetify.cryolab.expNoGain`) }}</alert-text>
         <div class="text-center">{{ $vuetify.lang.t(`$vuetify.cryolab.expNext`) }}</div>
         <div>
-          <display-row v-for="(item, key) in effect" :key="`${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
+          <display-row v-for="(item, key) in effect[sub]" :key="`${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
         </div>
       </gb-tooltip>
       <div class="d-flex justify-center align-center ma-1">
@@ -68,26 +68,41 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    cheater: {
+      type: Boolean
     }
   },
   computed: {
     feature() {
       return this.$store.state.cryolab[this.name];
     },
+    allSubfeatures() {
+      const all = new Array(this.feature.data.length).fill(0);
+      for(const i in all) {
+        all[i] = parseInt(i);
+      }
+      return all;
+    },
+    subfeatures() {
+      return this.$store.getters['system/isMe'] ?  this.allSubfeatures: [ this.subfeature ];
+    },
     subfeature() {
       return this.$store.state.system.features[this.name].currentSubfeature;
     },
-    level() {
-      return this.feature.level[this.subfeature];
+    expNeededAll() {
+      const needs = [];
+      for(const sub in this.allSubfeatures) {
+        needs.push(this.$store.getters['cryolab/expNeeded'](this.feature.level[sub]));
+      }
+      return needs;
     },
-    exp() {
-      return this.feature.exp[this.subfeature];
-    },
-    expNeeded() {
-      return this.$store.getters['cryolab/expNeeded'](this.level);
-    },
-    expPercent() {
-      return 100 * this.exp / this.expNeeded;
+    expPercentAll() {
+      const percents = [];
+      for(const sub in this.allSubfeatures) {
+        percents.push(100 * this.feature.exp[sub] / this.expNeededAll[sub]);
+      }
+      return percents;
     },
     passiveMultName() {
       return `${ this.name }CryolabPassive${ this.subfeature }`;
@@ -102,19 +117,25 @@ export default {
       return this.$store.getters['mult/get'](this.activeMultName);
     },
     effect() {
-      return this.feature.effect[this.subfeature].map(elem => {
+      return this.feature.effect.map((e, sub) => e.map(elem => {
+        const level = this.feature.level[sub];
         return {
-          ...elem,
-          before: this.level > 0 ? elem.value(this.level) : null,
-          after: elem.value(this.level + 1)
-        };
-      });
+            ...elem,
+            before: level > 0 ? elem.value(level) : null,
+            after: elem.value(level + 1)
+          };
+        })
+      );
     },
     canFreeze() {
       return this.feature.active || this.$store.getters['cryolab/currentFrozen'] < this.$store.getters['mult/get']('cryolabMaxFeatures');
     },
     expGain() {
-      return this.$store.getters['cryolab/expGain'](this.name);
+      const gains = [];
+      for(const sub in this.allSubfeatures) {
+        gains.push(this.$store.getters['cryolab/expGain'](this.name, sub));
+      }
+      return gains;
     },
     prestigeGain() {
       return this.$store.getters['cryolab/prestigeGain'](this.name);

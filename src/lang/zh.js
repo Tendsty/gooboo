@@ -1857,7 +1857,7 @@ export default {
       pawn: '士兵',
       knight: '骑士',
       bishop: '主教',
-      rook: '骗子',
+      rook: '战车',
       queen: '女王',
       king: '国王',
     },

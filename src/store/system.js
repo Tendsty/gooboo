@@ -534,6 +534,9 @@ export default {
                 }
             }
             return obj;
+        },
+        isMe: (state) => {
+            return state.playerName === 'BaiLee';
         }
     },
     mutations: {

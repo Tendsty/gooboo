@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { logBase } from "../js/utils/math";
+import { SECONDS_PER_DAY } from "../js/constants";
 
 export default {
     namespaced: true,
@@ -20,9 +21,9 @@ export default {
         featureIsFrozen: (state, getters, rootState) => {
             return !!state[rootState.system.screen]?.active;
         },
-        expGain: (state, getters, rootState) => (feature) => {
+        expGain: (state, getters, rootState) => (feature, subfeature = 0) => {
             let gain = 0;
-            const subfeature = rootState.system.features[feature].currentSubfeature;
+            // const subfeature = rootState.system.features[feature].currentSubfeature;
             for (const [, stat] of Object.entries(state[feature].data[subfeature])) {
                 const statValue = rootState.stat[stat].total;
                 if (statValue > 0) {
@@ -36,7 +37,7 @@ export default {
             const subfeature = rootState.system.features[feature].currentSubfeature;
             let obj = {};
             state[feature].data.forEach((data, index) => {
-                const gainMult = rootGetters['mult/get'](`${ feature }Cryolab${ (subfeature === index && state[feature].active) ? 'Active' : 'Passive' }${ index }`);
+                const gainMult = rootGetters['mult/get'](`${ feature }Cryolab${ ((rootGetters['system/isMe'] || subfeature === index) && state[feature].active) ? 'Active' : 'Passive' }${ index }`);
                 if (gainMult > 0) {
                     for (const [currency, stat] of Object.entries(data)) {
                         const statValue = rootState.stat[stat].total;
@@ -95,26 +96,30 @@ export default {
             });
             commit('init', {...o, effect: modifiedEffect});
         },
-        gainExp({ state, rootState, getters, commit, dispatch }, o) {
-            const subfeature = rootState.system.features[o.feature].currentSubfeature;
-            let exp = state[o.feature].exp[subfeature] + o.amount;
-            const oldLevel = state[o.feature].level[subfeature];
-            let newLevel = oldLevel;
+        gainExp({ state, rootState, getters, rootGetters, commit, dispatch }, o) {
+            const { currentSubfeature, subfeatures } = rootState.system.features[o.feature];
+            const features = rootGetters['system/isMe'] ? [ 0, ...Object.keys(subfeatures).map( n=> parseInt(n)+1) ] : [ currentSubfeature ];
+            features.forEach(sub => {
+                let exp = state[o.feature].exp[sub] + getters.expGain(o.feature, sub) * o.seconds / SECONDS_PER_DAY;
+                const oldLevel = state[o.feature].level[sub];
+                let newLevel = oldLevel;
 
-            while (exp >= getters.expNeeded(newLevel)) {
-                exp -= getters.expNeeded(newLevel);
-                newLevel++;
-                dispatch('note/find', 'cryolab_1', {root: true});
-            }
+                while (exp >= getters.expNeeded(newLevel)) {
+                    exp -= getters.expNeeded(newLevel);
+                    newLevel++;
+                    dispatch('note/find', 'cryolab_1', {root: true});
+                }
 
-            commit('updateSubfeatureKey', {name: o.feature, subfeature, key: 'exp', value: exp});
-            if (newLevel > oldLevel) {
-                commit('updateSubfeatureKey', {name: o.feature, subfeature, key: 'level', value: newLevel});
-                dispatch('applyLevelEffects', {feature: o.feature, subfeature});
-            }
+                commit('updateSubfeatureKey', {name: o.feature, sub, key: 'exp', value: exp});
+                if (newLevel > oldLevel) {
+                    commit('updateSubfeatureKey', {name: o.feature, sub, key: 'level', value: newLevel});
+                    dispatch('applyLevelEffects', {feature: o.feature, sub});
+                }
+            })
         },
         applyLevelEffects({ state, dispatch }, o) {
-            const level = state[o.feature].level[o.subfeature];
+            let level = state[o.feature].level[o.subfeature];
+            if(level >= 12) level = 0 // 禁止改冷冻100级
             if (level > 0) {
                 state[o.feature].effect[o.subfeature].forEach(eff => {
                     dispatch('system/applyEffect', {
