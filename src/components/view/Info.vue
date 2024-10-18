@@ -83,35 +83,43 @@
       <v-card-text>以下是本网站和原版网站在游玩时的不同之处</v-card-text>
       <v-card-text>
         <span class="d-flex ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">显示</v-chip>
-          <span>画廊的全局等级进度</span>
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>在画廊声望页显示画廊的全局等级进度</span>
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">显示</v-chip>
-          <span>画廊的灵感每层使用数</span>
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>显示画廊的灵感每层已使用数</span>
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">显示</v-chip>
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
           <span>画廊的形状游戏显示各个形状的个数</span>
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">显示</v-chip>
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>村庄-工匠显示每个制品的价格时间之比和当前里程碑升级所需时间（以不间断制作计算）</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
           <span>冷冻实验室显示升级所需天数</span>
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="green">辅助</v-chip>
-          <span>画廊生产加速器（解锁完所有形状后出现）</span>
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
+          <span>画廊虚空生产加速器（解锁完所有形状后出现）</span>
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
           <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
           <span>村庄冻结收益 40% -> 100%（作者于v1.5.0削弱）</span>
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">反作弊</v-chip>
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
+          <span>学校点击“参加考试”即可以满分通过考试</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="green">反作弊</v-chip>
           <span>无法通过修改存档来提前解锁子功能</span>
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">反作弊</v-chip>
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="green">反作弊</v-chip>
           <span>无法通过修改存档来设置多个冷冻实验室，此时冷冻收益强制为0</span>
         </span>
       </v-card-text>
