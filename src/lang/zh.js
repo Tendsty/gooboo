@@ -1122,12 +1122,12 @@ export default {
   theme: {
     name: '主题',
     icon: {
-      hasCustomNavbar: '自定义导航栏',
-      hasCustomBackground: '自定义背景色',
-      hasCustomColors: '自定义调色板',
-      hasCustomUI: '自定义用户界面元素',
-      hasAnimations: '包括动画',
-      hasParticles: '包括粒子',
+      hasCustomNavbar: '定制导航栏',
+      hasCustomBackground: '定制背景色',
+      hasCustomColors: '定制调色板',
+      hasCustomUI: '定制用户界面元素',
+      hasAnimations: '包含动画',
+      hasParticles: '包含粒子',
     },
     default: '蓝色',
     cyan: '青色',
