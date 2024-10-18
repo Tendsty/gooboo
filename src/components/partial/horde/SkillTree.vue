@@ -28,7 +28,7 @@
     </div>
     <div class="d-flex align-center ma-2" style="justify-content: center;">
       <div class="text-center ml-4 mr-4">{{ $vuetify.lang.t('$vuetify.horde.classes.skillPointsLeft', skillPoints) }}</div>
-      <v-btn color="red" v-if="isMe" @click="resetPoints">重置技能点</v-btn>
+      <v-btn color="error" v-if="isMe" @click="resetPoints">重置技能点</v-btn>
     </div>
     <v-card
       v-for="(skillRow, key) in skillTree"
