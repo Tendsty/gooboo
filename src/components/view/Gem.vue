@@ -2,6 +2,16 @@
   <v-row no-gutters>
     <v-col cols="12" lg="6" v-if="$vuetify.breakpoint.smAndDown || $vuetify.breakpoint.lgAndUp" :class="$vuetify.breakpoint.mdAndUp ? 'scroll-container' : ''">
       <gem-list></gem-list>
+      <div class="d-flex justify-center" v-if="isMe">
+        <v-btn class="justify-start balloon-text-dynamic px-2" color="red" @click="cheatRuby">
+          <v-icon class="mr-1">mdi-rhombus</v-icon>
+          <span>+1000</span>
+        </v-btn>
+        <v-btn class="justify-start balloon-text-dynamic px-2 ml-2" color="amber" @click="cheatTopaz">
+          <v-icon class="mr-1">mdi-triangle</v-icon>
+          <span>+1000</span>
+        </v-btn>
+      </div>
     </v-col>
     <v-col class="px-2" cols="12" md="6" lg="3" :class="$vuetify.breakpoint.mdAndUp ? 'scroll-container' : ''">
       <gem-list v-if="$vuetify.breakpoint.mdOnly"></gem-list>
@@ -33,7 +43,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      mainFeatures: 'system/mainFeatures'
+      mainFeatures: 'system/mainFeatures',
+      isMe: 'system/isMe'
     }),
     gemShopFeatures() {
       let arr = [...this.mainFeatures];
@@ -71,6 +82,14 @@ export default {
     },
     canSeeAchievement() {
       return this.$store.state.unlock.achievementFeature.see;
+    }
+  },
+  methods: {
+    cheatRuby() {
+      this.$store.dispatch('currency/gain', {feature: 'gem', name: 'ruby', amount: 1000});
+    },
+    cheatTopaz() {
+      this.$store.dispatch('currency/gain', {feature: 'gem', name: 'topaz', amount: 1000});
     }
   }
 }

@@ -581,7 +581,7 @@ export default {
 
   // Farm premium upgrades
   farm_biggerVegetables: '更大的蔬菜',
-  farm_biggerFruits: '更大的水果',
+  farm_biggerBerries: '更大的浆果',
   farm_biggerGrain: '更大的粮食',
   farm_biggerFlowers: '更大的鲜花',
   farm_moreExperience: '更多经验',
