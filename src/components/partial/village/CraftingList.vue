@@ -106,7 +106,7 @@
         <v-progress-linear v-if="currentMilestone !== null" class="rounded mt-2" color="blue" height="24" :value="milestonePercent">
           <div class="d-flex w-100 justify-space-between align-center ma-1">
             <span>{{ $vuetify.lang.t('$vuetify.village.crafting.crafts', $formatNum(craftObj.crafted), $formatNum(currentMilestone.needed)) }}:</span>
-            <span>{{ $formatTime(craftObj.timeNeeded * (currentMilestone.needed - craftObj.crafted) }}</span>
+            <span>{{ $formatTime(craftObj.timeNeeded * (currentMilestone.needed - craftObj.crafted)) }}</span>
             <span v-if="currentMilestone.type === 'changeStat'" :key="`milestone-reward-stat-${selectedCraft}-${currentMilestone.needed}`">{{ $vuetify.lang.t(`$vuetify.village.crafting.changeStat.${ currentMilestone.name }`, currentMilestone.name === 'timeNeeded' ? $formatTime(currentMilestone.value) : $formatNum(currentMilestone.value)) }}</span>
             <display-row v-else :key="`milestone-reward-other-${selectedCraft}-${currentMilestone.needed}`" :type="currentMilestone.type" :name="currentMilestone.name" :after="currentMilestone.value"></display-row>
           </div>
