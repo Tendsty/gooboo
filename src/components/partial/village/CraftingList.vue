@@ -67,14 +67,24 @@
       <v-card-text>
         <div class="d-flex flex-wrap mx-n1 my-1">
           <template v-for="(amount, currency, index) in craftObj.price">
-            <v-chip v-if="currency.split('_')[0] === 'craft'" :key="currency + '-' + index" small label class="ma-1 px-2 balloon-text-dynamic" :color="craftingList[currency.split('_')[1]].color">
-              <v-icon class="mr-2">{{ craftingList[currency.split('_')[1]].icon }}</v-icon>
-              <span :class="{
-                'red--text': craftingList[currency.split('_')[1]].owned < (craftObj.isSpecial ? amount(craftObj.owned) : amount),
-                'text--lighten-2': $vuetify.theme.dark,
-                'text--darken-4': !$vuetify.theme.dark
-              }">{{ $formatNum(craftObj.isSpecial ? amount(craftObj.owned) : amount) }}</span>
-            </v-chip>
+            <gb-tooltip v-if="currency.split('_')[0] === 'craft'" :key="currency + '-' + index">
+              <template v-slot:activator="{ on, attrs }">
+                <v-chip small label class="ma-1 px-2 balloon-text-dynamic" :color="craftingList[currency.split('_')[1]].color" v-bind="attrs" v-on="on">
+                  <v-icon class="mr-2">{{ craftingList[currency.split('_')[1]].icon }}</v-icon>
+                  <span :class="{
+                    'red--text': craftingList[currency.split('_')[1]].owned < (craftObj.isSpecial ? amount(craftObj.owned) : amount),
+                    'text--lighten-2': $vuetify.theme.dark,
+                    'text--darken-4': !$vuetify.theme.dark
+                  }">{{ $formatNum(craftObj.isSpecial ? amount(craftObj.owned) : amount) }}</span>
+                </v-chip>
+              </template>
+              <div class="mt-0 text-center">
+                {{ craftingList[currency.split('_')[1]].owned}} / {{ (craftObj.isSpecial ? amount(craftObj.owned) : amount) }}
+              </div>
+              <div class="mt-0 text-center" v-if="craftingList[currency.split('_')[1]].owned < (craftObj.isSpecial ? amount(craftObj.owned) : amount)">
+                预计需要 {{  $formatTime(((craftObj.isSpecial ? amount(craftObj.owned) : amount) - craftingList[currency.split('_')[1]].owned) * craftingList[currency.split('_')[1]].timeNeeded) }}
+              </div>
+            </gb-tooltip>
             <price-tag v-else class="ma-1" :key="currency + '-' + index" :currency="currency" :amount="craftObj.isSpecial ? amount(craftObj.owned) : amount"></price-tag>
           </template>
           <v-chip small label class="ma-1 px-2" color="error">
