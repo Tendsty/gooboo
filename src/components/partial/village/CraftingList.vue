@@ -111,7 +111,11 @@
             :disabled="isFrozen || !craftObj.isSelling && currentCounter >= maxCounter"
           ><v-icon>{{ craftObj.isSelling ? 'mdi-currency-usd' : 'mdi-currency-usd-off' }}</v-icon></v-btn>
           <v-text-field type="number" :label="$vuetify.lang.t('$vuetify.village.crafting.sellPrice', $formatNum(craftObj.value))" min="1" outlined hide-details v-model="sellPrice"></v-text-field>
-          <div class="text-center" style="min-width: 175px;">{{ $vuetify.lang.t('$vuetify.village.crafting.sellEvery', $formatTime(Math.round(1 / Math.min(craftObj.cacheSellChance, 1)))) }}</div>
+          <div class="text-center" style="min-width: 175px;">
+            {{ $vuetify.lang.t('$vuetify.village.crafting.sellEvery', $formatTime(Math.round(1 / Math.min(craftObj.cacheSellChance, 1)))) }}
+            <br/>
+            需要~{{ $formatTime(Math.round(1 / Math.min(craftObj.cacheSellChance, 1))*craftObj.owned) }}
+          </div>
         </div>
         <v-progress-linear v-if="currentMilestone !== null" class="rounded mt-2" color="blue" height="24" :value="milestonePercent">
           <div class="d-flex w-100 justify-space-between align-center ma-1">
