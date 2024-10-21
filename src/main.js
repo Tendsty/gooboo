@@ -10,6 +10,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/900.css";
 import "@fontsource/caveat/400.css";
 import "@fontsource/roboto-mono/400.css";
+import "@fontsource/ma-shan-zheng/400.css";
 import GoobooTooltip from './components/partial/render/GoobooTooltip.vue';
 import { APP_TESTING } from './js/constants';
 

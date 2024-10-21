@@ -288,7 +288,7 @@ export default {
     farmGnomeBoost: '增加附近每个花园侏儒的收获收益4%。高级花园侏儒算作2个',
     farmLonelyGrow: '如果田间没有其他此类作物，生长速度会加快两倍',
     farmFertileBoost: '每花费1块蓝宝石的肥料，产量提升30%',
-    farmYieldConversion: '将 60% 的收益转换为其他收益类型（每种 20%）',
+    farmYieldConversion: '将 5% 的收益转换为其他收益类型',
     farmFastPrestige: '声望将作物等级降低 5，而不是重置为 0',
     farmLuckyHarvest: '1%的几率获得8倍的收获增益',
     farmSelfless: '所有作物增产5%',
@@ -2350,7 +2350,7 @@ export default {
     colorGainReduced: '100 颜色后额外增益减少为平方根',
     drumCompounding: '为了找到这个鼓，你必须先找到之前所有颜色的鼓。这会减少你找到这个鼓的几率',
     allConverterInfo: '转换颜色总是会消耗所有转换器',
-    converterOverload: '对于这种转换，你有比颜色更多的转换器，从而产生 x{0} 转换增益',
+    converterOverload: '可转换的转换器份数大于颜色份数，提供 x{0} 转换增益',
     idea: {
       tier: '层 {0} 创意',
       unlock: '解锁创意',

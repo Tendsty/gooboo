@@ -8,7 +8,7 @@
 .current-note {
   font-size: 150%;
   line-height: 100%;
-  font-family: Caveat;
+  font-family: Caveat, 'Ma Shan Zheng';
 }
 </style>
 
