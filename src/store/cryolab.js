@@ -119,7 +119,7 @@ export default {
         },
         applyLevelEffects({ state, dispatch }, o) {
             let level = state[o.feature].level[o.subfeature];
-            if(level >= 12) level = 0 // 禁止改冷冻100级
+            if(level >= 50) level = 0 // 禁止改冷冻100级
             if (level > 0) {
                 state[o.feature].effect[o.subfeature].forEach(eff => {
                     dispatch('system/applyEffect', {
