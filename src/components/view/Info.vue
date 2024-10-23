@@ -179,7 +179,7 @@
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
           <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
-          <span>村庄-工匠显示每个制品的价格时间之比和当前里程碑升级所需时间（以不间断制作计算）</span>
+          <span>村庄-工匠显示每个制品的基础价格和预计销售时间之比和当前里程碑升级所需时间（以不间断制作计算）</span>
         </span>
         <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
           <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>

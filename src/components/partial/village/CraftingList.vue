@@ -87,11 +87,10 @@
             </gb-tooltip>
             <price-tag v-else class="ma-1" :key="currency + '-' + index" :currency="currency" :amount="craftObj.isSpecial ? amount(craftObj.owned) : amount"></price-tag>
           </template>
-          <v-chip small label class="ma-1 px-2" color="error">
-            <v-icon>mdi-currency-usd</v-icon>
-            <span>/</span>
-            <v-icon>mdi-clock</v-icon>
-            <span class="ml-2">{{ parseFloat(craftObj.value / craftObj.timeNeeded).toFixed(3) }}</span>
+          <v-chip small label class="ma-1 px-2" color="error" v-if="!craftObj.isSpecial">
+            <v-icon>mdi-circle-multiple</v-icon>
+            <span>/s</span>
+            <span class="ml-2">{{ parseFloat(craftObj.value / (Math.round(1 / Math.min(craftObj.cacheSellChance, 1)))).toFixed(3) }}</span>
           </v-chip>
         </div>
         <div class="d-flex align-center my-1">
