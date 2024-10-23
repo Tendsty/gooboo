@@ -1513,7 +1513,7 @@ export default {
       },
       nextEffect: '下一个制作效果',
       special: {
-        description: '特制作能够给制作过程提供永久加成，进度不随声望重置。每制作一次，消耗提升。特殊制作没有里程碑'
+        description: '特殊制品能够给制作过程提供永久加成，进度不随声望重置。每制作一次，消耗提升。特殊制品没有里程碑'
       },
       crafts: '制作 {0} / {1}',
       sellEvery: '每 ~{0} 卖出 1',
@@ -1530,7 +1530,7 @@ export default {
       shower: '淋浴间',
       pouch: '袋子',
       cupboard: '橱柜',
-      weight: '哑铃',
+      weight: '砝码',
       scissors: '剪刀',
       herbTea: '草药茶',
       glasses: '眼镜',
@@ -1544,7 +1544,7 @@ export default {
       spicySoup: '辣味汤',
       stopwatch: '秒表',
       smallChest: '小宝箱',
-      bush: '轴承',
+      bush: '灌木丛',
       handSaw: '手锯',
       garage: '车库',
       diamondRing: '钻戒',
