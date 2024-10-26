@@ -34,6 +34,7 @@
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthNext"><v-icon>mdi-step-forward</v-icon></v-btn>
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthNext10"><v-icon>mdi-step-forward-2</v-icon></v-btn>
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
+      <v-btn small color="success" class="ml-1" v-if="isMe" @click="timeSkip(1000)">>>1000秒</v-btn>
     </div>
     <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.mining.durability')">
       <template v-slot:activator="{ on, attrs }">
@@ -210,6 +211,8 @@ import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
 import BeaconSector from './BeaconSector.vue';
+import mining from '../../../js/modules/mining';
+
 
 export default {
   components: { StatBreakdown, CurrencyIcon, AlertText, DisplayRow, BeaconSector },
@@ -269,6 +272,7 @@ export default {
       rareDropBase: 'mining/rareDropBase',
       enhancementLevel: 'mining/enhancementLevel',
       currentDepthBeacon: 'mining/currentDepthBeacon',
+      isMe: 'system/isMe'
     }),
     maxDepth() {
       return this.$store.state.stat[`mining_maxDepth${this.subfeature}`].value;
@@ -384,6 +388,9 @@ export default {
       this.$store.commit('mining/updateKey', {key: 'depth', value: this.maxDepth});
       this.$store.commit('system/updateTutorialKey', {name: 'miningDepth', key: 'completed', value: true});
       this.resetDurability();
+    },
+    timeSkip(seconds) {
+      mining.tick(Math.round(seconds / mining.tickspeed));
     }
   }
 }
