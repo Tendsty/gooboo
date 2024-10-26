@@ -60,6 +60,7 @@
           <v-progress-circular rotate="270" :color="name" :value="canvasPercent * 100" v-bind="attrs" v-on="on">{{ canvasLevel }}</v-progress-circular>
         </template>
         <div v-if="canvasUntilNext !== null" class="mb-2">{{ $vuetify.lang.t('$vuetify.gallery.canvas.untilNextLevel', $formatTime(canvasUntilNext)) }}</div>
+        <div v-if="fakeCanvasUntilNext !== null" class="mb-2">全画布{{ $vuetify.lang.t('$vuetify.gallery.canvas.untilNextLevel', $formatTime(fakeCanvasUntilNext)) }}</div>
         <display-row class="mt-0" v-for="(item, key) in canvasDisplay" :key="`${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
         <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.galleryCanvasSpeed') }}</h3>
         <stat-breakdown name="galleryCanvasSpeed" :base="canvasSpeedBase" :mult-array="canvasSpeedMult"></stat-breakdown>
@@ -213,6 +214,12 @@ export default {
     },
     canvasUntilNext() {
       const speed = this.$store.getters['mult/get']('galleryCanvasSpeed', this.canvasSpeedBase, this.canvasSpeedMultAmount);
+      const difficulty = this.$store.getters['gallery/canvasDifficulty'](this.name, this.canvasLevel);
+      return speed > 0 ? ((1 - this.canvasPercent) * difficulty / speed) : null;
+    },
+    fakeCanvasUntilNext() {
+      const canvasSpeedBase = getSequence(10, this.canvasSpaceMax) * 0.1;
+      const speed = this.$store.getters['mult/get']('galleryCanvasSpeed', canvasSpeedBase, this.canvasSpeedMultAmount);
       const difficulty = this.$store.getters['gallery/canvasDifficulty'](this.name, this.canvasLevel);
       return speed > 0 ? ((1 - this.canvasPercent) * difficulty / speed) : null;
     },
