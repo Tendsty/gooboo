@@ -6,6 +6,15 @@
       </currency>
       <currency v-else-if="subfeature === 1" large class="ma-1" name="village_copperCoin"></currency>
     </div>
+    <div v-if="subfeature===1" class="d-flex justify-center">
+      <v-card>
+        <v-card-text class="text-center">
+          <div>100%容量铜币获得股票：{{ copperCoinCal.share.toFixed(1) }}</div>
+          <div>铜币增益：x {{ copperCoinCal.mult.toFixed(3) }}</div>
+          <div>升级增益减少时间（达到100%容量）：{{ copperCoinCal.ratio.toFixed(2) }}%</div>
+        </v-card-text>
+      </v-card>
+  </div>
     <div v-if="stat.village_wood.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.material`) }}</div>
     <div class="d-flex flex-wrap justify-center ma-1">
       <template v-for="item in material">
@@ -160,6 +169,15 @@ export default {
         const nextAmount = this.$store.getters['currency/value']('village_' + food) + this.$store.getters['mult/get'](this.$store.getters['currency/gainMultName']('village', food));
         return {name: 'villageFood_' + food, value: Math.min(taxpayers, nextAmount) * VILLAGE_COINS_PER_FOOD};
       }).filter(elem => elem.value > 0);
+    },
+    copperCoinCal() {
+      const { multCache: mult } = this.$store.state.mult.items.currencyVillageCopperCoinGain
+      const { cap, value } = this.$store.state.currency.village_copperCoin
+      const { level, price } = this.$store.state.upgrade.item.village_decoration
+      const { village_copperCoin: needed } = price(level)
+      const ratio = (1 - (cap - value - needed) / ((cap - value) * 1.175)) * 100
+      const share = this.$store.getters['mult/get']('currencyVillageSharesGain', cap / 1000)
+      return { share, mult, ratio }
     }
   },
   methods: {
