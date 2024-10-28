@@ -9,7 +9,7 @@
     <div v-if="subfeature===1" class="d-flex justify-center">
       <v-card>
         <v-card-text class="text-center">
-          <div>100%容量铜币获得股票：{{ copperCoinCal.share.toFixed(1) }}</div>
+          <div>100%容量铜币获得股票：{{ $formatNum(copperCoinCal.share) }}</div>
           <div>铜币增益：x {{ copperCoinCal.mult.toFixed(3) }}</div>
           <div>升级增益减少时间（达到100%容量）：{{ copperCoinCal.ratio.toFixed(2) }}%</div>
         </v-card-text>
@@ -172,10 +172,10 @@ export default {
     },
     copperCoinCal() {
       const { multCache: mult } = this.$store.state.mult.items.currencyVillageCopperCoinGain
-      const { cap, value } = this.$store.state.currency.village_copperCoin
+      const { cap } = this.$store.state.currency.village_copperCoin
       const { level, price } = this.$store.state.upgrade.item.village_decoration
       const { village_copperCoin: needed } = price(level)
-      const ratio = (1 - (cap - value - needed) / ((cap - value) * 1.175)) * 100
+      const ratio = (1 - (cap - needed) / (cap * 1.175)) * 100
       const share = this.$store.getters['mult/get']('currencyVillageSharesGain', cap / 1000)
       return { share, mult, ratio }
     }
