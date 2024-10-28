@@ -172,10 +172,11 @@ export default {
     },
     copperCoinCal() {
       const { multCache: mult } = this.$store.state.mult.items.currencyVillageCopperCoinGain
-      const { cap } = this.$store.state.currency.village_copperCoin
+      const { cap, value } = this.$store.state.currency.village_copperCoin
       const { level, price } = this.$store.state.upgrade.item.village_decoration
       const { village_copperCoin: needed } = price(level)
-      const ratio = (1 - cap / ((cap - needed) * 1.175)) * 100
+      const amount = Math.max(value,needed)
+      const ratio = (1 - (cap - amount + needed) / ((cap - amount) * 1.175)) * 100
       const share = this.$store.getters['mult/get']('currencyVillageSharesGain', cap / 1000)
       return { share, mult, ratio }
     }
