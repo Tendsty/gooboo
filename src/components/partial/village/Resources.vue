@@ -175,7 +175,7 @@ export default {
       const { cap } = this.$store.state.currency.village_copperCoin
       const { level, price } = this.$store.state.upgrade.item.village_decoration
       const { village_copperCoin: needed } = price(level)
-      const ratio = (1 - (cap - needed) / (cap * 1.175)) * 100
+      const ratio = (1 - cap / ((cap - needed) * 1.175)) * 100
       const share = this.$store.getters['mult/get']('currencyVillageSharesGain', cap / 1000)
       return { share, mult, ratio }
     }
