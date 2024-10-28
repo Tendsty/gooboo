@@ -90,7 +90,7 @@
           <v-chip small label class="ma-1 px-2" color="error" v-if="!craftObj.isSpecial">
             <v-icon>mdi-circle-multiple</v-icon>
             <span>/s</span>
-            <span class="ml-2">{{ parseFloat(sellPrice / (Math.round(1 / Math.min(craftObj.cacheSellChance, 1)))).toFixed(3) }}</span>
+            <span class="ml-2">{{ parseFloat(sellPrice *craftObj.cacheSellChance).toFixed(4) }}</span>
           </v-chip>
         </div>
         <div class="d-flex align-center my-1">

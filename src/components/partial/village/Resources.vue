@@ -11,6 +11,8 @@
         <v-card-text class="text-center">
           <div>100%容量铜币获得股票：{{ $formatNum(copperCoinCal.share) }}</div>
           <div>铜币增益：x {{ copperCoinCal.mult.toFixed(3) }}</div>
+          <div>收入：~{{ copperCoinCal.gain.toFixed(2) }}/秒 ~{{ $formatNum(copperCoinCal.gain*3600) }}/时 ~{{ $formatNum(copperCoinCal.gain*3600*24) }}/天</div>
+          <div>距离100%容量时间：~{{ $formatTime(copperCoinCal.time) }}</div>
           <div>升级增益减少时间（达到100%容量）：{{ copperCoinCal.ratio.toFixed(2) }}%</div>
         </v-card-text>
       </v-card>
@@ -171,14 +173,24 @@ export default {
       }).filter(elem => elem.value > 0);
     },
     copperCoinCal() {
-      const { multCache: mult } = this.$store.state.mult.items.currencyVillageCopperCoinGain
-      const { cap, value } = this.$store.state.currency.village_copperCoin
-      const { level, price } = this.$store.state.upgrade.item.village_decoration
-      const { village_copperCoin: needed } = price(level)
-      const amount = Math.max(value,needed)
-      const ratio = (1 - (cap - amount + needed) / ((cap - amount) * 1.175)) * 100
-      const share = this.$store.getters['mult/get']('currencyVillageSharesGain', cap / 1000)
-      return { share, mult, ratio }
+      const { multCache: mult } = this.$store.state.mult.items.currencyVillageCopperCoinGain;
+      const { cap, value } = this.$store.state.currency.village_copperCoin;
+      const { level, price } = this.$store.state.upgrade.item.village_decoration;
+      const { village_copperCoin: needed } = price(level);
+      const amount = Math.max(value,needed);
+      const ratio = (1 - (cap - amount + needed) / ((cap - amount) * 1.175)) * 100;
+      const share = this.$store.getters['mult/get']('currencyVillageSharesGain', cap / 1000);
+      let gain = 0;
+      const crafts = this.$store.state.village.crafting;
+      for(const i in crafts) {
+        const { isSelling, sellPrice, cacheSellChance } = crafts[i];
+        if(isSelling) {
+          gain += sellPrice * cacheSellChance;
+        }
+      }
+      gain *= mult;
+      const time = (cap - value) / gain;
+      return { share, mult, ratio, gain, time }
     }
   },
   methods: {
