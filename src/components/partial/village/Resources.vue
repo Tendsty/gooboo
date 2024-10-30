@@ -183,8 +183,8 @@ export default {
       let gain = 0;
       const crafts = this.$store.state.village.crafting;
       for(const i in crafts) {
-        const { isSelling, sellPrice, cacheSellChance } = crafts[i];
-        if(isSelling) {
+        const { isSelling, sellPrice, cacheSellChance, owned } = crafts[i];
+        if(isSelling && owned) {
           gain += sellPrice * cacheSellChance;
         }
       }
