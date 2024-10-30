@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { HORDE_INACTIVE_ITEM_COOLDOWN } from '../../../js/constants';
 import { logBase } from '../../../js/utils/math';
 import AlertText from '../render/AlertText.vue';
@@ -108,6 +108,9 @@ export default {
       chosenActive: state => state.horde.chosenActive,
       subfeature: state => state.system.features.horde.currentSubfeature,
       isFrozen: state => state.cryolab.horde.active,
+    }),
+    ...mapGetters({
+      isMe: 'system/isMe'
     }),
     item() {
       if (this.subfeature === 1) {
@@ -165,7 +168,7 @@ export default {
       return HORDE_INACTIVE_ITEM_COOLDOWN;
     },
     charges() {
-      return Math.floor(logBase(2 - (this.cooldownLeft / this.cooldown), 2));
+      return this.isMe ? Math.floor(- this.cooldownLeft / this.cooldown) : Math.floor(logBase(2 - (this.cooldownLeft / this.cooldown), 2));
     },
     nextChargeTime() {
       return (0 - (2 - Math.pow(2, this.charges + 1) - this.cooldownLeft / this.cooldown)) * this.cooldown;
