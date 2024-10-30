@@ -54,7 +54,8 @@ export default {
   computed: {
     ...mapGetters({
       mainFeatures: 'system/mainFeatures',
-      isOnMainFeature: 'system/isOnMainFeature'
+      isOnMainFeature: 'system/isOnMainFeature',
+      isMe: 'system/isMe'
     }),
     isValidTime() {
       return !isNaN(this.minutes) && this.minutes > 0;
@@ -83,7 +84,9 @@ export default {
       if (this.canAfford) {
         const module = {mining, village, horde, farm, gallery}[this.$store.state.system.screen];
         module.tick(Math.round(this.minutes * 60 / module.tickspeed));
-        this.$store.dispatch('currency/spend', {feature: 'school', name: 'goldenDust', amount: this.dustCost});
+        if(!this.isMe) {
+          this.$store.dispatch('currency/spend', {feature: 'school', name: 'goldenDust', amount: this.dustCost});
+        }
       }
     },
     convertPass() {
