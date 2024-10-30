@@ -34,7 +34,12 @@
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthNext"><v-icon>mdi-step-forward</v-icon></v-btn>
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthNext10"><v-icon>mdi-step-forward-2</v-icon></v-btn>
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
-      <v-btn small color="success" class="ml-1" v-if="isMe" @click="timeSkip(1000)">>>1000秒</v-btn>
+      <gb-tooltip title-text="注意">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn small color="success" class="ml-1" :disabled="isFrozen" @click="timeSkip(1020)" v-bind="attrs" v-on="on">>>1020秒</v-btn>
+        </template>
+        <div>只是快捷使用沙漏加速，会消耗1020秒（17分钟）的金尘</div>
+      </gb-tooltip>
     </div>
     <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.mining.durability')">
       <template v-slot:activator="{ on, attrs }">
@@ -391,6 +396,9 @@ export default {
     },
     timeSkip(seconds) {
       mining.tick(Math.round(seconds / mining.tickspeed));
+      if(!this.isMe) {
+        this.$store.dispatch('currency/spend', {feature: 'school', name: 'goldenDust', amount: Math.round(Math.pow(seconds/60, 0.9) * 100)});
+      }
     }
   }
 }
