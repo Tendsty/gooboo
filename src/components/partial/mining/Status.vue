@@ -402,7 +402,7 @@ export default {
     },
     timeSkip() {
       mining.tick(Math.round(17*60 / mining.tickspeed));
-      if(this.isMe) {
+      if(!this.isMe) {
         this.$store.dispatch('currency/spend', {feature: 'school', name: 'goldenDust', amount: this.dustCost});
       }
     }
