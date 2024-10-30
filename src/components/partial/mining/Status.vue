@@ -36,7 +36,7 @@
       <v-btn icon :disabled="isDeepest || isFrozen" @click="depthMax"><v-icon>mdi-skip-forward</v-icon></v-btn>
       <gb-tooltip title-text="注意">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn small color="success" class="ml-1" :disabled="isFrozen" @click="timeSkip(1020)" v-bind="attrs" v-on="on">>>1020秒</v-btn>
+          <v-btn small color="success" class="ml-1" :disabled="!canAffordDust || isFrozen" @click="timeSkip" v-bind="attrs" v-on="on">>>1020秒</v-btn>
         </template>
         <div>只是快捷使用沙漏加速，会消耗1020秒（17分钟）的金尘</div>
       </gb-tooltip>
@@ -352,6 +352,12 @@ export default {
       } else {
         return [];
       }
+    },
+    dustCost() {
+      return Math.round(Math.pow(17, 0.9) * 100);
+    },
+    canAffordDust() {
+      return this.$store.getters['currency/value']('school_goldenDust') >= this.dustCost;
     }
   },
   methods: {
@@ -394,10 +400,10 @@ export default {
       this.$store.commit('system/updateTutorialKey', {name: 'miningDepth', key: 'completed', value: true});
       this.resetDurability();
     },
-    timeSkip(seconds) {
-      mining.tick(Math.round(seconds / mining.tickspeed));
-      if(!this.isMe) {
-        this.$store.dispatch('currency/spend', {feature: 'school', name: 'goldenDust', amount: Math.round(Math.pow(seconds/60, 0.9) * 100)});
+    timeSkip() {
+      mining.tick(Math.round(17*60 / mining.tickspeed));
+      if(this.isMe) {
+        this.$store.dispatch('currency/spend', {feature: 'school', name: 'goldenDust', amount: this.dustCost});
       }
     }
   }
