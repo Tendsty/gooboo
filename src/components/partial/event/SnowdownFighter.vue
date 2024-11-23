@@ -38,7 +38,10 @@
 
 <template>
   <div class="snowdown-fighter bg-tile-default d-flex flex-column justify-space-between align-center rounded-lg elevation-2" :class="{'snowdown-fighter-mobile': $vuetify.breakpoint.xsOnly}">
-    <div :class="{'pt-1': $vuetify.breakpoint.smAndUp}">{{ $vuetify.lang.t(`$vuetify.event.snowdown.fighter.${stats.name}`) }}</div>
+    <div :class="{'pt-1': $vuetify.breakpoint.smAndUp}">
+      <span v-if="type === 'player' || stats.name === 'player'">{{ playerName }}</span>
+      <span v-else>{{ $vuetify.lang.t(`$vuetify.event.snowdown.fighter.${stats.name}`) }}</span>
+    </div>
     <div class="snowdown-fighter-stun" v-if="stats.stun !== undefined && stats.stun > 0">
       <v-icon class="mr-1" x-small>mdi-octagram-outline</v-icon>
       <span class="snowdown-fighter-text">{{ $formatNum(stats.stun) }}</span>
@@ -71,7 +74,7 @@
         <template v-slot:activator="{ on, attrs }">
           <div class="d-flex align-center" v-bind="attrs" v-on="on">
             <v-icon class="mr-1" x-small>mdi-exclamation-thick</v-icon>
-            <span class="snowdown-fighter-text">{{ $formatNum(critChance(stats.critRating) * 100) }}% +{{ $formatNum(Math.round(critDamage(stats.critRating))) }}</span>
+            <span class="snowdown-fighter-text">{{ $formatNum(critChance(stats.critRating) * 100) }}% +{{ $formatNum(Math.round(critDamage(stats.critRating) * critMult)) }}</span>
           </div>
         </template>
         <div>{{ $vuetify.lang.t('$vuetify.event.snowdown.critDescription') }}</div>
@@ -155,6 +158,20 @@ export default {
         return null;
       }
       return this.$store.state.snowdown.pet[this.stats.name];
+    },
+    critMult() {
+      if (this.stats.critMult !== undefined) {
+        return this.stats.critMult;
+      } else if (this.stats.name === 'player') {
+        return this.$store.state.mult.items.snowdownAttack.multCache;
+      } else if (this.type === 'pet') {
+        return this.$store.state.mult.items.snowdownPetAttack.multCache;
+      } else {
+        return 1;
+      }
+    },
+    playerName() {
+      return this.$store.state.system.playerName ?? this.$vuetify.lang.t('$vuetify.info.statistics.defaultPlayerName');
     }
   }
 }

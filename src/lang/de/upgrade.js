@@ -827,10 +827,7 @@ export default {
 
   event_pineTrees: 'Tannen',
   event_woolHat: 'Wollmütze',
-  event_mulledWine: 'Glühwein',
   event_cookies: 'Kekse',
-  event_iceSculpture: 'Eisskulptur',
   event_attackBoost: 'Angriffsboost',
   event_healthBoost: 'Lebensboost',
-  event_lootBoost: 'Beuteboost',
 };

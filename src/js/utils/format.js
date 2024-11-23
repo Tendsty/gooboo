@@ -1,3 +1,5 @@
+import store from "../../store";
+
 const numFormatters = [
     '', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'O', 'N', 'D',
     'UD', 'DD', 'TD', 'QaD', 'QiD', 'SxD', 'SpD', 'OD', 'ND', 'V',
@@ -13,7 +15,7 @@ const numFormatters = [
 ];
 const numNegativeFormatters = ['m', 'µ', 'n', 'p', 'f', 'a', 'z', 'y'];
 
-export { numFormatters, numNegativeFormatters, formatNum, formatTime, formatGrade, formatRoman, buildNum, capitalize, decapitalize }
+export { numFormatters, numNegativeFormatters, formatNum, formatInt, formatTime, formatGrade, formatRoman, buildNum, capitalize, decapitalize }
 
 function roundNear(num, decimals = 9) {
     const numMod = Math.pow(10, decimals - Math.floor(Math.log10(num)));
@@ -63,6 +65,27 @@ function formatNum(amount, showDecimals = false) {
     } else {
         return negativePrefix + amount.toPrecision(4);
     }
+}
+
+/**
+ * Display a number with thousands separator
+ * @param {Number} num the number to show
+ * @returns {String}
+ */
+function formatInt(num) {
+    if (num < 10000) {
+        return num.toString();
+    }
+    let locale;
+    switch (store.state.system.settings.general.items.lang.value) {
+        case 'en':
+            locale = 'en-US';
+            break;
+        case 'de':
+            locale = 'de-DE';
+            break;
+    }
+    return num.toLocaleString(locale);
 }
 
 /**

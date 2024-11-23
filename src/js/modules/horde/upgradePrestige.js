@@ -114,7 +114,8 @@ export default {
     deepHatred: {type: 'prestige', cap: 30, requirementBase, requirementStat, requirementValue: 151, price(lvl) {
         return {horde_soulEmpowered: Math.pow(lvl * 0.02 + 1.6, lvl) * buildNum(2.25, 'Sx')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.18 + 1)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.06, lvl) * (lvl * 0.1 + 1)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.03, lvl) * (lvl * 0.05 + 1)}
     ]},
     spiritLure: {type: 'prestige', cap: 50, requirementBase, requirementStat, requirementValue: 181, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.25, lvl) * buildNum(333, 'Sp')};

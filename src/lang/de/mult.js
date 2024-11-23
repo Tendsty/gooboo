@@ -237,7 +237,6 @@ export default {
   snowdownDefense: 'Abwehr',
   snowdownCritRating: 'Kritisch-Wertung',
   snowdownBlockRating: 'Blockwertung',
-  snowdownLootRating: 'Beutewertung',
   snowdownPetAttack: 'Haustier-Angriff',
   snowdownPetHealth: 'Haustier-Leben',
   snowdownPetDefense: 'Haustier-Abwehr',
@@ -245,4 +244,8 @@ export default {
   snowdownPetBlockRating: 'Haustier-Blockwertung',
   snowdownAllAttack: 'Gesamter Angriff',
   snowdownAllHealth: 'Gesamte Leben',
+  snowdownAllDefense: 'Gesamte Abwehr',
+  snowdownRevengeStats: 'Rachewerte',
+  snowdownRevengeCrit: 'Rache-Kritisch-Wertung',
+  snowdownRevengeBlock: 'Rache-Blockwertung',
 };
