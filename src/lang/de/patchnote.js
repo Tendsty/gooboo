@@ -516,6 +516,9 @@ export default {
     425: 'Produzenten zeigen nun das Rohstoffeinkommen an',
     426: '"Tiefer Hass" gibt nun weniger Angriff, erhöht aber auch Leben',
     427: 'Ein Fehler wurde behoben, bei dem "Erste Pflanzen" nach dem Öffnen des Spiels nicht korrekt angewendet wurde',
+
+    // v1.5.5
+    428: 'Ein Fehler, bei dem das Spiel für einige Spieler nicht gestartet ist, wurde behoben',
   },
   v: {
     1: {

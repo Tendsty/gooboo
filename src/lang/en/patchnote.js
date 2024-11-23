@@ -516,6 +516,9 @@ export default {
     425: 'Producers now show their resource gain',
     426: '"Deep hatred" now gives less attack, but also increases health',
     427: 'Fixed a bug where the "First crops" effect was not applied correctly when opening the game',
+
+    // v1.5.5
+    428: 'Fixed a bug where the game didn\'t load for some players',
   },
   v: {
     1: {
