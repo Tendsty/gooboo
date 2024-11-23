@@ -32,7 +32,7 @@ import PriceTag from '../../render/PriceTag.vue';
 export default {
   components: { Currency, PriceTag },
   data: () => ({
-    currencies: ['dough', 'cinnamon', 'sapling', 'water', 'snow', 'yarn', 'snowball', 'snowdownToken']
+    currencies: ['sapling', 'yarn', 'dough', 'snow', 'snowball', 'snowdownToken']
   }),
   computed: {
     ...mapState({

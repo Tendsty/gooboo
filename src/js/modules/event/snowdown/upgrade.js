@@ -1,44 +1,33 @@
 export default {
     pineTrees: {type: 'snowdown', price(lvl) {
-        return {event_sapling: 250 * Math.pow(lvl + 1, 2) * Math.pow(2, lvl)};
+        return {event_sapling: 250 * Math.pow(lvl * 0.5 + 1, 2) * Math.pow(2, lvl)};
     }, effect: [
-        {name: 'snowdownAttack', type: 'base', value: lvl => lvl * 0.5}
+        {name: 'snowdownAllAttack', type: 'mult', value: lvl => Math.pow(1.02, lvl) * (lvl * 0.05 + 1)}
     ]},
     woolHat: {type: 'snowdown', price(lvl) {
-        return {event_yarn: 250 * Math.pow(lvl + 1, 2) * Math.pow(2, lvl)};
+        return {event_yarn: 250 * Math.pow(lvl * 0.5 + 1, 2) * Math.pow(2, lvl)};
     }, effect: [
-        {name: 'snowdownHealth', type: 'base', value: lvl => lvl * 5}
-    ]},
-    mulledWine: {type: 'snowdown', price(lvl) {
-        return {event_cinnamon: 200 * Math.pow(lvl + 1, 2) * Math.pow(2 + lvl * 0.1, lvl)};
-    }, effect: [
-        {name: 'snowdownBlockRating', type: 'base', value: lvl => lvl * 2.5}
+        {name: 'snowdownAllHealth', type: 'mult', value: lvl => Math.pow(1.02, lvl) * (lvl * 0.05 + 1)},
+        {name: 'snowdownAllDefense', type: 'mult', value: lvl => Math.pow(1.02, lvl) * (lvl * 0.05 + 1)},
     ]},
     cookies: {type: 'snowdown', price(lvl) {
-        return {event_dough: 200 * Math.pow(lvl + 1, 2) * Math.pow(2 + lvl * 0.1, lvl)};
+        return {event_dough: 250 * Math.pow(lvl * 0.5 + 1, 2) * Math.pow(2, lvl)};
     }, effect: [
-        {name: 'snowdownCritRating', type: 'base', value: lvl => lvl * 5}
-    ]},
-    iceSculpture: {type: 'snowdown', price(lvl) {
-        return {event_water: 250 * Math.pow(lvl + 1, 2) * Math.pow(2, lvl)};
-    }, effect: [
-        {name: 'snowdownLootRating', type: 'base', value: lvl => lvl * 2.5}
+        {name: 'snowdownRevengeStats', type: 'base', value: lvl => lvl * 0.0005},
+        {name: 'snowdownRevengeCrit', type: 'base', value: lvl => lvl * 0.06},
+        {name: 'snowdownRevengeBlock', type: 'base', value: lvl => lvl * 0.04},
     ]},
 
     // topaz upgrades
-    attackBoost: {type: 'snowdown', cap: 2, price(lvl) {
-        return {gem_topaz: Math.pow(2, lvl) * 400};
+    attackBoost: {type: 'snowdown', price(lvl) {
+        return {gem_topaz: lvl * 50 + 150};
     }, effect: [
-        {name: 'snowdownAllAttack', type: 'mult', value: lvl => Math.pow(1.8, lvl)}
+        {name: 'snowdownAllAttack', type: 'mult', value: lvl => lvl * 0.5 + 1}
     ]},
-    healthBoost: {type: 'snowdown', cap: 2, price(lvl) {
-        return {gem_topaz: Math.pow(2, lvl) * 400};
+    healthBoost: {type: 'snowdown', price(lvl) {
+        return {gem_topaz: lvl * 40 + 100};
     }, effect: [
-        {name: 'snowdownAllHealth', type: 'mult', value: lvl => Math.pow(2, lvl)}
+        {name: 'snowdownAllHealth', type: 'mult', value: lvl => lvl * 0.5 + 1},
+        {name: 'snowdownAllDefense', type: 'mult', value: lvl => lvl * 0.5 + 1},
     ]},
-    lootBoost: {type: 'snowdown', cap: 3, price(lvl) {
-        return {gem_topaz: Math.pow(2, lvl) * 300};
-    }, effect: [
-        {name: 'snowdownLootRating', type: 'base', value: lvl => lvl * 6}
-    ]}
 }

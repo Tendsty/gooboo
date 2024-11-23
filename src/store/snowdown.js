@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { SNOWDOWN_FIGHT_COST, SNOWDOWN_REROLL_COST } from "../js/constants";
 import { chance, randomElem, randomFloat, randomInt } from "../js/utils/random";
+import { getSequence } from "../js/utils/math";
 
 export default {
     namespaced: true,
@@ -54,57 +55,87 @@ export default {
         enemy: {
             toddler: {
                 name: 'toddler',
-                attack: 1.5,
+                attack: 2,
                 health: 15,
                 defense: 0
             },
             kid: {
                 name: 'kid',
-                attack: 3,
-                health: 50,
+                attack: 4,
+                health: 60,
                 defense: 0
             },
             babysitter: {
                 name: 'babysitter',
-                attack: 9,
-                health: 35,
-                defense: 0
-            },
-            fatKid: {
-                name: 'fatKid',
-                attack: 7,
-                health: 100,
+                attack: 12,
+                health: 55,
                 defense: 1
+            },
+            toughKid: {
+                name: 'toughKid',
+                attack: 14,
+                health: 200,
+                defense: 4
             },
             teenager: {
                 name: 'teenager',
-                attack: 14,
-                health: 160,
-                defense: 2
+                attack: 30,
+                health: 350,
+                defense: 6
             },
             bully: {
                 name: 'bully',
-                attack: 28,
-                health: 105,
-                defense: 1
+                attack: 70,
+                health: 260,
+                defense: 5
             },
             youngAdult: {
                 name: 'youngAdult',
-                attack: 22,
-                health: 320,
-                defense: 3
+                attack: 60,
+                health: 850,
+                defense: 14
             },
             hooligan: {
                 name: 'hooligan',
-                attack: 60,
-                health: 220,
-                defense: 1
+                attack: 180,
+                health: 650,
+                defense: 9
             },
             adult: {
                 name: 'adult',
-                attack: 32,
-                health: 700,
-                defense: 5
+                attack: 100,
+                health: 2250,
+                defense: 35
+            },
+            veteran: {
+                name: 'veteran',
+                attack: 225,
+                health: 3600,
+                defense: 75
+            },
+            wallOfIce1: {
+                name: 'wallOfIce',
+                attack: 0,
+                health: 2000,
+                defense: 0
+            },
+            wallOfIce2: {
+                name: 'wallOfIce',
+                attack: 0,
+                health: 3000,
+                defense: 0
+            },
+            wallOfIce3: {
+                name: 'wallOfIce',
+                attack: 0,
+                health: 4000,
+                defense: 0
+            },
+            wallOfIce4: {
+                name: 'wallOfIce',
+                attack: 0,
+                health: 6000,
+                defense: 0
             }
         },
         fights: [
@@ -118,27 +149,59 @@ export default {
             ['babysitter', 'toddler', 'toddler', 'toddler'],
             ['babysitter', 'babysitter', 'toddler', 'toddler'],
             ['babysitter', 'babysitter', 'kid', 'kid'],
-            ['fatKid', 'babysitter'],
-            ['fatKid', 'babysitter', 'kid', 'kid'],
-            ['fatKid', 'babysitter', 'babysitter'],
-            ['fatKid', 'babysitter', 'babysitter', 'babysitter'],
-            ['fatKid', 'fatKid', 'babysitter'],
-            ['fatKid', 'fatKid', 'babysitter', 'babysitter'],
-            ['fatKid', 'fatKid', 'fatKid', 'kid'],
+            ['toughKid', 'babysitter'],
+            ['toughKid', 'babysitter', 'kid', 'kid'],
+            ['toughKid', 'babysitter', 'babysitter'],
+            ['toughKid', 'babysitter', 'babysitter', 'babysitter'],
+            ['toughKid', 'toughKid', 'babysitter'],
+            ['toughKid', 'toughKid', 'babysitter', 'babysitter'],
+            ['toughKid', 'toughKid', 'toughKid', 'kid'],
             ['teenager', 'toddler', 'toddler', 'toddler'],
             ['teenager', 'kid', 'kid', 'kid'],
-            ['teenager', 'fatKid', 'babysitter'],
+            ['teenager', 'toughKid', 'babysitter'],
             ['teenager', 'teenager'],
             ['teenager', 'bully'],
-            ['teenager', 'bully', 'fatKid', 'fatKid'],
-            ['teenager', 'bully', 'bully', 'fatKid'],
-            ['bully', 'bully', 'bully', 'bully'],
+            ['teenager', 'bully', 'toughKid', 'toughKid'],
+            ['teenager', 'bully', 'bully', 'toughKid'],
             ['teenager', 'bully', 'teenager', 'bully'],
+            ['bully', 'bully', 'bully', 'bully'],
+            ['youngAdult', 'bully', 'teenager'],
+            ['youngAdult', 'bully', 'bully', 'bully'],
+            ['youngAdult', 'youngAdult'],
+            ['youngAdult', 'youngAdult', 'bully', 'bully'],
+            ['youngAdult', 'youngAdult', 'youngAdult'],
+            ['wallOfIce1', 'youngAdult', 'youngAdult', 'youngAdult'],
+            ['wallOfIce1', 'hooligan'],
+            ['wallOfIce1', 'hooligan', 'youngAdult'],
+            ['wallOfIce1', 'hooligan', 'youngAdult', 'hooligan'],
+            ['wallOfIce1', 'hooligan', 'hooligan', 'hooligan'],
+            ['wallOfIce2', 'hooligan', 'hooligan', 'youngAdult'],
+            ['wallOfIce2', 'hooligan', 'hooligan', 'hooligan'],
+            ['wallOfIce2', 'adult'],
+            ['wallOfIce2', 'adult', 'youngAdult', 'youngAdult'],
+            ['wallOfIce2', 'adult', 'hooligan'],
+            ['wallOfIce3', 'adult', 'adult'],
+            ['wallOfIce3', 'adult', 'adult', 'youngAdult'],
+            ['wallOfIce3', 'adult', 'adult', 'hooligan'],
+            ['wallOfIce3', 'adult', 'adult', 'adult'],
+            ['wallOfIce3', 'veteran'],
+            ['wallOfIce3', 'veteran', 'hooligan'],
+            ['wallOfIce3', 'veteran', 'hooligan', 'hooligan'],
+            ['wallOfIce3', 'veteran', 'adult'],
+            ['wallOfIce4', 'veteran', 'adult'],
+            ['wallOfIce4', 'veteran', 'adult', 'hooligan'],
+            ['wallOfIce4', 'veteran', 'adult', 'adult'],
+            ['wallOfIce4', 'veteran', 'veteran'],
+            ['wallOfIce4', 'veteran', 'veteran', 'hooligan'],
+            ['wallOfIce4', 'veteran', 'veteran', 'adult'],
+            ['wallOfIce4', 'veteran', 'veteran', 'veteran'],
         ],
         result: null,
         rewardProducer: false,
         rewardItem: null,
-        itemsBought: 0
+        itemsBought: 0,
+        itemsBoughtTopaz: 0,
+        revenge: 0,
     },
     getters: {
         playerStats: (state, getters, rootState, rootGetters) => {
@@ -146,7 +209,7 @@ export default {
                 name: 'player',
                 attack: rootGetters['mult/get']('snowdownAttack'),
                 health: rootGetters['mult/get']('snowdownHealth'),
-                defense: rootGetters['mult/get']('snowdownDefense') + 5 * state.item.starShield.amount,
+                defense: rootGetters['mult/get']('snowdownDefense', 5 * state.item.starShield.amount),
                 critRating: rootGetters['mult/get']('snowdownCritRating'),
                 blockRating: rootGetters['mult/get']('snowdownBlockRating')
             }];
@@ -166,26 +229,26 @@ export default {
         },
         enemyStats: (state) => {
             if (state.fights.length <= state.fight) {
-                const statMult = Math.pow(1.12, state.fight);
+                const statMult = Math.pow(1.1, state.fight);
                 return [{
+                    name: 'wallOfIce',
+                    attack: 0,
+                    health: Math.round(statMult * 40),
+                    defense: 0
+                }, {
                     name: 'snowBot',
                     attack: statMult * 1.1,
                     health: Math.round(statMult * 15),
-                    defense: Math.round(statMult * 0.075)
+                    defense: Math.round(statMult * 0.4)
                 }, {
                     name: 'snowBot',
                     attack: statMult * 2,
                     health: Math.round(statMult * 9),
-                    defense: Math.round(statMult * 0.025)
-                }, {
-                    name: 'snowBot',
-                    attack: statMult * 0.6,
-                    health: Math.round(statMult * 30),
-                    defense: Math.round(statMult * 0.3)
+                    defense: Math.round(statMult * 0.2)
                 }];
             }
             return state.fights[state.fight].map(elem => {
-                return {...state.enemy[elem], name: elem};
+                return {...state.enemy[elem]};
             });
         },
         critChance: () => (rating) => {
@@ -211,6 +274,15 @@ export default {
         },
         itemSnowCost: (state) => {
             return Math.pow(state.itemsBought * 10 + 10, state.itemsBought) * 1000;
+        },
+        itemTopazCost: (state) => {
+            return state.itemsBoughtTopaz * 10 + 100;
+        },
+        winTokenGain: (state) => {
+            return Math.floor(Math.pow(state.fight * 0.35 + 1, 0.75) + 3);
+        },
+        winItemGain: (state) => {
+            return state.fight < 50 && (state.fight < 5 || (state.fight % 5) === 4);
         }
     },
     mutations: {
@@ -241,7 +313,7 @@ export default {
                 commit('updateItemKey', {name: key, key: 'amount', value: 0});
             }
         },
-        fight({ state, getters, rootGetters, commit, dispatch }) {
+        fight({ state, rootState, getters, rootGetters, commit, dispatch }) {
             if (rootGetters['currency/value']('event_snowball') >= SNOWDOWN_FIGHT_COST) {
                 dispatch('currency/spend', {feature: 'event', name: 'snowball', amount: SNOWDOWN_FIGHT_COST}, {root: true});
                 let turn = 0;
@@ -251,10 +323,10 @@ export default {
                 const attackMult = rootGetters['mult/get']('snowdownAllAttack', 1);
                 const healthMult = rootGetters['mult/get']('snowdownAllHealth', 1);
                 let player = playerBase.map((elem, key) => {
-                    return {...elem, healthCurrent: elem.health, revive: 0, stun: 0, spikedCollar: false, key};
+                    return {...elem, healthCurrent: elem.health, critMult: elem.name === 'player' ? rootState.mult.items.snowdownAttack.multCache : rootState.mult.items.snowdownPetAttack.multCache, revive: 0, stun: 0, spikedCollar: false, key};
                 });
                 let enemy = enemyBase.map((elem, key) => {
-                    return {...elem, healthCurrent: elem.health, revive: 0, stun: 0, key};
+                    return {...elem, healthCurrent: elem.health, critMult: 1, revive: 0, stun: 0, key};
                 });
                 let forceCrit = 5 * state.item.snowboard.amount; // Amount of attacks with a guaranteed crit (consumed on attack)
                 let petHeal = 3 * state.item.treatBag.amount;
@@ -392,9 +464,9 @@ export default {
                                         forceCrit--;
                                     }
                                     const damage = Math.max(0, Math.round(
-                                        elemP.attack * randomFloat(0.8, 1.2) +              // base damage
-                                        (crit ? getters.critDamage(elemP.critRating) : 0) - // crit damage
-                                        enemy[picked].defense                               // enemy defense
+                                        elemP.attack * randomFloat(0.8, 1.2) +                                 // base damage
+                                        (crit ? (getters.critDamage(elemP.critRating) * elemP.critMult) : 0) - // crit damage
+                                        enemy[picked].defense                                                  // enemy defense
                                     ));
                                     if (damage > 0) {
                                         enemy[picked].healthCurrent -= damage;
@@ -457,39 +529,43 @@ export default {
 
                     // Disable star shield after 3 turns
                     if (turn === 5 && state.item.starShield.amount > 0) {
-                        player[0].defense -= state.item.starShield.amount * 5;
-                        log.push({type: 'buffStat', stat: 'defense', targetKey: 0, power: state.item.starShield.amount * -5});
+                        log.push({type: 'buffStat', stat: 'defense', targetKey: 0, power: rootGetters['mult/get']('snowdownDefense') - player[0].defense});
+                        player[0].defense = rootGetters['mult/get']('snowdownDefense');
                     }
                     battleLog.push(log);
                     turn++;
                 }
 
-                commit('updateKey', {key: 'result', value: {player: playerBase, enemy: enemyBase, winner, battleLog}});
+                commit('updateKey', {key: 'result', value: {player: playerBase.map(elem => {
+                    return {...elem, critMult: elem.name === 'player' ? rootState.mult.items.snowdownAttack.multCache : rootState.mult.items.snowdownPetAttack.multCache};
+                }), enemy: enemyBase, winner, battleLog}});
 
                 if (winner === 'player') {
-                    const lootRating = rootGetters['mult/get']('snowdownLootRating', 35, 0.01);
-                    let rngGen = rootGetters['system/getRng']('snowdown_item');
-                    commit('system/nextRng', {name: 'snowdown_item', amount: 1}, {root: true});
-                    if (state.fight < 5 || chance(lootRating / (lootRating + 1), rngGen())) {
+                    if (getters.winItemGain) {
                         dispatch('addRewardItem');
                     }
                     // Get currency rewards
-                    dispatch('currency/gain', {feature: 'event', name: 'snowball', amount: Math.round(rootGetters['mult/get']('snowdownLootRating', 3, 3))}, {root: true});
-                    dispatch('event/giveTokens', {event: 'snowdown', amount: Math.floor(rootGetters['mult/get']('snowdownLootRating', state.fight * 3.5 + 50, 0.05))}, {root: true});
+                    dispatch('event/giveTokens', {event: 'snowdown', amount: getters.winTokenGain}, {root: true});
 
                     commit('updateKey', {key: 'fight', value: state.fight + 1});
+                    commit('updateKey', {key: 'revenge', value: 0});
                     commit('updateKey', {key: 'rewardProducer', value: true});
 
                     dispatch('note/find', 'event_33', {root: true});
                     if (state.fight >= 4) {
                         dispatch('note/find', 'event_32', {root: true});
                     }
+                } else {
+                    commit('updateKey', {key: 'revenge', value: state.revenge + 1});
                 }
+
+                dispatch('applyRevengeEffect');
             }
         },
-        getProducer({ state, commit }, name) {
+        getProducer({ state, commit, dispatch }, name) {
             if (state.rewardProducer) {
                 commit('updateItemKey', {name, key: 'amount', value: state.item[name].amount + 1});
+                dispatch('applyItemEffects', name);
                 commit('updateKey', {key: 'rewardProducer', value: false});
             }
         },
@@ -515,9 +591,7 @@ export default {
             });
         },
         rerollItem({ state, getters, rootGetters, commit, dispatch }, name) {
-            if (rootGetters['currency/value']('event_snowball') >= SNOWDOWN_REROLL_COST && state.rewardItem === null) {
-                const isProducer = state.item[name].type === 'producer';
-
+            if (rootGetters['currency/value']('event_snowball') >= SNOWDOWN_REROLL_COST && state.rewardItem === null && state.item[name].type !== 'producer') {
                 commit('updateItemKey', {name, key: 'amount', value: state.item[name].amount - 1});
                 dispatch('applyItemEffects', name);
 
@@ -526,8 +600,8 @@ export default {
 
                 // Exclude producer and max amount items, also exclude pets if you already have 3
                 for (const [key, elem] of Object.entries(state.item)) {
-                    if ((
-                        (elem.type === 'producer') === isProducer) &&    // Producer reroll only gives producers, same with non-producers
+                    if (
+                        elem.type !== 'producer' &&                      // Only non-producers
                         name !== key &&                                  // Cannot get back the same item
                         (getters.petCount < 3 || elem.type !== 'pet') && // No more than 3 pets
                         (elem.max === null || elem.amount < elem.max)    // Respect item limits
@@ -588,6 +662,87 @@ export default {
                 dispatch('currency/spend', {feature: 'event', name: 'snow', amount: getters.itemSnowCost}, {root: true});
                 commit('updateKey', {key: 'itemsBought', value: state.itemsBought + 1});
                 dispatch('addRewardItem');
+            }
+        },
+        buyTopazItem({ state, getters, rootGetters, commit, dispatch }) {
+            if (rootGetters['currency/value']('gem_topaz') >= getters.itemTopazCost && state.rewardItem === null) {
+                dispatch('currency/spend', {feature: 'gem', name: 'topaz', amount: getters.itemTopazCost}, {root: true});
+                commit('updateKey', {key: 'itemsBoughtTopaz', value: state.itemsBoughtTopaz + 1});
+                dispatch('addRewardItem');
+            }
+        },
+        applyRevengeEffect({ state, rootGetters, dispatch }) {
+            if (state.revenge > 0) {
+                const revengeStats = state.revenge * 0.05 + getSequence(1, state.revenge) * rootGetters['mult/get']('snowdownRevengeStats') + 1;
+                const revengeCrit = state.revenge * rootGetters['mult/get']('snowdownRevengeCrit');
+                const revengeBlock = state.revenge * rootGetters['mult/get']('snowdownRevengeBlock');
+                dispatch('system/applyEffect', {
+                    type: 'mult',
+                    name: 'snowdownAllAttack',
+                    multKey: `snowdownRevenge`,
+                    value: revengeStats
+                }, {root: true});
+                dispatch('system/applyEffect', {
+                    type: 'mult',
+                    name: 'snowdownAllHealth',
+                    multKey: `snowdownRevenge`,
+                    value: revengeStats
+                }, {root: true});
+                dispatch('system/applyEffect', {
+                    type: 'base',
+                    name: 'snowdownCritRating',
+                    multKey: `snowdownRevenge`,
+                    value: revengeCrit
+                }, {root: true});
+                dispatch('system/applyEffect', {
+                    type: 'base',
+                    name: 'snowdownPetCritRating',
+                    multKey: `snowdownRevenge`,
+                    value: revengeCrit
+                }, {root: true});
+                dispatch('system/applyEffect', {
+                    type: 'base',
+                    name: 'snowdownBlockRating',
+                    multKey: `snowdownRevenge`,
+                    value: revengeBlock
+                }, {root: true});
+                dispatch('system/applyEffect', {
+                    type: 'base',
+                    name: 'snowdownPetBlockRating',
+                    multKey: `snowdownRevenge`,
+                    value: revengeBlock
+                }, {root: true});
+            } else {
+                dispatch('system/resetEffect', {
+                    type: 'mult',
+                    name: 'snowdownAllAttack',
+                    multKey: `snowdownRevenge`
+                }, {root: true});
+                dispatch('system/resetEffect', {
+                    type: 'mult',
+                    name: 'snowdownAllHealth',
+                    multKey: `snowdownRevenge`
+                }, {root: true});
+                dispatch('system/resetEffect', {
+                    type: 'base',
+                    name: 'snowdownCritRating',
+                    multKey: `snowdownRevenge`
+                }, {root: true});
+                dispatch('system/resetEffect', {
+                    type: 'base',
+                    name: 'snowdownPetCritRating',
+                    multKey: `snowdownRevenge`
+                }, {root: true});
+                dispatch('system/resetEffect', {
+                    type: 'base',
+                    name: 'snowdownBlockRating',
+                    multKey: `snowdownRevenge`
+                }, {root: true});
+                dispatch('system/resetEffect', {
+                    type: 'base',
+                    name: 'snowdownPetBlockRating',
+                    multKey: `snowdownRevenge`
+                }, {root: true});
             }
         }
     }

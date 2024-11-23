@@ -237,7 +237,6 @@ export default {
   snowdownDefense: 'Defense',
   snowdownCritRating: 'Crit rating',
   snowdownBlockRating: 'Block rating',
-  snowdownLootRating: 'Loot rating',
   snowdownPetAttack: 'Pet attack',
   snowdownPetHealth: 'Pet health',
   snowdownPetDefense: 'Pet defense',
@@ -245,4 +244,8 @@ export default {
   snowdownPetBlockRating: 'Pet block rating',
   snowdownAllAttack: 'All attack',
   snowdownAllHealth: 'All health',
+  snowdownAllDefense: 'All defense',
+  snowdownRevengeStats: 'Revenge stats',
+  snowdownRevengeCrit: 'Revenge crit rating',
+  snowdownRevengeBlock: 'Revenge block rating',
 };

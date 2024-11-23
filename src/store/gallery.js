@@ -121,7 +121,7 @@ export default {
             return state.shapeGrid.findIndex(row => row.findIndex(cell => cell === 'hourglass') !== -1) !== -1;
         },
         hourglassTime: (state) => {
-            return state.hourglassCombo * 13 + 300;
+            return Math.round(state.hourglassCombo * 3.7 + 30);
         },
         canvasDifficulty: (state) => (name, level) => {
             const index = state.color.findIndex(c => c === name);
@@ -296,6 +296,7 @@ export default {
             if (rootGetters['currency/canAfford']({gallery_motivation: 1})) {
                 const shapeName = state.shapeGrid[o.y][o.x];
                 if (state.shape[shapeName].isSpecial) {
+                    const specialMult = rootGetters['mult/get']('gallerySpecialShapeMult');
                     switch (shapeName) {
                         case 'bomb': {
                             let connectedGrid = [];
@@ -306,7 +307,7 @@ export default {
                                 row.forEach((cell, x) => {
                                     const cellName = state.shapeGrid[y][x];
                                     if (cell && state.shape[cellName].unlocked && !state.shape[cellName].isSpecial) {
-                                        dispatch('currency/gain', {feature: 'gallery', name: cellName, gainMult: true, amount: rootGetters['mult/get']('gallerySpecialShapeMult')}, {root: true});
+                                        dispatch('currency/gain', {feature: 'gallery', name: cellName, gainMult: true, amount: specialMult}, {root: true});
                                         commit('stat/add', {feature: 'gallery', name: 'shapeComboTotal', value: 1}, {root: true});
                                     }
                                 });
@@ -334,14 +335,14 @@ export default {
                                         if (cellName === targetShape) {
                                             sameAmount++;
                                         }
-                                        dispatch('currency/gain', {feature: 'gallery', name: cellName, gainMult: true, amount: rootGetters['mult/get']('gallerySpecialShapeMult')}, {root: true});
+                                        dispatch('currency/gain', {feature: 'gallery', name: cellName, gainMult: true, amount: specialMult}, {root: true});
                                         commit('stat/add', {feature: 'gallery', name: 'shapeComboTotal', value: 1}, {root: true});
                                     }
                                 });
                             });
                             if (sameAmount >= 8) {
                                 const motivation = Math.floor(rootState.currency.gallery_motivation.value);
-                                dispatch('currency/gain', {feature: 'gallery', name: targetShape, gainMult: true, amount: (motivation / 5 + 1) * rootGetters['mult/get']('gallerySpecialShapeMult')}, {root: true});
+                                dispatch('currency/gain', {feature: 'gallery', name: targetShape, gainMult: true, amount: (motivation / 5 + 1) * specialMult}, {root: true});
                                 dispatch('currency/spend', {feature: 'gallery', name: 'motivation', amount: motivation}, {root: true});
                             }
                             dispatch('rerollShapes', connectedGrid);
@@ -440,15 +441,23 @@ export default {
                                         if (!shapeList.includes(cellName)) {
                                             shapeList.push(cellName);
                                         }
+                                    }
+                                });
+                            });
+                            const chestFull = shapeList.length >= 10;
+                            connectedGrid.forEach((row, y) => {
+                                row.forEach((cell, x) => {
+                                    const cellName = state.shapeGrid[y][x];
+                                    if (cell && !state.shape[cellName].isSpecial) {
                                         if (state.shape[cellName].unlocked) {
-                                            dispatch('currency/gain', {feature: 'gallery', name: cellName, gainMult: true, amount: rootGetters['mult/get']('gallerySpecialShapeMult')}, {root: true});
+                                            dispatch('currency/gain', {feature: 'gallery', name: cellName, gainMult: true, amount: chestFull ? Math.pow(specialMult, 1.5) : specialMult}, {root: true});
                                             commit('stat/add', {feature: 'gallery', name: 'shapeComboTotal', value: 1}, {root: true});
                                         }
                                     }
                                 });
                             });
-                            if (shapeList.length >= 10) {
-                                dispatch('currency/gain', {feature: 'gallery', name: 'mysteryShape', amount: 1}, {root: true});
+                            if (chestFull) {
+                                dispatch('currency/gain', {feature: 'gallery', name: 'mysteryShape', amount: rootGetters['mult/get']('currencyGalleryMysteryShapeGain')}, {root: true});
                             }
                             dispatch('rerollShapes', connectedGrid);
                             break;
@@ -583,7 +592,7 @@ export default {
             if (level > 0) {
                 dispatch('system/applyEffect', {type: 'mult', name: `currencyGallery${ capitalize(o.name) }Gain`, multKey: `galleryCanvas_${o.name}`, value: Math.pow(2, level), trigger}, {root: true});
                 dispatch('system/applyEffect', {type: 'mult', name: `gallery${ capitalize(o.name) }Conversion`, multKey: `galleryCanvas_${o.name}`, value: Math.pow(2, level), trigger}, {root: true});
-                dispatch('system/applyEffect', {type: 'base', name: `currencyGallery${ capitalize(o.name) }DrumCap`, multKey: `galleryCanvas_${o.name}`, value: 25 * level, trigger}, {root: true});
+                dispatch('system/applyEffect', {type: 'base', name: `currencyGallery${ capitalize(o.name) }DrumCap`, multKey: `galleryCanvas_${o.name}`, value: 10 * level, trigger}, {root: true});
             } else {
                 dispatch('system/resetEffect', {type: 'mult', name: `currencyGallery${ capitalize(o.name) }Gain`, multKey: `galleryCanvas_${o.name}`}, {root: true});
                 dispatch('system/resetEffect', {type: 'mult', name: `gallery${ capitalize(o.name) }Conversion`, multKey: `galleryCanvas_${o.name}`}, {root: true});
