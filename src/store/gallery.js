@@ -599,7 +599,7 @@ export default {
             if (level > 0) {
                 dispatch('system/applyEffect', {type: 'mult', name: `currencyGallery${ capitalize(o.name) }Gain`, multKey: `galleryCanvas_${o.name}`, value: Math.pow(2, level), trigger}, {root: true});
                 dispatch('system/applyEffect', {type: 'mult', name: `gallery${ capitalize(o.name) }Conversion`, multKey: `galleryCanvas_${o.name}`, value: Math.pow(2, level), trigger}, {root: true});
-                dispatch('system/applyEffect', {type: 'base', name: `currencyGallery${ capitalize(o.name) }DrumCap`, multKey: `galleryCanvas_${o.name}`, value: 10 * level, trigger}, {root: true});
+                dispatch('system/applyEffect', {type: 'base', name: `currencyGallery${ capitalize(o.name) }DrumCap`, multKey: `galleryCanvas_${o.name}`, value: 25 * level, trigger}, {root: true});
             } else {
                 dispatch('system/resetEffect', {type: 'mult', name: `currencyGallery${ capitalize(o.name) }Gain`, multKey: `galleryCanvas_${o.name}`}, {root: true});
                 dispatch('system/resetEffect', {type: 'mult', name: `gallery${ capitalize(o.name) }Conversion`, multKey: `galleryCanvas_${o.name}`}, {root: true});

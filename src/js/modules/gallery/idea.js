@@ -51,8 +51,7 @@ export default {
         {name: 'currencyGalleryRedDrumCap', type: 'mult', value: lvl => lvl * 0.35 + 1},
     ]},
     orderMassiveSafe: {tier: 2, icon: 'mdi-safe-square', color: 'dark-grey', effect: [
-        {name: 'galleryColorDrumCap', type: 'base', value: lvl => lvl * 2},
-        {name: 'galleryCanvasSpeed', type: 'mult', value: lvl => 1 - (lvl / (lvl + 10))},
+        {name: 'galleryColorDrumCap', type: 'base', value: lvl => getSequence(3, lvl)},
     ]},
     buyPen: {tier: 2, icon: 'mdi-pen', color: 'indigo', effect: [
         {name: 'galleryShapeGain', type: 'mult', value: lvl => lvl * 0.12 + 1},
