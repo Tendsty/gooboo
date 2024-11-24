@@ -1,28 +1,32 @@
 export default {
     // Producers
-    rollingPin: {
-        type: 'producer',
-        icon: 'mdi-arrow-top-right-bottom-left-bold'
-    },
     forest: {
         type: 'producer',
-        icon: 'mdi-forest'
-    },
-    spiceJar: {
-        type: 'producer',
-        icon: 'mdi-glass-mug'
-    },
-    tap: {
-        type: 'producer',
-        icon: 'mdi-water-pump'
-    },
-    snowCannon: {
-        type: 'producer',
-        icon: 'mdi-snowflake-alert'
+        icon: 'mdi-forest',
+        effect: [
+            {name: 'currencyEventSaplingGain', type: 'base', value: lvl => Math.pow(2, lvl) * Math.pow(lvl + 1, 2) * 0.01}
+        ]
     },
     shepherd: {
         type: 'producer',
-        icon: 'mdi-sheep'
+        icon: 'mdi-sheep',
+        effect: [
+            {name: 'currencyEventYarnGain', type: 'base', value: lvl => Math.pow(2, lvl) * Math.pow(lvl + 1, 2) * 0.01}
+        ]
+    },
+    rollingPin: {
+        type: 'producer',
+        icon: 'mdi-arrow-top-right-bottom-left-bold',
+        effect: [
+            {name: 'currencyEventDoughGain', type: 'base', value: lvl => Math.pow(2, lvl) * Math.pow(lvl + 1, 2) * 0.01}
+        ]
+    },
+    snowCannon: {
+        type: 'producer',
+        icon: 'mdi-snowflake-alert',
+        effect: [
+            {name: 'currencyEventSnowGain', type: 'base', value: lvl => Math.pow(2, lvl) * Math.pow(lvl + 1, 2) * 0.01}
+        ]
     },
 
     // Pets
@@ -60,29 +64,35 @@ export default {
     // Pet boosts
     animalTooth: {
         type: 'petBoost',
-        icon: 'mdi-tooth', effect: [
-            {name: 'snowdownPetAttack', type: 'mult', value: lvl => lvl * 0.5 + 1}
+        icon: 'mdi-tooth',
+        effect: [
+            {name: 'snowdownPetAttack', type: 'base', value: lvl => lvl * 0.5},
+            {name: 'snowdownPetAttack', type: 'mult', value: lvl => lvl * 0.1 + 1},
         ]
     },
     collar: {
         type: 'petBoost',
-        icon: 'mdi-dog-service', effect: [
-            {name: 'snowdownPetHealth', type: 'mult', value: lvl => lvl * 0.5 + 1}
+        icon: 'mdi-dog-service',
+        effect: [
+            {name: 'snowdownPetHealth', type: 'base', value: lvl => lvl * 5},
+            {name: 'snowdownPetHealth', type: 'mult', value: lvl => lvl * 0.1 + 1},
         ]
     },
     chili: {
         type: 'petBoost',
-        icon: 'mdi-chili-mild', effect: [
-            {name: 'snowdownCritRating', type: 'base', value: lvl => lvl * 10},
-            {name: 'snowdownPetCritRating', type: 'base', value: lvl => lvl * 20}
+        icon: 'mdi-chili-mild',
+        effect: [
+            {name: 'snowdownCritRating', type: 'base', value: lvl => lvl * 8},
+            {name: 'snowdownPetCritRating', type: 'base', value: lvl => lvl * 10},
         ]
     },
     drumstick: {
         type: 'petBoost',
-        icon: 'mdi-food-drumstick', effect: [
-            {name: 'snowdownPetAttack', type: 'mult', value: lvl => lvl * 0.2 + 1},
-            {name: 'snowdownPetHealth', type: 'mult', value: lvl => lvl * 0.2 + 1},
-            {name: 'snowdownPetBlockRating', type: 'base', value: lvl => lvl * 5}
+        icon: 'mdi-food-drumstick',
+        effect: [
+            {name: 'snowdownPetAttack', type: 'mult', value: lvl => lvl * 0.1 + 1},
+            {name: 'snowdownPetHealth', type: 'mult', value: lvl => lvl * 0.1 + 1},
+            {name: 'snowdownPetBlockRating', type: 'base', value: lvl => lvl * 5},
         ]
     },
     mouse: {
@@ -192,42 +202,49 @@ export default {
 
     // Filler items
     sunShield: {
-        icon: 'mdi-shield-sun', effect: [
+        icon: 'mdi-shield-sun',
+        effect: [
             {name: 'snowdownDefense', type: 'base', value: lvl => lvl * 2}
         ]
     },
     moonShield: {
-        icon: 'mdi-shield-moon', effect: [
+        icon: 'mdi-shield-moon',
+        effect: [
             {name: 'snowdownDefense', type: 'base', value: lvl => lvl},
             {name: 'snowdownBlockRating', type: 'base', value: lvl => lvl * 5}
         ]
     },
     fireplace: {
-        icon: 'mdi-fireplace', effect: [
+        icon: 'mdi-fireplace',
+        effect: [
             {name: 'snowdownHealth', type: 'base', value: lvl => lvl * 10},
             {name: 'snowdownHealth', type: 'mult', value: lvl => lvl * 0.1 + 1}
         ]
     },
     specialSnowflake: {
-        icon: 'mdi-snowflake-variant', effect: [
+        icon: 'mdi-snowflake-variant',
+        effect: [
             {name: 'snowdownAttack', type: 'mult', value: lvl => lvl * 0.1 + 1},
             {name: 'snowdownCritRating', type: 'base', value: lvl => lvl * 5}
         ]
     },
     candyCane: {
-        icon: 'mdi-candycane', effect: [
+        icon: 'mdi-candycane',
+        effect: [
             {name: 'snowdownHealth', type: 'base', value: lvl => lvl * 15},
             {name: 'snowdownBlockRating', type: 'base', value: lvl => lvl * 5}
         ]
     },
     shovel: {
-        icon: 'mdi-shovel', effect: [
+        icon: 'mdi-shovel',
+        effect: [
             {name: 'snowdownAttack', type: 'base', value: lvl => lvl},
             {name: 'snowdownAttack', type: 'mult', value: lvl => lvl * 0.1 + 1}
         ]
     },
     turkey: {
-        icon: 'mdi-food-turkey', effect: [
+        icon: 'mdi-food-turkey',
+        effect: [
             {name: 'snowdownAttack', type: 'base', value: lvl => lvl},
             {name: 'snowdownHealth', type: 'mult', value: lvl => lvl * 0.1 + 1}
         ]

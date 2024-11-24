@@ -208,7 +208,7 @@ export default {
       return [
         {type: 'mult', name: `currencyGallery${ capitalize(this.name) }Gain`, before: level > 0 ? Math.pow(2, level) : null, after: Math.pow(2, nextLevel)},
         {type: 'mult', name: `gallery${ capitalize(this.name) }Conversion`, before: level > 0 ? Math.pow(2, level) : null, after: Math.pow(2, nextLevel)},
-        {type: 'base', name: `currencyGallery${ capitalize(this.name) }DrumCap`, before: level > 0 ? (25 * level) : null, after: 25 * nextLevel}
+        {type: 'base', name: `currencyGallery${ capitalize(this.name) }DrumCap`, before: level > 0 ? (10 * level) : null, after: 10 * nextLevel}
       ];
     },
     canvasUntilNext() {

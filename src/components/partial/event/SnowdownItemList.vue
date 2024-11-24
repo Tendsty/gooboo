@@ -40,6 +40,20 @@
           <div class="mt-0">{{ $vuetify.lang.t('$vuetify.event.snowdown.buyItemDescription') }}</div>
         </gb-tooltip>
       </div>
+      <div class="d-flex align-center bg-tile-default rounded ma-1 pa-1">
+        <price-tag class="ma-1" currency="gem_topaz" :amount="itemTopazCost"></price-tag>
+        <gb-tooltip :min-width="0">
+          <template v-slot:activator="{ on, attrs }">
+            <div class="ma-1" v-bind="attrs" v-on="on">
+              <v-btn :disabled="rewardItem !== null || topaz < itemTopazCost" @click="buyTopazItem" color="primary">
+                <v-icon class="mr-2">mdi-plus</v-icon>
+                {{ $vuetify.lang.t(`$vuetify.event.snowdown.buyItem`) }}
+              </v-btn>
+            </div>
+          </template>
+          <div class="mt-0">{{ $vuetify.lang.t('$vuetify.event.snowdown.buyItemDescription') }}</div>
+        </gb-tooltip>
+      </div>
     </div>
   </div>
 </template>
@@ -60,10 +74,12 @@ export default {
       rewardProducer: state => state.snowdown.rewardProducer,
       rewardItem: state => state.snowdown.rewardItem,
       snowball: state => state.currency.event_snowball.value,
-      snow: state => state.currency.event_snow.value
+      snow: state => state.currency.event_snow.value,
+      topaz: state => state.currency.gem_topaz.value,
     }),
     ...mapGetters({
-      itemSnowCost: 'snowdown/itemSnowCost'
+      itemSnowCost: 'snowdown/itemSnowCost',
+      itemTopazCost: 'snowdown/itemTopazCost',
     }),
     itemList() {
       let arr = [];
@@ -98,7 +114,7 @@ export default {
       this.rerollMode = !this.rerollMode;
     },
     rerollItem(name) {
-      if (this.rerollMode && this.snowball >= this.rerollCost && this.rewardItem === null) {
+      if (this.rerollMode && this.snowball >= this.rerollCost && this.rewardItem === null && this.$store.state.snowdown.item[name].type !== 'producer') {
         this.$store.dispatch('snowdown/rerollItem', name);
         this.rerollMode = false;
       }
@@ -106,6 +122,11 @@ export default {
     buySnowItem() {
       if (this.snow >= this.itemSnowCost && this.rewardItem === null) {
         this.$store.dispatch('snowdown/buySnowItem');
+      }
+    },
+    buyTopazItem() {
+      if (this.topaz >= this.itemTopazCost && this.rewardItem === null) {
+        this.$store.dispatch('snowdown/buyTopazItem');
       }
     }
   }
