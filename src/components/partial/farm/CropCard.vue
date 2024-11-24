@@ -135,6 +135,7 @@
           </template>
           <stat-breakdown name="farmExperience" :baseArray="this.cropGeneStats.mult.farmExperience.baseArray" :multArray="this.cropGeneStats.mult.farmExperience.multArray"></stat-breakdown>
           <div>{{ $vuetify.lang.t(`$vuetify.farm.expToLevelUp`, $formatNum(harvestsNeeded)) }}</div>
+          <alert-text v-if="Math.max(crop.level, crop.levelMax) >= 10" type="info">{{ $vuetify.lang.t(`$vuetify.farm.prestige.increasedGLRequirement`) }}</alert-text>
         </gb-tooltip>
       </div>
       <div v-if="currentGenePicker !== null" key="crop-gene-picker">

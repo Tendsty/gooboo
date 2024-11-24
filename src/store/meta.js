@@ -103,7 +103,7 @@ export default {
                 }
             }
         },
-        globalLevelUnlocks({ state, rootState, rootGetters, commit, dispatch }) {
+        globalLevelUnlocks({ state, rootState, getters, rootGetters, commit, dispatch }) {
             // Global level unlocks
             for (const [key, elem] of Object.entries(state.globalLevelUnlocks)) {
                 if (state.globalLevel >= elem && !rootState.unlock[key].use) {
@@ -151,6 +151,16 @@ export default {
             // Get a relic at global level 40 (when relics unlock)
             if (state.globalLevel >= 40 && !rootState.relic.item.friendlyBat.found) {
                 dispatch('relic/find', 'friendlyBat', {root: true});
+            }
+
+            // Apply effects
+            if (getters.globalEventLevel > 0) {
+                dispatch('system/applyEffect', {
+                    type: 'mult',
+                    name: 'snowdownResourceGain',
+                    multKey: `globalLevel`,
+                    value: Math.pow(1.01, getters.globalEventLevel)
+                }, {root: true});
             }
         }
     }

@@ -3,7 +3,7 @@
     <div class="d-flex justify-center align-center pa-1">
       <div class="ma-1">{{ $vuetify.lang.t(`$vuetify.event.snowdown.fightCount`) }} #{{ fightsWon + 1 }}</div>
       <price-tag class="ma-1" currency="event_snowball" :amount="snowballFightCost"></price-tag>
-      <gb-tooltip :min-width="0">
+      <gb-tooltip key="snowball-fight-win">
         <template v-slot:activator="{ on, attrs }">
           <div class="ma-1" v-bind="attrs" v-on="on">
             <v-btn color="primary" :disabled="rewardProducer || rewardItem !== null || snowball < snowballFightCost" @click="snowballFight">
@@ -13,6 +13,27 @@
           </div>
         </template>
         <div class="mt-0">{{ $vuetify.lang.t('$vuetify.event.snowdown.fightDescription') }}</div>
+        <div>{{ $vuetify.lang.t('$vuetify.event.snowdown.fightWin') }}:</div>
+        <ul class="mt-0">
+          <li>{{ $vuetify.lang.t('$vuetify.event.snowdown.fightWinProducer') }}</li>
+          <li v-if="winItemGain">{{ $vuetify.lang.t('$vuetify.event.snowdown.fightWinItem') }}</li>
+          <li><price-tag currency="event_snowdownToken" add :amount="winTokenGain"></price-tag></li>
+        </ul>
+      </gb-tooltip>
+      <gb-tooltip key="snowball-fight-revenge" v-if="revenge > 0" :title-text="$vuetify.lang.t('$vuetify.event.snowdown.revenge.name')">
+        <template v-slot:activator="{ on, attrs }">
+          <div v-bind="attrs" v-on="on">
+            <v-badge color="orange" class="balloon-text-dynamic" offset-x="14" offset-y="20" bottom overlap>
+              <v-icon large>mdi-emoticon-angry</v-icon>
+              <template v-slot:badge>
+                <span :class="{'black--text': !$vuetify.theme.dark}">{{ $formatInt(revenge) }}</span>
+              </template>
+            </v-badge>
+          </div>
+        </template>
+        <div class="mt-0">{{ $vuetify.lang.t('$vuetify.event.snowdown.revenge.description', $formatInt(revenge)) }}</div>
+        <div v-if="revengeStats > 0">{{ $vuetify.lang.t('$vuetify.event.snowdown.revenge.statsScaling', $formatNum(revengeCrit, true), $formatNum(revengeBlock, true), $formatNum(revengeStats * 100, true)) }}</div>
+        <div v-else>{{ $vuetify.lang.t('$vuetify.event.snowdown.revenge.statsBase') }}</div>
       </gb-tooltip>
     </div>
     <div class="d-flex justify-center flex-wrap pa-1 mt-4">
@@ -56,14 +77,26 @@ export default {
       rewardProducer: state => state.snowdown.rewardProducer,
       rewardItem: state => state.snowdown.rewardItem,
       replayBase: state => state.snowdown.result,
+      revenge: state => state.snowdown.revenge,
       snowball: state => state.currency.event_snowball.value
     }),
     ...mapGetters({
       playerStats: 'snowdown/playerStats',
-      enemyStats: 'snowdown/enemyStats'
+      enemyStats: 'snowdown/enemyStats',
+      winTokenGain: 'snowdown/winTokenGain',
+      winItemGain: 'snowdown/winItemGain',
     }),
     snowballFightCost() {
       return SNOWDOWN_FIGHT_COST;
+    },
+    revengeStats() {
+      return this.$store.getters['mult/get']('snowdownRevengeStats');
+    },
+    revengeCrit() {
+      return this.$store.getters['mult/get']('snowdownRevengeCrit');
+    },
+    revengeBlock() {
+      return this.$store.getters['mult/get']('snowdownRevengeBlock');
     }
   },
   methods: {

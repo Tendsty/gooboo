@@ -841,21 +841,29 @@ export default {
       name: 'Schneefall',
       fightCount: 'Kampf',
       fight: 'Kämpfen',
-      fightDescription: 'Bekämpfe den gezeigten Gegner für ein paar Schneebälle. Beim Sieg erhältst du Schneebälle, Schneefall-Chips, einen Produzenten und eventuell einen Gegenstand. Den Gegenstand erhältst du garantiert für die ersten 5 Kämpfe. Deine Beutewertung erhöht die Chance auf einen Gegenstand und die Menge erhaltener Schneebälle und Schneefall-Chips.',
+      fightDescription: 'Bekämpfe den gezeigten Gegner für ein paar Schneebälle',
+      fightWin: 'Beim Sieg erhältst du',
+      fightWinProducer: 'einen Produzenten deiner Wahl',
+      fightWinItem: 'einen von drei zufälligen Gegenständen',
       pickProducer: 'Wähle einen Produzenten',
       pickItem: 'Wähle einen Gegenstand',
       reroll: 'Neu würfeln',
-      rerollDescription: 'Würfle einen Gegenstand im Besitz neu, dabei erhältst du einen neuen Gegenstand der selben Kategorie (Produzent oder Nicht-Produzent).',
+      rerollDescription: 'Würfle einen Gegenstand im Besitz neu',
       buyItem: 'Gegenstand kaufen',
-      buyItemDescription: 'Erhalte einen von drei zufälligen Nicht-Produzenten-Gegenständen',
-      attackDescription: 'Menge an Schaden, den deine Angriffe anrichten. Der endgültige Schadenswert liegt zwischen 80% und 120% deines Angriffs.',
-      healthDescription: 'Menge an Schaden, die einstecken kannst, bevor du einfrierst und kampfunfähig wirst.',
-      defenseDescription: 'Reduziert eingehenden Schaden um einen flachen Wert.',
-      critDescription: 'Erhöht die Chance auf einen kritischen Treffer um 1% pro Kritisch-Wertung. Kritische Treffer verursachen +10 Schaden. Über 25% erhältst du weniger kritische Chance pro Kritisch-Wertung, während die Chance sich 75% annähert. Für jedes 1% so verlorene kritische Chance erhältst du +0.2 kritischen Schaden.',
-      blockDescription: 'Erhöht die Chance, eingehende Angriffe zu blockieren und keinen Schaden zu erleiden.',
+      buyItemDescription: 'Erhalte einen von drei zufälligen Gegenständen',
+      attackDescription: 'Menge an Schaden, den deine Angriffe anrichten. Der endgültige Schadenswert liegt zwischen 80% und 120% deines Angriffs',
+      healthDescription: 'Menge an Schaden, die einstecken kannst, bevor du einfrierst und kampfunfähig wirst',
+      defenseDescription: 'Reduziert eingehenden Schaden um einen flachen Wert',
+      critDescription: 'Erhöht die Chance auf einen kritischen Treffer um 1% pro Kritisch-Wertung. Kritische Treffer verursachen +10 Schaden. Über 25% erhältst du weniger kritische Chance pro Kritisch-Wertung, während die Chance sich 75% annähert. Für jedes 1% so verlorene kritische Chance erhältst du +0.2 kritischen Schaden. Multiplikative Angriffssteigerungen erhöhen auch den kritischen Schaden',
+      blockDescription: 'Erhöht die Chance, eingehende Angriffe zu blockieren und keinen Schaden zu erleiden',
       boost: 'Erhalte sofort 1 Tag Fortschritt',
+      revenge: {
+        name: 'Rache',
+        description: 'Du hast {0} Schlacht(en) in Folge verloren. Dies erhöht deine Werte, bis du eine Schneeballschlacht gewinnst',
+        statsBase: 'Erhalte +5% Angriff und Leben, wenn du eine Schlacht verlierst',
+        statsScaling: 'Erhalte +5% Angriff und Leben, +{0} Kritisch-Wertung und +{1} Blockwertung, wenn du eine Schlacht verlierst. Außerdem bekommst du zusätzliche +{2}% Angriff und Leben pro verlorener Schlacht, wenn du eine Schlacht verlierst'
+      },
       fighter: {
-        player: 'Spieler',
         snowOwl: 'Schneeeule',
         dog: 'Hund',
         cat: 'Katze',
@@ -865,38 +873,32 @@ export default {
         toddler: 'Kleinkind',
         babysitter: 'Babysitter',
         kid: 'Kind',
-        fatKid: 'Fettes Kind',
+        toughKid: 'Hartnäckiges Kind',
         teenager: 'Teenager',
         bully: 'Rowdy',
         youngAdult: 'Jugendlicher',
         hooligan: 'Hooligan',
         adult: 'Erwachsener',
+        veteran: 'Veteran',
+        wallOfIce: 'Eiswand',
         snowBot: 'Schnee-BOT'
       },
       item: {
         rollingPin: {
           name: 'Nudelholz',
-          description: 'Produziert Teig, der zu Keksen gebacken werden kann und deine Kritisch-Wertung erhöht'
+          description: ''
         },
         forest: {
           name: 'Wald',
-          description: 'Produziert Setzlinge, welche zu Tannen wachsen können und so deinen Angriff steigern'
-        },
-        spiceJar: {
-          name: 'Gewürzglas',
-          description: 'Produziert Zimt, der für Glühwein gebraucht wird. Dadurch steigt deine Blockwertung'
-        },
-        tap: {
-          name: 'Wasserhahn',
-          description: 'Produziert Wasser, woraus Eisskulpturen entstehen, was deine Beutewertung aufbessert'
+          description: ''
         },
         snowCannon: {
           name: 'Schneekanone',
-          description: 'Produziert Schnee, womit Schneemänner gebaut werden, was dir zusätzliche Gegenstände gibt'
+          description: ''
         },
         shepherd: {
           name: 'Schafhirte',
-          description: 'Produziert Garn, woraus Wollmützen gemacht werden, was dein Leben erhöht'
+          description: ''
         },
         animalTooth: {
           name: 'Tierzahn',
@@ -1300,6 +1302,7 @@ export default {
     ritualPotionLevel: 'Trank-Stufe',
     ritualHint: 'Gefundene Hinweise',
     ritualIngredient: 'Bonuszutat',
+    snowdownRevenge: 'Rache',
     interest: 'Zinsen',
     multiplier: 'Multiplikator',
   },
@@ -2113,7 +2116,8 @@ export default {
       current: 'Deine aktuelle Prestige-Stufe ist {0}, was den Ertrag aller Pflanzen um x{1} erhöht.',
       next: 'Ein Prestige dieser Pflanze erhöht die Prestige-Stufe um {0}. Dadurch steigt sie auf {1}, was den Ertrag aller Pflanzen auf x{2} erhöht.',
       nextNoEffect: 'Die Stufe dieser Pflanze ist nicht höher als ihre Prestige-Stufe. Ein Prestige wird die Prestige-Stufe nicht anheben, aber trotzdem Stufe und Gene zurücksetzen.',
-      cropOnField: 'Du kannst gerade keinen Prestige durchführen, da sich diese Pflanze noch auf dem Feld befindet'
+      cropOnField: 'Du kannst gerade keinen Prestige durchführen, da sich diese Pflanze noch auf dem Feld befindet',
+      increasedGLRequirement: 'Nach dem Erreichen von Stufe 10 erhöhen Pflanzen nur noch jede zweite Stufe die globale Stufe',
     },
     button: {
       plantAll: 'Säe die ausgewählte Pflanze ({0}) auf allen leeren Feldern aus. Du kannst auch Saat auf ein einzelnes Feld legen, indem du es anklickst',
@@ -2306,7 +2310,7 @@ export default {
         accelerator: 'Die 8 umliegenden Formen werden besonders gesammelt. Wenn alle 8 von ihnen gleich sind, wird sämtliche Motivation verbraucht um davon noch mehr Formen zu erhalten',
         sparkles: 'Die 4 direkt anliegenden Formen werden regulär gesammelt (wenn möglich) und zählen als eine große Kombo',
         hourglass: 'Erhalte sofort Konverter und Pakete, sammle Formen um die Zeit zu erhöhen',
-        chest: '10 naheliegende Formen werden besonders gesammelt, die 8 umliegenden und die links und rechts daneben. Wenn alle 10 Formen verschieden sind, gibt es eine besondere Belohnung'
+        chest: '10 naheliegende Formen werden besonders gesammelt, die 8 umliegenden und die links und rechts daneben. Wenn alle 10 Formen verschieden sind, gibt es eine besondere Belohnung und der Multiplikator für besonderes Sammeln wird erneut mit dem Wurzelwert angewendet'
       },
       buyFor: {
         0: 'Kaufe',
