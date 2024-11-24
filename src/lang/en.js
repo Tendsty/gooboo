@@ -841,21 +841,29 @@ export default {
       name: 'Snowdown',
       fightCount: 'Fight',
       fight: 'Fight',
-      fightDescription: 'Fight the shown opponent at the cost of a few snowballs. If you win, you get snowballs, snowdown tokens, a producer and a chance for a new non-producer item. The non-producer item is guaranteed for the first 5 fights. Your loot rating increases the chance for a new item and the amount of snowballs and snowdown tokens received.',
+      fightDescription: 'Fight the shown opponent at the cost of a few snowballs',
+      fightWin: 'If you win, you gain',
+      fightWinProducer: 'a producer of your choice',
+      fightWinItem: 'one of three random items',
       pickProducer: 'Pick a producer',
       pickItem: 'Pick an item',
       reroll: 'Reroll',
-      rerollDescription: 'Reroll an owned item into another item of the same category (producer or non-producer).',
+      rerollDescription: 'Reroll an owned item into another item',
       buyItem: 'Buy item',
-      buyItemDescription: 'Get one of three random non-producer items',
-      attackDescription: 'Amount of damage your attacks deal. The final amount of damage will be between 80% and 120% of your attack.',
-      healthDescription: 'Amount of damage you can take before freezing and becoming unable to fight.',
-      defenseDescription: 'Reduces incoming damage by a flat amount.',
-      critDescription: 'Increases your chance of dealing a critical hit by 1% per crit rating. Critical hits deal +10 damage. Above 25% crit chance, you get less crit chance per crit rating as your crit chance approaches 75%. For each 1% crit chance lost to this, get +0.2 crit damage.',
-      blockDescription: 'Increases your chance of blocking an attack and taking no damage.',
+      buyItemDescription: 'Get one of three random items',
+      attackDescription: 'Amount of damage your attacks deal. The final amount of damage will be between 80% and 120% of your attack',
+      healthDescription: 'Amount of damage you can take before freezing and becoming unable to fight',
+      defenseDescription: 'Reduces incoming damage by a flat amount',
+      critDescription: 'Increases your chance of dealing a critical hit by 1% per crit rating. Critical hits deal +10 damage. Above 25% crit chance, you get less crit chance per crit rating as your crit chance approaches 75%. For each 1% crit chance lost to this, get +0.2 crit damage. Multiplicative attack increases also increase crit damage',
+      blockDescription: 'Increases your chance of blocking an attack and taking no damage',
       boost: 'Get 1 day of progress instantly',
+      revenge: {
+        name: 'Revenge',
+        description: 'You have lost {0} battle(s) in a row. This increases your stats until you win a snowball fight',
+        statsBase: 'Gain +5% attack and health when you lose a fight',
+        statsScaling: 'Gain +5% attack and health, +{0} crit rating and +{1} block rating when you lose a fight. You also get an additional +{2}% attack and health per fight lost each time you lose a fight'
+      },
       fighter: {
-        player: 'Player',
         snowOwl: 'Snow owl',
         dog: 'Dog',
         cat: 'Cat',
@@ -865,38 +873,32 @@ export default {
         toddler: 'Toddler',
         babysitter: 'Babysitter',
         kid: 'Kid',
-        fatKid: 'Fat kid',
+        toughKid: 'Tough kid',
         teenager: 'Teenager',
         bully: 'Bully',
         youngAdult: 'Young adult',
         hooligan: 'Hooligan',
         adult: 'Adult',
+        veteran: 'Veteran',
+        wallOfIce: 'Wall of ice',
         snowBot: 'Snow-BOT'
       },
       item: {
         rollingPin: {
           name: 'Rolling pin',
-          description: 'Produces dough, which can be baked into cookies, boosting your critical rating'
+          description: ''
         },
         forest: {
           name: 'Forest',
-          description: 'Produces saplings, which can be grown into pine trees, boosting your attack'
-        },
-        spiceJar: {
-          name: 'Spice jar',
-          description: 'Produces cinnamon, which can be used to make mulled wine, boosting your block rating'
-        },
-        tap: {
-          name: 'Tap',
-          description: 'Produces water, which can be turned into ice sculptures, boosting your loot rating'
+          description: ''
         },
         snowCannon: {
           name: 'Snow cannon',
-          description: 'Produces snow, which can be used to make snowmen, giving you additional items'
+          description: ''
         },
         shepherd: {
           name: 'Shepherd',
-          description: 'Produces yarn, which can be turned into wool hats, boosting your health'
+          description: ''
         },
         animalTooth: {
           name: 'Animal tooth',
@@ -1300,6 +1302,7 @@ export default {
     ritualPotionLevel: 'Potion level',
     ritualHint: 'Discovered hints',
     ritualIngredient: 'Bonus ingredient',
+    snowdownRevenge: 'Revenge',
     interest: 'Interest',
     multiplier: 'Multiplier',
   },
@@ -2113,7 +2116,8 @@ export default {
       current: 'Your current prestige level is {0}, multiplying all crop gain by x{1}.',
       next: 'Prestiging this crop increases your prestige level by {0}. This raises your total prestige level to {1}, increasing your crop gain to x{2}.',
       nextNoEffect: 'Your level is not higher than your prestige level for this crop. Prestiging will not increase your prestige level, but still reset level and genes.',
-      cropOnField: 'You cannot prestige now because this crop is on the field'
+      cropOnField: 'You cannot prestige now because this crop is on the field',
+      increasedGLRequirement: 'After reaching level 10, crops only increase global level every second level',
     },
     button: {
       plantAll: 'Plant the selected crop ({0}) on all empty tiles. You can also plant a single crop by clicking the empty tile',
@@ -2306,7 +2310,7 @@ export default {
         accelerator: 'The surrounding 8 shapes are special collected. If all 8 of them are the same, spend all motivation to gain even more shapes',
         sparkles: 'The 4 directly adjacent shapes get regular collected if possible and count as one big combo',
         hourglass: 'Immediately get converters and packages, collect shapes to increase the time',
-        chest: 'Special collect 10 nearby shapes, the 8 surrounding ones and the ones to the left and right. If all 10 shapes are different, receive a special reward'
+        chest: 'Special collect 10 nearby shapes, the 8 surrounding ones and the ones to the left and right. If all 10 shapes are different, receive a special reward and apply the special shape multiplier again at its root value'
       },
       buyFor: {
         0: 'Buy',

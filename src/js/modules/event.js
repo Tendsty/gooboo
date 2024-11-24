@@ -174,18 +174,25 @@ export default {
         // snowdown mults
         snowdownAttack: {baseValue: 4},
         snowdownHealth: {baseValue: 40, round: true},
-        snowdownDefense: {},
+        snowdownDefense: {round: true},
         snowdownCritRating: {},
         snowdownBlockRating: {},
-        snowdownLootRating: {},
         snowdownPetAttack: {},
         snowdownPetHealth: {round: true},
-        snowdownPetDefense: {},
+        snowdownPetDefense: {round: true},
         snowdownPetCritRating: {},
         snowdownPetBlockRating: {},
         snowdownAllAttack: {group: ['snowdownAttack', 'snowdownPetAttack']},
-        snowdownAllHealth: {group: ['snowdownHealth', 'snowdownPetHealth']}
+        snowdownAllHealth: {group: ['snowdownHealth', 'snowdownPetHealth']},
+        snowdownAllDefense: {group: ['snowdownDefense', 'snowdownPetDefense']},
+        snowdownRevengeStats: {display: 'percent'},
+        snowdownRevengeCrit: {},
+        snowdownRevengeBlock: {},
+        snowdownResourceGain: {},
     },
+    multGroup: [
+        {mult: 'snowdownResourceGain', name: 'currencyGain', subtype: 'snowdownResource'},
+    ],
     currency: {
         // cinders currencies
         light: {type: 'cinders', color: 'yellow', icon: 'mdi-lightbulb-on', gainMult: {}},
@@ -250,12 +257,10 @@ export default {
         feather: {type: 'nightHunt', color: 'skyblue', icon: 'mdi-feather'},
 
         // snowdown currencies
-        dough: {type: 'snowdown', color: 'beige', icon: 'mdi-liquid-spot'},
-        cinnamon: {type: 'snowdown', color: 'brown', icon: 'mdi-script'},
-        sapling: {type: 'snowdown', color: 'green', icon: 'mdi-sprout'},
-        water: {type: 'snowdown', color: 'blue', icon: 'mdi-water'},
-        snow: {type: 'snowdown', color: 'light-blue', icon: 'mdi-snowflake'},
-        yarn: {type: 'snowdown', color: 'red', icon: 'mdi-link'},
+        sapling: {type: 'snowdown', subtype: 'snowdownResource', color: 'green', icon: 'mdi-sprout', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true},
+        yarn: {type: 'snowdown', subtype: 'snowdownResource', color: 'red', icon: 'mdi-link', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true},
+        dough: {type: 'snowdown', subtype: 'snowdownResource', color: 'beige', icon: 'mdi-liquid-spot', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true},
+        snow: {type: 'snowdown', subtype: 'snowdownResource', color: 'light-blue', icon: 'mdi-snowflake', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true},
 
         // topaz drop replacement currencies
         wax: {type: 'cinders', color: 'pale-yellow', icon: 'mdi-beehive-outline'},
@@ -543,6 +548,12 @@ export default {
         if (store.state.snowdown.itemsBought > 0) {
             obj.snowdown_itemsBought = store.state.snowdown.itemsBought;
         }
+        if (store.state.snowdown.itemsBoughtTopaz > 0) {
+            obj.snowdown_itemsBoughtTopaz = store.state.snowdown.itemsBoughtTopaz;
+        }
+        if (store.state.snowdown.revenge > 0) {
+            obj.snowdown_revenge = store.state.snowdown.revenge;
+        }
 
         let items = {};
         let hasItems = false;
@@ -746,6 +757,13 @@ export default {
         }
         if (data.snowdown_itemsBought !== undefined) {
             store.commit('snowdown/updateKey', {key: 'itemsBought', value: data.snowdown_itemsBought});
+        }
+        if (data.snowdown_itemsBoughtTopaz !== undefined) {
+            store.commit('snowdown/updateKey', {key: 'itemsBoughtTopaz', value: data.snowdown_itemsBoughtTopaz});
+        }
+        if (data.snowdown_revenge !== undefined) {
+            store.commit('snowdown/updateKey', {key: 'revenge', value: data.snowdown_revenge});
+            store.dispatch('snowdown/applyRevengeEffect');
         }
         if (data.snowdown_item !== undefined) {
             for (const [key, elem] of Object.entries(data.snowdown_item)) {

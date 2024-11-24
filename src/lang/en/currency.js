@@ -281,17 +281,9 @@ export default {
     name: 'Dough',
     description: 'Why eat the cookies when you can eat the dough?'
   },
-  event_cinnamon: {
-    name: 'Cinnamon',
-    description: 'What would winter be without cinnamon?'
-  },
   event_sapling: {
     name: 'Sapling',
     description: 'Pine tree saplings. With enough time, these can grow into massive trees'
-  },
-  event_water: {
-    name: 'Water',
-    description: 'Clean and cold tap water'
   },
   event_snow: {
     name: 'Snow',

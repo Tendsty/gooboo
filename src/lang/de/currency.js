@@ -281,17 +281,9 @@ export default {
     name: 'Teig',
     description: 'Warum Kekse essen wenn man auch gleich den Teig essen kann?'
   },
-  event_cinnamon: {
-    name: 'Zimt',
-    description: 'Was wäre ein Winter nur ohne Zimt?'
-  },
   event_sapling: {
     name: 'Setzling',
     description: 'Gewöhnliche Tannensetzlinge. Mit genug Zeit können daraus riesige Tannen werden'
-  },
-  event_water: {
-    name: 'Wasser',
-    description: 'Sauberes und kaltes Wasser aus dem Hahn'
   },
   event_snow: {
     name: 'Schnee',

@@ -367,7 +367,7 @@ export default {
                 cardEquipped: [],
                 upgrades: {},
                 exp: 0,
-                baseExp: Math.pow(1.6, tier) * 60 * baseExpMult,
+                baseExp: Math.pow(1.5, tier) * 60 * baseExpMult,
                 baseExpMult,
                 type: o.type,
                 patientStacks: 0
@@ -825,7 +825,8 @@ export default {
             let totalLevel = 0;
 
             for (const [, elem] of Object.entries(state.crop)) {
-                totalLevel += Math.max(elem.level, elem.levelMax);
+                const lvl = Math.max(elem.level, elem.levelMax);
+                totalLevel += Math.min(lvl, Math.floor(lvl / 2) + 5);
             }
 
             dispatch('meta/globalLevelPart', {key: 'farm_0', amount: totalLevel}, {root: true});

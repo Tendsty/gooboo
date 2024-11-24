@@ -60,8 +60,8 @@ function loadGame(file, runPrepare = true) {
 
         store.commit('system/updateKey', {key: 'currentDay', value: getDay(new Date(store.state.system.timestamp * 1000))});
         store.commit('system/generatePlayerId');
-        store.dispatch('farm/updateFieldCaches');
         store.dispatch('farm/applyEarlyGameBuff');
+        store.dispatch('farm/updateFieldCaches');
         store.dispatch('meta/globalLevelUnlocks');
         advance();
 
