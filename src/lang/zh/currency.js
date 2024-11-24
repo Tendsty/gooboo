@@ -283,17 +283,9 @@ export default {
     name: '面团',
     description: '当你可以吃面团时为什么要吃饼干?',
   },
-  event_cinnamon: {
-    name: '肉桂',
-    description: '没有肉桂的冬天会怎样?',
-  },
   event_sapling: {
     name: '树苗',
     description: '松树树苗。 如果有足够的时间，它们可以长成参天大树',
-  },
-  event_water: {
-    name: '水',
-    description: '干净、冷的自来水',
   },
   event_snow: {
     name: '雪',

@@ -828,10 +828,7 @@ export default {
 
   event_pineTrees: '松树',
   event_woolHat: '羊毛帽',
-  event_mulledWine: '热红酒',
   event_cookies: '饼干',
-  event_iceSculpture: '冰雕',
   event_attackBoost: '攻击提升',
   event_healthBoost: '生命值提升',
-  event_lootBoost: '战利品提升',
 };

@@ -888,24 +888,32 @@ export default {
       fightCount: '战斗',
       fight: '战斗',
       fightDescription:
-        '以几个雪球为代价与显示的对手战斗。 如果你赢了，你将获得雪球、降雪代币、生产者和获得新的非生产者物品的机会。 非生产者物品在前 5 场比赛中得到保证。 您的战利品等级会增加获得新物品的机会以及收到的雪球和降雪代币的数量。',
+        '以几个雪球为代价与显示的对手战斗',
+      fightWin: '如果你赢了，你将获得',
+      fightWinProducer: '你选择的生产者',
+      fightWinItem: '三种物品中随机一项',
       pickProducer: '选择一个生产者',
       pickItem: '选择一个物品',
       reroll: '重掷',
       rerollDescription:
-        '将拥有的物品重掷到同一类别（生产者或非生产者）的另一个物品中。',
+        '将拥有的物品重掷到另一个物品中',
       buyItem: '购买物品',
-      buyItemDescription: '获取三个随机非生产者物品之一',
+      buyItemDescription: '获取三个随机物品之一',
       attackDescription:
-        '你的攻击造成的伤害量。 最终伤害量将在你攻击的 80% 到 120% 之间。',
-      healthDescription: '在冻结并无法战斗之前你可以承受的伤害量。',
-      defenseDescription: '将传入的伤害减少固定数量。',
+        '你的攻击造成的伤害量。 最终伤害量将在你攻击的 80% 到 120% 之间',
+      healthDescription: '在冻结并无法战斗之前你可以承受的伤害量',
+      defenseDescription: '将传入的伤害减少固定数量',
       critDescription:
-        '每个暴击等级使你造成暴击的几率提高 1%。 暴击造成 +10 伤害。 暴击率高于 25% 时，当暴击率接近 75% 时，每个暴击等级的暴击率会降低。 为此每损失 1% 暴击率，获得 +0.2 暴击伤害。',
-      blockDescription: '增加你格挡攻击且不受伤害的几率。',
+        '每个暴击等级使你造成暴击的几率提高 1%。 暴击造成 +10 伤害。 暴击率高于 25% 时，当暴击率接近 75% 时，每个暴击等级的暴击率会降低。 为此每损失 1% 暴击率，获得 +0.2 暴击伤害。乘数攻击增加也会增加暴击伤害',
+      blockDescription: '增加你格挡攻击且不受伤害的几率',
       boost: '立即获得 1 天的进度',
+      revenge: {
+        name: '复仇',
+        description: '你连续输了 {0} 次战斗。在你赢得一场雪球战之前你获得属性提升',
+        statsBase: '输掉一场战斗时获得 +5% 攻击力和生命值',
+        statsScaling: '输掉一场战斗时获得 +5% 攻击力和生命值， +{0} 暴击率和 +{1} 格挡率。每输掉一次，你还会额外获得 +{2}% 在战斗中损失的攻击力和生命值'
+      },
       fighter: {
-        player: '玩家',
         snowOwl: '雪鸮',
         dog: '狗',
         cat: '猫',
@@ -914,39 +922,33 @@ export default {
         turtle: '乌龟',
         toddler: '学步儿童',
         babysitter: '保姆',
-        kid: '小孩',
-        fatKid: '胖孩子',
+        kid: '小孩子',
+        toughKid: '熊孩子',
         teenager: '少年',
         bully: '恶霸',
         youngAdult: '青年人',
         hooligan: '流氓',
         adult: '成人',
+        veteran: '老兵',
+        wallOfIce: '冰墙',
         snowBot: '雪地机器人',
       },
       item: {
         rollingPin: {
           name: '擀面杖',
-          description: '生产面团，可以将其烘烤成饼干，从而提高您的暴击率',
+          description: '',
         },
         forest: {
           name: '森林',
-          description: '产生树苗，可以长成松树，增强你的攻击力',
-        },
-        spiceJar: {
-          name: '香料罐',
-          description: '生产肉桂，可用于制作热红酒，提高你的格挡率',
-        },
-        tap: {
-          name: '水龙头',
-          description: '产生水，可以变成冰雕，提高你的战利品等级',
+          description: '',
         },
         snowCannon: {
           name: '雪炮',
-          description: '产生雪，可以用来堆雪人，为你提供额外的物品',
+          description: '',
         },
         shepherd: {
           name: '牧羊人',
-          description: '生产纱线，可制成羊毛帽子，提升您的生命值',
+          description: '',
         },
         animalTooth: {
           name: '动物牙齿',
@@ -1357,6 +1359,7 @@ export default {
     ritualPotionLevel: '药水等级',
     ritualHint: '仪式提示',
     ritualIngredient: '仪式成分',
+    snowdownRevenge: '复仇',
     interest: '利息',
     multiplier: '倍数',
   },
@@ -1762,7 +1765,7 @@ export default {
       power: '攻击和生命值 x{0}',
       sigil: '印记 +{0}',
       revive: '复活 +{0}',
-      execute: '执行 +{0}%'
+      execute: '处决 +{0}%'
     },
     activeCooldown: '主动冷却时间',
     activeBuffFor: '持续{0}:',
@@ -2209,6 +2212,7 @@ export default {
       nextNoEffect:
         '您的等级不高于该作物的声望等级。 声望不会增加你的声望等级，但仍会重置等级和基因。',
       cropOnField: '你现在无法声望，因为这种作物已经在田里了',
+      increasedGLRequirement: '10级之后，作物等级每提升两级提升一次全局等级',
     },
     button: {
       plantAll:
@@ -2410,10 +2414,10 @@ export default {
         description: '一些特殊的形状，{0}% 几率代替普通形状出现，特殊收集时收集 {1} 倍形状。在网格中同时只能出现一个特殊形状',
         bomb: '以此为中心 + 形状的所有形状被特殊收集',
         dice: '刷新所有和骰子上方形状（如果骰子在顶层则是骰子下方形状）不一致的形状',
-        accelerator: '特殊收集周围8个形状。如果这8个形状都相同，消耗所动机获得更多的形状',
+        accelerator: '特殊收集周围8个形状。如果这8个形状都相同，消耗所有动机获得更多的形状',
         sparkles: '普通收集相邻的4个形状（如果存在），并视为整个组合',
         hourglass: '立刻获得转换器和包裹，收集形状来增加时间',
-        chest: '特殊收集附近10个形状，包括周围8个和再往左右各一个。如果这10个形状都不同，获得一份特殊奖励'
+        chest: '特殊收集附近10个形状，包括周围8个和再往左右各一个。如果这10个形状都不同，获得一份特殊奖励并以根值再次特殊收集'
       },
       buyFor: {
         0: '购买',
