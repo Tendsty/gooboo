@@ -168,10 +168,10 @@ export default {
       return HORDE_INACTIVE_ITEM_COOLDOWN;
     },
     charges() {
-      return this.isMe ? Math.floor(- this.cooldownLeft / this.cooldown) : Math.floor(logBase(2 - (this.cooldownLeft / this.cooldown), 2));
+      return this.isMe ? Math.floor(- this.cooldownLeft / this.cooldown)+1 : Math.floor(logBase(2 - (this.cooldownLeft / this.cooldown), 2));
     },
     nextChargeTime() {
-      return (0 - (2 - Math.pow(2, this.charges + 1) - this.cooldownLeft / this.cooldown)) * this.cooldown;
+      return this.isMe ? this.cooldown * this.charges + this.cooldownLeft : (0 - (2 - Math.pow(2, this.charges + 1) - this.cooldownLeft / this.cooldown)) * this.cooldown;
     },
     autocastPrio() {
       return this.$store.state.horde.autocast.findIndex(el => el === this.name) + 1;
