@@ -519,6 +519,19 @@ export default {
 
     // v1.5.5
     428: 'Fixed a bug where the game didn\'t load for some players',
+
+    // v1.5.6
+    429: 'Sacrifices no longer reset on prestige',
+    430: 'Offerings gained on sacrifice are now multiplied by the amount of sacrifices made',
+    431: 'Passive offering gain',
+    432: 'The "Nihilist" achievement now counts total offerings gained',
+    433: 'The "Black hole" achievement now counts sacrifices made',
+    434: 'Fixed multipliers showing their name before being unlocked',
+    435: 'Buying upgrades that modify healing no longer change the tooltips of enemy actives',
+    436: 'Equipment sacrifice is now correctly stored in the savefile',
+    437: 'Fixed tokens not being given to players who already played the event before',
+    438: 'Light gain per global level',
+    439: 'Enlightenment upgrades (except the first one) now increase your light gain by x1.5',
   },
   v: {
     1: {

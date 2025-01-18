@@ -5,7 +5,7 @@ import { logBase } from "../../../utils/math";
 export default function(seconds) {
     const candleDuration = store.state.cinders.activeCandle ? store.state.cinders.activeCandle.duration : 0
     const candleTime = Math.min(candleDuration, seconds);
-    const lightGain = store.getters['cinders/totalProduction'] * Math.pow(1.01, store.getters['meta/globalEventLevel']);
+    const lightGain = store.getters['cinders/totalProduction'] * Math.pow(1.015, store.getters['meta/globalEventLevel']);
 
     let totalLight = lightGain * (seconds - candleTime);
     if (candleTime > 0) {
