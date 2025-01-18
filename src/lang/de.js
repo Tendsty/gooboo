@@ -1509,12 +1509,12 @@ export default {
       description: {
         0: 'Opfere ',
         1: ' für ',
-        2: ' und erhöhe die Kosten der nächsten Opfergabe. Opferkosten werden beim Prestige mit zurückgesetzt.'
+        2: ' und erhöhe das Opfergaben-Einkommen um ',
+        3: '/h'
       },
       sacrifice: 'Opfern',
       notUnlocked: 'Diese Opfergabe ist noch nicht freigeschaltet. Du kannst trotzdem Opfergaben einsetzen, aber nicht opfern und die Rohstoffkapazität wird nicht erhöht, bis die Opfergabe freigeschaltet wurde',
       notUnlockedHint: 'Diese Opfergabe ist nicht freigeschaltet, also wird die Rohstoffkapazität noch nicht erhöht',
-      autoGen: 'Generiere 1% deiner erhaltenen Opfergaben dieses Durchlaufs ({0}) pro Stunde'
     },
     material: 'Material',
     food: 'Nahrung',

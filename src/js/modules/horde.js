@@ -1166,6 +1166,9 @@ export default {
         if (store.state.horde.autocast.length > 0) {
             obj.autocast = store.state.horde.autocast;
         }
+        if (store.state.horde.sacrificeLevel > 0) {
+            obj.sacrificeLevel = store.state.horde.sacrificeLevel;
+        }
 
         for (const [key, elem] of Object.entries(store.state.horde.tower)) {
             if (elem.highest > 0) {
@@ -1228,7 +1231,8 @@ export default {
         [
             'zone', 'combo', 'respawn', 'maxRespawn', 'bossAvailable', 'bossFight', 'fightTime', 'fightRampage', 'enemyTimer',
             'playerBuff', 'minibossTimer', 'nostalgiaLost', 'chosenActive', 'currentTower', 'towerFloor', 'taunt',
-            'selectedClass', 'selectedArea', 'expLevel', 'skillPoints', 'bossStage', 'trinketDrop', 'bossBonusDifficulty', 'autocast'
+            'selectedClass', 'selectedArea', 'expLevel', 'skillPoints', 'bossStage', 'trinketDrop', 'bossBonusDifficulty',
+            'autocast', 'sacrificeLevel'
         ].forEach(elem => {
             if (data[elem] !== undefined) {
                 store.commit('horde/updateKey', {key: elem, value: data[elem]});

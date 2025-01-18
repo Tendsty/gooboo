@@ -3,7 +3,7 @@
 // OFFLINE hides auto-updates and shows support links (web-based)
 // DESKTOP hides auto-updates and shows support links (windows app)
 // STEAM hides auto-updates and hides support links
-export const APP_ENV = 'WEB';
+export const APP_ENV = 'DESKTOP';
 
 // enable / disable testing version
 export const APP_TESTING = false;
@@ -44,6 +44,7 @@ export const VILLAGE_JOY_MIN_HAPPINESS = 1.25;
 export const VILLAGE_JOY_PER_HAPPINESS = 0.2;
 export const VILLAGE_JOY_HAPPINESS_REDUCTION = 1.2;
 export const VILLAGE_MIN_HAPPINESS = 0.01;
+export const VILLAGE_OFFERING_PASSIVE_GAIN = 0.02;
 
 export const HORDE_COMBO_ATTACK = 1.025;
 export const HORDE_COMBO_HEALTH = 1.01;

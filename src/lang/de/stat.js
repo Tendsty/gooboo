@@ -112,13 +112,13 @@ export default {
     achievement: 'Vorherbestimmt',
     description: 'Segen erhalten'
   },
-  village_totalOffering: {
+  village_offering: {
     achievement: 'Nihilist',
-    description: 'Opfer erbracht'
+    description: 'Opfergaben erhalten'
   },
-  village_bestOffering: {
+  village_sacrifice: {
     achievement: 'Schwarzes Loch',
-    description: 'Opfer in einem Zyklus erbracht'
+    description: 'Opfer erbracht'
   },
   village_oil: {
     achievement: 'Nehmt ihr Öl!',
@@ -143,6 +143,9 @@ export default {
   },
   village_prestigeCount: {
     description: 'Prestigeanzahl'
+  },
+  village_offeringMax: {
+    description: 'Höchste Opfergabenmenge'
   },
 
   // Horde stats
@@ -194,7 +197,7 @@ export default {
     description: 'Scheitere mit einer 99% Erbstücks-Chance'
   },
   horde_maxItems: {
-    description: 'Meiste Gegenstände ausgerüstet'
+    description: 'Meiste Ausrüstung verwendet'
   },
   horde_timeSpent: {
     description: 'Zeit verbracht'

@@ -1509,12 +1509,12 @@ export default {
       description: {
         0: 'Sacrifice ',
         1: ' for ',
-        2: ' and increase the cost of the next sacrifice. Sacrifice cost resets on prestige.'
+        2: ' and increase offering gain by ',
+        3: '/h'
       },
       sacrifice: 'Sacrifice',
       notUnlocked: 'This offering is not unlocked yet. You can still spend offerings, but not sacrifice and the resource capacity won\'t be applied until you unlock the offering',
       notUnlockedHint: 'This offering is not unlocked, so the resource capacity does not apply yet',
-      autoGen: 'Generate 1% of your offerings gained this run ({0}) per hour'
     },
     material: 'Material',
     food: 'Food',

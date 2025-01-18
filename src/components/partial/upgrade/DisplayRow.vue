@@ -3,7 +3,7 @@
   <div v-else-if="type === 'tag'">{{ this.$vuetify.lang.t(`$vuetify.tag.${ name }`, ...tagArgs) }}</div>
   <div v-else class="d-flex align-center">
     <v-icon v-if="showIcon && featureIcon" small class="mr-2">{{ featureIcon }}</v-icon>
-    <div class="flex-grow-1">{{ text }}{{ showStar ? '*' : '' }}{{ isBuff ? ` ${ $vuetify.lang.t(`$vuetify.horde.active.buff.suffix`) }` : '' }}:</div>
+    <div class="flex-grow-1">{{ isLocked ? '???' : text }}{{ showStar ? '*' : '' }}{{ isBuff ? ` ${ $vuetify.lang.t(`$vuetify.horde.active.buff.suffix`) }` : '' }}:</div>
     <div class="pl-1" v-if="showRelative">
       <mult-stat :mult="name" :type="type" :value="relativeValue"></mult-stat>
     </div>
@@ -68,6 +68,13 @@ export default {
             return el;
         }
       });
+    },
+    isLocked() {
+      if (!['base', 'mult', 'bonus'].includes(this.type)) {
+        return false;
+      }
+      const mult = this.$store.state.mult.items[this.name];
+      return mult && mult.unlock !== null && !this.$store.state.unlock[mult.unlock].see;
     }
   },
   props: {
