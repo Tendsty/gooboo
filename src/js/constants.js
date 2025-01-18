@@ -3,7 +3,7 @@
 // OFFLINE hides auto-updates and shows support links (web-based)
 // DESKTOP hides auto-updates and shows support links (windows app)
 // STEAM hides auto-updates and hides support links
-export const APP_ENV = 'DESKTOP';
+export const APP_ENV = 'WEB';
 
 // enable / disable testing version
 export const APP_TESTING = false;
