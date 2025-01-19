@@ -532,6 +532,9 @@ export default {
     437: 'Chips werden nun korrekt an Spieler verteilt, die das Event bereits gespielt haben',
     438: 'Lichteinkommen pro globaler Stufe',
     439: 'Erleuchtungs-Verbesserungen (außer die erste) erhöhen nun das Lichteinkommen um x1.5',
+
+    // v1.5.7
+    440: 'Opfergaben durch Opfer werden nun korrekt erhöht',
   },
   v: {
     1: {

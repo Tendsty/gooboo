@@ -532,6 +532,9 @@ export default {
     437: 'Fixed tokens not being given to players who already played the event before',
     438: 'Light gain per global level',
     439: 'Enlightenment upgrades (except the first one) now increase your light gain by x1.5',
+
+    // v1.5.7
+    440: 'Fixed offerings gained on sacrifice not increasing',
   },
   v: {
     1: {

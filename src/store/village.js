@@ -261,7 +261,7 @@ export default {
 
             if (rootGetters['currency/value']('village_' + name) >= offering.cost(offering.offeringBought)) {
                 dispatch('currency/spend', {feature: 'village', name: name, amount: offering.cost(offering.offeringBought)}, {root: true});
-                dispatch('currency/gain', {feature: 'village', name: 'offering', amount: offering.amount}, {root: true});
+                dispatch('currency/gain', {feature: 'village', name: 'offering', amount: offering.amount * (offering.offeringBought + 1)}, {root: true});
                 commit('updateOfferingKey', {name: name, key: 'offeringBought', value: offering.offeringBought + 1});
             }
         },
