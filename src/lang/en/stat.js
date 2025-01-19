@@ -112,13 +112,13 @@ export default {
     achievement: 'Fated',
     description: 'Blessings gained'
   },
-  village_totalOffering: {
+  village_offering: {
     achievement: 'Nihilist',
-    description: 'Total sacrifice count'
+    description: 'Offerings gained'
   },
-  village_bestOffering: {
+  village_sacrifice: {
     achievement: 'Black hole',
-    description: 'Maximum sacrifices in one prestige'
+    description: 'Sacrifices made'
   },
   village_oil: {
     achievement: 'Take their oil!',
@@ -143,6 +143,9 @@ export default {
   },
   village_prestigeCount: {
     description: 'Prestiges'
+  },
+  village_offeringMax: {
+    description: 'Highest offering amount'
   },
 
   // Horde stats
@@ -194,7 +197,7 @@ export default {
     description: 'Fail with a 99% heirloom chance'
   },
   horde_maxItems: {
-    description: 'Most items equipped'
+    description: 'Most equipment used'
   },
   horde_timeSpent: {
     description: 'Time spent'

@@ -175,56 +175,63 @@ export default {
     }, price() {
         return {gem_topaz: 500};
     }, effect: [
-        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.2 : null}
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]},
     glowfishEnlightened: {type: 'cinders', cap: 1, requirement() {
         return store.state.upgrade.item.event_glowfish.level > 0;
     }, price() {
         return {gem_topaz: 600};
     }, effect: [
-        {name: 'cindersFirstProducerCost', type: 'mult', value: lvl => lvl >= 1 ? 0.25 : null}
+        {name: 'cindersFirstProducerCost', type: 'mult', value: lvl => lvl >= 1 ? 0.25 : null},
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]},
     lanternEnlightened: {type: 'cinders', cap: 1, requirement() {
         return store.state.upgrade.item.event_lantern.level > 0;
     }, price() {
         return {gem_topaz: 700};
     }, effect: [
-        {name: 'currencyEventSootGain', type: 'mult', value: lvl => lvl >= 1 ? 2 : null}
+        {name: 'currencyEventSootGain', type: 'mult', value: lvl => lvl >= 1 ? 2 : null},
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]},
     campfireEnlightened: {type: 'cinders', cap: 1, requirement() {
         return store.state.upgrade.item.event_campfire.level > 0;
     }, price() {
         return {gem_topaz: 800};
     }, effect: [
-        {name: 'currencyEventCindersTokenGain', type: 'mult', value: lvl => lvl >= 1 ? 1.05 : null}
+        {name: 'currencyEventCindersTokenGain', type: 'mult', value: lvl => lvl >= 1 ? 1.05 : null},
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]},
     coralEnlightened: {type: 'cinders', cap: 1, requirement() {
         return store.state.upgrade.item.event_coral.level > 0;
     }, price() {
         return {gem_topaz: 900};
     }, effect: [
-        {name: 'cindersUpgradeProducerRequirement', type: 'base', value: lvl => lvl >= 1 ? -10 : null}
+        {name: 'cindersUpgradeProducerRequirement', type: 'base', value: lvl => lvl >= 1 ? -10 : null},
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]},
     jellyfishEnlightened: {type: 'cinders', cap: 1, requirement() {
         return store.state.upgrade.item.event_jellyfish.level > 0;
     }, price() {
         return {gem_topaz: 1000};
     }, effect: [
-        {name: 'cindersCandlePower', type: 'mult', value: lvl => lvl >= 1 ? 2 : null}
+        {name: 'cindersCandlePower', type: 'mult', value: lvl => lvl >= 1 ? 2 : null},
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]},
     nightbloomEnlightened: {type: 'cinders', cap: 1, requirement() {
         return store.state.upgrade.item.event_nightbloom.level > 0;
     }, price() {
         return {gem_topaz: 1100};
     }, effect: [
-        {name: 'cindersNonFirstProducerCost', type: 'mult', value: lvl => lvl >= 1 ? 0.5 : null}
+        {name: 'cindersNonFirstProducerCost', type: 'mult', value: lvl => lvl >= 1 ? 0.5 : null},
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]},
     neonlightEnlightened: {type: 'cinders', cap: 1, requirement() {
         return store.state.upgrade.item.event_neonlight.level > 0;
     }, price() {
         return {gem_topaz: 1200};
     }, effect: [
-        {name: 'cindersUpgradeLightCost', type: 'mult', value: lvl => lvl >= 1 ? 0.5 : null}
+        {name: 'cindersUpgradeLightCost', type: 'mult', value: lvl => lvl >= 1 ? 0.5 : null},
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]},
     sunEnlightened: {type: 'cinders', cap: 1, requirement() {
         return store.state.upgrade.item.event_sun.level > 0;
@@ -240,6 +247,7 @@ export default {
         {name: 'cindersProductionJellyfish', type: 'mult', value: lvl => lvl >= 1 ? 1.4 : null},
         {name: 'cindersProductionNightbloom', type: 'mult', value: lvl => lvl >= 1 ? 1.3 : null},
         {name: 'cindersProductionNeonlight', type: 'mult', value: lvl => lvl >= 1 ? 1.2 : null},
-        {name: 'cindersProductionSun', type: 'mult', value: lvl => lvl >= 1 ? 1.1 : null}
+        {name: 'cindersProductionSun', type: 'mult', value: lvl => lvl >= 1 ? 1.1 : null},
+        {name: 'currencyEventLightGain', type: 'mult', value: lvl => lvl >= 1 ? 1.5 : null}
     ]}
 }

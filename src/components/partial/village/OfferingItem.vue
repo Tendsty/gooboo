@@ -23,11 +23,10 @@
       </v-chip>
       <v-spacer></v-spacer>
       <price-tag class="ma-1" :currency="`village_${name}`" :amount="sacrificeCost"></price-tag>
-      <v-btn small class="ma-1" color="primary" :disabled="!canAffordSacrifice || !isUnlocked || disabled" @click="buySacrifice(true)">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
       <gb-tooltip>
         <template v-slot:activator="{ on, attrs }">
           <div v-bind="attrs" v-on="on">
-            <v-btn class="ma-1" color="primary" :disabled="!canAffordSacrifice || !isUnlocked || disabled" @click="buySacrifice(false)">{{ $vuetify.lang.t('$vuetify.village.offering.sacrifice') }}</v-btn>
+            <v-btn class="ma-1" color="primary" :disabled="!canAffordSacrifice || !isUnlocked || disabled" @click="buySacrifice">{{ $vuetify.lang.t('$vuetify.village.offering.sacrifice') }}</v-btn>
           </div>
         </template>
         <div class="mt-0">
@@ -35,9 +34,11 @@
           <span>{{ $formatNum(sacrificeCost) }}&nbsp;</span>
           <currency-icon :name="'village_' + name"></currency-icon>
           <span>{{ $vuetify.lang.t('$vuetify.village.offering.description.1') }}</span>
-          <span>{{ $formatNum(offering.amount) }}&nbsp;</span>
+          <span>{{ $formatNum(offering.amount * (offering.offeringBought + 1)) }}&nbsp;</span>
           <currency-icon name="village_offering"></currency-icon>
           <span>{{ $vuetify.lang.t('$vuetify.village.offering.description.2') }}</span>
+          <span>{{ $formatNum(offering.amount * offeringPassiveGain, true) }}</span>
+          <span>{{ $vuetify.lang.t('$vuetify.village.offering.description.3') }}</span>
         </div>
       </gb-tooltip>
     </div>
@@ -64,6 +65,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { VILLAGE_OFFERING_PASSIVE_GAIN } from '../../../js/constants';
 import { capitalize } from '../../../js/utils/format';
 import Currency from '../../render/Currency.vue';
 import CurrencyIcon from '../../render/CurrencyIcon.vue';
@@ -117,11 +119,14 @@ export default {
     },
     isUnlocked() {
       return this.offering.unlock === null || this.$store.state.unlock[this.offering.unlock].use;
+    },
+    offeringPassiveGain() {
+      return VILLAGE_OFFERING_PASSIVE_GAIN;
     }
   },
   methods: {
-    buySacrifice(max) {
-      this.$store.dispatch('village/buyOffering', {name: this.name, max});
+    buySacrifice() {
+      this.$store.dispatch('village/buyOffering', this.name);
     },
     buyUpgrade(max) {
       this.$store.dispatch('village/upgradeOffering', {name: this.name, buyMax: max});
