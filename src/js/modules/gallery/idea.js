@@ -48,10 +48,10 @@ export default {
         {name: 'galleryColorGain', type: 'mult', value: lvl => lvl * 0.12 + 1},
     ]},
     buildRedReservoir: {tier: 2, icon: 'mdi-hoop-house', color: 'red', effect: [
-        {name: 'currencyGalleryRedDrumCap', type: 'mult', value: lvl => lvl * 0.35 + 1},
+        {name: 'currencyGalleryRedDrumCap', type: 'mult', value: lvl => lvl * 0.4 + 1},
     ]},
     orderMassiveSafe: {tier: 2, icon: 'mdi-safe-square', color: 'dark-grey', effect: [
-        {name: 'galleryColorDrumCap', type: 'base', value: lvl => lvl * 2},
+        {name: 'galleryColorDrumCap', type: 'base', value: lvl => lvl * 3},
         {name: 'galleryCanvasSpeed', type: 'mult', value: lvl => 1 - (lvl / (lvl + 10))},
     ]},
     buyPen: {tier: 2, icon: 'mdi-pen', color: 'indigo', effect: [
@@ -73,7 +73,7 @@ export default {
         {name: 'galleryColorDrumChance', type: 'mult', value: lvl => lvl * 0.4 + 1},
     ]},
     buildOrangeReservoir: {tier: 3, icon: 'mdi-hoop-house', color: 'orange', effect: [
-        {name: 'currencyGalleryOrangeDrumCap', type: 'mult', value: lvl => lvl * 0.35 + 1},
+        {name: 'currencyGalleryOrangeDrumCap', type: 'mult', value: lvl => lvl * 0.4 + 1},
     ]},
     thinkHarder: {tier: 3, icon: 'mdi-head-lightbulb', color: 'amber', effect: [
         {name: 'galleryInspirationStart', type: 'base', value: lvl => lvl * 2},
@@ -98,7 +98,7 @@ export default {
         {name: 'currencyGalleryDeep-orangeGain', type: 'mult', value: lvl => Math.pow(0.5, lvl / 2)},
     ]},
     buildYellowReservoir: {tier: 4, icon: 'mdi-hoop-house', color: 'yellow', effect: [
-        {name: 'currencyGalleryYellowDrumCap', type: 'mult', value: lvl => lvl * 0.35 + 1},
+        {name: 'currencyGalleryYellowDrumCap', type: 'mult', value: lvl => lvl * 0.4 + 1},
     ]},
     paintForFun: {tier: 4, icon: 'mdi-emoticon-happy', color: 'pink', effect: [
         {name: 'currencyGalleryBeautyGain', type: 'mult', value: lvl => Math.pow(4, lvl)},
@@ -127,7 +127,7 @@ export default {
         {name: 'currencyGalleryLight-greenGain', type: 'mult', value: lvl => Math.pow(0.5, lvl / 2)},
     ]},
     buildGreenReservoir: {tier: 5, icon: 'mdi-hoop-house', color: 'green', effect: [
-        {name: 'currencyGalleryGreenDrumCap', type: 'mult', value: lvl => lvl * 0.35 + 1},
+        {name: 'currencyGalleryGreenDrumCap', type: 'mult', value: lvl => lvl * 0.4 + 1},
     ]},
     beMysterious: {tier: 5, icon: 'mdi-wizard-hat', color: 'pale-purple', effect: [
         {name: 'currencyGalleryMysteryShapeGain', type: 'base', value: lvl => lvl},
@@ -145,6 +145,6 @@ export default {
         {name: 'currencyGalleryLight-blueGain', type: 'mult', value: lvl => Math.pow(0.5, lvl / 2)},
     ]},
     buildBlueReservoir: {tier: 6, icon: 'mdi-hoop-house', color: 'blue', effect: [
-        {name: 'currencyGalleryBlueDrumCap', type: 'mult', value: lvl => lvl * 0.35 + 1},
+        {name: 'currencyGalleryBlueDrumCap', type: 'mult', value: lvl => lvl * 0.4 + 1},
     ]},
 }

@@ -229,10 +229,7 @@ export default {
         bestPrestige0: {showInStatistics: true},
         bestPrestige1: {showInStatistics: true},
         prestigeCount: {showInStatistics: true},
-        totalOffering: {showInStatistics: true},
         minHappiness: {},
-        bestOffering: {showInStatistics: true},
-        offeringAmount: {},
         highestPower: {showInStatistics: true},
     },
     mult: {
@@ -346,7 +343,7 @@ export default {
         shares: {type: 'prestige', alwaysVisible: true, color: 'beige', icon: 'mdi-certificate', gainMult: {}},
         offering: {type: 'prestige', color: 'orange-red', icon: 'mdi-candle', gainMult: {display: 'perHour'}, showGainMult: true, gainTimerFunction() {
             return store.getters['village/offeringPerSecond'] * SECONDS_PER_HOUR;
-        }, timerIsEstimate: true}
+        }}
     },
     upgrade: {
         ...upgradeBuilding,

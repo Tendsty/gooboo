@@ -64,6 +64,11 @@ export default {
       type: Number,
       required: false,
       default: null
+    },
+    isEnemy: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
@@ -96,7 +101,7 @@ export default {
       return this.effect.canCrit ?? 0;
     },
     healingMult() {
-      return this.effect.type === 'heal' ? this.$store.state.horde.cachePlayerStats.healing : 1;
+      return this.effect.type === 'heal' && !this.isEnemy ? this.$store.state.horde.cachePlayerStats.healing : 1;
     },
     statDisplayName() {
       if (this.effect.stat) {
