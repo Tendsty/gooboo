@@ -519,6 +519,22 @@ export default {
 
     // v1.5.5
     428: '修复了部分玩家无法加载的问题',
+    
+    // v1.5.6
+    429: '牺牲不再随声望重置',
+    430: 'Offerings gained on sacrifice are now multiplied by the amount of sacrifices made',
+    431: '供品被动增益',
+    432: 'The "Nihilist" achievement now counts total offerings gained',
+    433: 'The "Black hole" achievement now counts sacrifices made',
+    434: 'Fixed multipliers showing their name before being unlocked',
+    435: 'Buying upgrades that modify healing no longer change the tooltips of enemy actives',
+    436: '装备的牺牲现在能正确保存',
+    437: '修复了之前参加过事件的玩家代币无法获得的问题',
+    438: '光增益每全局等级',
+    439: '启示升级（除了第一个）现在增加你的光增益 x1.5',
+
+    // v1.5.7
+    440: 'Fixed offerings gained on sacrifice not increasing',
   },
   v: {
     1: {

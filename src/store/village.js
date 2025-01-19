@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { capitalize } from "../js/utils/format";
 import { weightSelect } from "../js/utils/random";
-import { SECONDS_PER_HOUR, VILLAGE_JOY_HAPPINESS_REDUCTION, VILLAGE_JOY_MIN_HAPPINESS, VILLAGE_JOY_PER_HAPPINESS } from "../js/constants";
+import { SECONDS_PER_HOUR, VILLAGE_JOY_HAPPINESS_REDUCTION, VILLAGE_JOY_MIN_HAPPINESS, VILLAGE_JOY_PER_HAPPINESS, VILLAGE_OFFERING_PASSIVE_GAIN } from "../js/constants";
 import { deltaLinear } from "../js/utils/math";
 
 export default {
@@ -67,8 +67,22 @@ export default {
             const happiness = rootGetters['mult/get']('villageHappiness');
             return happiness > VILLAGE_JOY_MIN_HAPPINESS ? ((happiness - VILLAGE_JOY_HAPPINESS_REDUCTION) * VILLAGE_JOY_PER_HAPPINESS) : 0;
         },
-        offeringPerSecond: (state, getters, rootState) => {
-            return rootState.stat.village_offeringAmount.value * 0.01 / SECONDS_PER_HOUR;
+        offeringCount: (state) => {
+            let total = 0;
+            for (const [, elem] of Object.entries(state.offering)) {
+                total += elem.offeringBought;
+            }
+            return total;
+        },
+        offeringScore: (state) => {
+            let total = 0;
+            for (const [, elem] of Object.entries(state.offering)) {
+                total += elem.offeringBought * elem.amount;
+            }
+            return total;
+        },
+        offeringPerSecond: (state, getters) => {
+            return getters.offeringScore * VILLAGE_OFFERING_PASSIVE_GAIN / SECONDS_PER_HOUR;
         },
         sharesGain: (state, getters, rootState, rootGetters) => {
             const val = rootState.currency.village_copperCoin.value / 1000;
@@ -212,11 +226,6 @@ export default {
                 dispatch('setWorkerCount', {name: key, amount: 0});
             }
 
-            // Reset sacrifice cost
-            for (const [key] of Object.entries(state.offering)) {
-                commit('updateOfferingKey', {name: key, key: 'offeringBought', value: 0});
-            }
-
             // Reset all policies to 0
             for (const [key, elem] of Object.entries(state.policy)) {
                 if (elem.value !== 0) {
@@ -247,29 +256,13 @@ export default {
             dispatch('applyOfferingEffect');
             dispatch('upgrade/updateVillageStats', null, {root: true});
         },
-        buyOffering({ state, rootGetters, commit, dispatch }, o) {
-            const offering = state.offering[o.name];
-            const max = !!o.max;
+        buyOffering({ state, rootGetters, commit, dispatch }, name) {
+            const offering = state.offering[name];
 
-            let firstRun = true;
-            while (firstRun && rootGetters['currency/value']('village_' + o.name) >= offering.cost(offering.offeringBought)) {
-                dispatch('currency/spend', {feature: 'village', name: o.name, amount: offering.cost(offering.offeringBought)}, {root: true});
-                dispatch('currency/gain', {feature: 'village', name: 'offering', amount: offering.amount}, {root: true});
-                commit('updateOfferingKey', {name: o.name, key: 'offeringBought', value: offering.offeringBought + 1});
-
-                commit('stat/add', {feature: 'village', name: 'totalOffering', value: 1}, {root: true});
-                commit('stat/add', {feature: 'village', name: 'offeringAmount', value: offering.amount}, {root: true});
-
-                // Count total offerings for stat
-                let totalOfferings = 0;
-                for (const [, elem] of Object.entries(state.offering)) {
-                    totalOfferings += elem.offeringBought;
-                }
-                commit('stat/increaseTo', {feature: 'village', name: 'bestOffering', value: totalOfferings}, {root: true});
-
-                if (!max) {
-                    firstRun = false;
-                }
+            if (rootGetters['currency/value']('village_' + name) >= offering.cost(offering.offeringBought)) {
+                dispatch('currency/spend', {feature: 'village', name: name, amount: offering.cost(offering.offeringBought)}, {root: true});
+                dispatch('currency/gain', {feature: 'village', name: 'offering', amount: offering.amount * (offering.offeringBought + 1)}, {root: true});
+                commit('updateOfferingKey', {name: name, key: 'offeringBought', value: offering.offeringBought + 1});
             }
         },
         upgradeOffering({ state, rootState, rootGetters, commit, dispatch }, o) {

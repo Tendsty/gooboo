@@ -11,7 +11,7 @@
         <span v-else>{{ $formatNum(active.uses) }} / {{ $formatNum(maxUses) }}</span>
       </template>
     </div>
-    <active-tooltip v-for="(elem, key) in effect" :key="`active-effect-${ key }`" class="mt-0" :effect="elem" :attack="enemyAttack" :health="enemyMaxHealth"></active-tooltip>
+    <active-tooltip v-for="(elem, key) in effect" :key="`active-effect-${ key }`" class="mt-0" :effect="elem" :attack="enemyAttack" :health="enemyMaxHealth" is-enemy></active-tooltip>
   </div>
 </template>
 
