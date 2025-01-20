@@ -91,7 +91,7 @@ export default {
         effect: {farmExperience: 1.35}
     },
     superJuicy: {
-        type: 'fruit',
+        type: 'berry',
         color: 'orange-red',
         price: {gem_sapphire: 3},
         effect: {farmCropGain: 2.5, farmRareDropChance: 1.6}

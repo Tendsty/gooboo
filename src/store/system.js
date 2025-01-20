@@ -7,7 +7,7 @@ import { LOCAL_STORAGE_NAME } from "../js/constants";
 export default {
     namespaced: true,
     state: {
-        version: '1.5.7',
+        version: '1.5.8',
         cheaterSelfMark: 0,
         cheatDetected: {},
         lastPlayedDays: [],

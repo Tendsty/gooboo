@@ -535,6 +535,10 @@ export default {
 
     // v1.5.7
     440: 'Fixed offerings gained on sacrifice not increasing',
+
+    // v1.5.8
+    441: 'Fixed a bug where the game would not load for some players',
+    442: 'Fixed one fertilizer not showing up in the list',
   },
   v: {
     1: {
