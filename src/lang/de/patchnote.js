@@ -535,6 +535,10 @@ export default {
 
     // v1.5.7
     440: 'Opfergaben durch Opfer werden nun korrekt erhöht',
+
+    // v1.5.8
+    441: 'Ein Fehler wurde behoben, bei dem das Spiel bei manchen Spielern nicht gestartet ist',
+    442: 'Ein Fehler wurde behoben, bei dem ein Dünger nicht in der Liste aufgetaucht ist',
   },
   v: {
     1: {
