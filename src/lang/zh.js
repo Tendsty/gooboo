@@ -348,7 +348,7 @@ export default {
       discord: 'Discord',
     },
     supportMe: {
-      title: '支持我',
+      title: '支持原作者',
       text: '该游戏是免费的，没有微交易或广告。 如果您想支持开发，请查看我的 patreon 页面:',
       patreon: 'Patreon',
     },

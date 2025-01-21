@@ -522,19 +522,23 @@ export default {
     
     // v1.5.6
     429: '牺牲不再随声望重置',
-    430: 'Offerings gained on sacrifice are now multiplied by the amount of sacrifices made',
+    430: '牺牲获得的供品数现在会乘以已牺牲次数',
     431: '供品被动增益',
-    432: 'The "Nihilist" achievement now counts total offerings gained',
-    433: 'The "Black hole" achievement now counts sacrifices made',
-    434: 'Fixed multipliers showing their name before being unlocked',
-    435: 'Buying upgrades that modify healing no longer change the tooltips of enemy actives',
+    432: '成就“虚无主义者”现在计算获得过的供品总数',
+    433: '成就“黑洞”现在计算牺牲总次数',
+    434: '修复了倍数会在解锁之前显示名字的问题',
+    435: '购买会影响治疗量的升级项不再改变敌人主动技的描述',
     436: '装备的牺牲现在能正确保存',
     437: '修复了之前参加过事件的玩家代币无法获得的问题',
     438: '光增益每全局等级',
-    439: '启示升级（除了第一个）现在增加你的光增益 x1.5',
+    439: '黄玉升级（除了第一个）现在增加你的光增益 x1.5',
 
     // v1.5.7
-    440: 'Fixed offerings gained on sacrifice not increasing',
+    440: '修复了牺牲后供品不增加的问题',
+
+    // v1.5.8
+    441: '修复了部分玩家无法加载游戏的问题',
+    442: '修复了某个肥料不出现在列表的问题',
   },
   v: {
     1: {

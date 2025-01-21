@@ -45,12 +45,73 @@
           </div>
         </alert-text>
       </v-card-text>
+      <v-card-subtitle class="text-center">此汉化网页版提供者是 Whiteberry Lee</v-card-subtitle>
+      <v-card-text>Gooboo CN QQ群：468760729 欢迎加入讨论。</v-card-text>
       <v-card-actions class="flex-wrap justify-end">
         <v-spacer></v-spacer>
         <v-btn class="ma-1" color="primary" @click="toStatOverview"><v-icon class="mr-2">mdi-card-account-details</v-icon>{{ $vuetify.lang.t('$vuetify.info.statistics.name') }}</v-btn>
         <v-btn class="ma-1" color="primary" @click="toPatchnote"><v-icon class="mr-2">mdi-script-text</v-icon>{{ $vuetify.lang.t('$vuetify.info.viewPatchnotes') }}</v-btn>
+        <v-btn class="ma-1" color="primary" target="_blank" href="https://github.com/baicy/gooboo/"><v-icon class="mr-2">mdi-open-in-new</v-icon>{{ $vuetify.lang.t('$vuetify.info.socials.viewCode') }}</v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-card class="ma-2">
+      <v-card-title class="justify-center">特别声明</v-card-title>
+      <v-card-text>Gooboo汉化由锅巴汉化组引入，本网汉化基础继承自锅巴汉化组，部分汉化略有不同。</v-card-text>
+      <v-card-text>以下是本网站和原版网站在游玩时的不同之处：</v-card-text>
+      <v-card-text>
+        <span class="d-flex ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>在画廊声望页显示画廊的全局等级进度</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>显示画廊的灵感每层已使用数</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>画廊的形状游戏显示各个形状的个数</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>村庄-工匠显示每个制品的基础价格和预计销售时间之比和当前里程碑升级所需时间（以不间断制作计算）</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>冷冻实验室显示升级所需天数</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
+          <span>可直接复制存档文本，避免无法导出文件</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
+          <span>画廊虚空生产加速器（解锁完所有形状后出现）</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
+          <span>村庄冻结收益 40% -> 100%（作者于v1.5.0削弱）</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
+          <span>学校点击“参加考试”即可以满分通过考试</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
+          <span>未采用v1.5.5的画廊重大削弱（画布等级和灵感“订购大量保险箱”提供的鼓数量和画布速度）</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="green">反作弊</v-chip>
+          <span>无法通过修改存档来提前解锁子功能</span>
+        </span>
+        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
+          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="green">反作弊</v-chip>
+          <span>无法通过修改存档来设置多个冷冻实验室，此时冷冻收益强制为0</span>
+        </span>
+      </v-card-text>
+      <v-card-actions class="flex-wrap justify-end">
+        <v-spacer></v-spacer>
         <v-btn class="ma-1" color="primary" target="_blank" href="https://tendsty.itch.io/gooboo"><v-icon class="mr-2">mdi-open-in-new</v-icon>原版Gooboo</v-btn>
-        <v-btn class="ma-1" color="primary" target="_blank" href="https://github.com/Tendsty/gooboo"><v-icon class="mr-2">mdi-open-in-new</v-icon>{{ $vuetify.lang.t('$vuetify.info.socials.viewCode') }}</v-btn>
+        <v-btn class="ma-1" color="primary" target="_blank" href="https://gityx.com/g8hh/yihanhua/778.html"><v-icon class="mr-2">mdi-open-in-new</v-icon>锅巴版Gooboo</v-btn>
       </v-card-actions>
     </v-card>
     <v-card class="ma-2">
@@ -150,70 +211,6 @@
           </ul>
         </div>
       </v-card-text>
-    </v-card>
-    <v-card class="ma-2">
-      <v-card-title class="justify-center">汉化基础</v-card-title>
-      <v-card-text>本游戏由锅巴汉化组引入，汉化基础继承自锅巴汉化组，部分汉化略有不同。</v-card-text>
-      <v-card-actions class="flex-wrap justify-end">
-        <v-btn class="ma-1" color="primary" target="_blank" href="https://gityxs.github.io/gooboo/"><v-icon class="mr-2">mdi-open-in-new</v-icon>锅巴版gooboo</v-btn>
-        <v-btn class="ma-1" color="#ea4d89" target="_blank" href="https://gityxs.github.io/gooboo/"><v-icon class="mr-2">mdi-open-in-new</v-icon>gooboo介绍</v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-card class="ma-2">
-      <v-card-title class="justify-center">本网站</v-card-title>
-      <v-card-subtitle class="text-center">架设者是 BaiLee</v-card-subtitle>
-      <v-card-text>Gooboo CN QQ群：468760729 欢迎加入讨论。下方可以查看玩家自己填写的 Excel Wiki 和 Word FAQ，纯手工录入，若有错误和遗漏在所难免，也欢迎加入QQ群共同编辑。</v-card-text>
-      <v-card-text>以下是本网站和原版网站在游玩时的不同之处</v-card-text>
-      <v-card-text>
-        <span class="d-flex ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
-          <span>在画廊声望页显示画廊的全局等级进度</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
-          <span>显示画廊的灵感每层已使用数</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
-          <span>画廊的形状游戏显示各个形状的个数</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
-          <span>村庄-工匠显示每个制品的基础价格和预计销售时间之比和当前里程碑升级所需时间（以不间断制作计算）</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
-          <span>冷冻实验室显示升级所需天数</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="teal">体验</v-chip>
-          <span>可直接复制存档文本，避免无法导出文件</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
-          <span>画廊虚空生产加速器（解锁完所有形状后出现）</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
-          <span>村庄冻结收益 40% -> 100%（作者于v1.5.0削弱）</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="red">作弊</v-chip>
-          <span>学校点击“参加考试”即可以满分通过考试</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="green">反作弊</v-chip>
-          <span>无法通过修改存档来提前解锁子功能</span>
-        </span>
-        <span class="d-flex mt-2 ml-4" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly}">
-          <v-chip label small class="flex-shrink-0 mr-2 px-2" color="green">反作弊</v-chip>
-          <span>无法通过修改存档来设置多个冷冻实验室，此时冷冻收益强制为0</span>
-        </span>
-      </v-card-text>
-      <v-card-actions class="flex-wrap justify-end">
-        <v-btn class="ma-1" color="primary" target="_blank" href="https://docs.qq.com/sheet/DQlNPSHdVVkdxZ0l4?tab=pifj5o"><v-icon class="mr-2">mdi-open-in-new</v-icon>WIKI</v-btn>
-        <v-btn class="ma-1" color="primary" target="_blank" href="https://docs.qq.com/doc/DQlNoUk9kZWFnYVVZ"><v-icon class="mr-2">mdi-open-in-new</v-icon>FAQ</v-btn>
-      </v-card-actions>
     </v-card>
   </div>
 </template>

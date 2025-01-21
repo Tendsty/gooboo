@@ -112,13 +112,13 @@ export default {
     achievement: '命中注定',
     description: '获得的祝福'
   },
-  village_totalOffering: {
+  village_offering: {
     achievement: '虚无主义者',
-    description: '牺牲总数'
+    description: '获得的供品'
   },
-  village_bestOffering: {
+  village_sacrifice: {
     achievement: '黑洞',
-    description: '一次声望中最大牺牲次数'
+    description: '牺牲的次数'
   },
   village_oil: {
     achievement: '拿走他们的油!',
@@ -143,6 +143,9 @@ export default {
   },
   village_prestigeCount: {
     description: '声望'
+  },
+  village_offeringMax: {
+    description: '最大供品数'
   },
 
   // Horde stats
@@ -194,7 +197,7 @@ export default {
     description: '失败有 99% 的传家宝几率'
   },
   horde_maxItems: {
-    description: '装备最多的物品'
+    description: '最大装备数'
   },
   horde_timeSpent: {
     description: '花费的时间'
