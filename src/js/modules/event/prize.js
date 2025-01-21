@@ -423,7 +423,7 @@ export default {
             return store.state.unlock.villageOffering1.see;
         },
         roundAmount: true,
-        amountMult: () => store.state.stat.village_bestOffering.total,
+        amountMult: () => store.getters['village/offeringScore'],
         pool: {
             bingo0: {amount: 0.15},
             bingo1: {amount: 0.5},

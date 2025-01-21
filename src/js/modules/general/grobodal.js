@@ -110,7 +110,7 @@ export default {
                     {type: 'equipmentMastery', name: 'luckyCharm', operator: '>=', value: 1}
                 ]},
                 {note: 'general_25', tasks: [
-                    {type: 'stat', subtype: 'current', name: 'village_bestOffering', operator: '>=', value: 150}
+                    {type: 'stat', subtype: 'total', name: 'village_offeringMax', operator: '>=', value: 4500}
                 ]},
                 {note: 'general_26', tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 110},
