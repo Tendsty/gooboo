@@ -586,6 +586,14 @@ export default {
                 commit('updateSmelteryKey', {name: o.name, key: 'total', value: smeltery.total + amount});
             }
         },
+        addToSmelteryCustom({ state, getters, commit, dispatch }, o) {
+            const smeltery = state.smeltery[o.name];
+            for (const [key, elem] of Object.entries(getters.smelteryPrice(o.name, o.amount))) {
+                dispatch('currency/spend', {feature: key.split('_')[0], name: key.split('_')[1], amount: elem}, {root: true});
+            }
+            commit('updateSmelteryKey', {name: o.name, key: 'stored', value: smeltery.stored + o.amount});
+            commit('updateSmelteryKey', {name: o.name, key: 'total', value: smeltery.total + o.amount});
+        },
         enhanceBars({ state, getters, rootGetters, commit, dispatch }) {
             if (state.enhancementIngredient !== null) {
                 const barsNeeded = getters.enhancementBarsNeeded - state.enhancementBars;

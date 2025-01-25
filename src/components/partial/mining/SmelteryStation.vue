@@ -27,7 +27,7 @@
       <price-tag class="ma-1" :currency="smeltery.output" :amount="1" add></price-tag>
       <v-spacer></v-spacer>
       <v-badge v-if="smeltery.stored > 0" inline color="secondary" :content="$formatNum(smeltery.stored)"></v-badge>
-      <v-btn class="ma-1" small color="primary" :disabled="isFrozen || !canAfford" @click="buyMax">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
+      <v-btn class="ma-1" small color="primary" :disabled="isFrozen || !canAfford" @click="buyCustom">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
       <v-btn class="ma-1" color="primary" :disabled="isFrozen || !canAfford" @click="buy">{{ $vuetify.lang.t('$vuetify.mining.smelt') }}</v-btn>
     </div>
     <v-progress-linear class="rounded-b" height="4" :indeterminate="isHighspeed" :value="isHighspeed ? undefined : (smeltery.progress * 100)"></v-progress-linear>
@@ -39,6 +39,7 @@ import { mapState } from 'vuex';
 import { MINING_SMELTERY_TEMPERATURE_SPEED } from '../../../js/constants';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import { capitalize } from '../../../js/utils/format';
 
 export default {
   components: { PriceTag, StatBreakdown },
@@ -78,8 +79,27 @@ export default {
     buy() {
       this.$store.dispatch('mining/addToSmeltery', {name: this.name, max: false});
     },
-    buyMax() {
-      this.$store.dispatch('mining/addToSmeltery', {name: this.name, max: true});
+    buyCustom() {
+      let amount = 0;
+      if(this.$store.getters['mining/smelteryCanAfford'](this.name)) {
+        amount = 1;
+        let step = 1;
+        while (this.$store.getters['mining/smelteryCanAfford'](this.name, step)) {
+          step *= 2;
+        }
+        amount = step / 2;
+        while(step > 1) {
+          step /= 2;
+          if(this.$store.getters['mining/smelteryCanAfford'](this.name, amount + step)) {
+            amount += step;
+          }
+        }
+      }
+      const res = prompt(`冶炼${this.$vuetify.lang.t(`$vuetify.currency.mining_bar${capitalize(this.name)}.name`)}：最大${amount}个`, amount)
+      const n = parseInt(res)
+      if(n && n > 0 && n <= amount) {
+        this.$store.dispatch('mining/addToSmelteryCustom', {name: this.name, amount: n});
+      }
     }
   }
 }
