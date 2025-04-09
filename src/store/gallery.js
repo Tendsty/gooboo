@@ -614,7 +614,7 @@ export default {
             }
         },
         cheatAccelerator({ commit }) {
-            commit('updateShapeCell', {x: 0, y: 0, value: 'accelerator'});
+            commit('updateShapeCell', {x: 1, y: 1, value: 'accelerator'});
         }
     }
 }

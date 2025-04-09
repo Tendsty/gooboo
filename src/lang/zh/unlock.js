@@ -41,7 +41,7 @@ export default {
   villageUpgradeModifiedPlants: '改造植物升级',
   villageUpgradeDopamine: '多巴胺升级',
   villageUpgradeAdrenaline: '肾上腺素升级',
-  villageUpgradeSprinkler: '喷头升级',
+  villageUpgradeSprinkler: '洒水装置升级',
   villageUpgradeGreed: '贪婪升级',
   villageUpgradeAmbition: '野心升级',
   villageUpgradeUnderstanding: '认知升级',

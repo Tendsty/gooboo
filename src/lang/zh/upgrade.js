@@ -339,12 +339,12 @@ export default {
   village_sprinkler: '洒水装置',
   village_greed: '贪婪',
   village_ambition: '野心',
-  village_understanding: '理解',
+  village_understanding: '认知',
   village_curiosity: '好奇心',
   village_worship: '崇拜',
-  village_bartering: '物物交换',
+  village_bartering: '易货',
   village_sparks: '火花',
-  
+
   village_cashRegister: '收银机',
   village_decoration: '装饰品',
   village_plantFiberBin: '植物纤维箱',
