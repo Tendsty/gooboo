@@ -66,7 +66,11 @@
           :disabled="isFrozen && item.type !== 'sign'"
           @click="clickZone(key)"
           icon
-        ><v-icon :size="$vuetify.breakpoint.smAndDown ? 16 : 24">{{ typeIcon[item.type] }}</v-icon></v-btn>
+        >
+          <v-icon :size="$vuetify.breakpoint.smAndDown ? 16 : 24">
+            {{ typeIcon[item.type==='regular'?(clearMaxDifficulty>=item.difficulty?'regularDefeated':'regular'):item.type] }}
+          </v-icon>
+        </v-btn>
       </template>
       <div v-if="item.type === 'regular'" class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.area.zone`, key) }}</div>
       <div v-else-if="['boss', 'bossDefeated'].includes(item.type)" class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.area.zoneBoss`, $vuetify.lang.t(`$vuetify.horde.bossName.${ item.boss[item.boss.length - 1] }`)) }}</div>
@@ -98,6 +102,7 @@ export default {
   data: () => ({
     typeIcon: {
       regular: 'mdi-circle-medium',
+      regularDefeated: 'mdi-square-medium-outline',
       boss: 'mdi-skull',
       bossDefeated: 'mdi-flag-variant',
       endless: 'mdi-infinity',
@@ -108,6 +113,7 @@ export default {
     ...mapState({
       bossBonusDifficulty: state => state.horde.bossBonusDifficulty,
       isFrozen: state => state.cryolab.horde.active,
+      clearMaxDifficulty: state => state.stat.horde_maxDifficulty.value,
     }),
     area() {
       return this.$store.state.horde.area[this.name];
