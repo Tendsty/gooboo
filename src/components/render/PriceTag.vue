@@ -59,7 +59,7 @@ export default {
       if (this.add) {
         return null;
       } else if (this.curr.cap !== null && this.amount > this.curr.cap) {
-        return 'orange--text ' + (this.$vuetify.theme.dark ? 'text--lighten-2' : 'text--darken-4');
+        return 'orange--text ' + (this.$vuetify.theme.dark ? 'text--lighten-2' : 'text--darken-1');
       } else if (this.amount > this.curr.value) {
         return 'red--text ' + (this.$vuetify.theme.dark ? 'text--lighten-2' : 'text--darken-4');
       }
