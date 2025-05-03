@@ -497,7 +497,8 @@ export default {
                                 const split = name.split('_');
                                 if (split[0] === 'skill') {
                                     const skill = store.state.horde.fighterClass[store.state.horde.selectedClass].skills[split[1]];
-                                    return {ready: store.state.horde.skillActive[name] <= 0, type: skill.activeType, effect: skill.active(skill.level), cost: skill.activeCost(skill.level), name};
+                                    const skillLevel = store.state.horde.skillLevel[split[1]]
+                                    return {ready: store.state.horde.skillActive[name] <= 0, type: skill.activeType, effect: skill.active(skillLevel), cost: skill.activeCost(skillLevel), name};
                                 } else if (split[0] === 'trinket') {
                                     const trinket = store.state.horde.trinket[split[1]];
                                     return {ready: store.state.horde.skillActive[name] <= 0, type: trinket.activeType, effect: trinket.active(trinket.level), cost: trinket.activeCost(trinket.level), name};
@@ -517,7 +518,15 @@ export default {
                                 elem.effect.forEach(el => {
                                     let condition = null;
                                     if (el.type === 'heal') {
-                                        condition = (store.state.horde.player.health / playerStats.health) <= (1 - el.value);
+                                        let finalValue = el.value;
+                                        if (el.str !== undefined) {
+                                            finalValue += el.str * playerStats.strength;
+                                        }
+                                        if (el.int !== undefined) {
+                                            finalValue += el.int * playerStats.intelligence;
+                                        }
+                                        finalValue = finalValue * playerStats.healing
+                                        condition = (store.state.horde.player.health / playerStats.health) <= (1 - finalValue);
                                     } else if (el.type === 'stun') {
                                         condition = store.state.horde.enemy.stun <= 0;
                                     } else if (el.type === 'silence') {
