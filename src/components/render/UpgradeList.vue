@@ -18,10 +18,9 @@
 
 <template>
   <div>
-    <div class="d-flex mx-2 my-2 py-1 bg-tile-default">
-      <v-spacer></v-spacer>
-      <v-btn @click="ableType = ableType==='price'?'':'price'" :color="ableType==='price' ? 'success' : 'warning'">价格满足</v-btn>
-      <v-btn @click="ableType = ableType==='cap'?'':'cap'" :color="ableType==='cap' ? 'success' : 'warning'" class="ml-2">容量满足</v-btn>
+    <div class="d-flex justify-center mx-2 my-2 py-1 bg-tile-default">
+      <v-btn small @click="ableType = ableType==='price'?'':'price'" :color="ableType==='price' ? 'success' : 'warning'"><v-icon>mdi-check</v-icon>价格</v-btn>
+      <v-btn small @click="ableType = ableType==='cap'?'':'cap'" :color="ableType==='cap' ? 'success' : 'warning'" class="ml-2"><v-icon>mdi-check-underline</v-icon>容量</v-btn>
     </div>
     <div v-if="items.length > 0">
       <div class="d-flex upgrade-pagination justify-center align-center bg-tile-default rounded-b elevation-2 mx-2" :class="{'upgrade-pagination-mobile': $vuetify.breakpoint.smAndDown && !noTabs, 'upgrade-pagination-mobile-notabs': $vuetify.breakpoint.smAndDown && noTabs, 'pr-10': showQueueSpeed}" v-if="pages > 1 || requirementStat.length > 0">
