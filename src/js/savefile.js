@@ -444,7 +444,11 @@ function getSavefileName() {
     let year = now.slice(2, 4);
     let month = now.slice(5, 7);
     let day = now.slice(8, 10);
-    return `Gooboo_${ year }${ month }${ day }.txt`;
+    const time = new Date();
+    const hour = time.getHours();
+    const minute = time.getMinutes();
+    const second = time.getSeconds();
+    return `Gooboo_${ year }${ month }${ day }_${ hour }${ minute }${ second }.txt`;
 }
 
 function getSavefile() {
