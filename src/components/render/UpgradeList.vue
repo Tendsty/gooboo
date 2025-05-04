@@ -17,39 +17,46 @@
 </style>
 
 <template>
-  <div v-if="items.length > 0">
-    <div class="d-flex upgrade-pagination justify-center align-center bg-tile-default rounded-b elevation-2 mx-2" :class="{'upgrade-pagination-mobile': $vuetify.breakpoint.smAndDown && !noTabs, 'upgrade-pagination-mobile-notabs': $vuetify.breakpoint.smAndDown && noTabs, 'pr-10': showQueueSpeed}" v-if="pages > 1 || requirementStat.length > 0">
-      <v-pagination v-if="pages > 1" v-model="page" :length="pages" :total-visible="7"></v-pagination>
-      <gb-tooltip v-for="item in requirementFiltered" :key="item.key" :min-width="0">
-        <template v-slot:activator="{ on, attrs }">
-          <v-chip small label class="flex-shrink-0 ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-1">mdi-chevron-double-up</v-icon>{{ $formatNum(requirementNext[item.key]) }}</v-chip>
-        </template>
-        <div class="mt-0">{{ $vuetify.lang.t('$vuetify.upgrade.keyset.default.nextRequirement') }}{{ $formatNum(requirementNext[item.key]) }} {{ $vuetify.lang.t(`$vuetify.stat.${ item.stat }.description`) }}</div>
-      </gb-tooltip>
-      <gb-tooltip v-for="(item, index) in requirementCustom" :key="index" :min-width="0">
-        <template v-slot:activator="{ on, attrs }">
-          <v-chip small label class="flex-shrink-0 ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-1">mdi-chevron-double-up</v-icon>{{ $formatNum(item.value) }}</v-chip>
-        </template>
-        <div class="mt-0">{{ item.text }}</div>
-      </gb-tooltip>
-      <gb-tooltip v-if="speedMultName" :title-text="$vuetify.lang.t(`$vuetify.mult.${speedMultName}`)">
-        <template v-slot:activator="{ on, attrs }">
-          <div class="flex-shrink-0 upgrade-queue-speed" v-bind="attrs" v-on="on"><v-icon>mdi-chevron-double-right</v-icon></div>
-        </template>
-        <stat-breakdown :name="speedMultName"></stat-breakdown>
-      </gb-tooltip>
+  <div>
+    <div class="d-flex mx-2 my-2 py-1 bg-tile-default">
+      <v-spacer></v-spacer>
+      <v-btn @click="ableType = ableType==='price'?'':'price'" :color="ableType==='price' ? 'success' : 'warning'">价格满足</v-btn>
+      <v-btn @click="ableType = ableType==='cap'?'':'cap'" :color="ableType==='cap' ? 'success' : 'warning'" class="ml-2">容量满足</v-btn>
     </div>
-    <v-row class="pa-1" no-gutters>
-      <v-col class="pa-1" v-for="(item, key) in finalItems" :key="`${feature}-${type}-${key}`" :cols="cols">
-        <upgrade :name="item" :disabled="isFrozen" :upgrade-translation="upgradeTranslation" :translation-set="translationSet">
-          <slot :upgrade-name="item"></slot>
-        </upgrade>
-      </v-col>
-    </v-row>
-  </div>
-  <div v-else>
-    <div class="text-center">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.notFound`) }}</div>
-    <alert-text v-if="type === 'book'" class="ma-2" type="info">{{ $vuetify.lang.t(`$vuetify.upgrade.${ feature === 'village' ? 'bookNotFoundVillage' : 'bookNotFound' }`) }}</alert-text>
+    <div v-if="items.length > 0">
+      <div class="d-flex upgrade-pagination justify-center align-center bg-tile-default rounded-b elevation-2 mx-2" :class="{'upgrade-pagination-mobile': $vuetify.breakpoint.smAndDown && !noTabs, 'upgrade-pagination-mobile-notabs': $vuetify.breakpoint.smAndDown && noTabs, 'pr-10': showQueueSpeed}" v-if="pages > 1 || requirementStat.length > 0">
+        <v-pagination v-if="pages > 1" v-model="page" :length="pages" :total-visible="7"></v-pagination>
+        <gb-tooltip v-for="item in requirementFiltered" :key="item.key" :min-width="0">
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip small label class="flex-shrink-0 ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-1">mdi-chevron-double-up</v-icon>{{ $formatNum(requirementNext[item.key]) }}</v-chip>
+          </template>
+          <div class="mt-0">{{ $vuetify.lang.t('$vuetify.upgrade.keyset.default.nextRequirement') }}{{ $formatNum(requirementNext[item.key]) }} {{ $vuetify.lang.t(`$vuetify.stat.${ item.stat }.description`) }}</div>
+        </gb-tooltip>
+        <gb-tooltip v-for="(item, index) in requirementCustom" :key="index" :min-width="0">
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip small label class="flex-shrink-0 ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-1">mdi-chevron-double-up</v-icon>{{ $formatNum(item.value) }}</v-chip>
+          </template>
+          <div class="mt-0">{{ item.text }}</div>
+        </gb-tooltip>
+        <gb-tooltip v-if="speedMultName" :title-text="$vuetify.lang.t(`$vuetify.mult.${speedMultName}`)">
+          <template v-slot:activator="{ on, attrs }">
+            <div class="flex-shrink-0 upgrade-queue-speed" v-bind="attrs" v-on="on"><v-icon>mdi-chevron-double-right</v-icon></div>
+          </template>
+          <stat-breakdown :name="speedMultName"></stat-breakdown>
+        </gb-tooltip>
+      </div>
+      <v-row class="pa-1" no-gutters>
+        <v-col class="pa-1" v-for="(item, key) in finalItems" :key="`${feature}-${type}-${key}`" :cols="cols">
+          <upgrade :name="item" :disabled="isFrozen" :upgrade-translation="upgradeTranslation" :translation-set="translationSet">
+            <slot :upgrade-name="item"></slot>
+          </upgrade>
+        </v-col>
+      </v-row>
+    </div>
+    <div v-else>
+      <div class="text-center">{{ $vuetify.lang.t(`$vuetify.upgrade.keyset.${ translationSet }.notFound`) }}</div>
+      <alert-text v-if="type === 'book'" class="ma-2" type="info">{{ $vuetify.lang.t(`$vuetify.upgrade.${ feature === 'village' ? 'bookNotFoundVillage' : 'bookNotFound' }`) }}</alert-text>
+    </div>
   </div>
 </template>
 
@@ -103,7 +110,8 @@ export default {
     }
   },
   data: () => ({
-    page: 1
+    page: 1,
+    ableType: ""
   }),
   mounted() {
     const cachePage = this.$store.state.system.cachePage[this.cacheKey];
@@ -118,7 +126,18 @@ export default {
     items() {
       return this.baseItems.filter(elem => {
         const upgrade = this.$store.state.upgrade.item[elem];
-        return upgrade.requirement(upgrade.level);
+        if (this.ableType) {
+          const [feature, name] = elem.split('_');
+          let result = false;
+          if (this.ableType==='price') {
+            result  = this.$store.getters['upgrade/canAfford'](feature, name);
+          } else {
+            result  = this.$store.getters['upgrade/ableAfford'](feature, name);
+          }
+          if (result) return upgrade.requirement(upgrade.level);
+        } else {
+          return upgrade.requirement(upgrade.level);
+        }
       });
     },
     finalItems() {

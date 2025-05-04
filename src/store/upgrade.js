@@ -47,6 +47,19 @@ export default {
             }
             return price;
         },
+        ableAfford: (state, getters, rootState) => (feature, name, amount = 1) => {
+            const upgrade = state.item[feature + '_' + name];
+            if (upgrade.cap !== null && (upgrade.bought + amount) > upgrade.cap) {
+                return false;
+            }
+            let ableAfford = true;
+            for (const [key, elem] of Object.entries(getters.priceList(feature, name, amount))) {
+                if (rootState.currency[key].cap !== null && rootState.currency[key].cap < elem) {
+                    ableAfford = false;
+                }
+            }
+            return ableAfford;
+        },
         canAfford: (state, getters, rootState, rootGetters) => (feature, name, amount = 1) => {
             const upgrade = state.item[feature + '_' + name];
             if (upgrade.cap !== null && (upgrade.bought + amount) > upgrade.cap) {
