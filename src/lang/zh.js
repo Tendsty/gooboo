@@ -374,7 +374,7 @@ export default {
       website: '网站',
       googlefonts: 'Google Fonts',
     },
-    
+
     cheater: {
       0: {
         title: 'Honorable',
@@ -1159,10 +1159,10 @@ export default {
     keybinds: {
       name: '键盘绑定',
       prevMainFeature: {
-        name: '以前的主要功能',
+        name: '上一个功能',
       },
       nextMainFeature: {
-        name: '下一个主要功能',
+        name: '下一个功能',
       },
       debugSkip1m: {
         name: '跳过 1 分钟',
@@ -2217,9 +2217,9 @@ export default {
     button: {
       plantAll:
         '在所有空地块上种植选定的作物 ({0})。 您还可以通过单击空地块来种植单一作物',
-      replant: '所有生长的作物都被收获并再次种植在同一块地块上',
+      replant: '收获所有已成熟的作物，并原地再次种植相同作物',
       replantFertilizer: '也将使用相同的肥料（如果可能）',
-      harvestAll: '所有生长的农作物均已收获。 您还可以通过单击来收割单一作物',
+      harvestAll: '收获所有已成熟的作物。 您还可以通过单击来收割单一作物',
       delete: '从地块上移除作物。 消耗的资源不予退还',
       deleteBuilding: '建筑物也可以通过这种方式移除并返回到您的库存中',
       color:
