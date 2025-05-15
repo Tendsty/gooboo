@@ -50,6 +50,7 @@ export default {
     startNewGame() {
       this.$store.dispatch('system/updateSetting', {category: 'general', name: 'pause', value: false});
       this.$store.commit('system/resetAutosaveTimer');
+      this.$store.commit('system/resetcloudAutosaveTimer');
       this.$store.commit('system/updateKey', {key: 'screen', value: 'mining'});
     }
   }

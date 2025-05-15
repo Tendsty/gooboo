@@ -77,6 +77,7 @@ function loadGame(file, runPrepare = true) {
 
         store.commit('upgrade/initCache');
         store.commit('system/resetAutosaveTimer');
+        store.commit('system/resetCloudAutosaveTimer');
         return true;
     }
     return false;

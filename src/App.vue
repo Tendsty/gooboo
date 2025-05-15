@@ -433,6 +433,21 @@
           <v-list-item @click="changeScreen('resetProgress')">
             <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.resetProgress') }}</v-list-item-title>
           </v-list-item>
+          <v-list-item @click="CloudSave" :disabled="isSaving">
+            <v-list-item-title>
+              <span>{{ '云存档' + (cloudautosaveTimer !== null ? (' (' + $formatTime(cloudautosaveTimer) + ')') : '') }}</span>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="showCloudLoadConfirm = true"> 
+            <v-list-item-title>
+              <v-list-item-title>云存档读取最新</v-list-item-title>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="CloudLoadList">
+            <v-list-item-title>
+              <v-list-item-title>云存档列表</v-list-item-title>
+            </v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-menu>
       <v-btn data-cy="settings-button" icon @click="changeScreen('settings')">
@@ -484,8 +499,52 @@
     <particle-spawner></particle-spawner>
     <current-note></current-note>
     <current-confirm></current-confirm>
+    <v-dialog v-model="dialogSaveList" max-width="500">
+      <v-card class="default-card" elevation="5" shaped>
+        <v-card-title primary-title class="title">选择云存档</v-card-title>
+        <v-card-text>
+          <v-list rounded style="max-height: 250px; overflow-y: auto;">
+            <v-list-item
+              v-for="file in formattedSaveFiles"
+              :key="file.id"
+              @click="selectedSavefile = file"
+              ripple
+              :active="selectedSavefile === file"
+              active-class="primary--text"
+            >
+              <v-list-item-title>{{ file.formattedText }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-grey darken-1" text @click="dialogSaveList = false">
+            取消
+          </v-btn>
+          <v-btn color="primary" @click="confirmLoadSavefile">
+            确认
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialogDust" max-width="400">
       <golden-dust-menu @cancel="dialogDust = false"></golden-dust-menu>
+    </v-dialog>
+    <v-dialog v-model="showCloudLoadConfirm" max-width="500">
+      <v-card class="default-card" elevation="5" shaped>
+        <v-card-title primary-title class="title">请确认是否下载最新云存档</v-card-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-grey darken-1" text @click="showCloudLoadConfirm = false">
+            取消
+          </v-btn>
+          <v-btn color="primary" @click="CloudLoadLatest">
+            确认
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
     <input @change="importSave" type="file" accept="text/plain, application/json" id="gooboo-savefile-input" style="display: none;"/>
     <v-icon v-if="activeTutorialCss !== null" class="tutorial-arrow" :style="activeTutorialCss">mdi-arrow-up-bold</v-icon>
@@ -519,7 +578,7 @@ import General from './components/view/General.vue';
 import Event from './components/view/Event.vue';
 import Treasure from './components/view/Treasure.vue';
 import Cryolab from './components/view/Cryolab.vue';
-import { cleanStore, decodeFile, exportFile, exportFileString, saveLocal } from './js/savefile';
+import { cleanStore, decodeFile, exportFile, saveLocal, saveFileData, exportFileString ,loadLatestFileData, getCloudSaveFileList, loadSelectedFileData } from './js/savefile';
 import NextTile from './components/partial/main/NextTile.vue';
 import VSnackbars from 'v-snackbars'
 import AchievementMessage from './components/partial/snackbar/AchievementMessage.vue';
@@ -592,7 +651,12 @@ export default {
   },
   data: () => ({
     dialogDust: false,
-    intervalId: null
+    dialogSaveList: false,
+    saveFiles: [],
+    selectedSavefile: null,
+    intervalId: null,
+    isSaving: false,
+    showCloudLoadConfirm: false
   }),
   computed: {
     ...mapState({
@@ -600,6 +664,7 @@ export default {
       screen: state => state.system.screen,
       dark: state => state.system.settings.general.items.dark.value,
       lang: state => state.system.settings.general.items.lang.value,
+      cloudautosaveTimer: state => state.system.cloudautosaveTimer,
       autosaveTimer: state => state.system.autosaveTimer,
       currentTheme: state => state.system.theme,
       snackbarPosition: state => state.system.settings.notification.items.position.value,
@@ -675,6 +740,12 @@ export default {
         badges++;
       }
       return badges;
+    },
+    formattedSaveFiles() {
+      return this.saveFiles.map(saveFile => ({
+        ...saveFile,
+        formattedText: `存档时间: ${saveFile.created_at}`,
+      }));
     }
   },
   created() {
@@ -731,6 +802,39 @@ export default {
         }
       }
     },
+    async CloudSave(){
+      if (this.isSaving) {
+        return; 
+      }
+      this.isSaving = true;
+      try {
+        saveLocal();
+        await saveFileData();
+      } finally {
+        this.isSaving = false;
+        this.$store.commit('system/resetCloudAutosaveTimer');
+      }
+
+    },
+    CloudLoadLatest(){
+      loadLatestFileData()
+      this.showCloudLoadConfirm = false;
+    },
+    async CloudLoadList() {
+      try {
+        const saveFiles = await getCloudSaveFileList();
+        this.saveFiles = saveFiles || [];
+        this.dialogSaveList = true;
+      } catch (error) {
+        console.error("获取云存档列表失败:", error);
+      }
+    },
+    confirmLoadSavefile() {
+      if (this.selectedSavefile) {
+        loadSelectedFileData(this.selectedSavefile);
+        this.dialogSaveList = false;
+      }
+    },  
     changeScreen(name, finishTutorial = false) {
       this.$store.commit('system/updateKey', {key: 'screen', value: name});
       if (finishTutorial) {

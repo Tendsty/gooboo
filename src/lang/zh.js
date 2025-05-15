@@ -1217,6 +1217,17 @@ export default {
         name: '旧版农场显示',
         description: '使用旧版菜单选择农场的作物和建筑'
       },
+      clouduser: {
+        name: '云端用户名',
+        description: '请谨记，不提供找回'
+      },
+      cloudpwd: {
+        name: '云端密码',
+        description: '请谨记，不提供找回'
+      },
+      cloudautosaveTimer: {
+        name: '云端自动保存'
+      },
     },
     automation: {
       name: '自动化',

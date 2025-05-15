@@ -18,7 +18,9 @@ import v1_1_0 from "./modules/migration/v1_1_0";
 import { getDay } from "./utils/date";
 import v1_1_2 from "./modules/migration/v1_1_2";
 import v1_3_0 from "./modules/migration/v1_3_0";
+import {loadGame} from "@/js/init";
 import { APP_TESTING, LOCAL_STORAGE_NAME } from "./constants";
+import { saveData, getLatestDataList, getLatestData, loadSaveFile } from "./cloud"
 import v1_3_4 from "./modules/migration/v1_3_4";
 import v1_3_5 from "./modules/migration/v1_3_5";
 import v1_4_0 from "./modules/migration/v1_4_0";
@@ -29,7 +31,7 @@ import v1_5_1 from "./modules/migration/v1_5_1";
 import v1_5_3 from "./modules/migration/v1_5_3";
 import v1_5_4 from "./modules/migration/v1_5_4";
 import v1_5_6 from "./modules/migration/v1_5_6";
-
+let isSaving = false;
 const migrations = {
     '1.1.0': v1_1_0,
     '1.1.2': v1_1_2,
@@ -45,7 +47,7 @@ const migrations = {
     '1.5.6': v1_5_6,
 };
 
-export { checkLocal, saveLocal, loadFile, exportFile, exportFileString, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }
+export { checkLocal, saveLocal, loadFile, exportFile, exportFileString, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile, saveFileData, loadLatestFileData, getCloudSaveFileList, loadSelectedFileData }
 const semverCompare = require('semver/functions/compare');
 
 /**
@@ -60,6 +62,116 @@ function checkLocal() {
 function saveLocal() {
     localStorage.setItem(LOCAL_STORAGE_NAME, getSavefile());
 }
+
+const saveFileData = async () => {
+    if (isSaving) {
+        console.log("正在上传存档，请稍候...");
+        return;
+    }
+    isSaving = true;
+
+    try {
+        let userId = store.state.system.settings.general.items.clouduser.value;
+        let tokenId = store.state.system.settings.general.items.cloudpwd.value;
+
+        if (!userId || !tokenId) {
+            console.error("clouduser or cloudpwd error");
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: "clouduser or cloudpwd error" } });
+            isSaving = false;
+            return; 
+        }
+        
+        const goobooSavefile = localStorage.getItem('goobooSavefile');
+        if (!goobooSavefile) return;
+
+        const res = await saveData(goobooSavefile, userId, tokenId); 
+        if (res.success){
+            store.commit('system/addNotification', { color: 'info', timeout: 2000, message: { type: 'save', name: 'auto' } });
+        }
+    } catch (error) {
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'save', name: 'auto', error: "cloudsave error" } });
+    } finally {
+        isSaving = false;
+    }
+
+};
+
+const loadLatestFileData = async (userId = null, tokenId = null) => {
+    try {
+        const effectiveUserId = userId !== null ? userId : store.state.system.settings.general.items.clouduser.value;
+        const effectiveTokenId = tokenId !== null ? tokenId : store.state.system.settings.general.items.cloudpwd.value;
+
+        if (!effectiveUserId || !effectiveTokenId) {
+            store.commit('system/addNotification', { 
+                color: 'error', 
+                timeout: 5000, 
+                message: { type: 'load', name: 'cloud', error: 'clouduser or cloudpwd error' } 
+            });
+            return;
+        }
+
+        const res = await getLatestData(effectiveUserId, effectiveTokenId);
+        //console.log('saveFileData res:', res.save_data);
+        if (res.save_data) {
+            cleanStore();
+            loadGame(res.save_data);
+        } else {
+            store.commit('system/addNotification', { 
+                color: 'warning', 
+                timeout: 5000, 
+                message: { type: 'load', name: 'cloud', error: 'No cloud save found' } 
+            });
+        }
+    } catch (error) {
+        store.commit('system/addNotification', { 
+            color: 'error', 
+            timeout: 5000, 
+            message: { type: 'load', name: 'cloud', error: error.data?.message || 'Failed to load cloud save' } 
+        });
+    }
+};
+
+const getCloudSaveFileList = async () => {
+    try {
+        let userId = store.state.system.settings.general.items.clouduser.value;
+        let tokenId = store.state.system.settings.general.items.cloudpwd.value;
+
+        if (!userId || !tokenId) {
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser or cloudpwd error' } });
+            return null;
+        }
+        const saveFiles = await getLatestDataList(userId, tokenId);
+        console.log('saveFileData res:', saveFiles);
+        return saveFiles;
+    } catch (error) {
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error.data.message } });
+        return null;
+    }
+};
+
+const loadSelectedFileData = async (selectedSavefile) => {
+    try {
+        let userId = store.state.system.settings.general.items.clouduser.value;
+        let tokenId = store.state.system.settings.general.items.cloudpwd.value;
+
+        if (!userId || !tokenId) {
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'clouduser or cloudpwd error' } });
+            return;
+        }
+
+        const saveData = await loadSaveFile(selectedSavefile.id, userId, tokenId);
+        console.log('saveFileData res:', saveData);
+        if (saveData) {
+            cleanStore();
+            loadGame(saveData);
+            store.commit('system/addNotification', { color: 'success', timeout: 2000, message: { type: 'load', name: 'cloud' } });
+        } else {
+            store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: 'Failed to load cloud save' } });
+        }
+    } catch (error) {
+        store.commit('system/addNotification', { color: 'error', timeout: 5000, message: { type: 'load', name: 'cloud', error: error.data?.message || 'Failed to load cloud save' } });
+    }
+};
 
 function cleanStore() {
     Object.keys(store._modules.root._children).forEach(module => {

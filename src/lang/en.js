@@ -1161,6 +1161,17 @@ export default {
       useLegacyFarmSelect: {
         name: 'Old farm selection',
         description: 'Uses the old menu to select crops and buildings in the farm'
+      },
+      clouduser: {
+        name: 'Cloud Username',
+        description: 'Please remember, recovery is not provided.'
+      },
+      cloudpwd: {
+        name: 'Cloud Password',
+        description: 'Please remember, recovery is not provided.'
+      },
+      cloudautosaveTimer: {
+        name: 'Cloud Autosave'
       }
     },
     automation: {

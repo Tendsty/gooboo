@@ -7,6 +7,7 @@
       <template v-slot:item="{ item }">{{ $vuetify.lang.t(`$vuetify.settings.${category}.${name}.${item}`) }}</template>
     </v-select>
     <v-text-field :data-cy="dataCy" v-else-if="item.type === 'number'" outlined hide-details v-model="value" :label="$vuetify.lang.t(`$vuetify.settings.${category}.${name}.name`)" type="number" :min="item.min" :max="item.max" :step="item.step" :suffix="item.suffix" :clearable="item.clearable"></v-text-field>
+    <v-text-field :data-cy="dataCy" v-else-if="item.type === 'text'" outlined hide-details v-model="value" :label="$vuetify.lang.t(`$vuetify.settings.${category}.${name}.name`)" type="text" :clearable="item.clearable"></v-text-field>
     <gb-tooltip v-if="item.hasDescription" :min-width="0">
       <template v-slot:activator="{ on, attrs }">
         <v-icon class="ma-1" v-bind="attrs" v-on="on">mdi-help-circle</v-icon>
