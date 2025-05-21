@@ -133,8 +133,11 @@ export default {
         graniteBreaksMult: (state, getters) => {
             return Math.pow(2, Math.max(0, Math.floor(logBase(getters.currentBreaks + 1, 10)) - 3));
         },
+        depthBaseSmoke: (state, getters, rootState) => (depth) => {
+            return (rootState.unlock.miningSmoke.use && depth >= 25 && rootState.system.features.mining.currentSubfeature === 1) ? Math.pow(1.05, depth - 25) * 0.01 : 0;
+        },
         depthSmoke: (state, getters, rootState, rootGetters) => (depth) => {
-            return (rootState.unlock.miningSmoke.use && depth >= 25 && rootState.system.features.mining.currentSubfeature === 1) ? rootGetters['mult/get']('currencyMiningSmokeGain', Math.pow(1.05, depth - 25) * 0.01) : 0;
+            return (rootState.unlock.miningSmoke.use && depth >= 25 && rootState.system.features.mining.currentSubfeature === 1) ? rootGetters['mult/get']('currencyMiningSmokeGain', getters.depthBaseSmoke(depth)) : 0;
         },
         depthGasLimit: (state, getters, rootState, rootGetters) => (depth, gas) => {
             return Math.round((depth + 1 - state.gas[gas]) * 100 * Math.pow(rootGetters['mult/get'](`currencyMining${ capitalize(gas) }Increment`, 1), depth - state.gas[gas]));
@@ -174,6 +177,9 @@ export default {
         },
         currentOre: (state, getters) => {
             return getters.depthOre(state.depth);
+        },
+        currentBaseSmoke: (state, getters) => {
+            return getters.depthBaseSmoke(state.depth);
         },
         currentSmoke: (state, getters) => {
             return getters.depthSmoke(state.depth);

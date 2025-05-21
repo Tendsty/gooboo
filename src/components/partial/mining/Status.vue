@@ -118,10 +118,16 @@
         </gb-tooltip>
       </template>
       <template v-else-if="subfeature === 1">
-        <v-chip v-if="smoke > 0" label class="balloon-text-dynamic ma-1" :class="$vuetify.theme.dark ? 'darken-2' : 'lighten-2'" :color="currency.mining_smoke.color">
-          <v-icon class="mr-2">{{ currency.mining_smoke.icon }}</v-icon>
-          <span>{{ $formatNum(smoke, true) }}</span>
-        </v-chip>
+        <gb-tooltip key="status-smoke" v-if="smoke > 0" :title-text="$vuetify.lang.t('$vuetify.currency.mining_smoke.name')">
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip label class="balloon-text-dynamic ma-1" :class="$vuetify.theme.dark ? 'darken-2' : 'lighten-2'" :color="currency.mining_smoke.color" v-bind="attrs" v-on="on">
+              <v-icon class="mr-2">{{ currency.mining_smoke.icon }}</v-icon>
+              <span>{{ $formatNum(smoke, true) }}</span>
+            </v-chip>
+          </template>
+          <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
+          <stat-breakdown :base="baseSmoke" name="currencyMiningSmokeGain"></stat-breakdown>
+        </gb-tooltip>
         <template v-if="isDeepest">
           <gb-tooltip v-for="(amount, gas) in gasses" :key="gas" :title-text="$vuetify.lang.t(`$vuetify.currency.mining_${ gas }.name`)">
             <template v-slot:activator="{ on, attrs }">
@@ -140,6 +146,10 @@
               <currency-icon :name="`mining_${gas}`"></currency-icon>
               <span>{{ $vuetify.lang.t(`$vuetify.mining.gasGain.3`) }}</span>
             </div>
+            <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
+            <stat-breakdown :name="`currencyMining${ gas.charAt(0).toUpperCase() + gas.slice(1) }Gain`"></stat-breakdown>
+            <div class="text-center">{{ $vuetify.lang.t('$vuetify.mult.currencyMining' + gas.charAt(0).toUpperCase() + gas.slice(1) + 'Increment') }}</div>
+            <stat-breakdown :base="1" :name="`currencyMining${ gas.charAt(0).toUpperCase() + gas.slice(1) }Increment`"></stat-breakdown>
           </gb-tooltip>
         </template>
       </template>
@@ -257,6 +267,7 @@ export default {
       baseScrap: 'mining/currentBaseScrap',
       ore: 'mining/currentOre',
       smoke: 'mining/currentSmoke',
+      baseSmoke: 'mining/currentBaseSmoke',
       gasses: 'mining/currentGas',
       gasLimit: 'mining/currentGasLimit',
       hitsNeeded: 'mining/hitsNeeded',
