@@ -146,6 +146,10 @@
               <currency-icon :name="`mining_${gas}`"></currency-icon>
               <span>{{ $vuetify.lang.t(`$vuetify.mining.gasGain.3`) }}</span>
             </div>
+            <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
+            <stat-breakdown :name="`currencyMining${ gas.charAt(0).toUpperCase() + gas.slice(1) }Gain`"></stat-breakdown>
+            <div class="text-center">{{ $vuetify.lang.t('$vuetify.mult.currencyMining' + gas.charAt(0).toUpperCase() + gas.slice(1) + 'Increment') }}</div>
+            <stat-breakdown :base="1" :name="`currencyMining${ gas.charAt(0).toUpperCase() + gas.slice(1) }Increment`"></stat-breakdown>
           </gb-tooltip>
         </template>
       </template>
