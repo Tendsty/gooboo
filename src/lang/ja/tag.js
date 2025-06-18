@@ -1,0 +1,15 @@
+export default {
+  hordeEnergyToStr: '現在のエネルギーにつき+{0}力',
+  hordeEnergyToEnergyReg: '+{0}エネルギー不足につきエネルギー再生',
+  hordeEnergyOnCrit: 'クリティカルヒット時に+{0}エネルギー',
+  hordeHealOnCrit: 'クリティカルヒット時に{0}最大体力を回復する',
+  hordeRestoreCooldownOnCrit: 'クリティカルヒット時にクールダウンを{0}減らす',
+  hordeBloodOnCrit: 'クリティカルヒット時に{0}の敵の血を得る',
+  hordeManaRest: '{0}の間アクティブを使用しなかった後、{1}のマナ再生を得る',
+  hordeManasteal: 'キル時に{0}マナを得る',
+  hordePassiveRecovery: '毎秒{0}回復する',
+  hordeActiveDamageCrit: 'ダメージを与えるアクティブは{0}の効率でクリティカルを出す',
+  hordeActiveHealCrit: 'ヒーリング・アクティブは{0}の効率でクリティカルを出す',
+  hordeAttackAfterTime: '同じ戦闘で毎分攻撃力+{0}を得る',
+  hordeStrIntAfterTime: '同じ戦闘で毎分{0}の体力と知力を得る',
+}
