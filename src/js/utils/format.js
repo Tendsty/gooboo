@@ -1,4 +1,5 @@
 import store from "../../store";
+import { SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE, SECONDS_PER_YEAR } from "../constants";
 
 const numFormatters = [
     '', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'O', 'N', 'D',
@@ -15,9 +16,12 @@ const numFormatters = [
 ];
 const numNegativeFormatters = ['m', 'µ', 'n', 'p', 'f', 'a', 'z', 'y'];
 
-export { numFormatters, numNegativeFormatters, formatNum, formatInt, formatTime, formatGrade, formatRoman, buildNum, capitalize, decapitalize }
+export { numFormatters, numNegativeFormatters, roundNear, formatNum, formatInt, formatTime, formatGrade, formatRoman, buildNum, capitalize, decapitalize }
 
 function roundNear(num, decimals = 9) {
+    if (num === 0) {
+        return 0;
+    }
     const numMod = Math.pow(10, decimals - Math.floor(Math.log10(num)));
     return Math.round(num * numMod) / numMod;
 }
@@ -44,13 +48,20 @@ function formatNum(amount, showDecimals = false) {
         return negativePrefix + '∞';
     }
 
+    const formatting = store.state.system.settings.general.items.numberFormatting.value;
+
     if (showDecimals) {
         if (numBase === -Infinity) {
             return '0';
         } else if (numBase < -2) {
+            if (formatting === 'scientific') {
+                const tempVal = amount * Math.pow(10, 0 - numBase);
+                const exponent = 0 - numBase;
+                return negativePrefix + tempVal.toFixed(3) + 'e-' + exponent;
+            }
             const tempVal = amount * Math.pow(10, Math.floor(0 - numBase / 3) * 3);
             const exponent = Math.floor((0 - numBase) / 3);
-            return negativePrefix + tempVal.toFixed(3) + (exponent <= numNegativeFormatters.length ? numNegativeFormatters[exponent - 1] : ('e-' + (exponent * 3)));
+            return negativePrefix + tempVal.toFixed(3) + ((exponent <= numNegativeFormatters.length && formatting === 'standard') ? numNegativeFormatters[exponent - 1] : ('e-' + (exponent * 3)));
         } else if (numBase < 3) {
             // Round to 9 digits to fix rounding inaccuracies caused by the float type
             return negativePrefix + roundNear(amount).toString().slice(0, 5);
@@ -59,6 +70,12 @@ function formatNum(amount, showDecimals = false) {
 
     if (numBase < 4) {
         return negativePrefix + Math.floor(amount);
+    } else if (formatting === 'scientific') {
+        const tempVal = amount / Math.pow(10, numBase);
+        return negativePrefix + tempVal.toPrecision(4) + 'e' + numBase;
+    } else if (formatting === 'engineering') {
+        const tempVal = amount / Math.pow(10, Math.floor(numBase / 3) * 3);
+        return negativePrefix + tempVal.toPrecision(4) + 'e' + (Math.floor(numBase / 3) * 3);
     } else if (Math.floor(numBase / 3) < numFormatters.length) {
         const tempVal = amount / Math.pow(10, Math.floor(numBase / 3) * 3);
         return negativePrefix + tempVal.toPrecision(4) + numFormatters[Math.floor(numBase / 3)];
@@ -94,31 +111,39 @@ function formatInt(num) {
  * @returns {String}
  */
 function formatTime(seconds, minimumUnit = 's') {
-    let min = ['ms', 's', 'm', 'h', 'd'].indexOf(minimumUnit);
+    let min = ['ms', 's', 'm', 'h', 'd', 'y'].indexOf(minimumUnit);
     let negativePrefix = '';
     if (seconds < 0) {
         seconds = Math.abs(seconds);
         negativePrefix = '-';
     }
+    if (seconds === Infinity) {
+        return negativePrefix + '∞';
+    }
     if (seconds < 1 && min < 1) {
         // display milliseconds only
         return negativePrefix + Math.floor(seconds * 1000) + 'ms';
-    } else if (seconds < 60 && min < 2) {
+    } else if (seconds < SECONDS_PER_MINUTE && min < 2) {
         // display seconds only
         return negativePrefix + Math.floor(seconds) + 's';
-    } else if (seconds < 3600 && min < 3) {
+    } else if (seconds < SECONDS_PER_HOUR && min < 3) {
         // display minutes and seconds
-        return negativePrefix + Math.floor(seconds / 60) + 'm' + (min < 2 ? (' ' + (Math.floor(seconds % 60) < 10 ? '0' : '') + Math.floor(seconds % 60) + 's') : '');
-    } else if (seconds < 86400 && min < 4) {
+        return negativePrefix + Math.floor(seconds / SECONDS_PER_MINUTE) + 'm' + (min < 2 ? (' ' + (Math.floor(seconds % SECONDS_PER_MINUTE) < 10 ? '0' : '') + Math.floor(seconds % SECONDS_PER_MINUTE) + 's') : '');
+    } else if (seconds < SECONDS_PER_DAY && min < 4) {
         // display hours and minutes
-        return negativePrefix + Math.floor(seconds / 3600) + 'h' + (min < 3 ? (' ' + (Math.floor((seconds % 3600) / 60) < 10 ? '0' : '') + Math.floor((seconds % 3600) / 60) + 'm') : '');
-    } else if (seconds < 8640000) {
+        return negativePrefix + Math.floor(seconds / SECONDS_PER_HOUR) + 'h' + (min < 3 ? (' ' + (Math.floor((seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE) < 10 ? '0' : '') + Math.floor((seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE) + 'm') : '');
+    } else if (seconds < (100 * SECONDS_PER_DAY) && min < 5) {
         // display days and hours
-        return negativePrefix + Math.floor(seconds / 86400) + 'd' + (min < 4 ? (' ' + (Math.floor((seconds % 86400) / 3600) < 10 ? '0' : '') + Math.floor((seconds % 86400) / 3600) + 'h') : '');
-    }
-    else {
+        return negativePrefix + Math.floor(seconds / SECONDS_PER_DAY) + 'd' + (min < 4 ? (' ' + (Math.floor((seconds % SECONDS_PER_DAY) / SECONDS_PER_HOUR) < 10 ? '0' : '') + Math.floor((seconds % SECONDS_PER_DAY) / SECONDS_PER_HOUR) + 'h') : '');
+    } else if (seconds < SECONDS_PER_YEAR && min < 5) {
         // display days only
-        return negativePrefix + formatNum(Math.floor(seconds / 86400)) + 'd';
+        return negativePrefix + formatNum(Math.floor(seconds / SECONDS_PER_DAY)) + 'd';
+    } else if (seconds < (100 * SECONDS_PER_YEAR)) {
+        // display years and days
+        return negativePrefix + Math.floor(seconds / SECONDS_PER_YEAR) + 'y' + (min < 5 ? (' ' + Math.floor((seconds % SECONDS_PER_YEAR) / SECONDS_PER_DAY) + 'd') : '');
+    } else {
+        // display years only
+        return negativePrefix + formatNum(Math.floor(seconds / SECONDS_PER_YEAR)) + 'y';
     }
 }
 

@@ -54,7 +54,7 @@ export default {
     featureList() {
       return [
         ...this.mainFeatures.filter(elem => elem.name !== 'farm'),
-        ...this.sideFeatures.filter(elem => ['gem', 'school', 'event'].includes(elem.name) && (elem.name !== 'event' || this.$store.getters['event/eventIsBig'](this.$store.getters['event/currentEvent'])))
+        ...this.sideFeatures.filter(elem => ['gem', 'event'].includes(elem.name) && (elem.name !== 'event' || this.$store.getters['event/eventIsBig'](this.$store.getters['event/currentEvent'])))
       ];
     },
     isNewVersion() {

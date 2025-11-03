@@ -21,7 +21,7 @@ export default {
     },
     ohilio: {
         attack: 0.01,
-        health: 0.01,
+        health: 0.00000001,
         textShadow: '1px 1px 2px palevioletred, 0 0 25px lightpink, 0 0 5px pink',
         sigil: {
             ohilio_megagun: 1,

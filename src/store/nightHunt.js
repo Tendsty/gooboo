@@ -197,7 +197,7 @@ export default {
         },
         addChangedCurrency({ state, rootState, rootGetters, commit }, o) {
             const currencyList = Object.keys(state.ingredientStat).slice(0, rootGetters['mult/get']('nightHuntFindableIngredients'));
-            let targetList = Object.keys(rootState.currency).filter(key => key.split('_')[0] !== 'event' && state.changedCurrency[key] === undefined && rootState.stat[key].total > 0);
+            let targetList = Object.keys(rootState.currency).filter(key => key.split('_')[0] !== 'event' && !rootState.currency[key].isHidden && state.changedCurrency[key] === undefined && rootState.stat[key].total > 0);
 
             for (let i = 0; i < o.sack && targetList.length > 0; i++) {
                 const targetIndex = randomInt(0, targetList.length - 1);
@@ -279,7 +279,9 @@ export default {
                     if (chance(stats.nightHuntRitualSuccessChance, rngGen())) {
                         if (!getters.ritualPerformed) {
                             if (!potionRecipe) {
-                                dispatch('event/giveTokens', {event: 'nightHunt', amount: 1}, {root: true});
+                                if (tier < 3) {
+                                    dispatch('event/giveTokens', {event: 'nightHunt', amount: 1}, {root: true});
+                                }
                                 dispatch('note/find', 'event_29', {root: true});
                                 canAddHint = true;
                             }

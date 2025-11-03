@@ -20,7 +20,7 @@ export default [
         {"x": 0.4, "y": -0.15, "rotate": 20, "size": 0.6, "icon": "mdi-trophy"}
     ]},
     {id: 3, collection: 'plantsInTheCity', power: 2, reward: [
-        {name: 'farmGoldChance', type: 'mult', value: 1.15}
+        {name: 'farmGoldChance', type: 'mult', value: 1.1}
     ], color: 'pale-purple', icons: [
         {"x": -0.75, "y": 0.65, "rotate": 0, "size": 1.5, "icon": "mdi-pot"},
         {"x": 0, "y": 0.65, "rotate": 0, "size": 1.5, "icon": "mdi-pot"},
@@ -48,7 +48,7 @@ export default [
     ]},
 
     {id: 6, group: 'berry', collection: 'supplyAndSupport', power: 1, reward: [
-        {name: 'farmCropGain', type: 'mult', value: 1.35}
+        {name: 'farmCropGain', type: 'mult', value: 1.2}
     ], color: 'light-blue', icons: [
         {"x": 0.05, "y": -0.45, "rotate": 45, "size": 2, "icon": "mdi-airplane"},
         {"x": -0.2, "y": 0, "rotate": 0, "size": 0.6, "icon": "mdi-water"},
@@ -61,7 +61,7 @@ export default [
         {"x": -0.65, "y": 1.1, "rotate": 0, "size": 1, "icon": "mdi-flower"}
     ]},
     {id: 7, group: 'vegetable', collection: 'supplyAndSupport', power: 1, reward: [
-        {name: 'farmCropGain', type: 'mult', value: 1.35}
+        {name: 'farmCropGain', type: 'mult', value: 1.2}
     ], color: 'blue-grey', icons: [
         {"x": -1.05, "y": 0, "rotate": 0, "size": 1.25, "icon": "mdi-train-car-centerbeam-full"},
         {"x": -0.35, "y": 0, "rotate": 0, "size": 1.25, "icon": "mdi-train-car-container"},
@@ -69,7 +69,7 @@ export default [
         {"x": 1.05, "y": 0, "rotate": 0, "size": 1.25, "icon": "mdi-train-car-hopper-full"}
     ]},
     {id: 8, group: 'grain', collection: 'supplyAndSupport', power: 1, reward: [
-        {name: 'farmCropGain', type: 'mult', value: 1.35}
+        {name: 'farmCropGain', type: 'mult', value: 1.2}
     ], color: 'beige', icons: [
         {"x": -0.6, "y": -0.3, "rotate": 0, "size": 1.5, "icon": "mdi-home-silo"},
         {"x": 0.25, "y": -0.3, "rotate": 0, "size": 1.5, "icon": "mdi-silo"},
@@ -77,7 +77,7 @@ export default [
         {"x": -0.15, "y": 0.5, "rotate": 0, "size": 0.75, "icon": "mdi-land-rows-horizontal"}
     ]},
     {id: 9, group: 'flower', collection: 'supplyAndSupport', power: 1, reward: [
-        {name: 'farmCropGain', type: 'mult', value: 1.35}
+        {name: 'farmCropGain', type: 'mult', value: 1.2}
     ], color: 'deep-orange', icons: [
         {"x": 0, "y": 0, "rotate": 0, "size": 4.5, "icon": "mdi-hoop-house"},
         {"x": 0, "y": 0.6, "rotate": 0, "size": 0.75, "icon": "mdi-radiator"},
@@ -87,7 +87,7 @@ export default [
     ]},
 
     {id: 10, collection: 'feedingTheWorld', power: 2, reward: [
-        {name: 'farmCropGain', type: 'mult', value: 1.1}
+        {name: 'farmCropGain', type: 'mult', value: 1.15}
     ], color: 'lime', icons: [
         {"x": 0.2, "y": 0, "rotate": 0, "size": 2.25, "icon": "mdi-blender"},
         {"x": 0.95, "y": 0.23, "rotate": 0, "size": 1.3, "icon": "mdi-beer"},
@@ -95,7 +95,7 @@ export default [
         {"x": -0.5, "y": 0.32, "rotate": 0, "size": 1, "icon": "mdi-fruit-pear"}
     ]},
     {id: 11, collection: 'feedingTheWorld', power: 0, reward: [
-        {name: 'farmGoldChance', type: 'mult', value: 1.25}
+        {name: 'farmGoldChance', type: 'mult', value: 1.15}
     ], color: 'pale-pink', icons: [
         {"x": -0.5, "y": 0.6, "rotate": 0, "size": 3, "icon": "mdi-minus"},
         {"x": 0.5, "y": 0.6, "rotate": 0, "size": 3, "icon": "mdi-minus"},
@@ -125,7 +125,7 @@ export default [
         {"x": -0.1, "y": 0.25, "rotate": 0, "size": 0.7, "icon": "mdi-french-fries"}
     ]},
     {id: 14, collection: 'feedingTheWorld', power: 3, reward: [
-        {name: 'farm_grass', type: 'addRareDrop', value: 4, chance: 0.2, mult: 0.4}
+        {name: 'farm_grass', type: 'addRareDrop', value: 4, chance: 0.4, mult: 0.4}
     ], color: 'brown', icons: [
         {"x": 0, "y": 0.5, "rotate": 0, "size": 3, "icon": "mdi-table-furniture"},
         {"x": 0, "y": -0.05, "rotate": 0, "size": 1, "icon": "mdi-food-turkey"},
@@ -136,7 +136,7 @@ export default [
     ]},
     {id: 15, collection: 'feedingTheWorld', power: 3, reward: [
         {name: 'farmCropGain', type: 'mult', value: 1.1},
-        {name: 'farmGoldChance', type: 'mult', value: 1.1}
+        {name: 'farmGoldChance', type: 'mult', value: 1.06}
     ], color: 'light-blue', icons: [
         {"x": 0, "y": 0.4, "rotate": 0, "size": 1.7, "icon": "mdi-human-handsup"},
         {"x": -0.3, "y": -0.05, "rotate": 0, "size": 0.85, "icon": "mdi-candy"},
@@ -220,7 +220,7 @@ export default [
         {"x": 0.65, "y": 0.1, "rotate": 50, "size": 0.9, "icon": "mdi-leaf"}
     ]},
     {id: 23, collection: 'organicDyes', power: 4, reward: [
-        {name: 'farmOvergrow', type: 'base', value: 1.75}
+        {name: 'farmOvergrow', type: 'base', value: 0.75}
     ], color: 'dark-blue', icons: [
         {"x": -0.4, "y": 0.2, "rotate": 0, "size": 2, "icon": "mdi-image-filter-drama"},
         {"x": -0.05, "y": 0.05, "rotate": -75, "size": 1, "icon": "mdi-fruit-grapes"},
@@ -266,5 +266,236 @@ export default [
         {"x": 0.7, "y": 0.3, "rotate": 70, "size": 0.85, "icon": "mdi-butterfly"},
         {"x": 0.05, "y": -0.05, "rotate": 145, "size": 0.95, "icon": "mdi-butterfly"},
         {"x": -0.65, "y": -0.5, "rotate": -100, "size": 0.7, "icon": "mdi-butterfly"}
+    ]},
+
+    {id: 28, collection: 'specialGadgets', power: 'adaptive', reward: [
+        {name: 'farmCareWeight', type: 'mult', value: 2}
+    ], color: 'light-green', icons: [
+        {"x": -0.35, "y": 0.45, "rotate": 0, "size": 1.5, "icon": "mdi-land-fields"},
+        {"x": 0.35, "y": 0.45, "rotate": 0, "size": 1.5, "icon": "mdi-land-fields"},
+        {"x": 0.15, "y": -0.12, "rotate": 0, "size": 1, "icon": "mdi-sprout"},
+        {"x": -0.4, "y": 0, "rotate": 0, "size": 0.6, "icon": "mdi-grass"}
+    ]},
+    {id: 29, collection: 'specialGadgets', power: 'adaptive', reward: [
+        {name: 'farmCareWeight', type: 'mult', value: 3}
+    ], color: 'dark-blue', icons: [
+        {"x": 0.25, "y": -0.55, "rotate": 0, "size": 1.75, "icon": "mdi-weather-lightning"},
+        {"x": -0.45, "y": -0.55, "rotate": 0, "size": 1.3, "icon": "mdi-weather-pouring"},
+        {"x": 0.85, "y": -0.7, "rotate": 0, "size": 1.15, "icon": "mdi-clouds"},
+        {"x": 0.65, "y": 0.8, "rotate": 0, "size": 1.2, "icon": "mdi-home"},
+        {"x": -0.65, "y": 0.8, "rotate": 0, "size": 1, "icon": "mdi-tree"},
+        {"x": -0.2, "y": 0.95, "rotate": 0, "size": 0.35, "icon": "mdi-grass"}
+    ]},
+    {id: 30, collection: 'specialGadgets', power: 'adaptive', reward: [
+        {name: 'farmCareWeight', type: 'mult', value: 1 / 3}
+    ], color: 'brown', icons: [
+        {"x": -0.35, "y": 0.45, "rotate": 0, "size": 1.5, "icon": "mdi-land-fields"},
+        {"x": 0.35, "y": 0.45, "rotate": 0, "size": 1.5, "icon": "mdi-land-fields"},
+        {"x": 0.2, "y": -0.45, "rotate": 0, "size": 1.5, "icon": "mdi-shaker"}
+    ]},
+    {id: 31, collection: 'specialGadgets', power: 'adaptive', reward: [
+        {name: 'farmCareWeight', type: 'mult', value: 0}
+    ], color: 'dark-grey', icons: [
+        {"x": -0.35, "y": 0.45, "rotate": 0, "size": 1.5, "icon": "mdi-land-fields"},
+        {"x": 0.35, "y": 0.45, "rotate": 0, "size": 1.5, "icon": "mdi-land-fields"},
+        {"x": -0.3, "y": -0.05, "rotate": 0, "size": 0.6, "icon": "mdi-fire"},
+        {"x": 0.1, "y": -0.35, "rotate": 0, "size": 1.65, "icon": "mdi-smoke"}
+    ]},
+
+    {id: 32, collection: 'countryLife', power: 5, reward: [
+        {name: 'farmExperience', type: 'base', value: 0.3}
+    ], color: 'red', icons: [
+        {"x": 0.1, "y": 0, "rotate": 0, "size": 2, "icon": "mdi-barn"},
+        {"x": -1.1, "y": 0.2, "rotate": 0, "size": 1, "icon": "mdi-fence"},
+        {"x": -0.6, "y": 0.2, "rotate": 0, "size": 1, "icon": "mdi-fence"},
+        {"x": 0.9, "y": 0.25, "rotate": 0, "size": 1.1, "icon": "mdi-car-lifted-pickup"},
+        {"x": 0.72, "y": 0.12, "rotate": 0, "size": 0.4, "icon": "mdi-sack"}
+    ]},
+    {id: 33, group: 'vegetable', collection: 'countryLife', power: 8, reward: [], color: 'green', icons: [
+        {"x": -0.3, "y": 0.4, "rotate": 0, "size": 3, "icon": "mdi-pot"},
+        {"x": 0.75, "y": 0.5, "rotate": 0, "size": 2.25, "icon": "mdi-human-greeting"},
+        {"x": 0.2, "y": 0.15, "rotate": 175, "size": 1, "icon": "mdi-silverware-spoon"},
+        {"x": -0.65, "y": 0.2, "rotate": -20, "size": 1, "icon": "mdi-carrot"},
+        {"x": -0.35, "y": -0.45, "rotate": 0, "size": 2, "icon": "mdi-smoke"},
+        {"x": -0.3, "y": 0.25, "rotate": 45, "size": 0.85, "icon": "mdi-corn"}
+    ]},
+    {id: 34, group: 'berry', collection: 'countryLife', power: 8, reward: [], color: 'pink', icons: [
+        {"x": -0.75, "y": 0.17, "rotate": 0, "size": 1, "icon": "mdi-cup"},
+        {"x": -0.15, "y": 0, "rotate": 0, "size": 1.75, "icon": "mdi-bottle-soda"},
+        {"x": 0.2, "y": 0, "rotate": 0, "size": 1.75, "icon": "mdi-bottle-soda"},
+        {"x": 0.55, "y": 0, "rotate": 0, "size": 1.75, "icon": "mdi-bottle-soda"},
+        {"x": 1, "y": 0.3, "rotate": -60, "size": 1, "icon": "mdi-fruit-grapes"}
+    ]},
+    {id: 35, group: 'grain', collection: 'countryLife', power: 8, reward: [], color: 'pale-yellow', icons: [
+        {"x": 0.6, "y": 0.55, "rotate": 0, "size": 3, "icon": "mdi-road-variant"},
+        {"x": 0.6, "y": -0.35, "rotate": 0, "size": 2, "icon": "mdi-road-variant"},
+        {"x": 0.62, "y": -1, "rotate": 0, "size": 1.35, "icon": "mdi-road-variant"},
+        {"x": -1, "y": 0.7, "rotate": 0, "size": 1.2, "icon": "mdi-barley"},
+        {"x": -0.6, "y": 0.7, "rotate": 0, "size": 1.2, "icon": "mdi-barley"},
+        {"x": -0.2, "y": 0.7, "rotate": 0, "size": 1.2, "icon": "mdi-barley"},
+        {"x": -0.8, "y": 0.15, "rotate": 0, "size": 1.1, "icon": "mdi-barley"},
+        {"x": -0.45, "y": 0.15, "rotate": 0, "size": 1.1, "icon": "mdi-barley"},
+        {"x": -0.1, "y": 0.15, "rotate": 0, "size": 1.1, "icon": "mdi-barley"},
+        {"x": -0.6, "y": -0.35, "rotate": 0, "size": 1, "icon": "mdi-barley"},
+        {"x": -0.3, "y": -0.35, "rotate": 0, "size": 1, "icon": "mdi-barley"},
+        {"x": 0, "y": -0.35, "rotate": 0, "size": 1, "icon": "mdi-barley"},
+        {"x": -0.45, "y": -0.8, "rotate": 0, "size": 0.9, "icon": "mdi-barley"},
+        {"x": -0.15, "y": -0.8, "rotate": 0, "size": 0.9, "icon": "mdi-barley"},
+        {"x": 0.15, "y": -0.8, "rotate": 0, "size": 0.9, "icon": "mdi-barley"}
+    ]},
+    {id: 36, group: 'flower', collection: 'countryLife', power: 8, reward: [], color: 'wooden', icons: [
+        {"x": 0, "y": -0.6, "rotate": 30, "size": 1.75, "icon": "mdi-image-filter-vintage"},
+        {"x": 0, "y": -0.6, "rotate": 0, "size": 0.85, "icon": "mdi-dots-hexagon"},
+        {"x": 0, "y": -0.1, "rotate": 90, "size": 1.5, "icon": "mdi-minus"},
+        {"x": 0, "y": 0.35, "rotate": 90, "size": 1.5, "icon": "mdi-minus"},
+        {"x": 0, "y": 0.8, "rotate": 90, "size": 1.5, "icon": "mdi-minus"},
+        {"x": 0.15, "y": 0.1, "rotate": 10, "size": 0.4, "icon": "mdi-leaf"},
+        {"x": -0.15, "y": 0.4, "rotate": -85, "size": 0.4, "icon": "mdi-leaf"},
+        {"x": 0.6, "y": 0.8, "rotate": 0, "size": 1.2, "icon": "mdi-human-greeting"}
+    ]},
+    {id: 37, collection: 'countryLife', power: 6, reward: [
+        {name: 'farmGoldChance', type: 'mult', value: 1.15}
+    ], color: 'deep-purple', icons: [
+        {"x": 0.2, "y": -0.3, "rotate": 0, "size": 1.5, "icon": "mdi-home-silo"},
+        {"x": -0.5, "y": -0.15, "rotate": 0, "size": 1, "icon": "mdi-fence"},
+        {"x": 0.45, "y": 0.35, "rotate": 0, "size": 0.95, "icon": "mdi-human-child"},
+        {"x": 0.85, "y": 0.45, "rotate": 0, "size": 0.75, "icon": "mdi-human-child"},
+        {"x": -0.95, "y": 0.5, "rotate": 0, "size": 0.65, "icon": "mdi-human-child"},
+        {"x": -0.45, "y": 0.55, "rotate": 0, "size": 0.9, "icon": "mdi-human-child"},
+        {"x": -0.7, "y": 0.9, "rotate": 0, "size": 0.75, "icon": "mdi-human-child"}
+    ]},
+    {id: 38, collection: 'countryLife', power: 6, reward: [
+        {name: 'farmCropGain', type: 'mult', value: 1.1},
+        {name: 'farmRareDropChance', type: 'mult', value: 1.1}
+    ], color: 'amber', icons: [
+        {"x": -0.35, "y": 0.4, "rotate": 0, "size": 2, "icon": "mdi-table-picnic"},
+        {"x": -0.6, "y": -0.15, "rotate": 0, "size": 1, "icon": "mdi-beehive-outline"},
+        {"x": -0.1, "y": -0.15, "rotate": 0, "size": 1, "icon": "mdi-beehive-outline"},
+        {"x": 0.75, "y": -0.25, "rotate": 0, "size": 1, "icon": "mdi-beekeeper"},
+        {"x": 0.75, "y": 0.2, "rotate": 0, "size": 2, "icon": "mdi-human-handsdown"},
+        {"x": 0.4, "y": -0.6, "rotate": 80, "size": 0.75, "icon": "mdi-bee"},
+        {"x": 0, "y": -0.9, "rotate": -5, "size": 0.75, "icon": "mdi-bee"},
+        {"x": -0.85, "y": -0.7, "rotate": -80, "size": 0.75, "icon": "mdi-bee"}
+    ]},
+    {id: 39, group: 'grain', collection: 'countryLife', power: 6, reward: [
+        {name: 'farm_smallSeed', type: 'addRareDrop', value: 2, chance: -0.2, mult: 0.1}
+    ], color: 'dark-blue', icons: [
+        {"x": 0.45, "y": 0, "rotate": 0, "size": 2, "icon": "mdi-silo"},
+        {"x": 1.1, "y": 0.25, "rotate": 0, "size": 1, "icon": "mdi-fence"},
+        {"x": -0.35, "y": 0.35, "rotate": 90, "size": 0.7, "icon": "mdi-barley"},
+        {"x": -0.65, "y": 0.3, "rotate": 50, "size": 0.7, "icon": "mdi-barley"},
+        {"x": -1.1, "y": 0.38, "rotate": -90, "size": 0.6, "icon": "mdi-barley"}
+    ]},
+    {id: 40, group: 'flower', collection: 'countryLife', power: 6, reward: [
+        {name: 'farm_petal', type: 'addRareDrop', value: 3, chance: 0.1, mult: 0.1}
+    ], color: 'light-green', icons: [
+        {"x": 0.35, "y": 0.15, "rotate": 0, "size": 0.8, "icon": "mdi-flower"},
+        {"x": -0.75, "y": 0.6, "rotate": 0, "size": 0.9, "icon": "mdi-flower"},
+        {"x": 0.05, "y": -0.65, "rotate": 0, "size": 0.7, "icon": "mdi-flower"},
+        {"x": -0.55, "y": -0.35, "rotate": 0, "size": 0.75, "icon": "mdi-flower-tulip"},
+        {"x": 1, "y": 0.35, "rotate": 0, "size": 0.85, "icon": "mdi-flower-tulip"},
+        {"x": -0.2, "y": 0.2, "rotate": 0, "size": 0.5, "icon": "mdi-grass"},
+        {"x": 0.25, "y": 0.65, "rotate": 0, "size": 0.5, "icon": "mdi-grass"},
+        {"x": 0.75, "y": -0.35, "rotate": 0, "size": 0.5, "icon": "mdi-grass"}
+    ]},
+    {id: 41, collection: 'countryLife', power: 5, reward: [
+        {name: 'farmCropGain', type: 'mult', value: 1.2}
+    ], color: 'light-blue', icons: [
+        {"x": 0, "y": -0.2, "rotate": 0, "size": 2, "icon": "mdi-human-handsdown"},
+        {"x": 0, "y": -0.6, "rotate": 0, "size": 1, "icon": "mdi-account-cowboy-hat"},
+        {"x": -0.35, "y": 0.03, "rotate": -45, "size": 1, "icon": "mdi-pitchfork"},
+        {"x": 0.45, "y": -0.05, "rotate": 0, "size": 1, "icon": "mdi-watering-can"},
+        {"x": -0.9, "y": 0.85, "rotate": 0, "size": 1, "icon": "mdi-sprout"},
+        {"x": -0.45, "y": 0.82, "rotate": 0, "size": 1.2, "icon": "mdi-sprout"},
+        {"x": 0, "y": 0.85, "rotate": 0, "size": 1, "icon": "mdi-sprout"},
+        {"x": 0.45, "y": 0.83, "rotate": 0, "size": 1.1, "icon": "mdi-sprout"},
+        {"x": 0.9, "y": 0.85, "rotate": 0, "size": 1, "icon": "mdi-sprout"}
+    ]},
+    {id: 42, group: 'berry', collection: 'countryLife', power: 6, reward: [
+        {name: 'farm_seedHull', type: 'addRareDrop', value: 8, chance: 0.1, mult: 0.1}
+    ], color: 'beige', icons: [
+        {"x": -0.4, "y": 0.55, "rotate": 0, "size": 1.5, "icon": "mdi-barley"},
+        {"x": -0.4, "y": 0.1, "rotate": 0, "size": 1, "icon": "mdi-corn"},
+        {"x": 0.8, "y": 0.75, "rotate": 0, "size": 1, "icon": "mdi-basket"},
+        {"x": 0.95, "y": 0.65, "rotate": 0, "size": 0.4, "icon": "mdi-seed"},
+        {"x": 0.7, "y": 0.7, "rotate": 95, "size": 0.4, "icon": "mdi-seed"},
+        {"x": -0.15, "y": 0.45, "rotate": 30, "size": 0.4, "icon": "mdi-seed"},
+        {"x": -0.6, "y": 0.45, "rotate": -35, "size": 0.4, "icon": "mdi-seed"},
+        {"x": 0.2, "y": 0.7, "rotate": 0, "size": 1.15, "icon": "mdi-human-greeting"},
+        {"x": -1, "y": 0.9, "rotate": 30, "size": 0.4, "icon": "mdi-seed"}
+    ]},
+    {id: 43, group: 'vegetable', collection: 'countryLife', power: 6, reward: [
+        {name: 'farm_bug', type: 'addRareDrop', value: 3, chance: 0.1, mult: 0.1}
+    ], color: 'brown', icons: [
+        {"x": -0.2, "y": 0.6, "rotate": 0, "size": 2.5, "icon": "mdi-pot"},
+        {"x": -0.2, "y": -0.15, "rotate": 0, "size": 2.5, "icon": "mdi-flower"},
+        {"x": 0.6, "y": 0.2, "rotate": 15, "size": 2.5, "icon": "mdi-magnify"},
+        {"x": 0.45, "y": 0, "rotate": 15, "size": 0.5, "icon": "mdi-bug"}
+    ]},
+
+    {id: 44, collection: 'forgottenPlants', power: 9, reward: [], color: 'cyan', icons: [
+        {"x": 0, "y": 0.45, "rotate": 0, "size": 3, "icon": "mdi-ellipse-outline"},
+        {"x": 0.6, "y": -0.45, "rotate": 0, "size": 1.25, "icon": "mdi-eyedropper"},
+        {"x": 0, "y": 0.45, "rotate": 0, "size": 0.5, "icon": "mdi-seed"},
+        {"x": 0, "y": 0.45, "rotate": 0, "size": 1.25, "icon": "mdi-dots-circle"}
+    ]},
+    {id: 45, group: 'vegetable', collection: 'forgottenPlants', power: 7, reward: [
+        {name: 'farmOvergrow', type: 'base', value: 1.1}
+    ], color: 'pale-purple', icons: [
+        {"x": -0.75, "y": 0.1, "rotate": -80, "size": 1.5, "icon": "mdi-carrot"},
+        {"x": -0.4, "y": 0.2, "rotate": 0, "size": 2, "icon": "mdi-truck-flatbed"},
+        {"x": 0.5, "y": 0.35, "rotate": 0, "size": 1, "icon": "mdi-human-greeting"},
+        {"x": 1, "y": 0.33, "rotate": 0, "size": 1.1, "icon": "mdi-human-male-female-child"}
+    ]},
+    {id: 46, group: 'flower', collection: 'forgottenPlants', power: 7, reward: [
+        {name: 'farmCropGain', type: 'mult', value: 1.2}
+    ], color: 'darker-grey', icons: [
+        {"x": -0.9, "y": 0.45, "rotate": 0, "size": 1, "icon": "mdi-flower"},
+        {"x": -0.45, "y": 0.48, "rotate": 0, "size": 0.8, "icon": "mdi-flower"},
+        {"x": 0.05, "y": 0.46, "rotate": 0, "size": 0.9, "icon": "mdi-flower"},
+        {"x": 0.75, "y": 0.2, "rotate": 0, "size": 2, "icon": "mdi-human-handsdown"},
+        {"x": 0.5, "y": -0.45, "rotate": -15, "size": 0.5, "icon": "mdi-help"},
+        {"x": 1, "y": -0.55, "rotate": 20, "size": 0.7, "icon": "mdi-help"}
+    ]},
+    {id: 47, collection: 'forgottenPlants', power: 7, reward: [
+        {name: 'farm_grass', type: 'addRareDrop', value: 5, chance: 0.4, mult: 0.4}
+    ], color: 'light-green', icons: [
+        {"x": -0.15, "y": 0, "rotate": 0, "size": 1, "icon": "mdi-robot-mower"},
+        {"x": -1, "y": 0.45, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": -0.5, "y": 0.45, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": 0, "y": 0.45, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": 0.5, "y": 0.45, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": 1, "y": 0.45, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": -1, "y": 0.9, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": -0.5, "y": 0.9, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": 0, "y": 0.9, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": 0.5, "y": 0.9, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": 1, "y": 0.9, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": 0.5, "y": 0, "rotate": 0, "size": 1, "icon": "mdi-grass"},
+        {"x": 1, "y": 0, "rotate": 0, "size": 1, "icon": "mdi-grass"}
+    ]},
+    {id: 48, group: 'grain', collection: 'forgottenPlants', power: 7, reward: [
+        {name: 'farmGoldChance', type: 'mult', value: 1.15}
+    ], color: 'amber', icons: [
+        {"x": -1, "y": 0.95, "rotate": 0, "size": 1.6, "icon": "mdi-barley"},
+        {"x": -0.5, "y": 0.95, "rotate": 0, "size": 1.6, "icon": "mdi-barley"},
+        {"x": 0, "y": 0.95, "rotate": 0, "size": 1.6, "icon": "mdi-barley"},
+        {"x": 0, "y": -0.25, "rotate": 15, "size": 1.2, "icon": "mdi-barley"},
+        {"x": 0.2, "y": -0.15, "rotate": 0, "size": 0.25, "icon": "mdi-seed"},
+        {"x": 0.35, "y": -0.4, "rotate": 0, "size": 0.65, "icon": "mdi-shimmer"}
+    ]},
+    {id: 49, group: 'berry', collection: 'forgottenPlants', power: 7, reward: [
+        {name: 'farmExperience', type: 'base', value: 0.25}
+    ], color: 'orange', icons: [
+        {"x": 0, "y": 0.85, "rotate": 0, "size": 2, "icon": "mdi-weight-lifter"},
+        {"x": -0.8, "y": 1.25, "rotate": -60, "size": 1, "icon": "mdi-fruit-grapes"},
+        {"x": 1.1, "y": 1, "rotate": 60, "size": 1, "icon": "mdi-fruit-grapes"},
+        {"x": 0, "y": -0.4, "rotate": 0, "size": 1.5, "icon": "mdi-fruit-grapes"},
+        {"x": -0.85, "y": -0.4, "rotate": 0, "size": 2, "icon": "mdi-minus"},
+        {"x": 0.85, "y": -0.4, "rotate": 0, "size": 2, "icon": "mdi-minus"},
+        {"x": -0.75, "y": -0.8, "rotate": 30, "size": 2, "icon": "mdi-minus"},
+        {"x": 0.75, "y": -0.8, "rotate": -30, "size": 2, "icon": "mdi-minus"},
+        {"x": -0.75, "y": 0, "rotate": -30, "size": 2, "icon": "mdi-minus"},
+        {"x": 0.75, "y": 0, "rotate": 30, "size": 2, "icon": "mdi-minus"}
     ]},
 ];

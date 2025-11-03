@@ -63,6 +63,7 @@ function loadGame(file, runPrepare = true) {
         store.dispatch('farm/applyEarlyGameBuff');
         store.dispatch('farm/updateFieldCaches');
         store.dispatch('meta/globalLevelUnlocks');
+        store.dispatch('school/updateBookEffects');
         advance();
 
         const offlineTime = store.state.system.timestamp - parsedFile.timestamp;
@@ -145,6 +146,13 @@ function prepare() {
             module.multGroup.forEach(elem => {
                 store.dispatch('mult/addToGroup', {feature: module.name, ...elem});
             });
+        }
+    });
+
+    // Some modules need to execute code after everything is set up
+    modules.forEach(module => {
+        if (module.postInit) {
+            module.postInit();
         }
     });
 }

@@ -25,9 +25,9 @@ export default {
         heirlooms: ['heat'],
         reward: {
             50: {type: 'unlock', name: 'hordeUpgradeRoyalStorage', value: true},
-            100: {type: 'base', name: 'hordeMaxItems', value: 1},
-            150: {type: 'mult', name: 'hordeAttack', value: 1.35},
-            200: {type: 'base', name: 'hordeCritMult', value: 0.2},
+            100: {type: 'base', name: 'hordeMaxEquipment', value: 1},
+            150: {type: 'mult', name: 'hordeAttack', value: 1.5},
+            200: {type: 'base', name: 'currencyHordeMysticalShardCap', value: 10},
             300: {type: 'mult', name: 'currencyHordeBoneCap', value: 1.5},
             400: {type: 'mult', name: 'currencyHordeMonsterPartCap', value: 1.35},
         },
@@ -57,9 +57,9 @@ export default {
         reward: {
             50: {type: 'unlock', name: 'hordeUpgradeRoyalSecret', value: true},
             100: {type: 'mult', name: 'hordeAttack', value: 1.5},
-            150: {type: 'base', name: 'currencyHordeMysticalShardCap', value: 5},
+            150: {type: 'base', name: 'currencyHordeMysticalShardCap', value: 10},
             200: {type: 'mult', name: 'hordeAttack', value: 1.5},
-            300: {type: 'base', name: 'currencyHordeMysticalShardCap', value: 5},
+            300: {type: 'base', name: 'currencyHordeMysticalShardCap', value: 10},
         },
     },
     toxic: {
@@ -70,10 +70,22 @@ export default {
         crowns: 8,
         heirlooms: ['vitality'],
         reward: {
-            50: {type: 'base', name: 'hordeMaxSacrifice', value: 1},
-            100: {type: 'mult', name: 'hordeHealth', value: 1.5},
-            150: {type: 'mult', name: 'hordeHealing', value: 1.2},
+            50: {type: 'mult', name: 'hordeHealth', value: 1.5},
+            100: {type: 'base', name: 'hordeMaxSacrifice', value: 1},
+            150: {type: 'base', name: 'currencyHordeMysticalShardCap', value: 10},
             200: {type: 'mult', name: 'hordeAttack', value: 1.5},
+        },
+    },
+    forest: {
+        unlock: 'hordeForestTower',
+        sigils: ['screaming', 'protection', 'shielding', 'recovery', 'drain'],
+        statBase: 350,
+        statScaling: 0.5,
+        crowns: 13,
+        heirlooms: ['nature'],
+        reward: {
+            50: {type: 'unlock', name: 'hordeUpgradeRoyalBlessing', value: true},
+            100: {type: 'base', name: 'currencyHordeMysticalShardCap', value: 10},
         },
     },
 }

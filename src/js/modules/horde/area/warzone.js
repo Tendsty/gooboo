@@ -117,7 +117,15 @@ export default {
             type: 'endless',
             difficulty: 30,
             enemyType: ['soldier_1', 'soldier_2', 'soldier_3', 'officer_1', 'officer_2', 'officer_3', 'hunter', 'sniper']
-        }
+        },
+        digsite: {
+            x: 8,
+            y: -6,
+            unlockedBy: 'hordeMonsterToothWarzone',
+            type: 'digsite',
+            difficulty: 80,
+            enemyType: ['armed_skeleton']
+        },
     },
     decoration: [
         {x: 0, y: -0.5, rotate: 0, icon: 'mdi-tent', size: 3},

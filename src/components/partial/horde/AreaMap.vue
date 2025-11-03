@@ -54,27 +54,46 @@
       class="horde-area-line"
       :class="{'horde-area-line-dark': $vuetify.theme.dark}"
     ></div>
-    <gb-tooltip v-for="(item, key) in zones" :key="`horde-zone-${ key }`" :min-width="0" :max-width="300">
+    <gb-tooltip
+      v-for="(item, key) in zones"
+      :key="`horde-zone-${ key }`"
+      :min-width="0"
+      :max-width="300"
+      :title-text="item.type === 'regular' ? $vuetify.lang.t(`$vuetify.horde.area.zone`, key) :
+        ['boss', 'bossDefeated'].includes(item.type) ? $vuetify.lang.t(`$vuetify.horde.area.zoneBoss`, $vuetify.lang.t(`$vuetify.horde.bossName.${ item.boss[item.boss.length - 1] }`)) :
+        item.type === 'digsite' ? $vuetify.lang.t('$vuetify.horde.area.digsite') :
+        item.type === 'endless' ? $vuetify.lang.t(`$vuetify.horde.area.zoneEndless`) : null"
+    >
       <template v-slot:activator="{ on, attrs }">
+        <v-icon
+          v-if="item.type === 'sign'"
+          v-bind="attrs"
+          v-on="on"
+          :style="`left: ${ (item.x - 0.5) * unitSize + xCenter + signOffset }px; top: ${ (item.y - 0.5) * unitSize + yCenter + signOffset }px;`"
+          class="horde-area-zone"
+          :size="$vuetify.breakpoint.smAndDown ? 16 : 24"
+        >mdi-sign-text</v-icon>
         <v-btn
+          v-else
           v-bind="attrs"
           v-on="on"
           :x-small="$vuetify.breakpoint.smAndDown"
           :style="`left: ${ (item.x - 0.5) * unitSize + xCenter }px; top: ${ (item.y - 0.5) * unitSize + yCenter }px;`"
           class="horde-area-zone"
           :color="item.isCurrent ? 'primary' : undefined"
-          :disabled="isFrozen && item.type !== 'sign'"
+          :disabled="isFrozen"
           @click="clickZone(key)"
           icon
         ><v-icon :size="$vuetify.breakpoint.smAndDown ? 16 : 24">{{ typeIcon[item.type] }}</v-icon></v-btn>
       </template>
-      <div v-if="item.type === 'regular'" class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.area.zone`, key) }}</div>
-      <div v-else-if="['boss', 'bossDefeated'].includes(item.type)" class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.area.zoneBoss`, $vuetify.lang.t(`$vuetify.horde.bossName.${ item.boss[item.boss.length - 1] }`)) }}</div>
-      <div v-else-if="item.type === 'sign'" class="mt-0">
+      <div v-if="item.type === 'sign'" class="mt-0">
         <div>{{ $vuetify.lang.t(`$vuetify.horde.sign.${ key }.text`) }}</div>
         <div class="mt-2 text-right">~ {{ $vuetify.lang.t(`$vuetify.horde.sign.${ key }.signed`) }}</div>
       </div>
-      <div v-else-if="item.type === 'endless'" class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.area.zoneEndless`) }}</div>
+      <template v-else-if="item.type === 'digsite'">
+        <div>{{ $vuetify.lang.t(`$vuetify.horde.area.digsiteDescription`) }}</div>
+        <div>{{ $vuetify.lang.t(`$vuetify.horde.area.digsiteWeakness`, $vuetify.lang.t(`$vuetify.horde.classes.${ skeletonWeaknessClass }.name`), $formatNum(skeletonWeaknessMult)) }}</div>
+      </template>
       <div v-if="['regular', 'boss', 'endless'].includes(item.type)">{{ $vuetify.lang.t(`$vuetify.horde.area.difficulty`, $formatNum(item.difficulty)) }}</div>
       <div v-else-if="item.type === 'bossDefeated'">{{ $vuetify.lang.t(`$vuetify.horde.area.difficulty`, $formatNum(item.difficulty + bossBonusDifficulty)) }} ({{ item.difficulty }} + {{ bossBonusDifficulty }})</div>
       <div v-if="item.type === 'regular'" class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.area.enemyAmount`, $formatNum(item.enemyAmount)) }}</div>
@@ -85,6 +104,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { HORDE_SKELETON_WEAKNESS_MULT } from '../../../js/constants';
 import AlertText from '../render/AlertText.vue';
 
 export default {
@@ -101,7 +121,7 @@ export default {
       boss: 'mdi-skull',
       bossDefeated: 'mdi-flag-variant',
       endless: 'mdi-infinity',
-      sign: 'mdi-sign-text'
+      digsite: 'mdi-shovel',
     }
   }),
   computed: {
@@ -121,10 +141,19 @@ export default {
     unitSize() {
       return this.$vuetify.breakpoint.smAndDown ? 16 : 32;
     },
+    signOffset() {
+      return this.$vuetify.breakpoint.smAndDown ? 0 : 4;
+    },
+    skeletonWeaknessClass() {
+      return this.$store.getters['horde/skeletonWeakness'](this.name);
+    },
+    skeletonWeaknessMult() {
+      return HORDE_SKELETON_WEAKNESS_MULT;
+    },
     lines() {
       let arr = [];
       for (const [, elem] of Object.entries(this.area.zones)) {
-        if (elem.unlockedBy !== null) {
+        if (elem.unlockedBy !== null && !['sign', 'digsite'].includes(elem.type)) {
           elem.unlockedBy.forEach(newElem => {
             if (elem.unlocked || this.zones[newElem]) {
               const oldElem = this.area.zones[newElem];
@@ -148,7 +177,7 @@ export default {
     zones() {
       let obj = {};
       for (const [key, elem] of Object.entries(this.area.zones)) {
-        if (elem.unlocked) {
+        if (elem.unlocked || (elem.type === 'digsite' && this.$store.state.unlock[elem.unlockedBy].use)) {
           obj[key] = {...elem, isCurrent: this.$store.state.horde.selectedArea === this.name && this.$store.state.horde.zone === key};
           if (elem.type === 'boss') {
             if (this.$store.state.unlock[elem.reward].use) {
@@ -162,7 +191,7 @@ export default {
   },
   methods: {
     clickZone(zone) {
-      if (this.zones[zone].type !== 'sign' && (this.$store.state.horde.trinketDrop === null || !['boss', 'bossDefeated'].includes(this.zones[zone].type))) {
+      if (this.$store.state.horde.trinketDrop === null || !['boss', 'bossDefeated'].includes(this.zones[zone].type)) {
         this.$store.dispatch('horde/updateAreaZone', {area: this.name, zone});
       }
     }

@@ -12,6 +12,7 @@
           <v-chip label small :color="`pale-blue ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-circle-half-full</v-icon>{{ $formatNum(divisionShield) }}</v-chip>
         </template>
         <div>{{ $vuetify.lang.t('$vuetify.horde.divisionShieldDescription') }}</div>
+        <div v-if="isPlayer">{{ $vuetify.lang.t('$vuetify.horde.divisionShieldReplenishDescription', $formatNum(divisionShieldReplenish * 100)) }}</div>
         <stat-breakdown v-if="isPlayer" name="hordeDivisionShield"></stat-breakdown>
       </gb-tooltip>
       <gb-tooltip key="status-revive" v-if="maxRevive > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeRevive')">
@@ -78,7 +79,7 @@
             <v-icon class="mr-2">mdi-motion</v-icon>
             {{ $formatNum(critChance * 100) }}%
             <v-icon>mdi-circle-small</v-icon>
-            x{{ $formatNum(critMult, true) }}
+            +{{ $formatNum(critMult * 100) }}%
           </v-chip>
         </template>
         <h3 class="text-center mt-0">{{ $vuetify.lang.t('$vuetify.horde.stat.crit') }}</h3>
@@ -104,14 +105,13 @@
         <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.shieldbreak`) }}</div>
         <stat-breakdown v-if="isPlayer" name="hordeShieldbreak"></stat-breakdown>
       </gb-tooltip>
-      <gb-tooltip key="status-stun-resist" v-if="stunResist > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeStunResist')">
+      <gb-tooltip key="status-status-resist" v-if="statusResist > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeStatusResist')">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip label small :color="`wooden ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-alert-octagram-outline</v-icon>{{ $formatNum(stunResist) }}</v-chip>
+          <v-chip label small :color="`wooden ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-alert-octagram-outline</v-icon>{{ $formatNum(statusResist) }}</v-chip>
         </template>
-        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.stunResist`) }}</div>
-        <stat-breakdown v-if="isPlayer" name="hordeStunResist"></stat-breakdown>
-        <alert-text v-if="!isPlayer && bossFight === 1" type="info">{{ $vuetify.lang.t(`$vuetify.horde.stunMiniboss`) }}</alert-text>
-        <alert-text v-if="!isPlayer && bossFight === 2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.stunBoss`) }}</alert-text>
+        <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.horde.statusResist`) }}</div>
+        <stat-breakdown v-if="isPlayer" name="hordeStatusResist"></stat-breakdown>
+        <alert-text v-if="!isPlayer && bossFight" type="info">{{ $vuetify.lang.t(`$vuetify.horde.stunBoss`) }}</alert-text>
       </gb-tooltip>
       <gb-tooltip key="status-toxic" v-if="toxic > 0" :min-width="tooltipWidth" :title-text="$vuetify.lang.t('$vuetify.mult.hordeToxic')">
         <template v-slot:activator="{ on, attrs }">
@@ -168,8 +168,7 @@
             </tr>
           </tbody>
         </v-simple-table>
-        <alert-text v-if="!isPlayer && bossFight === 1" type="info">{{ $vuetify.lang.t(`$vuetify.horde.minibossBioResist`) }}</alert-text>
-        <alert-text v-if="!isPlayer && bossFight === 2" type="info">{{ $vuetify.lang.t(`$vuetify.horde.bossBioResist`) }}</alert-text>
+        <alert-text v-if="!isPlayer && bossFight" type="info">{{ $vuetify.lang.t(`$vuetify.horde.bossBioResist`) }}</alert-text>
       </gb-tooltip>
     </div>
   </div>
@@ -177,7 +176,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { HORDE_DAMAGE_INCREASE_PER_STRENGTH } from '../../../js/constants';
+import { HORDE_DAMAGE_INCREASE_PER_STRENGTH, HORDE_REPLENISH_DIVISION_SHIELD } from '../../../js/constants';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
 
@@ -245,7 +244,7 @@ export default {
       required: false,
       default: 0
     },
-    stunResist: {
+    statusResist: {
       type: Number,
       required: false,
       default: 0
@@ -360,6 +359,9 @@ export default {
     },
     strengthAmp() {
       return HORDE_DAMAGE_INCREASE_PER_STRENGTH;
+    },
+    divisionShieldReplenish() {
+      return HORDE_REPLENISH_DIVISION_SHIELD;
     }
   }
 }

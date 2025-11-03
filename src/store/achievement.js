@@ -33,12 +33,14 @@ export default {
                 feature: o.feature ?? 'meta',
                 cap: o.cap ?? 20,
                 display: o.display ?? 'number',
+                descriptionCustom: o.descriptionCustom ?? null,
                 level: 0,
                 cacheHideNotification: 0,
                 value: o.value ?? (() => 0),
                 default: o.default ?? 0,
                 milestones: o.milestones,
                 relic: o.relic ?? {},
+                reward: o.reward ?? {},
                 secret: o.secret ?? false
             });
         },
@@ -72,6 +74,19 @@ export default {
                         dispatch('relic/find', elem.relic[elem.level], {root: true});
                         gainedRelic = true;
                     }
+
+                    // Award effects if one is the reward
+                    if (elem.reward[elem.level]) {
+                        elem.reward[elem.level].forEach(reward => {
+                            dispatch('system/applyEffect', {
+                                type: reward.type,
+                                name: reward.name,
+                                multKey: `achievementReward_${ key }`,
+                                value: reward.value
+                            }, {root: true});
+                        });
+                    }
+
                     commit('achievement/updateKey', {name: key, key: 'level', value: elem.level + 1}, {root: true});
                     elem = state[key];
                 }

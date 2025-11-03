@@ -54,7 +54,7 @@
     <tr v-for="(row, y) in field" :key="'field-row-' + y">
       <td class="field-cell text-center" :class="{'field-cell-filled bg-tile-default elevation-2': cell !== null}" v-for="(cell, x) in row" :key="'field-cell-' + y + '-' + x" @click="selectTile(x, y)">
         <div v-if="cell && cell.color" class="field-cell field-cell-colored" :class="cell.color"></div>
-        <crop v-if="cell && cell.type === 'crop'" :item="cell"></crop>
+        <crop v-if="cell && cell.type === 'crop'" :item="cell" :x="x" :y="y"></crop>
         <building v-if="cell && cell.type === 'building'" :name="cell.building" :is-premium="cell.premium"></building>
       </td>
     </tr>
@@ -108,10 +108,11 @@ export default {
                 y,
                 crop: this.selectedCropName,
                 fertilizer: this.selectedFertilizerName,
+                giant: this.$store.state.farm.plantGiant,
                 price: price,
               }});
             } else {
-              this.$store.dispatch('farm/plantCrop', {x, y, crop: this.selectedCropName, fertilizer: this.selectedFertilizerName});
+              this.$store.dispatch('farm/plantCrop', {x, y, crop: this.selectedCropName, fertilizer: this.selectedFertilizerName, giant: this.$store.state.farm.plantGiant});
             }
           } else if (field.type === 'crop' && field.grow >= 1) {
             this.$store.dispatch('farm/harvestCrop', {x, y, crop: this.selectedCropName});

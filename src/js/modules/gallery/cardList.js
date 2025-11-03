@@ -221,4 +221,141 @@ export default [
         {"x": -1.1, "y": 0.15, "rotate": 0, "size": 1, "icon": "mdi-traffic-cone"},
         {"x": -0.5, "y": 0.1, "rotate": -25, "size": 1.25, "icon": "mdi-car-side"}
     ]},
+
+    {id: 24, collection: 'abstractShapes', power: 5, reward: [], color: 'dark-blue', icons: [
+        {"x": 0, "y": -0.15, "rotate": 0, "size": 4, "icon": "mdi-rectangle-outline"},
+        {"x": -0.5, "y": 0.8, "rotate": 0, "size": 0.75, "icon": "mdi-circle"},
+        {"x": 0.5, "y": 0.8, "rotate": 0, "size": 0.75, "icon": "mdi-circle"}
+    ]},
+    {id: 25, collection: 'abstractShapes', power: 3, reward: [
+        {name: 'galleryInspirationStart', type: 'base', value: 6},
+    ], color: 'pale-orange', icons: [
+        {"x": -0.45, "y": -0.5, "rotate": 0, "size": 0.75, "icon": "mdi-circle"},
+        {"x": 0.45, "y": -0.5, "rotate": 0, "size": 0.75, "icon": "mdi-circle"},
+        {"x": 0, "y": 0.5, "rotate": 0, "size": 5, "icon": "mdi-minus"}
+    ]},
+    {id: 26, collection: 'abstractShapes', power: 4, reward: [
+        {name: 'currencyGalleryBlueGain', type: 'mult', value: 1.25},
+    ], color: 'blue', icons: [
+        {"x": 0, "y": 0, "rotate": 90, "size": 4, "icon": "mdi-heat-wave"}
+    ]},
+    {id: 27, collection: 'abstractShapes', power: 4, reward: [
+        {name: 'currencyGalleryPurpleGain', type: 'mult', value: 1.25},
+    ], color: 'purple', icons: [
+        {"x": 0, "y": 0.8, "rotate": 90, "size": 3, "icon": "mdi-minus"},
+        {"x": 0, "y": -0.55, "rotate": 0, "size": 3, "icon": "mdi-circle-outline"}
+    ]},
+    {id: 28, collection: 'abstractShapes', power: 6, reward: [
+        {name: 'currencyGalleryOrangeDrumCap', type: 'mult', value: 1.2},
+    ], color: 'brown', icons: [
+        {"x": 0, "y": 0.65, "rotate": 0, "size": 2.75, "icon": "mdi-square-outline"},
+        {"x": 0, "y": -0.65, "rotate": 0, "size": 2.75, "icon": "mdi-triangle-outline"}
+    ]},
+
+    {id: 29, collection: 'artOfWar', power: 6, reward: [
+        {name: 'currencyGalleryDeep-orangeGain', type: 'mult', value: 1.25},
+    ], color: 'deep-orange', icons: [
+        {"x": 0.8, "y": 0.1, "rotate": 0, "size": 2, "icon": "mdi-human-handsdown"},
+        {"x": 0.4, "y": 0.05, "rotate": -105, "size": 1, "icon": "mdi-bow-arrow"},
+        {"x": -0.7, "y": -0.3, "rotate": -120, "size": 1, "icon": "mdi-arrow-projectile"},
+        {"x": -0.85, "y": -0.5, "rotate": 0, "size": 0.6, "icon": "mdi-fire"},
+        {"x": -0.6, "y": -0.4, "rotate": 0, "size": 0.5, "icon": "mdi-fire"}
+    ]},
+    {id: 30, collection: 'artOfWar', power: 6, reward: [
+        {name: 'currencyGalleryAmberGain', type: 'mult', value: 1.25},
+    ], color: 'amber', icons: [
+        {"x": 0, "y": 0.05, "rotate": 70, "size": 3, "icon": "mdi-sword"},
+        {"x": -0.4, "y": -0.4, "rotate": -105, "size": 0.85, "icon": "mdi-shimmer"},
+        {"x": 0.65, "y": -0.75, "rotate": -15, "size": 0.85, "icon": "mdi-shimmer"},
+        {"x": 0.55, "y": 0.15, "rotate": 115, "size": 0.85, "icon": "mdi-shimmer"}
+    ]},
+    {id: 31, collection: 'artOfWar', power: 6, reward: [
+        {name: 'galleryCanvasSpeed', type: 'mult', value: 1.25},
+    ], color: 'pale-blue', icons: [
+        {"x": -0.55, "y": -0.1, "rotate": 0, "size": 1.2, "icon": "mdi-human-handsdown"},
+        {"x": 0.5, "y": -0.1, "rotate": 0, "size": 1.2, "icon": "mdi-human-handsdown"},
+        {"x": 0.15, "y": -0.25, "rotate": 0, "size": 0.65, "icon": "mdi-sword"},
+        {"x": -0.2, "y": -0.25, "rotate": 90, "size": 0.65, "icon": "mdi-sword"},
+        {"x": 0.15, "y": -0.8, "rotate": 0, "size": 1.1, "icon": "mdi-tree"},
+        {"x": -0.05, "y": 0.2, "rotate": 0, "size": 0.35, "icon": "mdi-grass"},
+        {"x": 0.6, "y": 0.9, "rotate": 0, "size": 1.6, "icon": "mdi-human-greeting"},
+        {"x": 0.15, "y": 0.45, "rotate": 0, "size": 0.7, "icon": "mdi-camera"}
+    ]},
+    {id: 32, collection: 'artOfWar', power: 7, reward: [
+        {name: 'galleryCanvasSize', type: 'base', value: 2},
+    ], color: 'pink-purple', icons: [
+        {"x": 0.5, "y": 0.2, "rotate": 0, "size": 2, "icon": "mdi-horse-human"},
+        {"x": 0.15, "y": -0.75, "rotate": 0, "size": 1.4, "icon": "mdi-bookmark"},
+        {"x": 0.15, "y": -0.4, "rotate": 90, "size": 1, "icon": "mdi-minus-thick"},
+        {"x": 0.15, "y": -0.1, "rotate": 90, "size": 1, "icon": "mdi-minus-thick"},
+        {"x": -0.55, "y": 0.4, "rotate": 0, "size": 1.25, "icon": "mdi-human-greeting"},
+        {"x": -0.85, "y": -0.05, "rotate": 25, "size": 0.7, "icon": "mdi-sword"}
+    ]},
+
+    {id: 33, collection: 'handmade', power: 8, reward: [], color: 'light-blue', icons: [
+        {"x": 0, "y": 0, "rotate": -90, "size": 3, "icon": "mdi-bottle-tonic-outline"},
+        {"x": 0.3, "y": 0.2, "rotate": 0, "size": 1, "icon": "mdi-ferry"}
+    ]},
+    {id: 34, collection: 'handmade', power: 6, reward: [
+        {name: 'currencyGalleryYellowDrumCap', type: 'mult', value: 1.2},
+    ], color: 'red', icons: [
+        {"x": -0.2, "y": 0.15, "rotate": 10, "size": 3, "icon": "mdi-tshirt-crew"},
+        {"x": 0.5, "y": -0.15, "rotate": -125, "size": 1, "icon": "mdi-lasso"},
+        {"x": 0.9, "y": -0.3, "rotate": 195, "size": 1, "icon": "mdi-arrow-projectile"},
+        {"x": 0.95, "y": -0.15, "rotate": 215, "size": 1, "icon": "mdi-arrow-projectile"}
+    ]},
+    {id: 35, collection: 'handmade', power: 6, reward: [
+        {name: 'currencyGalleryCashGain', type: 'mult', value: 1.25},
+    ], color: 'wooden', icons: [
+        {"x": -0.85, "y": 0.1, "rotate": 0, "size": 1.5, "icon": "mdi-cupboard"},
+        {"x": 0.55, "y": -0.15, "rotate": 35, "size": 1, "icon": "mdi-hand-saw"},
+        {"x": 0, "y": 0, "rotate": 0, "size": 2, "icon": "mdi-walk"},
+        {"x": 0.85, "y": 0.25, "rotate": 0, "size": 1.3, "icon": "mdi-table-furniture"},
+        {"x": 0.85, "y": 0, "rotate": 0, "size": 1.4, "icon": "mdi-minus-thick"}
+    ]},
+    {id: 36, collection: 'handmade', power: 5, reward: [
+        {name: 'galleryInspirationStart', type: 'base', value: 7},
+    ], color: 'beige', icons: [
+        {"x": 0.05, "y": 0.2, "rotate": -120, "size": 1, "icon": "mdi-screwdriver"},
+        {"x": -0.5, "y": 0.15, "rotate": 0, "size": 2, "icon": "mdi-human-handsdown"},
+        {"x": 0.45, "y": 0.4, "rotate": 0, "size": 1, "icon": "mdi-dog-side"},
+        {"x": 0.4, "y": 0.6, "rotate": 0, "size": 1, "icon": "mdi-minus"}
+    ]},
+    {id: 37, collection: 'handmade', power: 7, reward: [
+        {name: 'currencyGalleryLight-greenGain', type: 'mult', value: 1.25},
+    ], color: 'light-green', icons: [
+        {"x": 0, "y": -0.05, "rotate": 0, "size": 2, "icon": "mdi-nature"},
+        {"x": 0, "y": 0.45, "rotate": 0, "size": 2, "icon": "mdi-pot"},
+        {"x": -0.8, "y": -0.25, "rotate": -10, "size": 0.75, "icon": "mdi-content-cut"},
+        {"x": 0.5, "y": -0.5, "rotate": -25, "size": 0.75, "icon": "mdi-shimmer"}
+    ]},
+    {id: 38, collection: 'handmade', power: 7, reward: [
+        {name: 'currencyGalleryTealGain', type: 'mult', value: 1.25},
+    ], color: 'teal', icons: [
+        {"x": 0.5, "y": 0.35, "rotate": 0, "size": 3, "icon": "mdi-human-female-dance"},
+        {"x": -0.15, "y": -0.4, "rotate": -70, "size": 2, "icon": "mdi-brush"},
+        {"x": -0.8, "y": 0.3, "rotate": 35, "size": 1.5, "icon": "mdi-palette"}
+    ]},
+
+    {id: 39, collection: 'specialGadgets', power: 'adaptive', reward: [
+        {name: 'galleryInspirationBase', type: 'mult', value: 10},
+        {name: 'galleryInspirationIncrement', type: 'mult', value: 2},
+        {name: 'galleryInspirationStart', type: 'mult', value: 0}
+    ], color: 'babypink', icons: [
+        {"x": 0, "y": 0.4, "rotate": 0, "size": 3, "icon": "mdi-human-handsdown"},
+        {"x": 0.7, "y": -0.65, "rotate": 30, "size": 1.2, "icon": "mdi-help"},
+        {"x": 0, "y": -0.85, "rotate": 0, "size": 1, "icon": "mdi-help"},
+        {"x": -0.6, "y": -0.6, "rotate": -25, "size": 0.9, "icon": "mdi-help"}
+    ]},
+    {id: 40, collection: 'specialGadgets', power: 'adaptive', reward: [
+        {name: 'galleryColorDrumChance', type: 'base', value: -0.1},
+        {name: 'galleryColorDrumChance', type: 'mult', value: 0.25}
+    ], color: 'aqua', icons: [
+        {"x": 0, "y": 0.1, "rotate": 90, "size": 2, "icon": "mdi-barrel"},
+        {"x": -0.9, "y": 0.6, "rotate": 35, "size": 1, "icon": "mdi-liquid-spot"},
+        {"x": -0.2, "y": 0.85, "rotate": -40, "size": 1, "icon": "mdi-liquid-spot"},
+        {"x": 0.05, "y": 0.85, "rotate": 15, "size": 1, "icon": "mdi-liquid-spot"},
+        {"x": 0.3, "y": 0.9, "rotate": 90, "size": 1, "icon": "mdi-liquid-spot"},
+        {"x": 0.7, "y": 0.9, "rotate": -25, "size": 1, "icon": "mdi-liquid-spot"}
+    ]},
 ];

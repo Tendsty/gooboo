@@ -34,16 +34,5 @@ export default {
         pool: {
             summerFestival: {price: {event_summerFestivalToken: 30}}
         }
-    },
-    farm_tropicalWater: {
-        type: 'consumable',
-        item: 'farm_tropicalWater',
-        amount: 20,
-        requirement() {
-            return store.state.unlock.farmFertilizer.see;
-        },
-        pool: {
-            summerFestival: {price: {event_summerFestivalToken: 1}}
-        }
     }
 }

@@ -9,13 +9,15 @@
     <div v-if="stat.village_wood.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.material`) }}</div>
     <div class="d-flex flex-wrap justify-center ma-1">
       <template v-for="item in material">
-        <currency :key="item" class="ma-1" :class="{'premium-glow': upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}" :name="item"></currency>
+        <currency :key="item" class="ma-1" :class="{[premiumGlowName + upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level]: upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}" :name="item"></currency>
       </template>
     </div>
     <div v-if="subfeature === 0 && (stat.village_grain.total > 0 || stat.village_fruit.total > 0)" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.food`) }}</div>
     <div v-if="subfeature === 0" class="d-flex flex-wrap justify-center ma-1">
       <template v-for="item in food">
-        <currency :key="item" class="ma-1" :name="item">{{ $vuetify.lang.t(`$vuetify.village.foodConsume`, $formatNum(foodConsumption, true)) }}</currency>
+        <currency :key="item" class="ma-1" :name="item">
+          <div v-if="upgrade.village_treasury.highestLevel >= 1">{{ $vuetify.lang.t(`$vuetify.village.foodConsume`, $formatNum(foodConsumption, true)) }}</div>
+        </currency>
       </template>
     </div>
     <div v-if="subfeature === 0 && stat.village_knowledge.total > 0" class="text-center mt-2">{{ $vuetify.lang.t(`$vuetify.village.mental`) }}</div>
@@ -24,7 +26,7 @@
         <currency
           :key="item"
           class="ma-1"
-          :class="{'premium-glow': mental_premium.includes(item) && upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}"
+          :class="{[premiumGlowName + (mental_premium.includes(item) ? upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level : 0)]: mental_premium.includes(item) && upgrade[`village_more${ item.charAt(8).toUpperCase() + item.slice(9) }`].level >= 1}"
           :name="item"
           :gainBase="item === 'village_joy' ? joyGainBase : null"
         >
@@ -116,7 +118,12 @@ export default {
       return this.$store.getters['mult/get']('villageTaxRate') * this.$store.getters['village/employed'];
     },
     material() {
-      return this.list('village', 'regular', 'material');
+      return [
+        ...this.list('village', 'regular', 'foundationMaterial'),
+        ...this.list('village', 'regular', 'industrialMaterial'),
+        ...this.list('village', 'regular', 'luxuryMaterial'),
+        ...this.list('village', 'regular', 'modernMaterial'),
+      ];
     },
     food() {
       return this.list('village', 'regular', 'food');
@@ -160,6 +167,9 @@ export default {
         const nextAmount = this.$store.getters['currency/value']('village_' + food) + this.$store.getters['mult/get'](this.$store.getters['currency/gainMultName']('village', food));
         return {name: 'villageFood_' + food, value: Math.min(taxpayers, nextAmount) * VILLAGE_COINS_PER_FOOD};
       }).filter(elem => elem.value > 0);
+    },
+    premiumGlowName() {
+      return `premium-${ this.$store.state.system.settings.performance.items.cssAnimations.value ? 'glow' : 'frame' }-`;
     }
   },
   methods: {

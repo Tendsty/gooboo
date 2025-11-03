@@ -3,8 +3,11 @@
     <v-card-title class="pa-0 justify-center align-center">{{ $vuetify.lang.t(`$vuetify.message.card.get`) }}</v-card-title>
     <v-card-text class="pa-0">
       <div v-for="(item, key) in message.value" :key="key">
-        <span>{{ item.amount }}x {{ key }}: {{ $vuetify.lang.t(`$vuetify.card.card.${key}`) }}</span>
+        <span>{{ $formatInt(item.amount) }}x</span>
+        <span v-if="item.shiny > 0">&nbsp;(<v-icon x-small>mdi-shimmer</v-icon>{{ $formatInt(item.shiny) }}x)</span>
+        <span>&nbsp;{{ key }}: {{ $vuetify.lang.t(`$vuetify.card.card.${key}`) }}</span>
         <span v-if="item.isNew">&nbsp;({{ $vuetify.lang.t(`$vuetify.message.card.new`) }})</span>
+        <span v-if="item.isNewShiny">&nbsp;({{ $vuetify.lang.t(`$vuetify.message.card.newShiny`) }})</span>
         <span v-if="item.effect">&nbsp;(<template v-for="(subitem, subkey, subindex) in item.effect">
           <span :key="key + '-' + subkey + '-comma'" v-if="subindex">,&nbsp;</span>
           <card-pack-instant-effect :key="key + '-' + subkey + '-effect'" :name="subkey" :value="subitem"></card-pack-instant-effect>

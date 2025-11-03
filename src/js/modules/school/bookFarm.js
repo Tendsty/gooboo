@@ -1,46 +1,41 @@
-import store from "../../../store";
-
 export default {
-    bookSmallCrate: {type: 'book', raiseOtherCap: 'farm_smallCrate', requirement() {
-        return store.state.upgrade.item.farm_smallCrate.highestLevel >= 7;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.25, lvl) * (lvl + 5) * 72)};
-    }, effect: [
-        {name: 'upgradeFarmSmallCrateCap', type: 'base', value: lvl => lvl}
+    vegetableGain: {subfeature: 0, scalesWithGL: true, minGL: 10, effect: [
+        {name: 'currencyFarmVegetableGain', type: 'mult', value: lvl => Math.pow(1.005, lvl)}
     ]},
-    bookScarecrow: {type: 'book', raiseOtherCap: 'farm_scarecrow', requirement() {
-        return store.state.upgrade.item.farm_scarecrow.highestLevel >= 10;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.25, lvl) * (lvl + 5) * 96)};
-    }, effect: [
-        {name: 'upgradeFarmScarecrowCap', type: 'base', value: lvl => lvl}
+    berryGain: {subfeature: 0, scalesWithGL: true, minGL: 10, effect: [
+        {name: 'currencyFarmBerryGain', type: 'mult', value: lvl => Math.pow(1.005, lvl)}
     ]},
-    bookShed: {type: 'book', raiseOtherCap: 'farm_shed', requirement() {
-        return store.state.upgrade.item.farm_shed.highestLevel >= 10;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.25, lvl) * (lvl + 5) * 144)};
-    }, effect: [
-        {name: 'upgradeFarmShedCap', type: 'base', value: lvl => lvl}
+    grainGain: {subfeature: 0, scalesWithGL: true, minGL: 10, effect: [
+        {name: 'currencyFarmGrainGain', type: 'mult', value: lvl => Math.pow(1.005, lvl)}
     ]},
-    bookMediumCrate: {type: 'book', raiseOtherCap: 'farm_mediumCrate', requirement() {
-        return store.state.upgrade.item.farm_mediumCrate.highestLevel >= 8;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.25, lvl) * (lvl + 5) * 185)};
-    }, effect: [
-        {name: 'upgradeFarmMediumCrateCap', type: 'base', value: lvl => lvl}
+    flowerGain: {subfeature: 0, scalesWithGL: true, minGL: 10, effect: [
+        {name: 'currencyFarmFlowerGain', type: 'mult', value: lvl => Math.pow(1.005, lvl)}
     ]},
-    bookInsectParadise: {type: 'book', raiseOtherCap: 'farm_insectParadise', requirement() {
-        return store.state.upgrade.item.farm_insectParadise.highestLevel >= 6;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.25, lvl) * (lvl + 5) * 330)};
-    }, effect: [
-        {name: 'upgradeFarmInsectParadiseCap', type: 'base', value: lvl => lvl}
+    grassCap: {subfeature: 0, scalesWithGL: true, minGL: 30, maxGL: 129, effect: [
+        {name: 'currencyFarmGrassCap', type: 'base', value: lvl => lvl * 6}
     ]},
-    bookBigCrate: {type: 'book', raiseOtherCap: 'farm_bigCrate', requirement() {
-        return store.state.upgrade.item.farm_bigCrate.highestLevel >= 10;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.25, lvl) * (lvl + 5) * 525)};
-    }, effect: [
-        {name: 'upgradeFarmBigCrateCap', type: 'base', value: lvl => lvl}
+    seedHullCap: {subfeature: 0, scalesWithGL: true, minGL: 60, maxGL: 159, effect: [
+        {name: 'currencyFarmSeedHullCap', type: 'base', value: lvl => lvl * 6}
+    ]},
+    bugCap: {subfeature: 0, scalesWithGL: true, minGL: 80, maxGL: 179, effect: [
+        {name: 'currencyFarmBugCap', type: 'base', value: lvl => lvl * 3}
+    ]},
+    petalCap: {subfeature: 0, scalesWithGL: true, minGL: 100, maxGL: 199, effect: [
+        {name: 'currencyFarmPetalCap', type: 'base', value: lvl => lvl * 2}
+    ]},
+    butterflyCap: {subfeature: 0, scalesWithGL: true, minGL: 140, maxGL: 238, effect: [
+        {name: 'currencyFarmButterflyCap', type: 'base', value: lvl => Math.ceil(lvl / 2)}
+    ]},
+    ladybugCap: {subfeature: 0, scalesWithGL: true, minGL: 180, maxGL: 279, effect: [
+        {name: 'currencyFarmLadybugCap', type: 'base', value: lvl => lvl * 3}
+    ]},
+    spiderCap: {subfeature: 0, scalesWithGL: true, minGL: 220, maxGL: 315, effect: [
+        {name: 'currencyFarmSpiderCap', type: 'base', value: lvl => Math.ceil(lvl / 5)}
+    ]},
+    beeCap: {subfeature: 0, scalesWithGL: true, minGL: 260, maxGL: 359, effect: [
+        {name: 'currencyFarmBeeCap', type: 'base', value: lvl => lvl * 10}
+    ]},
+    smallSeedCap: {subfeature: 0, scalesWithGL: true, minGL: 320, maxGL: 419, effect: [
+        {name: 'currencyFarmSmallSeedCap', type: 'base', value: lvl => lvl * 8}
     ]},
 }

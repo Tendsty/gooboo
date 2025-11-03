@@ -1,10 +1,29 @@
+<style scoped>
+.golden-dust-container {
+  position: relative;
+}
+.golden-dust-bonus {
+  position: absolute;
+  left: 200px;
+  bottom: 6px;
+}
+</style>
+
 <template>
   <v-card class="default-card pa-2">
     <v-card-title class="pa-2 justify-center">{{ $vuetify.lang.t('$vuetify.hourglass.title') }}</v-card-title>
     <v-card-subtitle class="pa-1 text-center">{{ $vuetify.lang.t(`$vuetify.hourglass.${ isAtSchool ? 'subtitleSchool' : 'subtitle' }`) }}</v-card-subtitle>
     <v-card-text class="px-0">
-      <div class="d-flex justify-center ma-1">
-        <currency class="ma-1" name="school_goldenDust"></currency>
+      <div class="d-flex justify-center flex-wrap ma-1">
+        <div class="golden-dust-container">
+          <currency class="ma-1" name="school_goldenDust"></currency>
+          <gb-tooltip v-if="bonusDust > 0" key="bonus-dust" :title-text="$vuetify.lang.t('$vuetify.hourglass.bonusTitle')">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip label small class="golden-dust-bonus px-2" v-bind="attrs" v-on="on">+{{ $formatInt(bonusDust) }}</v-chip>
+            </template>
+            <div>{{ $vuetify.lang.t('$vuetify.hourglass.bonusDescription') }}</div>
+          </gb-tooltip>
+        </div>
         <currency v-if="isAtSchool" class="ma-1" name="school_examPass"></currency>
       </div>
       <div v-if="isAtSchool" class="d-flex justify-center">
@@ -13,7 +32,7 @@
         <price-tag currency="school_goldenDust" :amount="goldenDustMin" add></price-tag>
       </div>
       <template v-else>
-        <v-text-field class="ma-2" type="number" step="1" min="0" :label="$vuetify.lang.t('$vuetify.hourglass.timeInMinutes')" outlined hide-details v-model="minutes"></v-text-field>
+        <v-text-field class="ma-2" type="number" step="1" min="0" max="99999" :label="$vuetify.lang.t('$vuetify.hourglass.timeInMinutes')" outlined hide-details v-model="minutes"></v-text-field>
         <div class="d-flex justify-end align-center ma-1">
           <v-btn class="ma-1" color="primary" @click="setToMax">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
           <v-chip class="justify-center ma-1" style="min-width: 100px;">
@@ -36,7 +55,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import mining from '../../js/modules/mining';
 import village from '../../js/modules/village';
 import horde from '../../js/modules/horde';
@@ -52,18 +71,21 @@ export default {
     minutes: ''
   }),
   computed: {
+    ...mapState({
+      bonusDust: state => state.school.bonusDust,
+    }),
     ...mapGetters({
       mainFeatures: 'system/mainFeatures',
-      isOnMainFeature: 'system/isOnMainFeature'
+      isOnMainFeature: 'system/isOnMainFeature',
     }),
     isValidTime() {
       return !isNaN(this.minutes) && this.minutes > 0;
     },
     formattedTime() {
-      return this.isValidTime ? this.$formatTime(this.minutes * 60, 'm') : '-';
+      return this.isValidTime ? this.$formatTime(Math.min(this.minutes, 99999) * 60, 'm') : '-';
     },
     dustCost() {
-      return this.isValidTime ? Math.round(Math.pow(this.minutes, 0.9) * 100) : null;
+      return this.isValidTime ? Math.round(Math.pow(Math.min(this.minutes, 99999), 0.9) * 100) : null;
     },
     canAfford() {
       return this.isValidTime && this.$store.getters['currency/value']('school_goldenDust') >= this.dustCost;
@@ -75,14 +97,14 @@ export default {
       return Math.round(SCHOOL_EXAM_DUST_MIN * this.$store.getters['school/dustMult']);
     },
     canConvertPass() {
-      return this.$store.getters['currency/value']('school_examPass') >= 1 && this.$store.state.currency.school_goldenDust.value < this.$store.state.currency.school_goldenDust.cap;
+      return this.$store.getters['currency/value']('school_examPass') >= 1;
     }
   },
   methods: {
     performTimeSkip() {
       if (this.canAfford) {
         const module = {mining, village, horde, farm, gallery}[this.$store.state.system.screen];
-        module.tick(Math.round(this.minutes * 60 / module.tickspeed));
+        module.tick(Math.round(Math.min(this.minutes, 99999) * 60 / module.tickspeed));
         this.$store.dispatch('currency/spend', {feature: 'school', name: 'goldenDust', amount: this.dustCost});
       }
     },

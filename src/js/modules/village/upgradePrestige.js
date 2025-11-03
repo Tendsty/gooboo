@@ -58,7 +58,7 @@ export default {
     monk: {type: 'prestige', price(lvl) {
         return {village_blessing: Math.pow(1.85, lvl) * 150};
     }, effect: [
-        {name: 'currencyVillageKnowledgeGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyVillageKnowledgeGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
         {name: 'currencyVillageKnowledgeCap', type: 'base', value: lvl => lvl * 10}
     ]},
     holyPiggyBank: {type: 'prestige', price(lvl) {
@@ -133,7 +133,7 @@ export default {
     }, price(lvl) {
         return {village_blessing: Math.pow(1.85, lvl) * buildNum(70, 'K')};
     }, effect: [
-        {name: 'currencyVillageScienceGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyVillageScienceGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
         {name: 'currencyVillageScienceCap', type: 'base', value: lvl => lvl * 10}
     ]},
     charity: {type: 'prestige', requirement() {
@@ -141,7 +141,7 @@ export default {
     }, price(lvl) {
         return {village_blessing: Math.pow(2.35, lvl) * buildNum(120, 'K')};
     }, effect: [
-        {name: 'currencyVillageJoyGain', type: 'mult', value: lvl => lvl * 0.2 + 1},
+        {name: 'currencyVillageJoyGain', type: 'mult', value: lvl => lvl * 0.05 + 1},
         {name: 'villageHappiness', type: 'base', value: lvl => lvl * 0.01}
     ]},
     holyOil: {type: 'prestige', requirement() {
@@ -234,10 +234,8 @@ export default {
         {name: 'frostSpear', type: 'villageCraft', value: lvl => lvl >= 2},
         {name: 'spicySoup', type: 'villageCraft', value: lvl => lvl >= 3},
         {name: 'stopwatch', type: 'villageCraft', value: lvl => lvl >= 4},
-        {name: 'villageIngredientBoxGet', type: 'text', value: lvl => lvl},
-    ], onBuy() {
-        store.dispatch('consumable/gain', {name: 'village_ingredientBox', amount: 3});
-    }},
+        {name: 'village_ingredientBox', type: 'gainConsumable', value: () => 3},
+    ]},
     hireGardeners: {type: 'prestige', requirement() {
         return store.state.upgrade.item.village_woodBin.highestLevel >= 1;
     }, price(lvl) {

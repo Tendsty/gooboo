@@ -1,17 +1,34 @@
 import Vue from "vue"
+import { RELIC_POWER_CAP_PER_QUESTLINE } from "../js/constants";
 
 export default {
     namespaced: true,
     state: {},
+    getters: {
+        bonusCompleted: (state) => {
+            let amount = 0;
+            for (const [, general] of Object.entries(state)) {
+                for (const [, quest] of Object.entries(general.quests)) {
+                    const completed = Math.floor(quest.stage / quest.stageLength);
+                    if (completed >= 1) {
+                        amount += completed - 1;
+                    }
+                }
+            }
+            return amount;
+        }
+    },
     mutations: {
         init(state, o) {
             let quests = {};
             for (const [key, elem] of Object.entries(o.quests)) {
+                const stages = elem.stages ?? [];
                 quests[key] = {
                     unlock: elem.unlock ?? null,
                     reward: elem.reward ?? null,
                     stage: 0,
-                    stages: elem.stages ?? []
+                    stages,
+                    stageLength: elem.stageLength ?? stages.length
                 };
             }
 
@@ -50,9 +67,19 @@ export default {
                 }
 
                 // Last stage gives a relic
-                if (quest.stage >= quest.stages.length && quest.reward !== null) {
+                if (quest.stage >= quest.stageLength && quest.reward !== null) {
                     dispatch('relic/find', quest.reward, {root: true});
                 }
+
+                // Bonus completions give relic batteries
+                dispatch('applyBattery');
+            }
+        },
+        applyBattery({ getters, dispatch }) {
+            if (getters.bonusCompleted > 0) {
+                dispatch('mult/setBase', {name: 'currencyRelicPowerCap', key: 'generalBonusCompletions', value: getters.bonusCompleted * RELIC_POWER_CAP_PER_QUESTLINE}, {root: true});
+            } else {
+                dispatch('mult/removeKey', {name: 'currencyRelicPowerCap', type: 'base', key: 'generalBonusCompletions'}, {root: true});
             }
         }
     }

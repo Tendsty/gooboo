@@ -86,7 +86,7 @@
 }
 
 /** Special effect for premium upgrades */
-@keyframes premium-glow-shadow {
+@keyframes premium-glow-1-shadow {
   0%   {box-shadow: 0 1px 6px var(--v-red-base);}
   10%   {box-shadow: 0 2px 12px var(--v-red-base);}
   20% {box-shadow: 0 1px 6px var(--v-deep-orange-base);}
@@ -99,7 +99,7 @@
   90%   {box-shadow: 0 2px 12px var(--v-red-base);}
   100%   {box-shadow: 0 1px 6px var(--v-red-base);}
 }
-@keyframes premium-glow-text-shadow {
+@keyframes premium-glow-1-text-shadow {
   0%   {text-shadow: 0 1px 6px var(--v-red-base);}
   10%   {text-shadow: 0 2px 12px var(--v-red-base);}
   20% {text-shadow: 0 1px 6px var(--v-deep-orange-base);}
@@ -112,11 +112,55 @@
   90%   {text-shadow: 0 2px 12px var(--v-red-base);}
   100%   {text-shadow: 0 1px 6px var(--v-red-base);}
 }
-.premium-glow {
-  animation: premium-glow-shadow 15s linear infinite;
+@keyframes premium-glow-2-shadow {
+  0%   {box-shadow: 0 1px 6px var(--v-cyan-base);}
+  10%   {box-shadow: 0 2px 12px var(--v-cyan-base);}
+  20% {box-shadow: 0 1px 6px var(--v-light-blue-base);}
+  30% {box-shadow: 0 2px 12px var(--v-light-blue-base);}
+  40%   {box-shadow: 0 1px 6px var(--v-cyan-base);}
+  50%   {box-shadow: 0 2px 12px var(--v-cyan-base);}
+  60%   {box-shadow: 0 1px 6px var(--v-teal-base);}
+  70%   {box-shadow: 0 2px 12px var(--v-teal-base);}
+  80%   {box-shadow: 0 1px 6px var(--v-cyan-base);}
+  90%   {box-shadow: 0 2px 12px var(--v-cyan-base);}
+  100%   {box-shadow: 0 1px 6px var(--v-cyan-base);}
 }
-.premium-glow-text {
-  animation: premium-glow-text-shadow 15s linear infinite;
+@keyframes premium-glow-2-text-shadow {
+  0%   {text-shadow: 0 1px 6px var(--v-cyan-base);}
+  10%   {text-shadow: 0 2px 12px var(--v-cyan-base);}
+  20% {text-shadow: 0 1px 6px var(--v-light-blue-base);}
+  30% {text-shadow: 0 2px 12px var(--v-light-blue-base);}
+  40%   {text-shadow: 0 1px 6px var(--v-cyan-base);}
+  50%   {text-shadow: 0 2px 12px var(--v-cyan-base);}
+  60%   {text-shadow: 0 1px 6px var(--v-teal-base);}
+  70%   {text-shadow: 0 2px 12px var(--v-teal-base);}
+  80%   {text-shadow: 0 1px 6px var(--v-cyan-base);}
+  90%   {text-shadow: 0 2px 12px var(--v-cyan-base);}
+  100%   {text-shadow: 0 1px 6px var(--v-cyan-base);}
+}
+.premium-glow-1 {
+  animation: premium-glow-1-shadow 15s linear infinite;
+}
+.premium-glow-1-text {
+  animation: premium-glow-1-text-shadow 15s linear infinite;
+}
+.premium-frame-1 {
+  box-shadow: 0 2px 9px var(--v-red-base) !important;
+}
+.premium-frame-1-text {
+  text-shadow: 0 2px 9px var(--v-red-base);
+}
+.premium-glow-2 {
+  animation: premium-glow-2-shadow 15s linear infinite;
+}
+.premium-glow-2-text {
+  animation: premium-glow-2-text-shadow 15s linear infinite;
+}
+.premium-frame-2 {
+  box-shadow: 0 2px 9px var(--v-cyan-base) !important;
+}
+.premium-frame-2-text {
+  text-shadow: 0 2px 9px var(--v-cyan-base);
 }
 </style>
 <style scoped>
@@ -138,6 +182,14 @@
   top: 0;
   bottom: 0;
   font-size: 12px;
+}
+.feature-title {
+  margin-left: 16px;
+  margin-bottom: -4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  opacity: 0.5;
 }
 .theme--dark >>> .global-level-text {
   color: #121212;
@@ -332,6 +384,7 @@
           </v-btn>
         </template>
         <v-card data-cy="feature-list" class="default-card" :class="`pa-${marginSize}`">
+          <div class="feature-title">{{ $vuetify.lang.t('$vuetify.gooboo.mainFeatures') }}</div>
           <feature-tile
             v-for="(item, key) in mainFeatures"
             :class="`ma-${marginSize}`"
@@ -343,6 +396,7 @@
           ></feature-tile>
           <next-tile :class="`ma-${marginSize}`" v-if="nextFeature && nextFeature.type === 'main'" :level="nextFeature.globalLevel"></next-tile>
           <v-divider :class="`my-${marginSize}`"></v-divider>
+          <div class="feature-title">{{ $vuetify.lang.t('$vuetify.gooboo.sideFeatures') }}</div>
           <feature-tile
             v-for="(item, key) in sideFeatures"
             :class="`ma-${marginSize}`"
@@ -454,6 +508,7 @@
         <error-message v-else-if="message.type === 'error'" :message="message"></error-message>
         <card-pack-message v-else-if="message.type === 'cardPack'" :message="message"></card-pack-message>
         <heirloom-message v-else-if="message.type === 'heirloom'" :message="message"></heirloom-message>
+        <unlock-message v-else-if="message.type === 'unlock'" :message="message"></unlock-message>
         <prize-message v-else-if="message.type === 'prize'" :message="message"></prize-message>
         <school-message v-else-if="message.type === 'school'" :message="message"></school-message>
         <update-message v-else-if="message.type === 'update'" :message="message"></update-message>
@@ -534,6 +589,7 @@ import Currency from './components/render/Currency.vue';
 import UpdateMessage from './components/partial/snackbar/UpdateMessage.vue';
 import { APP_ENV } from './js/constants';
 import ImportMessage from './components/partial/snackbar/ImportMessage.vue';
+import UnlockMessage from './components/partial/snackbar/UnlockMessage.vue';
 const semverCompare = require('semver/functions/compare');
 
 export default {
@@ -580,7 +636,8 @@ export default {
     GoldenDustMenu,
     Currency,
     UpdateMessage,
-    ImportMessage
+    ImportMessage,
+    UnlockMessage
   },
   data: () => ({
     dialogDust: false,
@@ -663,7 +720,13 @@ export default {
       if (this.$store.state.system.noteHint.length > 0) {
         badges++;
       }
+      if (this.$store.state.system.bookHint.length > 0) {
+        badges++;
+      }
       if (this.$store.state.system.farmHint) {
+        badges++;
+      }
+      if (this.$store.getters['system/hasQuestlineHint']) {
         badges++;
       }
       return badges;

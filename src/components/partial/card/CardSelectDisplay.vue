@@ -16,7 +16,7 @@
     <div class="flex-grow-1">
       <div>
         <span>{{ $vuetify.lang.t(`$vuetify.card.card.${item.name}`) }}</span>
-        <span v-if="item.power > 0">&nbsp;(+{{ item.power }})</span>
+        <span v-if="finalPower > 0">&nbsp;(+{{ finalPower }})<span v-if="item.power === 'adaptive'">*</span></span>
       </div>
       <div class="card-reward" v-for="(reward, rkey) in item.reward" :key="rkey">
         <span v-if="reward.type === 'addRareDrop'">{{ $vuetify.lang.t(`$vuetify.farm.addRareDrop`, $vuetify.lang.t(`$vuetify.currency.${ reward.name }.name`)) }}: +{{ $formatNum(reward.value) }}</span>
@@ -57,6 +57,9 @@ export default {
     },
     colorIcon() {
       return (this.showDisabled || !this.item.disabled) ? ((this.item.color + ' ' + this.themeModifier)) : (this.item.disabled ? '#80808080' : null);
+    },
+    finalPower() {
+      return (this.item.power === 'adaptive' ? this.$store.getters['card/adaptivePower'](this.item.feature) : this.item.power) + (this.item.foundShiny ? 1 : 0);
     }
   }
 }

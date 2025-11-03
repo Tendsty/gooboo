@@ -10,6 +10,7 @@
 
 <script>
 import PatchnoteContent from '../partial/patchnote/PatchnoteContent.vue';
+import patchnotes from '../../js/modules/patchnote/patchnotes.js';
 
 const semverCompare = require('semver/functions/compare');
 
@@ -25,10 +26,10 @@ export default {
   computed: {
     patchnote() {
       if (this.oldVersion === null) {
-        return this.$store.state.system.patchnote;
+        return patchnotes;
       }
       let obj = {};
-      for (const [key, elem] of Object.entries(this.$store.state.system.patchnote)) {
+      for (const [key, elem] of Object.entries(patchnotes)) {
         if (semverCompare(this.oldVersion, key) === -1) {
           obj[key] = elem;
         }

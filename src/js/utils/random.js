@@ -1,4 +1,4 @@
-export { randomInt, randomFloat, randomElem, weightSelect, chance, randomRound, simpleHash, randomHex }
+export { randomInt, randomFloat, randomElem, weightSelect, chance, randomRound, simpleHash, randomHex, randomSplit }
 
 /**
  * Return a random integer between two numbers
@@ -29,6 +29,9 @@ function randomFloat(min, max, rng = Math.random()) {
  * @returns chosen array element
  */
 function randomElem(array, rng = Math.random()) {
+    if (array.length <= 0) {
+        return null;
+    }
     return array[randomInt(0, array.length - 1, rng)];
 }
 
@@ -102,4 +105,18 @@ function randomHex(length = 8) {
         result += chars.charAt(randomInt(0, 15));
     }
     return result;
+}
+
+/**
+ * Generates a random distribution of numbers
+ * @param {Number} splits The amount of random values
+ * @returns {Array} An array containing numbers adding up to 1
+ */
+function randomSplit(splits = 3) {
+    let nums = [];
+    for (let i = 0; i < splits; i++) {
+        nums.push(Math.random());
+    }
+    const sum = nums.reduce((a, b) => a + b, 0);
+    return nums.map(el => el / sum);
 }

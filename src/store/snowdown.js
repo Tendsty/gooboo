@@ -279,7 +279,7 @@ export default {
             return state.itemsBoughtTopaz * 10 + 100;
         },
         winTokenGain: (state) => {
-            return Math.floor(Math.pow(state.fight * 0.35 + 1, 0.75) + 3);
+            return Math.floor(Math.pow(state.fight * 0.15 + 1, 0.6) + 3);
         },
         winItemGain: (state) => {
             return state.fight < 50 && (state.fight < 5 || (state.fight % 5) === 4);
@@ -309,9 +309,11 @@ export default {
             commit('updateKey', {key: 'rewardProducer', value: false});
             commit('updateKey', {key: 'rewardItem', value: null});
             commit('updateKey', {key: 'itemsBought', value: 0});
+            commit('updateKey', {key: 'itemsBoughtTopaz', value: 0});
             for (const [key] of Object.entries(state.item)) {
                 commit('updateItemKey', {name: key, key: 'amount', value: 0});
             }
+            commit('updateKey', {key: 'revenge', value: 0});
         },
         fight({ state, rootState, getters, rootGetters, commit, dispatch }) {
             if (rootGetters['currency/value']('event_snowball') >= SNOWDOWN_FIGHT_COST) {

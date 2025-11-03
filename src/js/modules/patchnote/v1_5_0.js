@@ -184,15 +184,15 @@ export default {
                 params: [4]
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'new',
-                text: 'addedHordeItem',
+                text: 'addedHordeEquipment',
                 params: [14]
             },
             {
                 unlock: 'hordeBrickTower',
                 type: 'new',
-                text: 'addedTower',
+                text: 'addedHordeTower',
                 params: [2]
             },
             {
@@ -213,12 +213,12 @@ export default {
                 text: '352'
             },
             {
-                unlock: 'hordeItemMastery',
+                unlock: 'hordeEquipmentMastery',
                 type: 'bugfix',
                 text: '308'
             },
             {
-                unlock: 'hordeItemMastery',
+                unlock: 'hordeEquipmentMastery',
                 type: 'bugfix',
                 text: '315'
             },
@@ -241,12 +241,12 @@ export default {
                 after: 'x1.02'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'change',
                 text: '345'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'balance',
                 text: '346'
             },
@@ -287,7 +287,7 @@ export default {
                 after: '+0.25%'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'balance',
                 text: '387'
             }

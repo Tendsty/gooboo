@@ -1,3 +1,13 @@
+<style scoped>
+.giant-crop-btn {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  min-width: 0 !important;
+  width: 28px;
+}
+</style>
+
 <template>
   <v-card>
     <v-card-title class="pa-2 justify-center">{{ $vuetify.lang.t(`$vuetify.farm.crop.${ name }`) }}</v-card-title>
@@ -8,19 +18,31 @@
             <div v-bind="attrs" v-on="on">{{ $formatTime(cropGrow * 60) }}</div>
           </template>
           <div class="mt-0">{{ $vuetify.lang.t('$vuetify.farm.timeDescription') }}</div>
-          <stat-breakdown name="farmGrow" :base="crop.grow * 60" :baseArray="cropGeneStats.mult.farmGrow.baseArray" :multArray="cropGeneStats.mult.farmGrow.multArray"></stat-breakdown>
+          <stat-breakdown
+            name="farmGrow"
+            :base="(plantGiant ? crop.giantGrow : crop.grow) * 60"
+            :baseArray="cropGeneStats.mult.farmGrow.baseArray"
+            :multArray="cropGeneStats.mult.farmGrow.multArray"
+          ></stat-breakdown>
         </gb-tooltip>
-        <v-icon class="mx-2">mdi-circle-small</v-icon>
-        <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.farm.yield')">
-          <template v-slot:activator="{ on, attrs }">
-            <div class="d-flex justify-center align-center" v-bind="attrs" v-on="on">
-              <div>{{ $formatNum(cropYield) }}</div>
-              <v-icon class="ml-1" small>{{ currency['farm_' + crop.type].icon }}</v-icon>
-            </div>
-          </template>
-          <stat-breakdown :name="yieldMultName" :base="crop.yield" :baseArray="cropGeneStats.mult.farmCropGain.baseArray" :multArray="cropGeneStats.mult.farmCropGain.multArray"></stat-breakdown>
-        </gb-tooltip>
-        <template v-if="cropOvergrow > 0">
+        <template v-if="crop.type !== 'special'">
+          <v-icon class="mx-2">mdi-circle-small</v-icon>
+          <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.farm.yield')">
+            <template v-slot:activator="{ on, attrs }">
+              <div class="d-flex justify-center align-center" v-bind="attrs" v-on="on">
+                <div>{{ $formatNum(cropYield) }}</div>
+                <v-icon class="ml-1" small>{{ currency['farm_' + crop.type].icon }}</v-icon>
+              </div>
+            </template>
+            <stat-breakdown
+              :name="yieldMultName"
+              :base="crop.yield"
+              :baseArray="cropGeneStats.mult.farmCropGain.baseArray"
+              :multArray="cropGeneStats.mult.farmCropGain.multArray"
+            ></stat-breakdown>
+          </gb-tooltip>
+        </template>
+        <template v-if="crop.type !== 'special' && cropOvergrow > 0">
           <v-icon class="mx-2">mdi-circle-small</v-icon>
           <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.mult.farmOvergrow')">
             <template v-slot:activator="{ on, attrs }">
@@ -29,11 +51,16 @@
                 <v-icon class="ml-1" small>mdi-resize</v-icon>
               </div>
             </template>
-            <stat-breakdown name="farmOvergrow" :baseArray="cropGeneStats.mult.farmOvergrow.baseArray" :multArray="cropGeneStats.mult.farmOvergrow.multArray"></stat-breakdown>
+            <stat-breakdown
+              name="farmOvergrow"
+              :baseArray="cropGeneStats.mult.farmOvergrow.baseArray"
+              :multArray="cropGeneStats.mult.farmOvergrow.multArray"
+            ></stat-breakdown>
             <div>{{ $vuetify.lang.t('$vuetify.farm.overgrowDescription', $formatNum(1 / cropOvergrow + 1, true)) }}</div>
+            <alert-text type="formula" v-if="showFormulas">{{ $vuetify.lang.t('$vuetify.farm.overgrowFormula') }}</alert-text>
           </gb-tooltip>
         </template>
-        <template v-if="hasGnome">
+        <template v-if="crop.type !== 'special' && hasGnome">
           <v-icon class="mx-2">mdi-circle-small</v-icon>
           <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.farm.goldChance')">
             <template v-slot:activator="{ on, attrs }">
@@ -42,7 +69,12 @@
                 <v-icon class="ml-1" small>mdi-gold</v-icon>
               </div>
             </template>
-            <stat-breakdown name="farmGoldChance" :base="cropGoldChanceBase" :baseArray="cropGeneStats.mult.farmGoldChance.baseArray" :multArray="goldChanceMult"></stat-breakdown>
+            <stat-breakdown
+              name="farmGoldChance"
+              :base="cropGoldChanceBase"
+              :baseArray="cropGeneStats.mult.farmGoldChance.baseArray"
+              :multArray="goldChanceMult"
+            ></stat-breakdown>
             <div>{{ $vuetify.lang.t('$vuetify.farm.goldChanceDescription') }}</div>
             <alert-text v-if="cropGoldChance > 1" type="info">{{ $vuetify.lang.t(
               '$vuetify.farm.goldChanceMultiple',
@@ -52,9 +84,8 @@
             <alert-text v-if="gnomeAmount <= 0" type="error">{{ $vuetify.lang.t('$vuetify.farm.goldChanceWarning') }}</alert-text>
           </gb-tooltip>
         </template>
-        <v-icon class="mx-2">mdi-circle-small</v-icon>
-        <price-tag v-for="(elem, key) in crop.cost" :key="`crop-cost-${ key }`" :currency="key" :amount="elem * cropCostMult"></price-tag>
-        <span v-if="Object.keys(crop.cost).length <= 0">{{ $vuetify.lang.t('$vuetify.gooboo.free') }}</span>
+        <v-icon v-if="Object.keys(crop.cost).length > 0" class="mx-2">mdi-circle-small</v-icon>
+        <price-tag v-for="(elem, key) in crop.cost" :key="`crop-cost-${ key }`" :currency="key" :amount="elem * ((crop.type === 'special' && plantGiant) ? crop.giantMult : 1)"></price-tag>
         <template v-if="unlock.farmFertilizer.use">
           <v-icon class="mx-2">mdi-circle-small</v-icon>
           <gb-tooltip :min-width="0">
@@ -68,12 +99,27 @@
           </gb-tooltip>
         </template>
       </div>
+      <div v-if="crop.type !== 'special' && showEfficiency" class="d-flex justify-center align-center flex-wrap" key="crop-efficiency-bar">
+        <div class="d-flex justify-center align-center">
+          <div>{{ $formatNum(cropYield * 60 / cropGrow) }}</div>
+          <v-icon class="ml-1" small>{{ currency['farm_' + crop.type].icon }}</v-icon>
+          <div>/ h</div>
+        </div>
+        <template v-if="hasGnome">
+          <v-icon class="mx-2">mdi-circle-small</v-icon>
+          <div class="d-flex justify-center align-center">
+            <div>{{ $formatNum(cropGoldChance * 6000 / cropGrow, true) }}%</div>
+            <v-icon class="mx-1" small>mdi-gold</v-icon>
+            <div>/ h</div>
+          </div>
+        </template>
+      </div>
       <div v-if="rareDrops.length > 0 || Object.keys(cropGeneStats.rareDrop).length > 0" class="mb-2" key="crop-rare-drop-list">
         <div>{{ $vuetify.lang.t('$vuetify.farm.rareDrops') }}:</div>
         <crop-rare-drop
           class="ml-1"
           v-for="(item, key) in rareDrops"
-          :key="'rare-drop-' + key"
+          :key="'rare-drop-native-' + key"
           :item="item"
           :dropBase="cropGeneStats.mult.farmRareDropChance.baseValue"
           :dropMult="cropGeneStats.mult.farmRareDropChance.multValue * item.mult"
@@ -83,7 +129,7 @@
         <crop-rare-drop
           class="ml-1"
           v-for="(item, key) in cropGeneStats.rareDrop"
-          :key="'rare-drop-' + key"
+          :key="'rare-drop-gene-' + key"
           :item="{name: item.name, type: 'currency', chance: item.chance, value: item.amount, found: true}"
           :dropBase="cropGeneStats.mult.farmRareDropChance.baseValue"
           :dropMult="cropGeneStats.mult.farmRareDropChance.multValue * item.mult"
@@ -96,7 +142,7 @@
         <crop-rare-drop
           class="ml-1"
           v-for="(item, key) in rareDropsHunted"
-          :key="'rare-drop-' + key"
+          :key="'rare-drop-hunter-' + key"
           :item="item"
           :dropBase="cropGeneStats.mult.farmRareDropChance.baseValue"
           :dropMult="cropGeneStats.mult.farmRareDropChance.multValue * cropGeneStats.mult.farmHuntChance.multValue * item.mult"
@@ -107,7 +153,7 @@
       </div>
       <div class="d-flex flex-wrap align-end justify-space-between" v-if="unlock.farmCropExp.use" key="crop-level-prestige">
         <span>{{ $vuetify.lang.t('$vuetify.gooboo.level') }} {{ crop.level }}{{ crop.levelMax > 0 ? ` (${$formatNum(crop.levelMax)})` : '' }}</span>
-        <gb-tooltip v-if="crop.level >= 4" :title-text="$vuetify.lang.t('$vuetify.gooboo.prestige')">
+        <gb-tooltip v-if="crop.type !== 'special' && crop.level >= 4" :title-text="$vuetify.lang.t('$vuetify.gooboo.prestige')">
           <template v-slot:activator="{ on, attrs }">
             <div v-bind="attrs" v-on="on">
               <v-btn
@@ -133,57 +179,91 @@
               {{ $formatNum(crop.exp) }} / {{ $formatNum(expNeeded) }}
             </v-progress-linear>
           </template>
-          <stat-breakdown name="farmExperience" :baseArray="this.cropGeneStats.mult.farmExperience.baseArray" :multArray="this.cropGeneStats.mult.farmExperience.multArray"></stat-breakdown>
-          <div>{{ $vuetify.lang.t(`$vuetify.farm.expToLevelUp`, $formatNum(harvestsNeeded)) }}</div>
-          <alert-text v-if="Math.max(crop.level, crop.levelMax) >= 10" type="info">{{ $vuetify.lang.t(`$vuetify.farm.prestige.increasedGLRequirement`) }}</alert-text>
-        </gb-tooltip>
-      </div>
-      <div v-if="currentGenePicker !== null" key="crop-gene-picker">
-        <div class="text-center mt-2">{{ $vuetify.lang.t('$vuetify.farm.gene.pickLevel', genePickerLevel) }}:</div>
-        <div class="d-flex flex-wrap justify-center">
-          <gene-icon
-            v-for="geneName in currentGenePicker"
-            class="ma-1"
-            :disabled="gene[geneName].lockOnField && cropCount > 0"
-            @click="pickGene(geneName)"
-            :key="`gene-pick-${ geneName }`"
-            :name="geneName"
-            clickable
-            show-upgrade
-          ></gene-icon>
-        </div>
-      </div>
-      <div v-if="unlock.farmCropExp.use" class="d-flex justify-center mt-2" key="crop-dna-display">
-        <gb-tooltip :min-width="0">
-          <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on">
-              <v-icon class="mr-1">mdi-dna</v-icon>
-              {{ crop.dna }}
-            </v-chip>
+          <stat-breakdown
+            v-if="crop.type !== 'special'"
+            name="farmExperience"
+            :baseArray="this.cropGeneStats.mult.farmExperience.baseArray"
+            :multArray="this.cropGeneStats.mult.farmExperience.multArray"
+          ></stat-breakdown>
+          <div v-if="cropExp > 0">{{ $vuetify.lang.t(`$vuetify.farm.expToLevelUp`, $formatNum(harvestsNeeded)) }}</div>
+          <template v-if="crop.type === 'special'">
+            <div class="text-center">{{ $vuetify.lang.t('$vuetify.farm.specialCropEffect') }}</div>
+            <display-row class="mt-0" v-for="(item, key) in specialEffect" :key="`${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
           </template>
-          <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaDescription`, $formatNum(dnaNext)) }}</div>
-          <div>{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaDuplicate`) }}</div>
-          <div v-if="crop.genesBlocked.length > 0">
-            <span>{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaBlocked`) }}:&nbsp;</span>
-            <span v-for="(blocked, index) in crop.genesBlocked" :key="`gene-blocked-${ blocked }`">
-              <span v-if="index > 0">,&nbsp;</span>
-              <span>{{ $vuetify.lang.t(`$vuetify.farm.gene.${ blocked }`) }}</span>
-            </span>
-          </div>
+          <template v-else>
+            <alert-text v-if="Math.max(crop.level, crop.levelMax) >= 40" type="info">{{ $vuetify.lang.t(`$vuetify.farm.prestige.noMoreGL`) }}</alert-text>
+            <alert-text v-else-if="Math.max(crop.level, crop.levelMax) >= 10" type="info">{{ $vuetify.lang.t(`$vuetify.farm.prestige.increasedGLRequirement`) }}</alert-text>
+          </template>
         </gb-tooltip>
       </div>
-      <gene-upgrade v-if="unlock.farmCropExp.use" class="ma-1 flex-grow-1" style="margin-left: 60px !important;" :crop="name" name="basics"></gene-upgrade>
-      <div v-for="geneName in crop.genes" class="d-flex align-center" :key="`gene-taken-${ geneName }`">
-        <gene-icon class="ma-1" :name="geneName"></gene-icon>
-        <div v-if="geneName === 'dna'" class="ma-1 flex-grow-1">
-          <gene-upgrade v-for="dnaGeneName in dnaGenes" class="flex-grow-1" :key="`gene-dna-${ dnaGeneName }`" :crop="name" :name="dnaGeneName"></gene-upgrade>
+      <template v-if="crop.type !== 'special'">
+        <div v-if="currentGenePicker !== null" key="crop-gene-picker">
+          <div class="text-center mt-2">{{ $vuetify.lang.t('$vuetify.farm.gene.pickLevel', genePickerLevel) }}:</div>
+          <div class="d-flex flex-wrap justify-center">
+            <gene-icon
+              v-for="geneName in currentGenePicker"
+              class="ma-1"
+              :disabled="gene[geneName].lockOnField && cropCount > 0"
+              @click="pickGene(geneName)"
+              :key="`gene-pick-${ geneName }`"
+              :name="geneName"
+              clickable
+              show-upgrade
+            ></gene-icon>
+          </div>
         </div>
-        <gene-upgrade v-else class="ma-1 flex-grow-1" :crop="name" :name="geneName"></gene-upgrade>
-      </div>
-      <div v-if="unlock.farmCropExp.use">
-        <card-overview feature="farm" :crop="name" :group="crop.type"></card-overview>
-      </div>
+        <div v-if="unlock.farmCropExp.use" class="d-flex justify-center mt-2" key="crop-dna-display">
+          <gb-tooltip :min-width="0">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip v-bind="attrs" v-on="on">
+                <v-icon class="mr-1">mdi-dna</v-icon>
+                {{ $formatInt(cropDnaLeft) }}
+              </v-chip>
+            </template>
+            <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaDescription`) }}</div>
+            <div>{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaDuplicate`) }}</div>
+            <div v-if="crop.genesBlocked.length > 0">
+              <span>{{ $vuetify.lang.t(`$vuetify.farm.gene.dnaBlocked`) }}:&nbsp;</span>
+              <span v-for="(blocked, index) in crop.genesBlocked" :key="`gene-blocked-${ blocked }`">
+                <span v-if="index > 0">,&nbsp;</span>
+                <span>{{ $vuetify.lang.t(`$vuetify.farm.gene.${ blocked }`) }}</span>
+              </span>
+            </div>
+          </gb-tooltip>
+        </div>
+        <div v-for="geneName in crop.genes" class="d-flex align-center" :key="`gene-taken-${ geneName }`">
+          <gene-icon class="ma-1 ml-0" :name="geneName"></gene-icon>
+          <gene-upgrade v-if="gene[geneName].maxLevel > 0" class="ma-1 flex-grow-1" :crop="name" :name="geneName"></gene-upgrade>
+        </div>
+        <div v-if="unlock.cardFeature.use && unlock.farmCropExp.use">
+          <card-overview feature="farm" :crop="name" :group="crop.type"></card-overview>
+        </div>
+      </template>
     </v-card-text>
+    <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.farm.giantCrop.name')">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          class="giant-crop-btn"
+          small
+          @click="toggleGiant"
+          :color="plantGiant ? 'primary' : 'secondary'"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon size="20">mdi-resize</v-icon>
+        </v-btn>
+      </template>
+      <div>{{ $vuetify.lang.t(`$vuetify.farm.giantCrop.description`) }}</div>
+      <ul class="mt-0">
+        <li>{{ $vuetify.lang.t(`$vuetify.farm.giantCrop.stat.0`, $formatTime(cropBaseGrow * 60), $formatTime(cropGiantGrow * 60)) }}</li>
+        <li v-if="unlock.farmFertilizer.use">{{ $vuetify.lang.t(`$vuetify.farm.giantCrop.stat.1`, $formatNum(cropFertilizerCostBase), $formatNum(cropFertilizerCostGiant)) }}</li>
+        <li v-if="crop.type !== 'special'">{{ $vuetify.lang.t(`$vuetify.farm.giantCrop.stat.2`, $formatNum(crop.giantMult, true)) }}</li>
+        <li v-if="crop.type === 'special'">{{ $vuetify.lang.t(`$vuetify.farm.giantCrop.stat.3`, $formatNum(crop.giantMult, true)) }}</li>
+        <li v-if="crop.type === 'special'">{{ $vuetify.lang.t(`$vuetify.farm.giantCrop.stat.4`, $formatNum(crop.giantMult, true)) }}</li>
+      </ul>
+      <div>{{ $vuetify.lang.t(`$vuetify.farm.giantCrop.${ plantGiant ? 'giant' : 'regular' }`) }} ({{ $vuetify.lang.t(`$vuetify.farm.giantCrop.clickToToggle`) }})</div>
+      <alert-text v-if="showEfficiency" type="info">{{ $vuetify.lang.t(`$vuetify.farm.giantCrop.efficiency`, $formatNum(100 * crop.giantMult * crop.grow / crop.giantGrow)) }}</alert-text>
+    </gb-tooltip>
   </v-card>
 </template>
 
@@ -195,12 +275,13 @@ import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import CardOverview from '../card/CardOverview.vue';
 import AlertText from '../render/AlertText.vue';
+import DisplayRow from '../upgrade/DisplayRow.vue';
 import CropRareDrop from './CropRareDrop.vue';
 import GeneIcon from './GeneIcon.vue';
 import GeneUpgrade from './GeneUpgrade.vue';
 
 export default {
-  components: { StatBreakdown, CropRareDrop, PriceTag, AlertText, GeneIcon, GeneUpgrade, CardOverview },
+  components: { StatBreakdown, CropRareDrop, PriceTag, AlertText, GeneIcon, GeneUpgrade, CardOverview, DisplayRow },
   props: {
     name: {
       type: String,
@@ -214,6 +295,7 @@ export default {
       unlock: state => state.unlock,
       isFrozen: state => state.cryolab.farm.active,
       gene: state => state.farm.gene,
+      plantGiant: state => state.farm.plantGiant,
     }),
     ...mapGetters({
       currentPrestigeLevel: 'farm/currentPrestigeLevel',
@@ -228,6 +310,9 @@ export default {
     expNeeded() {
       return this.$store.getters['farm/expNeeded'](this.name);
     },
+    cropDnaLeft() {
+      return this.$store.getters['farm/cropDnaLeft'](this.name);
+    },
     crop() {
       return this.$store.state.farm.crop[this.name];
     },
@@ -238,12 +323,22 @@ export default {
         this.cropGeneStats.mult.farmCropGain.multValue
       );
     },
-    cropGrow() {
+    cropBaseGrow() {
       return this.$store.getters['mult/get'](
         'farmGrow',
         this.crop.grow + this.cropGeneStats.mult.farmGrow.baseValue,
         this.cropGeneStats.mult.farmGrow.multValue
       );
+    },
+    cropGiantGrow() {
+      return this.$store.getters['mult/get'](
+        'farmGrow',
+        this.crop.giantGrow + this.cropGeneStats.mult.farmGrow.baseValue,
+        this.cropGeneStats.mult.farmGrow.multValue
+      );
+    },
+    cropGrow() {
+      return this.plantGiant ? this.cropGiantGrow : this.cropBaseGrow;
     },
     cropOvergrow() {
       return this.$store.getters['mult/get'](
@@ -253,20 +348,23 @@ export default {
       );
     },
     cropExp() {
-      return this.$store.getters['mult/get'](
+      return this.crop.type !== 'special' ? this.$store.getters['mult/get'](
         'farmExperience',
         this.cropGeneStats.mult.farmExperience.baseValue,
         this.cropGeneStats.mult.farmExperience.multValue
-      );
+      ) : 1;
+    },
+    cropFertilizerCostBase() {
+      return this.$store.getters['farm/cropFertilizerCost'](this.name, false);
+    },
+    cropFertilizerCostGiant() {
+      return this.$store.getters['farm/cropFertilizerCost'](this.name, true);
     },
     cropFertilizerCost() {
-      return this.$store.getters['farm/cropFertilizerCost'](this.name);
-    },
-    cropCostMult() {
-      return this.$store.getters['mult/get']('farmCropCost', 1, this.cropGeneStats.mult.farmCropCost.multValue);
+      return this.plantGiant ? this.cropFertilizerCostGiant : this.cropFertilizerCostBase;
     },
     rareDrops() {
-      return this.crop.rareDrop.filter(elem => elem.found || this.$store.getters['mult/get']('farmRareDropChance', elem.chance) >= -0.1);
+      return this.crop.rareDrop.filter(elem => elem.found || this.$store.getters['mult/get']('farmRareDropChance', elem.chance) >= (this.crop.genes.includes('rareDropChance') ? -0.05 : -0.1));
     },
     rareDropsHunted() {
       return this.rareDrops.filter(elem => elem.type === 'currency');
@@ -281,7 +379,7 @@ export default {
       return this.crop.level - this.crop.levelMax;
     },
     gnomeAmount() {
-      return this.$store.state.farm.building.gardenGnome.cacheAmount + this.$store.state.farm.building.gardenGnome.cachePremium;
+      return this.$store.state.farm.building.gardenGnome.cacheAmount + this.$store.state.farm.building.gardenGnome.cachePremium / 2;
     },
     cropGoldChanceBase() {
       return this.$store.getters['farm/baseGoldChance'](this.name) + this.cropGeneStats.mult.farmGoldChance.baseValue;
@@ -314,17 +412,29 @@ export default {
     genePickerLevel() {
       return fallbackArray(Object.keys(this.$store.state.farm.geneLevels), '?', this.crop.genes.length);
     },
-    dnaGenes() {
-      return this.$store.state.farm.geneLevels[1].filter(elem => this.crop.genes.length <= 0 || this.crop.genes[0] !== elem);
-    },
     cropGeneStats() {
-      return this.$store.getters['farm/cropGeneStats'](this.name, this.$store.state.farm.selectedFertilizerName);
-    },
-    dnaNext() {
-      return this.$store.getters['farm/cropDnaGain'](this.crop.level);
+      return this.$store.getters['farm/cropGeneStats'](this.name, this.$store.state.farm.selectedFertilizerName, this.plantGiant);
     },
     cropCount() {
       return this.$store.state.farm.field.reduce((a, b) => a + b.reduce((c, d) => c + ((d !== null && d.crop === this.name) ? 1 : 0), 0), 0);
+    },
+    showFormulas() {
+      return this.$store.state.system.settings.general.items.showFormulas.value;
+    },
+    showEfficiency() {
+      return this.$store.state.system.settings.general.items.showEfficiencyStats.value;
+    },
+    specialEffect() {
+      return this.crop.specialEffect.map(elem => {
+        const lvl = this.crop.level;
+        return {
+          ...elem,
+          before: lvl > 0 ? elem.value(lvl) : null,
+          after: elem.value(lvl + 1)
+        };
+      }).filter(elem => {
+        return elem.before !== elem.after;
+      });
     }
   },
   methods: {
@@ -343,6 +453,9 @@ export default {
       if (!this.gene[name].lockOnField || this.cropCount <= 0) {
         this.$store.dispatch('farm/pickGene', {crop: this.name, gene: name});
       }
+    },
+    toggleGiant() {
+      this.$store.commit('farm/updateKey', {key: 'plantGiant', value: !this.plantGiant});
     }
   }
 }

@@ -58,7 +58,7 @@ export default {
       return this.shop.cap !== null && this.shop.taken >= this.shop.cap;
     },
     showMax() {
-      return ['consumable', 'currency', 'cardPack'].includes(this.shop.type);
+      return ['consumable', 'currency', 'cardPack', 'card'].includes(this.shop.type);
     },
     hasTreasureSpace() {
       return this.$store.getters['treasure/firstEmptySlot'] !== null;

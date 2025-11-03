@@ -1,16 +1,13 @@
 <template>
-  <inventory-template :currencies="currencies" :prestige-stones="prestigeStone" :disabled="isFrozen">
-    <heirloom-list></heirloom-list>
-  </inventory-template>
+  <inventory-template :currencies="currencies" :prestige-stones="prestigeStone" :disabled="isFrozen"></inventory-template>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import InventoryTemplate from '../prestige/InventoryTemplate.vue';
-import HeirloomList from './HeirloomList.vue';
 
 export default {
-  components: { InventoryTemplate, HeirloomList },
+  components: { InventoryTemplate },
   data: () => ({
     currencies: ['horde_soulEmpowered', 'horde_crown', 'horde_courage']
   }),

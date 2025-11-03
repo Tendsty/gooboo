@@ -20,6 +20,7 @@
         <span v-else-if="['stun', 'silence'].includes(effect.type)">{{ $formatTime(finalValue) }} </span>
         <template v-else-if="['permanentStat', 'gainStat'].includes(effect.type)">
           <span v-if="effect.stat.split('_')[1] === 'mult'">{{ effect.type === 'permanentStat' ? '+' : ''}}{{ $formatNum(finalValue, true) }}x </span>
+          <span v-else-if="['hordeFirstStrike', 'hordeCritMult', 'hordeHealing', 'cutting'].includes(effect.stat.split('_')[0])">+{{ $formatNum(finalValue * 100, true) }}% </span>
           <span v-else>+{{ $formatNum(finalValue, true) }} </span>
         </template>
         <span v-else>{{ $formatNum(finalValue * healingMult * 100, true) }}% </span>
@@ -31,15 +32,19 @@
         <span>{{ $vuetify.lang.t(`$vuetify.horde.active.${ effect.type }.1`) }}</span>
       </template>
     </div>
+    <div v-for="(stat, index) in statDiff" class="d-flex align-center" :key="`stat-diff-${ index }-${ stat.type }-${ stat.name }`">
+      <v-icon class="mx-1" x-small>mdi-circle-medium</v-icon>
+      <display-row class="mt-0" :name="stat.name" :type="stat.type" :before="stat.before" :after="stat.value"></display-row>
+    </div>
     <div v-if="hasBreakdown" class="ml-2 mt-n1">
-      <span>({{ $formatNum(effect.value * healingMult * 100, true) }}% base</span>
+      <span>({{ $formatNum(effect.value * healingMult * 100, true) }}% {{ $vuetify.lang.t('$vuetify.horde.active.baseValue') }}</span>
       <span v-if="effect.str !== undefined">,&nbsp;</span>
       <span class="orange-red--text" :class="`text--${ themeModifier }`" v-if="effect.str !== undefined">+{{ $formatNum(effect.str * healingMult * 100, true) }}% <v-icon size="12" :color="`orange-red ${ themeModifier }`">mdi-arm-flex</v-icon></span>
       <span v-if="effect.int !== undefined">,&nbsp;</span>
       <span class="indigo--text" :class="`text--${ themeModifier }`" v-if="effect.int !== undefined">+{{ $formatNum(effect.int * healingMult * 100, true) }}% <v-icon size="12" :color="`indigo ${ themeModifier }`">mdi-lightbulb-on</v-icon></span>
       <span>)</span>
     </div>
-    <div v-if="critEffect > 0" class="ml-2 mt-n1">({{ $vuetify.lang.t(`$vuetify.horde.active.canCrit`, $formatNum(critEffect * 100)) }})</div>
+    <div v-if="critEffect > 0" class="ml-2 mt-n1">({{ $vuetify.lang.t('$vuetify.horde.active.canCrit', $formatNum(critEffect * 100)) }})</div>
   </div>
 </template>
 
@@ -69,17 +74,22 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    equipName: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   computed: {
     highestBone() {
-      return this.$store.getters['mult/get']('currencyHordeBoneGain', this.$store.getters['horde/enemyBone'](this.$store.state.stat.horde_maxZone.value, 0));
+      return this.$store.getters['mult/get']('currencyHordeBoneGain', this.$store.getters['horde/enemyBone'](this.$store.state.stat.horde_maxZone.value, 0), 1, 0, ['hordeEquipment']);
     },
     highestBlood() {
       return this.$store.getters['mult/get']('currencyHordeBloodGain', this.$store.getters['horde/enemyBlood'](this.$store.state.stat.horde_maxDifficulty.value, 0));
     },
     highestMonsterPart() {
-      return this.$store.getters['mult/get']('currencyHordeMonsterPartGain', this.$store.getters['horde/enemyMonsterPart'](this.$store.state.stat.horde_maxZone.value, 0));
+      return this.$store.getters['mult/get']('currencyHordeMonsterPartGain', this.$store.getters['horde/enemyMonsterPart'](this.$store.state.stat.horde_maxZone.value, 0), 1, 0, ['hordeEquipment']);
     },
     finalValue() {
       let value = this.effect.value;
@@ -101,7 +111,7 @@ export default {
       return this.effect.canCrit ?? 0;
     },
     healingMult() {
-      return this.effect.type === 'heal' && !this.isEnemy ? this.$store.state.horde.cachePlayerStats.healing : 1;
+      return (this.effect.type === 'heal' && !this.isEnemy) ? this.$store.state.horde.cachePlayerStats.healing : 1;
     },
     statDisplayName() {
       if (this.effect.stat) {
@@ -112,6 +122,41 @@ export default {
         }
       }
       return null;
+    },
+    statDiff() {
+      if (this.effect.type === 'addStack' && this.equipName) {
+        const equip = this.$store.state.horde.items[this.equipName];
+        const beforeArr = equip.stats(equip.level, equip.stacks).map(elem => elem.value);
+        let arr = equip.stats(equip.level, equip.stacks + (equip.masteryLevel >= 4 ? 1.5 : 1)).map((elem, index) => {
+          return {...elem, before: beforeArr[index]};
+        });
+        if (equip.passive) {
+          arr = arr.map(elem => {
+            let value = elem.value;
+            let before = elem.before;
+            if (elem.isPositive && value !== true) {
+              const masteryMult = (equip.masteryLevel >= 4 ? 2 : 1) * equip.masteryBoost + 1;
+              if (elem.type === 'base' || elem.type === 'bonus') {
+                value *= masteryMult;
+                before *= masteryMult;
+                if (elem.name === 'hordeDivisionShield' || elem.name === 'hordeRevive') {
+                  value = Math.round(value);
+                  before = Math.round(value);
+                }
+              } else if (elem.type === 'mult' && elem.value > 0) {
+                value = Math.pow(value, masteryMult);
+                before = Math.pow(before, masteryMult);
+              } else if (elem.type === 'tag') {
+                value = value.map(el => el * masteryMult);
+                before = before.map(el => el * masteryMult);
+              }
+            }
+            return {...elem, before, value};
+          });
+        }
+        return arr.filter(elem => elem.before !== elem.value);
+      }
+      return [];
     }
   }
 }

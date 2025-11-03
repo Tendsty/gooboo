@@ -1,9 +1,20 @@
+<style scoped>
+.idea-bonus-level {
+  margin-left: 2px;
+  font-size: 10px;
+}
+</style>
+
 <template>
   <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.gallery.idea.${name}`)">
     <template v-slot:activator="{ on, attrs }">
       <div :class="$vnode.data.staticClass" v-bind="attrs" v-on="on">
         <v-btn width="56" height="56" min-width="56" :disabled="!canUpgrade || disabled" :color="idea.color" @click="buy">
-          <v-badge overlap bottom left offset-x="45" color="grey" :disabled="!canUpgrade" :content="$formatNum(idea.level)">
+          <v-badge overlap bottom left offset-x="45" color="grey" :disabled="!canUpgrade">
+            <template v-slot:badge>
+              <span>{{ $formatInt(idea.level) }}</span>
+              <span v-if="bonusLevels > 0" class="idea-bonus-level">+{{ $formatInt(bonusLevels) }}</span>
+            </template>
             <v-icon large>{{ idea.icon }}</v-icon>
           </v-badge>
         </v-btn>
@@ -31,6 +42,9 @@ export default {
     }
   },
   computed: {
+    bonusLevels() {
+      return this.idea.tier === 1 ? this.$store.getters['tag/values']('galleryBonusTier1Idea')[0] : 0;
+    },
     idea() {
       return this.$store.state.gallery.idea[this.name];
     },
@@ -39,7 +53,7 @@ export default {
     },
     display() {
       return this.idea.effect.map(elem => {
-        const lvl = this.idea.level;
+        const lvl = this.idea.level + this.bonusLevels;
         return {
           ...elem,
           before: lvl > 0 ? elem.value(lvl) : null,

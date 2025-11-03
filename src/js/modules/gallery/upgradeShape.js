@@ -7,7 +7,7 @@ export default {
     bigCircle: {type: 'shape', price(lvl) {
         return {gallery_circle: Math.pow(lvl * 0.01 + 1.35, lvl) * 100};
     }, effect: [
-        {name: 'galleryShapeGain', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
+        {name: 'galleryShapeGain', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
     ]},
     wellDrawnCircle: {type: 'shape', price(lvl) {
         return {gallery_circle: Math.pow(lvl * 0.05 + 2.25, lvl) * 5000};
@@ -19,7 +19,7 @@ export default {
     }, price(lvl) {
         return {gallery_rectangle: Math.pow(lvl * 0.1 + 1.75, lvl) * 1000};
     }, effect: [
-        {name: 'currencyGalleryMotivationCap', type: 'base', value: lvl => lvl}
+        {name: 'currencyGalleryMotivationCap', type: 'base', value: lvl => lvl * 5}
     ]},
     wellDrawnRectangle: {type: 'shape', requirement() {
         return store.state.gallery.shape.rectangle.unlocked;
@@ -46,7 +46,7 @@ export default {
         {name: 'sparkles', type: 'galleryShape', value: lvl => lvl >= 4},
         {name: 'hourglass', type: 'galleryShape', value: lvl => lvl >= 5},
         {name: 'chest', type: 'galleryShape', value: lvl => lvl >= 6},
-        {name: 'currencyGalleryMotivationGain', type: 'base', value: lvl => lvl >= 7 ? ((lvl - 6) * 0.005) : null}
+        {name: 'currencyGalleryMotivationCap', type: 'base', value: lvl => lvl >= 7 ? ((lvl - 6) * 10) : null}
     ]},
     wellDrawnTriangle: {type: 'shape', requirement() {
         return store.state.gallery.shape.triangle.unlocked;
@@ -89,7 +89,7 @@ export default {
         return {gallery_heart: Math.pow(lvl + 8, lvl) * buildNum(2, 'M')};
     }, effect: [
         {name: 'galleryShapeGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
-        {name: 'currencyGalleryMotivationCap', type: 'base', value: lvl => lvl * 2}
+        {name: 'currencyGalleryMotivationCap', type: 'base', value: lvl => lvl * 10}
     ]},
     wellDrawnHeart: {type: 'shape', requirement() {
         return store.state.gallery.shape.heart.unlocked;

@@ -1,43 +1,70 @@
 <style scoped>
 .date-text {
-  font-size: 32px;
+  position: relative;
+  width: 128px;
+  height: 80px;
+  font-size: 20px;
 }
 .date-text-mobile {
-  font-size: 28px;
+  width: 80px;
+  height: 56px;
+  font-size: 16px;
 }
-.answer-input {
-  width: 300px;
-  max-width: 300px;
+.card-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: opacity 100ms;
+}
+.card-selected {
+  border: 4px dotted var(--v-primary-base);
+}
+.card-revealed {
+  opacity: 0;
+}
+.game-reset {
+  font-size: 36px;
+  text-align: center;
+}
+.game-reset-mobile {
+  font-size: 28px;
 }
 </style>
 
 <template>
-  <div v-if="answering">
-    <div class="d-flex justify-center align-center flex-wrap">
-      <div v-if="question !== null" class="d-flex align-center date-text ma-1 pa-2 rounded balloon-text-dynamic" :class="[colors[dates[question].id], {'date-text-mobile': $vuetify.breakpoint.xsOnly}]">
-        <v-icon class="mr-2" large>{{ icons[dates[question].id] }}</v-icon>
-        <span>{{ $vuetify.lang.t(`$vuetify.school.history.year`, '???') }}</span>
+  <div v-if="gameState === 0" class="game-reset" :class="{'game-reset-mobile': $vuetify.breakpoint.xsOnly}">{{ $vuetify.lang.t('$vuetify.school.history.newGame') }}</div>
+  <div v-else class="d-flex justify-center flex-wrap mx-auto" :style="`max-width: ${ maxCols * ($vuetify.breakpoint.xsOnly ? 88 : 136) }px;`">
+    <div
+      v-for="item in dates"
+      class="d-flex flex-column justify-center align-center date-text ma-1 pa-2 rounded"
+      :class="{'date-text-mobile': $vuetify.breakpoint.xsOnly, 'card-selected': item.id === revealNext}"
+      :style="item.done ? undefined : `background-color: #808080;`"
+      :key="item.id"
+      @click="revealCell(item.done ? null : item.id)"
+    >
+      <template v-if="!item.done">
+        <div class="balloon-text-dynamic">{{ $vuetify.lang.t(`$vuetify.school.history.year`) }}</div>
+        <div class="balloon-text-dynamic">{{ $formatInt(item.year) }}</div>
+      </template>
+      <div
+        class="card-overlay d-flex justify-center align-center rounded"
+        :class="{'card-revealed': !item.done && (item.reveal > 0 || item.id === revealNext || gameState === 2), 'warning': !item.done && item.seen, 'info': !item.done && !item.seen}"
+        :id="`card-overlay-${ item.id }`"
+      >
+        <v-icon v-if="item.done" style="opacity: 0.05;" :size="iconSize">mdi-check-bold</v-icon>
+        <v-icon v-else-if="item.seen" style="opacity: 0.25;" :size="iconSize">mdi-eye</v-icon>
+        <v-icon v-else style="opacity: 0.25;" :size="iconSize">mdi-help</v-icon>
       </div>
-      <v-text-field id="answer-input-history" class="answer-input ma-1" type="number" @keydown.enter.prevent="giveAnswer" outlined hide-details autofocus v-model="answer" :disabled="answersGiven >= 5"></v-text-field>
-      <v-btn class="ma-1" :large="$vuetify.breakpoint.smAndAbove" color="primary" @click="giveAnswerOnButton" :disabled="answersGiven >= 5">{{ $vuetify.lang.t(`$vuetify.school.answer`) }}</v-btn>
-    </div>
-  </div>
-  <div v-else>
-    <div class="d-flex justify-center flex-wrap ma-1">
-      <div v-for="(item, key) in dates" class="d-flex align-center date-text ma-1 pa-2 rounded balloon-text-dynamic" :class="[colors[item.id], {'date-text-mobile': $vuetify.breakpoint.xsOnly}]" :key="key">
-        <v-icon class="mr-2" large>{{ icons[item.id] }}</v-icon>
-        <span>{{ $vuetify.lang.t(`$vuetify.school.history.year`, item.year) }}</span>
-      </div>
-    </div>
-    <div class="d-flex justify-center align-center">
-      <v-btn color="primary" @click="startAnswering">{{ $vuetify.lang.t(`$vuetify.school.answer`) }}</v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import { buildArray, shuffleArray } from '../../../js/utils/array';
-import { randomElem, randomInt } from '../../../js/utils/random';
+import { shuffleArray } from '../../../js/utils/array';
+import { randomInt } from '../../../js/utils/random';
+import { setCharAt } from '../../../js/utils/string';
 
 export default {
   props: {
@@ -51,78 +78,168 @@ export default {
     score: 0,
     elo: 0,
     triesLeft: 0,
-    colors: ['red', 'green', 'blue', 'yellow', 'purple', 'brown', 'orange', 'grey', 'cyan', 'pink'],
-    icons: ['mdi-circle', 'mdi-triangle', 'mdi-square', 'mdi-star', 'mdi-ellipse', 'mdi-hexagon', 'mdi-pentagon', 'mdi-rectangle', 'mdi-octagram', 'mdi-rhombus'],
+    found: 0,
     dates: [],
-    question: null,
-    answer: '',
-    answersGiven: 0,
-    answering: false
+    realDates: [],
+    revealNext: null,
+    intervalId: null,
+    gameState: 1,
+    gameTick: 0,
   }),
   mounted() {
-    this.elo = this.$store.state.school.history.currentGrade;
+    this.elo = this.$store.state.school.subject.history.currentGrade;
     if (this.schoolMode === 'exam') {
       this.triesLeft = 1;
-    } else if (this.schoolMode === 'study') {
-      this.triesLeft = 0;
     }
     this.newDates();
   },
+  computed: {
+    maxCols() {
+      return Math.ceil(Math.sqrt(this.dates.length / 2) * 2);
+    },
+    maxTicks() {
+      return this.schoolMode === 'exam' ? 300 : 350;
+    },
+    revealTime() {
+      return Math.ceil(80 / (this.elo + 3));
+    },
+    iconSize() {
+      return this.$vuetify.breakpoint.xsOnly ? 48 : 72;
+    }
+  },
   methods: {
-    startAnswering() {
-      this.answering = true;
-      this.newQuestion();
-    },
-    giveAnswer() {
-      if (this.answer !== '' && this.question !== null) {
-        const answer = parseInt(this.answer);
-        if (answer === this.dates[this.question].year) {
-          this.addScore();
-        } else {
-          this.$emit('score', this.score);
-        }
-        this.answer = null;
-        this.answersGiven++;
-        this.newQuestion();
-      }
-    },
-    giveAnswerOnButton() {
-      this.giveAnswer();
-      document.getElementById('answer-input-history').focus();
-    },
-    newQuestion() {
-      if (this.answersGiven < 5) {
-        this.question = randomElem(buildArray(this.dates.length).filter(elem => elem !== this.question));
-      } else {
-        this.question = null;
-        if (this.schoolMode !== 'practice' && this.triesLeft <= 0) {
-          setTimeout(this.endEarly, 1000);
-        } else {
-          if (this.schoolMode !== 'practice') {
-            this.triesLeft--;
-          }
-          this.newDates();
-        }
-      }
-    },
     newDates() {
-      const minYear = Math.round(Math.pow(5, this.elo / 3));
-      const maxYear = Math.round(Math.pow(6, this.elo / 3) * 7.5);
-      let dates = [];
-      for (let i = 0, n = Math.floor(Math.min(10, this.elo / 3 + 3)); i < n; i++) {
-        dates.push({id: i, year: randomInt(minYear, maxYear)});
+      // Define constants
+      const digitAmount = Math.ceil(this.elo / 3 + 1);
+      const fakeAmount = Math.round(this.elo + 2 - digitAmount);
+
+      // Create real date numbers
+      let realDates = [];
+      while (realDates.length < 5) {
+        const num = randomInt(Math.pow(10, digitAmount - 1), Math.pow(10, digitAmount) - 1).toString();
+        if (!realDates.includes(num)) {
+          realDates.push(num);
+        }
       }
-      this.dates = shuffleArray(dates);
-      this.answersGiven = 0;
-      this.answering = false;
+      this.realDates = realDates;
+
+      // Create fake date numbers
+      let fakeDates = [];
+      while (fakeDates.length < fakeAmount) {
+        const realIndex = randomInt(0, 4);
+        const fakeIndex = randomInt(0, digitAmount - 1);
+        const realDigit = parseInt(realDates[realIndex].substring(fakeIndex, fakeIndex + 1));
+        let fakeDigit = randomInt(0, fakeIndex > 0 ? 8 : 7);
+        if (fakeIndex <= 0) {
+          fakeDigit++;
+        }
+        if (fakeDigit >= realDigit) {
+          fakeDigit++;
+        }
+        const num = setCharAt(realDates[realIndex], fakeIndex, fakeDigit);
+        if (!realDates.includes(num) && !fakeDates.includes(num)) {
+          fakeDates.push(num);
+        }
+      }
+
+      // Set up tiles and fakes
+      this.dates = shuffleArray([...realDates, ...realDates, ...fakeDates]).map((el, id) => {
+        return {year: el, seen: false, done: false, reveal: 0, id};
+      });
+
+      this.found = 0;
+
+      // Start the game
+      this.gameState = 1;
+      this.gameTick = 0;
+      this.intervalId = setInterval(this.revealTick, 100);
     },
-    addScore() {
-      this.score++;
+    revealTick() {
+      this.dates.forEach((elem, key) => {
+        if (elem.reveal > 0) {
+          this.$set(this.dates[key], 'reveal', elem.reveal - 1);
+        }
+      });
+      this.updateTimer(-1);
+    },
+    updateTimer(diff = 0) {
+      this.gameTick -= diff;
+      if (this.gameTick >= this.maxTicks) {
+        this.intervalStop();
+        this.gameState = 2;
+        setTimeout(this.startNextGame, 5000);
+      }
+      this.$emit('timer', Math.max(0, Math.ceil((this.maxTicks - this.gameTick) / 10)));
+    },
+    changeScore(diff) {
+      this.score = Math.max(0, this.score + diff);
+      if (this.schoolMode === 'exam' && this.score > this.$store.state.school.subject.history.scoreGoal) {
+        this.score = this.$store.state.school.subject.history.scoreGoal;
+      }
       this.$emit('score', this.score);
     },
-    endEarly() {
-      this.$emit('stop');
-    }
+    startNextGame() {
+      if (this.schoolMode === 'practice') {
+        this.triesLeft++;
+      } else if (this.triesLeft <= 0 || (this.schoolMode === 'exam' && this.score >= this.$store.state.school.subject.history.scoreGoal)) {
+        this.$emit('stop', this.score);
+        return;
+      } else {
+        this.triesLeft--;
+      }
+      this.gameState = 0;
+      this.gameTick = 0;
+      this.updateTimer();
+      setTimeout(this.newDates, 5000);
+    },
+    revealCell(id) {
+      if (id !== null) {
+        if (this.revealNext === null) {
+          this.revealNext = id;
+        } else if (this.revealNext !== id) {
+          if (this.dates[this.revealNext].year === this.dates[id].year) {
+            // Found pair
+            this.$set(this.dates[this.revealNext], 'done', true);
+            this.$set(this.dates[id], 'done', true);
+            this.found++;
+            this.changeScore(1);
+            if (this.found >= 5) {
+              this.intervalStop();
+              this.gameState = 2;
+              setTimeout(this.startNextGame, 5000);
+            }
+          } else {
+            // No pair
+            let mistakes = 0;
+            if (this.dates[this.revealNext].seen) {
+              mistakes++;
+            } else {
+              this.$set(this.dates[this.revealNext], 'seen', true);
+            }
+            if (this.dates[id].seen) {
+              mistakes++;
+            } else {
+              this.$set(this.dates[id], 'seen', true);
+            }
+            if (mistakes > 0) {
+              this.updateTimer(mistakes * -50);
+            }
+            this.$set(this.dates[this.revealNext], 'reveal', this.revealTime);
+            this.$set(this.dates[id], 'reveal', this.revealTime);
+          }
+          this.revealNext = null;
+        }
+      }
+    },
+    intervalStop() {
+      if (this.intervalId !== null) {
+        clearInterval(this.intervalId);
+        this.intervalId = null;
+      }
+    },
+  },
+  destroyed() {
+    this.intervalStop();
   }
 }
 </script>

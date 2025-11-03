@@ -9,7 +9,7 @@
 
 <template>
   <v-card class="pa-1">
-    <currency always-show class="my-1 mx-auto" :name="`village_${name}`"></currency>
+    <currency always-show class="my-1 mx-auto" :name="`village_${ name }`"></currency>
     <gb-tooltip v-if="!isUnlocked" :min-width="0">
       <template v-slot:activator="{ on, attrs }">
         <v-icon size="32" class="offering-locked" v-bind="attrs" v-on="on">mdi-cancel</v-icon>
@@ -22,7 +22,7 @@
         {{ offering.offeringBought }}
       </v-chip>
       <v-spacer></v-spacer>
-      <price-tag class="ma-1" :currency="`village_${name}`" :amount="sacrificeCost"></price-tag>
+      <price-tag class="ma-1" :currency="`village_${ name }`" :amount="sacrificeCost"></price-tag>
       <gb-tooltip>
         <template v-slot:activator="{ on, attrs }">
           <div v-bind="attrs" v-on="on">
@@ -45,18 +45,18 @@
     <div class="d-flex align-center">
       <v-chip class="ma-1" style="height: 28px;">
         <v-icon class="mr-1">mdi-chevron-double-up</v-icon>
-        {{ offering.upgradeBought }}
+        {{ $formatInt(offering.upgradeBought) }}
       </v-chip>
       <v-spacer></v-spacer>
       <price-tag class="ma-1" currency="village_offering" :amount="upgradeCost"></price-tag>
-      <v-btn small class="ma-1" color="primary" :disabled="!canAffordUpgrade || disabled" @click="buyUpgrade(true)">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
       <gb-tooltip>
         <template v-slot:activator="{ on, attrs }">
           <div v-bind="attrs" v-on="on">
-            <v-btn class="ma-1" color="primary" :disabled="!canAffordUpgrade || disabled" @click="buyUpgrade(false)">{{ $vuetify.lang.t('$vuetify.gooboo.buy') }}</v-btn>
+            <v-btn class="ma-1" color="primary" :disabled="!canAffordUpgrade || disabled" @click="buyUpgrade">{{ $vuetify.lang.t('$vuetify.gooboo.buy') }}</v-btn>
           </div>
         </template>
         <display-row class="mt-0" :name="capName" type="base" :before="valueBefore" :after="valueAfter"></display-row>
+        <display-row v-if="offering.hasMultiplier" class="mt-0" :name="capName" type="mult" :before="multBefore" :after="multAfter"></display-row>
         <alert-text v-if="!isUnlocked" type="warning">{{ $vuetify.lang.t('$vuetify.village.offering.notUnlockedHint') }}</alert-text>
       </gb-tooltip>
     </div>
@@ -65,7 +65,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { VILLAGE_OFFERING_PASSIVE_GAIN } from '../../../js/constants';
+import { VILLAGE_OFFERING_MULT_EFFECT, VILLAGE_OFFERING_PASSIVE_GAIN, VILLAGE_OFFERING_PRICE_INCREMENT } from '../../../js/constants';
 import { capitalize } from '../../../js/utils/format';
 import Currency from '../../render/Currency.vue';
 import CurrencyIcon from '../../render/CurrencyIcon.vue';
@@ -97,7 +97,7 @@ export default {
       return this.offering.cost(this.offering.offeringBought);
     },
     upgradeCost() {
-      return this.offering.amount + this.offering.increment * this.offering.upgradeBought;
+      return Math.round(Math.pow(this.offering.amount, 2) * Math.pow(VILLAGE_OFFERING_PRICE_INCREMENT, this.offering.upgradeBought));
     },
     canAffordSacrifice() {
       return this.$store.getters['currency/value']('village_' + this.name) >= this.sacrificeCost;
@@ -108,14 +108,17 @@ export default {
     capName() {
       return 'currencyVillage' + capitalize(this.name) + 'Cap';
     },
-    valuePerOffering() {
-      return this.$store.getters['mult/get']('villageOfferingPower', this.offering.effect);
-    },
     valueBefore() {
-      return this.offering.upgradeBought * this.valuePerOffering;
+      return this.$store.getters['village/offeringBaseEffect'](this.name, this.offering.upgradeBought);
     },
     valueAfter() {
-      return (this.offering.upgradeBought + 1) * this.valuePerOffering;
+      return this.$store.getters['village/offeringBaseEffect'](this.name, this.offering.upgradeBought + 1);
+    },
+    multBefore() {
+      return Math.pow(VILLAGE_OFFERING_MULT_EFFECT, this.offering.upgradeBought);
+    },
+    multAfter() {
+      return Math.pow(VILLAGE_OFFERING_MULT_EFFECT, this.offering.upgradeBought + 1);
     },
     isUnlocked() {
       return this.offering.unlock === null || this.$store.state.unlock[this.offering.unlock].use;
@@ -128,8 +131,8 @@ export default {
     buySacrifice() {
       this.$store.dispatch('village/buyOffering', this.name);
     },
-    buyUpgrade(max) {
-      this.$store.dispatch('village/upgradeOffering', {name: this.name, buyMax: max});
+    buyUpgrade() {
+      this.$store.dispatch('village/upgradeOffering', this.name);
     }
   }
 }

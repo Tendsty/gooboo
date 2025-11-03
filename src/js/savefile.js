@@ -14,6 +14,7 @@ import treasure from "./modules/treasure";
 import general from "./modules/general";
 import event from "./modules/event";
 import cryolab from "./modules/cryolab";
+import relic from "./modules/relic";
 import v1_1_0 from "./modules/migration/v1_1_0";
 import { getDay } from "./utils/date";
 import v1_1_2 from "./modules/migration/v1_1_2";
@@ -29,6 +30,7 @@ import v1_5_1 from "./modules/migration/v1_5_1";
 import v1_5_3 from "./modules/migration/v1_5_3";
 import v1_5_4 from "./modules/migration/v1_5_4";
 import v1_5_6 from "./modules/migration/v1_5_6";
+import v1_6_0 from "./modules/migration/v1_6_0";
 
 const migrations = {
     '1.1.0': v1_1_0,
@@ -43,6 +45,7 @@ const migrations = {
     '1.5.3': v1_5_3,
     '1.5.4': v1_5_4,
     '1.5.6': v1_5_6,
+    '1.6.0': v1_6_0,
 };
 
 export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }
@@ -51,7 +54,7 @@ const semverCompare = require('semver/functions/compare');
 /**
  * An array of modules that save and load data to the savefile
  */
-const modules = [event, mining, village, horde, farm, gallery, gem, achievement, school, card, general, treasure, cryolab];
+const modules = [event, relic, mining, village, horde, farm, gallery, gem, achievement, school, card, general, treasure, cryolab];
 
 function checkLocal() {
     return localStorage.getItem(LOCAL_STORAGE_NAME);
@@ -116,7 +119,7 @@ function decodeFile(file, showErrors = true) {
     // Check if keys are missing
     [
         'version', 'timestamp', 'theme', 'unlock', 'settings', 'subfeature',
-        'currency', 'stat', 'upgrade', 'upgradeQueue', 'relic', 'globalLevel',
+        'currency', 'stat', 'upgrade', 'upgradeQueue', 'globalLevel',
         'keybinds', 'note', 'consumable', 'rng'
     ].forEach(key => {
         if (file[key] === undefined) {
@@ -167,7 +170,7 @@ function decodeFile(file, showErrors = true) {
     // Check for invalid checksum
     // eslint-disable-next-line no-unused-vars
     const {checksum: _, ...rawFile} = file;
-    if (semverCompare(file.version, '1.5.0') === 1 && simpleHash(JSON.stringify(rawFile)) !== file.checksum) {
+    if (semverCompare(file.version, '1.5.0') !== -1 && simpleHash(JSON.stringify(rawFile)) !== file.checksum) {
         if (showErrors) {
             store.commit('system/addNotification', {color: APP_TESTING ? 'warning' : 'error', timeout: -1, message: {
                 type: 'import',
@@ -199,7 +202,7 @@ function loadFile(file) {
         return;
     }
 
-    ['timestamp', 'currentDay', 'lastPlayedDays', 'theme', 'backupTimer', 'playerId', 'noteHint', 'cheaterSelfMark', 'cheatDetected'].forEach(elem => {
+    ['timestamp', 'currentDay', 'lastPlayedDays', 'theme', 'backupTimer', 'playerId', 'noteHint', 'bookHint', 'cheaterSelfMark', 'cheatDetected'].forEach(elem => {
         if (save[elem]) {
             store.commit('system/updateKey', {key: elem, value: save[elem]});
         }
@@ -249,20 +252,12 @@ function loadFile(file) {
             // Detect unobtainable unlocks
             const illegalUnlocks = {
                 debugFeature: 'meta',
-                relicMuseum: 'relic',
-                treasureSpecialEffect: 'treasure',
-                treasureDual: 'treasure',
-                cardShiny: 'card',
-                generalOrladeeSubfeature: 'general',
                 generalOppenschroeSubfeature: 'general',
                 generalBelluxSubfeature: 'general',
                 generalOnocluaSubfeature: 'general',
                 generalOmnisolixSubfeature: 'general',
-                hordeChessItems: 'horde',
-                hordeClassAssassin: 'horde',
                 hordeClassShaman: 'horde',
                 hordeClassUndead: 'horde',
-                hordeClassCultist: 'horde',
                 hordeClassScholar: 'horde',
             };
             if (Object.keys(illegalUnlocks).includes(key)) {
@@ -321,14 +316,6 @@ function loadFile(file) {
             }
         }
     }
-    if (save.relic) {
-        save.relic.forEach(elem => {
-            if (store.state.relic.item[elem]) {
-                Vue.set(store.state.relic.item[elem], 'found', true);
-                store.dispatch('relic/apply', {name: elem});
-            }
-        });
-    }
     if (save.globalLevel) {
         for (const [key, elem] of Object.entries(save.globalLevel)) {
             if (store.state.meta.globalLevelList.includes(key)) {
@@ -340,7 +327,7 @@ function loadFile(file) {
         // Global level unlocks
         for (const [key, elem] of Object.entries(store.state.meta.globalLevelUnlocks)) {
             if (store.state.meta.globalLevel >= elem && !store.state.unlock[key].use) {
-                store.commit('unlock/unlock', key);
+                store.dispatch('unlock/unlock', key);
             }
         }
     }
@@ -383,6 +370,11 @@ function loadFile(file) {
             store.commit('system/updateCachePageKey', {key, value: elem});
         }
     }
+    if (save.questlineHint) {
+        for (const [key, elem] of Object.entries(save.questlineHint)) {
+            store.commit('system/updateSubkey', {name: 'questlineHint', key, value: elem});
+        }
+    }
 
     // Load feature specific things
     modules.forEach(module => {
@@ -390,14 +382,6 @@ function loadFile(file) {
             module.loadGame(save[module.name]);
         }
     });
-
-    // Add autoplay data if it was used
-    if (save.autoplayData) {
-        store.commit('system/updateKey', {key: 'autoplayData', value: save.autoplayData});
-    }
-    if (save.autoplayChoice) {
-        store.commit('system/updateKey', {key: 'autoplayChoice', value: save.autoplayChoice});
-    }
 
     if (save.timeMult) {
         store.commit('system/updateKey', {key: 'timeMult', value: save.timeMult});
@@ -461,7 +445,6 @@ function getSavefile() {
         stat: {},
         upgrade: {},
         upgradeQueue: {},
-        relic: [],
         globalLevel: {},
         settings: {},
         keybinds: {},
@@ -525,11 +508,6 @@ function getSavefile() {
             save.upgradeQueue[key] = [...elem];
         }
     }
-    for (const [key, elem] of Object.entries(store.state.relic.item)) {
-        if (elem.found) {
-            save.relic.push(key);
-        }
-    }
     for (const [key, elem] of Object.entries(store.getters['meta/globalLevelParts'])) {
         save.globalLevel[key] = elem;
     }
@@ -557,6 +535,17 @@ function getSavefile() {
     if (store.state.system.noteHint.length > 0) {
         save.noteHint = store.state.system.noteHint;
     }
+    if (store.state.system.bookHint.length > 0) {
+        save.bookHint = store.state.system.bookHint;
+    }
+    for (const [key, elem] of Object.entries(store.state.system.questlineHint)) {
+        if (elem.length > 0) {
+            if (save.questlineHint === undefined) {
+                save.questlineHint = {};
+            }
+            save.questlineHint[key] = elem;
+        }
+    }
     for (const [key, elem] of Object.entries(store.state.consumable)) {
         if (elem.amount > 0 || (!elem.foundDefault && elem.found)) {
             save.consumable[key] = elem.amount;
@@ -579,14 +568,6 @@ function getSavefile() {
             save[module.name] = module.saveGame();
         }
     });
-
-    // Add autoplay data to savefile if it was used
-    if (store.state.system.autoplayData.length > 0) {
-        save.autoplayData = store.state.system.autoplayData;
-    }
-    if (Object.keys(store.state.system.autoplayChoice).length > 0) {
-        save.autoplayChoice = store.state.system.autoplayChoice;
-    }
 
     if (store.state.system.timeMult > 1) {
         save.timeMult = store.state.system.timeMult;

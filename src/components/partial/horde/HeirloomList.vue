@@ -1,6 +1,6 @@
 <template>
   <v-row class="pa-1" no-gutters>
-    <v-col class="pa-1" v-for="item in items" :key="item" cols="12" sm="6" lg="4">
+    <v-col class="pa-1" v-for="item in items" :key="item" cols="12" sm="6" md="3" lg="2">
       <heirloom-item :name="item"></heirloom-item>
     </v-col>
   </v-row>

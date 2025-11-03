@@ -65,7 +65,7 @@ export default {
     highestCorrectChars: 0
   }),
   mounted() {
-    this.elo = this.$store.state.school.literature.currentGrade;
+    this.elo = this.$store.state.school.subject.literature.currentGrade;
     this.newWords();
   },
   computed: {

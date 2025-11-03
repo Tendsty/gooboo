@@ -1,8 +1,5 @@
 const reward = [
-    {name: 'gem_ruby', type: 'currency', value: 10},
-    {name: 'gem_emerald', type: 'currency', value: 10},
-    {name: 'gem_sapphire', type: 'currency', value: 10},
-    {name: 'gem_amethyst', type: 'currency', value: 10}
+    {name: 'school_goldenDust', type: 'currency', value: 750}
 ];
 
 export default [

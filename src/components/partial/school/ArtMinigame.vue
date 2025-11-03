@@ -63,15 +63,17 @@ export default {
     score: 0,
     elo: 0,
     answerCount: 0,
-    changeAmount: 0,
+    changeAmountMin: 0,
+    changeAmountMax: 0,
     mixed: [],
     answers: [],
     solution: null
   }),
   mounted() {
-    this.elo = this.$store.state.school.art.currentGrade;
-    this.answerCount = Math.floor(this.elo / 2 + 4);
-    this.changeAmount = 60000 / (this.elo * 150 + 1000);
+    this.elo = this.$store.state.school.subject.art.currentGrade;
+    this.answerCount = Math.max(Math.floor(this.elo / 2) + 4, this.elo + 1);
+    this.changeAmountMin = Math.max(2, 60 / (this.elo * 0.4 + 1) / Math.pow(1.1, this.elo));
+    this.changeAmountMax = Math.max(5, 180 / (this.elo * 0.25 + 1) / Math.pow(1.05, this.elo));
     this.newQuestion();
   },
   methods: {
@@ -90,7 +92,7 @@ export default {
       for (let i = 0; i < this.answerCount; i++) {
         let newColor = Color(answer);
         if (i !== this.solution) {
-          newColor = newColor.rotate(this.changeAmount * randomFloat(1, 3) * (chance(0.5) ? 1 : -1));
+          newColor = newColor.rotate(randomFloat(this.changeAmountMin, this.changeAmountMax) * (chance(0.5) ? 1 : -1));
         }
         this.answers.push(newColor.hex());
       }
@@ -98,10 +100,10 @@ export default {
     giveAnswer(id) {
       if (this.solution === id) {
         this.score++;
-      } else if (this.score > 0) {
-        this.score--;
+        this.$emit('score', this.score);
+      } else {
+        this.$emit('timer', 5);
       }
-      this.$emit('score', this.score);
       this.newQuestion();
     }
   }

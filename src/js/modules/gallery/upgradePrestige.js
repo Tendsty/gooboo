@@ -5,9 +5,9 @@ import { getSequence } from "../../utils/math";
 
 export default {
     artAcademy: {type: 'prestige', price(lvl) {
-        return {gallery_cash: Math.pow(lvl * 0.01 + 1.65, lvl) * 2};
+        return {gallery_cash: Math.pow(lvl * 0.008 + 1.65, lvl) * 2};
     }, effect: [
-        {name: 'currencyGalleryBeautyGain', type: 'mult', value: lvl => Math.pow(1.3, lvl)}
+        {name: 'currencyGalleryBeautyGain', type: 'mult', value: lvl => Math.pow(1.35, lvl)}
     ]},
     redCrayon: {type: 'prestige', cap: 15, requirement() {
         return store.state.stat.gallery_orange.total > 0;
@@ -58,6 +58,7 @@ export default {
         {name: 'octagon', type: 'galleryShape', value: lvl => lvl >= 8},
         {name: 'pentagon', type: 'galleryShape', value: lvl => lvl >= 9},
         {name: 'hexagon', type: 'galleryShape', value: lvl => lvl >= 10},
+        {name: 'gallery_surpriseParty', type: 'gainConsumable', value: lvl => lvl > 1 ? 3 : 10},
     ]},
     forklift: {type: 'prestige', cap: 9, requirement() {
         return store.state.unlock.galleryDrums.see;
@@ -107,7 +108,8 @@ export default {
     }, price(lvl) {
         return {gallery_cash: Math.pow(lvl * 0.05 + 1.75, lvl) * buildNum(35.5, 'K')};
     }, effect: [
-        {name: 'galleryShapeGain', type: 'mult', value: lvl => Math.pow(1.45, lvl)}
+        {name: 'galleryShapeGain', type: 'mult', value: lvl => Math.pow(1.45, lvl)},
+        {name: 'gallery_surpriseParty', type: 'gainConsumable', value: () => 1},
     ]},
     greenCrayon: {type: 'prestige', cap: 30, requirement() {
         return store.state.stat.gallery_blue.total > 0;
@@ -162,7 +164,7 @@ export default {
     investment: {type: 'prestige', requirement() {
         return store.state.stat.gallery_purple.total > 0;
     }, price(lvl) {
-        return {gallery_cash: Math.pow(1.75 + 0.08 * lvl, lvl) * buildNum(12, 'B')};
+        return {gallery_cash: Math.pow(1.75 + 0.06 * lvl, lvl) * buildNum(12, 'B')};
     }, effect: [
         {name: 'currencyGalleryCashGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
     ]},

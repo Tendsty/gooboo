@@ -81,7 +81,7 @@ export default {
     }, effect: [
         {name: 'queueSpeedVillageBuilding', type: 'base', value: lvl => lvl}
     ]},
-    treasury: {cap: 10, hasDescription: true, capMult: true, icon: 'mdi-treasure-chest', note: 'village_9', requirement() {
+    treasury: {cap: 10, hasDescription: true, icon: 'mdi-treasure-chest', note: 'village_9', requirement() {
         return store.state.unlock.villageBuildings2.use;
     }, price(lvl) {
         let obj = {village_plantFiber: Math.pow(1.25, Math.max(0, lvl - 9)) * Math.pow(1.5, lvl) * 2600};
@@ -96,7 +96,7 @@ export default {
         {name: 'villageCoinUpgrades', type: 'unlock', value: lvl => lvl >= 1},
         {name: 'villageTaxRate', type: 'base', value: lvl => splicedLinear(0.025, 0.01, 10, lvl)}
     ]},
-    storage: {cap: 20, capMult: true, icon: 'mdi-database', note: 'village_8', requirement() {
+    storage: {cap: 20, icon: 'mdi-database', note: 'village_8', requirement() {
         return store.state.unlock.villageBuildings2.use;
     }, price(lvl) {
         let obj = {village_plantFiber: Math.pow(lvl * 0.02 + 1.15, lvl) * 900, village_wood: Math.pow(lvl * 0.02 + 1.15, lvl) * 900, village_stone: Math.pow(lvl * 0.02 + 1.18, lvl) * 1400};
@@ -107,10 +107,8 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.15, lvl) * 225);
     }, effect: [
-        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 20, lvl)},
-        {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 20, lvl)},
-        {name: 'currencyVillageStoneCap', type: 'mult', value: lvl => splicedPowLinear(1.2, 0.1, 20, lvl)},
-        {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => lvl > 5 ? splicedPowLinear(1.2, 0.1, 15, lvl - 5) : null}
+        {name: 'villageFoundationMaterialCap', type: 'mult', value: lvl => Math.pow(1.2, lvl)},
+        {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => lvl > 5 ? Math.pow(1.2, lvl - 5) : null}
     ]},
     forge: {cap: 20, icon: 'mdi-anvil', requirement() {
         return store.state.unlock.villageBuildings2.use;
@@ -178,7 +176,7 @@ export default {
     }, effect: [
         {name: 'villageWorker', type: 'base', value: lvl => lvl}
     ]},
-    shed: {icon: 'mdi-home-analytics', cap: 5, capMult: true, requirement() {
+    shed: {icon: 'mdi-home-analytics', cap: 5, requirement() {
         return store.state.unlock.villageBuildings3.use;
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.75, lvl) * 1600);
@@ -285,7 +283,7 @@ export default {
     }, effect: [
         {name: 'currencyVillageFaithGain', type: 'base', value: lvl => getSequence(1, lvl) * 0.02}
     ]},
-    school: {icon: 'mdi-school', cap: 5, capMult: true, note: 'village_20', requirement() {
+    school: {icon: 'mdi-school', cap: 5, note: 'village_20', requirement() {
         return store.state.unlock.villageBuildings3.use;
     }, price(lvl) {
         return {
@@ -606,9 +604,7 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(700, 'K'));
     }, effect: [
-        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => Math.pow(1.5, lvl)},
-        {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => Math.pow(1.5, lvl)},
-        {name: 'currencyVillageStoneCap', type: 'mult', value: lvl => Math.pow(1.5, lvl)},
+        {name: 'villageFoundationMaterialCap', type: 'mult', value: lvl => Math.pow(1.5, lvl)},
         {name: 'currencyVillageScienceCap', type: 'base', value: lvl => lvl * 8}
     ]},
     bioLab: {cap: 5, icon: 'mdi-dna', requirement() {
@@ -662,7 +658,7 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(1.5, 'M'));
     }, effect: [
-        {name: 'villageOfferingPower', type: 'mult', value: lvl => lvl * 0.5 + 1},
+        {name: 'villageOfferingPower', type: 'mult', value: lvl => lvl * 0.4 + 1},
         {name: 'currencyVillageFaithCap', type: 'base', value: lvl => lvl * 32}
     ]},
     mosque: {cap: 25, icon: 'mdi-mosque', requirement() {
@@ -834,9 +830,7 @@ export default {
     }, timeNeeded(lvl) {
         return Math.ceil(Math.pow(1.3, lvl) * buildNum(2.2, 'B'));
     }, effect: [
-        {name: 'currencyVillageWoodGain', type: 'mult', value: lvl => Math.pow(1.25, lvl) * (0.25 * lvl + 1)},
-        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: lvl => Math.pow(1.25, lvl) * (0.25 * lvl + 1)},
-        {name: 'currencyVillageStoneGain', type: 'mult', value: lvl => Math.pow(1.25, lvl) * (0.25 * lvl + 1)},
+        {name: 'villageFoundationMaterialGain', type: 'mult', value: lvl => Math.pow(1.25, lvl) * (0.25 * lvl + 1)},
         {name: 'villagePollution', type: 'base', value: lvl => lvl}
     ]},
     oilTruck: {icon: 'mdi-tanker-truck', requirement() {
@@ -968,9 +962,7 @@ export default {
     }, effect: [
         {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
         {name: 'currencyVillageGlassCap', type: 'mult', value: lvl => Math.pow(1.4, lvl)},
-        {name: 'currencyVillageHardwoodCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
-        {name: 'currencyVillageGemCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
-        {name: 'currencyVillageMarbleCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
+        {name: 'villageLuxuryMaterialCap', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
     ]},
     pyramid: {cap: 10, hasDescription: true, capMult: true, subtype: 'workstation', icon: 'mdi-pyramid', requirement() {
         return store.state.unlock.villageBuildings7.use;
@@ -984,7 +976,7 @@ export default {
         return Math.ceil(Math.pow(1.45, lvl) * buildNum(100, 'B'));
     }, effect: [
         {name: 'explorer', type: 'villageJob', value: lvl => lvl},
-        {name: 'villageLootQuality', type: 'base', value: lvl => lvl > 1 ? ((lvl - 1) * 2) : null}
+        {name: 'villageLootQuality', type: 'base', value: lvl => lvl > 1 ? ((lvl - 1) * 5) : null}
     ]},
     trophyCase: {cap: 6, icon: 'mdi-gradient-vertical', requirement() {
         return store.state.unlock.villageBuildings7.use;

@@ -4,7 +4,7 @@ export default {
     expandVault: {
         price: lvl => getSequence(2, lvl) * 500 + 2000,
         effect: [
-            {name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 300}
+            {name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 200}
         ]
     },
     persuadeInvestors: {

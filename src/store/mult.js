@@ -10,13 +10,37 @@ export default {
         cache: {}
     },
     getters: {
-        get: (state) => (name, base = 0, mult = 1, bonus = 0) => {
+        get: (state) => (name, base = 0, mult = 1, bonus = 0, blacklist = []) => {
             const item = state.items[name];
             if (!item) {
                 return null;
             }
 
-            let val = (item.baseCache + base) * item.multCache * mult + item.bonusCache + bonus;
+            let val = null;
+            if (blacklist.length > 0) {
+                val = item.baseValue + base;
+                for (const [key, elem] of Object.entries(item.baseValues)) {
+                    if (!blacklist.includes(key.split('_')[0])) {
+                        val += elem;
+                    }
+                }
+
+                val *= mult;
+                for (const [key, elem] of Object.entries(item.multValues)) {
+                    if (!blacklist.includes(key.split('_')[0])) {
+                        val *= elem;
+                    }
+                }
+
+                val += bonus;
+                for (const [key, elem] of Object.entries(item.bonusValues)) {
+                    if (!blacklist.includes(key.split('_')[0])) {
+                        val += elem;
+                    }
+                }
+            } else {
+                val = (item.baseCache + base) * item.multCache * mult + item.bonusCache + bonus;
+            }
 
             // Apply modifiers
             if (item.min !== null) {
@@ -87,6 +111,7 @@ export default {
                 max: o.max ?? null,
                 round: o.round ?? false,
                 display: o.display ?? 'number',
+                isPositive: o.isPositive ?? true,
                 unlock: o.unlock ?? null,
                 type: o.type ?? null
             });
@@ -309,8 +334,16 @@ export default {
                 } else {
                     dispatch('removeKey', {name: 'hordeHeirloomChance', type: 'base', key: 'hordeNostalgia'});
                 }
+            } else if (name === 'miningDepthDwellerMax') {
+                dispatch('mining/updateDwellerStat', null, {root: true});
+            } else if (name === 'treasureSlots') {
+                dispatch('treasure/updateEffectCache', null, {root: true});
+            } else if (name.slice(0, 9) === 'hordeRaid') {
+                dispatch('horde/applyRaidEffect', null, {root: true});
             } else if (name.slice(0, 5) === 'horde') {
                 dispatch('horde/updatePlayerCache', null, {root: true});
+            } else if (name === 'snowdownRevengeStats' || name === 'snowdownRevengeCrit' || name === 'snowdownRevengeBlock') {
+                dispatch('snowdown/applyRevengeEffect', null, {root: true});
             }
         },
         updateTriggerCaches({ getters, dispatch }, o) {

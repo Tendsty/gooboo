@@ -31,6 +31,7 @@
 <script>
 import AlertText from '../render/AlertText.vue';
 import DisplayRow from '../upgrade/DisplayRow.vue';
+
 export default {
   components: { DisplayRow, AlertText },
   props: {

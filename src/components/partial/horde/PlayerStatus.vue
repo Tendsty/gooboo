@@ -88,7 +88,7 @@
         :division-shield="playerStats.divisionShield"
         :max-division-shield="cachePlayerStats.divisionShield"
         :shieldbreak="cachePlayerStats.shieldbreak"
-        :stun-resist="cachePlayerStats.stunResist"
+        :status-resist="cachePlayerStats.statusResist"
         :toxic="cachePlayerStats.toxic"
         :silence="playerStats.silence"
         :stun="playerStats.stun"
@@ -117,10 +117,12 @@
           </template>
           <stat-breakdown name="hordeIntelligence"></stat-breakdown>
         </gb-tooltip>
-        <gb-tooltip v-if="cachePlayerStats.haste > 0" :title-text="$vuetify.lang.t(`$vuetify.mult.hordeHaste`)">
+        <gb-tooltip v-if="cachePlayerStats.haste !== 0" :title-text="$vuetify.lang.t(`$vuetify.mult.hordeHaste`)">
           <template v-slot:activator="{ on, attrs }">
             <v-chip label small :color="`pale-yellow ${ themeModifier }`" class="balloon-text-dynamic ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-2">mdi-timer-sand</v-icon>{{ $formatNum(cachePlayerStats.haste) }}</v-chip>
           </template>
+          <div>{{ $vuetify.lang.t('$vuetify.horde.hasteDescription') }}</div>
+          <alert-text type="formula" v-if="showFormulas">{{ $vuetify.lang.t('$vuetify.horde.hasteFormula') }}</alert-text>
           <stat-breakdown name="hordeHaste"></stat-breakdown>
         </gb-tooltip>
         <template slot="between">
@@ -135,10 +137,11 @@
 import { mapGetters, mapState } from 'vuex';
 import Consumable from '../../render/Consumable.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
+import AlertText from '../render/AlertText.vue';
 import EntityStatus from './EntityStatus.vue';
 
 export default {
-  components: { StatBreakdown, EntityStatus, Consumable },
+  components: { StatBreakdown, EntityStatus, Consumable, AlertText },
   computed: {
     ...mapState({
       playerStats: state => state.horde.player,
@@ -175,7 +178,10 @@ export default {
     },
     enemyExecute() {
       return this.$store.state.horde.enemy ? this.$store.state.horde.enemy.execute : 0;
-    }
+    },
+    showFormulas() {
+      return this.$store.state.system.settings.general.items.showFormulas.value;
+    },
   },
   methods: {
     useManaPotion() {

@@ -12,6 +12,9 @@
 .card-header-reduce-minheight {
   min-height: 32px !important;
 }
+.multibuy-button {
+  text-transform: none;
+}
 </style>
 
 <template>
@@ -21,13 +24,22 @@
         <template v-slot:selection="{ item }"><card-pack :item="item"></card-pack></template>
         <template v-slot:item="{ item }"><card-pack :item="item"></card-pack></template>
       </v-select>
-      <v-btn small class="ma-1" color="primary" :disabled="!canBuyPack" @click="buyPack(true)">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
-      <v-btn class="ma-1" color="primary" :disabled="!canBuyPack" @click="buyPack(false)">{{ $vuetify.lang.t('$vuetify.gooboo.buy') }}</v-btn>
+      <v-btn v-if="unlock.cardShiny.use" class="ma-1" color="primary" :disabled="!canBuyShinyPack" @click="buyShinyPack"><v-icon small class="mr-1">mdi-shimmer</v-icon>{{ $vuetify.lang.t('$vuetify.gooboo.buy') }}</v-btn>
+      <v-btn small class="ma-1" color="primary" :disabled="!canBuyPack" @click="buyPack(null)">{{ $vuetify.lang.t('$vuetify.gooboo.max') }}</v-btn>
+      <v-btn small class="ma-1 multibuy-button" color="primary" :disabled="!canBuy100Pack" @click="buyPack(100)">x100</v-btn>
+      <v-btn small class="ma-1 multibuy-button" color="primary" :disabled="!canBuy10Pack" @click="buyPack(10)">x10</v-btn>
+      <v-btn class="ma-1" color="primary" :disabled="!canBuyPack" @click="buyPack(1)">{{ $vuetify.lang.t('$vuetify.gooboo.buy') }}</v-btn>
     </div>
     <div class="d-flex flex-wrap align-center ma-1">
       <currency class="ma-1" name="card_shinyDust"></currency>
-    </div>
-    <div class="d-flex flex-wrap ma-1">
+      <gb-tooltip v-if="unlock.cardShiny.see" key="shiny-card" :title-text="$vuetify.lang.t('$vuetify.card.shinyTitle')">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon class="ma-1" v-bind="attrs" v-on="on">mdi-shimmer</v-icon>
+        </template>
+        <div>{{ $vuetify.lang.t('$vuetify.card.shinyDescription', $formatNum(shinyChance * 100, true)) }}</div>
+        <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.cardShinyChance') }}</h3>
+        <stat-breakdown name="cardShinyChance"></stat-breakdown>
+      </gb-tooltip>
       <gb-tooltip v-for="(item, key) in unlockedFeature" :key="`feature-${ key }`" :title-text="$vuetify.lang.t(`$vuetify.feature.${ key }`) + $vuetify.lang.t(`$vuetify.card.cardsSuffix`)">
         <template v-slot:activator="{ on, attrs }">
           <v-chip class="ma-1" v-bind="attrs" v-on="on">
@@ -65,15 +77,15 @@
         <v-expansion-panel v-for="(coll, key) in collection" :key="'collection-' + key">
           <v-expansion-panel-header :class="{'pa-2 card-header-reduce-minheight': $vuetify.breakpoint.xsOnly}">
             <v-chip v-if="coll.cacheCards < coll.cards.length" class="card-count-chip justify-center flex-grow-0 mr-2 px-2" label small>{{ coll.cacheCards }} / {{ coll.cards.length }}</v-chip>
-            <v-chip v-else-if="!unlock.cardShiny.see" class="card-count-chip justify-center flex-grow-0 mr-2 px-2" color="orange" label small><v-icon class="mr-2">mdi-crown</v-icon>{{ coll.cards.length }}</v-chip>
-            <template v-if="unlock.cardShiny.see">
+            <v-chip v-else-if="!(unlock.cardShiny.see && key !== 'specialGadgets')" class="card-count-chip justify-center flex-grow-0 mr-2 px-2" color="orange" label small><v-icon class="mr-2">mdi-crown</v-icon>{{ coll.cards.length }}</v-chip>
+            <template v-if="unlock.cardShiny.see && key !== 'specialGadgets'">
               <v-chip v-if="coll.cacheShinyCards < coll.cards.length" class="card-count-chip justify-center flex-grow-0 mr-2 px-2" color="dark-blue" label small><v-icon class="mr-2">mdi-shimmer</v-icon>{{ coll.cacheShinyCards }} / {{ coll.cards.length }}</v-chip>
               <v-chip v-else class="card-count-chip justify-center flex-grow-0 mr-2 px-2" color="pale-light-blue" label small><v-icon>mdi-shimmer</v-icon><v-icon class="mr-2">mdi-crown</v-icon>{{ coll.cards.length }}</v-chip>
             </template>
             {{ $vuetify.lang.t(`$vuetify.card.collection.${key}`) }}
           </v-expansion-panel-header>
           <v-expansion-panel-content class="card-panel-content" :class="{'card-panel-no-padding': $vuetify.breakpoint.xsOnly}">
-            <div class="ml-1">{{ $vuetify.lang.t(`$vuetify.card.fullCollectionReward`) }}:</div>
+            <div v-if="coll.reward.length > 0" class="ml-1">{{ $vuetify.lang.t(`$vuetify.card.fullCollectionReward`) }}:</div>
             <div class="d-flex align-center ml-1" v-for="(reward, rkey) in coll.reward" :key="'reward-' + key + '-' + rkey">
               <v-icon>mdi-circle-small</v-icon>
               <mult-name :name="reward.name"></mult-name>:&nbsp;
@@ -98,11 +110,12 @@ import MultStat from '../partial/render/MultStat.vue';
 import DisplayRow from '../partial/upgrade/DisplayRow.vue';
 import Currency from '../render/Currency.vue';
 import MultName from '../render/MultName.vue';
+import StatBreakdown from '../render/StatBreakdown.vue';
 
 export default {
-  components: { CardItem, MultStat, CardPack, MultName, DisplayRow, AlertText, Currency },
+  components: { CardItem, MultStat, CardPack, MultName, DisplayRow, AlertText, Currency, StatBreakdown },
   data: () => ({
-    selectedPack: null
+    selectedPack: null,
   }),
   computed: {
     ...mapState({
@@ -114,7 +127,7 @@ export default {
     collection() {
       let obj = {};
       for (const [key, elem] of Object.entries(this.$store.state.card.collection)) {
-        if (elem.cacheCards > 0) {
+        if (this.$store.state.system.settings.general.items.showAllCards.value || elem.cacheCards > 0) {
           obj[key] = elem;
         }
       }
@@ -135,6 +148,24 @@ export default {
       }
       return this.$store.getters['currency/value']('gem_emerald') >= this.packList[this.selectedPack].price;
     },
+    canBuy10Pack() {
+      if (this.selectedPack === null) {
+        return false;
+      }
+      return this.$store.getters['currency/value']('gem_emerald') >= (this.packList[this.selectedPack].price * 10);
+    },
+    canBuy100Pack() {
+      if (this.selectedPack === null) {
+        return false;
+      }
+      return this.$store.getters['currency/value']('gem_emerald') >= (this.packList[this.selectedPack].price * 100);
+    },
+    canBuyShinyPack() {
+      if (this.selectedPack === null) {
+        return false;
+      }
+      return this.$store.getters['card/canOpenShinyPack'](this.selectedPack) && this.$store.getters['currency/value']('card_shinyDust') >= this.packList[this.selectedPack].shinyPrice;
+    },
     unlockedFeature() {
       let obj = {};
       for (const [key, elem] of Object.entries(this.feature)) {
@@ -153,12 +184,15 @@ export default {
         }
       }
       return hasCards && this.stat.mining_prestigeCount.total <= 0 && this.stat.village_prestigeCount.total <= 0 && this.stat.horde_prestigeCount.total <= 0;
+    },
+    shinyChance() {
+      return this.$store.getters['mult/get']('cardShinyChance');
     }
   },
   methods: {
-    buyPack(max) {
+    buyPack(amount) {
+      const maxAfford = amount === null ? Math.floor(this.$store.state.currency.gem_emerald.value / this.packList[this.selectedPack].price) : amount;
       if (this.$store.state.system.settings.confirm.items.gem.value) {
-        const maxAfford = max ? Math.floor(this.$store.state.currency.gem_emerald.value / this.packList[this.selectedPack].price) : 1;
         this.$store.commit('system/updateKey', {key: 'confirm', value: {
           type: 'cardPack',
           name: this.selectedPack,
@@ -166,7 +200,18 @@ export default {
           amount: maxAfford,
         }});
       } else {
-        this.$store.dispatch('card/buyPack', {name: this.selectedPack, notify: true, max});
+        this.$store.dispatch('card/buyPack', {name: this.selectedPack, amount: maxAfford});
+      }
+    },
+    buyShinyPack() {
+      if (this.$store.state.system.settings.confirm.items.gem.value) {
+        this.$store.commit('system/updateKey', {key: 'confirm', value: {
+          type: 'cardShinyPack',
+          name: this.selectedPack,
+          price: {card_shinyDust: this.packList[this.selectedPack].shinyPrice},
+        }});
+      } else {
+        this.$store.dispatch('card/buyShinyPack', this.selectedPack);
       }
     }
   }

@@ -16,11 +16,11 @@
   <div>
     <div class="ma-2 d-flex justify-center align-center">
       <v-btn small class="mr-3 pa-1" color="beige" min-width="20" min-height="20" style="height: 24px;" @click="toggleLoadouts"><v-icon small>mdi-tray-full</v-icon></v-btn>
-      <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.mult.hordeMaxItems`)">
+      <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.mult.hordeMaxEquipment`)">
         <template v-slot:activator="{ on, attrs }">
           <span v-bind="attrs" v-on="on">{{ itemsEquipped }} / {{ maxItems }} {{ $vuetify.lang.t(`$vuetify.horde.itemsEquipped`) }}</span>
         </template>
-        <stat-breakdown name="hordeMaxItems"></stat-breakdown>
+        <stat-breakdown name="hordeMaxEquipment"></stat-breakdown>
       </gb-tooltip>
     </div>
     <div class="d-flex flex-column align-center bg-tile-default rounded-b elevation-2 ma-2 pa-1" v-if="showLoadouts">
@@ -57,7 +57,7 @@
     <div class="horde-item-pagination text-center bg-tile-default rounded-b elevation-2 mx-2" :class="{'horde-item-pagination-mobile': $vuetify.breakpoint.xsOnly}" v-if="pages > 1">
       <v-pagination v-model="page" :length="pages"></v-pagination>
     </div>
-    <item v-for="item in finalItems" :key="'item-' + item.name" :name="item.name" :disabled="itemsBlocked" :active-disabled="isFrozen" class="ma-2"></item>
+    <equip-item v-for="item in finalItems" :key="'item-' + item.name" :name="item.name" :disabled="itemsBlocked" :active-disabled="isFrozen" class="ma-2"></equip-item>
   </div>
 </template>
 
@@ -65,10 +65,10 @@
 import { mapGetters, mapState } from 'vuex';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import EquipLoadout from './EquipLoadout.vue';
-import Item from './Item.vue';
+import EquipItem from './EquipItem.vue';
 
 export default {
-  components: { Item, StatBreakdown, EquipLoadout },
+  components: { EquipItem, StatBreakdown, EquipLoadout },
   data: () => ({
     page: 1,
     cacheKey: 'horde_0_equipment',
@@ -90,7 +90,7 @@ export default {
       itemsList: 'horde/itemsList'
     }),
     maxItems() {
-      return this.$store.getters['mult/get']('hordeMaxItems');
+      return this.$store.getters['mult/get']('hordeMaxEquipment');
     },
     items() {
       let arr = [];

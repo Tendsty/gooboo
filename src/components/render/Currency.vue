@@ -92,7 +92,7 @@
             :height="$vuetify.breakpoint.xsOnly ? 20 : 24"
             style="overflow: visible;"
           >
-            <span class="balloon-text-dynamic currency-text text-center">{{ $formatNum(currency.value) }}{{ finalCap !== null ? (' / ' + $formatNum(finalCap)) : '' }}</span>
+            <span class="balloon-text-dynamic currency-text text-center">{{ formattedValue }}{{ finalCap !== null ? (' / ' + formattedCap) : '' }}</span>
             <template v-if="finalCap !== null">
               <div v-for="i in (large ? largeLinesSmall : smallLinesSmall)" :key="i" class="currency-line currency-line--small" :style="'left: ' + i + '%;'"></div>
               <div v-for="i in (large ? largeLinesMedium : smallLinesMedium)" :key="i" class="currency-line currency-line--medium" :style="'left: ' + i + '%;'"></div>
@@ -107,7 +107,7 @@
             :style="`background-color: var(--v-${ currency.color }-base);`"
           >+{{ currency.timerIsEstimate ? '~' : '' }}{{ $formatNum(gainTimerAmount, true) }}{{ gainUnit }}</div>
           <div
-            v-if="capTimerNeeded !== null"
+            v-if="capTimerNeeded !== null && !isOvercap"
             class="currency-label balloon-text-dynamic rounded mx-1 px-1"
             :style="`background-color: var(--v-${ currency.color }-base);`"
           >{{ currency.timerIsEstimate ? '~' : '' }}{{ $formatTime(capTimerNeeded) }}</div>
@@ -116,11 +116,15 @@
     </template>
     <currency-tooltip :name="name" :gain-base="gainBase" :base-array="baseArray" :mult-array="multArray" :bonus-array="bonusArray">
       <slot></slot>
+      <template v-slot:before-stats>
+        <slot name="before-stats"></slot>
+      </template>
     </currency-tooltip>
   </gb-tooltip>
 </template>
 
 <script>
+import { formatInt, formatNum } from '../../js/utils/format';
 import CurrencyTooltip from '../partial/render/CurrencyTooltip.vue';
 
 export default {
@@ -280,6 +284,27 @@ export default {
     },
     hasLabels() {
       return !this.hideLabels && this.$store.state.system.settings.experiment.items.currencyLabel.value && this.showTimer && ((!this.currency.hideGainTag && this.gainTimerAmount > 0) || this.capTimerNeeded !== null);
+    },
+    formattedValue() {
+      switch (this.currency.display) {
+        case 'number':
+          return formatNum(this.currency.value);
+        case 'int':
+          return formatInt(this.currency.value);
+      }
+      return this.currency.value;
+    },
+    formattedCap() {
+      if (this.finalCap === null) {
+        return null;
+      }
+      switch (this.currency.display) {
+        case 'number':
+          return formatNum(this.finalCap);
+        case 'int':
+          return formatInt(this.finalCap);
+      }
+      return this.finalCap;
     }
   },
   methods: {

@@ -66,6 +66,15 @@ export default {
             sniper_gun: 1
         }
     },
+    armed_skeleton: {
+        attack: 2,
+        health: 50,
+        sigil: {
+            rifle_gun: 1,
+            war_grenade: 5,
+            war_bandage: 5
+        }
+    },
 
     // monkey jungle
     strongMonkey: {

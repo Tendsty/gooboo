@@ -1,7 +1,7 @@
 import { getSequence } from "../../utils/math";
 
-function bossTimeMult(bossFight = 0) {
-    return bossFight === 2 ? 5 : (bossFight === 1 ? 2 : 1);
+function bossTimeMult(bossFight = false) {
+    return bossFight ? 5 : 1;
 }
 
 export default {
@@ -48,14 +48,14 @@ export default {
             };
         },
         active: {
-            effect(lvl) {
+            effect(lvl, boss) {
                 return [
-                    {type: 'heal', value: lvl * 0.05 + 0.3}
+                    {type: 'heal', value: (lvl * 0.05 + 0.3) / bossTimeMult(boss)}
                 ];
             },
             cooldown: () => 20,
             startCooldown: () => 10,
-            uses: lvl => lvl
+            uses: (lvl, boss) => lvl * bossTimeMult(boss)
         }
     },
     toughness: {
@@ -240,7 +240,7 @@ export default {
         color: 'brown',
         stats: lvl => {
             return {
-                stunResist: {type: 'base', amount: lvl},
+                statusResist: {type: 'base', amount: lvl},
             };
         },
         active: {
@@ -414,8 +414,9 @@ export default {
         color: 'yellow',
         stats: lvl => {
             return {
-                revive: {type: 'base', amount: lvl},
-                health: {type: 'mult', amount: 0.15 * lvl + 0.5},
+                physicTaken: {type: 'mult', amount: Math.pow(1 / 1.4, lvl)},
+                magicTaken: {type: 'mult', amount: Math.pow(1 / 1.4, lvl)},
+                bioTaken: {type: 'mult', amount: Math.pow(1 / 1.4, lvl)},
             };
         }
     },
@@ -513,11 +514,11 @@ export default {
             };
         },
         active: {
-            effect(lvl) {
+            effect(lvl, boss) {
                 return [
                     {type: 'damageMagic', value: lvl * 0.2 + 0.85},
                     {type: 'damageBio', value: lvl * 0.2 + 0.85},
-                    {type: 'heal', value: lvl * 0.01 + 0.05},
+                    {type: 'heal', value: (lvl * 0.01 + 0.05) / bossTimeMult(boss)},
                 ];
             },
             cooldown: () => 14,
@@ -550,10 +551,10 @@ export default {
         minZone: 225,
         icon: 'mdi-shield',
         color: 'dark-blue',
-        stats: lvl => {
+        stats: (lvl, boss) => {
             return {
                 health: {type: 'mult', amount: Math.pow(1.15, lvl)},
-                defense: {type: 'base', amount: lvl * 0.001},
+                defense: {type: 'base', amount: lvl * (boss ? 0.1 : 1) * 0.001},
             };
         }
     },
@@ -568,6 +569,42 @@ export default {
             };
         },
         exclude: ['sharp']
+    },
+
+    // Raid-only sigils
+    raidRage: {
+        minZone: Infinity,
+        icon: 'mdi-emoticon-angry',
+        color: 'deep-orange',
+        stats: lvl => {
+            return {
+                cutting: {type: 'base', amount: lvl * 0.001 + 0.009},
+            };
+        },
+        active: {
+            effect(lvl) {
+                return [
+                    {type: 'gainStat', stat: 'attack_mult', value: lvl * 0.01 + 1.29},
+                    {type: 'gainStat', stat: 'cutting_base', value: lvl * 0.001},
+                ];
+            },
+            cooldown: () => 30,
+            startCooldown: () => 30,
+            uses: () => null
+        }
+    },
+    monstrousToughness: {
+        minZone: Infinity,
+        icon: 'mdi-shield',
+        color: 'pale-blue',
+        stats: lvl => {
+            return {
+                health: {type: 'mult', amount: Math.pow(1.03, lvl) * 50},
+                divisionShield: {type: 'base', amount: lvl + 19},
+                bioTaken: {type: 'mult', amount: 0.02},
+                statusResist: {type: 'base', amount: 4},
+            };
+        }
     },
 
     // Tower-only sigils

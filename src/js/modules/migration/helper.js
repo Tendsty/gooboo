@@ -7,18 +7,18 @@ function addCurrencyToSave(save, currency, amount) {
     save.currency[currency] += amount;
 
     if (save.stat[currency] === undefined) {
-        save.stat[currency] = {value: 0, total: 0};
+        save.stat[currency] = [0, 0];
     }
-    save.stat[currency].value += amount;
-    save.stat[currency].total += amount;
+    save.stat[currency][0] += amount;
+    save.stat[currency][1] += amount;
 
     const maxStatName = currency + 'Max';
 
     if (save.stat[maxStatName] === undefined) {
-        save.stat[maxStatName] = {value: 0, total: 0};
+        save.stat[maxStatName] = [0, 0];
     }
-    save.stat[maxStatName].value = Math.max(amount, save.stat[maxStatName].value);
-    save.stat[maxStatName].total = Math.max(amount, save.stat[maxStatName].total);
+    save.stat[maxStatName][0] = Math.max(amount, save.stat[maxStatName][0]);
+    save.stat[maxStatName][1] = Math.max(amount, save.stat[maxStatName][1]);
 
     return save;
 }
@@ -62,6 +62,9 @@ function removeCurrency(save, name) {
     if (save.stat[name] !== undefined) {
         delete save.stat[name];
     }
+    if (save.stat[name + 'Max'] !== undefined) {
+        delete save.stat[name + 'Max'];
+    }
     return save;
 }
 
@@ -72,7 +75,7 @@ function refundCurrency(save, name) {
     return save;
 }
 
-function replaceTreasureEffect(save, oldName, newName) {
+function replaceTreasureEffect(save, oldName, newName = null) {
     if (save.treasure) {
         if (save.treasure.newItem) {
             save.treasure.newItem.effect = save.treasure.newItem.effect.map(effect => effect === oldName ? newName : effect);

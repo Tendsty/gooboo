@@ -2,6 +2,7 @@ import Vue from "vue";
 import quest from "../js/modules/event/summerFestival/quest";
 import { buildArray } from "../js/utils/array";
 import { randomInt } from "../js/utils/random";
+import { SUMMER_FESTIVAL_GL_BOOST } from "../js/constants";
 
 export default {
     namespaced: true,
@@ -72,7 +73,7 @@ export default {
     },
     getters: {
         eventMult: (state, getters, rootState, rootGetters) => {
-            return Math.pow(1.005, rootGetters['meta/globalEventLevel']);
+            return Math.pow(SUMMER_FESTIVAL_GL_BOOST, rootGetters['meta/globalEventLevel']);
         },
         topazExpansionCost: (state) => {
             if (state.topazExpansion >= 20) {

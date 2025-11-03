@@ -1,6 +1,6 @@
 <template>
   <v-card class="d-flex pa-2 pr-1 align-center">
-    <gb-tooltip :min-width="0">
+    <gb-tooltip :title-text="unlockName ? $vuetify.lang.t(`$vuetify.unlock.${ unlockName }`) : null" :min-width="0">
       <template v-slot:activator="{ on, attrs }">
         <v-icon large class="mr-1" v-bind="attrs" v-on="on">{{ typeObj.icon ? typeObj.icon : 'mdi-help' }}</v-icon>
       </template>
@@ -13,6 +13,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { capitalize } from '../../../js/utils/format';
 import PriceTag from '../../render/PriceTag.vue';
 
 export default {
@@ -34,7 +35,10 @@ export default {
       return this.$store.getters['currency/value']('gem_emerald') >= this.price;
     },
     price() {
-      return this.typeObj.buyPrice;
+      return Math.round(this.$store.getters['treasure/treasurePrice'](this.name));
+    },
+    unlockName() {
+      return this.name !== 'regular' ? `treasure${ capitalize(this.name)}` : null;
     }
   },
   methods: {

@@ -33,7 +33,7 @@ export default {
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 100};
     }, effect: [
-        {name: 'miningSmelterySpeed', type: 'mult', value: lvl => lvl + 1}
+        {name: 'miningSmelteryTime', type: 'mult', value: lvl => 1 / (lvl + 1)}
     ]},
     moreResin: {type: 'premium', requirement() {
         return store.state.unlock.miningResin.see;
@@ -50,74 +50,74 @@ export default {
     }, effect: [
         {name: 'miningPickaxePremiumCraftingSlots', type: 'base', value: lvl => lvl}
     ]},
-    moreAluminium: {type: 'premium', cap: 1, requirement() {
+    moreAluminium: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 15;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 300};
+        return {gem_ruby: Math.pow(10, lvl) * 300};
     }, effect: [
         {name: 'currencyMiningOreAluminiumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreAluminiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreCopper: {type: 'premium', cap: 1, requirement() {
+    moreCopper: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 30;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 450};
+        return {gem_ruby: Math.pow(10, lvl) * 450};
     }, effect: [
         {name: 'currencyMiningOreCopperGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreCopperCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreTin: {type: 'premium', cap: 1, requirement() {
+    moreTin: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 50;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 600};
+        return {gem_ruby: Math.pow(10, lvl) * 600};
     }, effect: [
         {name: 'currencyMiningOreTinGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreTinCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreIron: {type: 'premium', cap: 1, requirement() {
+    moreIron: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 80;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 900};
+        return {gem_ruby: Math.pow(10, lvl) * 900};
     }, effect: [
         {name: 'currencyMiningOreIronGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreIronCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreTitanium: {type: 'premium', cap: 1, requirement() {
+    moreTitanium: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 120;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 1200};
+        return {gem_ruby: Math.pow(10, lvl) * 1200};
     }, effect: [
         {name: 'currencyMiningOreTitaniumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreTitaniumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    morePlatinum: {type: 'premium', cap: 1, requirement() {
+    morePlatinum: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 175;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 1800};
+        return {gem_ruby: Math.pow(10, lvl) * 1800};
     }, effect: [
         {name: 'currencyMiningOrePlatinumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOrePlatinumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreIridium: {type: 'premium', cap: 1, requirement() {
+    moreIridium: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 260;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 2500};
+        return {gem_ruby: Math.pow(10, lvl) * 2500};
     }, effect: [
         {name: 'currencyMiningOreIridiumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreIridiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreOsmium: {type: 'premium', cap: 1, requirement() {
+    moreOsmium: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 350;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 3500};
+        return {gem_ruby: Math.pow(10, lvl) * 3500};
     }, effect: [
         {name: 'currencyMiningOreOsmiumGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreOsmiumCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
     ]},
-    moreLead: {type: 'premium', cap: 1, requirement() {
+    moreLead: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumOre', requirement() {
         return store.state.stat.mining_maxDepth0.total >= 450;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 5000};
+        return {gem_ruby: Math.pow(10, lvl) * 5000};
     }, effect: [
         {name: 'currencyMiningOreLeadGain', type: 'mult', value: lvl => Math.pow(2, lvl)},
         {name: 'currencyMiningOreLeadCap', type: 'mult', value: lvl => lvl * 0.25 + 1}
@@ -127,27 +127,39 @@ export default {
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 300};
     }, effect: [
-        {name: 'currencyMiningHeliumGain', type: 'base', value: lvl => lvl * 0.004}
+        {name: 'currencyMiningHeliumLimit', type: 'base', value: lvl => lvl * 30},
+        {name: 'currencyMiningHeliumGain', type: 'base', value: lvl => lvl * 0.002}
     ]},
     moreSmoke: {type: 'premium', requirement() {
         return store.state.unlock.miningSmoke.see;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 325};
     }, effect: [
-        {name: 'currencyMiningSmokeCap', type: 'mult', value: lvl => Math.pow(2, lvl)}
+        {name: 'currencyMiningSmokeGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+        {name: 'currencyMiningSmokeCap', type: 'mult', value: lvl => getSequence(1, lvl) + 1}
     ]},
     moreNeon: {type: 'premium', cap: 5, requirement() {
-        return store.state.stat.mining_maxDepth1.total >= 40;
+        return store.state.stat.mining_maxDepth1.total > 50;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 525};
     }, effect: [
-        {name: 'currencyMiningNeonGain', type: 'base', value: lvl => lvl * 0.004}
+        {name: 'currencyMiningNeonLimit', type: 'base', value: lvl => lvl * 30},
+        {name: 'currencyMiningNeonGain', type: 'base', value: lvl => lvl * 0.002}
     ]},
     moreArgon: {type: 'premium', cap: 5, requirement() {
-        return store.state.stat.mining_maxDepth1.total >= 90;
+        return store.state.stat.mining_maxDepth1.total > 120;
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 800};
     }, effect: [
-        {name: 'currencyMiningArgonGain', type: 'base', value: lvl => lvl * 0.004}
+        {name: 'currencyMiningArgonLimit', type: 'base', value: lvl => lvl * 30},
+        {name: 'currencyMiningArgonGain', type: 'base', value: lvl => lvl * 0.002}
+    ]},
+    moreKrypton: {type: 'premium', cap: 5, requirement() {
+        return store.state.stat.mining_maxDepth1.total > 220;
+    }, price(lvl) {
+        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 1250};
+    }, effect: [
+        {name: 'currencyMiningKryptonLimit', type: 'base', value: lvl => lvl * 30},
+        {name: 'currencyMiningKryptonGain', type: 'base', value: lvl => lvl * 0.002}
     ]},
 }

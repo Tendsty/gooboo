@@ -9,7 +9,7 @@ export default {
         ],
         horde: [
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'clarity',
                 text: '162'
             },

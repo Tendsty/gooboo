@@ -175,7 +175,15 @@ export default {
             type: 'endless',
             difficulty: 75,
             enemyType: ['strongMonkey', 'angryMonkey', 'dartMonkey', 'monkeyWizard_1', 'monkeyWizard_2', 'monkeyWizard_3']
-        }
+        },
+        digsite: {
+            x: -8,
+            y: -6.5,
+            unlockedBy: 'hordeMonsterToothMonkeyJungle',
+            type: 'digsite',
+            difficulty: 125,
+            enemyType: ['armed_skeleton']
+        },
     },
     decoration: [
         {x: 8.2, y: -3.4, rotate: 0, icon: 'mdi-tent', size: 2},

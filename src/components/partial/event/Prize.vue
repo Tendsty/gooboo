@@ -9,6 +9,7 @@
     <div class="mx-1">{{ $vuetify.lang.t(`$vuetify.card.pack.${ prize.item }`) }}</div>
     <v-chip class="px-2 mx-1" label small><v-icon class="mr-1">mdi-cards</v-icon>{{ cardPackAmount * amount }}</v-chip>
   </div>
+  <card-item v-else-if="prize.type === 'card'" :id="prize.data" hide-amount force-show></card-item>
   <mini v-else-if="prize.type === 'relic'" large :name="prize.item"></mini>
   <theme-item v-else-if="prize.type === 'theme'" :name="prize.item" hide-actions small></theme-item>
   <item-slot v-else-if="prize.type === 'treasure'" :item-obj="prize.data"></item-slot>
@@ -17,12 +18,13 @@
 <script>
 import Consumable from '../../render/Consumable.vue';
 import PriceTag from '../../render/PriceTag.vue';
+import CardItem from '../card/CardItem.vue';
 import Mini from '../relic/Mini.vue';
 import ThemeItem from '../settings/ThemeItem.vue';
 import ItemSlot from '../treasure/ItemSlot.vue';
 
 export default {
-  components: { Consumable, Mini, PriceTag, ThemeItem, ItemSlot },
+  components: { Consumable, Mini, PriceTag, ThemeItem, ItemSlot, CardItem },
   props: {
     pool: {
       type: String,

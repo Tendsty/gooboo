@@ -120,7 +120,7 @@ export default {
         ],
         horde: [
             {
-                unlock: 'hordeItemMastery',
+                unlock: 'hordeEquipmentMastery',
                 type: 'balance',
                 text: '295'
             }

@@ -14,9 +14,9 @@
 </style>
 
 <template>
-  <div class="alert-text-container d-flex align-center pa-1 pr-2" :class="`${ type }--text text--${ themeCss }`">
-    <div class="alert-text-bg rounded-lg" :class="type"></div>
-    <v-icon :color="`${ type } ${ themeCss }`" small class="ma-1 mr-2">{{ icon }}</v-icon>
+  <div class="alert-text-container d-flex align-center pa-1 pr-2" :class="`${ typeColor }--text text--${ themeCss }`">
+    <div class="alert-text-bg rounded-lg" :class="typeColor"></div>
+    <v-icon :color="`${ typeColor } ${ themeCss }`" small class="ma-1 mr-2">{{ icon }}</v-icon>
     <slot></slot>
   </div>
 </template>
@@ -36,12 +36,20 @@ export default {
     }
   },
   computed: {
+    typeColor() {
+      if (this.type === 'formula') {
+        return 'purple';
+      }
+      return this.type;
+    },
     icon() {
       const iconName = this.iconName ?? this.type;
       if (iconName === 'success') {
         return 'mdi-check';
       } else if (iconName === 'info') {
         return 'mdi-information';
+      } else if (iconName === 'formula') {
+        return 'mdi-exponent-box';
       }
       return 'mdi-alert';
     },

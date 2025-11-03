@@ -34,16 +34,5 @@ export default {
         pool: {
             nightHunt: {price: {event_nightHuntToken: 30}}
         }
-    },
-    farm_fieldBlessing: {
-        type: 'consumable',
-        item: 'farm_fieldBlessing',
-        amount: 20,
-        requirement() {
-            return store.state.unlock.farmFertilizer.see;
-        },
-        pool: {
-            nightHunt: {price: {event_nightHuntToken: 1}}
-        }
     }
 }

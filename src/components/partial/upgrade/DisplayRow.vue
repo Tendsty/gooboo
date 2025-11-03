@@ -1,7 +1,7 @@
 <template>
   <div v-if="isSimple" class="text-center">{{ text }}</div>
   <div v-else-if="type === 'tag'">{{ this.$vuetify.lang.t(`$vuetify.tag.${ name }`, ...tagArgs) }}</div>
-  <div v-else class="d-flex align-center">
+  <div v-else class="d-flex align-center" :class="{'error--text': isNegative}">
     <v-icon v-if="showIcon && featureIcon" small class="mr-2">{{ featureIcon }}</v-icon>
     <div class="flex-grow-1">{{ isLocked ? '???' : text }}{{ showStar ? '*' : '' }}{{ isBuff ? ` ${ $vuetify.lang.t(`$vuetify.horde.active.buff.suffix`) }` : '' }}:</div>
     <div class="pl-1" v-if="showRelative">
@@ -29,7 +29,7 @@ export default {
   }),
   computed: {
     isSimple() {
-      return ['unlock', 'keepUpgrade', 'villageCraft', 'farmSeed', 'findConsumable', 'galleryIdea', 'galleryShape', 'text'].includes(this.type);
+      return ['unlock', 'keepUpgrade', 'uncapUpgrade', 'villageCraft', 'farmSeed', 'farmCareImprove', 'farmCareAdd', 'farmCareDisable', 'findConsumable', 'galleryIdea', 'galleryShape', 'text'].includes(this.type);
     },
     hidePrefix() {
       return ['hordeActive', 'hordeBuff', 'hordeCooldown'].includes(this.type);
@@ -41,7 +41,7 @@ export default {
       return this.before === null ? this.after : (this.after === null ? this.before : (this.type === 'mult' ? (this.after / this.before) : (this.after - this.before)));
     },
     featureIcon() {
-      if (!this.isSimple && this.$store.state.mult.items[this.name]) {
+      if (!this.isCustom && !this.isSimple && this.$store.state.mult.items[this.name]) {
         const feature = this.$store.state.mult.items[this.name].feature;
         return feature === 'meta' ? 'mdi-earth' : this.$store.state.system.features[feature].icon;
       }
@@ -70,11 +70,35 @@ export default {
       });
     },
     isLocked() {
-      if (!['base', 'mult', 'bonus'].includes(this.type)) {
+      if (this.isCustom || !['base', 'mult', 'bonus'].includes(this.type)) {
         return false;
       }
       const mult = this.$store.state.mult.items[this.name];
-      return mult && mult.unlock !== null && !this.$store.state.unlock[mult.unlock].see;
+      if (mult && mult.unlock !== null) {
+        return !this.$store.state.unlock[mult.unlock].see;
+      }
+      if (this.$store.getters['mult/isCurrencyGain'](this.name)) {
+        return this.$store.state.stat[this.$store.getters['mult/getCurrencyName'](this.name, 4)].total <= 0;
+      }
+      if (this.$store.getters['mult/isCurrencyCap'](this.name)) {
+        return this.$store.state.stat[this.$store.getters['mult/getCurrencyName'](this.name)].total <= 0;
+      }
+      return false;
+    },
+    isNegative() {
+      if (this.isCustom || !['base', 'mult', 'bonus'].includes(this.type)) {
+        return false;
+      }
+      const mult = this.$store.state.mult.items[this.name];
+      if (!mult) {
+        return false;
+      }
+      const defaultMult = this.type === 'mult' ? 1 : 0;
+      const before = this.before ?? defaultMult;
+      if (this.after === null) {
+        return mult.isPositive ? (before < defaultMult) : (before > defaultMult);
+      }
+      return mult.isPositive ? (before > this.after) : (before < this.after);
     }
   },
   props: {
@@ -108,6 +132,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    isCustom: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   created() {
@@ -128,8 +157,14 @@ export default {
         case 'keepUpgrade':
           cacheValue = this.$vuetify.lang.t(`$vuetify.gooboo.keep`) + ': ' + this.$vuetify.lang.t(`$vuetify.upgrade.${this.name}`);
           break;
+        case 'uncapUpgrade':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.gooboo.uncap`) + ': ' + this.$vuetify.lang.t(`$vuetify.upgrade.${this.name}`);
+          break;
         case 'findConsumable':
           cacheValue = this.$vuetify.lang.t(`$vuetify.gooboo.consumable`) + ': ' + this.$vuetify.lang.t(`$vuetify.consumable.${this.name}.name`);
+          break;
+        case 'gainConsumable':
+          cacheValue = this.$vuetify.lang.t(`$vuetify.gooboo.consumable`) + ' (' + this.$vuetify.lang.t(`$vuetify.consumable.${this.name}.name`) + ')';
           break;
         case 'farmSeed':
           cacheValue = this.$vuetify.lang.t(`$vuetify.farm.unlockSeed`) + ': ' + this.$vuetify.lang.t(`$vuetify.farm.crop.${this.name}`);
@@ -163,6 +198,15 @@ export default {
           break;
         case 'addRareDropAmount':
           cacheValue = this.$vuetify.lang.t(`$vuetify.farm.addRareDropAmount`, this.$vuetify.lang.t(`$vuetify.currency.${this.name}.name`));
+          break;
+        case 'farmCareImprove':
+          cacheValue = this.$vuetify.lang.t('$vuetify.farm.care.improve', this.$vuetify.lang.t(`$vuetify.farm.care.${ this.name }`));
+          break;
+        case 'farmCareAdd':
+          cacheValue = this.$vuetify.lang.t('$vuetify.farm.care.add', this.$vuetify.lang.t(`$vuetify.farm.care.${ this.name }`));
+          break;
+        case 'farmCareDisable':
+          cacheValue = this.$vuetify.lang.t('$vuetify.farm.care.disable', this.$vuetify.lang.t(`$vuetify.farm.care.${ this.name }`));
           break;
         case 'galleryIdea':
           cacheValue = this.$vuetify.lang.t(`$vuetify.gallery.idea.unlock`) + ': ' + this.$vuetify.lang.t(`$vuetify.gallery.idea.${this.name}`);

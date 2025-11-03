@@ -1,4 +1,4 @@
-import { SECONDS_PER_HOUR } from "../../../constants";
+import { HORDE_STACKING_COOLDOWN } from "../../../constants";
 
 export default {
     unlock: 'hordeClassMage',
@@ -13,7 +13,7 @@ export default {
         base: 840,
         increment: 1.24
     },
-    courageMult: 4,
+    courageMult: 2.25,
     skills: {
         manaRest: {
             type: 'passive',
@@ -24,26 +24,19 @@ export default {
                 {name: 'hordeManaRest', type: 'tag', value: lvl => [15, lvl * 1.2]}
             ]
         },
-        autocast: {
-            type: 'passive',
-            color: 'pink',
-            icon: 'mdi-cached',
-            max: 3,
-            cost: 75,
-            effect: [
-                {name: 'hordeAutocast', type: 'base', value: lvl => lvl}
-            ]
-        },
+        autocast: {type: 'statBig', max: 3, cost: 60, effect: [
+            {name: 'hordeAutocast', type: 'base', value: lvl => lvl}
+        ]},
         magicMissile: {
             type: 'active',
             color: 'indigo',
             icon: 'mdi-motion',
             max: 1,
             cooldown: () => 6,
-            activeCost: () => {return {mana: 10};},
+            activeCost: () => {return {mana: 3};},
             active() {
                 return [
-                    {type: 'damageMagic', value: 2.2, int: 0.16}
+                    {type: 'damageMagic', value: 3.8, int: 0.24}
                 ];
             },
             activeType: 'combat'
@@ -55,10 +48,10 @@ export default {
             max: 5,
             cost: 14,
             cooldown: () => 13,
-            activeCost: () => {return {mana: 22};},
+            activeCost: () => {return {mana: 5};},
             active(lvl) {
                 return [
-                    {type: 'damageMagic', value: lvl * 0.1 + 3.3, int: 0.24, canCrit: lvl * 0.1 + 0.5}
+                    {type: 'damageMagic', value: lvl * 0.2 + 5.4, int: 0.45, canCrit: lvl * 0.1 + 0.5}
                 ];
             },
             activeType: 'combat'
@@ -70,10 +63,10 @@ export default {
             max: 5,
             cost: 14,
             cooldown: () => 28,
-            activeCost: () => {return {mana: 30};},
+            activeCost: () => {return {mana: 6};},
             active(lvl) {
                 return [
-                    {type: 'damageMagic', value: lvl * 0.3 + 4.5, int: 0.3},
+                    {type: 'damageMagic', value: lvl * 0.35 + 9.4, int: 0.75},
                     {type: 'silence', value: lvl * 2 + 4}
                 ];
             },
@@ -85,8 +78,8 @@ export default {
             icon: 'mdi-medical-bag',
             max: 5,
             cost: 14,
-            cooldown: (lvl) => 55 - lvl * 5,
-            activeCost: () => {return {mana: 65};},
+            cooldown: (lvl) => 125 - lvl * 10,
+            activeCost: () => {return {mana: 21};},
             active() {
                 return [
                     {type: 'heal', value: 0.6, int: 0.01}
@@ -107,7 +100,7 @@ export default {
             max: 5,
             cost: 16,
             cooldown: () => 36,
-            activeCost: () => {return {mana: 40};},
+            activeCost: () => {return {mana: 7};},
             active(lvl) {
                 return [
                     {type: 'divisionShield', value: lvl * 3 + 1}
@@ -122,10 +115,10 @@ export default {
             max: 5,
             cost: 16,
             cooldown: () => 30,
-            activeCost: () => {return {mana: 48};},
+            activeCost: () => {return {mana: 9};},
             active(lvl) {
                 return [
-                    {type: 'damageMagic', value: 3.75, int: 0.22},
+                    {type: 'damageMagic', value: lvl * 0.75 + 9.4, int: 0.65},
                     {type: 'stun', value: lvl + 3}
                 ];
             },
@@ -133,6 +126,9 @@ export default {
         },
         intelligence_2: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.4}
+        ]},
+        spellblade_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeSpellblade', type: 'base', value: lvl => lvl * 0.15}
         ]},
         haste: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeHaste', type: 'base', value: lvl => lvl * 3}
@@ -156,11 +152,11 @@ export default {
             icon: 'mdi-waves',
             max: 5,
             cost: 18,
-            cooldown: () => 75,
-            activeCost: () => {return {mana: 130};},
+            cooldown: () => 40,
+            activeCost: () => {return {mana: 12};},
             active(lvl) {
                 return [
-                    {type: 'damageMagic', value: lvl * 0.6 + 8, int: 0.36},
+                    {type: 'damageMagic', value: lvl * 0.7 + 12.5, int: 0.9},
                     {type: 'heal', value: lvl * 0.025 + 0.075, int: 0.006}
                 ];
             },
@@ -173,7 +169,7 @@ export default {
             max: 5,
             cost: 18,
             cooldown: (lvl) => 38 - lvl * 4,
-            activeCost: () => {return {mana: 85};},
+            activeCost: () => {return {mana: 16};},
             active(lvl) {
                 return [
                     {type: 'stun', value: lvl * 2 + 6},
@@ -182,22 +178,18 @@ export default {
             },
             activeType: 'combat'
         },
+        damage: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.12}
+        ]},
         mana_2: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeMana', type: 'base', value: lvl => lvl * 50}
         ]},
         haste_2: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeHaste', type: 'base', value: lvl => lvl * 3}
         ]},
-        autocast_2: {
-            type: 'passive',
-            color: 'pink',
-            icon: 'mdi-cached',
-            max: 1,
-            cost: 50,
-            effect: [
-                {name: 'hordeAutocast', type: 'base', value: lvl => lvl}
-            ]
-        },
+        autocast_2: {type: 'statBig', max: 2, cost: 20, effect: [
+            {name: 'hordeAutocast', type: 'base', value: lvl => lvl}
+        ]},
         mana_3: {type: 'stat', max: 15, cost: 10, effect: [
             {name: 'hordeMana', type: 'base', value: lvl => lvl * 40},
             {name: 'hordeManaRegen', type: 'base', value: lvl => lvl * 0.08}
@@ -212,7 +204,7 @@ export default {
             max: 5,
             cost: 20,
             cooldown: () => 180,
-            activeCost: () => {return {mana: 125};},
+            activeCost: () => {return {mana: 24};},
             active(lvl) {
                 return [
                     {type: 'buff', value: 60, effect: [
@@ -229,10 +221,10 @@ export default {
             max: 5,
             cost: 20,
             cooldown: (lvl) => 95 - lvl * 5,
-            activeCost: () => {return {mana: 250};},
+            activeCost: () => {return {mana: 40};},
             active(lvl) {
                 return [
-                    {type: 'damageMagic', value: lvl * 4 + 18, int: 0.8}
+                    {type: 'damageMagic', value: lvl * 4 + 28, int: 2.2}
                 ];
             },
             activeType: 'combat'
@@ -240,19 +232,21 @@ export default {
         intelligence_3: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.4}
         ]},
+        spellblade_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeSpellblade', type: 'base', value: lvl => lvl * 0.15}
+        ]},
+        haste_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHaste', type: 'base', value: lvl => lvl * 3}
+        ]},
+        damage_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.12}
+        ]},
         health_2: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeHealth', type: 'base', value: lvl => lvl * 70}
         ]},
-        autocast_3: {
-            type: 'passive',
-            color: 'pink',
-            icon: 'mdi-cached',
-            max: 1,
-            cost: 50,
-            effect: [
-                {name: 'hordeAutocast', type: 'base', value: lvl => lvl}
-            ]
-        },
+        autocast_3: {type: 'statBig', max: 2, cost: 20, effect: [
+            {name: 'hordeAutocast', type: 'base', value: lvl => lvl}
+        ]},
         conjure: {
             type: 'active',
             color: 'red-pink',
@@ -263,7 +257,7 @@ export default {
             activeCost: () => {return {};},
             active(lvl) {
                 return [
-                    {type: 'blood', value: lvl * 5 + 25}
+                    {type: 'blood', value: lvl * 5 + 10}
                 ];
             },
             activeType: 'utility'
@@ -294,7 +288,7 @@ export default {
             icon: 'mdi-water',
             max: 5,
             cost: 20,
-            cooldown: () => 22 * SECONDS_PER_HOUR,
+            cooldown: () => HORDE_STACKING_COOLDOWN,
             activeCost: () => {return {};},
             active(lvl) {
                 return [
@@ -303,21 +297,54 @@ export default {
             },
             activeType: 'utility'
         },
+        damage_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.12}
+        ]},
+        health_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 70}
+        ]},
+        mana_4: {type: 'stat', max: 20, cost: 10, effect: [
+            {name: 'hordeMana', type: 'base', value: lvl => lvl * 50}
+        ]},
+        intelligence_4: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.4}
+        ]},
+        haste_4: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHaste', type: 'base', value: lvl => lvl * 3}
+        ]},
+        damage_4: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.12}
+        ]},
+        health_4: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 70}
+        ]},
+        intelligence_5: {type: 'stat', max: 20, cost: 10, effect: [
+            {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.4}
+        ]},
+        spellblade_4: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeSpellblade', type: 'base', value: lvl => lvl * 0.15}
+        ]},
     },
     skillTree: [
         {isInnate: true, level: 0, items: ['manaRest', 'autocast', 'magicMissile']},
         {level: 1, items: ['fireball', 'shockBlast', 'heal', 'mana', 'intelligence']},
-        {level: 10, items: ['barrier', 'earthquake', 'intelligence_2', 'haste', 'health']},
-        {level: 20, items: ['manasteal', 'waterBolt', 'iceBlast', 'mana_2', 'haste_2']},
+        {level: 10, items: ['barrier', 'earthquake', 'intelligence_2', 'spellblade_2', 'haste', 'health']},
+        {level: 20, items: ['manasteal', 'waterBolt', 'iceBlast', 'damage', 'mana_2', 'haste_2']},
         {isChoice: true, level: 30, items: [['autocast_2'], ['mana_3'], ['spellblade']]},
-        {level: 40, items: ['focus', 'smite', 'intelligence_3', 'health_2']},
+        {level: 40, items: ['focus', 'smite', 'intelligence_3', 'spellblade_3', 'haste_3', 'damage_2', 'health_2']},
         {isChoice: true, level: 50, items: [['autocast_3'], ['conjure'], ['ascend'], ['deepFocus']]},
+        {level: 75, items: ['damage_3', 'health_3', 'mana_4', 'intelligence_4', 'haste_4']},
+        {level: 100, items: ['damage_4', 'health_4', 'intelligence_5', 'spellblade_4']},
     ],
     quests: {
         stat: [
-            {stat: 'hordeMana', type: 'total', value: 1000},
+            {stat: 'hordeMana', type: 'total', value: 900},
+            {stat: 'hordeIntelligence', type: 'total', value: 22},
             {stat: 'hordeHaste', type: 'total', value: 60},
-            {stat: 'hordeMana', type: 'total', value: 2500},
+            {stat: 'hordeMana', type: 'total', value: 2000},
+            {stat: 'hordeSpellblade', type: 'total', value: 7},
+            {stat: 'hordeAutocast', type: 'total', value: 11},
+            {stat: 'hordeHaste', type: 'total', value: 165},
         ],
         zone: [
             {area: 'warzone', zone: '7'},

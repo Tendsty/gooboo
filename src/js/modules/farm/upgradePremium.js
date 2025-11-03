@@ -41,33 +41,43 @@ export default {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 180};
     }, effect: [
         {name: 'gardenGnome', type: 'farmBuildingPremium', value: lvl => lvl}
-    ]},
+    ], onBuy() {
+        store.dispatch('farm/upgradeBuilding', 'gardenGnome');
+    }},
     premiumSprinkler: {type: 'premium', hasDescription: true, cap: 2, hideCap: true, requirement(lvl) {
         return store.state.upgrade.item.farm_sprinkler.level >= (lvl + 1);
     }, price(lvl) {
         return {gem_ruby: Math.pow(2, lvl) * 500};
     }, effect: [
         {name: 'sprinkler', type: 'farmBuildingPremium', value: lvl => lvl}
-    ]},
+    ], onBuy() {
+        store.dispatch('farm/upgradeBuilding', 'sprinkler');
+    }},
     premiumLectern: {type: 'premium', hasDescription: true, cap: 2, hideCap: true, requirement(lvl) {
         return store.state.upgrade.item.farm_lectern.level >= (lvl + 1);
     }, price(lvl) {
         return {gem_ruby: Math.pow(2, lvl) * 675};
     }, effect: [
         {name: 'lectern', type: 'farmBuildingPremium', value: lvl => lvl}
-    ]},
+    ], onBuy() {
+        store.dispatch('farm/upgradeBuilding', 'lectern');
+    }},
     premiumPinwheel: {type: 'premium', hasDescription: true, cap: 1, hideCap: true, requirement(lvl) {
         return store.state.upgrade.item.farm_pinwheel.level >= (lvl + 1);
     }, price(lvl) {
         return {gem_ruby: Math.pow(3, lvl) * 1200};
     }, effect: [
         {name: 'pinwheel', type: 'farmBuildingPremium', value: lvl => lvl}
-    ]},
+    ], onBuy() {
+        store.dispatch('farm/upgradeBuilding', 'pinwheel');
+    }},
     premiumFlag: {type: 'premium', hasDescription: true, cap: 1, hideCap: true, requirement(lvl) {
         return store.state.upgrade.item.farm_flag.level >= (lvl + 1);
     }, price(lvl) {
         return {gem_ruby: Math.pow(4, lvl) * 2100};
     }, effect: [
         {name: 'flag', type: 'farmBuildingPremium', value: lvl => lvl}
-    ]}
+    ], onBuy() {
+        store.dispatch('farm/upgradeBuilding', 'flag');
+    }}
 }

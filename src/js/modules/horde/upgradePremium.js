@@ -34,76 +34,106 @@ export default {
     }, price(lvl) {
         return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 125};
     }, effect: [
-        {name: 'hordeItemMasteryGain', type: 'mult', value: lvl => getSequence(2, lvl) * 0.25 + 1}
+        {name: 'hordeEquipmentMasteryGain', type: 'mult', value: lvl => getSequence(2, lvl) * 0.25 + 1}
     ]},
-    ancientPower: {type: 'premium', cap: 1, requirement() {
+    ancientPower: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.power.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 300};
+        return {gem_ruby: Math.pow(10, lvl) * 300};
     }, effect: [
-        {name: 'powerHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'powerHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientFortitude: {type: 'premium', cap: 1, requirement() {
+    ancientFortitude: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.fortitude.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 300};
+        return {gem_ruby: Math.pow(10, lvl) * 300};
     }, effect: [
-        {name: 'fortitudeHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'fortitudeHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientWealth: {type: 'premium', cap: 1, requirement() {
+    ancientWealth: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.wealth.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 300};
+        return {gem_ruby: Math.pow(10, lvl) * 300};
     }, effect: [
-        {name: 'wealthHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'wealthHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientSpirit: {type: 'premium', cap: 1, requirement() {
+    ancientSpirit: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.spirit.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 450};
+        return {gem_ruby: Math.pow(10, lvl) * 450};
     }, effect: [
-        {name: 'spiritHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'spiritHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientSharpsight: {type: 'premium', cap: 1, requirement() {
+    ancientSharpsight: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.sharpsight.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 600};
+        return {gem_ruby: Math.pow(10, lvl) * 600};
     }, effect: [
-        {name: 'sharpsightHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'sharpsightHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientReaping: {type: 'premium', cap: 1, requirement() {
+    ancientReaping: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.reaping.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 750};
+        return {gem_ruby: Math.pow(10, lvl) * 750};
     }, effect: [
-        {name: 'reapingHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'reapingHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientRemembrance: {type: 'premium', cap: 1, requirement() {
+    ancientRemembrance: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.remembrance.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 750};
+        return {gem_ruby: Math.pow(10, lvl) * 750};
     }, effect: [
-        {name: 'remembranceHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'remembranceHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientHolding: {type: 'premium', cap: 1, requirement() {
+    ancientHolding: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.holding.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 975};
+        return {gem_ruby: Math.pow(10, lvl) * 975};
     }, effect: [
-        {name: 'holdingHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'holdingHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientExpertise: {type: 'premium', cap: 1, requirement() {
+    ancientExpertise: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.expertise.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 1300};
+        return {gem_ruby: Math.pow(10, lvl) * 1300};
     }, effect: [
-        {name: 'expertiseHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
+        {name: 'expertiseHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
-    ancientMystery: {type: 'premium', cap: 1, requirement() {
+    ancientMystery: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
         return store.state.horde.heirloom.mystery.amount > 0;
     }, price(lvl) {
-        return {gem_ruby: Math.pow(2, lvl) * 1800};
+        return {gem_ruby: Math.pow(10, lvl) * 1800};
     }, effect: [
-        {name: 'mysteryHeirloomEffect', type: 'mult', value: lvl => getSequence(1, lvl + 1)}
-    ]}
+        {name: 'mysteryHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
+    ]},
+    ancientFreezing: {type: 'premium', cap: 1, capMult: true, subtype: 'premiumAncient', requirement() {
+        return store.state.horde.heirloom.freezing.amount > 0;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(10, lvl) * 2500};
+    }, effect: [
+        {name: 'freezingHeirloomEffect', type: 'mult', value: lvl => Math.pow(2, lvl)}
+    ]},
+    moreBlood: {type: 'premium', requirement() {
+        return store.state.unlock.hordeClassesSubfeature.see;
+    }, price(lvl) {
+        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 900};
+    }, effect: [
+        {name: 'currencyHordeBloodGain', type: 'mult', value: lvl => getSequence(1, lvl) + 1},
+        {name: 'currencyHordeBloodCap', type: 'mult', value: lvl => getSequence(1, lvl) + 1},
+    ]},
+    moreCourage: {type: 'premium', requirement() {
+        return store.state.unlock.hordeClassesSubfeature.see;
+    }, price(lvl) {
+        return {gem_ruby: [2, 3][lvl % 2] * Math.pow(2, Math.floor(lvl / 2)) * 1200};
+    }, effect: [
+        {name: 'currencyHordeCourageGain', type: 'mult', value: lvl => lvl * 0.25 + 1},
+    ]},
+    moreMonsterTeeth: {type: 'premium', cap: 5, requirement() {
+        return store.state.unlock.hordeMonsterToothWarzone.see;
+    }, price(lvl) {
+        return {gem_ruby: Math.pow(2, lvl) * 2000};
+    }, effect: [
+        {name: 'hordeToothGain', type: 'base', value: lvl => lvl * 0.01},
+        {name: 'hordeToothGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+    ]},
 }

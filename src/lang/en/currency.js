@@ -1,10 +1,22 @@
 export default {
+  overcapFullGain: 'You\'ve reached overcap, but still get full income',
   overcapGain: 'Income is reduced to {0}% due to overcap',
   overcapNoGain: 'No income due to overcap',
   benefitLoss: 'Buying this results in the loss of benefits',
   gainTimerNeeded: 'Can afford in {0}',
   capTimerNeeded: 'Capacity reached in {0}',
   overcapTimerNeeded: 'Next capacity level reached in {0}',
+  isNotSpent: 'This currency is only required, but not spent',
+  unknown: 'Unknown currency',
+
+  subtype: {
+    village: {
+      foundationMaterial: 'Foundation material',
+      industrialMaterial: 'Industrial material',
+      luxuryMaterial: 'Luxury material',
+      modernMaterial: 'Modern material',
+    },
+  },
 
   // Premium currencies
   gem_ruby: {
@@ -337,6 +349,7 @@ export default {
   },
   mining_granite: {
     name: 'Granite',
+    hint: 'Found when breaking a rock at least 1000 times at 50m or below',
     description: 'Huge blocks of granite cut from the underground. Surprisingly, there is no scrap in them'
   },
   mining_salt: {
@@ -357,6 +370,7 @@ export default {
   },
   mining_obsidian: {
     name: 'Obsidian',
+    hint: 'Found when breaking a rock at 150m or below with an unenhanced pickaxe',
     description: 'Beautiful purple shards, they look fragile'
   },
   mining_deeprock: {
@@ -435,6 +449,19 @@ export default {
     name: 'Radon',
     description: ''
   },
+  mining_limestone: {
+    name: 'Limestone',
+    description: ''
+  },
+  mining_moonshard: {
+    name: 'Moonshard',
+    hint: 'Found when breaking a rock your depth dweller has reached at 20m or below',
+    description: ''
+  },
+  mining_phosphorus: {
+    name: 'Phosphorus',
+    description: ''
+  },
   mining_crystalYellow: {
     name: 'Yellow crystal',
     description: 'These crystals look amazing as well! Good thing you already have your depth dweller'
@@ -497,6 +524,7 @@ export default {
   },
   village_joy: {
     name: 'Joy',
+    hint: 'Gained by reaching a happiness value of over 125%',
     description: 'Gain joy by reaching a happiness value of over 125%. More happiness above that value generates even more joy'
   },
   village_glass: {
@@ -581,6 +609,7 @@ export default {
   },
   horde_monsterPart: {
     name: 'Monster part',
+    hint: 'Found at zone 10 or higher when enemies stop appearing',
     description: 'A disgusting organ that can be found at zone 10 or higher when enemies stop appearing'
   },
   horde_corruptedFlesh: {
@@ -589,6 +618,7 @@ export default {
   },
   horde_mysticalShard: {
     name: 'Mystical shard',
+    hint: 'Found when using equipment with a mastery level of 5 or higher',
     description: 'Filled with untapped power'
   },
   horde_soulCorrupted: {
@@ -607,9 +637,49 @@ export default {
     name: 'Crown',
     description: 'They used to rule the towers, but are now dethroned'
   },
+  horde_raidKey: {
+    name: 'Raid key',
+    description: 'A key that allows you to challenge a raid boss'
+  },
   horde_towerKey: {
     name: 'Tower key',
     description: 'A rare key that allows you to access a tower'
+  },
+  horde_fireEssence: {
+    name: 'Fire essence',
+    description: ''
+  },
+  horde_thunderEssence: {
+    name: 'Thunder essence',
+    description: ''
+  },
+  horde_windEssence: {
+    name: 'Wind essence',
+    description: ''
+  },
+  horde_waterEssence: {
+    name: 'Water essence',
+    description: ''
+  },
+  horde_iceEssence: {
+    name: 'Ice essence',
+    description: ''
+  },
+  horde_earthEssence: {
+    name: 'Earth essence',
+    description: ''
+  },
+  horde_natureEssence: {
+    name: 'Nature essence',
+    description: ''
+  },
+  horde_lightEssence: {
+    name: 'Light essence',
+    description: ''
+  },
+  horde_shadowEssence: {
+    name: 'Shadow essence',
+    description: ''
   },
   horde_blood: {
     name: 'Blood',
@@ -618,6 +688,18 @@ export default {
   horde_lockpick: {
     name: 'Lockpick',
     description: 'Allows you to receive trinkets from already defeated bosses. Exclusive to the pirate'
+  },
+  horde_monsterToothWarzone: {
+    name: 'Sharp monster tooth',
+    description: ''
+  },
+  horde_monsterToothMonkeyJungle: {
+    name: 'Mossy monster tooth',
+    description: ''
+  },
+  horde_monsterToothLoveIsland: {
+    name: 'Cute monster tooth',
+    description: ''
   },
   farm_vegetable: {
     name: 'Vegetable',
@@ -639,12 +721,27 @@ export default {
     name: 'Gold',
     description: 'Small nuggets of gold that were buried in the soil'
   },
+  farm_rainwater: {
+    name: 'Rainwater',
+    description: ''
+  },
+  farm_mixedSeeds: {
+    name: 'Mixed seeds',
+    hint: 'Gained from events',
+    description: 'A variety of seeds that can be used to grow wildflowers. They can be obtained during events'
+  },
+  farm_cactusSeed: {
+    name: 'Cactus seed',
+    hint: 'Gained from big events',
+    description: 'A seed that can be used to grow a cactus. They can only be obtained during big events'
+  },
   farm_seedHull: {
     name: 'Seed hull',
     description: 'An empty hull from a plant, the seed seems to be missing'
   },
   farm_grass: {
     name: 'Grass',
+    hint: 'Obtainable from a gene after reaching crop level 5',
     description: 'This seems unnatural, grass shouldn\'t grow on crops'
   },
   farm_petal: {
@@ -675,12 +772,21 @@ export default {
     name: 'Mystery stone',
     description: 'What is this? What uses does it have?'
   },
-  farm_goldenPetal: {
-    name: 'Golden petal',
-    description: 'This extremely rare petal can only be found on roses. Rumors say the roses with these petals look darker than others'
-  },
   farm_smallSeed: {
     name: 'Small seed',
+    description: ''
+  },
+  farm_ancientSeed: {
+    name: 'Ancient seed',
+    hint: 'Sometimes sold by the merchant',
+    description: 'An extremely old and rare seed that can be used to grow a mysterious plant'
+  },
+  farm_snail: {
+    name: 'Snail',
+    description: ''
+  },
+  farm_oldRoot: {
+    name: 'Old root',
     description: ''
   },
   gallery_beauty: {
@@ -859,9 +965,13 @@ export default {
     name: 'Exam pass',
     description: 'Strange, we didn\'t need them at our old school. Here they are needed to take an exam'
   },
+  relic_power: {
+    name: 'Relic energy',
+    description: ''
+  },
   card_shinyDust: {
     name: 'Shiny dust',
-    description: ''
+    description: 'This dust is made of duplicate shiny cards. It can be used to create card packs with an unowned shiny card inside'
   },
   treasure_fragment: {
     name: 'Fragment',

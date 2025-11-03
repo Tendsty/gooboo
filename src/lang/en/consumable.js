@@ -77,28 +77,44 @@ export default {
     name: 'Pellets',
     description: ''
   },
-  farm_sunshine: {
-    name: 'Sunshine',
+  farm_supplementsS: {
+    name: 'Supplements (S)',
     description: ''
   },
-  farm_superFlower: {
-    name: 'Super flower',
+  farm_supplementsM: {
+    name: 'Supplements (M)',
     description: ''
   },
-  farm_smellyMud: {
-    name: 'Smelly mud',
+  farm_supplementsL: {
+    name: 'Supplements (L)',
     description: ''
   },
-  farm_tropicalWater: {
-    name: 'Tropical water',
+  farm_supplementsXL: {
+    name: 'Supplements (XL)',
     description: ''
   },
-  farm_fieldBlessing: {
-    name: 'Field blessing',
+  farm_supplementsXXL: {
+    name: 'Supplements (XXL)',
     description: ''
   },
-  farm_cinnamonBag: {
-    name: 'Cinnamon bag',
-    description: ''
+  gallery_surpriseParty: {
+    name: 'Surprise party',
+    description: 'Gain 500 motivation'
+  },
+  treasure_upArrow: {
+    name: 'Up arrow',
+    description: 'Increases treasure level by 2'
+  },
+  treasure_expander: {
+    name: 'Expander',
+    description: 'Treasure level increases over time, but cannot be upgraded using fragments'
+  },
+  treasure_wildcard: {
+    name: 'Wildcard',
+    description: 'All effects can be chosen again'
+  },
+  treasure_eventStar: {
+    name: 'Event star',
+    description: 'Adds event power as an effect'
   },
 };

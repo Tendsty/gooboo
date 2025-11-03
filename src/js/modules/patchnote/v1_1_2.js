@@ -118,12 +118,12 @@ export default {
         ],
         horde: [
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'qol',
                 text: '51',
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'qol',
                 text: '52',
             },
@@ -133,7 +133,7 @@ export default {
                 text: '53',
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'qol',
                 text: '54',
             },
@@ -142,12 +142,12 @@ export default {
                 text: '60',
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'qol',
                 text: '78',
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'clarity',
                 text: '79',
             },

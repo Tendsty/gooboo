@@ -10,19 +10,17 @@
         </template>
         <div>{{ $vuetify.lang.t('$vuetify.mining.smelteryTemperatureDescription2', $formatNum(temperatureSpeed * 100, true)) }}</div>
       </gb-tooltip>
-      <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.mult.miningSmelterySpeed')">
+      <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.mult.miningSmelteryTime')">
         <template v-slot:activator="{ on, attrs }">
           <div class="d-flex align-center ma-1" v-bind="attrs" v-on="on">
             <v-icon class="mr-1">mdi-timer</v-icon>
-            <div v-if="timeNeeded >= 1">{{ $formatTime(Math.round(timeNeeded)) }}</div>
-            <div v-else>{{ $formatNum(1 / timeNeeded, true) }}/s</div>
+            <div>{{ $formatTime(timeNeeded, 'ms') }}</div>
           </div>
         </template>
-        <div>{{ $vuetify.lang.t('$vuetify.mining.smelterySpeedDescription', $formatTime(smeltery.timeNeeded)) }}</div>
-        <stat-breakdown name="miningSmelterySpeed" :multArray="temperatureSpeedMult"></stat-breakdown>
+        <stat-breakdown name="miningSmelteryTime" :base="baseTimeNeeded" :multArray="temperatureSpeedMult"></stat-breakdown>
       </gb-tooltip>
       <v-spacer></v-spacer>
-      <price-tag v-for="(amount, currency) in price" :key="`price-${ currency }`" class="ma-1" :currency="currency" :amount="amount"></price-tag>
+      <price-tag v-for="(amount, currency) in price" :key="`price-${ currency }`" class="ma-1" :currency="currency" :amount="amount" :is-spent="!smelteryNotSpent.includes(currency)"></price-tag>
       <v-icon class="ma-1">mdi-transfer-right</v-icon>
       <price-tag class="ma-1" :currency="smeltery.output" :amount="1" add></price-tag>
       <v-spacer></v-spacer>
@@ -36,7 +34,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { MINING_SMELTERY_TEMPERATURE_SPEED } from '../../../js/constants';
+import { MINING_SMELTERY_TEMPERATURE_SPEED, MINING_SMELTERY_TIME_INCREMENT } from '../../../js/constants';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 
@@ -51,6 +49,7 @@ export default {
   computed: {
     ...mapState({
       isFrozen: state => state.cryolab.mining.active,
+      smelteryNotSpent: state => state.mining.smelteryNotSpent,
     }),
     smeltery() {
       return this.$store.state.mining.smeltery[this.name];
@@ -61,14 +60,17 @@ export default {
     canAfford() {
       return this.$store.getters['currency/canAfford'](this.price, this.price);
     },
+    baseTimeNeeded() {
+      return this.smeltery.timeNeeded * Math.pow(MINING_SMELTERY_TIME_INCREMENT, this.smeltery.total);
+    },
     timeNeeded() {
-      return this.$store.getters['mining/smelteryTimeNeeded'](this.name);
+      return this.$store.getters['mining/smelteryTimeNeeded'](this.name) * Math.pow(MINING_SMELTERY_TIME_INCREMENT, this.smeltery.stored);
     },
     temperatureSpeed() {
       return MINING_SMELTERY_TEMPERATURE_SPEED * (this.$store.getters['mult/get']('miningSmelteryTemperature') - this.smeltery.minTemperature);
     },
     temperatureSpeedMult() {
-      return this.temperatureSpeed > 0 ? [{name: 'miningTemperature', value: this.temperatureSpeed + 1}] : [];
+      return this.temperatureSpeed > 0 ? [{name: 'miningTemperature', value: 1 / (this.temperatureSpeed + 1)}] : [];
     },
     isHighspeed() {
       return this.timeNeeded < 1 && this.smeltery.stored > 0;

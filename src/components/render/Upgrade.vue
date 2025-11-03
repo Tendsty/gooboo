@@ -89,7 +89,7 @@
     </v-card-text>
     <v-card-actions>
       <div>
-        <gb-tooltip key="upgrade-subtype" v-if="subtype !== null" :min-width="0">
+        <gb-tooltip key="upgrade-subtype" v-if="subtype && subtypeIcon" :min-width="0">
           <template v-slot:activator="{ on, attrs }">
             <v-icon class="ma-1" small v-bind="attrs" v-on="on">{{ subtypeIcon }}</v-icon>
           </template>
@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import { UPGRADE_IS_BOOL } from '../../js/constants';
 import { capitalize } from '../../js/utils/format';
 import AlertText from '../partial/render/AlertText.vue';
 import DisplayRow from '../partial/upgrade/DisplayRow.vue';
@@ -218,11 +219,11 @@ export default {
         const lvl = this.upgrade.bought;
         return {
           ...elem,
-          before: lvl > 0 ? elem.value(lvl) : null,
+          before: (lvl > 0 && elem.type !== 'gainConsumable') ? elem.value(lvl) : null,
           after: this.isMax ? null : elem.value(lvl + 1)
         };
       }).filter(elem => {
-        const isBool = ['unlock', 'keepUpgrade', 'villageCraft', 'farmSeed', 'findConsumable', 'galleryIdea', 'galleryShape'].includes(elem.type);
+        const isBool = UPGRADE_IS_BOOL.includes(elem.type);
         return (isBool && !elem.before && elem.after) || (!isBool && elem.before !== elem.after);
       });
     },
@@ -234,11 +235,11 @@ export default {
         const lvl = this.otherUpgrade.bought;
         return {
           ...elem,
-          before: lvl > 0 ? elem.value(lvl) : null,
+          before: (lvl > 0 && elem.type !== 'gainConsumable') ? elem.value(lvl) : null,
           after: this.isMax ? null : elem.value(lvl + 1)
         };
       }).filter(elem => {
-        const isBool = ['unlock', 'keepUpgrade', 'villageCraft', 'farmSeed', 'findConsumable', 'galleryIdea', 'galleryShape'].includes(elem.type);
+        const isBool = UPGRADE_IS_BOOL.includes(elem.type);
         return (isBool && !elem.before && elem.after) || (!isBool && elem.before !== elem.after);
       });
     },
@@ -306,7 +307,7 @@ export default {
           display: this.upgrade.effect.map(elem => {
             return {
               ...elem,
-              before: elem.value(lvl),
+              before: elem.type !== 'gainConsumable' ? elem.value(lvl) : null,
               after: elem.value(lvl + 1)
             };
           }).filter(elem => {

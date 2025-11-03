@@ -1,6 +1,6 @@
 export default {
     moreSlots: {type: 'premium', price(lvl) {
-        return {gem_ruby: lvl * 10 + 50};
+        return {gem_ruby: Math.max(lvl * 10, Math.round(Math.pow(1.1, lvl) * 6 * lvl)) + 50};
     }, effect: [
         {name: 'treasureSlots', type: 'base', value: lvl => lvl}
     ]},

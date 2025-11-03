@@ -9,11 +9,14 @@ export default {
     metal: {unlock: 'villageOffering2', amount: 3, cost: lvl => Math.pow(1.5, lvl) * buildNum(3, 'M'), effect: 200},
     water: {unlock: 'villageOffering2', amount: 3, cost: lvl => Math.pow(2, lvl) * buildNum(5, 'M'), effect: 500},
 
-    glass: {unlock: 'villageOffering3', amount: 8, cost: lvl => Math.pow(1.5, lvl) * buildNum(120, 'K'), effect: 100},
+    glass: {unlock: 'villageOffering3', amount: 8, cost: lvl => Math.pow(1.5, lvl) * buildNum(120, 'K'), effect: 200},
     hardwood: {unlock: 'villageOffering3', amount: 8, cost: lvl => Math.pow(1.5, lvl) * buildNum(40, 'K'), effect: 100},
     gem: {unlock: 'villageOffering3', amount: 8, cost: lvl => Math.pow(1.5, lvl) * buildNum(40, 'K'), effect: 100},
 
-    knowledge: {unlock: 'villageOffering4', amount: 20, increment: 1, cost: lvl => Math.pow(1.25, lvl) * 250, effect: 2},
-    science: {unlock: 'villageOffering4', amount: 20, increment: 1, cost: lvl => Math.pow(1.25, lvl) * 100, effect: 1},
-    joy: {unlock: 'villageOffering4', amount: 20, increment: 1, cost: lvl => Math.pow(1.25, lvl) * 750, effect: 5},
+    knowledge: {unlock: 'villageOffering4', amount: 20, hasMultiplier: false, cost: lvl => Math.pow(1.25, lvl) * 250, effect: 2},
+    science: {unlock: 'villageOffering4', amount: 20, hasMultiplier: false, cost: lvl => Math.pow(1.25, lvl) * 100, effect: 1},
+    joy: {unlock: 'villageOffering4', amount: 20, hasMultiplier: false, cost: lvl => Math.pow(1.25, lvl) * 750, effect: 5},
+
+    oil: {unlock: 'villageOffering5', amount: 50, cost: lvl => Math.pow(1.8, lvl) * buildNum(1, 'M'), effect: 100},
+    marble: {unlock: 'villageOffering5', amount: 50, cost: lvl => Math.pow(1.4, lvl) * 5000, effect: 20},
 }

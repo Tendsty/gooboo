@@ -1,72 +1,85 @@
-import { SECONDS_PER_DAY, SECONDS_PER_HOUR } from "../../constants";
-import { buildNum } from "../../utils/format";
+import { MINING_SMELTERY_ORE_INCREMENT, SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_YEAR } from "../../constants";
 
 export default {
     aluminium: {
-        price: {
-            mining_oreAluminium: {base: 1000, increment: 50},
-            mining_granite: {base: 800, increment: 800}
+        price(lvl) {
+            return {
+                mining_oreAluminium: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 1000,
+                mining_granite: Math.pow(1.1, lvl) * 7500,
+            };
         },
         output: 'mining_barAluminium',
         timeNeeded: 300,
         minTemperature: 100
     },
     bronze: {
-        price: {
-            mining_oreCopper: {base: 900, increment: 45},
-            mining_oreTin: {base: 100, increment: 5},
-            mining_salt: {base: 150, increment: 50}
+        price(lvl) {
+            return {
+                mining_oreCopper: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 900,
+                mining_oreTin: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 100,
+                mining_salt: Math.pow(1.06, lvl) * 800,
+            };
         },
         output: 'mining_barBronze',
         timeNeeded: SECONDS_PER_HOUR,
         minTemperature: 275
     },
     steel: {
-        price: {
-            mining_oreIron: {base: 1000, increment: 50},
-            mining_coal: {base: 2, increment: 0}
+        price(lvl) {
+            return {
+                mining_oreIron: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 1000,
+                mining_coal: 5,
+            };
         },
         output: 'mining_barSteel',
         timeNeeded: 8 * SECONDS_PER_HOUR,
         minTemperature: 500
     },
     titanium: {
-        price: {
-            mining_oreTitanium: {base: 1000, increment: 50},
-            mining_sulfur: {base: 200, increment: 10},
-            mining_niter: {base: 50, increment: 0}
+        price(lvl) {
+            return {
+                mining_oreTitanium: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 1000,
+                mining_sulfur: Math.pow(1.06, lvl) * 200,
+                mining_niter: 100,
+            };
         },
         output: 'mining_barTitanium',
         timeNeeded: 3 * SECONDS_PER_DAY,
         minTemperature: 800
     },
     shiny: {
-        price: {
-            mining_orePlatinum: {base: 1000, increment: 50},
-            mining_obsidian: {base: buildNum(2, 'M'), increment: buildNum(100, 'K')}
+        price(lvl) {
+            return {
+                mining_orePlatinum: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 1000,
+                mining_obsidian: Math.pow(1.1, lvl) * 2e6,
+            };
         },
         output: 'mining_barShiny',
         timeNeeded: 30 * SECONDS_PER_DAY,
-        minTemperature: 1200
+        minTemperature: 1250
     },
     iridium: {
-        price: {
-            mining_oreIridium: {base: 1000, increment: 50},
-            mining_helium: {base: buildNum(10, 'K'), increment: 2500}
+        price(lvl) {
+            return {
+                mining_oreIridium: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 1000,
+                mining_helium: Math.pow(1.1, lvl) * 1e4,
+            };
         },
         output: 'mining_barIridium',
-        timeNeeded: 365 * SECONDS_PER_DAY,
-        minTemperature: 1750
+        timeNeeded: SECONDS_PER_YEAR,
+        minTemperature: 2000
     },
     darkIron: {
-        price: {
-            mining_oreIron: {base: buildNum(10, 'M'), increment: buildNum(500, 'K')},
-            mining_oreOsmium: {base: 1000, increment: 50},
-            mining_deeprock: {base: buildNum(100, 'M'), increment: buildNum(25, 'M')},
-            mining_neon: {base: buildNum(10, 'K'), increment: 2500}
+        price(lvl) {
+            return {
+                mining_oreIron: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 1e7,
+                mining_oreOsmium: Math.pow(MINING_SMELTERY_ORE_INCREMENT, lvl) * 1000,
+                mining_deeprock: Math.pow(1.1, lvl) * 1e8,
+                mining_neon: Math.pow(1.1, lvl) * 1e4,
+            };
         },
         output: 'mining_barDarkIron',
-        timeNeeded: 5000 * SECONDS_PER_DAY,
-        minTemperature: 2500
+        timeNeeded: 15 * SECONDS_PER_YEAR,
+        minTemperature: 3000
     },
 }

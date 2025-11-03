@@ -4,6 +4,7 @@
     <div class="d-flex justify-center align-center ma-1">
       <price-tag class="ma-1" v-for="(item, currencyName) in prestigeGain" :key="currencyName" :currency="currencyName" :amount="item.total" add>
         <alert-text type="info" v-if="item.showDescription">{{ $vuetify.lang.t(`$vuetify.prestigeDescription.${ currencyName }`) }}</alert-text>
+        <alert-text type="formula" v-if="showFormulas && item.showFormula">{{ $vuetify.lang.t(`$vuetify.prestigeFormula.${ currencyName }`) }}</alert-text>
         <template v-if="item.gainMult">
           <div class="text-center">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</div>
           <stat-breakdown :name="item.gainMult" :base="item.base ? item.base : null"></stat-breakdown>
@@ -78,7 +79,10 @@ export default {
     },
     isFrozen() {
       return this.$store.state.cryolab[this.feature].active;
-    }
+    },
+    showFormulas() {
+      return this.$store.state.system.settings.general.items.showFormulas.value;
+    },
   },
   methods: {
     prestige() {

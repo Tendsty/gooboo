@@ -9,20 +9,21 @@ const winterTable = {'EV-0024': 0.6, 'EV-0025': 0.6, 'EV-0026': 0.6, 'EV-0027': 
 export default {
     feature: {
         prefix: 'EV',
-        reward: [{name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 5}],
-        shinyReward: [{name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 5}],
+        reward: [{name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 10}],
+        shinyReward: [{name: 'currencyGemTopazCap', type: 'base', value: lvl => lvl * 10}],
         unlock: 'eventFeature'
     },
     collection: {
         weekendTrip: {reward: [
-            {name: 'currencyGemTopazCap', type: 'base', value: 50}
+            {name: 'currencyGemTopazCap', type: 'base', value: 150}
         ]},
         tropicalParadise: {reward: [
-            {name: 'currencyGemTopazCap', type: 'base', value: 50}
+            {name: 'currencyGemTopazCap', type: 'base', value: 150}
         ]},
         coldTimes: {reward: [
-            {name: 'currencyGemTopazCap', type: 'base', value: 50}
+            {name: 'currencyGemTopazCap', type: 'base', value: 150}
         ]},
+        specialGadgets: {},
     },
     pack: {
         goodDeal: {unlock: 'merchantEvent', amount: 1, content: {

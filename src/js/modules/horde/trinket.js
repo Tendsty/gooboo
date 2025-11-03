@@ -19,7 +19,7 @@ export default {
         activeCost: () => {return {energy: 25};},
         active(lvl) {
             return [
-                {type: 'damagePhysic', value: lvl * 0.4 + 3.1, str: 0.15}
+                {type: 'damagePhysic', value: lvl * 0.4 + 3.1, str: 0.25}
             ];
         },
         activeType: 'combat'
@@ -30,10 +30,10 @@ export default {
         rarity: 10,
         needsMana,
         cooldown: () => 9,
-        activeCost: () => {return {mana: 5};},
+        activeCost: () => {return {mana: 2};},
         active(lvl) {
             return [
-                {type: 'damageMagic', value: lvl * 0.55 + 3.65, int: 0.2}
+                {type: 'damageMagic', value: lvl * 0.55 + 3.65, int: 0.35}
             ];
         },
         activeType: 'combat'
@@ -112,6 +112,10 @@ export default {
     },
 
     // Boss-specific trinkets
+    stone: {color: 'grey', icon: 'mdi-chart-bubble', rarity: 30, uniqueToBoss: 'ohilio', effect: [
+        {name: 'hordeHealth', type: 'mult', value: lvl => lvl * 0.12 + 1.3},
+        {name: 'hordeHealing', type: 'mult', value: lvl => 1 / (lvl * 0.12 + 1.5)}
+    ]},
     duality: {color: 'purple', icon: 'mdi-call-split', rarity: 75, uniqueToBoss: 'chriz2', effect: [
         {name: 'hordeStrength', type: 'base', value: lvl => lvl * 2 + 4},
         {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 2 + 4}

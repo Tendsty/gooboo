@@ -92,7 +92,10 @@ export default {
   computed: {
     hasBadge() {
       return (this.name === 'note' && this.$store.state.system.noteHint.length > 0) ||
-             (this.name === 'farm' && this.$store.state.system.farmHint);
+             (this.name === 'school' && this.$store.state.system.bookHint.length > 0) ||
+             (this.name === 'farm' && this.$store.state.system.farmHint) ||
+             (this.name === 'general' && this.$store.getters['system/hasQuestlineHint']) ||
+             (this.name === 'relic' && this.$store.state.unlock.relicMuseum.use && this.$store.getters['relic/hasMuseumHint']);
     },
     isFrozen() {
       return !!this.$store.state.cryolab[this.name] && this.$store.state.cryolab[this.name].active;

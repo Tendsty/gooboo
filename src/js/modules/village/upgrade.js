@@ -3,14 +3,14 @@ import { buildNum } from "../../utils/format";
 import { getSequence } from "../../utils/math";
 
 export default {
-    wallet: {cap: 12, capMult: true, requirement() {
+    wallet: {cap: 12, requirement() {
         return store.state.unlock.villageCoinUpgrades.use;
     }, price(lvl) {
         return {village_coin: Math.ceil(Math.pow(1.3, lvl) * 200)};
     }, effect: [
         {name: 'currencyVillageCoinCap', type: 'base', value: lvl => lvl * 150}
     ]},
-    resourceBag: {cap: 10, capMult: true, requirement() {
+    resourceBag: {cap: 10, requirement() {
         return store.state.unlock.villageCoinUpgrades.use;
     }, price(lvl) {
         return {village_coin: Math.ceil(Math.pow(1.4, lvl) * 200)};
@@ -19,7 +19,7 @@ export default {
         {name: 'currencyVillageWoodCap', type: 'base', value: lvl => lvl * 200},
         {name: 'currencyVillageStoneCap', type: 'base', value: lvl => lvl * 200}
     ]},
-    metalBag: {cap: 5, capMult: true, requirement() {
+    metalBag: {cap: 5, requirement() {
         return store.state.unlock.villageCoinUpgrades.use;
     }, price(lvl) {
         return {village_coin: Math.ceil(Math.pow(1.7, lvl) * 300)};
@@ -214,7 +214,7 @@ export default {
         return {village_loot0: Math.ceil(Math.pow(1.15, lvl) * (lvl * 2 + 6))};
     }, effect: [
         {name: 'villageLootGain', type: 'mult', value: lvl => lvl * 0.01 + 1},
-        {name: 'villageLootQuality', type: 'base', value: lvl => lvl * 3}
+        {name: 'villageLootQuality', type: 'base', value: lvl => lvl}
     ]},
     understanding: {cap: 20, requirement() {
         return store.state.unlock.villageUpgradeUnderstanding.use;

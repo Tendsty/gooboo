@@ -278,10 +278,12 @@ export default {
     isEditingName: false,
     cheetahColorList: {
       0: 'green',
+      50: 'lime',
       100: 'amber',
+      150: 'orange-red',
       200: 'red',
     },
-    cheetahStateList: [0, 100, 200],
+    cheetahStateList: [0, 50, 100, 150, 200],
     cheaterSelfMark: 0,
     showSelfMark: false,
     cheetahFeatureList: ['mining', 'village', 'horde', 'farm', 'gallery', 'school'],
@@ -381,7 +383,7 @@ export default {
     },
     schoolGrades() {
       let obj = {};
-      for (const [key, elem] of Object.entries(this.$store.state.school)) {
+      for (const [key, elem] of Object.entries(this.$store.state.school.subject)) {
         if (elem.unlock === null || this.unlock[elem.unlock].see) {
           const gradeTier = Math.floor((elem.grade + 2) / 3);
           let color = 'blue';
@@ -413,9 +415,7 @@ export default {
         if (elem.unlock === null || this.unlock[elem.unlock].see) {
           let amount = 0;
           for (const [, el] of Object.entries(elem.quests)) {
-            if (el.stage >= el.stages.length) {
-              amount++;
-            }
+            amount += Math.floor(el.stage / el.stageLength);
           }
           obj[key] = amount;
         }

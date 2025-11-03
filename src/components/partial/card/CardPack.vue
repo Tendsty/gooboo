@@ -4,6 +4,10 @@
     <v-chip v-if="item.feature" class="px-2 mx-1" label small><v-icon class="mr-1">{{ featureIcon }}</v-icon>{{ $vuetify.lang.t(`$vuetify.feature.${ item.feature }`) }}</v-chip>
     <v-chip class="px-2 mx-1" label small><v-icon class="mr-1">mdi-cards</v-icon>{{ item.amount }}</v-chip>
     <price-tag class="mx-1" currency="gem_emerald" :amount="item.price"></price-tag>
+    <template v-if="canSeeShiny">
+      <div>/</div>
+      <price-tag class="mx-1" currency="card_shinyDust" :amount="item.shinyPrice"></price-tag>
+    </template>
   </div>
 </template>
 
@@ -21,6 +25,9 @@ export default {
   computed: {
     featureIcon() {
       return this.item.feature ? this.$store.state.system.features[this.item.feature].icon : null;
+    },
+    canSeeShiny() {
+      return this.$store.state.unlock.cardShiny.see;
     }
   }
 }

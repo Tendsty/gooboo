@@ -18,13 +18,17 @@
 
 <template>
   <div v-if="items.length > 0">
-    <div class="d-flex upgrade-pagination justify-center align-center bg-tile-default rounded-b elevation-2 mx-2" :class="{'upgrade-pagination-mobile': $vuetify.breakpoint.smAndDown && !noTabs, 'upgrade-pagination-mobile-notabs': $vuetify.breakpoint.smAndDown && noTabs, 'pr-10': showQueueSpeed}" v-if="pages > 1 || requirementStat.length > 0">
+    <div class="d-flex flex-wrap upgrade-pagination justify-center align-center bg-tile-default rounded-b elevation-2 mx-2" :class="{'upgrade-pagination-mobile': $vuetify.breakpoint.smAndDown && !noTabs, 'upgrade-pagination-mobile-notabs': $vuetify.breakpoint.smAndDown && noTabs, 'pr-10': showQueueSpeed}" v-if="pages > 1 || requirementStat.length > 0">
       <v-pagination v-if="pages > 1" v-model="page" :length="pages" :total-visible="7"></v-pagination>
       <gb-tooltip v-for="item in requirementFiltered" :key="item.key" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
-          <v-chip small label class="flex-shrink-0 ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-1">mdi-chevron-double-up</v-icon>{{ $formatNum(requirementNext[item.key]) }}</v-chip>
+          <v-chip small label class="flex-shrink-0 ma-1 px-2" v-bind="attrs" v-on="on"><v-icon class="mr-1">mdi-chevron-double-up</v-icon>{{ $formatNum(requirementNext[item.key].requirementValue) }}</v-chip>
         </template>
-        <div class="mt-0">{{ $vuetify.lang.t('$vuetify.upgrade.keyset.default.nextRequirement') }}{{ $formatNum(requirementNext[item.key]) }} {{ $vuetify.lang.t(`$vuetify.stat.${ item.stat }.description`) }}</div>
+        <div class="mt-0">{{ $vuetify.lang.t('$vuetify.upgrade.keyset.default.nextRequirement') }}{{ $formatNum(requirementNext[item.key].requirementValue) }} {{ $vuetify.lang.t(`$vuetify.stat.${ item.stat }.description`) }}</div>
+        <display-row v-for="(subitem, key) in item.effect" class="mt-0 mx-1" :key="`next-display-${ item.key }-${ subitem.name }-${ subitem.type }-${ key }`" :name="subitem.name" :type="subitem.type" :after="subitem.after"></display-row>
+        <div class="d-flex flex-wrap mt-0">
+          <price-tag class="ma-1" v-for="(amount, currency, index) in item.price" :key="'next-price-' + item.key + '-' + currency + '-' + index" :currency="currency" :amount="amount"></price-tag>
+        </div>
       </gb-tooltip>
       <gb-tooltip v-for="(item, index) in requirementCustom" :key="index" :min-width="0">
         <template v-slot:activator="{ on, attrs }">
@@ -54,13 +58,16 @@
 </template>
 
 <script>
+import { UPGRADE_IS_BOOL } from '../../js/constants';
 import { capitalize } from '../../js/utils/format';
 import AlertText from '../partial/render/AlertText.vue';
+import DisplayRow from '../partial/upgrade/DisplayRow.vue';
+import PriceTag from './PriceTag.vue';
 import StatBreakdown from './StatBreakdown.vue';
 import Upgrade from './Upgrade.vue';
 
 export default {
-  components: { Upgrade, StatBreakdown, AlertText },
+  components: { Upgrade, StatBreakdown, AlertText, DisplayRow, PriceTag },
   props: {
     feature: {
       type: String,
@@ -136,11 +143,23 @@ export default {
     requirementNext() {
       return this.requirementStat.map(statName => {
         let next = null;
-        const stat = this.$store.state.stat[statName].total;
+        let stat = 0;
+        if (statName.split('_')[0] === 'custom') {
+          switch (statName.split('_')[1]) {
+            case 'hordeBattlepass':
+              stat = this.$store.getters['horde/battlePassCurrentLevel'];
+              break;
+            default:
+              stat = 0;
+              break;
+          }
+        } else {
+          stat = this.$store.state.stat[statName].total;
+        }
         this.baseItems.forEach(elem => {
           const upgrade = this.$store.state.upgrade.item[elem];
           if (upgrade.requirementValue !== null && upgrade.requirementStat === statName && stat < upgrade.requirementValue && (next === null || upgrade.requirementValue < next)) {
-            next = upgrade.requirementValue;
+            next = upgrade;
           }
         });
         return next;
@@ -148,7 +167,24 @@ export default {
     },
     requirementFiltered() {
       return this.requirementStat.map((el, key) => {
-        return {stat: el, key};
+        if (this.requirementNext[key] === null) {
+          return {stat: el, effect: [], price: {}, key};
+        }
+        const effect = this.requirementNext[key].effect.map(elem => {
+          return {
+            ...elem,
+            after: elem.value(1)
+          };
+        }).filter(elem => {
+          const isBool = UPGRADE_IS_BOOL.includes(elem.type);
+          return (isBool && elem.after) || (!isBool && elem.after !== null);
+        });
+        return {
+          stat: el,
+          effect,
+          price: this.requirementNext[key].price(0),
+          key,
+        };
       }).filter(el => {
         return this.requirementNext[el.key] !== null;
       });

@@ -40,7 +40,7 @@ export default {
         list: (state) => (feature, type = null, subtype = null) => {
             let arr = [];
             for (const [key, elem] of Object.entries(state)) {
-                if (elem.feature === feature && (type === null || elem.type === type) && (subtype === null || elem.subtype === subtype)) {
+                if (elem.feature === feature && !elem.isHidden && (type === null || elem.type === type) && (subtype === null || elem.subtype === subtype)) {
                     arr.push(key);
                 }
             }
@@ -85,16 +85,22 @@ export default {
             Vue.set(state, name, {
                 feature: feature,
                 type: o.type ?? 'regular',
+                display: o.display ?? 'number',
                 subtype: o.subtype ?? null,
                 value: 0,
                 alwaysVisible: o.alwaysVisible ?? false,
                 cap: o.capMult ? o.capMult.baseValue : null,
+                baseCap: o.capMult ? o.capMult.baseValue : null,
                 showGainMult: o.showGainMult ?? false,
                 hideGainTag: o.hideGainTag ?? false,
                 currencyMult: o.currencyMult ?? null,
                 overcapMult: o.overcapMult ?? 0.25,
                 overcapScaling: o.overcapScaling ?? 0.5,
+                overcapFunction: o.overcapFunction ?? null,
                 showGainTimer: o.showGainTimer ?? false,
+                showHint: o.showHint ?? false,
+                showSubtype: o.showSubtype ?? false,
+                isHidden: o.isHidden ?? false,
                 gainTimerFunction: o.gainTimerFunction ?? null,
                 timerIsEstimate: o.timerIsEstimate ?? false,
                 color: o.color ?? '#808080',
@@ -119,8 +125,9 @@ export default {
     },
     actions: {
         cleanState({ state, commit }) {
-            for (const [key] of Object.entries(state)) {
+            for (const [key, elem] of Object.entries(state)) {
                 commit('updateKey', {name: key, key: 'value', value: 0});
+                commit('updateKey', {name: key, key: 'cap', value: elem.baseCap});
             }
         },
         init({ getters, commit }, o) {
@@ -134,14 +141,14 @@ export default {
             }
 
             commit('init', o);
-            commit('stat/init', {feature, name: o.name}, {root: true});
-            commit('stat/init', {feature, name: o.name + 'Max'}, {root: true});
+            commit('stat/init', {feature, type: o.type ?? undefined, name: o.name}, {root: true});
+            commit('stat/init', {feature, type: o.type ?? undefined, name: o.name + 'Max'}, {root: true});
         },
-        gain({ state, getters, rootState, rootGetters, commit, dispatch }, o) {
+        gain({ state, getters, rootGetters, commit, dispatch }, o) {
             const feature = o.feature ?? 'meta';
             const name = feature + '_' + o.name;
             let gained = 0;
-            const amount = o.gainMult ? rootGetters['mult/get'](getters.gainMultName(feature, o.name), o.amount) : o.amount;
+            const amount = o.gainMult ? rootGetters['mult/get'](getters.gainMultName(feature, o.name), o.amount, 1, 0, o.blacklist ?? []) : o.amount;
             if (state[name].cap === null) {
                 gained = amount;
             } else if (state[name].overcapMult > 0) {
@@ -166,8 +173,8 @@ export default {
             if (!o.refund) {
                 commit('stat/add', {feature, name: o.name, value: gained}, {root: true});
             }
-            if (name === 'gem_topaz' && gained < amount && rootState.event.bank_loan > 0) {
-                commit('event/updateKey', {key: 'bank_loan', value: Math.max(0, rootState.event.bank_loan + gained - amount)}, {root: true});
+            if (gained < amount && state[name].overcapFunction !== null) {
+                state[name].overcapFunction(amount - gained);
             }
             commit('stat/increaseTo', {feature, name: o.name + 'Max', value: state[name].value}, {root: true});
             dispatch('updateCurrencyMult', name);

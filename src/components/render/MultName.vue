@@ -1,8 +1,8 @@
 <template>
   <span v-if="isLocked">???</span>
   <span v-else-if="isUpgradeCap">{{ $vuetify.lang.t(`$vuetify.upgrade.${upgradeName}`) }} {{ $vuetify.lang.t(`$vuetify.gooboo.maxLevel`) }}</span>
-  <span v-else-if="isCurrencyCap">{{ $vuetify.lang.t(`$vuetify.gooboo.multCapacity`, $vuetify.lang.t(`$vuetify.currency.${currencyName}.name`)) }}</span>
-  <span v-else-if="isCurrencyGain">{{ $vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t(`$vuetify.currency.${currencyGainName}.name`)) }}</span>
+  <span v-else-if="isCurrencyCap">{{ $vuetify.lang.t(`$vuetify.gooboo.multCapacity`, $vuetify.lang.t(`$vuetify.currency.${ currencyName }.name`)) }}</span>
+  <span v-else-if="isCurrencyGain">{{ $vuetify.lang.t(`$vuetify.gooboo.multGain`, $vuetify.lang.t(`$vuetify.currency.${ currencyGainName }.name`)) }}</span>
   <span v-else>{{ $vuetify.lang.t(`$vuetify.mult.${name}`) }}</span>
 </template>
 
@@ -44,7 +44,16 @@ export default {
     },
     isLocked() {
       const mult = this.$store.state.mult.items[this.name];
-      return mult && mult.unlock !== null && !this.$store.state.unlock[mult.unlock].see;
+      if (mult && mult.unlock !== null) {
+        return !this.$store.state.unlock[mult.unlock].see;
+      }
+      if (this.isCurrencyGain) {
+        return this.$store.state.stat[this.currencyGainName].total <= 0;
+      }
+      if (this.isCurrencyCap) {
+        return this.$store.state.stat[this.currencyName].total <= 0;
+      }
+      return false;
     }
   }
 }

@@ -134,7 +134,7 @@ export default {
                 after: 'x1.15'
             },
             {
-                unlock: 'hordeItemMastery',
+                unlock: 'hordeEquipmentMastery',
                 type: 'clarity',
                 text: '275'
             }

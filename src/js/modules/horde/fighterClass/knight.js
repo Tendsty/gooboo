@@ -1,5 +1,4 @@
-import { SECONDS_PER_HOUR } from "../../../constants";
-import { buildNum } from "../../../utils/format";
+import { HORDE_STACKING_COOLDOWN } from "../../../constants";
 
 export default {
     unlock: 'hordeClassKnight',
@@ -14,7 +13,7 @@ export default {
         base: 1200,
         increment: 1.3
     },
-    courageMult: 12,
+    courageMult: 4,
     skills: {
         damageRamp: {
             type: 'passive',
@@ -25,15 +24,9 @@ export default {
                 {name: 'hordeAttackAfterTime', type: 'tag', value: lvl => [lvl * 0.75]}
             ]
         },
-        revive: {
-            type: 'passive',
-            color: 'yellow',
-            icon: 'mdi-cross',
-            max: 1,
-            effect: [
-                {name: 'hordeRevive', type: 'base', value: lvl => lvl}
-            ]
-        },
+        revive: {type: 'statBig', max: 1, effect: [
+            {name: 'hordeRevive', type: 'base', value: lvl => lvl}
+        ]},
         heavyHit: {
             type: 'active',
             color: 'orange-red',
@@ -70,6 +63,9 @@ export default {
         ]},
         defense: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeDefense', type: 'base', value: lvl => lvl * 0.001}
+        ]},
+        energy_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 35}
         ]},
         haste: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeHaste', type: 'base', value: lvl => lvl * 3}
@@ -109,7 +105,7 @@ export default {
             activeCost: () => {return {energy: 120};},
             active(lvl) {
                 return [
-                    {type: 'heal', value: lvl * 0.05 + 0.25, int: 0.006},
+                    {type: 'heal', value: lvl * 0.05 + 0.15, int: 0.006},
                     {type: 'buff', value: lvl * 2 + 8, effect: [
                         {type: 'mult', name: 'hordePhysicTaken', value: 1 / 1.4},
                         {type: 'mult', name: 'hordeMagicTaken', value: 1 / 1.4},
@@ -130,7 +126,7 @@ export default {
             {name: 'hordePhysicTaken', type: 'mult', value: lvl => Math.pow(1 / 1.08, lvl)}
         ]},
         strength: {type: 'stat', max: 10, cost: 10, effect: [
-            {name: 'hordeStrength', type: 'base', value: lvl => lvl * 0.8}
+            {name: 'hordeStrength', type: 'base', value: lvl => lvl * 1.2}
         ]},
         consecrate: {
             type: 'active',
@@ -149,7 +145,7 @@ export default {
             activeType: 'combat'
         },
         energy: {type: 'stat', max: 15, cost: 10, effect: [
-            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 35}
+            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 40}
         ]},
         blessing: {
             type: 'active',
@@ -157,33 +153,26 @@ export default {
             icon: 'mdi-cross-outline',
             max: 5,
             cost: 20,
-            cooldown: lvl => 2700 - lvl * 300,
-            activeCost: () => {return {energy: 80};},
+            cooldown: (lvl) => 3600 - lvl * 400,
+            activeCost: () => {return {energy: 160};},
             active(lvl) {
                 return [
                     {type: 'heal', value: lvl * 0.3 + 0.9, int: 0.02},
-                    {type: 'revive', value: 1},
+                    {type: 'revive', value: 2},
                 ];
             },
             activeType: 'combat'
         },
-        revive_2: {
-            type: 'passive',
-            color: 'yellow',
-            icon: 'mdi-cross',
-            max: 3,
-            cost: 100,
-            effect: [
-                {name: 'hordeRevive', type: 'base', value: lvl => lvl}
-            ]
-        },
+        revive_2: {type: 'statBig', max: 3, cost: 50, effect: [
+            {name: 'hordeRevive', type: 'base', value: lvl => lvl}
+        ]},
         fortify: {
             type: 'active',
             color: 'pale-green',
             icon: 'mdi-heart',
             max: 5,
             cost: 20,
-            cooldown: () => 22 * SECONDS_PER_HOUR,
+            cooldown: () => HORDE_STACKING_COOLDOWN,
             activeCost: () => {return {};},
             active(lvl) {
                 return [
@@ -195,6 +184,22 @@ export default {
         bioTaken: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeBioTaken', type: 'mult', value: lvl => Math.pow(1 / 1.09, lvl)}
         ]},
+        parry: {
+            type: 'active',
+            color: 'deep-purple',
+            icon: 'mdi-fencing',
+            max: 5,
+            cost: 20,
+            cooldown: () => 26,
+            activeCost: () => {return {energy: 60};},
+            active(lvl) {
+                return [
+                    {type: 'damagePhysic', value: lvl * 0.7 + 3.9, str: 0.35},
+                    {type: 'divisionShield', value: lvl + 1}
+                ];
+            },
+            activeType: 'combat'
+        },
         health_3: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeHealth', type: 'base', value: lvl => lvl * 120}
         ]},
@@ -205,8 +210,24 @@ export default {
             {name: 'hordeDivisionShield', type: 'base', value: lvl => lvl}
         ]},
         intelligence: {type: 'stat', max: 10, cost: 10, effect: [
-            {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 0.9}
+            {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.3}
         ]},
+        smite2: {
+            type: 'active',
+            color: 'blue-grey',
+            icon: 'mdi-weather-lightning',
+            max: 5,
+            cost: 20,
+            cooldown: () => 135,
+            activeCost: () => {return {energy: 200};},
+            active(lvl) {
+                return [
+                    {type: 'damageMagic', value: lvl * 2 + 11, int: 1.1, canCrit: lvl * 0.15 + 0.25},
+                    {type: 'heal', value: lvl * 0.01 + 0.05, int: 0.001}
+                ];
+            },
+            activeType: 'combat'
+        },
         recovery_2: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeHealth', type: 'base', value: lvl => lvl * 35},
             {name: 'hordeRecovery', type: 'base', value: lvl => lvl * 0.01}
@@ -215,23 +236,62 @@ export default {
             {name: 'hordeDefense', type: 'base', value: lvl => lvl * 0.001}
         ]},
         courage: {type: 'stat', max: 10, cost: 15, effect: [
-            {name: 'currencyHordeCourageGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.05 + 1}
+        ]},
+        damage: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.08}
+        ]},
+        health_4: {type: 'stat', max: 20, cost: 10, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 120}
+        ]},
+        physicTaken_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordePhysicTaken', type: 'mult', value: lvl => Math.pow(1 / 1.08, lvl)}
+        ]},
+        strength_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeStrength', type: 'base', value: lvl => lvl * 1.2}
+        ]},
+        haste_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHaste', type: 'base', value: lvl => lvl * 3}
+        ]},
+        damage_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.08}
+        ]},
+        health_5: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 120}
+        ]},
+        magicTaken_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeMagicTaken', type: 'mult', value: lvl => Math.pow(1 / 1.08, lvl)}
+        ]},
+        divisionShield_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeDivisionShield', type: 'base', value: lvl => lvl}
+        ]},
+        intelligence_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.3}
+        ]},
+        energy_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 35}
         ]},
     },
     skillTree: [
         {isInnate: true, level: 0, items: ['damageRamp', 'revive', 'heavyHit']},
-        {level: 1, items: ['shieldBash', 'health', 'defense', 'haste']},
+        {level: 1, items: ['shieldBash', 'health', 'defense', 'energy_2', 'haste']},
         {isChoice: true, level: 10, items: [['statRamp', 'defense_2'], ['toxic', 'physicTaken'], ['cutting', 'magicTaken']]},
         {level: 20, items: ['refuge', 'health_2', 'recovery', 'physicTaken_2', 'strength']},
         {isChoice: true, level: 30, items: [['consecrate', 'energy'], ['blessing', 'revive_2'], ['fortify', 'bioTaken']]},
-        {level: 40, items: ['health_3', 'magicTaken_2', 'divisionShield', 'intelligence']},
-        {level: 50, items: ['recovery_2', 'defense_3', 'courage']},
+        {level: 40, items: ['parry', 'health_3', 'magicTaken_2', 'divisionShield', 'intelligence']},
+        {level: 50, items: ['smite2', 'recovery_2', 'defense_3', 'courage']},
+        {level: 75, items: ['damage', 'health_4', 'physicTaken_3', 'strength_2', 'haste_2']},
+        {level: 100, items: ['damage_2', 'health_5', 'magicTaken_3', 'divisionShield_2', 'intelligence_2', 'energy_3']},
     ],
     quests: {
         stat: [
+            {stat: 'hordeEnergy', type: 'total', value: 500},
+            {stat: 'hordeCutting', type: 'total', value: 0.03},
             {stat: 'hordeHealth', type: 'base', value: 3000},
-            {stat: 'hordeCutting', type: 'total', value: 0.04},
-            {stat: 'hordeHealth', type: 'base', value: buildNum(10, 'K')},
+            {stat: 'hordeRevive', type: 'total', value: 7},
+            {stat: 'hordeHealth', type: 'base', value: 6000},
+            {stat: 'hordeDefense', type: 'total', value: 0.03},
+            {stat: 'hordeHaste', type: 'total', value: 105},
         ],
         zone: [
             {area: 'warzone', zone: '9'},
