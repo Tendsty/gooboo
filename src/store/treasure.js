@@ -1,6 +1,8 @@
 import Vue from "vue";
-import { TREASURE_FRAGMENT_BUY_COST, TREASURE_FRAGMENT_BUY_GAIN, TREASURE_TIER_DESTROY_MULT, TREASURE_TIER_REGULAR_MULT, TREASURE_TIER_SPECIAL_MULT, TREASURE_TIER_UPGRADE_MULT } from "../js/constants";
+import { TREASURE_EVENT_POWER_PER_LEVEL, TREASURE_EVENT_POWER_PER_TIER, TREASURE_FRAGMENT_BUY_COST, TREASURE_FRAGMENT_BUY_GAIN, TREASURE_TIER_DESTROY_MULT, TREASURE_TIER_UPGRADE_MULT } from "../js/constants";
 import { chance, randomElem } from "../js/utils/random";
+import { roundNear } from "../js/utils/format";
+import { getSequence, logBase } from "../js/utils/math";
 
 export default {
     namespaced: true,
@@ -14,25 +16,23 @@ export default {
         // Contains all features with their possible effects
         effect: {},
 
-        // Contains translations from mult to feature
-        effectToFeature: {},
-
         // Contains all different types of treasure
         type: {},
 
         // Contains all tier colors
-        tierColor: ['white', 'yellow', 'orange', 'red', 'pink', 'purple', 'indigo', 'blue', 'teal', 'green', 'light-green', 'lime', 'amber', 'orange-red', 'red-pink', 'pink-purple', 'dark-blue', 'light-blue', 'cyan'],
-
-        // Contains all item icons
-        iconList: [
-            'mdi-star', 'mdi-hexagram', 'mdi-star-four-points', 'mdi-star-three-points', 'mdi-lightning-bolt',
-            'mdi-spear', 'mdi-stamper', 'mdi-magnify', 'mdi-shaker', 'mdi-checkerboard', 'mdi-sd', 'mdi-bullseye',
-            'mdi-spa', 'mdi-sim', 'mdi-drama-masks', 'mdi-tag', 'mdi-water-pump', 'mdi-asterisk', 'mdi-filmstrip',
-            'mdi-pillar', 'mdi-vhs'
+        tierColor: [
+            'lighter-grey', 'yellow', 'orange', 'red', 'pink',
+            'purple', 'indigo', 'blue', 'teal', 'green',
+            'light-green', 'lime', 'amber', 'orange-red', 'red-pink',
+            'pink-purple', 'dark-blue', 'light-blue', 'cyan'
         ],
 
         // Contains a list of all effects, also used to apply the mults
         effectCache: {},
+        eventPowerCache: 0,
+
+        // Contains all modifiers
+        modifier: {},
 
         // Special modes (upgrade item using fragments or destroy items to get fragments)
         upgrading: false,
@@ -60,25 +60,43 @@ export default {
             const upgradeChances = getters.tierChances;
 
             if (upgradeChances.length <= 0) {
-                return [{tier: 0, chance: 1}];
+                return [{tier: 0, chance: 1, wildcardChance: getters.wildcardChance(0)}];
             }
 
             upgradeChances.forEach((elem, key) => {
                 if (elem < 1) {
                     const chance = (1 - totalChance) * (1 - elem)
-                    arr.push({tier, chance});
+                    arr.push({tier, chance, wildcardChance: getters.wildcardChance(tier)});
                     totalChance += chance;
                 }
                 tier++;
                 if ((key + 1) >= upgradeChances.length) {
-                    arr.push({tier, chance: (1 - totalChance)});
+                    arr.push({tier, chance: (1 - totalChance), wildcardChance: getters.wildcardChance(tier)});
                 }
             });
 
             return arr;
         },
-        effectValue: () => (base, tier = 0, level = 0, type) => {
-            return base * Math.pow(type === 'special' ? TREASURE_TIER_SPECIAL_MULT : TREASURE_TIER_REGULAR_MULT, tier) * (level * (type === 'special' ? 0.05 : 0.2) + 1);
+        tierPrice: () => (tier) => {
+            return (getSequence(1, tier + 1) + 4) * 3;
+        },
+        treasurePrice: (state, getters) => (type) => {
+            return getters.tierChancesRaw.reduce((a, b) => a + b.chance * getters.tierPrice(b.tier), 0) * state.type[type].buyPrice;
+        },
+        effectValue: (state) => (name, tier = 0, level = 0, mult = 1) => {
+            if (name === null) {
+                return null;
+            }
+            const effect = state.effect[name];
+            const effectiveTier = tier + roundNear(logBase(level / 5 + 1, 2)) + 1 - effect.minTier;
+            switch (effect.scaling) {
+                case 'divisive':
+                case 'multiplicative':
+                    return (Math.pow(effect.value + 1, effectiveTier) - 1) * mult;
+                case 'additive':
+                    return effect.value * effectiveTier * mult + 1;
+            }
+            return 1;
         },
         destroyFragments: (state, getters, rootState, rootGetters) => (tier, type) => {
             return rootGetters['mult/get']('currencyTreasureFragmentGain', Math.pow(TREASURE_TIER_DESTROY_MULT, tier) * state.type[type].destroyPrice);
@@ -90,34 +108,80 @@ export default {
             }
             return Math.round(Math.pow(TREASURE_TIER_UPGRADE_MULT, tier) * Math.pow(typeObj.upgradeScaling, Math.max(0, level - typeObj.upgradeLimit)) * typeObj.upgradePrice);
         },
+        wildcardChance: () => (tier) => {
+            return 0.6 / (tier + 2);
+        },
         averageFragments: (state, getters) => {
             return getters.tierChancesRaw.reduce((a, b) => a + b.chance * getters.destroyFragments(b.tier, 'regular'), 0);
         },
         fragmentGain: (state, getters) => {
-            return Math.round(getters.averageFragments * TREASURE_FRAGMENT_BUY_GAIN);
+            return Math.round(getters.averageFragments * TREASURE_FRAGMENT_BUY_GAIN * TREASURE_FRAGMENT_BUY_COST / getters.treasurePrice('regular'));
+        },
+        visibleTypes: (state, getters, rootState) => {
+            let visibleTypes = ['regular'];
+            if (rootState.unlock.treasurePrestigious.see) {
+                visibleTypes.push('prestige');
+            }
+            return visibleTypes;
+        },
+        visibleEffect: (state, getters, rootState) => {
+            let effectList = {};
+            let highestTier = getters.tierChances.length - 1;
+            for (const [key, elem] of Object.entries(state.effect)) {
+                if (
+                    (elem.feature === 'mining' || rootState.unlock[`${elem.feature}Feature`].see) &&
+                    (elem.unlock === null || rootState.unlock[elem.unlock].see) &&
+                    getters.visibleTypes.includes(elem.type) && highestTier >= elem.minTier
+                ) {
+                    effectList[key] = elem;
+                }
+            }
+            return effectList;
+        },
+        eligibleEffects: (state, getters, rootState) => (type, tier, feature = null) => {
+            let effectList = [];
+            for (const [key, elem] of Object.entries(state.effect)) {
+                if (
+                    (elem.feature === 'mining' || rootState.unlock[`${elem.feature}Feature`].see) &&
+                    (elem.unlock === null || rootState.unlock[elem.unlock].see) &&
+                    (feature === null || elem.feature === feature) &&
+                    elem.type === type && tier >= elem.minTier
+                ) {
+                    effectList.push(key);
+                }
+            }
+            return effectList;
         },
         generateItem: (state, getters, rootState, rootGetters) => (type, tier = 0, auto = false, rngSkip = 0, bonusTier = 0) => {
             let rngGen = rootGetters['system/getRng']('treasure_' + type, rngSkip);
-
             let effectList = {};
-            for (const [key, elem] of Object.entries(state.effect)) {
-                if (key === 'mining' || rootState.unlock[`${key}Feature`].see) {
-                    for (const [subkey, subelem] of Object.entries(elem)) {
-                        if (subelem.unlock === null || rootState.unlock[subelem.unlock].see) {
-                            if (!effectList[subelem.type]) {
-                                effectList[subelem.type] = [];
-                            }
-                            effectList[subelem.type].push(subkey);
-                        }
-                    }
+            let chosenEffect = [];
+            let eligibleFeatures = [];
+            for (const [, elem] of Object.entries(state.effect)) {
+                if (
+                    !eligibleFeatures.includes(elem.feature) &&
+                    (elem.feature === 'mining' || rootState.unlock[`${elem.feature}Feature`].see) &&
+                    (elem.unlock === null || rootState.unlock[elem.unlock].see) &&
+                    elem.type === type && tier >= elem.minTier
+                ) {
+                    eligibleFeatures.push(elem.feature);
                 }
             }
+            const chosenFeature = randomElem(eligibleFeatures);
 
-            let chosenEffect = [];
             state.type[type].slots.forEach(slot => {
-                const chosenElem = randomElem(effectList[slot.type], rngGen());
-                effectList[slot.type] = effectList[slot.type].filter(el => el !== chosenElem);
-                chosenEffect.push(chosenElem);
+                if (!chance(getters.wildcardChance(tier), rngGen())) {
+                    if (effectList[slot.type] === undefined) {
+                        effectList[slot.type] = getters.eligibleEffects(slot.type, tier, chosenFeature);
+                    }
+                    const chosenElem = randomElem(effectList[slot.type], rngGen());
+                    if (chosenElem !== null) {
+                        effectList[slot.type] = effectList[slot.type].filter(el => el !== chosenElem);
+                    }
+                    chosenEffect.push(chosenElem);
+                } else {
+                    chosenEffect.push(null);
+                }
             });
 
             let level = 0;
@@ -133,14 +197,15 @@ export default {
                 type: type,
                 level,
                 fragmentsSpent: Math.round(state.type[type].destroyPrice * level * 0.6), // track spent fragments to refund the correct amount, even after balance changes
-                icon: randomElem(state.iconList, rngGen()),
                 effect: chosenEffect,
+                modifier: [],
                 valueCache: chosenEffect.map((el, i) => getters.effectValue(
-                    state.effect[state.effectToFeature[el]][el].value * state.type[type].slots[i].power,
+                    el,
                     tier,
                     level,
-                    type
-                ))
+                    state.type[type].slots[i].power
+                )),
+                days: 0,
             };
         },
         firstEmptySlot: (state, getters, rootState, rootGetters) => {
@@ -155,6 +220,22 @@ export default {
                 return state.items.length;
             }
             return null;
+        },
+        levelAtDay: (state) => (type, tier, days) => {
+            const upgPrice = state.type[type].upgradePrice;
+            const upgLimit = state.type[type].upgradeLimit;
+            const upgScaling = state.type[type].upgradeScaling;
+            let level = days / (tier * 0.2 + 0.8) / (upgPrice / 4);
+            if (level > upgLimit) {
+                level = upgLimit + logBase((level - upgLimit) / upgLimit + 1, Math.pow(upgScaling, 1.5));
+            }
+            return Math.floor(level);
+        },
+        maxEventPower: (state, getters, rootState) => {
+            return Math.floor(rootState.meta.globalLevel / 5);
+        },
+        eventPowerPrestigeMult: (state, getters) => {
+            return Math.min(state.eventPowerCache, getters.maxEventPower) * 0.0015 + 1;
         }
     },
     mutations: {
@@ -166,26 +247,27 @@ export default {
                 upgradeScaling: o.upgradeScaling ?? null,
                 destroyPrice: o.destroyPrice ?? 10,
                 slots: o.slots,
+                maxModifiers: o.maxModifiers ?? 0,
                 icon: o.icon ?? null
             });
         },
         initEffect(state, o) {
-            // Create feature if it doesn't exist
-            const feature = o.feature ?? 'meta';
-            if (!state.effect[feature]) {
-                Vue.set(state.effect, feature, {});
-            }
-
-            Vue.set(state.effect[feature], o.name, {
+            Vue.set(state.effect, o.name, {
+                feature: o.feature ?? 'meta',
                 unlock: o.unlock ?? null,
                 type: o.type ?? 'regular',
                 icon: o.icon ?? 'mdi-circle',
-                unique: o.unique ?? false,
-                value: o.value ?? 0
+                minTier: o.minTier ?? 0,
+                max: o.max ?? null,
+                value: o.value ?? 0,
+                weight: o.weight ?? 1,
+                scaling: o.scaling ?? 'multiplicative',
             });
-
-            // Create entry in translation object
-            Vue.set(state.effectToFeature, o.name, o.feature);
+        },
+        initModifier(state, o) {
+            Vue.set(state.modifier, o.name, {
+                unique: o.unique ?? false,
+            });
         },
         updateKey(state, o) {
             Vue.set(state, o.key, o.value);
@@ -204,6 +286,20 @@ export default {
                 Vue.set(state.items[o.id], o.key, o.value);
             }
         },
+        updateItemEffect(state, o) {
+            if (o.id === -1) {
+                Vue.set(state.newItem.effect, o.index, o.value);
+            } else {
+                Vue.set(state.items[o.id].effect, o.index, o.value);
+            }
+        },
+        addItemModifier(state, o) {
+            if (o.id === -1) {
+                state.newItem.modifier.push(o.modifier);
+            } else {
+                state.items[o.id].modifier.push(o.modifier);
+            }
+        },
         moveItem(state, o) {
             while (state.items.length < (Math.max(o.from, o.to) + 1)) {
                 state.items.push(null);
@@ -211,8 +307,8 @@ export default {
             const fromContent = o.from === -1 ? state.newItem : state.items[o.from];
             const toContent = o.to === -1 ? state.newItem : state.items[o.to];
 
-            // Cannot switch treasure in the temp slot
-            if (o.from === -1 && fromContent && toContent) {
+            // Cannot switch treasure in the temp slot or locked slots
+            if ((o.from === -1 || o.from >= o.slots) && fromContent && toContent) {
                 return;
             }
 
@@ -226,6 +322,10 @@ export default {
             } else {
                 Vue.set(state.items, o.to, fromContent);
             }
+
+            while (state.items[state.items.length - 1] === null) {
+                state.items.splice(state.items.length - 1, 1);
+            }
         },
         deleteItem(state, id) {
             if (id === -1) {
@@ -233,6 +333,35 @@ export default {
             } else {
                 Vue.set(state.items, id, null);
             }
+
+            while (state.items[state.items.length - 1] === null) {
+                state.items.splice(state.items.length - 1, 1);
+            }
+        },
+        sortItems(state, slots) {
+            const effectList = Object.keys(state.effect);
+            const lockedItems = state.items.slice(slots);
+            let newItems = state.items.slice(0, slots).sort((a, b) => {
+                if (a === null) {
+                    return 1;
+                }
+                if (b === null) {
+                    return -1;
+                }
+                const effectA = effectList.findIndex(el => el === a.effect[0]);
+                const effectB = effectList.findIndex(el => el === b.effect[0]);
+                if (effectA === effectB) {
+                    if (a.tier === b.tier) {
+                        return a.level - b.level;
+                    }
+                    return a.tier - b.tier;
+                }
+                return effectA - effectB;
+            });
+            if (lockedItems.length <= 0) {
+                newItems = newItems.filter(el => el !== null);
+            }
+            Vue.set(state, 'items', [...newItems, ...lockedItems]);
         }
     },
     actions: {
@@ -240,6 +369,7 @@ export default {
             commit('updateKey', {key: 'items', value: []});
             commit('updateKey', {key: 'newItem', value: null});
             commit('updateKey', {key: 'effectCache', value: {}});
+            commit('updateKey', {key: 'eventPowerCache', value: 0});
             commit('updateKey', {key: 'upgrading', value: false});
             commit('updateKey', {key: 'deleting', value: false});
         },
@@ -268,8 +398,8 @@ export default {
                 }
             }
         },
-        buy({ state, rootGetters, dispatch }, type) {
-            const price = state.type[type].buyPrice;
+        buy({ state, getters, rootGetters, dispatch }, type) {
+            const price = Math.round(getters.treasurePrice(type));
             if (state.newItem === null && rootGetters['currency/value']('gem_emerald') >= price) {
                 dispatch('currency/spend', {feature: 'gem', name: 'emerald', amount: price}, {root: true});
                 dispatch('gain', type);
@@ -289,14 +419,9 @@ export default {
                     dispatch('currency/spend', {feature: 'treasure', name: 'fragment', amount: cost}, {root: true});
 
                     // Increase level and update value cache
-                    commit('updateItemKey', {id, key: 'valueCache', value: item.effect.map((el, i) => getters.effectValue(
-                        state.effect[state.effectToFeature[el]][el].value * state.type[item.type].slots[i].power,
-                        item.tier,
-                        item.level + 1,
-                        item.type
-                    ))});
                     commit('updateItemKey', {id, key: 'fragmentsSpent', value: item.fragmentsSpent + cost});
                     commit('updateItemKey', {id, key: 'level', value: item.level + 1});
+                    dispatch('updateItemCache', id);
 
                     // Refresh cache
                     dispatch('updateEffectCache');
@@ -311,45 +436,116 @@ export default {
                 dispatch('currency/gain', {feature: 'treasure', name: 'fragment', amount: item.fragmentsSpent + getters.destroyFragments(item.tier, item.type)}, {root: true});
             }
         },
-        moveItem({ commit, dispatch }, o) {
-            commit('moveItem', o);
+        moveItem({ rootGetters, commit, dispatch }, o) {
+            commit('moveItem', {...o, slots: rootGetters['mult/get']('treasureSlots')});
             dispatch('updateEffectCache');
         },
         deleteItem({ state, getters, commit, dispatch }, id) {
             const item = id === -1 ? state.newItem : state.items[id];
             if (item) {
                 dispatch('currency/gain', {feature: 'treasure', name: 'fragment', amount: item.fragmentsSpent + getters.destroyFragments(item.tier, item.type)}, {root: true});
-                item.effect.forEach(ef => {
-                    commit('mult/removeKey', {name: ef, type: 'mult', key: 'treasure'}, {root: true});
-                });
                 commit('deleteItem', id);
                 dispatch('updateEffectCache');
             }
         },
-        updateEffectCache({ state, commit, dispatch }) {
+        updateItemCache({ state, getters, commit }, id) {
+            const item = id === -1 ? state.newItem : state.items[id];
+            if (item) {
+                commit('updateItemKey', {id, key: 'valueCache', value: item.effect.map((el, i) => getters.effectValue(
+                    el,
+                    item.tier,
+                    item.level + item.modifier.filter(el => el === 'upArrow').length * 2,
+                    state.type[item.type].slots[i].power
+                ))});
+            }
+        },
+        updateEffectCache({ state, getters, rootGetters, commit, dispatch }) {
             let effects = {};
+            let eventPower = 0;
 
-            state.items.forEach(item => {
-                if (item) {
+            const slots = rootGetters['mult/get']('treasureSlots');
+
+            state.items.forEach((item, n) => {
+                if (item && n < slots) {
                     item.effect.forEach((el, i) => {
-                        const effectFeature = state.effectToFeature[el];
-                        if (effects[effectFeature] === undefined) {
-                            effects[effectFeature] = {};
+                        if (el !== null) {
+                            if (effects[el] === undefined) {
+                                effects[el] = {owned: 0, value: []};
+                            }
+                            effects[el].owned++;
+                            effects[el].value.push(item.valueCache[i]);
                         }
-                        if (effects[effectFeature][el] === undefined) {
-                            effects[effectFeature][el] = 1;
-                        }
-                        effects[effectFeature][el] += item.valueCache[i];
                     });
+
+                    const eventStars = item.modifier.filter(el => el === 'eventStar').length;
+                    if (eventStars > 0) {
+                        eventPower += (item.tier + 1) * TREASURE_EVENT_POWER_PER_TIER + item.level * TREASURE_EVENT_POWER_PER_LEVEL;
+                    }
                 }
             });
 
-            commit('updateKey', {key: 'effectCache', value: effects});
-
-            for (const [, group] of Object.entries(effects)) {
-                for (const [key, elem] of Object.entries(group)) {
-                    dispatch('mult/setMult', {name: key, key: 'treasure', value: elem}, {root: true});
+            for (const [key, elem] of Object.entries(effects)) {
+                const maxEffects = state.effect[key].max;
+                let effectValue = effects[key].value;
+                if (maxEffects !== null) {
+                    effectValue = effectValue.slice(0, maxEffects);
                 }
+                effects[key].value = effectValue.reduce((a, b) => a + b, 0) + 1;
+                if (state.effect[key].scaling === 'divisive') {
+                    effects[key].value = 1 / elem.value;
+                }
+            }
+
+            commit('updateKey', {key: 'effectCache', value: effects});
+            commit('updateKey', {key: 'eventPowerCache', value: eventPower});
+
+            for (const [key, elem] of Object.entries(effects)) {
+                if (elem.value !== 1) {
+                    dispatch('mult/setMult', {name: key, key: 'treasure', value: elem.value}, {root: true});
+                } else {
+                    commit('mult/removeKey', {name: key, type: 'mult', key: 'treasure'}, {root: true});
+                }
+            }
+            if (eventPower > 0) {
+                dispatch('mult/setMult', {name: 'allPrestigeIncome', key: 'eventPower', value: getters.eventPowerPrestigeMult}, {root: true});
+            } else {
+                commit('mult/removeKey', {name: 'allPrestigeIncome', type: 'mult', key: 'eventPower'}, {root: true});
+            }
+        },
+        changeEffect({ state, commit, dispatch }, o) {
+            const item = o.id === -1 ? state.newItem : state.items[o.id];
+            if (item.effect[o.index] === null) {
+                commit('updateItemEffect', {id: o.id, index: o.index, value: o.effect});
+                dispatch('updateItemCache', o.id);
+                dispatch('updateEffectCache');
+            }
+        },
+        useModifier({ state, rootState, getters, rootGetters, commit, dispatch }, o) {
+            const item = o.id === -1 ? state.newItem : state.items[o.id];
+            if (item.modifier.length < state.type[item.type].maxModifiers && rootGetters['consumable/canAfford'](`treasure_${ o.modifier }`)) {
+                commit('addItemModifier', o);
+                if (o.modifier === 'expander') {
+                    if (item.fragmentsSpent > 0) {
+                        dispatch('currency/gain', {feature: 'treasure', name: 'fragment', amount: item.fragmentsSpent}, {root: true});
+                    }
+                    commit('updateItemKey', {id: o.id, key: 'fragmentsSpent', value: 0});
+                    commit('updateItemKey', {id: o.id, key: 'level', value: 0});
+                }
+                if (o.modifier === 'wildcard') {
+                    commit('updateItemKey', {id: o.id, key: 'effect', value: state.type[item.type].slots.map(() => null)});
+                }
+                dispatch('consumable/use', `treasure_${ o.modifier }`, {root: true});
+
+                // Add emerald price as fragment value
+                const emeraldPrice = rootState.consumable[`treasure_${ o.modifier }`].price?.gem_emerald ?? 0;
+                if (emeraldPrice > 0) {
+                    const newItem = o.id === -1 ? state.newItem : state.items[o.id];
+                    commit('updateItemKey', {id: o.id, key: 'fragmentsSpent', value: newItem.fragmentsSpent + Math.round(getters.averageFragments * TREASURE_FRAGMENT_BUY_GAIN * emeraldPrice / getters.treasurePrice('regular'))});
+                }
+
+                // Update all caches
+                dispatch('updateItemCache', o.id);
+                dispatch('updateEffectCache');
             }
         }
     }

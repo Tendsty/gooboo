@@ -77,28 +77,44 @@ export default {
     name: 'Pellets',
     description: ''
   },
-  farm_sunshine: {
-    name: 'Sonnenschein',
+  farm_supplementsS: {
+    name: 'Zusatzstoffe (S)',
     description: ''
   },
-  farm_superFlower: {
-    name: 'Super-Blume',
+  farm_supplementsM: {
+    name: 'Zusatzstoffe (M)',
     description: ''
   },
-  farm_smellyMud: {
-    name: 'Stinkender Matsch',
+  farm_supplementsL: {
+    name: 'Zusatzstoffe (L)',
     description: ''
   },
-  farm_tropicalWater: {
-    name: 'Tropisches Wasser',
+  farm_supplementsXL: {
+    name: 'Zusatzstoffe (XL)',
     description: ''
   },
-  farm_fieldBlessing: {
-    name: 'Feldsegen',
+  farm_supplementsXXL: {
+    name: 'Zusatzstoffe (XXL)',
     description: ''
   },
-  farm_cinnamonBag: {
-    name: 'Zimtbeutel',
-    description: ''
+  gallery_surpriseParty: {
+    name: 'Überraschungsparty',
+    description: 'Erhalte 500 Motivation'
+  },
+  treasure_upArrow: {
+    name: 'Hoch-Pfeil',
+    description: 'Erhöhe die Schatzstufe um 2'
+  },
+  treasure_expander: {
+    name: 'Dehner',
+    description: 'Die Schatzstufe erhöht sich mit der Zeit, kann aber nicht mehr mit Fragmenten verbessert werden'
+  },
+  treasure_wildcard: {
+    name: 'Freikarte',
+    description: 'Alle Effekte können neu gewählt werden'
+  },
+  treasure_eventStar: {
+    name: 'Eventstern',
+    description: 'Fügt Eventkraft als Effekt hinzu'
   },
 };

@@ -6,18 +6,24 @@
       <div>{{ $vuetify.lang.t(`$vuetify.error.source`, message.source) }}</div>
       <div>{{ $vuetify.lang.t(`$vuetify.error.position`, message.line, message.column) }}</div>
     </v-card-text>
-    <v-card-actions class="pa-0">
+    <v-card-actions v-if="!isTest" class="pa-0">
       <v-btn color="secondary" target="_blank" href="https://github.com/Tendsty/gooboo/issues/new/choose">{{ $vuetify.lang.t(`$vuetify.error.reportBug`) }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import { APP_TESTING } from '../../../js/constants'
 export default {
   props: {
     message: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    isTest() {
+      return APP_TESTING;
     }
   }
 }

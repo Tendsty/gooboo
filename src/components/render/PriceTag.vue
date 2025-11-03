@@ -5,24 +5,30 @@
 </style>
 
 <template>
-  <gb-tooltip v-if="add || curr.alwaysVisible || stat.total > 0" :title-text="$vuetify.lang.t(`$vuetify.currency.${ currency }.name`)">
+  <gb-tooltip v-if="add || curr.alwaysVisible || stat.total > 0" key="currency-show" :title-text="$vuetify.lang.t(`$vuetify.currency.${ currency }.name`)">
     <template v-slot:activator="{ on, attrs }">
-      <v-badge dot overlap bordered :color="curr.color" :value="multWarning">
+      <v-badge dot overlap bordered :color="curr.color" :value="!isSpent || multWarning" :left="!isSpent">
         <div class="v-chip v-chip--label v-size--small px-2 balloon-text-dynamic" :class="[{'price-tag-highlight': highlight}, $vuetify.theme.dark ? 'theme--dark darken-3' : 'theme--light lighten-3', curr.color, $vnode.data.staticClass]" v-bind="attrs" v-on="on">
           <v-icon size="16" class="mr-2" :aria-label="$vuetify.lang.t(`$vuetify.currency.${ currency }.name`)">{{ curr.icon }}</v-icon>
-          <span :class="costClass">{{ (add && amount >= 0) ? '+' : '' }}{{ $formatNum(amount) }}<slot name="suffix"></slot></span>
+          <span :class="costClass">{{ (add && amount >= 0) ? '+' : '' }}{{ formattedValue }}<slot name="suffix"></slot></span>
         </div>
       </v-badge>
     </template>
-    <currency-tooltip :name="currency" :needed="add ? null : amount" hide-details :show-mult-warning="multWarning"></currency-tooltip>
+    <currency-tooltip :name="currency" :needed="add ? null : amount" hide-details :show-mult-warning="multWarning" :is-spent="isSpent"></currency-tooltip>
     <slot></slot>
   </gb-tooltip>
-  <v-chip v-else small label>
-    <v-icon>mdi-help</v-icon>
-  </v-chip>
+  <gb-tooltip v-else key="currency-hide" :min-width="0">
+    <template v-slot:activator="{ on, attrs }">
+      <v-chip small label :class="$vnode.data.staticClass" v-bind="attrs" v-on="on">
+        <v-icon>mdi-help</v-icon>
+      </v-chip>
+    </template>
+    <div class="mt-0">{{ curr.showHint ? $vuetify.lang.t(`$vuetify.currency.${ currency }.hint`) : $vuetify.lang.t(`$vuetify.currency.unknown`) }}</div>
+  </gb-tooltip>
 </template>
 
 <script>
+import { formatInt, formatNum } from '../../js/utils/format';
 import CurrencyTooltip from '../partial/render/CurrencyTooltip.vue';
 
 export default {
@@ -46,6 +52,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    isSpent: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   computed: {
@@ -72,6 +83,15 @@ export default {
         return true;
       }
       return false;
+    },
+    formattedValue() {
+      switch (this.curr.display) {
+        case 'number':
+          return formatNum(this.amount);
+        case 'int':
+          return formatInt(this.amount);
+      }
+      return this.amount;
     }
   }
 }

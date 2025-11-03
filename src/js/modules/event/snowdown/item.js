@@ -221,7 +221,7 @@ export default {
             {name: 'snowdownHealth', type: 'mult', value: lvl => lvl * 0.1 + 1}
         ]
     },
-    specialSnowflake: {
+    sharpSnowflake: {
         icon: 'mdi-snowflake-variant',
         effect: [
             {name: 'snowdownAttack', type: 'mult', value: lvl => lvl * 0.1 + 1},

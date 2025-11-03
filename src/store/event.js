@@ -73,7 +73,7 @@ export default {
 
             // Get all big events
             for (const [key, elem] of Object.entries(state.big)) {
-                if (month >= parseInt(elem.start.substring(0, 2)) && month <= parseInt(elem.end.substring(0, 2))) {
+                if ((month + 1) >= parseInt(elem.start.substring(0, 2)) && (month - 1) <= parseInt(elem.end.substring(0, 2))) {
                     arr.push({
                         name: key,
                         color: elem.color,
@@ -197,7 +197,30 @@ export default {
         },
         getNewPrize: (state, getters, rootState, rootGetters) => (name, rngSkip = 0, bonusTier = 0) => {
             const prize = state.prize[name];
-            return {prize: name, taken: 0, data: prize.type === 'treasure' ? rootGetters['treasure/generateItem'](prize.item, 0, true, rngSkip, bonusTier) : null};
+            let data = null;
+            let taken = 0;
+            let rngGen = name.slice(0, 4) === 'card' ? rootGetters['system/getRng']('event_' + name) : null;
+            if (name === 'card_unowned') {
+                data = randomElem(rootGetters['card/missingObtainableCards'], rngGen());
+            }
+            if (name === 'card_quest') {
+                const maxMissing = Math.max(...Object.values(rootGetters['card/missingQuestCards']));
+                let eligible = [];
+                let weights = [];
+                for (const [card, missing] of Object.entries(rootGetters['card/missingQuestCards'])) {
+                    if (maxMissing < 5 || missing >= 5) {
+                        eligible.push(card);
+                        weights.push(missing);
+                    }
+                }
+                const selected = weightSelect(weights, rngGen());
+                data = eligible[selected];
+                taken = 5 - weights[selected];
+            }
+            if (prize.type === 'treasure') {
+                data = rootGetters['treasure/generateItem'](prize.item, 0, true, rngSkip, bonusTier);
+            }
+            return {prize: name, taken, data};
         },
         getBingoCount: (state) => {
             if (state.casino_bingo_card === null) {
@@ -432,7 +455,7 @@ export default {
                     break;
                 }
             }
-            commit('unlock/unlock', name === 'casino' ? `${ state.casino_type }CasinoEvent` : `${ name }Event`, {root: true});
+            dispatch('unlock/unlock', name === 'casino' ? `${ state.casino_type }CasinoEvent` : `${ name }Event`, {root: true});
             if (getters.eventIsBig(name)) {
                 dispatch('generateShops', name);
                 dispatch('note/find', 'event_1', {root: true});
@@ -549,6 +572,9 @@ export default {
 
                 // Reset all event stats
                 dispatch('stat/reset', {feature: 'event', type: name}, {root: true});
+
+                // Reset tokens
+                commit('currency/updateKey', {name: `event_${ name }Token`, key: 'value', value: 0}, {root: true});
             }
         },
         dayChange({ getters, dispatch }, o) {
@@ -643,7 +669,7 @@ export default {
             let rngGen = rootGetters['system/getRng']('bank_cardPack');
             commit('system/nextRng', {name: 'bank_cardPack', amount: 1}, {root: true});
             if (chance(rootGetters['mult/get']('bankCardPackChance'), rngGen())) {
-                dispatch('card/openPack', {name: 'investorsDream', notify: true, amount: 1}, {root: true});
+                dispatch('card/openPack', {name: 'investorsDream', amount: 1}, {root: true});
             }
         },
         bankCashInInvestment({ state, rootGetters, dispatch }) {
@@ -784,7 +810,10 @@ export default {
                     commit('system/updateThemeKey', {name: prize.item, key: 'owned', value: true}, {root: true});
                     break;
                 case 'cardPack':
-                    dispatch('card/openPack', {name: prize.item, notify: true, amount}, {root: true});
+                    dispatch('card/openPack', {name: prize.item, amount}, {root: true});
+                    break;
+                case 'card':
+                    dispatch('card/gainCard', {name: prize.data, amount, isShiny: false}, {root: true});
                     break;
                 case 'treasure':
                     dispatch('treasure/winItem', prize.data, {root: true});
@@ -863,6 +892,9 @@ export default {
                         chosen.push(prize);
                         if (prizeData.type === 'treasure') {
                             commit('system/nextRng', {name: 'treasure_' + prizeData.item, amount: 1}, {root: true});
+                        }
+                        if (prizeData.type === 'card') {
+                            commit('system/nextRng', {name: 'event_' + key, amount: 1}, {root: true});
                         }
                         commit('system/nextRng', {name: 'event_prizePool', amount: 1}, {root: true});
                     }

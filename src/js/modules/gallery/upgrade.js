@@ -14,7 +14,7 @@ export default {
         {name: 'galleryConversion', type: 'unlock', value: lvl => lvl >= 1}
     ]},
 
-    redPower: {cap: 15, capMult: true, requirement() {
+    redPower: {cap: 15, requirement() {
         return store.state.stat.gallery_red.total > 0;
     }, price(lvl) {
         return {gallery_red: Math.pow(2.5, lvl) * 2};
@@ -36,19 +36,20 @@ export default {
         {name: 'currencyGalleryConverterGain', type: 'mult', value: lvl => Math.pow(1.2, lvl)}
     ]},
 
-    orangePower: {cap: 15, capMult: true, requirement() {
+    orangePower: {cap: 15, requirement() {
         return store.state.stat.gallery_orange.total > 0;
     }, price(lvl) {
         return {gallery_orange: Math.pow(2.5, lvl) * 2};
     }, effect: [
         {name: 'currencyGalleryRedGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    redLuck: {cap: 40, hasDescription: true, requirement() {
+    redLuck: {cap: 80, hasDescription: true, requirement() {
         return store.state.stat.gallery_orange.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {gallery_orange: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(1, 'M')};
+        return {gallery_orange: Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(1, 'M')};
     }, effect: [
-        {name: 'galleryRedDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryRedDrumChance', type: 'base', value: lvl => Math.min(lvl, 80) * 0.01},
+        {name: 'currencyGalleryRedDrumCap', type: 'base', value: lvl => lvl > 80 ? ((lvl - 80) * 2) : null}
     ]},
     epiphany: {note: 'gallery_5', cap: 1, hasDescription: true, requirement() {
         return store.state.stat.gallery_orange.total > 0;
@@ -76,7 +77,7 @@ export default {
     }, price(lvl) {
         return {gallery_beauty: Math.pow(8 + lvl * 0.5, lvl) * buildNum(7, 'B')};
     }, effect: [
-        {name: 'galleryColorGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)}
+        {name: 'galleryColorGain', type: 'mult', value: lvl => Math.pow(1.12, lvl)}
     ]},
     auctionHouse: {persistent: true, cap: 1, hasDescription: true, note: 'gallery_8', requirement() {
         return store.state.stat.gallery_orange.total > 0;
@@ -86,19 +87,20 @@ export default {
         {name: 'galleryAuction', type: 'unlock', value: lvl => lvl >= 1}
     ]},
 
-    yellowPower: {cap: 15, capMult: true, requirement() {
+    yellowPower: {cap: 15, requirement() {
         return store.state.stat.gallery_yellow.total > 0;
     }, price(lvl) {
         return {gallery_yellow: Math.pow(2.5, lvl) * 2};
     }, effect: [
         {name: 'currencyGalleryOrangeGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    orangeLuck: {cap: 40, requirement() {
+    orangeLuck: {cap: 80, requirement() {
         return store.state.stat.gallery_yellow.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {gallery_yellow: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(1, 'M')};
+        return {gallery_yellow: Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(1, 'M')};
     }, effect: [
-        {name: 'galleryOrangeDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryOrangeDrumChance', type: 'base', value: lvl => Math.min(lvl, 80) * 0.01},
+        {name: 'currencyGalleryOrangeDrumCap', type: 'base', value: lvl => lvl > 80 ? ((lvl - 80) * 2) : null}
     ]},
     yellowConversion: {cap: 10, requirement() {
         return store.state.stat.gallery_yellow.total > 0;
@@ -115,19 +117,20 @@ export default {
         {name: 'galleryDrums', type: 'unlock', value: lvl => lvl >= 1}
     ]},
 
-    greenPower: {cap: 15, capMult: true, requirement() {
+    greenPower: {cap: 15, requirement() {
         return store.state.stat.gallery_green.total > 0;
     }, price(lvl) {
         return {gallery_green: Math.pow(2.5, lvl) * 2};
     }, effect: [
         {name: 'currencyGalleryYellowGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    yellowLuck: {cap: 40, requirement() {
+    yellowLuck: {cap: 80, requirement() {
         return store.state.stat.gallery_green.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {gallery_green: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(1, 'M')};
+        return {gallery_green: Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(1, 'M')};
     }, effect: [
-        {name: 'galleryYellowDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryYellowDrumChance', type: 'base', value: lvl => Math.min(lvl, 80) * 0.01},
+        {name: 'currencyGalleryYellowDrumCap', type: 'base', value: lvl => lvl > 80 ? ((lvl - 80) * 2) : null}
     ]},
     greenConversion: {cap: 10, requirement() {
         return store.state.stat.gallery_green.total > 0;
@@ -145,19 +148,20 @@ export default {
         {name: 'currencyGalleryRedDrumCap', type: 'base', value: lvl => lvl * 2}
     ]},
 
-    bluePower: {cap: 15, capMult: true, requirement() {
+    bluePower: {cap: 15, requirement() {
         return store.state.stat.gallery_blue.total > 0;
     }, price(lvl) {
         return {gallery_blue: Math.pow(2.5, lvl) * 2};
     }, effect: [
         {name: 'currencyGalleryGreenGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    greenLuck: {cap: 40, requirement() {
+    greenLuck: {cap: 80, requirement() {
         return store.state.stat.gallery_blue.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {gallery_blue: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(1, 'M')};
+        return {gallery_blue: Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(1, 'M')};
     }, effect: [
-        {name: 'galleryGreenDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryGreenDrumChance', type: 'base', value: lvl => Math.min(lvl, 80) * 0.01},
+        {name: 'currencyGalleryGreenDrumCap', type: 'base', value: lvl => lvl > 80 ? ((lvl - 80) * 2) : null}
     ]},
     blueConversion: {cap: 10, requirement() {
         return store.state.stat.gallery_blue.total > 0;
@@ -167,19 +171,20 @@ export default {
         {name: 'galleryBlueConversion', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
 
-    purplePower: {cap: 15, capMult: true, requirement() {
+    purplePower: {cap: 15, requirement() {
         return store.state.stat.gallery_purple.total > 0;
     }, price(lvl) {
         return {gallery_purple: Math.pow(2.5, lvl) * 2};
     }, effect: [
         {name: 'currencyGalleryBlueGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    blueLuck: {cap: 40, requirement() {
+    blueLuck: {cap: 80, requirement() {
         return store.state.stat.gallery_purple.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {gallery_purple: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(1, 'M')};
+        return {gallery_purple: Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(1, 'M')};
     }, effect: [
-        {name: 'galleryBlueDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryBlueDrumChance', type: 'base', value: lvl => Math.min(lvl, 80) * 0.01},
+        {name: 'currencyGalleryBlueDrumCap', type: 'base', value: lvl => lvl > 80 ? ((lvl - 80) * 2) : null}
     ]},
     purpleConversion: {cap: 10, requirement() {
         return store.state.stat.gallery_purple.total > 0;
@@ -189,19 +194,20 @@ export default {
         {name: 'galleryPurpleConversion', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
 
-    deepOrangePower: {cap: 15, capMult: true, requirement() {
+    deepOrangePower: {cap: 15, requirement() {
         return store.state.stat['gallery_deep-orange'].total > 0;
     }, price(lvl) {
         return {'gallery_deep-orange': Math.pow(2.5, lvl) * 4};
     }, effect: [
         {name: 'currencyGalleryPurpleGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    purpleLuck: {cap: 40, requirement() {
+    purpleLuck: {cap: 80, requirement() {
         return store.state.stat['gallery_deep-orange'].total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {'gallery_deep-orange': Math.pow(3 + 0.1 * lvl, lvl) * buildNum(3, 'M')};
+        return {'gallery_deep-orange': Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(3, 'M')};
     }, effect: [
-        {name: 'galleryPurpleDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryPurpleDrumChance', type: 'base', value: lvl => Math.min(lvl, 80) * 0.01},
+        {name: 'currencyGalleryPurpleDrumCap', type: 'base', value: lvl => lvl > 80 ? ((lvl - 80) * 2) : null}
     ]},
     deepOrangeConversion: {cap: 10, requirement() {
         return store.state.stat['gallery_deep-orange'].total > 0;
@@ -225,19 +231,19 @@ export default {
         {name: 'galleryCanvasSize', type: 'base', value: lvl => lvl}
     ]},
 
-    amberPower: {cap: 15, capMult: true, requirement() {
+    amberPower: {cap: 15, requirement() {
         return store.state.stat.gallery_amber.total > 0;
     }, price(lvl) {
         return {gallery_amber: Math.pow(2.5, lvl) * 8};
     }, effect: [
         {name: 'currencyGalleryDeep-orangeGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    deepOrangeLuck: {cap: 40, requirement() {
+    deepOrangeLuck: {cap: 80, requirement() {
         return store.state.stat.gallery_amber.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {gallery_amber: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(9, 'M')};
+        return {gallery_amber: Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(9, 'M')};
     }, effect: [
-        {name: 'galleryDeep-orangeDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryDeep-orangeDrumChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
     amberConversion: {cap: 10, requirement() {
         return store.state.stat.gallery_amber.total > 0;
@@ -247,19 +253,19 @@ export default {
         {name: 'galleryAmberConversion', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
 
-    lightGreenPower: {cap: 15, capMult: true, requirement() {
+    lightGreenPower: {cap: 15, requirement() {
         return store.state.stat['gallery_light-green'].total > 0;
     }, price(lvl) {
         return {'gallery_light-green': Math.pow(2.5, lvl) * 16};
     }, effect: [
         {name: 'currencyGalleryAmberGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    amberLuck: {cap: 40, requirement() {
+    amberLuck: {cap: 80, requirement() {
         return store.state.stat['gallery_light-green'].total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {'gallery_light-green': Math.pow(3 + 0.1 * lvl, lvl) * buildNum(27, 'M')};
+        return {'gallery_light-green': Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(27, 'M')};
     }, effect: [
-        {name: 'galleryAmberDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryAmberDrumChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
     lightGreenConversion: {cap: 10, requirement() {
         return store.state.stat['gallery_light-green'].total > 0;
@@ -269,19 +275,19 @@ export default {
         {name: 'galleryLight-greenConversion', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
 
-    tealPower: {cap: 15, capMult: true, requirement() {
+    tealPower: {cap: 15, requirement() {
         return store.state.stat.gallery_teal.total > 0;
     }, price(lvl) {
         return {gallery_teal: Math.pow(2.5, lvl) * 32};
     }, effect: [
         {name: 'currencyGalleryLight-greenGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    lightGreenLuck: {cap: 40, requirement() {
+    lightGreenLuck: {cap: 80, requirement() {
         return store.state.stat.gallery_teal.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {gallery_teal: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(81, 'M')};
+        return {gallery_teal: Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(81, 'M')};
     }, effect: [
-        {name: 'galleryLight-greenDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryLight-greenDrumChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
     tealConversion: {cap: 10, requirement() {
         return store.state.stat.gallery_teal.total > 0;
@@ -291,19 +297,19 @@ export default {
         {name: 'galleryTealConversion', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
 
-    lightBluePower: {cap: 15, capMult: true, requirement() {
+    lightBluePower: {cap: 15, requirement() {
         return store.state.stat['gallery_light-blue'].total > 0;
     }, price(lvl) {
         return {'gallery_light-blue': Math.pow(2.5, lvl) * 64};
     }, effect: [
         {name: 'currencyGalleryTealGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    tealLuck: {cap: 40, requirement() {
+    tealLuck: {cap: 80, requirement() {
         return store.state.stat['gallery_light-blue'].total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {'gallery_light-blue': Math.pow(3 + 0.1 * lvl, lvl) * buildNum(243, 'M')};
+        return {'gallery_light-blue': Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(243, 'M')};
     }, effect: [
-        {name: 'galleryTealDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryTealDrumChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
     lightBlueConversion: {cap: 10, requirement() {
         return store.state.stat['gallery_light-blue'].total > 0;
@@ -313,19 +319,19 @@ export default {
         {name: 'galleryLight-blueConversion', type: 'mult', value: lvl => Math.pow(2, lvl)}
     ]},
 
-    pinkPower: {cap: 15, capMult: true, requirement() {
+    pinkPower: {cap: 15, requirement() {
         return store.state.stat.gallery_pink.total > 0;
     }, price(lvl) {
         return {gallery_pink: Math.pow(2.5, lvl) * 128};
     }, effect: [
         {name: 'currencyGalleryLight-blueGain', type: 'mult', value: lvl => splicedPowLinear(1.25, 0.1, 15, lvl)}
     ]},
-    lightBlueLuck: {cap: 40, requirement() {
+    lightBlueLuck: {cap: 80, requirement() {
         return store.state.stat.gallery_pink.total > 0 && store.state.unlock.galleryDrums.see;
     }, price(lvl) {
-        return {gallery_pink: Math.pow(3 + 0.1 * lvl, lvl) * buildNum(729, 'M')};
+        return {gallery_pink: Math.pow(1.5 + 0.075 * lvl, lvl) * buildNum(729, 'M')};
     }, effect: [
-        {name: 'galleryLight-blueDrumChance', type: 'base', value: lvl => lvl * 0.02}
+        {name: 'galleryLight-blueDrumChance', type: 'base', value: lvl => lvl * 0.01}
     ]},
     pinkConversion: {cap: 10, requirement() {
         return store.state.stat.gallery_pink.total > 0;

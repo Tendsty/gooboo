@@ -111,14 +111,14 @@
 @keyframes shiny-card {
   0%   {opacity: 30%;}
   10%  {opacity: 40%;}
-  20%  {opacity: 55%;}
+  20%  {opacity: 60%;}
   30%  {opacity: 30%;}
   40%  {opacity: 40%;}
   50%  {opacity: 30%;}
-  60%  {opacity: 60%;}
+  60%  {opacity: 65%;}
   70%  {opacity: 40%;}
   80%  {opacity: 30%;}
-  90%  {opacity: 45%;}
+  90%  {opacity: 55%;}
   100% {opacity: 30%;}
 }
 .card-shiny {
@@ -136,7 +136,7 @@
   <gb-tooltip>
     <template v-slot:activator="{ on, attrs }">
       <div
-        v-if="card.amount > 0"
+        v-if="showCard"
         class="card-playing d-flex flex-column rounded elevation-2"
         :style="`border-color: ${ $vuetify.theme.dark ? 'white' : 'black' } !important;`"
         :class="[{'card-playing-mobile': $vuetify.breakpoint.xsOnly, 'card-playing-dark': $vuetify.theme.dark}, $vuetify.theme.dark ? card.color : `${ card.color } lighten-3`, $vuetify.breakpoint.xsOnly ? 'card-ma-05' : 'ma-1']"
@@ -144,9 +144,9 @@
         v-on="on"
       >
         <div
-          class="card-playing-title d-flex flex-wrap justify-center align-center text-center px-1"
+          class="card-playing-title d-flex flex-wrap justify-center align-center text-center px-1 balloon-text-dynamic"
           :class="[{'card-playing-title-mobile': $vuetify.breakpoint.xsOnly}, $vuetify.theme.dark ? `${ card.color } darken-2` : `${ card.color } lighten-1`]"
-        >{{ $vuetify.lang.t(`$vuetify.card.card.${id}`) }}</div>
+        >{{ $vuetify.lang.t(`$vuetify.card.card.${ id }`) }}</div>
         <div class="card-playing-inner flex-grow-1 px-3 py-2 px-sm-4 py-sm-4" :class="{'card-playing-inner-dark': $vuetify.theme.dark}">
           <div class="card-playing-inner-frame">
             <v-icon
@@ -159,23 +159,26 @@
             >{{ item.icon }}</v-icon>
             <div
               v-if="card.amount > 1 && !hideAmount"
-              class="card-playing-amount rounded px-1"
+              class="card-playing-amount rounded px-1 balloon-text-dynamic"
               :class="[{'card-playing-amount-mobile': $vuetify.breakpoint.xsOnly}, $vuetify.theme.dark ? `${ card.color } lighten-2` : `${ card.color } lighten-5`]"
             ><v-icon size="10">mdi-close</v-icon>{{ $formatNum(card.amount - 1) }}</div>
             <div v-if="!card.instant" class="card-playing-power rounded-circle" :class="[{'card-playing-power-mobile': $vuetify.breakpoint.xsOnly}, `card-playing-power-${ $vuetify.theme.dark ? 'dark' : 'light' }`]">
               <div
-                class="d-flex justify-center align-center card-playing-power-inner rounded-circle"
+                class="d-flex justify-center align-center card-playing-power-inner rounded-circle balloon-text-dynamic"
                 :class="[{'card-playing-power-mobile': $vuetify.breakpoint.xsOnly}, $vuetify.theme.dark ? `${ card.color } lighten-2` : `${ card.color } lighten-5`]"
-              >{{ cardPower }}</div>
+              >
+                <v-icon v-if="cardPower === 'adaptive'" small>mdi-multiplication</v-icon>
+                <span v-else>{{ cardPower }}</span>
+              </div>
             </div>
           </div>
         </div>
-        <div class="card-playing-bottom d-flex align-center" :class="$vuetify.theme.dark ? `${ card.color } darken-2` : `${ card.color } lighten-1`">
+        <div class="card-playing-bottom d-flex align-center balloon-text-dynamic" :class="$vuetify.theme.dark ? `${ card.color } darken-2` : `${ card.color } lighten-1`">
           <span>{{ id }}</span>
           <v-icon v-if="card.foundShiny" class="ml-1" x-small>mdi-shimmer</v-icon>
         </div>
         <div
-          class="card-feature-icon d-flex justify-center align-center"
+          class="card-feature-icon d-flex justify-center align-center balloon-text-dynamic"
           :style="`border-top: 2px solid ${ $vuetify.theme.dark ? 'white' : 'black' } !important; border-left: 2px solid ${ $vuetify.theme.dark ? 'white' : 'black' } !important;`"
           :class="$vuetify.theme.dark ? `${ card.color } darken-3` : card.color"
         ><v-icon size="20" :color="$vuetify.theme.dark ? 'white' : 'black'">{{ featureIcon }}</v-icon></div>
@@ -185,7 +188,7 @@
         <v-icon color="#80808040" :size="$vuetify.breakpoint.smAndUp ? 64 : 48">{{ obtainable.length ? 'mdi-help' : 'mdi-lock' }}</v-icon>
       </div>
     </template>
-    <div v-if="card.amount > 0" class="mb-2">
+    <div v-if="showCard" class="mb-2">
       <div>
         <span>{{ $vuetify.lang.t(`$vuetify.gooboo.effects`) }} ({{ $vuetify.lang.t(`$vuetify.card.${ card.instant ? 'onDuplicate' : 'onActive' }`) }}</span>
         <span v-if="card.group">, {{ $vuetify.lang.t(`$vuetify.farm.fertilizerEffect.${ card.group }`) }}</span>
@@ -234,6 +237,11 @@ export default {
       type: Object,
       required: false,
       default: null
+    },
+    forceShow: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
@@ -260,7 +268,10 @@ export default {
       return arr;
     },
     cardPower() {
-      return this.card.power + (this.card.foundShiny ? 1 : 0);
+      return this.card.power === 'adaptive' ? 'adaptive' : (this.card.power + (this.card.foundShiny ? 1 : 0));
+    },
+    showCard() {
+      return this.$store.state.system.settings.general.items.showAllCards.value || this.forceShow || this.card.amount > 0;
     }
   }
 }

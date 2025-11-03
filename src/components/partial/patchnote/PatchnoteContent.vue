@@ -30,7 +30,7 @@
       </span>
     </v-expansion-panel-header>
     <v-expansion-panel-content>
-      <div class="bg-tile-default rounded elevation-1 pa-4" v-for="(items, category, index) in contentDisplay" :key="category" :class="{'mt-6': index > 0}">
+      <div class="bg-tile-default rounded elevation-1 pa-4" v-for="(items, category, index) in contentDisplay.items" :key="category" :class="{'mt-6': index > 0}">
         <div class="category-header d-flex">
           <v-icon class="mr-2">{{ features[category.split('_')[0]] ? features[category.split('_')[0]].icon : 'mdi-earth' }}</v-icon>
           {{ category.split('_').length > 1 ? $vuetify.lang.t(`$vuetify.subfeature.${category.split('_')[0]}.${category.split('_')[1]}`) : $vuetify.lang.t(`$vuetify.feature.${category}`) }}
@@ -41,7 +41,8 @@
           </li>
         </ul>
       </div>
-      <ul class="mt-4" v-if="hiddenCount > 0"><li>{{ $vuetify.lang.t(`$vuetify.patchnote.changeCount`, hiddenCount) }}</li></ul>
+      <ul class="mt-4" v-if="contentDisplay.hiddenDueToSetting > 0"><li>{{ $vuetify.lang.t(`$vuetify.patchnote.changeSettingCount`, $formatInt(contentDisplay.hiddenDueToSetting)) }}</li></ul>
+      <ul :class="{'mt-4': contentDisplay.hiddenDueToSetting <= 0}" v-if="contentDisplay.hiddenDueToUnlock > 0"><li>{{ $vuetify.lang.t(`$vuetify.patchnote.changeUnlockCount`, $formatInt(contentDisplay.hiddenDueToUnlock)) }}</li></ul>
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>
@@ -72,40 +73,47 @@ export default {
   computed: {
     ...mapState({
       features: state => state.system.features,
-      unlock: state => state.unlock
+      unlock: state => state.unlock,
+      card: state => state.card.card,
+      equipment: state => state.horde.items,
+      crop: state => state.farm.crop,
+      consumable: state => state.consumable,
+      gene: state => state.farm.gene,
+      idea: state => state.gallery.idea,
+      upgrade: state => state.upgrade.item,
     }),
     dayDisplay() {
       return (new Date(`${this.day}T00:00:00`)).toLocaleDateString([this.$store.state.system.settings.general.items.lang.value, 'default'], {year: 'numeric', month: 'long', day: 'numeric'});
     },
     contentDisplay() {
       let obj = {};
+      let hiddenDueToUnlock = 0;
+      let hiddenDueToSetting = 0;
       for (const [key, elem] of Object.entries(this.content)) {
         const keySplit = key.split('_');
         const feature = keySplit[0];
         const subfeature = keySplit.length > 1 ? parseInt(keySplit[1]) : 0;
         const unlock = this.features[feature] ? (subfeature > 0 ? this.features[feature].subfeatures[subfeature - 1] : this.features[feature].unlock) : null;
         if (unlock === null || this.unlock[unlock].see) {
-          const itemList = elem.filter(el => el.unlock === undefined || this.unlock[el.unlock].see);
+          const settingsList = elem.filter(el => !el.subtype || this.showDetailedPatchnotes);
+          const itemList = settingsList.filter(el =>
+            (el.unlock === undefined || this.unlock[el.unlock].see) &&
+            (el.subtype !== 'card' || this.card[el.name] === undefined || this.card[el.name].amount > 0) &&
+            (el.subtype !== 'equipment' || this.equipment[el.name] === undefined || this.equipment[el.name].known) &&
+            (el.subtype !== 'crop' || this.crop[el.name] === undefined || this.crop[el.name].found) &&
+            (el.subtype !== 'fertilizer' || this.consumable['farm_' + el.name] === undefined || this.consumable['farm_' + el.name].found) &&
+            (el.subtype !== 'gene' || this.gene[el.name] === undefined || this.unlock[this.gene[el.name].unlockNeeded].see) &&
+            (el.subtype !== 'idea' || this.idea[el.name] === undefined || this.idea[el.name].owned) &&
+            (el.subtype !== 'upgrade' || this.upgrade[el.name] === undefined || this.upgrade[el.name].highestLevel > 0)
+          );
+          hiddenDueToSetting += elem.length - settingsList.length;
+          hiddenDueToUnlock += settingsList.length - itemList.length;
           if (itemList.length > 0) {
             obj[key] = itemList;
           }
         }
       }
-      return obj;
-    },
-    changeCount() {
-      let count = 0;
-      for (const [, elem] of Object.entries(this.content)) {
-        count += elem.length;
-      }
-      return count;
-    },
-    hiddenCount() {
-      let count = this.changeCount;
-      for (const [, elem] of Object.entries(this.contentDisplay)) {
-        count -= elem.length;
-      }
-      return count;
+      return {items: obj, hiddenDueToUnlock, hiddenDueToSetting};
     },
     versionType() {
       if (semverPatch(this.version) > 0) {
@@ -115,7 +123,10 @@ export default {
       } else {
         return 'major';
       }
-    }
+    },
+    showDetailedPatchnotes() {
+      return this.$store.state.system.settings.general.items.showDetailedPatchnotes.value;
+    },
   }
 }
 </script>

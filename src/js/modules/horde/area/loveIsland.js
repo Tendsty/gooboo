@@ -137,7 +137,15 @@ export default {
             type: 'endless',
             difficulty: 120,
             enemyType: ['seal', 'guineaPig', 'puppy', 'rabbit', 'kitten', 'piglet', 'panda', 'koala']
-        }
+        },
+        digsite: {
+            x: 8,
+            y: 6.5,
+            unlockedBy: 'hordeMonsterToothLoveIsland',
+            type: 'digsite',
+            difficulty: 170,
+            enemyType: ['armed_skeleton']
+        },
     },
     decoration: [
         {x: 0, y: 3.75, rotate: 0, icon: 'mdi-seat', size: 2},

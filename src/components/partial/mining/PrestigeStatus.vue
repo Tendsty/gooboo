@@ -17,8 +17,9 @@
           </template>
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description1') }}</div>
           <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description2') }}</div>
-          <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description3', $formatNum(dwellerPercent)) }}</div>
-          <alert-text class="mb-2" type="info">{{ $vuetify.lang.t('$vuetify.mining.dweller.descriptionOvercap', $formatNum(dwellerOvercapPercent)) }}</alert-text>
+          <div>{{ $vuetify.lang.t('$vuetify.mining.dweller.description3', $formatNum(dwellerPercent, true)) }}</div>
+          <stat-breakdown name="miningDepthDwellerMax"></stat-breakdown>
+          <alert-text class="my-2" type="info">{{ $vuetify.lang.t('$vuetify.mining.dweller.descriptionOvercap', $formatNum(dwellerOvercapPercent)) }}</alert-text>
           <div v-for="(nextTime, key) in timesUntilNext" :key="`next-time-${ key }`">
             <price-tag v-if="nextTime.gain !== null" class="mr-1" add :currency="`mining_crystal${ crystalColor }`" :amount="nextTime.gain"></price-tag>
             <span>{{ $vuetify.lang.t('$vuetify.mining.dweller.nextTime', Math.round(nextTime.depth * 100) / 100, $formatTime(nextTime.time)) }}</span>
@@ -51,11 +52,12 @@
 import { mapGetters, mapState } from 'vuex';
 import { MINING_DWELLER_OVERCAP_MULT, MINING_DWELLER_OVERFLOW } from '../../../js/constants';
 import PriceTag from '../../render/PriceTag.vue';
+import StatBreakdown from '../../render/StatBreakdown.vue';
 import StatusTemplate from '../prestige/StatusTemplate.vue';
 import AlertText from '../render/AlertText.vue';
 
 export default {
-  components: { StatusTemplate, PriceTag, AlertText },
+  components: { StatusTemplate, PriceTag, AlertText, StatBreakdown },
   computed: {
     ...mapState({
       maxDweller0: state => state.stat.mining_depthDwellerCap0.total,
@@ -80,7 +82,7 @@ export default {
           }
           if (this.$store.getters['mult/get']('currencyMiningEmberGain') > 0) {
             obj.mining_ember = {
-              total: this.$store.getters['mult/get']('currencyMiningEmberGain') * this.$store.state.stat[`mining_depthDweller${ this.subfeature }`].value,
+              total: Math.floor(this.$store.getters['mult/get']('currencyMiningEmberGain') * this.$store.state.stat[`mining_depthDweller${ this.subfeature }`].value),
               showDescription: true,
               gainMult: 'currencyMiningEmberGain',
             };

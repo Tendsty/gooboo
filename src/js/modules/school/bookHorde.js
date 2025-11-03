@@ -1,46 +1,39 @@
-import store from "../../../store";
-
 export default {
-    bookTraining: {type: 'book', raiseOtherCap: 'horde_training', requirement() {
-        return store.state.upgrade.item.horde_training.highestLevel >= 100;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 28)};
-    }, effect: [
-        {name: 'upgradeHordeTrainingCap', type: 'base', value: lvl => lvl}
+    attack: {subfeature: 0, scalesWithGL: true, minGL: 25, effect: [
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
     ]},
-    bookLuckyStrike: {type: 'book', raiseOtherCap: 'horde_luckyStrike', requirement() {
-        return store.state.upgrade.item.horde_luckyStrike.highestLevel >= 15;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 85)};
-    }, effect: [
-        {name: 'upgradeHordeLuckyStrikeCap', type: 'base', value: lvl => lvl}
+    health: {subfeature: 0, scalesWithGL: true, minGL: 25, effect: [
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
     ]},
-    bookLooting: {type: 'book', raiseOtherCap: 'horde_looting', requirement() {
-        return store.state.upgrade.item.horde_looting.highestLevel >= 25;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 140)};
-    }, effect: [
-        {name: 'upgradeHordeLootingCap', type: 'base', value: lvl => lvl}
+    boneGain: {subfeature: 0, scalesWithGL: true, minGL: 40, maxGL: 139, effect: [
+        {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => lvl * 0.01 + 1}
     ]},
-    bookSurvivalGuide: {type: 'book', raiseOtherCap: 'horde_survivalGuide', requirement() {
-        return store.state.upgrade.item.horde_survivalGuide.highestLevel >= 25;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 190)};
-    }, effect: [
-        {name: 'upgradeHordeSurvivalGuideCap', type: 'base', value: lvl => lvl}
+    boneCap: {subfeature: 0, scalesWithGL: true, minGL: 50, effect: [
+        {name: 'currencyHordeBoneCap', type: 'mult', value: lvl => Math.pow(1.015, lvl)}
     ]},
-    bookCarving: {type: 'book', raiseOtherCap: 'horde_carving', requirement() {
-        return store.state.upgrade.item.horde_carving.highestLevel >= 5;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 310)};
-    }, effect: [
-        {name: 'upgradeHordeCarvingCap', type: 'base', value: lvl => lvl}
+    itemChance: {subfeature: 0, scalesWithGL: true, minGL: 60, maxGL: 159, effect: [
+        {name: 'hordeEquipmentChance', type: 'mult', value: lvl => lvl * 0.01 + 1}
     ]},
-    bookWhitePaint: {type: 'book', raiseOtherCap: 'horde_whitePaint', requirement() {
-        return store.state.upgrade.item.horde_whitePaint.highestLevel >= 25;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 475)};
-    }, effect: [
-        {name: 'upgradeHordeWhitePaintCap', type: 'base', value: lvl => lvl}
+    monsterPartCap: {subfeature: 0, scalesWithGL: true, minGL: 80, maxGL: 179, effect: [
+        {name: 'currencyHordeMonsterPartCap', type: 'mult', value: lvl => lvl * 0.01 + 1}
+    ]},
+    corruptedFleshGain: {subfeature: 0, scalesWithGL: true, minGL: 120, maxGL: 219, effect: [
+        {name: 'currencyHordeCorruptedFleshGain', type: 'mult', value: lvl => lvl * 0.01 + 1}
+    ]},
+    shardChance: {subfeature: 0, scalesWithGL: true, minGL: 150, maxGL: 249, effect: [
+        {name: 'hordeShardChance', type: 'mult', value: lvl => lvl * 0.01 + 1}
+    ]},
+
+    attack2: {subfeature: 1, scalesWithGL: true, minGL: 10, effect: [
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
+    ]},
+    health2: {subfeature: 1, scalesWithGL: true, minGL: 10, effect: [
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
+    ]},
+    bloodGain: {subfeature: 1, scalesWithGL: true, minGL: 20, maxGL: 119, effect: [
+        {name: 'currencyHordeBloodGain', type: 'mult', value: lvl => lvl * 0.02 + 1}
+    ]},
+    bloodCap: {subfeature: 1, scalesWithGL: true, minGL: 30, maxGL: 129, effect: [
+        {name: 'currencyHordeBloodCap', type: 'mult', value: lvl => lvl * 0.02 + 1}
     ]},
 }

@@ -1,17 +1,30 @@
 import store from "../../store"
-import { GEM_SPEED_BASE, SECONDS_PER_DAY } from "../constants";
+import { GEM_SPEED_BASE, GEM_SPEED_DIAMOND_BASE, SECONDS_PER_DAY } from "../constants";
 import { buildArray } from "../utils/array";
 import { getDay } from "../utils/date";
+import forge from "./gem/forge";
+import relic from "./gem/relic";
 
 export default {
     name: 'gem',
     tickspeed: 1,
     unlockNeeded: 'gemFeature',
     tick(seconds, oldTime, newTime) {
-        let progress = store.state.gem.progress;
-        const genSpeed = store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        const genSpeedPrimary = store.getters['gem/genSpeedPrimary'] / GEM_SPEED_BASE;
+        let progressPrimary = store.state.gem.progressPrimary + seconds * genSpeedPrimary;
+        if (progressPrimary >= 1) {
+            const gems = Math.floor(progressPrimary);
+            ['ruby', 'emerald'].forEach(elem => {
+                store.dispatch('currency/gain', {feature: 'gem', name: elem, amount: (elem === 'ruby' ? store.getters['mult/get']('currencyGemRubyGain') : 1) * gems});
+            });
+            progressPrimary -= gems;
+        }
+        store.commit('gem/updateKey', {key: 'progressPrimary', value: progressPrimary});
 
-        if (store.state.unlock.eventFeature.see) {
+        let progressSecondary = store.state.gem.progressSecondary;
+        const genSpeedSecondary = store.getters['gem/genSpeedSecondary'] / GEM_SPEED_BASE;
+
+        if (store.state.unlock.eventFeature.use) {
             let currentTime = oldTime;
             let nextDay = Math.floor((new Date(oldTime * 1000)).setHours(0, 0, 0, 0) / 1000) + SECONDS_PER_DAY;
 
@@ -32,22 +45,22 @@ export default {
             while (currentTime < newTime) {
                 let timeDiff = Math.min(nextDay, newTime) - currentTime;
 
-                progress += timeDiff * genSpeed * store.state.system.timeMult;
+                progressSecondary += timeDiff * genSpeedSecondary * store.state.system.timeMult;
 
-                if (progress >= 1) {
+                if (progressSecondary >= 1) {
                     if (lastEventTime !== null && currentTime > lastEventTime) {
-                        eventProgress += Math.floor(progress) - totalProgress;
+                        eventProgress += Math.floor(progressSecondary) - totalProgress;
                     } else {
                         const currentEvent = store.getters['event/eventOnDay'](getDay(new Date(isSimulation ? Date.now() : (currentTime * 1000))));
                         if (currentEvent === null || !store.getters['event/eventIsBig'](currentEvent)) {
-                            topazProgress += Math.floor(progress) - totalProgress;
+                            topazProgress += Math.floor(progressSecondary) - totalProgress;
                         }
                     }
                 }
 
                 currentTime = nextDay;
                 nextDay += SECONDS_PER_DAY;
-                totalProgress = Math.floor(progress);
+                totalProgress = Math.floor(progressSecondary);
             }
 
             if (eventProgress > 0) {
@@ -58,51 +71,68 @@ export default {
                 store.dispatch('currency/gain', {feature: 'gem', name: 'topaz', amount: topazProgress});
             }
         } else {
-            progress += seconds * genSpeed;
+            progressSecondary += seconds * genSpeedSecondary;
         }
 
-        if (progress >= 1) {
-            const gems = Math.floor(progress);
-            ['ruby', 'emerald', 'sapphire', 'amethyst'].forEach(elem => {
-                store.dispatch('currency/gain', {feature: 'gem', name: elem, amount: gems});
+        if (progressSecondary >= 1) {
+            const gems = Math.floor(progressSecondary);
+            ['sapphire', 'amethyst'].forEach(elem => {
+                store.dispatch('currency/gain', {feature: 'gem', name: elem, amount: (elem === 'ruby' ? store.getters['mult/get']('currencyGemRubyGain') : 1) * gems});
             });
-            progress -= gems;
+            progressSecondary -= gems;
         }
 
-        store.commit('gem/updateKey', {key: 'progress', value: progress});
+        store.commit('gem/updateKey', {key: 'progressSecondary', value: progressSecondary});
+
+        if (store.state.unlock.gemDiamond.use) {
+            const diamondSpeed = 1 / GEM_SPEED_DIAMOND_BASE;
+            let progressDiamond = store.state.gem.progressDiamond + seconds * diamondSpeed;
+
+            if (progressDiamond >= 1) {
+                const gems = Math.floor(progressDiamond);
+                store.dispatch('currency/gain', {feature: 'gem', name: 'diamond', amount: gems});
+                progressDiamond -= gems;
+            }
+
+            store.commit('gem/updateKey', {key: 'progressDiamond', value: progressDiamond});
+        }
     },
-    unlock: ['gemFeature'],
+    unlock: ['gemFeature', 'gemDiamond'],
     currency: {
         // Permanent upgrades
-        ruby: {color: 'red', icon: 'mdi-rhombus', gainTimerFunction() {
-            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        ruby: {color: 'red', icon: 'mdi-rhombus', display: 'int', gainMult: {round: true, baseValue: 1}, gainTimerFunction() {
+            return store.getters['gem/genSpeedPrimary'] / GEM_SPEED_BASE;
         }, timerIsEstimate: true, hideGainTag: true},
 
         // Replacable items (semi-permanent)
-        emerald: {color: 'green', icon: 'mdi-hexagon', gainTimerFunction() {
-            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        emerald: {color: 'green', icon: 'mdi-hexagon', display: 'int', gainTimerFunction() {
+            return store.getters['gem/genSpeedPrimary'] / GEM_SPEED_BASE;
         }, timerIsEstimate: true, hideGainTag: true},
 
         // Instant or temporary boosts
-        sapphire: {color: 'indigo', icon: 'mdi-pentagon', gainTimerFunction() {
-            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        sapphire: {color: 'indigo', icon: 'mdi-pentagon', display: 'int', gainTimerFunction() {
+            return store.getters['gem/genSpeedSecondary'] / GEM_SPEED_BASE;
         }, timerIsEstimate: true, hideGainTag: true},
 
         // Cosmetic items
-        amethyst: {color: 'purple', icon: 'mdi-cards-diamond', gainTimerFunction() {
-            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        amethyst: {color: 'purple', icon: 'mdi-cards-diamond', display: 'int', gainTimerFunction() {
+            return store.getters['gem/genSpeedSecondary'] / GEM_SPEED_BASE;
         }, timerIsEstimate: true, hideGainTag: true},
 
         // Event currency
-        topaz: {color: 'amber', icon: 'mdi-triangle', overcapMult: 0, capMult: {round: true, baseValue: 1000}, gainTimerFunction() {
-            return store.getters['gem/genSpeed'] / GEM_SPEED_BASE;
+        topaz: {color: 'amber', icon: 'mdi-triangle', display: 'int', overcapMult: 0, capMult: {round: true, baseValue: 1000}, overcapFunction(amount) {
+            if (store.state.event.bank_loan > 0) {
+                store.commit('event/updateKey', {key: 'bank_loan', value: Math.max(0, store.state.event.bank_loan - amount)}, {root: true});
+            }
+        }, gainTimerFunction() {
+            return store.getters['gem/genSpeedSecondary'] / GEM_SPEED_BASE;
         }, timerIsEstimate: true, hideGainTag: true},
 
         // Rare currency
-        diamond: {color: 'cyan', icon: 'mdi-diamond'},
+        diamond: {color: 'cyan', icon: 'mdi-diamond', display: 'int'},
 
         // Extremely rare currency
-        onyx: {color: 'deep-purple', icon: 'mdi-octagon'}
+        onyx: {color: 'deep-purple', icon: 'mdi-octagon', display: 'int'}
     },
     upgrade: {
         topazBag: {type: 'premium', requirement() {
@@ -114,21 +144,33 @@ export default {
         ]}
     },
     note: buildArray(2).map(() => 'g'),
+    relic,
     consumable: {
         prestigeStone: {
             icon: 'mdi-circle-double',
-            color: 'deep-purple',
-            price: {gem_sapphire: 400}
+            color: 'deep-purple'
+        }
+    },
+    init() {
+        for (const [key, elem] of Object.entries(forge)) {
+            store.commit('gem/initForge', {name: key, ...elem});
         }
     },
     saveGame() {
-        return {
-            progress: store.state.gem.progress
+        let obj = {
+            progressPrimary: store.state.gem.progressPrimary,
+            progressSecondary: store.state.gem.progressSecondary,
         };
+        if (store.state.gem.progressDiamond > 0) {
+            obj.progressDiamond = store.state.gem.progressDiamond;
+        }
+        return obj;
     },
     loadGame(data) {
-        if (data.progress !== undefined) {
-            store.commit('gem/updateKey', {key: 'progress', value: data.progress});
-        }
+        ['progressPrimary', 'progressSecondary', 'progressDiamond'].forEach(elem => {
+            if (data[elem] !== undefined) {
+                store.commit('gem/updateKey', {key: elem, value: data[elem]});
+            }
+        });
     }
 }

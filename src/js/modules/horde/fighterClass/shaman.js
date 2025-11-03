@@ -4,7 +4,8 @@ export default {
     baseStats: {
         attack: 4.4,
         health: 575,
-        mana: 150
+        mana: 150,
+        manaRegen: 0.01
     },
     exp: {
         base: 4200,

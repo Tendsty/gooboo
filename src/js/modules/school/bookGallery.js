@@ -1,46 +1,20 @@
-import store from "../../../store";
-
 export default {
-    bookRedPower: {type: 'book', raiseOtherCap: 'gallery_redPower', requirement() {
-        return store.state.upgrade.item.gallery_redPower.highestLevel >= 15;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 60)};
-    }, effect: [
-        {name: 'upgradeGalleryRedPowerCap', type: 'base', value: lvl => lvl}
+    redGain: {subfeature: 0, scalesWithGL: true, minGL: 20, maxGL: 119, effect: [
+        {name: 'currencyGalleryRedGain', type: 'mult', value: lvl => lvl * 0.02 + 1}
     ]},
-    bookOrangePower: {type: 'book', raiseOtherCap: 'gallery_orangePower', requirement() {
-        return store.state.upgrade.item.gallery_orangePower.highestLevel >= 15;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 88)};
-    }, effect: [
-        {name: 'upgradeGalleryOrangePowerCap', type: 'base', value: lvl => lvl}
+    converterCap: {subfeature: 0, scalesWithGL: true, minGL: 40, maxGL: 139, effect: [
+        {name: 'currencyGalleryConverterCap', type: 'base', value: lvl => lvl * 20}
     ]},
-    bookYellowPower: {type: 'book', raiseOtherCap: 'gallery_yellowPower', requirement() {
-        return store.state.upgrade.item.gallery_yellowPower.highestLevel >= 15;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 132)};
-    }, effect: [
-        {name: 'upgradeGalleryYellowPowerCap', type: 'base', value: lvl => lvl}
+    shapeGain: {subfeature: 0, scalesWithGL: true, minGL: 60, effect: [
+        {name: 'galleryShapeGain', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
     ]},
-    bookGreenPower: {type: 'book', raiseOtherCap: 'gallery_greenPower', requirement() {
-        return store.state.upgrade.item.gallery_greenPower.highestLevel >= 15;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 200)};
-    }, effect: [
-        {name: 'upgradeGalleryGreenPowerCap', type: 'base', value: lvl => lvl}
+    packageCap: {subfeature: 0, scalesWithGL: true, minGL: 80, maxGL: 178, effect: [
+        {name: 'currencyGalleryPackageCap', type: 'base', value: lvl => Math.ceil(lvl / 2)}
     ]},
-    bookBluePower: {type: 'book', raiseOtherCap: 'gallery_bluePower', requirement() {
-        return store.state.upgrade.item.gallery_bluePower.highestLevel >= 15;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 275)};
-    }, effect: [
-        {name: 'upgradeGalleryBluePowerCap', type: 'base', value: lvl => lvl}
+    drumCap: {subfeature: 0, scalesWithGL: true, minGL: 100, maxGL: 190, effect: [
+        {name: 'galleryColorDrumCap', type: 'base', value: lvl => Math.ceil(lvl / 10)}
     ]},
-    bookPurplePower: {type: 'book', raiseOtherCap: 'gallery_purplePower', requirement() {
-        return store.state.upgrade.item.gallery_purplePower.highestLevel >= 15;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 380)};
-    }, effect: [
-        {name: 'upgradeGalleryPurplePowerCap', type: 'base', value: lvl => lvl}
+    canvasSpeed: {subfeature: 0, scalesWithGL: true, minGL: 120, maxGL: 219, effect: [
+        {name: 'galleryCanvasSpeed', type: 'mult', value: lvl => lvl * 0.01 + 1}
     ]},
 }

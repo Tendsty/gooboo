@@ -31,16 +31,5 @@ export default {
         pool: {
             weatherChaos: {price: {event_weatherChaosToken: 30}}
         }
-    },
-    farm_smellyMud: {
-        type: 'consumable',
-        item: 'farm_smellyMud',
-        amount: 20,
-        requirement() {
-            return store.state.unlock.farmFertilizer.see;
-        },
-        pool: {
-            weatherChaos: {price: {event_weatherChaosToken: 1}}
-        }
     }
 }

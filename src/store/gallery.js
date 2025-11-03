@@ -2,7 +2,7 @@ import Vue from "vue"
 import { buildNum, capitalize } from "../js/utils/format";
 import { logBase } from "../js/utils/math";
 import { chance, randomElem, randomRound } from "../js/utils/random";
-import { GALLERY_CONVERTER_EXPONENT, GALLERY_MOTIVATION_BUY_AMOUNT, GALLERY_MOTIVATION_BUY_COST, GALLERY_REROLL_COST, GALLERY_SHAPES_GRID_HEIGHT, GALLERY_SHAPES_GRID_WIDTH } from "../js/constants";
+import { GALLERY_CONVERTER_EXPONENT, GALLERY_MOTIVATION_BUY_AMOUNT, GALLERY_REROLL_COST, GALLERY_SHAPES_ACCELERATOR_MAX, GALLERY_SHAPES_GRID_HEIGHT, GALLERY_SHAPES_GRID_WIDTH } from "../js/constants";
 import { buildArray } from "../js/utils/array";
 
 export default {
@@ -209,11 +209,9 @@ export default {
 
             commit('updateKey', {key: 'inspirationTime', value: 0});
             commit('updateKey', {key: 'inspirationAmount', value: 0});
-            for (const [key, elem] of Object.entries(state.idea)) {
-                if (elem.level > 0) {
-                    commit('updateIdeaKey', {name: key, key: 'level', value: 0});
-                    dispatch('applyIdeaReset', key);
-                }
+            for (const [key] of Object.entries(state.idea)) {
+                commit('updateIdeaKey', {name: key, key: 'level', value: 0});
+                dispatch('applyIdeaReset', key);
             }
             commit('updateKey', {key: 'canvasSpace', value: []});
             for (const [key] of Object.entries(state.colorData)) {
@@ -223,6 +221,7 @@ export default {
             dispatch('upgrade/reset', {feature: 'gallery', type: 'regular'}, {root: true});
             dispatch('currency/reset', {feature: 'gallery', type: 'regular'}, {root: true});
             dispatch('stat/reset', {feature: 'gallery', type: 'regular'}, {root: true});
+            dispatch('school/updateBookEffects', 'gallery', {root: true});
             dispatch('card/activateCards', 'gallery', {root: true});
 
             const inspirationStart = rootGetters['mult/get']('galleryInspirationStart');
@@ -230,7 +229,7 @@ export default {
                 dispatch('currency/gain', {feature: 'gallery', name: 'inspiration', amount: inspirationStart}, {root: true});
             }
         },
-        convertColor({ getters, rootGetters, dispatch }, o) {
+        convertColor({ rootState, getters, rootGetters, dispatch }, o) {
             const price = getters.conversionPrice(o.toColor);
             if (rootGetters['currency/canAfford'](price)) {
                 dispatch('currency/gain', {
@@ -245,13 +244,21 @@ export default {
                         dispatch('currency/spend', {feature: key.split('_')[0], name: key.split('_')[1], amount: elem}, {root: true});
                     }
                 }
+                if (!rootState.unlock.galleryAdvancedCardPack.use && o.toColor === 'teal') {
+                    dispatch('unlock/unlock', 'galleryAdvancedCardPack', {root: true});
+                }
             }
         },
-        applyIdea({ state, dispatch }, o) {
-            let trigger = o.onBuy ?? false;
-            state.idea[o.name].effect.forEach(eff => {
-                dispatch('system/applyEffect', {type: eff.type, name: eff.name, multKey: `galleryIdea_${o.name}`, value: eff.value(state.idea[o.name].level), trigger}, {root: true});
-            });
+        applyIdea({ state, rootGetters, dispatch }, o) {
+            if (state.idea[o.name].owned) {
+                let trigger = o.onBuy ?? false;
+                const level = state.idea[o.name].level + (state.idea[o.name].tier === 1 ? rootGetters['tag/values']('galleryBonusTier1Idea')[0] : 0);
+                if (level > 0) {
+                    state.idea[o.name].effect.forEach(eff => {
+                        dispatch('system/applyEffect', {type: eff.type, name: eff.name, multKey: `galleryIdea_${o.name}`, value: eff.value(level), trigger}, {root: true});
+                    });
+                }
+            }
         },
         applyIdeaReset({ state, dispatch }, name) {
             state.idea[name].effect.forEach(eff => {
@@ -264,6 +271,14 @@ export default {
                 commit('updateIdeaKey', {name, key: 'level', value: state.idea[name].level + 1});
                 commit('stat/increaseTo', {feature: 'gallery', name: 'highestTierIdea', value: state.idea[name].tier}, {root: true});
                 dispatch('applyIdea', {name, onBuy: true});
+
+                if (name === 'thinkHarder') {
+                    for (const [key, elem] of Object.entries(state.idea)) {
+                        if (elem.tier === 1 && elem.owned) {
+                            dispatch('applyIdea', {name: key, onBuy: false});
+                        }
+                    }
+                }
             }
         },
         openPackages({ state, rootState, rootGetters, commit, dispatch }) {
@@ -340,9 +355,9 @@ export default {
                                     }
                                 });
                             });
-                            if (sameAmount >= 8) {
-                                const motivation = Math.floor(rootState.currency.gallery_motivation.value);
-                                dispatch('currency/gain', {feature: 'gallery', name: targetShape, gainMult: true, amount: (motivation / 5 + 1) * specialMult}, {root: true});
+                            const motivation = Math.floor(Math.min(rootState.currency.gallery_motivation.value - 1, GALLERY_SHAPES_ACCELERATOR_MAX));
+                            if (sameAmount >= 8 && motivation > 0) {
+                                dispatch('currency/gain', {feature: 'gallery', name: targetShape, gainMult: true, amount: motivation * specialMult}, {root: true});
                                 dispatch('currency/spend', {feature: 'gallery', name: 'motivation', amount: motivation}, {root: true});
                             }
                             dispatch('rerollShapes', connectedGrid);
@@ -509,13 +524,16 @@ export default {
                 }
             }
         },
-        buyShapeReroll({ rootGetters, dispatch }) {
+        buyShapeReroll({ state, getters, rootGetters, commit, dispatch }) {
             if (rootGetters['currency/canAfford']({gallery_motivation: GALLERY_REROLL_COST})) {
-                let connectedGrid = [];
-                for (let y = 0; y < GALLERY_SHAPES_GRID_HEIGHT; y++) {
-                    connectedGrid.push(buildArray(GALLERY_SHAPES_GRID_WIDTH).map(() => true));
-                }
-                dispatch('rerollShapes', connectedGrid);
+                const weights = getters.shapeWeights;
+                state.shapeGrid.forEach((row, y) => {
+                    row.forEach((cell, x) => {
+                        if (!state.shape[cell].isSpecial) {
+                            commit('updateShapeCell', {x, y, value: randomElem(weights)});
+                        }
+                    });
+                });
                 dispatch('currency/spend', {feature: 'gallery', name: 'motivation', amount: GALLERY_REROLL_COST}, {root: true});
             }
         },
@@ -599,11 +617,11 @@ export default {
                 dispatch('system/resetEffect', {type: 'base', name: `currencyGallery${ capitalize(o.name) }DrumCap`, multKey: `galleryCanvas_${o.name}`}, {root: true});
             }
         },
-        buyMotivation({ rootGetters, commit, dispatch }) {
-            if (rootGetters['currency/value']('gem_sapphire') >= GALLERY_MOTIVATION_BUY_COST) {
+        surpriseParty({ rootGetters, commit, dispatch }) {
+            if (rootGetters['consumable/canAfford']('gallery_surpriseParty')) {
                 commit('currency/add', {feature: 'gallery', name: 'motivation', amount: GALLERY_MOTIVATION_BUY_AMOUNT}, {root: true});
                 commit('stat/add', {feature: 'gallery', name: 'motivation', value: GALLERY_MOTIVATION_BUY_AMOUNT}, {root: true});
-                dispatch('currency/spend', {feature: 'gem', name: 'sapphire', amount: GALLERY_MOTIVATION_BUY_COST}, {root: true});
+                dispatch('consumable/use', 'gallery_surpriseParty', {root: true});
             }
         }
     }

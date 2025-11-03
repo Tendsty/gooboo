@@ -26,8 +26,8 @@ export default {
         {name: 'currencyGalleryPackageCap', type: 'mult', value: lvl => lvl + 1},
     ]},
     beExcited: {tier: 1, icon: 'mdi-emoticon-excited', color: 'pink-purple', effect: [
-        {name: 'currencyGalleryMotivationGain', type: 'base', value: lvl => lvl * 0.02},
-        {name: 'currencyGalleryMotivationCap', type: 'base', value: lvl => lvl * 35},
+        {name: 'currencyGalleryMotivationGain', type: 'base', value: lvl => lvl * 0.001},
+        {name: 'currencyGalleryMotivationCap', type: 'base', value: lvl => lvl * 70},
     ]},
 
     // Tier 2
@@ -70,13 +70,13 @@ export default {
         {name: 'currencyGalleryBlueGain', type: 'mult', value: lvl => Math.pow(0.5, lvl / 2)},
     ]},
     calculateOdds: {tier: 3, icon: 'mdi-strategy', color: 'indigo', effect: [
-        {name: 'galleryColorDrumChance', type: 'mult', value: lvl => lvl * 0.4 + 1},
+        {name: 'galleryColorDrumChance', type: 'mult', value: lvl => lvl * 0.1 + 1},
     ]},
     buildOrangeReservoir: {tier: 3, icon: 'mdi-hoop-house', color: 'orange', effect: [
         {name: 'currencyGalleryOrangeDrumCap', type: 'mult', value: lvl => lvl * 0.4 + 1},
     ]},
     thinkHarder: {tier: 3, icon: 'mdi-head-lightbulb', color: 'amber', effect: [
-        {name: 'galleryInspirationStart', type: 'base', value: lvl => lvl * 2},
+        {name: 'galleryBonusTier1Idea', type: 'tag', value: lvl => [lvl]},
     ]},
     paintFaster: {tier: 3, icon: 'mdi-brush', color: 'orange-red', effect: [
         {name: 'galleryCanvasSpeed', type: 'mult', value: lvl => lvl * 0.25 + 1},
@@ -111,7 +111,7 @@ export default {
         {name: 'galleryCanvasSize', type: 'base', value: lvl => lvl * 3},
     ]},
     hyperfocus: {tier: 4, icon: 'mdi-image-filter-center-focus-strong-outline', color: 'red-pink', effect: [
-        {name: 'currencyGalleryMotivationGain', type: 'base', value: lvl => lvl * 0.08},
+        {name: 'currencyGalleryMotivationGain', type: 'base', value: lvl => lvl * 0.008},
         {name: 'currencyGalleryCircleGain', type: 'mult', value: lvl => lvl * 0.24 + 1},
     ]},
 

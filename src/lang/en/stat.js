@@ -41,18 +41,29 @@ export default {
   },
   mining_oreVariety: {
     achievement: 'Diversity',
-    description: 'Ore types found'
+    description0: 'Ore types found',
+    description1: 'Ore and rare earth types found',
+    description2: 'Ore, rare earth and gas types found',
   },
   mining_coal: {
     achievement: 'Darkness',
     description: 'Coal gained'
   },
-  mining_coalMax: {
-    description: 'Highest coal amount'
-  },
   mining_resin: {
     achievement: 'Sticky situation',
     description: 'Resin gained'
+  },
+  mining_gasTotal: {
+    achievement: 'Hothead',
+    description: 'Digit sum of highest gas amounts'
+  },
+  mining_smoke: {
+    achievement: 'Hard to see',
+    description: 'Highest smoke amount'
+  },
+  mining_enhancementHighest: {
+    achievement: 'Prepared',
+    description: 'Highest enhancement level'
   },
   mining_craftingWasted: {
     achievement: 'Wasted',
@@ -144,9 +155,6 @@ export default {
   village_prestigeCount: {
     description: 'Prestiges'
   },
-  village_offeringMax: {
-    description: 'Highest offering amount'
-  },
 
   // Horde stats
   horde_maxZone: {
@@ -161,12 +169,11 @@ export default {
     description: 'Maximum zone in under 30 minutes'
   },
   horde_totalDamage: {
-    achievement: 'Slayer',
-    description: 'Total basic attack damage dealt'
+    description: 'Total regular attack damage dealt'
   },
   horde_maxDamage: {
     achievement: 'Mighty',
-    description: 'Most damage in one basic attack'
+    description: 'Most damage in one regular attack'
   },
   horde_bone: {
     achievement: 'Dog\'s favourite',
@@ -192,12 +199,37 @@ export default {
     achievement: 'Diversity',
     description: 'Total mastery levels'
   },
+  horde_blood: {
+    achievement: 'Vampire',
+    description: 'Blood gained'
+  },
+  horde_courage: {
+    achievement: 'Courageous',
+    description: 'Courage gained'
+  },
+  horde_trinket: {
+    achievement: 'Prepared for anything',
+    description: 'Sum of all trinket rarities'
+  },
   horde_unlucky: {
     achievement: 'Unlucky',
     description: 'Fail with a 99% heirloom chance'
   },
   horde_maxItems: {
     description: 'Most equipment used'
+  },
+  horde_infiniteScore: {
+    achievement: 'Gladiator',
+    description: 'Sum of highest # enemies defeated in endless zones'
+  },
+  horde_warzoneInfiniteScore: {
+    description: 'Highest # enemy defeated in endless zone (Warzone)'
+  },
+  horde_monkeyJungleInfiniteScore: {
+    description: 'Highest # enemy defeated in endless zone (Monkey jungle)'
+  },
+  horde_loveIslandInfiniteScore: {
+    description: 'Highest # enemy defeated in endless zone (Love island)'
   },
   horde_timeSpent: {
     description: 'Time spent'
@@ -245,14 +277,9 @@ export default {
     achievement: 'Monocle',
     description: 'Gold gained'
   },
-  farm_bugMax: {
-    description: 'Highest bug amount'
-  },
-  farm_ladybugMax: {
-    description: 'Highest ladybug amount'
-  },
-  farm_butterflyMax: {
-    description: 'Highest butterfly amount'
+  farm_care: {
+    achievement: 'Precious plants',
+    description: 'Care applied'
   },
   farm_totalMystery: {
     description: 'Mystery'
@@ -275,18 +302,12 @@ export default {
     achievement: 'Rich',
     description: 'Cash gained'
   },
-  gallery_greenMax: {
-    description: 'Highest green paint in one prestige'
-  },
   gallery_bestPrestige: {
     description: 'Highest cash in one prestige'
   },
   gallery_highestTierIdea: {
     achievement: 'Big brain',
     description: 'Highest tier idea applied'
-  },
-  gallery_inspirationMax: {
-    description: 'Highest inspiration amount'
   },
   gallery_packageMax: {
     achievement: 'Cardboard fortress',
@@ -319,6 +340,11 @@ export default {
     description: 'Prestiges'
   },
 
+  // Other stats
+  school_totalPoints: {
+    description: 'Total points gained'
+  },
+
   // Meta stats
   meta_totalLevel: {
     achievement: 'Overachiever',
@@ -331,5 +357,10 @@ export default {
   meta_longestOfflineTime: {
     achievement: 'Comeback',
     description: 'Longest offline time'
-  }
+  },
+
+  // Custom stats
+  custom_hordeBattlepass: {
+    description: 'Battle pass level'
+  },
 };

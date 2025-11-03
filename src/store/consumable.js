@@ -108,6 +108,9 @@ export default {
                 commit('updateKey', {name: o.name, key: 'found', value: true});
             }
             commit('updateKey', {name: o.name, key: 'amount', value: state[o.name].amount + o.amount});
+        },
+        add({ state, commit }, o) {
+            commit('updateKey', {name: o.name, key: 'amount', value: state[o.name].amount + o.amount});
         }
     }
 }

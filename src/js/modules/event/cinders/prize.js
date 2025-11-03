@@ -31,16 +31,5 @@ export default {
         pool: {
             cinders: {price: {event_cindersToken: 30}}
         }
-    },
-    farm_sunshine: {
-        type: 'consumable',
-        item: 'farm_sunshine',
-        amount: 20,
-        requirement() {
-            return store.state.unlock.farmFertilizer.see;
-        },
-        pool: {
-            cinders: {price: {event_cindersToken: 1}}
-        }
     }
 }

@@ -33,7 +33,7 @@ export default {
     answer: ''
   }),
   mounted() {
-    this.elo = this.$store.state.school.math.currentGrade;
+    this.elo = this.$store.state.school.subject.math.currentGrade;
     if (this.elo >= 2) {
       this.operators.push('-');
     }
@@ -56,8 +56,8 @@ export default {
       const operator = randomElem(this.operators);
       switch (operator) {
         case '+': {
-          const minNum = Math.round(Math.pow(8, this.elo / 3));
-          const maxNum = Math.round(Math.pow(10, this.elo / 3) * 5);
+          const minNum = Math.round(Math.pow(7, this.elo / 3));
+          const maxNum = Math.round(Math.pow(9, this.elo / 3) * 5);
           const num1 = randomInt(minNum, maxNum);
           const num2 = randomInt(minNum, maxNum);
           this.question = `${ num1 } + ${ num2 }`;
@@ -65,8 +65,8 @@ export default {
           break;
         }
         case '-': {
-          const minNum = Math.round(Math.pow(8, this.elo / 3 - 0.2));
-          const maxNum = Math.round(Math.pow(10, this.elo / 3 - 0.2) * 5);
+          const minNum = Math.round(Math.pow(7, this.elo / 3 - 0.2));
+          const maxNum = Math.round(Math.pow(9, this.elo / 3 - 0.2) * 5);
           const num1 = randomInt(minNum, maxNum);
           const num2 = randomInt(minNum, maxNum);
           this.question = `${ num1 + num2 } - ${ num2 }`;
@@ -74,8 +74,8 @@ export default {
           break;
         }
         case '*': {
-          const minNum = Math.round(Math.pow(1.9, this.elo / 3) * 2.5);
-          const maxNum = Math.round(Math.pow(2, this.elo / 3) * 4.5);
+          const minNum = Math.round(Math.pow(1.8, this.elo / 3) * 3);
+          const maxNum = Math.round(Math.pow(1.9, this.elo / 3) * 5);
           const num1 = randomInt(minNum, maxNum);
           const num2 = randomInt(minNum, maxNum);
           this.question = `${ num1 } * ${ num2 }`;
@@ -83,8 +83,8 @@ export default {
           break;
         }
         case '/': {
-          const minNum = Math.round(Math.pow(1.9, this.elo / 3 - 0.2) * 2.5);
-          const maxNum = Math.round(Math.pow(2, this.elo / 3 - 0.2) * 4.5);
+          const minNum = Math.round(Math.pow(1.8, this.elo / 3 - 0.2) * 3);
+          const maxNum = Math.round(Math.pow(1.9, this.elo / 3 - 0.2) * 5);
           const num1 = randomInt(minNum, maxNum);
           const num2 = randomInt(minNum, maxNum);
           this.question = `${ num1 * num2 } / ${ num2 }`;
@@ -92,16 +92,16 @@ export default {
           break;
         }
         case 'r': {
-          const minNum = Math.round(Math.pow(1.9, this.elo / 3 - 0.3) * 2.5);
-          const maxNum = Math.round(Math.pow(2, this.elo / 3 - 0.3) * 4.5);
+          const minNum = Math.round(Math.pow(1.8, this.elo / 3 - 0.3) * 3);
+          const maxNum = Math.round(Math.pow(1.9, this.elo / 3 - 0.3) * 5);
           const num = randomInt(minNum, maxNum);
           this.question = `√${ Math.pow(num, 2) }`;
           this.solution = num;
           break;
         }
         case '^': {
-          const minNum = Math.round(Math.pow(3.1, this.elo / 3) * 7.5);
-          const maxNum = Math.round(Math.pow(3.25, this.elo / 3) * 40);
+          const minNum = Math.round(Math.pow(2.7, this.elo / 3) * 7.5);
+          const maxNum = Math.round(Math.pow(2.9, this.elo / 3) * 40);
           const target = randomInt(minNum, maxNum);
           const exponent = randomInt(3, Math.floor(this.elo / 3));
           const base = Math.round(Math.pow(target, 1 / exponent));
@@ -116,10 +116,10 @@ export default {
         const answer = parseInt(this.answer);
         if (answer === this.solution) {
           this.score++;
-        } else if (this.score > 0) {
-          this.score--;
+          this.$emit('score', this.score);
+        } else {
+          this.$emit('timer', 5);
         }
-        this.$emit('score', this.score);
         this.answer = null;
         this.newQuestion();
       }

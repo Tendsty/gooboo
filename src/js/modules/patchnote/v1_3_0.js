@@ -30,7 +30,7 @@ export default {
         ],
         horde: [
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'qol',
                 text: '110'
             },
@@ -57,7 +57,7 @@ export default {
                 text: '119'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'qol',
                 text: '121'
             },
@@ -66,9 +66,9 @@ export default {
                 text: '133',
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'new',
-                text: 'addedHordeItem',
+                text: 'addedHordeEquipment',
                 params: [16]
             },
             {
@@ -177,17 +177,17 @@ export default {
                 text: '122'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'change',
                 text: '123'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'new',
                 text: '124'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'new',
                 text: '125'
             },
@@ -253,7 +253,7 @@ export default {
                 text: '149'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'change',
                 text: '153'
             },

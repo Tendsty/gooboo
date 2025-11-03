@@ -57,9 +57,10 @@ export default {
           break;
         }
         case 1: {
-          if (this.$store.getters['mult/get']('currencyHordeCourageGain') > 0) {
+          if (this.$store.getters['mult/get']('currencyHordeCourageGain', this.$store.state.horde.courageScore) > 0) {
             obj.horde_courage = {
-              total: this.$store.getters['mult/get']('currencyHordeCourageGain'),
+              base: this.$store.state.horde.courageScore,
+              total: this.$store.getters['mult/get']('currencyHordeCourageGain', this.$store.state.horde.courageScore),
               gainMult: 'currencyHordeCourageGain',
               showDescription: true,
             };

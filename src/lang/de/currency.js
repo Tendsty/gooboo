@@ -1,10 +1,22 @@
 export default {
+  overcapFullGain: 'Du hast Überkapazität erreicht, bekommst aber noch volles Einkommen',
   overcapGain: 'Einkommen ist durch Überkapazität auf {0}% reduziert',
   overcapNoGain: 'Kein Einkommen aufgrund von Überkapazität',
   benefitLoss: 'Der Kauf führt zum Verlust von Vorteilen',
   gainTimerNeeded: 'Kaufbar in {0}',
   capTimerNeeded: 'Kapazität erreicht in {0}',
   overcapTimerNeeded: 'Nächste Kapazitätsstufe erreicht in {0}',
+  isNotSpent: 'Diese Währung wird zwar benötigt, aber nicht ausgegeben',
+  unknown: 'Unbekannte Währung',
+
+  subtype: {
+    village: {
+      foundationMaterial: 'Grundmaterial',
+      industrialMaterial: 'Industriematerial',
+      luxuryMaterial: 'Luxusmaterial',
+      modernMaterial: 'Neuzeitmaterial',
+    },
+  },
 
   // Premium currencies
   gem_ruby: {
@@ -337,6 +349,7 @@ export default {
   },
   mining_granite: {
     name: 'Granit',
+    hint: 'Gefunden, wenn du einen Stein ab 50m oder tiefer 1000 Mal zerbrichst',
     description: 'Massive Granitblöcke, aus dem Untergrund geschnitten. Überraschenderweise sind sie komplett schrottfrei'
   },
   mining_salt: {
@@ -357,6 +370,7 @@ export default {
   },
   mining_obsidian: {
     name: 'Obsidian',
+    hint: 'Gefunden, wenn du einen Stein ab 150m oder tiefer mit einer nicht aufgewerteten Spitzhacke zerbrichst',
     description: 'Wunderschöne lila Scherben, sie sehen zerbrechlich aus'
   },
   mining_deeprock: {
@@ -435,6 +449,19 @@ export default {
     name: 'Radon',
     description: ''
   },
+  mining_limestone: {
+    name: 'Kalkstein',
+    description: ''
+  },
+  mining_moonshard: {
+    name: 'Monscherbe',
+    hint: 'Gefunden, wenn du einen Stein ab 20m oder tiefer zerbrichst, welcher vom Tiefengräber erreicht wurde',
+    description: ''
+  },
+  mining_phosphorus: {
+    name: 'Phosphor',
+    description: ''
+  },
   mining_crystalYellow: {
     name: 'Gelber Kristall',
     description: 'Diese Kristalle sehen auch spitze aus! Zum Glück hast du deinen Tiefengräber bereits bei dir'
@@ -497,6 +524,7 @@ export default {
   },
   village_joy: {
     name: 'Freude',
+    hint: 'Gefunden, wenn du einen Zufriedenheitswert von über 125% erreichst',
     description: 'Erhalte Freude bei einer Zufriedenheit von über 125%. Mehr Zufriedenheit über diesem Wert erzeugt noch mehr Freude'
   },
   village_glass: {
@@ -581,6 +609,7 @@ export default {
   },
   horde_monsterPart: {
     name: 'Monsterteil',
+    hint: 'Ab Zone 10 gefunden, wenn keine Gegner mehr auftauchen',
     description: 'Ein ekelhaftes Organ, was ab Zone 10 gefunden werden kann, wenn Gegner fehlen'
   },
   horde_corruptedFlesh: {
@@ -589,6 +618,7 @@ export default {
   },
   horde_mysticalShard: {
     name: 'Mystische Scherbe',
+    hint: 'Gefunden, wenn du Ausrüstung mit einer Meisterungsstufe von 5 oder höher verwendest',
     description: 'Voll mit unangetasteter Kraft'
   },
   horde_soulCorrupted: {
@@ -607,9 +637,49 @@ export default {
     name: 'Krone',
     description: 'Sie haben einst über die Türme geherrscht, sind jetzt aber entthront'
   },
+  horde_raidKey: {
+    name: 'Raidschlüssel',
+    description: 'Ein Schlüssel, der dir Zugang zu einem Raidboss gewährt'
+  },
   horde_towerKey: {
     name: 'Turmschlüssel',
     description: 'Ein seltener Schlüssel, der dir Zugang zu einem Turm gewährt'
+  },
+  horde_fireEssence: {
+    name: 'Feueressenz',
+    description: ''
+  },
+  horde_thunderEssence: {
+    name: 'Donneressenz',
+    description: ''
+  },
+  horde_windEssence: {
+    name: 'Windessenz',
+    description: ''
+  },
+  horde_waterEssence: {
+    name: 'Wasseressenz',
+    description: ''
+  },
+  horde_iceEssence: {
+    name: 'Eisessenz',
+    description: ''
+  },
+  horde_earthEssence: {
+    name: 'Erdessenz',
+    description: ''
+  },
+  horde_natureEssence: {
+    name: 'Naturessenz',
+    description: ''
+  },
+  horde_lightEssence: {
+    name: 'Lichtessenz',
+    description: ''
+  },
+  horde_shadowEssence: {
+    name: 'Schattenessenz',
+    description: ''
   },
   horde_blood: {
     name: 'Blut',
@@ -618,6 +688,18 @@ export default {
   horde_lockpick: {
     name: 'Dietrich',
     description: 'Erlaubt es dir von einen bereits besiegten Boss Schmuckstücke zu erhalten. Nur für den Pirat'
+  },
+  horde_monsterToothWarzone: {
+    name: 'Scharfer Monsterzahn',
+    description: ''
+  },
+  horde_monsterToothMonkeyJungle: {
+    name: 'Bemooster Monsterzahn',
+    description: ''
+  },
+  horde_monsterToothLoveIsland: {
+    name: 'Niedlicher Monsterzahn',
+    description: ''
   },
   farm_vegetable: {
     name: 'Gemüse',
@@ -639,12 +721,27 @@ export default {
     name: 'Gold',
     description: 'Kleine Goldnuggets, die in der Erde vergraben waren'
   },
+  farm_rainwater: {
+    name: 'Regenwasser',
+    description: ''
+  },
+  farm_mixedSeeds: {
+    name: 'Gemischte Saat',
+    hint: 'Durch Events erhalten',
+    description: 'Eine Saatmischung, aus der Wildblumen wachsen. Sie kann nur durch Events erhalten werden'
+  },
+  farm_cactusSeed: {
+    name: 'Kaktussaat',
+    hint: 'Durch große Events erhalten',
+    description: 'Eine Saat, aus der ein Kaktus wächst. Sie kann nur durch große Events erhalten werden'
+  },
   farm_seedHull: {
     name: 'Saathülle',
     description: 'Eine leere pflanzliche Saathülle, die Saat selbst scheint zu fehlen'
   },
   farm_grass: {
     name: 'Gras',
+    hint: 'Kann durch ein Gen ab Pflanzenstufe 5 erhalten werden',
     description: 'Das wirkt unnatürlich, Gras sollte nicht auf Pflanzen wachsen'
   },
   farm_petal: {
@@ -675,12 +772,21 @@ export default {
     name: 'Mysterienstein',
     description: 'Was ist das? Welchen Nutzen hat es?'
   },
-  farm_goldenPetal: {
-    name: 'Goldenes Blütenblatt',
-    description: 'Dieses extrem seltene Blütenblatt kann nur auf Rosen gefunden werden. Gerüchte behaupten, dass Rosen mit solchen Blütenblättern dunkler als gewöhnlich sind'
-  },
   farm_smallSeed: {
     name: 'Kleine Saat',
+    description: ''
+  },
+  farm_ancientSeed: {
+    name: 'Antike Saat',
+    hint: 'Manchmal vom Händler verkauft',
+    description: 'Eine extrem alte und seltene Saat, aus der eine mysteriöse Pflanze wächst'
+  },
+  farm_snail: {
+    name: 'Schnecke',
+    description: ''
+  },
+  farm_oldRoot: {
+    name: 'Alte Wurzel',
     description: ''
   },
   gallery_beauty: {
@@ -858,6 +964,10 @@ export default {
   school_examPass: {
     name: 'Prüfungspass',
     description: 'Seltsam, bei unserer alten Schule haben wir sowas nicht gebraucht. Hier sind sie nötig, um eine Prüfung zu schreiben'
+  },
+  relic_power: {
+    name: 'Reliktenergie',
+    description: ''
   },
   card_shinyDust: {
     name: 'Glitzerstaub',

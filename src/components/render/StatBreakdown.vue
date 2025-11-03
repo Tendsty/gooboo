@@ -47,6 +47,7 @@ export default {
       return null;
     },
     list() {
+      const groupableName = ['hordeTower', 'cardCollection', 'cards', 'cardsShiny', 'treasure', 'relic', 'relicGlyph'];
       let arr = [];
       let total = 0;
 
@@ -60,9 +61,32 @@ export default {
       }
 
       // list base values
+      let groupableUpgrades = 0;
+      for (const [key] of Object.entries(this.mult.baseValues)) {
+        const nameBase = key.split('_')[0];
+        if (groupableName.includes(nameBase)) {
+          groupableUpgrades++;
+        } else if (nameBase === 'upgrade') {
+          const upgrade = this.$store.state.upgrade.item[key.slice(key.split('_')[0].length + 1)];
+          if (upgrade.cap !== null && upgrade.level >= upgrade.cap) {
+            groupableUpgrades++;
+          }
+        }
+      }
+      let upgradeBase = 0;
       for (const [key, elem] of Object.entries(this.mult.baseValues)) {
-        total += elem;
-        arr.push({name: key, value: elem, type: 'base', total});
+        const nameBase = key.split('_')[0];
+        const upgrade = nameBase === 'upgrade' ? this.$store.state.upgrade.item[key.slice(key.split('_')[0].length + 1)] : null;
+        if (groupableUpgrades >= 5 && (groupableName.includes(nameBase) || upgrade && upgrade.cap !== null && upgrade.level >= upgrade.cap)) {
+          upgradeBase += elem;
+        } else {
+          total += elem;
+          arr.push({name: key, value: elem, type: 'base', total});
+        }
+      }
+      if (upgradeBase !== 0) {
+        total += upgradeBase;
+        arr.push({name: `grouped_${ groupableUpgrades }`, value: upgradeBase, type: 'base', total});
       }
       this.baseArray.forEach(elem => {
         total += elem.value;
@@ -70,9 +94,32 @@ export default {
       });
 
       // list mult values
+      groupableUpgrades = 0;
+      for (const [key] of Object.entries(this.mult.multValues)) {
+        const nameBase = key.split('_')[0];
+        if (groupableName.includes(nameBase)) {
+          groupableUpgrades++;
+        } else if (key.split('_')[0] === 'upgrade') {
+          const upgrade = this.$store.state.upgrade.item[key.slice(key.split('_')[0].length + 1)];
+          if (upgrade.cap !== null && upgrade.level >= upgrade.cap) {
+            groupableUpgrades++;
+          }
+        }
+      }
+      let upgradeMult = 1;
       for (const [key, elem] of Object.entries(this.mult.multValues)) {
-        total *= elem;
-        arr.push({name: key, value: elem, type: 'mult', total});
+        const nameBase = key.split('_')[0];
+        const upgrade = nameBase === 'upgrade' ? this.$store.state.upgrade.item[key.slice(key.split('_')[0].length + 1)] : null;
+        if (groupableUpgrades >= 5 && (groupableName.includes(nameBase) || upgrade && upgrade.cap !== null && upgrade.level >= upgrade.cap)) {
+          upgradeMult *= elem;
+        } else {
+          total *= elem;
+          arr.push({name: key, value: elem, type: 'mult', total});
+        }
+      }
+      if (upgradeMult !== 1) {
+        total *= upgradeMult;
+        arr.push({name: `grouped_${ groupableUpgrades }`, value: upgradeMult, type: 'mult', total});
       }
       this.multArray.forEach(elem => {
         total *= elem.value;

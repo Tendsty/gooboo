@@ -6,7 +6,7 @@ export default {
         icon: 'mdi-sprinkler-variant'
     },
     lectern: {
-        icon: 'mdi-book-open-page-variant'
+        icon: 'mdi-lectern'
     },
     pinwheel: {
         icon: 'mdi-pinwheel'

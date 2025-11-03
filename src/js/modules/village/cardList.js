@@ -68,9 +68,7 @@ export default [
         {"x": -0.65, "y": -0.25, "rotate": -30, "size": 1, "icon": "mdi-human-child"}
     ]},
     {id: 8, collection: 'neighborhood', power: 2, reward: [
-        {name: 'currencyVillageWoodGain', type: 'mult', value: 1.2},
-        {name: 'currencyVillageStoneGain', type: 'mult', value: 1.2},
-        {name: 'currencyVillagePlantFiberGain', type: 'mult', value: 1.2}
+        {name: 'villageFoundationMaterialGain', type: 'mult', value: 1.2}
     ], color: 'skyblue', icons: [
         {"x": -0.8, "y": -0.3, "rotate": 0, "size": 1.75, "icon": "mdi-home"},
         {"x": 0.8, "y": -0.3, "rotate": 0, "size": 1.75, "icon": "mdi-home"},
@@ -94,9 +92,7 @@ export default [
         {"x": 0.35, "y": 0.85, "rotate": 0, "size": 1, "icon": "mdi-football"}
     ]},
     {id: 10, collection: 'neighborhood', power: 2, reward: [
-        {name: 'currencyVillageWoodCap', type: 'mult', value: 1.1},
-        {name: 'currencyVillageStoneCap', type: 'mult', value: 1.1},
-        {name: 'currencyVillagePlantFiberCap', type: 'mult', value: 1.1}
+        {name: 'villageFoundationMaterialCap', type: 'mult', value: 1.1}
     ], color: 'lime', icons: [
         {"x": -0.7, "y": -0.1, "rotate": 0, "size": 2.5, "icon": "mdi-home"},
         {"x": 0, "y": 0.2, "rotate": 0, "size": 1, "icon": "mdi-fence"},
@@ -326,7 +322,7 @@ export default [
     ]},
 
     {id: 34, collection: 'maintainingSafety', power: 2, reward: [
-        {name: 'villageWorker', type: 'mult', value: 1.1}
+        {name: 'villageWorker', type: 'mult', value: 1.05}
     ], color: 'orange', icons: [
         {"x": 0.6, "y": 0.2, "rotate": 0, "size": 2.5, "icon": "mdi-home"},
         {"x": 0.85, "y": -0.4, "rotate": 20, "size": 1, "icon": "mdi-fire"},
@@ -382,5 +378,261 @@ export default [
         {"x": -0.15, "y": 1, "rotate": 0, "size": 1.8, "icon": "mdi-ellipse"},
         {"x": 0.6, "y": 0.9, "rotate": 0, "size": 1, "icon": "mdi-waves"},
         {"x": 1, "y": 0.9, "rotate": 0, "size": 1, "icon": "mdi-waves"}
+    ]},
+
+    {id: 40, collection: 'localBusiness', power: 5, reward: [
+        {name: 'villageWorker', type: 'base', value: 20}
+    ], color: 'pale-red', icons: [
+        {"x": -0.45, "y": 0.4, "rotate": 0, "size": 3, "icon": "mdi-store"},
+        {"x": -0.45, "y": -0.35, "rotate": 0, "size": 1, "icon": "mdi-sale"},
+        {"x": 0.4, "y": 0.8, "rotate": 0, "size": 0.75, "icon": "mdi-cart"},
+        {"x": 0.7, "y": 0.8, "rotate": 0, "size": 0.75, "icon": "mdi-cart"},
+        {"x": 1, "y": 0.8, "rotate": 0, "size": 0.75, "icon": "mdi-cart"}
+    ]},
+    {id: 41, collection: 'localBusiness', power: 5, reward: [
+        {name: 'villageIndustrialMaterialCap', type: 'mult', value: 1.1}
+    ], color: 'pale-yellow', icons: [
+        {"x": -0.45, "y": 0, "rotate": 0, "size": 3, "icon": "mdi-factory"},
+        {"x": 0.8, "y": 0.35, "rotate": 0, "size": 2, "icon": "mdi-tree"},
+        {"x": 0.5, "y": 0.65, "rotate": 0, "size": 0.6, "icon": "mdi-grass"},
+        {"x": -0.9, "y": 1, "rotate": 0, "size": 0.75, "icon": "mdi-grass"},
+        {"x": -0.4, "y": 0.95, "rotate": 0, "size": 0.75, "icon": "mdi-grass"},
+        {"x": -0.1, "y": 1.1, "rotate": 0, "size": 0.75, "icon": "mdi-grass"},
+        {"x": 0.5, "y": 1, "rotate": 0, "size": 0.75, "icon": "mdi-grass"},
+        {"x": 0.65, "y": -0.7, "rotate": 0, "size": 1.3, "icon": "mdi-home-variant"},
+        {"x": 0.7, "y": -0.35, "rotate": 0, "size": 0.45, "icon": "mdi-grass"}
+    ]},
+    {id: 42, collection: 'localBusiness', power: 6, reward: [], color: 'skyblue', icons: [
+        {"x": 0, "y": 0.65, "rotate": 0, "size": 1, "icon": "mdi-office-building"},
+        {"x": 0, "y": 0.25, "rotate": 0, "size": 1, "icon": "mdi-office-building"},
+        {"x": 0, "y": -0.15, "rotate": 0, "size": 1, "icon": "mdi-office-building"},
+        {"x": 0, "y": -0.55, "rotate": 0, "size": 1, "icon": "mdi-office-building"},
+        {"x": 0.7, "y": 0.73, "rotate": 0, "size": 0.65, "icon": "mdi-tree"},
+        {"x": -0.95, "y": 0.8, "rotate": 0, "size": 0.25, "icon": "mdi-car-side"},
+        {"x": -0.7, "y": 0.8, "rotate": 0, "size": 0.25, "icon": "mdi-car-side"},
+        {"x": -0.8, "y": -0.65, "rotate": 0, "size": 1, "icon": "mdi-cloud"},
+        {"x": 0.75, "y": -0.75, "rotate": 0, "size": 0.7, "icon": "mdi-cloud"}
+    ]},
+    {id: 43, collection: 'localBusiness', power: 5, reward: [
+        {name: 'villageLuxuryMaterialCap', type: 'mult', value: 1.1}
+    ], color: 'babypink', icons: [
+        {"x": -0.8, "y": -0.1, "rotate": 0, "size": 1.5, "icon": "mdi-bed-king"},
+        {"x": 0, "y": -0.05, "rotate": 0, "size": 1, "icon": "mdi-dresser"},
+        {"x": 0, "y": -0.45, "rotate": 0, "size": 0.7, "icon": "mdi-lamp"},
+        {"x": 0.8, "y": -0.25, "rotate": 0, "size": 1.75, "icon": "mdi-wardrobe"},
+        {"x": -0.45, "y": 0, "rotate": 0, "size": 1.75, "icon": "mdi-human-handsdown"},
+        {"x": -0.6, "y": 0.85, "rotate": 0, "size": 2, "icon": "mdi-sofa"},
+        {"x": 0.55, "y": 0.8, "rotate": 0, "size": 2, "icon": "mdi-table-chair"}
+    ]},
+    {id: 44, collection: 'localBusiness', power: 5, reward: [
+        {name: 'villageIndustrialMaterialGain', type: 'mult', value: 1.1},
+        {name: 'villageLuxuryMaterialGain', type: 'mult', value: 1.1}
+    ], color: 'brown', icons: [
+        {"x": 0.8, "y": 0.7, "rotate": 0, "size": 1.25, "icon": "mdi-anvil"},
+        {"x": 0.88, "y": 0.4, "rotate": 0, "size": 1.6, "icon": "mdi-human-handsdown"},
+        {"x": 0.55, "y": 0.25, "rotate": -55, "size": 0.7, "icon": "mdi-hammer"},
+        {"x": -0.55, "y": 0.65, "rotate": 135, "size": 1, "icon": "mdi-pickaxe"},
+        {"x": -0.85, "y": 0.65, "rotate": -15, "size": 1, "icon": "mdi-shovel"},
+        {"x": -0.25, "y": 0.7, "rotate": 85, "size": 1, "icon": "mdi-axe"}
+    ]},
+    {id: 45, collection: 'localBusiness', power: 4, reward: [
+        {name: 'villagePower', type: 'base', value: 2}
+    ], color: 'purple', icons: [
+        {"x": -0.35, "y": 0, "rotate": 0, "size": 3, "icon": "mdi-human-handsdown"},
+        {"x": -0.9, "y": 0.3, "rotate": 0, "size": 1, "icon": "mdi-generator-portable"},
+        {"x": 0.85, "y": 0.42, "rotate": 0, "size": 1.5, "icon": "mdi-mower"}
+    ]},
+    {id: 46, collection: 'localBusiness', power: 5, reward: [
+        {name: 'villagePollutionTolerance', type: 'base', value: 3}
+    ], color: 'orange', icons: [
+        {"x": 0, "y": 0.2, "rotate": 0, "size": 4, "icon": "mdi-home-sound-in-outline"},
+        {"x": -0.3, "y": 0.25, "rotate": 0, "size": 1, "icon": "mdi-air-filter"},
+        {"x": 0.25, "y": 0.55, "rotate": 0, "size": 1, "icon": "mdi-human-handsup"}
+    ]},
+    {id: 47, collection: 'localBusiness', power: 5, reward: [
+        {name: 'currencyVillageOilGain', type: 'mult', value: 1.2},
+        {name: 'currencyVillageOilCap', type: 'mult', value: 1.1}
+    ], color: 'pale-green', icons: [
+        {"x": 0, "y": 0.2, "rotate": 0, "size": 3.5, "icon": "mdi-ferry"},
+        {"x": -0.35, "y": -0.1, "rotate": 0, "size": 0.65, "icon": "mdi-barrel"},
+        {"x": 0, "y": -0.1, "rotate": 0, "size": 0.65, "icon": "mdi-barrel"},
+        {"x": 0.35, "y": -0.1, "rotate": 0, "size": 0.65, "icon": "mdi-barrel"}
+    ]},
+    {id: 48, collection: 'localBusiness', power: 4, reward: [
+        {name: 'villageTaxRate', type: 'mult', value: 1.5}
+    ], color: 'red-pink', icons: [
+        {"x": 0.6, "y": 0.45, "rotate": 0, "size": 2.25, "icon": "mdi-desk"},
+        {"x": 0.4, "y": 0.58, "rotate": 0, "size": 1, "icon": "mdi-desktop-tower"},
+        {"x": 0.45, "y": -0.1, "rotate": 0, "size": 1, "icon": "mdi-monitor"},
+        {"x": 0.95, "y": 0, "rotate": 0, "size": 0.5, "icon": "mdi-note-text"},
+        {"x": -0.75, "y": 0.2, "rotate": 0, "size": 2.5, "icon": "mdi-human-handsdown"},
+        {"x": -0.2, "y": 0, "rotate": 70, "size": 1, "icon": "mdi-magnify"}
+    ]},
+    {id: 49, collection: 'localBusiness', power: 5, reward: [
+        {name: 'currencyVillageMarbleGain', type: 'mult', value: 1.2},
+        {name: 'currencyVillageMarbleCap', type: 'mult', value: 1.1}
+    ], color: 'pale-blue', icons: [
+        {"x": -0.1, "y": 0, "rotate": 0, "size": 2, "icon": "mdi-home"},
+        {"x": -0.85, "y": 0.05, "rotate": 0, "size": 1, "icon": "mdi-human-female-dance"},
+        {"x": -0.85, "y": 0.35, "rotate": 0, "size": 1, "icon": "mdi-minus-thick"},
+        {"x": 1, "y": 0.15, "rotate": 0, "size": 1, "icon": "mdi-fountain"},
+        {"x": -0.65, "y": 0.8, "rotate": 0, "size": 0.4, "icon": "mdi-grass"},
+        {"x": 0.2, "y": 1, "rotate": 0, "size": 0.4, "icon": "mdi-grass"},
+        {"x": 0.5, "y": 0.7, "rotate": 0, "size": 0.4, "icon": "mdi-grass"}
+    ]},
+    {id: 50, collection: 'localBusiness', power: 5, reward: [
+        {name: 'currencyVillageMeatGain', type: 'mult', value: 1.75}
+    ], color: 'light-green', icons: [
+        {"x": -1.1, "y": 0.55, "rotate": 0, "size": 1.1, "icon": "mdi-fence"},
+        {"x": -0.55, "y": 0.55, "rotate": 0, "size": 1.1, "icon": "mdi-fence"},
+        {"x": 0, "y": 0.55, "rotate": 0, "size": 1.1, "icon": "mdi-fence"},
+        {"x": 0.55, "y": 0.55, "rotate": 0, "size": 1.1, "icon": "mdi-fence"},
+        {"x": 1.1, "y": 0.55, "rotate": 0, "size": 1.1, "icon": "mdi-fence"},
+        {"x": 0.5, "y": 0.1, "rotate": 0, "size": 0.5, "icon": "mdi-grass"},
+        {"x": -0.95, "y": 0, "rotate": 0, "size": 0.45, "icon": "mdi-grass"},
+        {"x": -0.25, "y": -0.55, "rotate": 0, "size": 0.35, "icon": "mdi-grass"},
+        {"x": -0.3, "y": -0.1, "rotate": 0, "size": 0.6, "icon": "mdi-pig-variant"},
+        {"x": 0.7, "y": -0.3, "rotate": 0, "size": 0.55, "icon": "mdi-pig-variant"}
+    ]},
+    {id: 51, collection: 'localBusiness', power: 4, reward: [
+        {name: 'currencyVillageFaithGain', type: 'mult', value: 1.35}
+    ], color: 'amber', icons: [
+        {"x": 0, "y": -0.85, "rotate": 180, "size": 2, "icon": "mdi-weather-hazy"},
+        {"x": -0.5, "y": 0.65, "rotate": 0, "size": 1.5, "icon": "mdi-human-handsup"},
+        {"x": 0.5, "y": 0.65, "rotate": 0, "size": 1.6, "icon": "mdi-human-handsup"},
+        {"x": -0.8, "y": 0.3, "rotate": 0, "size": 0.7, "icon": "mdi-baguette"},
+        {"x": 0.8, "y": 0.15, "rotate": -20, "size": 0.55, "icon": "mdi-food-apple"},
+        {"x": -0.25, "y": 0.15, "rotate": -65, "size": 0.45, "icon": "mdi-food-drumstick"},
+        {"x": 0.1, "y": 0.3, "rotate": -20, "size": 0.7, "icon": "mdi-sausage"}
+    ]},
+    {id: 52, collection: 'localBusiness', power: 6, reward: [
+        {name: 'villagePower', type: 'base', value: 1},
+        {name: 'villagePollutionTolerance', type: 'base', value: 2}
+    ], color: 'indigo', icons: [
+        {"x": 0.6, "y": 0, "rotate": 0, "size": 1, "icon": "mdi-solar-panel-large"},
+        {"x": 0.6, "y": 0.65, "rotate": 0, "size": 2, "icon": "mdi-store"},
+        {"x": -1, "y": 1, "rotate": 0, "size": 1.5, "icon": "mdi-hydro-power"},
+        {"x": -0.25, "y": -0.65, "rotate": 0, "size": 1.35, "icon": "mdi-wind-turbine"},
+        {"x": -0.9, "y": -0.4, "rotate": 0, "size": 1.45, "icon": "mdi-wind-turbine"}
+    ]},
+
+    {id: 53, collection: 'versatile', power: 5, reward: [
+        {name: 'currencyVillageCoinGain', type: 'mult', value: 1.5},
+        {name: 'currencyVillageCopperCoinGain', type: 'mult', value: 1.25}
+    ], color: 'amber', icons: [
+        {"x": 0.75, "y": 0.4, "rotate": 0, "size": 2.5, "icon": "mdi-human-handsdown"},
+        {"x": 0.05, "y": 0.2, "rotate": -20, "size": 1.3, "icon": "mdi-magnify"},
+        {"x": -0.05, "y": 0.77, "rotate": 0, "size": 1.25, "icon": "mdi-table-furniture"},
+        {"x": -0.05, "y": 0.58, "rotate": 0, "size": 0.3, "icon": "mdi-circle"},
+        {"x": -0.8, "y": 0, "rotate": 0, "size": 1.5, "icon": "mdi-book-open-blank-variant"},
+        {"x": -0.72, "y": -0.05, "rotate": 0, "size": 0.3, "icon": "mdi-circle"},
+        {"x": -0.55, "y": -0.05, "rotate": 0, "size": 0.3, "icon": "mdi-circle"},
+        {"x": -0.72, "y": 0.1, "rotate": 0, "size": 0.3, "icon": "mdi-circle"}
+    ]},
+    {id: 54, collection: 'versatile', power: 7, reward: [
+        {name: 'queueSpeedVillageBuilding', type: 'mult', value: 1.15},
+        // TODO: Add missing stat
+    ], color: 'dark-blue', icons: [
+        {"x": -0.7, "y": 0.5, "rotate": 0, "size": 2, "icon": "mdi-human-handsdown"},
+        {"x": -0.7, "y": -0.1, "rotate": 0, "size": 0.6, "icon": "mdi-hard-hat"},
+        {"x": 0.7, "y": 0.5, "rotate": 0, "size": 2, "icon": "mdi-human-handsdown"},
+        {"x": 0.7, "y": -0.1, "rotate": 0, "size": 0.6, "icon": "mdi-hard-hat"},
+        {"x": 0.2, "y": 0.85, "rotate": 35, "size": 1, "icon": "mdi-hammer"},
+        {"x": -0.2, "y": 0.82, "rotate": 15, "size": 1, "icon": "mdi-screwdriver"}
+    ]},
+    {id: 55, collection: 'versatile', power: 6, reward: [
+        {name: 'villageWorker', type: 'base', value: 28},
+        {name: 'villageArtisan', type: 'base', value: 1}
+    ], color: 'pale-light-green', icons: [
+        {"x": -0.5, "y": 0.15, "rotate": 0, "size": 4, "icon": "mdi-office-building"},
+        {"x": -0.1, "y": 0.75, "rotate": 0, "size": 0.5, "icon": "mdi-account-tie"},
+        {"x": 0.45, "y": 0.87, "rotate": 0, "size": 0.7, "icon": "mdi-human-handsdown"},
+        {"x": 0.75, "y": 0.87, "rotate": 0, "size": 0.7, "icon": "mdi-human-handsdown"},
+        {"x": 1.1, "y": 0.87, "rotate": 0, "size": 0.7, "icon": "mdi-human-handsdown"}
+    ]},
+    {id: 56, collection: 'versatile', power: 7, reward: [
+        {name: 'villageMentalGain', type: 'mult', value: 1.1},
+        {name: 'villageCounter', type: 'base', value: 2}
+    ], color: 'brown', icons: [
+        {"x": -0.1, "y": 0.3, "rotate": 0, "size": 2.25, "icon": "mdi-human-greeting"},
+        {"x": -0.7, "y": -0.15, "rotate": 15, "size": 1, "icon": "mdi-book-alphabet"},
+        {"x": 0.85, "y": 0.57, "rotate": 0, "size": 1.35, "icon": "mdi-package"},
+        {"x": 0.85, "y": 0.3, "rotate": 0, "size": 0.8, "icon": "mdi-book"}
+    ]},
+
+    {id: 57, collection: 'handmade', power: 7, reward: [
+        {name: 'currencyVillageCopperCoinGain', type: 'mult', value: 1.1}
+    ], color: 'orange-red', icons: [
+        {"x": 0.35, "y": -0.05, "rotate": 0, "size": 1.5, "icon": "mdi-cash-register"},
+        {"x": 0, "y": 0.55, "rotate": 0, "size": 3, "icon": "mdi-table-furniture"},
+        {"x": -0.4, "y": -0.2, "rotate": 0, "size": 1.75, "icon": "mdi-cup-outline"},
+        {"x": -0.45, "y": 0.05, "rotate": 0, "size": 0.5, "icon": "mdi-circle-multiple"},
+        {"x": -0.25, "y": -0.1, "rotate": 60, "size": 0.5, "icon": "mdi-circle-multiple"},
+        {"x": -0.5, "y": -0.15, "rotate": 85, "size": 0.5, "icon": "mdi-cash"},
+        {"x": -0.4, "y": -0.4, "rotate": 15, "size": 0.5, "icon": "mdi-circle-multiple"}
+    ]},
+    {id: 58, collection: 'handmade', power: 8, reward: [
+        {name: 'villageArtisan', type: 'base', value: 1}
+    ], color: 'pale-purple', icons: [
+        {"x": 0.5, "y": -0.35, "rotate": -125, "size": 1, "icon": "mdi-lasso"},
+        {"x": 0.9, "y": -0.5, "rotate": 195, "size": 1, "icon": "mdi-arrow-projectile"},
+        {"x": 0.95, "y": -0.35, "rotate": 215, "size": 1, "icon": "mdi-arrow-projectile"},
+        {"x": 0, "y": 0.35, "rotate": 0, "size": 3.5, "icon": "mdi-rug"}
+    ]},
+    {id: 59, collection: 'handmade', power: 7, reward: [
+        {name: 'villageCounter', type: 'base', value: 3}
+    ], color: 'amber', icons: [
+        {"x": -0.8, "y": 1, "rotate": 0, "size": 1.2, "icon": "mdi-sack"},
+        {"x": -0.25, "y": 0.93, "rotate": 0, "size": 1.5, "icon": "mdi-sack"},
+        {"x": 0.55, "y": 1, "rotate": 0, "size": 1.2, "icon": "mdi-sack"},
+        {"x": 0.2, "y": 0, "rotate": 0, "size": 2.25, "icon": "mdi-human-handsup"},
+        {"x": -0.55, "y": -0.8, "rotate": 35, "size": 1, "icon": "mdi-cash"},
+        {"x": 1, "y": -0.6, "rotate": -20, "size": 1, "icon": "mdi-cash"}
+    ]},
+    {id: 60, collection: 'handmade', power: 7, reward: [
+        {name: 'villageHappiness', type: 'base', value: 0.05}
+    ], color: 'pale-green', icons: [
+        {"x": -0.8, "y": -0.85, "rotate": 0, "size": 2.3, "icon": "mdi-tree"},
+        {"x": -0.95, "y": 0.9, "rotate": 0, "size": 0.75, "icon": "mdi-flower"},
+        {"x": -0.55, "y": 0.9, "rotate": 0, "size": 0.75, "icon": "mdi-flower-tulip"},
+        {"x": -0.2, "y": 0.9, "rotate": 0, "size": 0.75, "icon": "mdi-flower"},
+        {"x": 1, "y": 0.9, "rotate": 0, "size": 0.75, "icon": "mdi-flower"},
+        {"x": 0.55, "y": -0.4, "rotate": 0, "size": 1, "icon": "mdi-slide"}
+    ]},
+    {id: 61, collection: 'handmade', power: 9, reward: [], color: 'pink', icons: [
+        {"x": -0.7, "y": -0.05, "rotate": 0, "size": 0.75, "icon": "mdi-ring"},
+        {"x": -0.5, "y": -0.1, "rotate": 0, "size": 0.75, "icon": "mdi-ring"},
+        {"x": -0.6, "y": -0.45, "rotate": 0, "size": 2.5, "icon": "mdi-mirror-rectangle"},
+        {"x": -0.6, "y": 0.55, "rotate": 0, "size": 2.75, "icon": "mdi-rectangle"},
+        {"x": 0.65, "y": 0.35, "rotate": 0, "size": 2.75, "icon": "mdi-human-male-female"}
+    ]},
+    {id: 62, collection: 'handmade', power: 8, reward: [
+        // TODO: Add missing stat
+    ], color: 'indigo', icons: [
+        {"x": 0, "y": 0.7, "rotate": 180, "size": 3, "icon": "mdi-window-open-variant"},
+        {"x": -0.1, "y": 0.3, "rotate": -45, "size": 0.8, "icon": "mdi-screwdriver"},
+        {"x": 0.1, "y": 0.3, "rotate": 125, "size": 0.8, "icon": "mdi-hand-saw"},
+        {"x": 0, "y": 1.05, "rotate": 135, "size": 1, "icon": "mdi-hammer"}
+    ]},
+
+    {id: 63, collection: 'specialGadgets', power: 'adaptive', reward: [
+        {name: 'villageHappiness', type: 'base', value: -0.4}
+    ], color: 'pink', icons: [
+        {"x": 0, "y": 0.4, "rotate": 0, "size": 2, "icon": "mdi-human-handsup"},
+        {"x": -0.3, "y": -0.35, "rotate": 0, "size": 1, "icon": "mdi-sign-text"},
+        {"x": 0.45, "y": -0.25, "rotate": -15, "size": 1, "icon": "mdi-bullhorn"},
+        {"x": -0.7, "y": 0.4, "rotate": 0, "size": 2, "icon": "mdi-human"},
+        {"x": 0.7, "y": 0.4, "rotate": 0, "size": 2, "icon": "mdi-human"}
+    ]},
+    {id: 64, collection: 'specialGadgets', power: 'adaptive', reward: [
+        {name: 'villageHappiness', type: 'base', value: -1.5}
+    ], color: 'beige', icons: [
+        {"x": -0.7, "y": 0, "rotate": 0, "size": 2, "icon": "mdi-crop-landscape"},
+        {"x": -0.85, "y": -0.5, "rotate": 0, "size": 0.7, "icon": "mdi-wall"},
+        {"x": -0.55, "y": 0.1, "rotate": -80, "size": 0.5, "icon": "mdi-seat"},
+        {"x": 0.7, "y": 0.55, "rotate": 165, "size": 1, "icon": "mdi-car-side"},
+        {"x": 0.6, "y": 0.35, "rotate": 0, "size": 0.5, "icon": "mdi-fire"},
+        {"x": 0.45, "y": -0.7, "rotate": 0, "size": 1, "icon": "mdi-weather-tornado"},
+        {"x": -0.4, "y": 0.85, "rotate": 0, "size": 0.65, "icon": "mdi-human-male-female-child"}
     ]},
 ];

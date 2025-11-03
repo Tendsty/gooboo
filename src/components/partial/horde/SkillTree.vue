@@ -22,16 +22,23 @@
 
 <template>
   <div>
-    <div class="d-flex align-center ma-2">
-      <div class="class-level-current red rounded-circle d-flex justify-center align-center balloon-text-dynamic flex-shrink-0">{{ currentLevel }}</div>
-      <v-progress-linear class="rounded-r ml-n1" color="red" height="20" :value="expProgress * 100">{{ $formatTime(expTime) }} ({{ $formatNum(expProgress * 100) }}%)</v-progress-linear>
-    </div>
+    <gb-tooltip :title-text="$vuetify.lang.t('$vuetify.horde.classes.level')">
+      <template v-slot:activator="{ on, attrs }">
+        <div class="d-flex align-center ma-2" v-bind="attrs" v-on="on">
+          <div class="class-level-current red rounded-circle d-flex justify-center align-center balloon-text-dynamic flex-shrink-0">{{ currentLevel }}</div>
+          <v-progress-linear class="rounded-r ml-n1" color="red" height="20" :value="expProgress * 100">{{ $formatTime(expTime) }} ({{ $formatNum(expProgress * 100) }}%)</v-progress-linear>
+        </div>
+      </template>
+      <div>{{ $vuetify.lang.t('$vuetify.horde.classes.levelDescription', $formatInt(skillPointsPerLevel)) }}</div>
+      <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.hordeExpBase') }}</h3>
+      <stat-breakdown name="hordeExpBase" :base="selectedClass.exp.base" :mult-array="expBaseMult"></stat-breakdown>
+      <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.hordeExpIncrement') }}</h3>
+      <stat-breakdown name="hordeExpIncrement" :base="selectedClass.exp.increment - classLowerLimit" :bonus-array="expIncrementBonus"></stat-breakdown>
+      <h3 class="text-center">{{ $vuetify.lang.t('$vuetify.mult.hordeSkillPointsPerLevel') }}</h3>
+      <stat-breakdown name="hordeSkillPointsPerLevel"></stat-breakdown>
+    </gb-tooltip>
     <div class="text-center">{{ $vuetify.lang.t('$vuetify.horde.classes.skillPointsLeft', skillPoints) }}</div>
-    <v-card
-      v-for="(skillRow, key) in skillTree"
-      :key="`skill-row-${ key }`"
-      class="d-flex ma-2"
-    >
+    <v-card v-for="(skillRow, key) in skillTree" :key="`skill-row-${ key }`" class="d-flex ma-2">
       <div class="d-flex flex-column justify-center align-center rounded-l rounded-r-0 class-level-needed flex-shrink-0" :class="{'class-level-inactive': !skillRow.canUse}">
         <v-icon v-if="skillRow.isInnate">mdi-star</v-icon>
         <div v-else>{{ skillRow.level }}</div>
@@ -55,8 +62,8 @@
               :key="`skill-btn-${ skillId }-${ skillInnerBtn.name }`"
               :name="skillInnerBtn.name"
               :type="skillInnerBtn.type"
-              :color="skillInnerBtn.type === 'stat' ? statStyle[skillInnerBtn.name.split('_')[0]].color : skillInnerBtn.color"
-              :icon="skillInnerBtn.type === 'stat' ? statStyle[skillInnerBtn.name.split('_')[0]].icon : skillInnerBtn.icon"
+              :color="statNames.includes(skillInnerBtn.type) ? statStyle[skillInnerBtn.name.split('_')[0]].color : skillInnerBtn.color"
+              :icon="statNames.includes(skillInnerBtn.type) ? statStyle[skillInnerBtn.name.split('_')[0]].icon : skillInnerBtn.icon"
               :max="skillInnerBtn.max"
               :skill="skillInnerBtn"
               :disabled="!skillRow.canUse || !skillInnerBtn.canUse"
@@ -67,8 +74,8 @@
             :key="`skill-btn-${ skillBtn.name }`"
             :name="skillBtn.name"
             :type="skillBtn.type"
-            :color="skillBtn.type === 'stat' ? statStyle[skillBtn.name.split('_')[0]].color : skillBtn.color"
-            :icon="skillBtn.type === 'stat' ? statStyle[skillBtn.name.split('_')[0]].icon : skillBtn.icon"
+            :color="statNames.includes(skillBtn.type) ? statStyle[skillBtn.name.split('_')[0]].color : skillBtn.color"
+            :icon="statNames.includes(skillBtn.type) ? statStyle[skillBtn.name.split('_')[0]].icon : skillBtn.icon"
             :max="skillBtn.max"
             :skill="skillBtn"
             :disabled="!skillRow.canUse"
@@ -81,10 +88,11 @@
 
 <script>
 import { mapState } from 'vuex';
+import StatBreakdown from '../../render/StatBreakdown.vue';
 import SkillButton from './SkillButton.vue';
 
 export default {
-  components: { SkillButton },
+  components: { SkillButton, StatBreakdown },
   data: () => ({
     statStyle: {
       health: {
@@ -115,6 +123,18 @@ export default {
         color: 'red',
         icon: 'mdi-sword-cross'
       },
+      physicAttack: {
+        color: 'orange',
+        icon: 'mdi-sword-cross'
+      },
+      magicAttack: {
+        color: 'purple',
+        icon: 'mdi-sword-cross'
+      },
+      bioAttack: {
+        color: 'green',
+        icon: 'mdi-sword-cross'
+      },
       recovery: {
         color: 'pink',
         icon: 'mdi-heart-plus'
@@ -134,6 +154,10 @@ export default {
       critMult: {
         color: 'orange-red',
         icon: 'mdi-motion'
+      },
+      firstStrike: {
+        color: 'pink-purple',
+        icon: 'mdi-spear'
       },
       spellblade: {
         color: 'pale-red',
@@ -174,8 +198,25 @@ export default {
       lockpick: {
         color: 'orange-red',
         icon: 'mdi-screwdriver'
+      },
+      autocast: {
+        color: 'pink',
+        icon: 'mdi-cached'
+      },
+      revive: {
+        color: 'yellow',
+        icon: 'mdi-cross'
+      },
+      corruption: {
+        color: 'deep-purple',
+        icon: 'mdi-skull'
+      },
+      healing: {
+        color: 'babypink',
+        icon: 'mdi-heart-multiple'
       }
-    }
+    },
+    statNames: ['stat', 'statBig']
   }),
   computed: {
     ...mapState({
@@ -196,7 +237,7 @@ export default {
           const row = elem.items.findIndex(i => this.skillLevel[i[0]] > 0);
           return {...this.skills[e], name: e, canUse: (row === ind) || (row === -1 && k === 0)};
         }) : {...this.skills[el], name: el}}), canUse};
-      }).filter((elem, index, arr) => elem.canUse || (index > 0 && arr[index - 1].canUse));
+      }).filter((elem, index) => elem.canUse || (index > 0 && this.selectedClass.highestLevel >= this.selectedClass.skillTree[index - 1].level));
     },
     currentLevel() {
       return Math.floor(this.expLevel);
@@ -206,6 +247,22 @@ export default {
     },
     expTime() {
       return Math.ceil((1 - this.expProgress) * this.$store.getters['horde/expDifficulty'](this.currentLevel));
+    },
+    expBaseMult() {
+      let arr = [];
+      if (this.currentLevel > 0) {
+        arr.push({name: 'hordeClassLevel', value: Math.pow(this.$store.getters['horde/expIncrement'](this.$store.state.horde.selectedClass), this.currentLevel)});
+      }
+      return arr;
+    },
+    classLowerLimit() {
+      return this.$store.state.horde.selectedClass === 'scholar' ? 1.12 : 1.15;
+    },
+    expIncrementBonus() {
+      return [{name: 'hordeClassLowerLimit', value: this.classLowerLimit}];
+    },
+    skillPointsPerLevel() {
+      return this.$store.getters['mult/get']('hordeSkillPointsPerLevel');
     }
   }
 }

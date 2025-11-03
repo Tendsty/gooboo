@@ -1,7 +1,7 @@
 import Vue from "vue";
-import { MINING_COAL_DEPTH, MINING_CRAFTING_COMPRESSION, MINING_DEEPROCK_DEPTH, MINING_DWELLER_OVERFLOW, MINING_ENHANCEMENT_BARS, MINING_ENHANCEMENT_FINAL, MINING_GLOWSHARD_DEPTH, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_SALT_DEPTH, MINING_SMELTERY_TEMPERATURE_SPEED, MINING_SULFUR_DEPTH, SECONDS_PER_HOUR } from "../js/constants";
+import { MINING_COAL_DEPTH, MINING_CRAFTING_COMPRESSION, MINING_DEEPROCK_DEPTH, MINING_DWELLER_OVERFLOW, MINING_ENHANCEMENT_BARS, MINING_ENHANCEMENT_INCREMENT, MINING_ENHANCEMENT_MAX, MINING_GLOWSHARD_DEPTH, MINING_GRANITE_DEPTH, MINING_MOONSHARD_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_OBSIDIAN_PENALTY_BASE, MINING_OBSIDIAN_PENALTY_INCREMENT, MINING_PHOSPHORUS_DEPTH, MINING_SALT_DEPTH, MINING_SMELTERY_TEMPERATURE_SPEED, MINING_SMELTERY_TIME_INCREMENT, MINING_SULFUR_DEPTH, SECONDS_PER_HOUR } from "../js/constants";
 import { buildNum, capitalize } from "../js/utils/format";
-import { deltaLinear, digitSum, logBase } from "../js/utils/math";
+import { digitSum, isPrime, logBase } from "../js/utils/math";
 import { randomFloat } from "../js/utils/random";
 
 export default {
@@ -14,22 +14,24 @@ export default {
         smeltery: {},
         gas: {
             helium: 1,
-            neon: 41,
-            argon: 91,
-            krypton: 151,
-            xenon: 301,
-            radon: 601,
+            neon: 51,
+            argon: 121,
+            krypton: 221,
+            xenon: 401,
+            radon: 651,
         },
         breaks: [],
         ingredientList: [],
         resin: 0,
         enhancement: {},
-        enhancementBars: 0,
         enhancementIngredient: null,
+        enhancementsActive: true,
         glowshardLimit: 0,
         beacon: {},
         beaconPlaced: {},
         beaconCooldown: 0,
+        torchDepths: [],
+        smelteryNotSpent: ['mining_helium', 'mining_neon'],
     },
     getters: {
         damage: (state, getters, rootState, rootGetters) => {
@@ -48,7 +50,7 @@ export default {
         },
         depthBaseScrap: (state, getters, rootState) => (depth) => {
             const subfeature = rootState.system.features.mining.currentSubfeature;
-            return Math.ceil(Math.pow(1.2, depth) * Math.pow(depth * 0.2 + 1.2, 2) * (subfeature === 1 ? 0.1 : 2));
+            return Math.pow(1.2, depth) * Math.pow(depth * 0.2 + 1.2, 2) * (subfeature === 1 ? (isPrime(depth) ? 0.01 : 0.1) : 2);
         },
         depthScrap: (state, getters, rootState, rootGetters) => (depth) => {
             return rootGetters['mult/get']('currencyMiningScrapGain', getters.depthBaseScrap(depth));
@@ -58,10 +60,12 @@ export default {
                 return {};
             }
             let ore = {};
+            const hasTorch = state.torchDepths.includes(depth);
             for (const [key, elem] of Object.entries(state.ingredient)) {
-                if (depth >= elem.minDepth && (showAll || depth <= elem.maxDepth || depth % elem.modulo === 0)) {
+                const depthCondition = depth <= elem.maxDepth || depth % elem.modulo === 0;
+                if (depth >= elem.minDepth && (showAll || depthCondition || hasTorch)) {
                     const baseAmount = Math.pow(elem.amountMult, depth - elem.minDepth - (depth > elem.maxDepth ? ((depth - elem.maxDepth) * ((elem.modulo - 1) / elem.modulo)) : 0)) * elem.baseAmount;
-                    ore[key] = {...elem, baseAmount, amount: rootGetters['mult/get'](rootGetters['currency/gainMultName']('mining', key), baseAmount)};
+                    ore[key] = {...elem, baseAmount, amount: rootGetters['mult/get'](rootGetters['currency/gainMultName']('mining', key), baseAmount * (depthCondition ? 1 : 0.5))};
                 }
             }
             return ore;
@@ -93,51 +97,76 @@ export default {
                 case 'glowshard':
                     amount = 10;
                     break;
+                case 'limestone':
+                    amount = Math.pow(1.1, state.depth) * 0.001;
+                    break;
+                case 'moonshard':
+                    amount = Math.pow(1.35, state.depth - MINING_MOONSHARD_DEPTH) * 0.00001;
+                    break;
+                case 'phosphorus':
+                    amount = Math.pow(5, (state.depth - MINING_PHOSPHORUS_DEPTH) / 25) * 0.000001;
+                    break;
             }
             return amount;
         },
         rareDropFinal: (state, getters, rootState, rootGetters) => (name) => {
             return rootGetters['mult/get'](rootGetters['currency/gainMultName']('mining', name), getters.rareDropBase(name));
         },
-        rareDrops: (state, getters) => {
+        rareDrops: (state, getters, rootState) => {
             let obj = {};
-            if (state.depth >= MINING_GRANITE_DEPTH && getters.currentBreaks >= 1000) {
-                obj.granite = getters.rareDropFinal('granite') * getters.graniteBreaksMult;
-            }
-            if (state.depth >= MINING_SALT_DEPTH && Object.keys(getters.currentOre).length === 1) {
-                obj.salt = getters.rareDropFinal('salt');
-            }
-            if (state.depth >= MINING_COAL_DEPTH && getters.currentBreaks === 0) {
-                obj.coal = getters.rareDropFinal('coal');
-            }
-            if (state.depth >= MINING_SULFUR_DEPTH && getters.currentBreaks === 0) {
-                obj.sulfur = getters.rareDropFinal('sulfur');
-            }
-            if (state.depth >= MINING_NITER_DEPTH) {
-                const breakslog10 = logBase(getters.currentBreaks + 1, 10);
-                if (Math.round(breakslog10) === breakslog10) {
-                    obj.niter = getters.rareDropFinal('niter');
+            if (rootState.system.features.mining.currentSubfeature === 0) {
+                if (state.depth >= MINING_GRANITE_DEPTH && getters.currentBreaks >= 1000) {
+                    obj.granite = getters.rareDropFinal('granite') * getters.graniteBreaksMult;
+                }
+                if (state.depth >= MINING_SALT_DEPTH && (Object.keys(getters.currentOre).length === 1 || state.torchDepths.includes(state.depth))) {
+                    obj.salt = getters.rareDropFinal('salt') * (Object.keys(getters.currentOre).length === 1 ? 1 : 0.5);
+                }
+                if (state.depth >= MINING_COAL_DEPTH && getters.currentBreaks === 0) {
+                    obj.coal = getters.rareDropFinal('coal');
+                }
+                if (state.depth >= MINING_SULFUR_DEPTH && getters.currentBreaks === 0) {
+                    obj.sulfur = getters.rareDropFinal('sulfur');
+                }
+                if (state.depth >= MINING_NITER_DEPTH) {
+                    const breakslog10 = logBase(getters.currentBreaks + 1, 10);
+                    if (Math.round(breakslog10) === breakslog10) {
+                        obj.niter = getters.rareDropFinal('niter');
+                    }
+                }
+                if (state.depth >= MINING_OBSIDIAN_DEPTH && (getters.enhancementLevel <= 0 || !state.enhancementsActive)) {
+                    obj.obsidian = getters.rareDropFinal('obsidian');
+                }
+                if (state.depth >= MINING_DEEPROCK_DEPTH && digitSum(state.depth) >= 14) {
+                    obj.deeprock = getters.rareDropFinal('deeprock');
+                }
+                if (state.depth >= (MINING_GLOWSHARD_DEPTH + state.glowshardLimit)) {
+                    obj.glowshard = getters.rareDropFinal('glowshard');
                 }
             }
-            if (state.depth >= MINING_OBSIDIAN_DEPTH && getters.enhancementLevel <= 0) {
-                obj.obsidian = getters.rareDropFinal('obsidian');
-            }
-            if (state.depth >= MINING_DEEPROCK_DEPTH && digitSum(state.depth) >= 14) {
-                obj.deeprock = getters.rareDropFinal('deeprock');
-            }
-            if (state.depth >= (MINING_GLOWSHARD_DEPTH + state.glowshardLimit)) {
-                obj.glowshard = getters.rareDropFinal('glowshard');
+            if (rootState.system.features.mining.currentSubfeature === 1) {
+                if (isPrime(state.depth)) {
+                    obj.limestone = getters.rareDropFinal('limestone');
+                }
+                if (state.depth >= MINING_MOONSHARD_DEPTH && rootState.stat.mining_depthDwellerCap1.value >= state.depth) {
+                    obj.moonshard = getters.rareDropFinal('moonshard');
+                }
+                if (state.depth >= MINING_PHOSPHORUS_DEPTH && (state.depth % 25 === 0)) {
+                    obj.phosphorus = getters.rareDropFinal('phosphorus');
+                }
             }
             return obj;
         },
         graniteBreaksMult: (state, getters) => {
             return Math.pow(2, Math.max(0, Math.floor(logBase(getters.currentBreaks + 1, 10)) - 3));
         },
+        depthBaseSmoke: () => (depth) => {
+            return Math.pow(1.05, depth - 25) * ((depth >= MINING_PHOSPHORUS_DEPTH && (depth % 25 === 0)) ? 0 : 0.0005);
+        },
         depthSmoke: (state, getters, rootState, rootGetters) => (depth) => {
-            return (rootState.unlock.miningSmoke.use && depth >= 25 && rootState.system.features.mining.currentSubfeature === 1) ? rootGetters['mult/get']('currencyMiningSmokeGain', Math.pow(1.05, depth - 25) * 0.01) : 0;
+            return (rootState.unlock.miningSmoke.use && depth >= 25 && rootState.system.features.mining.currentSubfeature === 1) ? rootGetters['mult/get']('currencyMiningSmokeGain', getters.depthBaseSmoke(depth)) : 0;
         },
         depthGasLimit: (state, getters, rootState, rootGetters) => (depth, gas) => {
-            return Math.round((depth + 1 - state.gas[gas]) * 100 * Math.pow(rootGetters['mult/get'](`currencyMining${ capitalize(gas) }Increment`, 1), depth - state.gas[gas]));
+            return Math.round((depth + 1 - state.gas[gas]) * rootGetters['mult/get'](`currencyMining${ capitalize(gas) }Limit`, 1) * Math.pow(rootGetters['mult/get'](`currencyMining${ capitalize(gas) }Increment`, 1), depth - state.gas[gas]));
         },
         depthGas: (state, getters, rootState, rootGetters) => (depth) => {
             if (rootState.system.features.mining.currentSubfeature !== 1) {
@@ -168,6 +197,9 @@ export default {
         },
         currentBaseScrap: (state, getters) => {
             return getters.depthBaseScrap(state.depth);
+        },
+        currentBaseSmoke: (state, getters) => {
+            return getters.depthBaseSmoke(state.depth);
         },
         currentScrap: (state, getters) => {
             return getters.depthScrap(state.depth);
@@ -302,25 +334,11 @@ export default {
         },
         smelteryTimeNeeded: (state, getters, rootState, rootGetters) => (name) => {
             const smeltery = state.smeltery[name];
-            return smeltery.timeNeeded / Math.max(1, (rootGetters['mult/get']('miningSmelteryTemperature') - smeltery.minTemperature) * MINING_SMELTERY_TEMPERATURE_SPEED + 1) / rootGetters['mult/get']('miningSmelterySpeed');
+            return rootGetters['mult/get']('miningSmelteryTime', smeltery.timeNeeded) * Math.pow(MINING_SMELTERY_TIME_INCREMENT, smeltery.total - smeltery.stored) / Math.max(1, (rootGetters['mult/get']('miningSmelteryTemperature') - smeltery.minTemperature) * MINING_SMELTERY_TEMPERATURE_SPEED + 1);
         },
-        smelteryPrice: (state) => (name, amount = 1) => {
+        smelteryPrice: (state) => (name, add = 0) => {
             const smeltery = state.smeltery[name];
-            let price = {};
-            for (const [key, elem] of Object.entries(smeltery.price)) {
-                price[key] = deltaLinear(elem.base, elem.increment, amount, smeltery.total);
-            }
-            return price;
-        },
-        smelteryCanAfford: (state, getters, rootState, rootGetters) => (name, amount = 1) => {
-            const smeltery = state.smeltery[name];
-            let price = {};
-            let maxPrice = {};
-            for (const [key, elem] of Object.entries(smeltery.price)) {
-                price[key] = deltaLinear(elem.base, elem.increment, amount, smeltery.total);
-                maxPrice[key] = deltaLinear(elem.base, elem.increment, 1, smeltery.total + amount - 1);
-            }
-            return rootGetters['currency/canAfford'](price, maxPrice);
+            return smeltery.price(smeltery.total + add);
         },
         enhancementLevel: (state) => {
             let level = 0;
@@ -329,14 +347,11 @@ export default {
             }
             return level;
         },
-        enhancementBarsNeeded: (state, getters, rootState, rootGetters) => {
-            return Math.ceil(MINING_ENHANCEMENT_BARS * Math.pow(rootGetters['mult/get']('miningEnhancementBarsIncrement') + 1, getters.enhancementLevel));
-        },
-        enhancementFinalNeeded: (state, getters, rootState, rootGetters) => {
+        enhancementBarsNeeded: (state) => {
             if (state.enhancementIngredient === null) {
-                return null;
+                return 0;
             }
-            return Math.ceil(MINING_ENHANCEMENT_FINAL * Math.pow(rootGetters['mult/get']('miningEnhancementFinalIncrement') + 1, state.enhancement[state.enhancementIngredient].level));
+            return MINING_ENHANCEMENT_BARS + MINING_ENHANCEMENT_INCREMENT * (state.enhancement[state.enhancementIngredient]?.level ?? 0);
         },
         timeUntilNext: (state, getters, rootState, rootGetters) => (amount) => {
             const dwellerLimit = getters.dwellerLimit;
@@ -432,8 +447,8 @@ export default {
         updateBeaconKey(state, o) {
             Vue.set(state.beacon[o.name], o.key, o.value);
         },
-        addIngredient(state, name) {
-            state.ingredientList.push({name, compress: 0});
+        addIngredient(state, o) {
+            state.ingredientList.push(o);
         },
         removeIngredient(state, index) {
             state.ingredientList.splice(index, 1);
@@ -443,6 +458,9 @@ export default {
                 state.breaks.push(0);
             }
             Vue.set(state.breaks, o.depth - 1, state.breaks[o.depth - 1] + o.amount);
+        },
+        addTorchDepth(state, depth) {
+            state.torchDepths.push(depth);
         }
     },
     actions: {
@@ -454,7 +472,6 @@ export default {
             commit('updateKey', {key: 'durability', value: 0});
             commit('updateKey', {key: 'resin', value: 0});
             commit('updateKey', {key: 'breaks', value: []});
-            commit('updateKey', {key: 'enhancementBars', value: 0});
             commit('updateKey', {key: 'enhancementIngredient', value: null});
             for (const [key] of Object.entries(state.smeltery)) {
                 commit('updateSmelteryKey', {name: key, key: 'progress', value: 0});
@@ -464,8 +481,25 @@ export default {
             for (const [key] of Object.entries(state.enhancement)) {
                 commit('updateEnhancementKey', {name: key, key: 'level', value: 0});
             }
-            commit('updateKey', {key: 'beaconPlaced', value: {}});
-            commit('updateKey', {key: 'beaconCooldown', value: 0});
+            for (const [key] of Object.entries(state.beacon)) {
+                commit('updateBeaconKey', {name: key, key: 'level', value: 0});
+            }
+            commit('updateKey', {key: 'enhancementsActive', value: true});
+            commit('updateKey', {key: 'glowshardLimit', value: 0});
+            commit('updateKey', {key: 'torchDepths', value: []});
+        },
+        addIngredient({ state, rootState, rootGetters, commit }, name) {
+            let compress = 0;
+            if (rootState.unlock[state.ingredient[name].compressUnlock].use) {
+                const currency = rootState.currency['mining_' + name];
+                const quality = rootGetters['mult/get']('miningOreQuality');
+                let limit = Math.pow(MINING_CRAFTING_COMPRESSION, compress + 1);
+                while (currency.value >= (limit / quality) && currency.cap >= limit) {
+                    compress++;
+                    limit *= MINING_CRAFTING_COMPRESSION;
+                }
+            }
+            commit('addIngredient', {name, compress});
         },
         craftPickaxe({ state, rootState, getters, commit, dispatch, rootGetters }, consumables = {}) {
             const subfeature = rootState.system.features.mining.currentSubfeature;
@@ -549,62 +583,56 @@ export default {
             commit('updateKey', {key: 'dweller', value: 0});
             commit('updateKey', {key: 'depth', value: 1});
             commit('updateKey', {key: 'breaks', value: []});
-            commit('updateKey', {key: 'enhancementBars', value: 0});
             commit('updateKey', {key: 'enhancementIngredient', value: null});
+            commit('updateKey', {key: 'enhancementsActive', value: true});
             commit('system/updateSubfeature', {key: 'mining', value: subfeature}, {root: true});
             commit('updateKey', {key: 'durability', value: getters.currentDurability});
+            commit('updateKey', {key: 'torchDepths', value: []});
             dispatch('upgrade/reset', {feature: 'mining', subfeature, type: 'regular'}, {root: true});
             dispatch('currency/reset', {feature: 'mining', type: 'regular'}, {root: true});
             dispatch('stat/reset', {feature: 'mining', type: 'regular'}, {root: true});
+            dispatch('school/updateBookEffects', 'mining', {root: true});
             dispatch('card/activateCards', 'mining', {root: true});
             if (state.resin > rootGetters['mult/get']('miningResinMax')) {
                 commit('updateKey', {key: 'resin', value: rootGetters['mult/get']('miningResinMax')});
             }
             dispatch('applyBeaconEffects');
         },
-        addToSmeltery({ state, getters, commit, dispatch }, o) {
+        addToSmeltery({ state, rootGetters, commit, dispatch }, o) {
             const smeltery = state.smeltery[o.name];
-            if (getters.smelteryCanAfford(o.name)) {
-                let amount = 1;
-                if (o.max) {
-                    let step = 1;
-                    while (getters.smelteryCanAfford(o.name, step)) {
-                        step *= 2;
-                    }
-                    amount = step / 2;
-                    while (step > 1) {
-                        step /= 2;
-                        if (getters.smelteryCanAfford(o.name, amount + step)) {
-                            amount += step;
-                        }
-                    }
+            let price = {};
+            let finalPrice = {};
+            let amount = 0;
+            while (o.max || amount < 1) {
+                let maxPrice = {};
+                for (const [key, elem] of Object.entries(smeltery.price(smeltery.total + amount))) {
+                    price[key] = (price[key] ?? 0) + elem;
+                    maxPrice[key] = elem;
                 }
-                for (const [key, elem] of Object.entries(getters.smelteryPrice(o.name, amount))) {
-                    dispatch('currency/spend', {feature: key.split('_')[0], name: key.split('_')[1], amount: elem}, {root: true});
+                if (rootGetters['currency/canAfford'](price, maxPrice)) {
+                    finalPrice = {...price};
+                    amount++;
+                } else {
+                    break;
+                }
+            }
+            if (amount > 0) {
+                for (const [key, elem] of Object.entries(finalPrice)) {
+                    if (!state.smelteryNotSpent.includes(key)) {
+                        dispatch('currency/spend', {feature: key.split('_')[0], name: key.split('_')[1], amount: elem}, {root: true});
+                    }
                 }
                 commit('updateSmelteryKey', {name: o.name, key: 'stored', value: smeltery.stored + amount});
                 commit('updateSmelteryKey', {name: o.name, key: 'total', value: smeltery.total + amount});
             }
         },
-        enhanceBars({ state, getters, rootGetters, commit, dispatch }) {
-            if (state.enhancementIngredient !== null) {
-                const barsNeeded = getters.enhancementBarsNeeded - state.enhancementBars;
-                const amount = Math.min(barsNeeded, Math.floor(rootGetters['currency/value']('mining_' + state.enhancementIngredient)));
-                if (amount > 0) {
-                    commit('updateKey', {key: 'enhancementBars', value: state.enhancementBars + amount});
-                    dispatch('currency/spend', {feature: 'mining', name: state.enhancementIngredient, amount}, {root: true});
-                }
-            }
-        },
-        enhanceFinal({ state, getters, rootGetters, commit, dispatch }) {
-            if (state.enhancementIngredient !== null && state.enhancementBars >= getters.enhancementBarsNeeded) {
-                const barsNeeded = getters.enhancementFinalNeeded;
-                if (rootGetters['currency/value']('mining_' + state.enhancementIngredient) >= barsNeeded) {
-                    commit('updateKey', {key: 'enhancementBars', value: state.enhancementBars - getters.enhancementBarsNeeded});
-                    dispatch('currency/spend', {feature: 'mining', name: state.enhancementIngredient, amount: barsNeeded}, {root: true});
-                    commit('updateEnhancementKey', {name: state.enhancementIngredient, key: 'level', value: state.enhancement[state.enhancementIngredient].level + 1});
-                    dispatch('applyEnhancement', {trigger: true, name: state.enhancementIngredient});
-                }
+        enhance({ state, getters, rootGetters, commit, dispatch }) {
+            if (state.enhancementIngredient !== null && state.enhancement[state.enhancementIngredient].level < MINING_ENHANCEMENT_MAX && rootGetters['currency/value']('mining_' + state.enhancementIngredient) >= getters.enhancementBarsNeeded) {
+                dispatch('currency/spend', {feature: 'mining', name: state.enhancementIngredient, amount: getters.enhancementBarsNeeded}, {root: true});
+                commit('updateEnhancementKey', {name: state.enhancementIngredient, key: 'level', value: state.enhancement[state.enhancementIngredient].level + 1});
+                commit('stat/increaseTo', {feature: 'mining', name: 'enhancementHighest', value: state.enhancement[state.enhancementIngredient].level}, {root: true});
+                dispatch('applyEnhancement', {trigger: true, name: state.enhancementIngredient});
+                dispatch('updateObsidianPenalty');
             }
         },
         applyEnhancement({ state, dispatch }, o) {
@@ -618,6 +646,25 @@ export default {
             state.enhancement[name].effect.forEach(eff => {
                 dispatch('system/resetEffect', {type: eff.type, name: eff.name, multKey: `miningEnhancement_${ name }`}, {root: true});
             });
+        },
+        toggleEnhancements({ state, commit, dispatch }) {
+            commit('updateKey', {key: 'enhancementsActive', value: !state.enhancementsActive});
+            for (const [key, elem] of Object.entries(state.enhancement)) {
+                if (elem.level > 0) {
+                    if (state.enhancementsActive) {
+                        dispatch('applyEnhancement', {trigger: false, name: key});
+                    } else {
+                        dispatch('resetEnhancement', key);
+                    }
+                }
+            }
+        },
+        updateObsidianPenalty({ getters, dispatch }) {
+            if (getters.enhancementLevel > 0) {
+                dispatch('system/applyEffect', {type: 'mult', name: 'currencyMiningObsidianGain', multKey: 'miningObsidianPenalty', value: MINING_OBSIDIAN_PENALTY_BASE * Math.pow(MINING_OBSIDIAN_PENALTY_INCREMENT, getters.enhancementLevel - 1), trigger: true}, {root: true});
+            } else {
+                dispatch('system/resetEffect', {type: 'mult', name: 'currencyMiningObsidianGain', multKey: 'miningObsidianPenalty'}, {root: true});
+            }
         },
         updateDwellerStat({ rootState, getters, commit }) {
             const subfeature = rootState.system.features.mining.currentSubfeature;

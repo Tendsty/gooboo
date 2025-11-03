@@ -1,23 +1,23 @@
-import { SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "../../constants";
+import { HORDE_STACKING_COOLDOWN, SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "../../constants";
 import { buildNum } from "../../utils/format";
-import { getSequence } from "../../utils/math";
+import { getApproaching, getDiminishing, getSequence } from "../../utils/math";
 
 export default {
     dagger: {
         findZone: 0,
         found: true,
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 10;
+            return Math.pow(10, lvl - 1) * 15;
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 4 + 6}
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 5 + 5}
             ];
         },
         active(lvl) {
             return [
                 {type: 'buff', value: 40, effect: [
-                    {type: 'base', name: 'hordeAttack', value: lvl * 5 + 30}
+                    {type: 'base', name: 'hordeAttack', value: lvl * 7 + 28}
                 ]}
             ];
         },
@@ -31,11 +31,11 @@ export default {
         findZone: 0,
         found: true,
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 10;
+            return Math.pow(10, lvl - 1) * 15;
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 800 + 1200}
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 1000 + 1000}
             ];
         },
         active() {
@@ -53,7 +53,7 @@ export default {
         findZone: 5,
         findChance: 1 / buildNum(10, 'K'),
         price(lvl) {
-            return Math.pow(10, lvl - 1) * 100;
+            return Math.pow(1000, lvl - 1) * 100;
         },
         cap: 5,
         stats() {
@@ -76,7 +76,7 @@ export default {
         findZone: 6,
         findChance: 1 / 2000,
         price(lvl) {
-            return Math.pow(4, lvl - 1) * 20;
+            return Math.pow(100, lvl - 1) * 25;
         },
         cap: 9,
         stats() {
@@ -86,11 +86,11 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'bone', value: 2.3 + lvl * 0.15}
+                {type: 'bone', value: 17.9 + lvl * 1.1}
             ];
         },
         activeType: 'utility',
-        cooldown: () => 90,
+        cooldown: () => 900,
         icon: 'mdi-cup',
         activeIcon: 'mdi-bone',
         activeColor: 'lighter-grey'
@@ -99,12 +99,12 @@ export default {
         findZone: 8,
         findChance: 1 / 4000,
         price(lvl) {
-            return Math.pow(16, getSequence(1, lvl - 1)) * 80;
+            return Math.pow(100, lvl - 1) * 80;
         },
-        cap: 4,
+        cap: 11,
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl + 2}
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl + 9}
             ];
         },
         active() {
@@ -122,13 +122,13 @@ export default {
         findZone: 10,
         findChance: 1 / 8000,
         price(lvl) {
-            return Math.pow(4, lvl - 1) * 40;
+            return Math.pow(100, lvl - 1) * 40;
         },
         cap: 5,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.3},
-                {isPositive: true, type: 'base', name: 'hordeCritMult', value: 0.25}
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.2},
+                {isPositive: true, type: 'base', name: 'hordeCritMult', value: 0.3}
             ];
         },
         active(lvl) {
@@ -146,11 +146,11 @@ export default {
         findZone: 12,
         findChance: 1 / buildNum(14, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 75;
+            return Math.pow(10, lvl - 1) * 75;
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.1 + 2.4}
+                {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.15 + 2.85}
             ];
         },
         active() {
@@ -169,20 +169,20 @@ export default {
         findZone: 14,
         findChance: 1 / buildNum(20, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 100;
+            return Math.pow(10, lvl - 1) * 100;
         },
-        stats(lvl) {
+        stats(lvl, stacks) {
             return [
-                {isPositive: true, type: 'mult', name: 'hordeItemChance', value: lvl * 0.05 + 1.7}
+                {isPositive: true, type: 'mult', name: 'hordeEquipmentChance', value: lvl * 0.05 + getDiminishing(stacks) * 0.05 + 1.05}
             ];
         },
         active() {
             return [
-                {type: 'permanentStat', stat: 'hordeItemChance_mult', value: 0.25}
+                {type: 'addStack', value: null}
             ];
         },
         activeType: 'utility',
-        cooldown: () => 7200,
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-clover',
         activeIcon: 'mdi-clover',
         activeColor: 'light-green'
@@ -191,7 +191,7 @@ export default {
         findZone: 15,
         findChance: 1 / buildNum(100, 'K'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * 120;
+            return Math.pow(100, lvl - 1) * 120;
         },
         cap: 11,
         stats() {
@@ -201,11 +201,11 @@ export default {
         },
         active(lvl) {
             return [
-                {type: 'monsterPart', value: 9.75 + lvl * 0.25}
+                {type: 'monsterPart', value: 97.5 + lvl * 2.5}
             ];
         },
         activeType: 'utility',
-        cooldown: () => 45,
+        cooldown: () => 1350,
         icon: 'mdi-stomach',
         activeIcon: 'mdi-stomach',
         activeColor: 'cherry'
@@ -214,20 +214,20 @@ export default {
         findZone: 16,
         findChance: 1 / buildNum(25, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 150;
+            return Math.pow(10, lvl - 1) * 150;
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 8},
-                {isPositive: true, type: 'base', name: 'hordeCritMult', value: 0.4},
+                {isPositive: true, type: 'base', name: 'hordeCritMult', value: 0.45},
                 {isPositive: false, type: 'base', name: 'hordeMagicConversion', value: 0.5}
             ];
         },
         active() {
             return [
                 {type: 'damageMagic', value: 13.5, int: 0.18},
-                {type: 'buff', value: 20, effect: [
-                    {type: 'base', name: 'hordeCritChance', value: 0.5}
+                {type: 'buff', value: 25, effect: [
+                    {type: 'base', name: 'hordeCritChance', value: 0.3}
                 ]}
             ];
         },
@@ -241,11 +241,11 @@ export default {
         findZone: 18,
         findChance: 1 / buildNum(35, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 200;
+            return Math.pow(10, lvl - 1) * 200;
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 500 + 1000},
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 600 + 900},
                 {isPositive: true, type: 'base', name: 'hordeRecovery', value: 0.04}
             ];
         },
@@ -267,13 +267,13 @@ export default {
         findZone: 20,
         findChance: 1 / buildNum(45, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 300;
+            return Math.pow(10, lvl - 1) * 300;
         },
         stats(lvl) {
             return [
                 {isPositive: false, type: 'mult', name: 'hordeAttack', value: 1 / 1.6},
                 {isPositive: true, type: 'mult', name: 'hordeHealth', value: 1.6},
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 800 + 6200}
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 900 + 6100}
             ];
         },
         masteryBoost: 0.25,
@@ -292,7 +292,7 @@ export default {
         findZone: 22,
         findChance: 1 / buildNum(55, 'K'),
         price(lvl) {
-            return Math.pow(6, lvl - 1) * 360;
+            return Math.pow(100, lvl - 1) * 360;
         },
         cap: 5,
         stats() {
@@ -315,7 +315,7 @@ export default {
         findZone: 23,
         findChance: 1 / buildNum(60, 'K'),
         price(lvl) {
-            return Math.pow(3, lvl - 1) * 400;
+            return Math.pow(100, lvl - 1) * 400;
         },
         cap: 6,
         stats(lvl) {
@@ -343,12 +343,12 @@ export default {
         findZone: 25,
         findChance: 1 / buildNum(300, 'K'),
         price(lvl) {
-            return Math.pow(10, lvl - 1) * 5000;
+            return Math.pow(1000, lvl - 1) * 5000;
         },
         cap: 5,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeMinibossTime', value: -20}
+                {isPositive: true, type: 'base', name: 'hordeRareLootTime', value: -20}
             ];
         },
         masteryBoost: 0.25,
@@ -368,11 +368,11 @@ export default {
         findZone: 27,
         findChance: 1 / buildNum(80, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 1500;
+            return Math.pow(10, lvl - 1) * 1500;
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 3 + 29},
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 4 + 28},
                 {isPositive: true, type: 'base', name: 'hordeMagicAttack', value: 0.15}
             ];
         },
@@ -391,21 +391,20 @@ export default {
         findZone: 30,
         findChance: 1 / buildNum(100, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 2500;
+            return Math.pow(10, lvl - 1) * 2500;
         },
-        stats(lvl) {
+        stats(lvl, stacks) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 3 + 27},
-                {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.05 + 0.7}
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 5 + getDiminishing(stacks) * 5 + 5}
             ];
         },
         active() {
             return [
-                {type: 'permanentStat', stat: 'hordeAttack_mult', value: 0.1}
+                {type: 'addStack', value: null}
             ];
         },
         activeType: 'utility',
-        cooldown: () => 2700,
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-magic-staff',
         activeIcon: 'mdi-pentagram',
         activeColor: 'red'
@@ -414,7 +413,7 @@ export default {
         findZone: 31,
         findChance: 1 / buildNum(25, 'K'),
         price(lvl) {
-            return Math.pow(6, lvl - 1) * 3000;
+            return Math.pow(100, lvl - 1) * 3000;
         },
         cap: 5,
         stats() {
@@ -437,14 +436,14 @@ export default {
         findZone: 33,
         findChance: 1 / buildNum(125, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 4000;
+            return Math.pow(10, lvl - 1) * 4000;
         },
         cap: 16,
         stats(lvl) {
             return [
                 {isPositive: false, type: 'mult', name: 'hordeMagicAttack', value: 0.25},
                 {isPositive: true, type: 'mult', name: 'hordeMagicTaken', value: 1 / (lvl * 0.05 + 2.2)},
-                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 2}
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 8}
             ];
         },
         active() {
@@ -464,7 +463,7 @@ export default {
         findZone: 35,
         findChance: 1 / buildNum(450, 'K'),
         price(lvl) {
-            return Math.pow(3, lvl - 1) * 6000;
+            return Math.pow(100, lvl - 1) * 6000;
         },
         cap: 11,
         stats() {
@@ -491,7 +490,7 @@ export default {
         findZone: 37,
         findChance: 1 / buildNum(160, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * 7000;
+            return Math.pow(10, lvl - 1) * 7000;
         },
         cap: 6,
         stats() {
@@ -515,12 +514,12 @@ export default {
         findZone: 40,
         findChance: 1 / buildNum(200, 'K'),
         price(lvl) {
-            return Math.pow(5, lvl - 1) * buildNum(10, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(10, 'K');
         },
         cap: 5,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeStunResist', value: 1}
+                {isPositive: true, type: 'base', name: 'hordeStatusResist', value: 1}
             ];
         },
         active() {
@@ -539,11 +538,11 @@ export default {
         findZone: 43,
         findChance: 1 / buildNum(275, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(12, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(12, 'K');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 10 + 130},
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 8 + 76},
                 {isPositive: false, type: 'mult', name: 'hordeCritMult', value: 0.8}
             ];
         },
@@ -564,7 +563,7 @@ export default {
         findZone: 45,
         findChance: 1 / buildNum(1.4, 'M'),
         price(lvl) {
-            return Math.pow(10, lvl - 1) * buildNum(15, 'K');
+            return Math.pow(1000, lvl - 1) * buildNum(15, 'K');
         },
         stats(lvl) {
             return [
@@ -591,11 +590,11 @@ export default {
         findZone: 46,
         findChance: 1 / buildNum(375, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(18, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(18, 'K');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 18},
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 3 + 21},
                 {isPositive: true, type: 'base', name: 'hordeShieldbreak', value: 1}
             ];
         },
@@ -615,13 +614,14 @@ export default {
         findZone: 47,
         findChance: 1 / buildNum(400, 'K'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(20, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(20, 'K');
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 10 + 110},
-                {isPositive: true, type: 'mult', name: 'hordeAttack', value: lvl * 0.01 + 1.19},
-                {isPositive: false, type: 'mult', name: 'hordeCritChance', value: 0}
+                {isPositive: true, type: 'mult', name: 'hordeAttack', value: 1.2},
+                {isPositive: false, type: 'mult', name: 'hordeCritChance', value: 0},
+                {isPositive: false, type: 'mult', name: 'hordeCritMult', value: 0}
             ];
         },
         masteryBoost: 0.25,
@@ -640,7 +640,7 @@ export default {
         findZone: 49,
         findChance: 1 / buildNum(500, 'K'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(24, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(24, 'K');
         },
         stats(lvl) {
             return [
@@ -664,7 +664,7 @@ export default {
         findZone: 51,
         findChance: 1 / buildNum(650, 'K'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(28, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(28, 'K');
         },
         cap: 5,
         stats() {
@@ -690,7 +690,7 @@ export default {
         findZone: 53,
         findChance: 1 / buildNum(850, 'K'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(35, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(35, 'K');
         },
         cap: 5,
         stats() {
@@ -715,7 +715,7 @@ export default {
         findZone: 55,
         findChance: 1 / buildNum(4.25, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(45, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(45, 'K');
         },
         stats() {
             return [
@@ -740,7 +740,7 @@ export default {
         findZone: 57,
         findChance: 1 / buildNum(1.1, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(55, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(55, 'K');
         },
         stats() {
             return [
@@ -768,7 +768,7 @@ export default {
         findZone: 60,
         findChance: 1 / buildNum(1.3, 'M'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(85, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(85, 'K');
         },
         cap: 8,
         stats() {
@@ -797,7 +797,7 @@ export default {
         findZone: 61,
         findChance: 1 / buildNum(1.4, 'M'),
         price(lvl) {
-            return Math.pow(7, lvl - 1) * buildNum(90, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(90, 'K');
         },
         cap: 6,
         stats() {
@@ -823,7 +823,7 @@ export default {
         findZone: 63,
         findChance: 1 / buildNum(1.5, 'M'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(100, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(100, 'K');
         },
         cap: 11,
         stats(lvl) {
@@ -848,7 +848,7 @@ export default {
         findZone: 65,
         findChance: 1 / buildNum(7.5, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(120, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(120, 'K');
         },
         cap: 16,
         stats(lvl) {
@@ -872,14 +872,13 @@ export default {
         findZone: 67,
         findChance: 1 / buildNum(1.8, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(200, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(200, 'K');
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 15 + 210},
-                {isPositive: true, type: 'mult', name: 'hordeAttack', value: 1.35},
-                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.25},
-                {isPositive: true, type: 'base', name: 'hordeCritMult', value: 0.4},
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.1},
+                {isPositive: true, type: 'base', name: 'hordeCritMult', value: 0.1},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
             ];
         },
@@ -899,11 +898,11 @@ export default {
         findZone: 70,
         findChance: 1 / buildNum(2, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(250, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(250, 'K');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 600 + 8400},
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 750 + 8250},
                 {isPositive: true, type: 'mult', name: 'hordeBioTaken', value: 1 / 1.25}
             ];
         },
@@ -922,7 +921,7 @@ export default {
         findZone: 73,
         findChance: 1 / buildNum(2.2, 'M'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(300, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(300, 'K');
         },
         cap: 7,
         stats() {
@@ -948,7 +947,7 @@ export default {
         findZone: 75,
         findChance: 1 / buildNum(11, 'M'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(400, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(400, 'K');
         },
         cap: 5,
         stats() {
@@ -966,7 +965,7 @@ export default {
                     {type: 'base', name: 'hordeSpellblade', value: 6.5},
                     {type: 'base', name: 'hordeCutting', value: 0.2},
                     {type: 'base', name: 'hordeShieldbreak', value: 15},
-                    {type: 'base', name: 'hordeStunResist', value: 15},
+                    {type: 'base', name: 'hordeStatusResist', value: 15},
                     {type: 'base', name: 'hordeRecovery', value: 0.25}
                 ]}
             ];
@@ -981,12 +980,11 @@ export default {
         findZone: 77,
         findChance: 1 / buildNum(2.7, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(500, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(500, 'K');
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 750 + 6750},
-                {isPositive: true, type: 'mult', name: 'hordeHealth', value: 1.35},
                 {isPositive: true, type: 'base', name: 'hordeRevive', value: 1},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
             ];
@@ -1008,11 +1006,11 @@ export default {
         findZone: 80,
         findChance: 1 / buildNum(3.1, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(550, 'K');
+            return Math.pow(10, lvl - 1) * buildNum(550, 'K');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 400 + 4600},
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 450 + 4550},
                 {isPositive: true, type: 'mult', name: 'hordePhysicTaken', value: 1 / 1.2},
                 {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 1}
             ];
@@ -1034,7 +1032,7 @@ export default {
         findZone: 83,
         findChance: 1 / buildNum(3.5, 'M'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(600, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(600, 'K');
         },
         cap: 6,
         stats() {
@@ -1059,7 +1057,7 @@ export default {
         findZone: 85,
         findChance: 1 / buildNum(17.5, 'M'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(750, 'K');
+            return Math.pow(100, lvl - 1) * buildNum(750, 'K');
         },
         cap: 10,
         stats() {
@@ -1086,7 +1084,7 @@ export default {
         findZone: 87,
         findChance: 1 / buildNum(7, 'M'),
         price(lvl) {
-            return Math.pow(20, lvl - 1) * buildNum(1, 'M');
+            return Math.pow(buildNum(1, 'M'), lvl - 1) * buildNum(1, 'M');
         },
         cap: 3,
         stats() {
@@ -1101,7 +1099,9 @@ export default {
             return [
                 {type: 'buff', value: lvl * 2 + 14, effect: [
                     {type: 'mult', name: 'hordeAttack', value: 1.5},
-                    {type: 'mult', name: 'hordeHealth', value: 1.5}
+                    {type: 'mult', name: 'hordePhysicTaken', value: 1 / 1.5},
+                    {type: 'mult', name: 'hordeMagicTaken', value: 1 / 1.5},
+                    {type: 'mult', name: 'hordeBioTaken', value: 1 / 1.5}
                 ]}
             ];
         },
@@ -1115,7 +1115,7 @@ export default {
         findZone: 90,
         findChance: 1 / buildNum(9, 'M'),
         price(lvl) {
-            return Math.pow(5, lvl - 1) * buildNum(1.25, 'M');
+            return Math.pow(100, lvl - 1) * buildNum(1.25, 'M');
         },
         cap: 6,
         stats() {
@@ -1143,7 +1143,7 @@ export default {
         findZone: 93,
         findChance: 1 / buildNum(12, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(1.5, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(1.5, 'M');
         },
         cap: 6,
         stats() {
@@ -1171,22 +1171,20 @@ export default {
         findZone: 95,
         findChance: 1 / buildNum(60, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(1.8, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(1.8, 'M');
         },
-        stats(lvl) {
+        stats(lvl, stacks) {
             return [
-                {isPositive: false, type: 'mult', name: 'hordeHealth', value: 1 / 1.3},
-                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl + 14}
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 1000 + getDiminishing(stacks) * 1000 + 1000}
             ];
         },
-        masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentStat', stat: 'hordeHealth_mult', value: 0.15}
+                {type: 'addStack', value: null}
             ];
         },
         activeType: 'utility',
-        cooldown: () => 3300,
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-shield-half-full',
         activeIcon: 'mdi-sun-wireless',
         activeColor: 'orange-red'
@@ -1195,7 +1193,7 @@ export default {
         findZone: 97,
         findChance: 1 / buildNum(16, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(2.2, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(2.2, 'M');
         },
         stats() {
             return [
@@ -1221,23 +1219,20 @@ export default {
         findZone: 100,
         findChance: 1 / buildNum(20, 'M'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(2.75, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(2.75, 'M');
         },
-        stats() {
+        stats(lvl, stacks) {
             return [
-                {isPositive: false, type: 'mult', name: 'hordeAttack', value: 0.5},
-                {isPositive: true, type: 'mult', name: 'hordeItemMasteryGain', value: 1.4}
+                {isPositive: true, type: 'mult', name: 'hordeEquipmentMasteryGain', value: lvl * 0.03 + getDiminishing(stacks) * 0.03 + 1.03}
             ];
         },
-        masteryBoost: 0.25,
-        active(lvl) {
+        active() {
             return [
-                {type: 'damageMagic', value: 3.18 + lvl * 0.02},
-                {type: 'stun', value: 1}
+                {type: 'addStack', value: null}
             ];
         },
-        activeType: 'combat',
-        cooldown: () => 10,
+        activeType: 'utility',
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-book',
         activeIcon: 'mdi-book-alert',
         activeColor: 'indigo'
@@ -1246,23 +1241,21 @@ export default {
         findZone: 107,
         findChance: 1 / buildNum(40, 'M'),
         price(lvl) {
-            return Math.pow(5, lvl - 1) * buildNum(4, 'M');
+            return Math.pow(100, lvl - 1) * buildNum(4, 'M');
         },
         cap: 11,
-        stats(lvl) {
+        stats(lvl, stacks) {
             return [
-                {isPositive: true, type: 'mult', name: 'currencyHordeBoneGain', value: lvl * 0.01 + 1.29},
-                {isPositive: false, type: 'mult', name: 'currencyHordeMonsterPartGain', value: 1 / 1.5}
+                {isPositive: true, type: 'mult', name: 'currencyHordeBoneGain', value: lvl * 0.01 + getApproaching(0.01, 0.3, stacks) + 1.09}
             ];
         },
-        masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentStat', stat: 'currencyHordeBoneGain_mult', value: 0.18}
+                {type: 'addStack', value: null}
             ];
         },
         activeType: 'utility',
-        cooldown: () => 4200,
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-beer',
         activeIcon: 'mdi-beer',
         activeColor: 'brown'
@@ -1271,13 +1264,13 @@ export default {
         findZone: 114,
         findChance: 1 / buildNum(80, 'M'),
         price(lvl) {
-            return Math.pow(7, lvl - 1) * buildNum(7, 'M');
+            return Math.pow(100, lvl - 1) * buildNum(7, 'M');
         },
         stats(lvl) {
             return [
-                {isPositive: false, type: 'mult', name: 'hordeAttack', value: 1 / 1.25},
+                {isPositive: false, type: 'mult', name: 'hordeAttack', value: 1 / 1.2},
                 {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.15},
-                {isPositive: true, type: 'base', name: 'hordeCritMult', value: lvl * 0.02 + 1.08}
+                {isPositive: true, type: 'base', name: 'hordeCritMult', value: lvl * 0.02 + 0.68}
             ];
         },
         masteryBoost: 0.25,
@@ -1298,12 +1291,12 @@ export default {
         findZone: 121,
         findChance: 1 / buildNum(160, 'M'),
         price(lvl) {
-            return Math.pow(9, lvl - 1) * buildNum(12, 'M');
+            return Math.pow(100, lvl - 1) * buildNum(12, 'M');
         },
         cap: 6,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeStunResist', value: 4},
+                {isPositive: true, type: 'base', name: 'hordeStatusResist', value: 4},
                 {isPositive: false, type: 'mult', name: 'hordeHealth', value: 1 / 1.25},
                 {isPositive: false, type: 'base', name: 'hordeMagicTaken', value: 0.75}
             ];
@@ -1327,23 +1320,21 @@ export default {
         findZone: 128,
         findChance: 1 / buildNum(320, 'M'),
         price(lvl) {
-            return Math.pow(5, lvl - 1) * buildNum(20, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(20, 'M');
         },
         cap: 11,
-        stats(lvl) {
+        stats(lvl, stacks) {
             return [
-                {isPositive: true, type: 'mult', name: 'currencyHordeMonsterPartGain', value: lvl * 0.01 + 1.29},
-                {isPositive: false, type: 'mult', name: 'currencyHordeBoneGain', value: 1 / 4},
+                {isPositive: true, type: 'mult', name: 'currencyHordeMonsterPartGain', value: lvl * 0.01 + getApproaching(0.01, 0.3, stacks) + 1.09}
             ];
         },
-        masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentStat', stat: 'currencyHordeMonsterPartGain_mult', value: 0.225}
+                {type: 'addStack', value: null}
             ];
         },
         activeType: 'utility',
-        cooldown: () => 18 * SECONDS_PER_HOUR,
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-test-tube',
         activeIcon: 'mdi-test-tube',
         activeColor: 'pink-purple'
@@ -1352,12 +1343,12 @@ export default {
         findZone: 135,
         findChance: 1 / buildNum(640, 'M'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(35, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(35, 'M');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl * 2 + 34},
-                {isPositive: true, type: 'base', name: 'hordeStunResist', value: 12},
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl * 2 + 28},
+                {isPositive: true, type: 'base', name: 'hordeStatusResist', value: 6},
                 {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
             ];
         },
@@ -1365,7 +1356,7 @@ export default {
         active(lvl) {
             return [
                 {type: 'heal', value: 0.12, int: 0.006},
-                {type: 'divisionShield', value: lvl + 11}
+                {type: 'divisionShield', value: lvl + 14}
             ];
         },
         activeType: 'combat',
@@ -1378,13 +1369,13 @@ export default {
         findZone: 142,
         findChance: 1 / buildNum(1.2, 'B'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(60, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(60, 'M');
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.04 + 1.76},
                 {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.01 + 0.49},
-                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 2}
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 5}
             ];
         },
         active() {
@@ -1403,7 +1394,7 @@ export default {
         findZone: 149,
         findChance: 1 / buildNum(2.4, 'B'),
         price(lvl) {
-            return Math.pow(8, lvl - 1) * buildNum(110, 'M');
+            return Math.pow(100, lvl - 1) * buildNum(110, 'M');
         },
         cap: 21,
         stats() {
@@ -1435,7 +1426,7 @@ export default {
         findZone: 156,
         findChance: 1 / buildNum(4.8, 'B'),
         price(lvl) {
-            return Math.pow(5, lvl - 1) * buildNum(175, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(175, 'M');
         },
         cap: 11,
         stats() {
@@ -1462,11 +1453,11 @@ export default {
         findZone: 163,
         findChance: 1 / buildNum(10, 'B'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(320, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(320, 'M');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 3 + 112},
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 4 + 116},
                 {isPositive: true, type: 'base', name: 'hordeRecovery', value: 0.03}
             ];
         },
@@ -1486,22 +1477,20 @@ export default {
         findZone: 170,
         findChance: 1 / buildNum(20, 'B'),
         price(lvl) {
-            return Math.pow(10, lvl - 1) * buildNum(550, 'M');
+            return Math.pow(1000, lvl - 1) * buildNum(550, 'M');
         },
-        stats(lvl) {
+        stats(lvl, stacks) {
             return [
-                {isPositive: false, type: 'mult', name: 'hordeHealth', value: 0.5},
-                {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: lvl * 0.001 + 0.009}
+                {isPositive: true, type: 'base', name: 'hordeHeirloomChance', value: lvl * 0.001 + getApproaching(0.001, 0.05, stacks) + 0.004}
             ];
         },
-        masteryBoost: 0.25,
         active() {
             return [
-                {type: 'permanentStat', stat: 'currencyHordeSoulCorruptedGain_mult', value: 0.03}
+                {type: 'addStack', value: null}
             ];
         },
         activeType: 'utility',
-        cooldown: () => 36 * SECONDS_PER_HOUR,
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-rhombus-split',
         activeIcon: 'mdi-rhombus',
         activeColor: 'light-blue'
@@ -1510,12 +1499,12 @@ export default {
         findZone: 177,
         findChance: 1 / buildNum(40, 'B'),
         price(lvl) {
-            return Math.pow(4, lvl - 1) * buildNum(975, 'M');
+            return Math.pow(100, lvl - 1) * buildNum(975, 'M');
         },
         cap: 11,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHaste', value: 15}
+                {isPositive: true, type: 'base', name: 'hordeHaste', value: 30}
             ];
         },
         active(lvl) {
@@ -1536,7 +1525,7 @@ export default {
         findZone: 184,
         findChance: 1 / buildNum(80, 'B'),
         price(lvl) {
-            return Math.pow(8, lvl - 1) * buildNum(1.75, 'B');
+            return Math.pow(100, lvl - 1) * buildNum(1.75, 'B');
         },
         cap: 6,
         stats() {
@@ -1562,12 +1551,12 @@ export default {
         findZone: 191,
         findChance: 1 / buildNum(160, 'B'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(3, 'B');
+            return Math.pow(10, lvl - 1) * buildNum(3, 'B');
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 68},
-                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.2},
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.15},
                 {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.01}
             ];
         },
@@ -1575,8 +1564,8 @@ export default {
             return [
                 {type: 'damageBio', value: 18, int: 0.35},
                 {type: 'poison', value: 2.75, int: 0.13},
-                {type: 'buff', value: 15, effect: [
-                    {type: 'base', name: 'hordeCritMult', value: 5.75}
+                {type: 'buff', value: 60, effect: [
+                    {type: 'base', name: 'hordeCritMult', value: 2.75}
                 ]}
             ];
         },
@@ -1590,20 +1579,20 @@ export default {
         findZone: 198,
         findChance: 1 / buildNum(320, 'B'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(5, 'B');
+            return Math.pow(10, lvl - 1) * buildNum(5, 'B');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 400 + 8600},
-                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl + 10},
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 550 + 9050},
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl + 29},
                 {isPositive: false, type: 'mult', name: 'hordeRecovery', value: 0}
             ];
         },
         masteryBoost: 0.25,
         active() {
             return [
-                {type: 'heal', value: 0.07, int: 0.003},
-                {type: 'divisionShield', value: 10}
+                {type: 'heal', value: 0.09, int: 0.0035},
+                {type: 'divisionShield', value: 4}
             ];
         },
         activeType: 'combat',
@@ -1616,7 +1605,7 @@ export default {
         findZone: 205,
         findChance: 1 / buildNum(640, 'B'),
         price(lvl) {
-            return Math.pow(6, lvl - 1) * buildNum(8, 'B');
+            return Math.pow(100, lvl - 1) * buildNum(8, 'B');
         },
         cap: 6,
         stats() {
@@ -1641,21 +1630,21 @@ export default {
         findZone: 212,
         findChance: 1 / buildNum(1.25, 'T'),
         price(lvl) {
-            return Math.pow(14, lvl - 1) * buildNum(12.5, 'B');
+            return Math.pow(1000, lvl - 1) * buildNum(12.5, 'B');
         },
         cap: 5,
-        stats() {
+        stats(lvl, stacks) {
             return [
-                {isPositive: true, type: 'mult', name: 'hordeShardChance', value: 1.5}
+                {isPositive: true, type: 'mult', name: 'hordeShardChance', value: lvl * 0.05 + getDiminishing(stacks) * 0.05 + 1.05}
             ];
         },
         active() {
             return [
-                {type: 'permanentStat', stat: 'hordeShardChance_mult', value: 0.35}
+                {type: 'addStack', value: null}
             ];
         },
         activeType: 'utility',
-        cooldown: lvl => (19 - lvl) * SECONDS_PER_HOUR,
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-rotate-orbit',
         activeIcon: 'mdi-rotate-orbit',
         activeColor: 'teal'
@@ -1664,7 +1653,7 @@ export default {
         findZone: 219,
         findChance: 1 / buildNum(2.5, 'T'),
         price(lvl) {
-            return Math.pow(25, lvl - 1) * buildNum(18, 'B');
+            return Math.pow(1000, lvl - 1) * buildNum(18, 'B');
         },
         cap: 4,
         stats() {
@@ -1688,11 +1677,37 @@ export default {
         activeIcon: 'mdi-fire-alert',
         activeColor: 'orange'
     },
+    stoneplate: {
+        findZone: 222,
+        findChance: 1 / buildNum(3.5, 'T'),
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(20, 'B');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 1200 + 2.28e4},
+                {isPositive: true, type: 'mult', name: 'hordeHealth', value: 2},
+                {isPositive: false, type: 'mult', name: 'hordeHealing', value: 0.25}
+            ];
+        },
+        masteryBoost: 0.25,
+        active() {
+            return [
+                {type: 'divisionShield', value: 20},
+                {type: 'stun', value: 20}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 175,
+        icon: 'mdi-rhombus-split',
+        activeIcon: 'mdi-rhombus-split',
+        activeColor: 'grey'
+    },
     shield: {
         findZone: 226,
         findChance: 1 / buildNum(5, 'T'),
         price(lvl) {
-            return Math.pow(25, lvl - 1) * buildNum(25, 'B');
+            return Math.pow(1000, lvl - 1) * buildNum(25, 'B');
         },
         cap: 4,
         stats() {
@@ -1719,17 +1734,17 @@ export default {
         findZone: 233,
         findChance: 1 / buildNum(10, 'T'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(35, 'B');
+            return Math.pow(10, lvl - 1) * buildNum(35, 'B');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 400 + buildNum(10.8, 'K')},
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 500 + buildNum(12, 'K')},
                 {isPositive: true, type: 'base', name: 'hordeDefense', value: 0.0025}
             ];
         },
         active() {
             return [
-                {type: 'divisionShield', value: 20}
+                {type: 'divisionShield', value: 12}
             ];
         },
         activeType: 'combat',
@@ -1742,7 +1757,7 @@ export default {
         findZone: 240,
         findChance: 1 / buildNum(20, 'T'),
         price(lvl) {
-            return Math.pow(20, lvl - 1) * buildNum(50, 'B');
+            return Math.pow(1000, lvl - 1) * buildNum(50, 'B');
         },
         cap: 5,
         stats() {
@@ -1767,7 +1782,7 @@ export default {
         findZone: 247,
         findChance: 1 / buildNum(40, 'T'),
         price(lvl) {
-            return Math.pow(100, lvl - 1) * buildNum(75, 'B');
+            return Math.pow(buildNum(1, 'M'), lvl - 1) * buildNum(75, 'B');
         },
         cap: 3,
         stats() {
@@ -1797,12 +1812,12 @@ export default {
         findZone: 254,
         findChance: 1 / buildNum(80, 'T'),
         price(lvl) {
-            return Math.pow(100, lvl - 1) * buildNum(140, 'B');
+            return Math.pow(buildNum(1, 'M'), lvl - 1) * buildNum(140, 'B');
         },
         cap: 3,
         stats() {
             return [
-                {isPositive: true, type: 'mult', name: 'hordeHaste', value: 1.5},
+                {isPositive: true, type: 'base', name: 'hordeHaste', value: 60},
                 {isPositive: false, type: 'mult', name: 'hordeCritMult', value: 0.5}
             ];
         },
@@ -1825,7 +1840,7 @@ export default {
         findZone: 261,
         findChance: 1 / buildNum(160, 'T'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(225, 'B');
+            return Math.pow(10, lvl - 1) * buildNum(225, 'B');
         },
         cap: 21,
         stats(lvl) {
@@ -1851,12 +1866,12 @@ export default {
         findZone: 268,
         findChance: 1 / buildNum(320, 'T'),
         price(lvl) {
-            return Math.pow(12, lvl - 1) * buildNum(400, 'B');
+            return Math.pow(1000, lvl - 1) * buildNum(400, 'B');
         },
         cap: 8,
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'currencyHordeMysticalShardCap', value: lvl}
+                {isPositive: true, type: 'base', name: 'currencyHordeMysticalShardCap', value: lvl * 2 + 24}
             ];
         },
         active() {
@@ -1879,7 +1894,7 @@ export default {
         findZone: 275,
         findChance: 1 / buildNum(640, 'T'),
         price(lvl) {
-            return Math.pow(25, lvl - 1) * buildNum(700, 'B');
+            return Math.pow(1000, lvl - 1) * buildNum(700, 'B');
         },
         cap: 5,
         stats() {
@@ -1904,7 +1919,7 @@ export default {
         findZone: 282,
         findChance: 1 / buildNum(1.25, 'Qa'),
         price(lvl) {
-            return Math.pow(25, lvl - 1) * buildNum(1.2, 'T');
+            return Math.pow(1000, lvl - 1) * buildNum(1.2, 'T');
         },
         cap: 5,
         stats() {
@@ -1931,15 +1946,15 @@ export default {
         findZone: 289,
         findChance: 1 / buildNum(2.5, 'Qa'),
         price(lvl) {
-            return Math.pow(8, lvl - 1) * buildNum(2, 'T');
+            return Math.pow(100, lvl - 1) * buildNum(2, 'T');
         },
         cap: 9,
         stats() {
             return [
                 {isPositive: false, type: 'mult', name: 'hordeAttack', value: 1 / 1.25},
-                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.5},
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.2},
                 {isPositive: true, type: 'base', name: 'hordeHaste', value: 20},
-                {isPositive: true, type: 'tag', name: 'hordeActiveDamageCrit', value: [0.3]}
+                {isPositive: true, type: 'tag', name: 'hordeActiveDamageCrit', value: [0.4]}
             ];
         },
         masteryBoost: 0.25,
@@ -1958,19 +1973,19 @@ export default {
         findZone: 296,
         findChance: 1 / buildNum(5, 'Qa'),
         price(lvl) {
-            return Math.pow(25, lvl - 1) * buildNum(3.3, 'T');
+            return Math.pow(1000, lvl - 1) * buildNum(3.3, 'T');
         },
         cap: 5,
         stats() {
             return [
-                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.15},
+                {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.3},
                 {isPositive: true, type: 'base', name: 'hordeHealing', value: 0.1},
-                {isPositive: true, type: 'tag', name: 'hordeActiveHealCrit', value: [0.1]}
+                {isPositive: true, type: 'tag', name: 'hordeActiveHealCrit', value: [0.25]}
             ];
         },
         active() {
             return [
-                {type: 'heal', value: 0.1, int: 0.005, canCrit: 0.4}
+                {type: 'heal', value: 0.1, int: 0.005, canCrit: 0.6}
             ];
         },
         activeType: 'combat',
@@ -1979,17 +1994,390 @@ export default {
         activeIcon: 'mdi-drama-masks',
         activeColor: 'pale-green'
     },
-
-    pawn: {
-        findZone: 50,
-        findChance: 1 / buildNum(10, 'M'),
-        unlock: 'hordeChessItems',
+    doubleEdgedSword: {
+        findZone: 307,
+        findChance: 1 / buildNum(12, 'Qa'),
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(1, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(10, 'T');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 10 + 90},
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.05 + 0.7},
+                {isPositive: true, type: 'tag', name: 'hordeSpellbladeOnActive', value: [1]}
+            ];
+        },
+        active() {
+            return [
+                {type: 'damageMagic', value: 4.4, int: 0.15}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 11,
+        icon: 'mdi-sword',
+        activeIcon: 'mdi-sword',
+        activeColor: 'babypink'
+    },
+    critCore: {
+        findZone: 318,
+        findChance: 1 / buildNum(30, 'Qa'),
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(75, 'T');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: false, type: 'mult', name: 'hordeCritChance', value: 0.5},
+                {isPositive: true, type: 'base', name: 'hordeCritMult', value: lvl * 0.05 + 0.45},
+                {isPositive: true, type: 'tag', name: 'hordeCritOnNonCrit', value: [0.2]}
+            ];
+        },
+        active() {
+            return [
+                {type: 'buff', value: 8, effect: [
+                    {type: 'bonus', name: 'hordeCritChance', value: 1}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 156,
+        icon: 'mdi-atom-variant',
+        activeIcon: 'mdi-motion',
+        activeColor: 'deep-orange'
+    },
+    heavyGauntlet: {
+        findZone: 329,
+        findChance: 1 / buildNum(75, 'Qa'),
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(500, 'T');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.2 + 3.8},
+                {isPositive: true, type: 'tag', name: 'hordeFirstStrikeStun', value: [2]}
+            ];
+        },
+        active() {
+            return [
+                {type: 'damageMagic', value: 17.5, int: 0.7},
+                {type: 'stun', value: 18}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 260,
+        icon: 'mdi-hand-back-left',
+        activeIcon: 'mdi-alert-octagram-outline',
+        activeColor: 'indigo'
+    },
+    dumbbell: {
+        findZone: 340,
+        findChance: 1 / buildNum(180, 'Qa'),
+        price(lvl) {
+            return Math.pow(1000, lvl - 1) * buildNum(3.2, 'Qa');
+        },
+        cap: 5,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeStrength', value: 4}
+            ];
+        },
+        active() {
+            return [
+                {type: 'buff', value: 60, effect: [
+                    {type: 'base', name: 'hordeStrength', value: 10}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: lvl => 375 - lvl * 15,
+        icon: 'mdi-dumbbell',
+        activeIcon: 'mdi-dumbbell',
+        activeColor: 'amber'
+    },
+    essenceExtractor: {
+        findZone: 351,
+        findChance: 1 / buildNum(1, 'Qa'),
+        cap: 1,
+        stats() {
+            return [
+                {isPositive: true, type: 'text', name: 'hordeLootElementalEssence', value: true},
+                {isPositive: false, type: 'mult', name: 'hordeHeirloomChance', value: 0},
+                {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
+            ];
+        },
+        cooldown: () => 999999999,
+        icon: 'mdi-eyedropper',
+    },
+    spellbook: {
+        findZone: 362,
+        findChance: 1 / buildNum(1.2, 'Qi'),
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(160, 'Qa');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.05 + 0.45},
+                {isPositive: true, type: 'base', name: 'hordeIntelligence', value: 4}
+            ];
+        },
+        active(lvl) {
+            return [
+                {type: 'damageMagic', value: 3.5, int: 0.25},
+                {type: 'buff', value: 2, effect: [
+                    {type: 'base', name: 'hordeSpellblade', value: lvl * 0.2 + 1.8}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 17,
+        icon: 'mdi-book-edit',
+        activeIcon: 'mdi-book-open-variant',
+        activeColor: 'dark-blue'
+    },
+    forbiddenScissors: {
+        findZone: 373,
+        findChance: 1 / buildNum(3, 'Qi'),
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(1.1, 'Qi');
+        },
+        stats() {
+            return [
+                {isPositive: true, type: 'mult', name: 'currencyHordeCorruptedFleshGain', value: 1.5},
+                {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'monsterPart', value: 245 + lvl * 5}
+            ];
+        },
+        activeType: 'utility',
+        cooldown: () => SECONDS_PER_HOUR,
+        icon: 'mdi-content-cut',
+        activeIcon: 'mdi-scissors-cutting',
+        activeColor: 'deep-purple'
+    },
+    basicSpear: {
+        findZone: 384,
+        findChance: 1 / buildNum(7.5, 'Qi'),
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(7.75, 'Qi');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 3 + 97},
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 600 + 1.94e4},
+            ];
+        },
+        active() {
+            return [
+                {type: 'damagePhysic', value: 6.8, str: 0.55},
+                {type: 'damageMagic', value: 0.5, int: 0.65},
+                {type: 'heal', value: 0.08, int: 0.004},
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 38,
+        icon: 'mdi-spear',
+        activeIcon: 'mdi-spear',
+        activeColor: 'green'
+    },
+    cursedEye: {
+        findZone: 395,
+        findChance: 1 / buildNum(18, 'Qi'),
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(55, 'Qi');
+        },
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeRareLootTime', value: -40},
+                {isPositive: false, type: 'mult', name: 'hordeCorruption', value: 1.15}
+            ];
+        },
+        masteryBoost: 0.25,
+        active(lvl) {
+            return [
+                {type: 'maxdamageBio', value: 0.1, int: 0.001},
+                {type: 'damageBio', value: 2 + lvl * 0.25}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 44,
+        icon: 'mdi-eye-settings',
+        activeIcon: 'mdi-laser-pointer',
+        activeColor: 'deep-purple'
+    },
+
+    blessedSword: {
+        findZone: 350,
+        findChance: 1 / buildNum(5, 'Qi'),
+        unlock: 'hordeEquipmentBlessedSword',
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(25, 'Qa');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 5 + 95},
+                {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.2}
+            ];
+        },
+        active() {
+            return [
+                {type: 'damagePhysic', value: 20, str: 1.45},
+                {type: 'buff', value: 120, effect: [
+                    {type: 'mult', name: 'hordeAttack', value: 1.25}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 300,
+        icon: 'mdi-sword',
+        activeIcon: 'mdi-sword',
+        activeColor: 'pale-yellow'
+    },
+    blessedArmor: {
+        findZone: 370,
+        findChance: 1 / buildNum(25, 'Qi'),
+        unlock: 'hordeEquipmentBlessedArmor',
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(1, 'Qi');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 1000 + 1.9e4},
+                {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.2}
+            ];
+        },
+        active() {
+            return [
+                {type: 'heal', value: 0.15, int: 0.008},
+                {type: 'buff', value: 40, effect: [
+                    {type: 'mult', name: 'hordePhysicTaken', value: 0.8},
+                    {type: 'mult', name: 'hordeMagicTaken', value: 0.8},
+                    {type: 'mult', name: 'hordeBioTaken', value: 0.8}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 90,
+        icon: 'mdi-tshirt-v',
+        activeIcon: 'mdi-medical-bag',
+        activeColor: 'pale-yellow'
+    },
+    blessedBow: {
+        findZone: 390,
+        findChance: 1 / buildNum(175, 'Qi'),
+        unlock: 'hordeEquipmentBlessedBow',
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(20, 'Qi');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.15 + 5.85},
+                {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.2}
+            ];
+        },
+        active() {
+            return [
+                {type: 'damageMagic', value: 5.25, int: 0.1},
+                {type: 'heal', value: 0.02, int: 0.001}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 12,
+        icon: 'mdi-bow-arrow',
+        activeIcon: 'mdi-bow-arrow',
+        activeColor: 'pale-yellow'
+    },
+    blessedFlame: {
+        findZone: 410,
+        findChance: 1 / buildNum(1, 'Sx'),
+        unlock: 'hordeEquipmentBlessedFlame',
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(400, 'Qi');
+        },
+        cap: 20,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeRecovery', value: 0.06},
+                {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.2}
+            ];
+        },
+        active(lvl) {
+            return [
+                {type: 'heal', value: lvl * 0.04, int: 0.01},
+                {type: 'buff', value: 200, effect: [
+                    {type: 'base', name: 'hordeRecovery', value: 0.25}
+                ]}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 480,
+        icon: 'mdi-campfire',
+        activeIcon: 'mdi-campfire',
+        activeColor: 'pale-yellow'
+    },
+    blessedWater: {
+        findZone: 430,
+        findChance: 1 / buildNum(6, 'Sx'),
+        unlock: 'hordeEquipmentBlessedWater',
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(8, 'Sx');
+        },
+        cap: 21,
+        stats() {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.025},
+                {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.2}
+            ];
+        },
+        active(lvl) {
+            return [
+                {type: 'poison', value: lvl * 0.025 + 0.475, int: 0.03}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 50,
+        icon: 'mdi-bottle-tonic',
+        activeIcon: 'mdi-bottle-tonic',
+        activeColor: 'pale-yellow'
+    },
+    blessedShield: {
+        findZone: 450,
+        findChance: 1 / buildNum(35, 'Sx'),
+        unlock: 'hordeEquipmentBlessedShield',
+        price(lvl) {
+            return Math.pow(100, lvl - 1) * buildNum(150, 'Sx');
+        },
+        cap: 11,
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl + 9},
+                {isPositive: true, type: 'bonus', name: 'hordeCorruption', value: -0.2}
+            ];
+        },
+        active(lvl) {
+            return [
+                {type: 'divisionShield', value: lvl + 9},
+                {type: 'stun', value: 4}
+            ];
+        },
+        activeType: 'combat',
+        cooldown: () => 55,
+        icon: 'mdi-shield-star',
+        activeIcon: 'mdi-octagram-outline',
+        activeColor: 'pale-yellow'
+    },
+
+    pawn: {
+        findZone: 100,
+        findChance: 1 / buildNum(10, 'M'),
+        unlock: 'hordeChessEquipment',
+        price(lvl) {
+            return Math.pow(10, lvl - 1) * buildNum(1, 'M');
+        },
+        stats(lvl) {
+            return [
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 6 + 34},
                 {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: 1.25}
             ];
         },
@@ -2005,16 +2393,16 @@ export default {
         activeColor: 'beige'
     },
     knight: {
-        findZone: 80,
+        findZone: 150,
         findChance: 1 / buildNum(100, 'M'),
-        unlock: 'hordeChessItems',
+        unlock: 'hordeChessEquipment',
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(4, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(4, 'M');
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.1 + 0.4},
-                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 7}
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 15}
             ];
         },
         active() {
@@ -2030,15 +2418,15 @@ export default {
         activeColor: 'orange'
     },
     bishop: {
-        findZone: 110,
+        findZone: 200,
         findChance: 1 / buildNum(1, 'B'),
-        unlock: 'hordeChessItems',
+        unlock: 'hordeChessEquipment',
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(16, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(16, 'M');
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 500 + 7000},
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 700 + 7000},
                 {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.01},
                 {isPositive: true, type: 'base', name: 'hordeCutting', value: 0.01}
             ];
@@ -2056,74 +2444,98 @@ export default {
         activeColor: 'green'
     },
     rook: {
-        findZone: 140,
+        findZone: 250,
         findChance: 1 / buildNum(10, 'B'),
-        unlock: 'hordeChessItems',
+        unlock: 'hordeChessEquipment',
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(64, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(64, 'M');
         },
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeCritChance', value: 0.05},
-                {isPositive: true, type: 'base', name: 'hordeCritMult', value: lvl * 0.02 + 0.58}
+                {isPositive: true, type: 'base', name: 'hordeCritMult', value: lvl * 0.01 + 0.29},
+                {isPositive: true, type: 'tag', name: 'hordeStunOnCrit', value: [2]},
             ];
         },
         active() {
             return [
-                {type: 'removeAttack', value: 0.12},
-                {type: 'stun', value: 10}
+                {type: 'stun', value: 10, canCrit: 0.2}
             ];
         },
         activeType: 'combat',
-        cooldown: () => 64,
+        cooldown: () => 84,
         icon: 'mdi-chess-rook',
         activeIcon: 'mdi-chess-rook',
         activeColor: 'brown'
     },
     queen: {
-        findZone: 170,
+        findZone: 300,
         findChance: 1 / buildNum(100, 'B'),
-        unlock: 'hordeChessItems',
+        unlock: 'hordeChessEquipment',
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(256, 'M');
+            return Math.pow(10, lvl - 1) * buildNum(256, 'M');
         },
-        stats(lvl) {
-            return [
-                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + 28},
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 200 + 2800},
-                {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: 0.6},
-                {isPositive: true, type: 'base', name: 'hordeToxic', value: 0.005},
-                {isPositive: false, type: 'base', name: 'hordeMagicConversion', value: 0.4},
-                {isPositive: false, type: 'base', name: 'hordeBioConversion', value: 0.4}
+        stats(lvl, stacks) {
+            let stats = [
+                {isPositive: true, type: 'base', name: 'hordeAttack', value: lvl * 2 + getDiminishing(Math.floor((stacks + 3) / 4)) * 2 + 2},
+                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 200 + getDiminishing(Math.floor((stacks + 2) / 4)) * 200 + 200},
             ];
+            if (stacks >= 3) {
+                stats.push({isPositive: true, type: 'base', name: 'hordeRecovery', value: getDiminishing(Math.floor((stacks + 9) / 12)) * 0.0017});
+            }
+            if (stacks >= 4) {
+                stats.push({isPositive: true, type: 'base', name: 'hordeCritChance', value: getDiminishing(Math.floor((stacks + 8) / 12)) * 0.02});
+            }
+            if (stacks >= 7) {
+                stats.push({isPositive: true, type: 'base', name: 'hordeFirstStrike', value: getDiminishing(Math.floor((stacks + 5) / 12)) * 0.23});
+            }
+            if (stacks >= 8) {
+                stats.push({isPositive: true, type: 'base', name: 'hordeToxic', value: getDiminishing(Math.floor((stacks + 4) / 12)) * 0.00013});
+            }
+            if (stacks >= 11) {
+                stats.push({isPositive: true, type: 'mult', name: 'currencyHordeBoneGain', value: getDiminishing(Math.floor((stacks + 1) / 12)) * 0.014 + 1});
+            }
+            if (stacks >= 12) {
+                stats.push({isPositive: true, type: 'base', name: 'hordeDefense', value: getApproaching(0.001, 0.005, Math.floor((stacks + 48) / 60))});
+            }
+            if (stacks >= 24) {
+                stats.push({isPositive: true, type: 'base', name: 'hordeCritMult', value: getApproaching(0.18, 0.9, Math.floor((stacks + 36) / 60))});
+            }
+            if (stacks >= 36) {
+                stats.push({isPositive: true, type: 'base', name: 'hordeSpellblade', value: getApproaching(0.22, 1.1, Math.floor((stacks + 24) / 60))});
+            }
+            if (stacks >= 48) {
+                stats.push({isPositive: true, type: 'base', name: 'hordeCutting', value: getApproaching(0.0025, 0.0125, Math.floor((stacks + 12) / 60))});
+            }
+            if (stacks >= 60) {
+                stats.push({isPositive: true, type: 'mult', name: 'currencyHordeMonsterPartGain', value: getApproaching(0.06, 0.3, Math.floor(stacks / 60)) + 1});
+            }
+            return stats;
         },
         active() {
             return [
-                {type: 'damagePhysic', value: 3.4},
-                {type: 'damageMagic', value: 3.4},
-                {type: 'damageBio', value: 3.4},
-                {type: 'poison', value: 0.25},
-                {type: 'heal', value: 0.1},
-                {type: 'stun', value: 4}
+                {type: 'addStack', value: null}
             ];
         },
-        activeType: 'combat',
-        cooldown: () => 70,
+        activeType: 'utility',
+        cooldown: () => HORDE_STACKING_COOLDOWN,
         icon: 'mdi-chess-queen',
         activeIcon: 'mdi-chess-queen',
         activeColor: 'indigo'
     },
     king: {
-        findZone: 200,
+        findZone: 350,
         findChance: 1 / buildNum(1, 'T'),
-        unlock: 'hordeChessItems',
+        unlock: 'hordeChessEquipment',
         price(lvl) {
-            return Math.pow(2, lvl - 1) * buildNum(1.024, 'B');
+            return Math.pow(1000, getSequence(1, lvl - 1)) * buildNum(1.024, 'B');
         },
+        cap: 4,
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeHealth', value: lvl * 2000 + 4000},
-                {isPositive: true, type: 'base', name: 'hordeRevive', value: 1}
+                {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: lvl},
+                {isPositive: true, type: 'base', name: 'hordeRevive', value: 1},
+                {isPositive: true, type: 'tag', name: 'hordeReviveDivisionShield', value: [0.5]},
             ];
         },
         active(lvl) {

@@ -55,10 +55,10 @@
         :nextChargeTime="(!pretend && item.activeType === 'utility') ? nextChargeTime : null"
         :cost="activeCost"
       ></active-cost>
-      <div v-if="item.usableInStun" class="text-center mt-0 mb-1">{{ $vuetify.lang.t(`$vuetify.horde.items.usableInStun`) }}</div>
-      <alert-text v-if="!pretend && item.activeType === 'utility' && cooldownLeft <= 0" type="info" class="mb-1" style="width: 268px;">{{ $vuetify.lang.t(`$vuetify.horde.items.utilityOvertime`) }}</alert-text>
-      <active-tooltip v-for="(elem, key) in effect" :key="`active-effect-${ key }`" class="mt-0" :effect="elem" :attack="playerAttack" :health="playerMaxHealth"></active-tooltip>
-      <alert-text v-if="subfeature === 0 && cooldownLeft > 0 && (!item.equipped || item.passive)" type="info">{{ $vuetify.lang.t(`$vuetify.horde.items.inactive`, $formatNum(cooldownRecover * 100)) }}</alert-text>
+      <div v-if="item.usableInStun" class="text-center mt-0 mb-1">{{ $vuetify.lang.t(`$vuetify.horde.equipment.usableInStun`) }}</div>
+      <alert-text v-if="!pretend && item.activeType === 'utility' && cooldownLeft <= 0" type="info" class="mb-1" style="width: 268px;">{{ $vuetify.lang.t(`$vuetify.horde.equipment.utilityOvertime`) }}</alert-text>
+      <active-tooltip v-for="(elem, key) in effect" :key="`active-effect-${ key }`" class="mt-0" :equip-name="name" :effect="elem" :attack="playerAttack" :health="playerMaxHealth"></active-tooltip>
+      <alert-text v-if="subfeature === 0 && item.activeType !== 'utility' && cooldownLeft > 0 && (!item.equipped || item.passive)" type="info">{{ $vuetify.lang.t(`$vuetify.horde.equipment.inactive`, $formatNum(cooldownRecover * 100)) }}</alert-text>
     </gb-tooltip>
     <v-btn
       v-if="canSeeAutocast"
@@ -144,13 +144,32 @@ export default {
       return this.item.activeType === 'combat' ? (this.$store.state.horde.cachePlayerStats.haste * 0.01 + 1) : 1;
     },
     cooldown() {
-      return Math.ceil(this.item.cooldown(this.itemLevel) / ((this.subfeature === 0 && this.item.masteryLevel >= 4) ? 2 : 1));
+      return Math.ceil(this.item.cooldown(this.itemLevel));
     },
     cooldownPercent() {
       return 100 * (1 - (this.cooldownLeft / this.cooldown));
     },
     effect() {
-      return this.item.active(this.itemLevel);
+      const activeMult = this.subfeature === 0 && this.item.masteryLevel >= 4 ? 1.5 : 1;
+      return this.item.active(this.itemLevel).map(elem => {
+        let obj = {...elem};
+        if (elem.value !== null) {
+          if (['stun', 'silence', 'revive', 'divisionShield', 'buff'].includes(elem.type)) {
+            obj.value = Math.round(elem.value * activeMult);
+          } else if (['removeDivisionShield', 'removeAttack', 'antidote'].includes(elem.type)) {
+            obj.value = 1 - Math.pow(1 - elem.value, activeMult);
+          } else {
+            obj.value = elem.value * activeMult;
+          }
+        }
+        if (elem.str !== undefined) {
+          obj.str = elem.str * activeMult;
+        }
+        if (elem.int !== undefined) {
+          obj.int = elem.int * activeMult;
+        }
+        return obj;
+      });
     },
     activeCost() {
       return this.item.activeCost !== undefined ? this.item.activeCost(this.itemLevel) : {};

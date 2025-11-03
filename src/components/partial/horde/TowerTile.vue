@@ -111,7 +111,7 @@ export default {
       return Math.round(this.tower.statBase + this.tower.highest * this.tower.statScaling);
     },
     canEnter() {
-      return this.$store.state.horde.currentTower === null && this.$store.getters['currency/value']('horde_towerKey') >= 1;
+      return !this.$store.state.horde.raidboss && this.$store.state.horde.currentTower === null && this.$store.getters['currency/value']('horde_towerKey') >= 1;
     },
     heirloomFloors() {
       return HORDE_HEIRLOOM_TOWER_FLOORS;

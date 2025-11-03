@@ -78,7 +78,7 @@ export default {
                 text: '90',
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'bugfix',
                 text: '91',
             },
@@ -87,7 +87,7 @@ export default {
                 text: '93',
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'bugfix',
                 text: '94',
             }

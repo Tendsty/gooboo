@@ -115,10 +115,10 @@ export default {
         cindersProductionNightbloom: {baseValue: buildNum(1.5, 'T')},
         cindersProductionNeonlight: {baseValue: buildNum(40, 'T')},
         cindersProductionSun: {baseValue: buildNum(1, 'Qa')},
-        cindersFirstProducerCost: {},
-        cindersNonFirstProducerCost: {},
-        cindersUpgradeLightCost: {},
-        cindersUpgradeProducerRequirement: {},
+        cindersFirstProducerCost: {isPositive: false},
+        cindersNonFirstProducerCost: {isPositive: false},
+        cindersUpgradeLightCost: {isPositive: false},
+        cindersUpgradeProducerRequirement: {isPositive: false},
         cindersCandlePower: {},
 
         // bloom mults
@@ -130,18 +130,18 @@ export default {
         bloomLilyChance: {baseValue: 0.15, display: 'percent'},
         bloomOrchidChance: {baseValue: 0.1, display: 'percent'},
         bloomCornflowerChance: {baseValue: 0.05, display: 'percent'},
-        bloomDaisyBreedTime: {baseValue: 300, display: 'time', min: 1, round: true}, // 5m
-        bloomPoppyBreedTime: {baseValue: 900, display: 'time', min: 1, round: true}, // 15m -> 10m
-        bloomIrisBreedTime: {baseValue: 2400, display: 'time', min: 1, round: true}, // 40m -> 20m
-        bloomLilyBreedTime: {baseValue: 6000, display: 'time', min: 1, round: true}, // 1h40m -> 40m
-        bloomOrchidBreedTime: {baseValue: 14400, display: 'time', min: 1, round: true}, // 4h -> 1h20m
-        bloomCornflowerBreedTime: {baseValue: 28800, display: 'time', min: 1, round: true}, // 8h -> 2h40m
+        bloomDaisyBreedTime: {baseValue: 300, display: 'time', isPositive: false, min: 1, round: true}, // 5m
+        bloomPoppyBreedTime: {baseValue: 900, display: 'time', isPositive: false, min: 1, round: true}, // 15m -> 10m
+        bloomIrisBreedTime: {baseValue: 2400, display: 'time', isPositive: false, min: 1, round: true}, // 40m -> 20m
+        bloomLilyBreedTime: {baseValue: 6000, display: 'time', isPositive: false, min: 1, round: true}, // 1h40m -> 40m
+        bloomOrchidBreedTime: {baseValue: 14400, display: 'time', isPositive: false, min: 1, round: true}, // 4h -> 1h20m
+        bloomCornflowerBreedTime: {baseValue: 28800, display: 'time', isPositive: false, min: 1, round: true}, // 8h -> 2h40m
 
         // weather chaos mults
         weatherChaosFishingPower: {},
         weatherChaosFishSizeMax: {min: 1},
         weatherChaosFishSizeAverage: {baseValue: 1},
-        weatherChaosFishingTime: {baseValue: 300, display: 'time', min: 1, round: true},
+        weatherChaosFishingTime: {baseValue: 300, display: 'time', isPositive: false, min: 1, round: true},
         weatherChaosFishDoubleChance: {display: 'percent', min: 0, max: 1},
         weatherChaosIgnoreWeather: {display: 'percent', min: 0, max: 1},
         weatherChaosFishChance: {baseValue: 0.25, display: 'percent', min: 0, max: 1},
@@ -261,20 +261,20 @@ export default {
         snow: {type: 'snowdown', subtype: 'snowdownResource', color: 'light-blue', icon: 'mdi-snowflake', gainMult: {display: 'perSecond'}, showGainMult: true, showGainTimer: true},
 
         // topaz drop replacement currencies
-        wax: {type: 'cinders', color: 'pale-yellow', icon: 'mdi-beehive-outline'},
-        humus: {type: 'bloom', color: 'brown', icon: 'mdi-gradient-vertical'},
-        cloud: {type: 'weatherChaos', color: 'skyblue', icon: 'mdi-cloud'},
-        cocktail: {type: 'summerFestival', color: 'amber', icon: 'mdi-glass-cocktail'},
-        magic: {type: 'nightHunt', color: 'pink-purple', icon: 'mdi-auto-fix'},
-        snowball: {type: 'snowdown', color: 'skyblue', icon: 'mdi-circle'},
+        wax: {type: 'cinders', color: 'pale-yellow', icon: 'mdi-beehive-outline', display: 'int'},
+        humus: {type: 'bloom', color: 'brown', icon: 'mdi-gradient-vertical', display: 'int'},
+        cloud: {type: 'weatherChaos', color: 'skyblue', icon: 'mdi-cloud', display: 'int'},
+        cocktail: {type: 'summerFestival', color: 'amber', icon: 'mdi-glass-cocktail', display: 'int'},
+        magic: {type: 'nightHunt', color: 'pink-purple', icon: 'mdi-auto-fix', display: 'int'},
+        snowball: {type: 'snowdown', color: 'skyblue', icon: 'mdi-circle', display: 'int'},
 
         // reward tokens
-        cindersToken: {type: 'token', color: 'amber', icon: 'mdi-poker-chip', gainMult: {}},
-        bloomToken: {type: 'token', color: 'light-green', icon: 'mdi-poker-chip'},
-        weatherChaosToken: {type: 'token', color: 'grey', icon: 'mdi-poker-chip'},
-        summerFestivalToken: {type: 'token', color: 'red', icon: 'mdi-poker-chip'},
-        nightHuntToken: {type: 'token', color: 'purple', icon: 'mdi-poker-chip'},
-        snowdownToken: {type: 'token', color: 'blue', icon: 'mdi-poker-chip'}
+        cindersToken: {type: 'token', color: 'amber', icon: 'mdi-poker-chip', display: 'int', gainMult: {}},
+        bloomToken: {type: 'token', color: 'light-green', icon: 'mdi-poker-chip', display: 'int'},
+        weatherChaosToken: {type: 'token', color: 'grey', icon: 'mdi-poker-chip', display: 'int'},
+        summerFestivalToken: {type: 'token', color: 'red', icon: 'mdi-poker-chip', display: 'int'},
+        nightHuntToken: {type: 'token', color: 'purple', icon: 'mdi-poker-chip', display: 'int'},
+        snowdownToken: {type: 'token', color: 'blue', icon: 'mdi-poker-chip', display: 'int'}
     },
     upgrade: {
         ...cindersUpgrade,

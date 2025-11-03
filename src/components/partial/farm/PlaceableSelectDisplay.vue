@@ -14,7 +14,8 @@
       <div class="d-flex align-center flex-grow-1">
         <div :class="colorText">{{ $vuetify.lang.t(`$vuetify.farm.crop.${ name }`) }}</div>
         <v-spacer></v-spacer>
-        <v-chip label small class="px-2 mr-2 balloon-text-dynamic" :color="growTimeColor"><v-icon class="mr-2">mdi-timer</v-icon>{{ $formatTime(cropGrow * 60) }}</v-chip>
+        <v-chip v-if="plantGiant" label small class="px-2 mr-2 balloon-text-dynamic" :color="giantGrowTimeColor"><v-icon class="mr-2">mdi-resize</v-icon>{{ $formatTime(cropGiantGrow * 60) }}</v-chip>
+        <v-chip v-else label small class="px-2 mr-2 balloon-text-dynamic" :color="growTimeColor"><v-icon class="mr-2">mdi-timer</v-icon>{{ $formatTime(cropGrow * 60) }}</v-chip>
       </div>
       <div v-if="canSeeExp" class="d-flex align-center flex-grow-1">
         <div class="crop-level text-center" :class="`${ isHighestLevel ? 'light-blue' : 'grey' }--text`">{{ crop.level }}</div>
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { MINUTES_PER_DAY, MINUTES_PER_HOUR } from '../../../js/constants';
 export default {
   data: () => ({
@@ -41,6 +43,7 @@ export default {
       berry: 'mdi-fruit-grapes',
       grain: 'mdi-barley',
       flower: 'mdi-flower',
+      special: 'mdi-star-face',
     }
   }),
   props: {
@@ -55,6 +58,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      plantGiant: state => state.farm.plantGiant,
+    }),
     type() {
       return this.item.name.split('_')[0];
     },
@@ -89,6 +95,16 @@ export default {
       return this.$store.getters['mult/get'](
         'farmGrow',
         this.crop.grow + this.cropGeneStats.mult.farmGrow.baseValue,
+        this.cropGeneStats.mult.farmGrow.multValue
+      );
+    },
+    cropGiantGrow() {
+      if (this.type !== 'crop') {
+        return 0;
+      }
+      return this.$store.getters['mult/get'](
+        'farmGrow',
+        this.crop.giantGrow + this.cropGeneStats.mult.farmGrow.baseValue,
         this.cropGeneStats.mult.farmGrow.multValue
       );
     },
@@ -154,6 +170,42 @@ export default {
         return 'pink-purple';
       }
       if (this.cropGrow <= (MINUTES_PER_DAY * 7)) {
+        return 'purple';
+      }
+      return 'deep-purple';
+    },
+    giantGrowTimeColor() {
+      if (this.type !== 'crop') {
+        return 'grey';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_HOUR * 2)) {
+        return 'green';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_HOUR * 4)) {
+        return 'light-green';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_HOUR * 8)) {
+        return 'yellow';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_HOUR * 16)) {
+        return 'amber';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_DAY)) {
+        return 'orange';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_DAY * 1 + MINUTES_PER_HOUR * 12)) {
+        return 'orange-red';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_DAY * 2)) {
+        return 'red';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_DAY * 3)) {
+        return 'pink';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_DAY * 4)) {
+        return 'pink-purple';
+      }
+      if (this.cropGiantGrow <= (MINUTES_PER_DAY * 7)) {
         return 'purple';
       }
       return 'deep-purple';

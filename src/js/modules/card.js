@@ -8,27 +8,29 @@ import gemCard from "./gem/card";
 import eventCard from "./event/card";
 import { buildArray } from "../utils/array";
 
+const cardObj = {
+        mining: miningCard,
+        village: villageCard,
+        horde: hordeCard,
+        farm: farmCard,
+        gallery: galleryCard,
+        gem: gemCard,
+        event: eventCard,
+    };
+
 export default {
     name: 'card',
     unlockNeeded: 'cardFeature',
     unlock: ['cardFeature', 'cardShiny'],
     mult: {
-        cardShinyChance: {display: 'percent', baseValue: 0.1},
+        cardShinyChance: {display: 'percent', baseValue: 0.015},
     },
     currency: {
-        shinyDust: {color: 'pale-light-blue', icon: 'mdi-shimmer'}
+        shinyDust: {color: 'pale-light-blue', icon: 'mdi-creation', display: 'int'}
     },
     note: buildArray(2).map(() => 'g'),
     init() {
-        for (const [name, feature] of Object.entries({
-            mining: miningCard,
-            village: villageCard,
-            horde: hordeCard,
-            farm: farmCard,
-            gallery: galleryCard,
-            gem: gemCard,
-            event: eventCard,
-        })) {
+        for (const [name, feature] of Object.entries(cardObj)) {
             if (feature.feature) {
                 store.dispatch('card/initFeature', {name, ...feature.feature});
             }
@@ -40,11 +42,21 @@ export default {
             for (const [key, elem] of Object.entries(feature.pack)) {
                 store.commit('card/initPack', {name: key, feature: name, ...elem});
             }
-
+        }
+        for (const [name, feature] of Object.entries(cardObj)) {
             if (feature.card) {
                 feature.card.forEach(elem => {
                     store.commit('card/initCard', {feature: name, ...elem});
                 });
+            }
+        }
+    },
+    postInit() {
+        for (const [name, feature] of Object.entries(cardObj)) {
+            for (const [key, elem] of Object.entries(feature.pack)) {
+                if (elem.unlock) {
+                    store.commit('unlock/addTrigger', {unlock: elem.unlock, trigger: `card_${ name }_${ key }`});
+                }
             }
         }
     },

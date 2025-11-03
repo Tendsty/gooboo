@@ -1,4 +1,4 @@
-import { SECONDS_PER_HOUR } from "../../../constants";
+import { HORDE_STACKING_COOLDOWN } from "../../../constants";
 
 export default {
     unlock: 'hordeClassArcher',
@@ -13,10 +13,10 @@ export default {
         base: 720,
         increment: 1.22
     },
-    courageMult: 2,
+    courageMult: 1.5,
     skills: {
         critMult: {type: 'stat', max: 1, effect: [
-            {name: 'hordeCritMult', type: 'base', value: lvl => lvl * 1.75}
+            {name: 'hordeCritMult', type: 'base', value: lvl => lvl * 3.5}
         ]},
         energyOnCrit: {
             type: 'passive',
@@ -24,7 +24,7 @@ export default {
             icon: 'mdi-lightning-bolt',
             max: 1,
             effect: [
-                {name: 'hordeEnergyOnCrit', type: 'tag', value: lvl => [lvl * 10]}
+                {name: 'hordeEnergyOnCrit', type: 'tag', value: lvl => [lvl * 15]}
             ]
         },
         longshot: {
@@ -32,11 +32,11 @@ export default {
             color: 'skyblue',
             icon: 'mdi-arrow-projectile',
             max: 1,
-            cooldown: () => 30,
-            activeCost: () => {return {energy: 70};},
+            cooldown: () => 10,
+            activeCost: () => {return {energy: 50};},
             active() {
                 return [
-                    {type: 'damagePhysic', value: 4.25, str: 0.65, canCrit: 0.75}
+                    {type: 'damagePhysic', value: 3.25, str: 0.45, canCrit: 0.75}
                 ];
             },
             activeType: 'combat'
@@ -48,7 +48,7 @@ export default {
             max: 5,
             cost: 20,
             cooldown: () => 45,
-            activeCost: () => {return {energy: 50};},
+            activeCost: () => {return {energy: 100};},
             active(lvl) {
                 return [
                     {type: 'buff', value: 12, effect: [
@@ -62,7 +62,14 @@ export default {
             {name: 'hordeStrength', type: 'base', value: lvl => lvl * 1.3}
         ]},
         critMult_2: {type: 'stat', max: 10, cost: 10, effect: [
-            {name: 'hordeCritMult', type: 'base', value: lvl => lvl * 0.1}
+            {name: 'hordeCritMult', type: 'base', value: lvl => lvl * 0.2}
+        ]},
+        energy: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 40}
+        ]},
+        recovery: {type: 'stat', max: 5, cost: 20, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 80},
+            {name: 'hordeRecovery', type: 'base', value: lvl => lvl * 0.004}
         ]},
         fireArrows: {
             type: 'active',
@@ -71,7 +78,7 @@ export default {
             max: 5,
             cost: 20,
             cooldown: () => 90,
-            activeCost: () => {return {energy: 110};},
+            activeCost: () => {return {energy: 125};},
             active(lvl) {
                 return [
                     {type: 'buff', value: 30, effect: [
@@ -88,15 +95,18 @@ export default {
             icon: 'mdi-bottle-tonic-skull',
             max: 5,
             cost: 20,
-            cooldown: () => 16,
-            activeCost: () => {return {energy: 50};},
+            cooldown: () => 56,
+            activeCost: () => {return {energy: 140};},
             active(lvl) {
                 return [
-                    {type: 'poison', value: lvl * 0.05 + 0.25, int: 0.01}
+                    {type: 'poison', value: lvl * 0.15 + 0.35, int: 0.02}
                 ];
             },
             activeType: 'combat'
         },
+        damage: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.2}
+        ]},
         critChance: {type: 'stat', max: 5, cost: 20, effect: [
             {name: 'hordeCritChance', type: 'base', value: lvl => lvl * 0.03}
         ]},
@@ -127,7 +137,8 @@ export default {
             ]
         },
         haste: {type: 'stat', max: 15, cost: 10, effect: [
-            {name: 'hordeHaste', type: 'base', value: lvl => lvl * 4}
+            {name: 'hordeHaste', type: 'base', value: lvl => lvl * 4},
+            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 10}
         ]},
         bloodOnCrit: {
             type: 'passive',
@@ -142,14 +153,33 @@ export default {
         blood: {type: 'stat', max: 15, cost: 10, effect: [
             {name: 'currencyHordeBloodCap', type: 'mult', value: lvl => lvl * 0.13 + 1}
         ]},
+        shockArrow: {
+            type: 'active',
+            color: 'light-blue',
+            icon: 'mdi-flash-alert',
+            max: 5,
+            cost: 20,
+            cooldown: () => 24,
+            activeCost: () => {return {energy: 110};},
+            active(lvl) {
+                return [
+                    {type: 'damageMagic', value: lvl * 1.3 + 4.1, int: 0.55, canCrit: lvl * 0.1},
+                    {type: 'silence', value: lvl + 5}
+                ];
+            },
+            activeType: 'combat'
+        },
         critChance_2: {type: 'stat', max: 5, cost: 20, effect: [
             {name: 'hordeCritChance', type: 'base', value: lvl => lvl * 0.03}
         ]},
-        energy: {type: 'stat', max: 10, cost: 10, effect: [
-            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 30}
+        energy_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 40}
         ]},
         health_2: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeHealth', type: 'base', value: lvl => lvl * 60}
+        ]},
+        intelligence_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.75}
         ]},
         sharpArrow: {
             type: 'active',
@@ -158,10 +188,10 @@ export default {
             max: 5,
             cost: 20,
             cooldown: () => 7,
-            activeCost: () => {return {energy: 25};},
+            activeCost: () => {return {energy: 30};},
             active(lvl) {
                 return [
-                    {type: 'damagePhysic', value: lvl * 0.4 + 1.2, str: 0.2},
+                    {type: 'damagePhysic', value: lvl * 0.4 + 1.2, str: 0.2, canCrit: lvl * 0.15},
                     {type: 'removeDivisionShield', value: 1}
                 ];
             },
@@ -170,13 +200,19 @@ export default {
         strength_2: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeStrength', type: 'base', value: lvl => lvl * 1.3}
         ]},
+        health_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 60}
+        ]},
+        haste_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHaste', type: 'base', value: lvl => lvl * 4}
+        ]},
         sharpMind: {
             type: 'active',
             color: 'orange-red',
             icon: 'mdi-motion',
             max: 5,
             cost: 20,
-            cooldown: () => 22 * SECONDS_PER_HOUR,
+            cooldown: () => HORDE_STACKING_COOLDOWN,
             activeCost: () => {return {};},
             active(lvl) {
                 return [
@@ -185,27 +221,91 @@ export default {
             },
             activeType: 'utility'
         },
+        forestBlessing: {
+            type: 'active',
+            color: 'green',
+            icon: 'mdi-tree',
+            max: 5,
+            cost: 20,
+            cooldown: () => 300,
+            activeCost: () => {return {energy: 500};},
+            active(lvl) {
+                return [
+                    {type: 'buff', value: lvl * 10 + 40, effect: [
+                        {type: 'base', name: 'hordeStrength', value: lvl * 4},
+                        {type: 'base', name: 'hordeIntelligence', value: lvl * 4},
+                        {type: 'base', name: 'hordeEnergyRegen', value: 20},
+                        {type: 'base', name: 'hordeHaste', value: 100},
+                        {type: 'base', name: 'hordeRecovery', value: 0.15},
+                    ]}
+                ];
+            },
+            activeType: 'combat'
+        },
         critChance_3: {type: 'stat', max: 5, cost: 20, effect: [
             {name: 'hordeCritChance', type: 'base', value: lvl => lvl * 0.03}
         ]},
+        damage_2: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.2}
+        ]},
         courage: {type: 'stat', max: 10, cost: 15, effect: [
-            {name: 'currencyHordeCourageGain', type: 'mult', value: lvl => lvl * 0.05 + 1}
+            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.05 + 1}
+        ]},
+        damage_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.2}
+        ]},
+        health_4: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 60}
+        ]},
+        critMult_3: {type: 'stat', max: 20, cost: 10, effect: [
+            {name: 'hordeCritMult', type: 'base', value: lvl => lvl * 0.2}
+        ]},
+        strength_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeStrength', type: 'base', value: lvl => lvl * 1.3}
+        ]},
+        recovery_2: {type: 'stat', max: 5, cost: 20, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 80},
+            {name: 'hordeRecovery', type: 'base', value: lvl => lvl * 0.004}
+        ]},
+        damage_4: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.2}
+        ]},
+        health_5: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHealth', type: 'base', value: lvl => lvl * 60}
+        ]},
+        critChance_4: {type: 'stat', max: 5, cost: 20, effect: [
+            {name: 'hordeCritChance', type: 'base', value: lvl => lvl * 0.03}
+        ]},
+        intelligence_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.75}
+        ]},
+        haste_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeHaste', type: 'base', value: lvl => lvl * 4}
+        ]},
+        energy_3: {type: 'stat', max: 10, cost: 10, effect: [
+            {name: 'hordeEnergy', type: 'base', value: lvl => lvl * 40}
         ]},
     },
     skillTree: [
         {isInnate: true, level: 0, items: ['critMult', 'energyOnCrit', 'longshot']},
-        {level: 1, items: ['eagleEye', 'strength', 'critMult_2']},
-        {level: 10, items: ['fireArrows', 'poisonArrow', 'critChance', 'intelligence']},
+        {level: 1, items: ['eagleEye', 'strength', 'critMult_2', 'energy', 'recovery']},
+        {level: 10, items: ['fireArrows', 'poisonArrow', 'damage', 'critChance', 'intelligence']},
         {isChoice: true, level: 20, items: [['healOnCrit', 'health'], ['reduceCooldownOnCrit', 'haste'], ['bloodOnCrit', 'blood']]},
-        {level: 30, items: ['critChance_2', 'energy', 'health_2']},
-        {level: 40, items: ['sharpArrow', 'sharpMind', 'strength_2']},
-        {level: 50, items: ['critChance_3', 'courage']},
+        {level: 30, items: ['shockArrow', 'critChance_2', 'energy_2', 'health_2', 'intelligence_2']},
+        {level: 40, items: ['sharpArrow', 'sharpMind', 'strength_2', 'health_3', 'haste_2']},
+        {level: 50, items: ['forestBlessing', 'critChance_3', 'damage_2', 'courage']},
+        {level: 75, items: ['damage_3', 'health_4', 'critMult_3', 'strength_3', 'recovery_2']},
+        {level: 100, items: ['damage_4', 'health_5', 'critChance_4', 'intelligence_3', 'haste_3', 'energy_3']},
     ],
     quests: {
         stat: [
-            {stat: 'hordeIntelligence', type: 'total', value: 10},
-            {stat: 'hordeHaste', type: 'total', value: 80},
-            {stat: 'hordeCritChance', type: 'total', value: 0.5},
+            {stat: 'hordeCritMult', type: 'total', value: 7},
+            {stat: 'hordeCritChance', type: 'total', value: 0.6},
+            {stat: 'hordeHealth', type: 'base', value: 1250},
+            {stat: 'hordeIntelligence', type: 'total', value: 35},
+            {stat: 'hordeHaste', type: 'total', value: 120},
+            {stat: 'hordeCritChance', type: 'total', value: 1.1},
+            {stat: 'hordeStrength', type: 'total', value: 85},
         ],
         zone: [
             {area: 'warzone', zone: '4'},

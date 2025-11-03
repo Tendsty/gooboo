@@ -15,15 +15,15 @@
 <template>
   <gb-tooltip>
     <template v-slot:activator="{ on, attrs }">
-      <v-badge class="balloon-text-dynamic" overlap bordered left offset-x="44" :class="$vnode.data.staticClass" :color="hasUsesLeft ? sigil.color : 'grey'">
+      <v-badge class="balloon-text-dynamic" overlap bordered left offset-x="44" :class="$vnode.data.staticClass" :color="hasUsesLeft ? color : 'grey'">
         <div class="active-container rounded d-flex justify-center align-center" v-bind="attrs" v-on="on">
           <v-progress-linear
             class="active-cooldown rounded"
             height="36"
-            :color="(hasUsesLeft ? sigil.color : 'grey') + ($vuetify.theme.dark ? ' darken-2' : ' lighten-2')"
+            :color="(hasUsesLeft ? color : 'grey') + ($vuetify.theme.dark ? ' darken-2' : ' lighten-2')"
             :value="hasUsesLeft ? cooldownPercent : 0"
           ></v-progress-linear>
-          <v-icon>{{ sigil.icon }}</v-icon>
+          <v-icon>{{ icon }}</v-icon>
         </div>
         <template v-slot:badge>
           <span :class="{'black--text': !$vuetify.theme.dark}">
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import EnemyActiveTooltip from './EnemyActiveTooltip.vue';
 
 export default {
@@ -49,17 +50,35 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      currentElement: 'horde/currentElement',
+    }),
+    hasElement() {
+      return this.$store.state.horde.currentTower === null && !this.$store.state.horde.raidboss && this.currentElement !== null;
+    },
     active() {
       return this.$store.state.horde.enemy.active[this.name];
     },
     sigil() {
-      return this.$store.state.horde.sigil[this.name];
+      return this.hasElement ? null : this.$store.state.horde.sigil[this.name];
     },
     sigilLevel() {
-      return this.$store.state.horde.enemy.sigil[this.name];
+      return this.hasElement ? 0 : this.$store.state.horde.enemy.sigil[this.name];
+    },
+    element() {
+      return this.hasElement ? this.$store.state.horde.element[this.currentElement] : null;
+    },
+    elementActive() {
+      return this.hasElement ? this.element.enemyActives(this.active.power, this.$store.state.horde.bossFight)[this.name] : null;
+    },
+    icon() {
+      return this.hasElement ? this.elementActive.icon : this.sigil.icon;
+    },
+    color() {
+      return this.hasElement ? this.elementActive.color : this.sigil.color;
     },
     cooldown() {
-      return Math.ceil(this.sigil.active.cooldown(this.sigilLevel, this.$store.state.horde.bossFight));
+      return this.hasElement ? this.elementActive.cooldown : Math.ceil(this.sigil.active.cooldown(this.sigilLevel, this.$store.state.horde.bossFight));
     },
     cooldownPercent() {
       return 100 * (1 - (this.active.cooldown / this.cooldown));

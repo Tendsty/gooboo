@@ -6,6 +6,7 @@
         <div v-if="confirm.type === 'upgrade'">{{ $vuetify.lang.t(`$vuetify.confirm.upgrade.0`) }}"{{ $vuetify.lang.t(`$vuetify.upgrade.${confirm.name}`) }}"{{ confirm.amount > 1 ? ` x${confirm.amount}` : '' }}{{ $vuetify.lang.t(`$vuetify.confirm.upgrade.1`) }}</div>
         <div v-else-if="confirm.type === 'theme'">{{ $vuetify.lang.t(`$vuetify.confirm.theme.0`) }}"{{ $vuetify.lang.t(`$vuetify.theme.${confirm.name}`) }}"{{ $vuetify.lang.t(`$vuetify.confirm.theme.1`) }}</div>
         <div v-else-if="confirm.type === 'cardPack'">{{ $vuetify.lang.t(`$vuetify.confirm.cardPack.0`) }}"{{ $vuetify.lang.t(`$vuetify.card.pack.${confirm.name}`) }}"{{ confirm.amount > 1 ? ` x${confirm.amount}` : '' }}{{ $vuetify.lang.t(`$vuetify.confirm.cardPack.1`) }}</div>
+        <div v-else-if="confirm.type === 'cardShinyPack'">{{ $vuetify.lang.t(`$vuetify.confirm.cardShinyPack.0`) }}"{{ $vuetify.lang.t(`$vuetify.card.pack.${confirm.name}`) }}"{{ $vuetify.lang.t(`$vuetify.confirm.cardShinyPack.1`) }}</div>
         <div v-else-if="confirm.type === 'weatherChaosFishingRodBuy'">{{ $vuetify.lang.t(`$vuetify.confirm.weatherChaosFishingRodBuy`, $vuetify.lang.t(`$vuetify.event.weatherChaos.fishingRod.${ confirm.name }`)) }}</div>
         <div v-else-if="confirm.type === 'reset'">
           <div>{{ $vuetify.lang.t(`$vuetify.confirm.reset.text`, $vuetify.lang.t(`$vuetify.feature.${ confirm.feature }`)) }}</div>
@@ -35,7 +36,7 @@ import PriceTag from './PriceTag.vue';
 export default {
   components: { PriceTag },
   data: () => ({
-    dialog: false
+    dialog: false,
   }),
   computed: {
     ...mapState({

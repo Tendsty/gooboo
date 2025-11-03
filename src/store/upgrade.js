@@ -114,6 +114,7 @@ export default {
                 bought: 0,
                 highestLevel: 0,
                 cap: o.cap ?? null,
+                capDefault: o.cap ?? null,
                 requirement: o.requirement ?? (o.requirementValue !== undefined ? (() => o.requirementBase() >= o.requirementValue) : (() => true)),
                 requirementStat: o.requirementStat ?? null,
                 requirementValue: o.requirementValue ?? null,
@@ -122,6 +123,7 @@ export default {
                 timeNeeded: o.timeNeeded ?? (() => 1),
                 timeProgress: 0,
                 persistent: o.persistent ?? false,
+                persistentDefault: o.persistent ?? false,
                 alwaysActive: o.alwaysActive ?? false,
                 collapse: false,
                 note: o.note ?? null,
@@ -182,12 +184,14 @@ export default {
     },
     actions: {
         cleanState({ state, commit }) {
-            for (const [key] of Object.entries(state.item)) {
+            for (const [key, elem] of Object.entries(state.item)) {
                 commit('updateKey', {name: key, key: 'level', value: 0});
                 commit('updateKey', {name: key, key: 'bought', value: 0});
                 commit('updateKey', {name: key, key: 'highestLevel', value: 0});
                 commit('updateKey', {name: key, key: 'timeProgress', value: 0});
                 commit('updateKey', {name: key, key: 'collapse', value: false});
+                commit('updateKey', {name: key, key: 'cap', value: elem.capDefault});
+                commit('updateKey', {name: key, key: 'persistent', value: elem.persistentDefault});
             }
             for (const [key] of Object.entries(state.queue)) {
                 commit('updateQueue', {key, value: []});
@@ -207,7 +211,13 @@ export default {
         apply({ state, dispatch }, o) {
             let trigger = o.onBuy ?? false;
             state.item[o.name].effect.forEach(eff => {
-                dispatch('system/applyEffect', {type: eff.type, name: eff.name, multKey: `upgrade_${o.name}`, value: eff.value(state.item[o.name].level), trigger}, {root: true});
+                if (eff.type === 'gainConsumable') {
+                    for (let i = o.oldLevel ?? 0, n = state.item[o.name].level; i < n; i++) {
+                        dispatch('system/applyEffect', {type: eff.type, name: eff.name, multKey: `upgrade_${o.name}`, value: eff.value(i + 1), trigger}, {root: true});
+                    }
+                } else {
+                    dispatch('system/applyEffect', {type: eff.type, name: eff.name, multKey: `upgrade_${o.name}`, value: eff.value(state.item[o.name].level), trigger}, {root: true});
+                }
             });
             if (trigger) {
                 state.item[o.name].onBuy();
@@ -235,11 +245,12 @@ export default {
 
                 // Instant mode increases level and applies effects immediately
                 if (upgrade.mode === 'instant') {
+                    const oldLevel = state.item[name].level;
                     commit('updateKey', {name, key: 'level', value: upgrade.bought});
                     if (upgrade.level > upgrade.highestLevel) {
                         commit('updateKey', {name, key: 'highestLevel', value: upgrade.bought});
                     }
-                    dispatch('apply', {name, onBuy: true});
+                    dispatch('apply', {name, oldLevel, onBuy: true});
                     if (upgrade.note !== null) {
                         dispatch('note/find', upgrade.note, {root: true});
                     }

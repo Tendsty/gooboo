@@ -1,60 +1,60 @@
-import store from "../../../store";
-
 export default {
-    bookWallet: {type: 'book', raiseOtherCap: 'village_wallet', requirement() {
-        return store.state.upgrade.item.village_wallet.highestLevel >= 12;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 10)};
-    }, effect: [
-        {name: 'upgradeVillageWalletCap', type: 'base', value: lvl => lvl * 2}
+    coinCap: {subfeature: 0, scalesWithGL: true, minGL: 25, maxGL: 124, effect: [
+        {name: 'currencyVillageCoinCap', type: 'base', value: lvl => lvl * 50}
     ]},
-    bookResourceBag: {type: 'book', raiseOtherCap: 'village_resourceBag', requirement() {
-        return store.state.upgrade.item.village_resourceBag.highestLevel >= 10;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 15)};
-    }, effect: [
-        {name: 'upgradeVillageResourceBagCap', type: 'base', value: lvl => lvl * 2}
+    plantFiberCap: {subfeature: 0, scalesWithGL: true, minGL: 40, maxGL: 139, effect: [
+        {name: 'currencyVillagePlantFiberCap', type: 'mult', value: lvl => lvl * 0.02 + 1}
     ]},
-    bookMetalBag: {type: 'book', raiseOtherCap: 'village_metalBag', requirement() {
-        return store.state.upgrade.item.village_metalBag.highestLevel >= 5;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 16)};
-    }, effect: [
-        {name: 'upgradeVillageMetalBagCap', type: 'base', value: lvl => lvl}
+    woodCap: {subfeature: 0, scalesWithGL: true, minGL: 40, maxGL: 139, effect: [
+        {name: 'currencyVillageWoodCap', type: 'mult', value: lvl => lvl * 0.02 + 1}
     ]},
-    bookTreasury: {type: 'book', raiseOtherCap: 'village_treasury', requirement() {
-        return store.state.upgrade.item.village_treasury.highestLevel >= 10;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 30)};
-    }, effect: [
-        {name: 'upgradeVillageTreasuryCap', type: 'base', value: lvl => lvl}
+    stoneCap: {subfeature: 0, scalesWithGL: true, minGL: 40, maxGL: 139, effect: [
+        {name: 'currencyVillageStoneCap', type: 'mult', value: lvl => lvl * 0.02 + 1}
     ]},
-    bookStorage: {type: 'book', raiseOtherCap: 'village_storage', requirement() {
-        return store.state.upgrade.item.village_storage.highestLevel >= 20;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 90)};
-    }, effect: [
-        {name: 'upgradeVillageStorageCap', type: 'base', value: lvl => lvl}
+    metalCap: {subfeature: 0, scalesWithGL: true, minGL: 50, maxGL: 149, effect: [
+        {name: 'currencyVillageMetalCap', type: 'mult', value: lvl => lvl * 0.02 + 1}
     ]},
-    bookShed: {type: 'book', raiseOtherCap: 'village_shed', requirement() {
-        return store.state.upgrade.item.village_shed.highestLevel >= 5;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 110)};
-    }, effect: [
-        {name: 'upgradeVillageShedCap', type: 'base', value: lvl => lvl}
+    taxRate: {subfeature: 0, scalesWithGL: true, minGL: 60, maxGL: 109, effect: [
+        {name: 'villageTaxRate', type: 'base', value: lvl => lvl * 0.004}
     ]},
-    bookSchool: {type: 'book', raiseOtherCap: 'village_school', requirement() {
-        return store.state.upgrade.item.village_school.highestLevel >= 5;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 180)};
-    }, effect: [
-        {name: 'upgradeVillageSchoolCap', type: 'base', value: lvl => lvl}
+    waterCap: {subfeature: 0, scalesWithGL: true, minGL: 80, maxGL: 179, effect: [
+        {name: 'currencyVillageWaterCap', type: 'mult', value: lvl => lvl * 0.04 + 1}
     ]},
-    bookBigStorage: {type: 'book', raiseOtherCap: 'village_bigStorage', requirement() {
-        return store.state.upgrade.item.village_bigStorage.highestLevel >= 20;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 480)};
-    }, effect: [
-        {name: 'upgradeVillageBigStorageCap', type: 'base', value: lvl => lvl}
+    glassCap: {subfeature: 0, scalesWithGL: true, minGL: 90, maxGL: 189, effect: [
+        {name: 'currencyVillageGlassCap', type: 'mult', value: lvl => lvl * 0.01 + 1}
+    ]},
+    knowledgeCap: {subfeature: 0, scalesWithGL: true, minGL: 100, effect: [
+        {name: 'currencyVillageKnowledgeCap', type: 'base', value: lvl => lvl}
+    ]},
+    hardwoodCap: {subfeature: 0, scalesWithGL: true, minGL: 150, maxGL: 249, effect: [
+        {name: 'currencyVillageHardwoodCap', type: 'mult', value: lvl => lvl * 0.01 + 1}
+    ]},
+    gemCap: {subfeature: 0, scalesWithGL: true, minGL: 150, maxGL: 249, effect: [
+        {name: 'currencyVillageGemCap', type: 'mult', value: lvl => lvl * 0.01 + 1}
+    ]},
+
+    plantFiberCap2: {subfeature: 1, scalesWithGL: true, minGL: 20, maxGL: 119, effect: [
+        {name: 'currencyVillagePlantFiberCap', type: 'base', value: lvl => lvl * 30}
+    ]},
+    woodCap2: {subfeature: 1, scalesWithGL: true, minGL: 25, maxGL: 124, effect: [
+        {name: 'currencyVillageWoodCap', type: 'base', value: lvl => lvl * 30}
+    ]},
+    stoneCap2: {subfeature: 1, scalesWithGL: true, minGL: 30, maxGL: 129, effect: [
+        {name: 'currencyVillageStoneCap', type: 'base', value: lvl => lvl * 30}
+    ]},
+    metalCap2: {subfeature: 1, scalesWithGL: true, minGL: 40, maxGL: 139, effect: [
+        {name: 'currencyVillageMetalCap', type: 'base', value: lvl => lvl * 15}
+    ]},
+    waterCap2: {subfeature: 1, scalesWithGL: true, minGL: 60, maxGL: 159, effect: [
+        {name: 'currencyVillageWaterCap', type: 'base', value: lvl => lvl * 15}
+    ]},
+    glassCap2: {subfeature: 1, scalesWithGL: true, minGL: 80, maxGL: 179, effect: [
+        {name: 'currencyVillageGlassCap', type: 'base', value: lvl => lvl * 15}
+    ]},
+    hardwoodCap2: {subfeature: 1, scalesWithGL: true, minGL: 110, maxGL: 209, effect: [
+        {name: 'currencyVillageHardwoodCap', type: 'base', value: lvl => lvl * 15}
+    ]},
+    gemCap2: {subfeature: 1, scalesWithGL: true, minGL: 140, maxGL: 239, effect: [
+        {name: 'currencyVillageGemCap', type: 'base', value: lvl => lvl * 15}
     ]},
 }

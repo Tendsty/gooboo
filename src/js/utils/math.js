@@ -1,4 +1,4 @@
-export { logBase, getSequence, splicedLinear, splicedPow, splicedPowLinear, deltaLinear, digitSum }
+export { logBase, getSequence, splicedLinear, splicedPow, splicedPowLinear, deltaLinear, digitSum, getDiminishing, getApproaching, isPrime }
 
 /**
  * Returns the logarithm of a number
@@ -39,4 +39,21 @@ function deltaLinear(base, increase, amount = 1, skip = 0) {
 
 function digitSum(num) {
     return `${num}`.split('').reduce((acc, n) => acc += parseInt(n), 0);
+}
+
+function getDiminishing(num) {
+    return num <= 0 ? 0 : Math.pow(Math.log(num + 1.5), 2.1) / Math.pow(Math.log(2.5), 2.1);
+}
+
+function getApproaching(base, cap, num) {
+    return (1 - Math.pow(1 - base / cap, num)) * cap;
+}
+
+function isPrime(num) {
+    for (let i = 2, n = Math.sqrt(num); i <= n; i++) {
+        if (num % i === 0) {
+            return false;
+        }
+    }
+    return num > 1;
 }

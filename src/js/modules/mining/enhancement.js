@@ -9,35 +9,35 @@ export default {
     },
     barBronze: {
         effect: [
-            {name: 'miningOreGain', type: 'mult', value: lvl => Math.pow(1.5, lvl)},
-            {name: 'miningRareEarthGain', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
+            {name: 'miningOreGain', type: 'mult', value: lvl => Math.pow(1.1, lvl) * (lvl * 0.1 + 1)},
+            {name: 'miningRareEarthGain', type: 'mult', value: lvl => Math.pow(1.15, lvl) * (lvl * 0.15 + 1)}
         ]
     },
     barSteel: {
         effect: [
-            {name: 'miningDamage', type: 'mult', value: lvl => lvl * 0.35 + 1},
-            {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(1 / 1.5, lvl)}
+            {name: 'miningDamage', type: 'mult', value: lvl => lvl * 0.08 + 1},
+            {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(1 / 1.35, lvl)}
         ]
     },
     barTitanium: {
         effect: [
-            {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => getSequence(2, lvl) + 1}
+            {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => getSequence(2, lvl) * 0.1 + 1}
         ]
     },
     barShiny: {
         effect: [
-            {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => Math.pow(1.35, lvl)},
-            {name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => lvl * 0.2 + 1}
+            {name: 'miningDepthDwellerSpeed', type: 'mult', value: lvl => lvl * 0.1 + 1},
+            {name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
         ]
     },
     barIridium: {
         effect: [
-            {name: 'currencyMiningEmberGain', type: 'mult', value: lvl => lvl + 1}
+            {name: 'currencyMiningEmberGain', type: 'mult', value: lvl => lvl * 0.3 + 1}
         ]
     },
     barDarkIron: {
         effect: [
-            {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => getSequence(2, lvl) * 0.5 + 1}
+            {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => getSequence(2, lvl) * 0.15 + 1}
         ]
     }
 }

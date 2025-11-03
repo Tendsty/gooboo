@@ -1,5 +1,4 @@
 import Vue from "vue";
-import { logBase } from "../js/utils/math";
 
 export default {
     namespaced: true,
@@ -20,17 +19,15 @@ export default {
         featureIsFrozen: (state, getters, rootState) => {
             return !!state[rootState.system.screen]?.active;
         },
-        expGain: (state, getters, rootState) => (feature) => {
-            let gain = 0;
-            const subfeature = rootState.system.features[feature].currentSubfeature;
+        expGain: (state, getters, rootState) => (feature, subfeature) => {
+            let canGain = true;
+            const globalLevel = rootState.meta.globalLevelParts[feature + '_' + subfeature] ?? 0;
             for (const [, stat] of Object.entries(state[feature].data[subfeature])) {
-                const statValue = rootState.stat[stat].total;
-                if (statValue > 0) {
-                    const baseValue = stat === 'farm_bestPrestige' ? statValue : logBase(statValue, stat === 'horde_bestPrestige0' ? 9 : 3);
-                    gain += baseValue * Math.pow(1.1, baseValue) * 40;
+                if (rootState.stat[stat].total <= 0) {
+                    canGain = false;
                 }
             }
-            return gain;
+            return canGain ? Math.round(Math.pow(1.015, globalLevel) * globalLevel * 2) : 0;
         },
         prestigeGain: (state, getters, rootState, rootGetters) => (feature) => {
             const subfeature = rootState.system.features[feature].currentSubfeature;
@@ -70,8 +67,10 @@ export default {
     },
     actions: {
         cleanState({ state, commit }) {
-            for (const [key] of Object.entries(state)) {
+            for (const [key, elem] of Object.entries(state)) {
                 commit('updateKey', {name: key, key: 'active', value: false});
+                commit('updateKey', {name: key, key: 'exp', value: elem.effect.map(() => 0)});
+                commit('updateKey', {name: key, key: 'level', value: elem.effect.map(() => 0)});
             }
         },
         toggleActive({ state, getters, rootGetters, commit }, name) {
@@ -86,11 +85,11 @@ export default {
                 const passiveMultName = `${ o.name }CryolabPassive${ subfeature }`;
                 const featureMult = o.name === 'village' ? 0.4 : 1;
                 modifiedEffect.push([
-                    {name: activeMultName, type: 'base', value: lvl => lvl * featureMult * 0.02},
-                    {name: passiveMultName, type: 'base', value: lvl => lvl * featureMult * 0.01},
+                    {name: activeMultName, type: 'base', value: lvl => lvl * featureMult * 0.01},
+                    {name: passiveMultName, type: 'base', value: lvl => lvl * featureMult * 0.005},
                     ...effect
                 ]);
-                commit('mult/init', {feature: 'cryolab', name: activeMultName, display: 'percent', baseValue: 0.25 * featureMult}, {root: true});
+                commit('mult/init', {feature: 'cryolab', name: activeMultName, display: 'percent', baseValue: 0.2 * featureMult}, {root: true});
                 commit('mult/init', {feature: 'cryolab', name: passiveMultName, display: 'percent'}, {root: true});
             });
             commit('init', {...o, effect: modifiedEffect});

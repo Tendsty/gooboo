@@ -9,7 +9,7 @@ export default {
         ],
         horde: [
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'bugfix',
                 text: '388'
             },

@@ -51,7 +51,7 @@ export default function(seconds) {
                     store.dispatch('currency/gain', {
                         feature: 'event',
                         name: cellType.produces,
-                        amount: chosenCell.cacheAutocollect * store.getters['mult/get']('summerFestivalMaterialGain') * Math.pow(1.01, store.getters['meta/globalEventLevel'])
+                        amount: chosenCell.cacheAutocollect * store.getters['mult/get']('summerFestivalMaterialGain') * store.getters['summerFestival/eventMult']
                     });
                 }
             }

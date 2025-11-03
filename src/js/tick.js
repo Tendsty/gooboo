@@ -12,7 +12,9 @@ import store from "../store";
 import { saveLocal } from "./savefile";
 import general from "./modules/general";
 import event from "./modules/event";
+import relic from "./modules/relic";
 import { getDay } from "./utils/date";
+import treasure from "./modules/treasure";
 
 export { advance, tick }
 
@@ -78,7 +80,7 @@ function advance() {
 }
 
 function tick(newTime, oldTime) {
-    [meta, mining, village, horde, farm, gallery, gem, school, event, achievement, general, cryolab].forEach(module => {
+    [meta, mining, village, horde, farm, gallery, gem, school, event, achievement, relic, general, treasure, cryolab].forEach(module => {
         const isFrozen = !!store.state.cryolab[module.name] && store.state.cryolab[module.name].active;
         if ((module.unlockNeeded === null || store.state.unlock[module.unlockNeeded].use)) {
             const diff = Math.floor(newTime * store.state.system.timeMult / module.tickspeed) - Math.floor(oldTime * store.state.system.timeMult / module.tickspeed);

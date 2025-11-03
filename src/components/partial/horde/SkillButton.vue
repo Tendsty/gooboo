@@ -29,7 +29,7 @@
 </style>
 
 <template>
-  <gb-tooltip key="item-chance-full">
+  <gb-tooltip key="item-chance-full" :title-text="['stat', 'statBig'].includes(type) ? null : $vuetify.lang.t(`$vuetify.horde.classes.skillName.${ name }`)">
     <template v-slot:activator="{ on, attrs }">
       <div class="skill-container mb-4" v-bind="attrs" v-on="on" :class="[$vnode.data.staticClass, {'mx-1 mt-1': type !== 'active'}]">
         <v-icon :size="circleSize" class="skill-bg-circle" :class="{'skill-disabled': isFrozen || disabled}">{{ circleIcon }}</v-icon>
@@ -49,7 +49,8 @@
         </div>
       </div>
     </template>
-    <div v-if="!isMax" class="mt-0">{{ $vuetify.lang.t('$vuetify.horde.classes.skillPointCost', skill.cost) }}</div>
+    <div v-if="type === 'stance'">{{ $vuetify.lang.t('$vuetify.horde.classes.stanceClick', skill.cost) }}</div>
+    <div v-else-if="!isMax" class="mt-0">{{ $vuetify.lang.t('$vuetify.horde.classes.skillPointCost', skill.cost) }}</div>
     <template v-if="type === 'active'">
       <active-cost
         class="mt-0"
@@ -112,11 +113,14 @@ export default {
     circleIcon() {
       switch (this.type) {
         case 'stat':
+        case 'statBig':
           return 'mdi-circle';
         case 'passive':
           return 'mdi-decagram';
         case 'active':
           return 'mdi-square-rounded';
+        case 'stance':
+          return 'mdi-hexagon';
       }
       return 'mdi-circle';
     },
@@ -124,9 +128,11 @@ export default {
       switch (this.type) {
         case 'stat':
           return 30;
+        case 'statBig':
         case 'passive':
           return 44;
         case 'active':
+        case 'stance':
           return 70;
       }
       return 30;
@@ -135,9 +141,11 @@ export default {
       switch (this.type) {
         case 'stat':
           return 32;
+        case 'statBig':
         case 'passive':
           return 46;
         case 'active':
+        case 'stance':
           return 72;
       }
       return 32;
@@ -146,9 +154,11 @@ export default {
       switch (this.type) {
         case 'stat':
           return 15;
+        case 'statBig':
         case 'passive':
           return 22;
         case 'active':
+        case 'stance':
           return 35;
       }
       return 15;
@@ -203,13 +213,13 @@ export default {
       if (this.type !== 'active') {
         return 0;
       }
-      return this.skill.cooldown(this.skillLevel);
+      return this.skill.cooldown(Math.max(this.skillLevel, 1));
     },
     activeCost() {
       if (this.type !== 'active') {
         return {};
       }
-      return this.skill.activeCost(this.skillLevel);
+      return this.skill.activeCost(Math.max(this.skillLevel, 1));
     },
     playerMaxHealth() {
       return this.$store.state.horde.cachePlayerStats.health;

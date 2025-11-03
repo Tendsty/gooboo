@@ -3,7 +3,7 @@
     <v-text-field class="ma-1" :label="$vuetify.lang.t(`$vuetify.horde.loadoutName`)" outlined hide-details v-model="loadoutName"></v-text-field>
     <v-select
       class="ma-1"
-      :label="$vuetify.lang.t(`$vuetify.horde.items.name`)"
+      :label="$vuetify.lang.t(`$vuetify.horde.equipment.name`)"
       multiple
       outlined
       hide-details
@@ -12,12 +12,12 @@
       v-model="contentList"
       clearable
     >
-      <template v-slot:selection="{ item, index }">{{ index > 0 ? ', ' : '' }}{{ $vuetify.lang.t(`$vuetify.horde.items.${ item.name }`) }}</template>
+      <template v-slot:selection="{ item, index }">{{ index > 0 ? ', ' : '' }}{{ $vuetify.lang.t(`$vuetify.horde.equipment.${ item.name }`) }}</template>
       <template v-slot:item="{ item }"><equip-display :name="item.name"></equip-display></template>
     </v-select>
     <div class="d-flex flex-wrap justify-end">
       <v-btn v-if="contentList.length <= 0" color="primary" class="ma-1" @click="takeEquipped">
-        {{ $vuetify.lang.t(`$vuetify.horde.items.takeEquipped`) }}
+        {{ $vuetify.lang.t(`$vuetify.horde.equipment.takeEquipped`) }}
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn color="error" class="ma-1" @click="deleteLoadout">

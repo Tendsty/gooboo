@@ -49,55 +49,52 @@
         <span class="scoreboard-text">{{ Math.floor(score) }}</span>
         <span v-if="mode === 'exam'" class="scoreboard-text">&nbsp;/&nbsp;{{ currentSubject.scoreGoal }}</span>
       </v-chip>
-      <v-btn class="ma-2" v-if="mode === 'practice'" color="error" @click="leaveSchool">Leave</v-btn>
+      <v-btn class="ma-2" v-if="mode === 'practice'" color="error" @click="leaveSchool">{{ $vuetify.lang.t('$vuetify.gooboo.leave') }}</v-btn>
     </div>
     <template v-if="canSeeMinigame">
-      <math-minigame v-if="playing === 'math'" @score="updateScore"></math-minigame>
+      <math-minigame v-if="playing === 'math'" @score="updateScore" @timer="tickTimer"></math-minigame>
       <literature-minigame v-else-if="playing === 'literature'" @score="updateScore"></literature-minigame>
-      <history-minigame v-else-if="playing === 'history'" :school-mode="mode" @score="updateScore" @stop="finishSchool"></history-minigame>
-      <art-minigame v-else-if="playing === 'art'" @score="updateScore"></art-minigame>
+      <history-minigame v-else-if="playing === 'history'" :school-mode="mode" @score="updateScore" @timer="updateTimer" @stop="finishSchool"></history-minigame>
+      <art-minigame v-else-if="playing === 'art'" @score="updateScore" @timer="tickTimer"></art-minigame>
+      <chemistry-minigame v-else-if="playing === 'chemistry'" :school-mode="mode" @score="updateScore" @timer="updateTimer" @stop="finishSchool"></chemistry-minigame>
     </template>
     <div v-else class="text-center scoreboard-text">{{ $vuetify.lang.t(`$vuetify.school.${ mode === 'exam' ? 'beginExam' : 'begin' }`) }}</div>
-  </div>
-  <div v-else-if="$vuetify.breakpoint.mdAndUp">
-    <v-row no-gutters>
-      <v-col cols="6" xl="9" class="scroll-container">
-        <subject-list @practice="startPractice" @study="startStudy" @exam="startExam"></subject-list>
-      </v-col>
-      <v-col cols="6" xl="3" class="scroll-container">
-        <book-upgrades></book-upgrades>
-      </v-col>
-    </v-row>
   </div>
   <div v-else>
     <v-tabs v-model="tab" grow show-arrows>
       <v-tab href="#school"><tab-icon-text :text="$vuetify.lang.t('$vuetify.school.school')" icon="mdi-school"></tab-icon-text></v-tab>
-      <v-tab href="#library"><tab-icon-text :text="$vuetify.lang.t('$vuetify.school.library')" icon="mdi-book"></tab-icon-text></v-tab>
+      <v-tab v-if="canSeeLibrary" href="#library">
+        <v-badge dot :value="hasLibraryBadge">
+          <tab-icon-text :text="$vuetify.lang.t('$vuetify.school.library')" icon="mdi-book"></tab-icon-text>
+        </v-badge>
+      </v-tab>
     </v-tabs>
-    <subject-list v-if="tab === 'school'" @practice="startPractice" @study="startStudy" @exam="startExam"></subject-list>
-    <book-upgrades v-else-if="tab === 'library'"></book-upgrades>
+    <subject-list v-if="tab === 'school'" :class="{'scroll-container-tab': $vuetify.breakpoint.mdAndUp}" @practice="startPractice" @study="startStudy" @exam="startExam"></subject-list>
+    <book-library v-else-if="tab === 'library'" :class="{'scroll-container-tab': $vuetify.breakpoint.mdAndUp}"></book-library>
   </div>
 </template>
 
 <script>
 import MathMinigame from '../partial/school/MathMinigame.vue';
 import LiteratureMinigame from '../partial/school/LiteratureMinigame.vue';
-import BookUpgrades from '../partial/school/BookUpgrades.vue';
 import SubjectList from '../partial/school/SubjectList.vue';
 import TabIconText from '../partial/render/TabIconText.vue';
 import HistoryMinigame from '../partial/school/HistoryMinigame.vue';
 import ArtMinigame from '../partial/school/ArtMinigame.vue';
-import { SCHOOL_EXAM_TIME, SCHOOL_STUDY_TIME } from '../../js/constants';
+import { SCHOOL_EXAM_PASS_PRICE, SCHOOL_EXAM_TIME, SCHOOL_STUDY_TIME } from '../../js/constants';
+import BookLibrary from '../partial/school/BookLibrary.vue';
+import ChemistryMinigame from '../partial/school/ChemistryMinigame.vue';
 
 export default {
-  components: { MathMinigame, LiteratureMinigame, BookUpgrades, SubjectList, TabIconText, HistoryMinigame, ArtMinigame },
+  components: { MathMinigame, LiteratureMinigame, SubjectList, TabIconText, HistoryMinigame, ArtMinigame, BookLibrary, ChemistryMinigame },
   data: () => ({
     timer: 0,
     playing: null,
     mode: null,
     intervalId: null,
     score: 0,
-    tab: 'school'
+    tab: 'school',
+    hasCustomTimer: ['history', 'chemistry']
   }),
   computed: {
     canSeeMinigame() {
@@ -113,7 +110,13 @@ export default {
       }
     },
     currentSubject() {
-      return this.playing ? this.$store.state.school[this.playing] : null;
+      return this.playing ? this.$store.state.school.subject[this.playing] : null;
+    },
+    canSeeLibrary() {
+      return this.$store.state.unlock.schoolLibrarySubfeature.see;
+    },
+    hasLibraryBadge() {
+      return this.$store.state.system.bookHint.length > 0;
     }
   },
   methods: {
@@ -122,73 +125,51 @@ export default {
       this.score = 0;
       this.playing = name;
       this.mode = 'practice';
-      this.intervalId = setInterval(this.tickTimer, 1000);
-    },
-    startStudy(name) {
-      this.timer = SCHOOL_STUDY_TIME + 1;
-      this.score = 0;
-      this.playing = name;
-      this.mode = 'study';
-      this.intervalId = setInterval(this.tickTimer, 1000);
-    },
-    startExam(name) {
-      if (this.$store.getters['currency/value']('school_examPass') >= 1) {
-        this.$store.dispatch('currency/spend', {feature: 'school', name: 'examPass', amount: 1});
-        this.timer = SCHOOL_EXAM_TIME + 1;
-        this.score = 0;
-        this.playing = name;
-        this.mode = 'exam';
+      if (!this.hasCustomTimer.includes(name)) {
         this.intervalId = setInterval(this.tickTimer, 1000);
       }
     },
-    tickTimer() {
+    startStudy(name) {
+      this.timer = this.hasCustomTimer.includes(name) ? 0 : (SCHOOL_STUDY_TIME + 1);
+      this.score = 0;
+      this.playing = name;
+      this.mode = 'study';
+      if (!this.hasCustomTimer.includes(name)) {
+        this.intervalId = setInterval(this.tickTimer, 1000);
+      }
+    },
+    startExam(name) {
+      const passesTaken = Math.min(this.$store.state.school.multipass, this.$store.getters['currency/value']('school_examPass'));
+      const passSapphiresNeeded = (this.$store.state.school.multipass - passesTaken) * SCHOOL_EXAM_PASS_PRICE;
+      if (this.$store.getters['currency/value']('gem_sapphire') >= passSapphiresNeeded) {
+        this.$store.dispatch('currency/spend', {feature: 'school', name: 'examPass', amount: passesTaken});
+        if (passSapphiresNeeded > 0) {
+          this.$store.dispatch('currency/spend', {feature: 'gem', name: 'sapphire', amount: passSapphiresNeeded});
+        }
+        this.timer = this.hasCustomTimer.includes(name) ? 0 : (SCHOOL_EXAM_TIME + 1);
+        this.score = 0;
+        this.playing = name;
+        this.mode = 'exam';
+        if (!this.hasCustomTimer.includes(name)) {
+          this.intervalId = setInterval(this.tickTimer, 1000);
+        }
+      }
+    },
+    tickTimer(seconds = 1) {
       if (this.mode === 'practice') {
-        this.timer++;
+        this.timer += seconds;
       } else {
-        this.timer--;
+        this.timer -= seconds;
       }
       if (this.timer <= 0) {
         this.finishSchool();
       }
     },
-    finishSchool() {
-      // Calculate elo and rewards
-      const score = (this.mode === 'exam' ? 1 : 2) * this.score / this.currentSubject.scoreGoal - ((this.mode === 'exam' || this.currentSubject.currentGrade <= 0) ? 0 : 1);
-
-      let gradeGain = 0;
-      let gradePlus = false;
-      let dustGain = 0;
-
-      if (this.mode === 'study' && this.currentSubject.currentGrade >= this.currentSubject.grade) {
-        const newProgress = Math.max(score * 0.2 + this.currentSubject.progress, 0);
-        if (newProgress >= 1) {
-          gradePlus = true;
-          const newGrade = this.currentSubject.grade + 1;
-          this.$store.commit('stat/increaseTo', {feature: 'school', name: 'highestGrade', value: newGrade});
-          this.$store.commit('school/updateKey', {name: this.playing, key: 'grade', value: newGrade});
-          this.$store.commit('school/updateKey', {name: this.playing, key: 'currentGrade', value: newGrade});
-          this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: 0});
-        } else {
-          gradeGain = newProgress - this.currentSubject.progress;
-          this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: newProgress});
-        }
+    finishSchool(score) {
+      if (score !== undefined) {
+        this.score = score;
       }
-      if (this.mode === 'exam') {
-        dustGain = this.$store.getters['school/examReward'](score, this.currentSubject.currentGrade);
-        this.$store.dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: dustGain});
-        this.$store.dispatch('note/find', 'school_1');
-      }
-
-      this.$store.commit('system/addNotification', {color: 'success', timeout: 5000, message: {
-        type: 'school',
-        isExam: this.mode === 'exam',
-        score: this.score,
-        perfectScore: false,
-        grade: gradeGain,
-        gradePlus,
-        dust: dustGain
-      }});
-
+      this.$store.dispatch('school/finishSchool', {mode: this.mode, score: this.score, subject: this.playing});
       this.leaveSchool();
     },
     intervalStop() {
@@ -215,30 +196,12 @@ export default {
 
       // Immediately end exam if you get a perfect score
       if (this.mode === 'exam' && value >= this.currentSubject.scoreGoal) {
-        const dustGain = this.$store.getters['school/examReward'](1, this.currentSubject.currentGrade);
-        this.$store.dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: dustGain});
-        this.$store.dispatch('note/find', 'school_1');
-
-        const gradePlus = this.currentSubject.currentGrade >= this.currentSubject.grade;
-        if (gradePlus) {
-          const newGrade = this.currentSubject.grade + 1;
-          this.$store.commit('stat/increaseTo', {feature: 'school', name: 'highestGrade', value: newGrade});
-          this.$store.commit('school/updateKey', {name: this.playing, key: 'grade', value: newGrade});
-          this.$store.commit('school/updateKey', {name: this.playing, key: 'currentGrade', value: newGrade});
-          this.$store.commit('school/updateKey', {name: this.playing, key: 'progress', value: 0});
-        }
-
-        this.$store.commit('system/addNotification', {color: 'success', timeout: 5000, message: {
-          type: 'school',
-          isExam: true,
-          score: value,
-          perfectScore: true,
-          gradePlus,
-          dust: dustGain
-        }});
-
+        this.$store.dispatch('school/finishSchool', {mode: 'exam', score: Math.min(value, this.currentSubject.scoreGoal), subject: this.playing});
         this.leaveSchool();
       }
+    },
+    updateTimer(value) {
+      this.timer = value;
     },
     leaveSchool() {
       this.timer = 0;

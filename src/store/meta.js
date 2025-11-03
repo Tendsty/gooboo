@@ -24,7 +24,8 @@ export default {
             schoolArtSubfeature: 440,
             miningGasSubfeature: 625,
             villageCraftingSubfeature: 800,
-            // generalOrladeeSubfeature: 1000,
+            schoolChemistrySubfeature: 930,
+            generalOrladeeSubfeature: 1000,
             hordeClassesSubfeature: 1100,
         },
         globalLevelNotes: {
@@ -89,9 +90,26 @@ export default {
             commit('updateKey', {key: 'globalLevel', value: 0});
             commit('updateKey', {key: 'globalLevelParts', value: {}});
         },
-        globalLevelPart({ state, commit, dispatch }, o) {
+        globalLevelPart({ state, rootState, rootGetters, commit, dispatch }, o) {
             const oldGlobalLevel = state.globalLevel;
             if (state.globalLevelParts[o.key] === undefined || state.globalLevelParts[o.key] < o.amount) {
+                // Check for new books
+                if (rootState.unlock.schoolLibrarySubfeature.see) {
+                    let [feature, subfeature] = o.key.split('_');
+                    subfeature = parseInt(subfeature);
+                    for (const [, book] of Object.entries(rootState.school.book)) {
+                        if (book.feature === feature && book.subfeature === subfeature && book.minGL !== null && (state.globalLevelParts[o.key] ?? 0) < book.minGL && o.amount >= book.minGL) {
+                            commit('system/addBookHint', o.key, {root: true});
+                            commit('system/addNotification', {color: 'info', timeout: 10000, message: {
+                                type: 'unlock',
+                                subtype: 'book',
+                                feature,
+                            }}, {root: true});
+                        }
+                    }
+                }
+
+                // Update GL
                 commit('updateSubkey', {name: 'globalLevelParts', key: o.key, value: o.amount});
                 commit('updateGlobalLevel');
                 dispatch('globalLevelUnlocks');
@@ -100,6 +118,14 @@ export default {
                 const globalLevelDiff = Math.floor(state.globalLevel / 10) - Math.floor(oldGlobalLevel / 10);
                 if (globalLevelDiff > 0) {
                     dispatch('currency/gain', {feature: 'school', name: 'examPass', amount: globalLevelDiff}, {root: true});
+                }
+
+                // Refresh books
+                dispatch('school/updateBookEffects', o.key.split('_')[0], {root: true});
+
+                // Update event power effect (treasure)
+                if (rootGetters['treasure/eventPower'] > 0) {
+                    dispatch('mult/setMult', {name: 'allPrestigeIncome', key: 'eventPower', value: rootGetters['treasure/eventPowerPrestigeMult']}, {root: true});
                 }
             }
         },
@@ -119,7 +145,7 @@ export default {
                         name: parentFeature ?? key.slice(0, -7),
                         subfeature: parentFeature ? key.slice(0, -10) : null
                     }}, {root: true});
-                    commit('unlock/unlock', key, {root: true});
+                    dispatch('unlock/unlock', key, {root: true});
 
                     // Gain various gems on feature unlock to let new players experience the feature right away
                     if (key === 'gemFeature') {
@@ -151,6 +177,11 @@ export default {
             // Get a relic at global level 40 (when relics unlock)
             if (state.globalLevel >= 40 && !rootState.relic.item.friendlyBat.found) {
                 dispatch('relic/find', 'friendlyBat', {root: true});
+            }
+
+            // Get a relic at global level 100 (when generals unlock)
+            if (state.globalLevel >= 100 && !rootState.relic.item.notebook.found) {
+                dispatch('relic/find', 'notebook', {root: true});
             }
 
             // Apply effects

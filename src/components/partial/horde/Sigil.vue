@@ -22,10 +22,12 @@
     <display-row class="mt-0" v-for="(item, key) in stats" :key="key" :name="item.name" :type="item.type" :after="item.amount"></display-row>
     <template v-if="sigil.active">
       <div>{{ $vuetify.lang.t('$vuetify.horde.sigil.hasActive') }}:</div>
-      <enemy-active-tooltip :name="name" :level="Math.max(tier, 1)" show-base></enemy-active-tooltip>
+      <enemy-active-tooltip :small="small" :name="name" :level="Math.max(tier, 1)" show-base></enemy-active-tooltip>
     </template>
-    <alert-text v-if="sigil.minZone === Infinity" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.special`) }}</alert-text>
-    <alert-text v-else-if="sigil.minZone > 0" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.min`, sigil.minZone) }}</alert-text>
+    <template v-if="!small">
+      <alert-text v-if="sigil.minZone === Infinity" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.special`) }}</alert-text>
+      <alert-text v-else-if="sigil.minZone > 0" type="info">{{ $vuetify.lang.t(`$vuetify.horde.sigil.min`, sigil.minZone) }}</alert-text>
+    </template>
   </gb-tooltip>
 </template>
 

@@ -19,42 +19,25 @@
       <v-tab>Design</v-tab>
       <v-tab>Colors</v-tab>
       <v-tab>Card creator</v-tab>
-      <v-tab>Date tester</v-tab>
       <v-tab>Stat viewer</v-tab>
-      <v-tab>RNG tester</v-tab>
-      <v-tab>Autoplay stats</v-tab>
     </v-tabs>
     <div class="scroll-container-tab" v-if="tab === 0">
       <div class="d-flex flex-wrap align-center ma-1">
-        <v-btn class="ma-1" @click="advance(60)">
-          <v-icon>mdi-clock</v-icon>1m
+        <v-btn class="ma-1" color="warning" @click="cleanSave">
+          <v-icon class="mr-1">mdi-broom</v-icon>
+          clean save
         </v-btn>
-        <v-btn class="ma-1" @click="advance(600)">
-          <v-icon>mdi-clock</v-icon>10m
+        <v-btn class="ma-1" color="error" @click="causeError">
+          <v-icon class="mr-1">mdi-close</v-icon>
+          throw error
         </v-btn>
-        <v-btn class="ma-1" @click="advance(3600)">
-          <v-icon>mdi-clock</v-icon>1h
+        <v-btn class="ma-1" color="primary" @click="maxSchool">
+          <v-icon class="mr-1">mdi-school</v-icon>
+          max school
         </v-btn>
-        <v-btn class="ma-1" @click="advance(86400)">
-          <v-icon>mdi-clock</v-icon>1d
-        </v-btn>
-        <v-btn class="ma-1" @click="deleteSave">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-        <v-btn class="ma-1" @click="cleanSave">
-          <v-icon>mdi-broom</v-icon>
-        </v-btn>
-        <v-btn class="ma-1" @click="deleteAutoplayData">
-          <v-icon>mdi-file-document-remove</v-icon>
-        </v-btn>
-        <v-btn class="ma-1" @click="causeError">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-        <v-btn class="ma-1" @click="maxSchool">
-          <v-icon>mdi-school</v-icon>
-        </v-btn>
-        <v-btn class="ma-1" @click="maxCrop">
-          <v-icon>mdi-sprout</v-icon>
+        <v-btn class="ma-1" color="primary" @click="maxCrop">
+          <v-icon class="mr-1">mdi-sprout</v-icon>
+          max crops
         </v-btn>
         <div class="ma-1">Total time spent: {{ $formatTime(totalTime) }}</div>
         <div>Today is {{ currentDay }}</div>
@@ -74,22 +57,21 @@
       <div class="d-flex align-center ma-1">
         <v-autocomplete data-cy="debug-currency-input" class="ma-1" label="Currency" outlined hide-details :items="currencies" v-model="selectedCurrency"></v-autocomplete>
         <v-text-field data-cy="debug-currency-amount" class="ma-1" type="number" label="Amount" outlined hide-details v-model="selectedCurrencyValue"></v-text-field>
-        <v-btn data-cy="debug-currency-gain" class="ma-1" color="primary" :disabled="!selectedCurrency || isNaN(selectedCurrencyValue)" @click="triggerCurrency">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</v-btn>
+        <v-btn data-cy="debug-currency-gain" class="ma-1" color="primary" :disabled="!selectedCurrency || isNaN(selectedCurrencyValue)" @click="triggerCurrency">{{ $vuetify.lang.t('$vuetify.gooboo.take') }}</v-btn>
       </div>
       <div class="d-flex align-center ma-1">
         <v-autocomplete class="ma-1" label="Consumable" outlined hide-details :items="consumables" v-model="selectedConsumable"></v-autocomplete>
         <v-text-field class="ma-1" type="number" label="Amount" outlined hide-details v-model="selectedConsumableValue"></v-text-field>
-        <v-btn class="ma-1" color="primary" :disabled="!selectedConsumable || isNaN(selectedConsumableValue)" @click="triggerConsumable">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</v-btn>
+        <v-btn class="ma-1" color="primary" :disabled="!selectedConsumable || isNaN(selectedConsumableValue)" @click="triggerConsumable">{{ $vuetify.lang.t('$vuetify.gooboo.take') }}</v-btn>
       </div>
       <div class="d-flex align-center ma-1">
-        <v-text-field class="ma-1" type="number" label="Days" min="1" outlined hide-details v-model="autoplayDays"></v-text-field>
-        <v-btn class="ma-1" color="primary" :disabled="isNaN(autoplayDays)" @click="triggerAutoplay">
-          <v-icon>mdi-play</v-icon>
-        </v-btn>
+        <v-autocomplete class="ma-1" label="Card" outlined hide-details :items="cards" v-model="selectedCard"></v-autocomplete>
+        <v-text-field class="ma-1" type="number" label="Amount" outlined hide-details v-model="selectedCardValue"></v-text-field>
+        <v-btn class="ma-1" color="primary" :disabled="!selectedCard || isNaN(selectedCardValue)" @click="triggerCard">{{ $vuetify.lang.t('$vuetify.gooboo.take') }}</v-btn>
       </div>
       <div class="d-flex align-center ma-1">
         <v-text-field class="ma-1" type="number" label="Global level" min="0" outlined hide-details v-model="globalLevelValue"></v-text-field>
-        <v-btn class="ma-1" color="primary" :disabled="isNaN(globalLevelValue)" @click="triggerGlobalLevel">{{ $vuetify.lang.t('$vuetify.gooboo.gain') }}</v-btn>
+        <v-btn class="ma-1" color="primary" :disabled="isNaN(globalLevelValue)" @click="triggerGlobalLevel">{{ $vuetify.lang.t('$vuetify.gooboo.take') }}</v-btn>
       </div>
       <div class="d-flex align-center ma-1">
         <v-autocomplete class="ma-1" label="Event" outlined hide-details :items="eventList" v-model="selectedEvent"></v-autocomplete>
@@ -171,21 +153,6 @@
       </v-row>
     </div>
     <div class="scroll-container-tab" v-else-if="tab === 4">
-      <div class="d-flex align-center ma-1">
-        <v-text-field class="ma-1" type="number" label="Timestamp" outlined hide-details v-model="testingDate"></v-text-field>
-        <v-btn class="ma-1" color="primary" @click="setToCurrentDate">Current</v-btn>
-      </div>
-      <div class="ma-1">
-        <div v-for="(item, key) in testingDateGrid" :key="`date-${ key }`" class="ma-1">
-          <span class="grey--text">{{ item.current }}</span> -
-          <span class="red--text">{{ item.day }}</span>,
-          <span class="amber--text">W{{ item.week }}</span>,
-          <span class="green--text">Offset: {{ item.offset }}</span>
-          (<span class="blue--text">{{ item.full }}</span>)
-        </div>
-      </div>
-    </div>
-    <div class="scroll-container-tab" v-else-if="tab === 5">
       <v-switch
         class="ma-1"
         v-model="includeEmptyStat"
@@ -207,31 +174,15 @@
         <template v-slot:item.total="{ item }"><span :class="{'grey--text': item.total === item.default}">{{ item.display === 'time' ? $formatTime(item.total) : $formatNum(item.total) }}</span></template>
       </v-data-table>
     </div>
-    <div class="scroll-container-tab" v-else-if="tab === 6">
-      <div class="d-flex align-center ma-1">
-        <div>{{ playerId }}</div>
-        <v-text-field class="ma-1" label="Seed" outlined hide-details v-model="rngSeed"></v-text-field>
-        <v-btn class="ma-1" color="primary" @click="seedRngData">Roll</v-btn>
-      </div>
-      <div v-for="(rngrow, key) in rngOutput" :key="`rngoutput-${ key }`">{{ rngrow }}</div>
-    </div>
-    <div class="scroll-container-tab" v-else-if="tab === 7">
-      <autoplay-graph></autoplay-graph>
-    </div>
   </div>
 </template>
 
 <script>
-import { tick } from '../../js/tick';
-import { autoplay } from '../../js/autoplay';
-import AutoplayGraph from '../partial/debug/AutoplayGraph.vue';
 import { randomFloat, randomInt } from '../../js/utils/random';
 import colors from '../../js/theme/colors';
 import CardItem from '../partial/card/CardItem.vue';
 import { buildNum, capitalize } from '../../js/utils/format';
-import { getDay, getWeek } from '../../js/utils/date';
 import { mapState } from 'vuex';
-import seedrandom from 'seedrandom';
 import { encodeFile } from '../../js/savefile';
 import { LOCAL_STORAGE_NAME } from '../../js/constants';
 
@@ -239,7 +190,7 @@ const Color = require('color');
 const colorVariants = ['lighten5', 'lighten4', 'lighten3', 'lighten2', 'lighten1', 'base', 'darken1', 'darken2', 'darken3', 'darken4'];
 
 export default {
-  components: { AutoplayGraph, CardItem },
+  components: { CardItem },
   data: () => ({
     selectedUnlock: null,
     selectedMult: null,
@@ -249,8 +200,9 @@ export default {
     selectedCurrencyValue: 0,
     selectedConsumable: null,
     selectedConsumableValue: 0,
+    selectedCard: null,
+    selectedCardValue: 0,
     multTypes: ['base', 'mult', 'bonus'],
-    autoplayDays: 5,
     globalLevelValue: 0,
     selectedEvent: 'null',
     selectedColor: '#FF0000',
@@ -273,16 +225,13 @@ export default {
     cardIconImport: false,
     cardIconJson: '',
     cardColor: 'red',
-    testingDate: 0,
     statHeaders: [
       {text: 'Name', value: 'name'},
       {text: 'Value', value: 'value'},
       {text: 'Total', value: 'total'},
     ],
     statSearch: '',
-    includeEmptyStat: false,
-    rngSeed: 'test',
-    rngOutput: []
+    includeEmptyStat: false
   }),
   computed: {
     ...mapState({
@@ -309,6 +258,9 @@ export default {
     },
     consumables() {
       return Object.keys(this.$store.state.consumable);
+    },
+    cards() {
+      return Object.keys(this.$store.state.card.card);
     },
     eventList() {
       return ['null', ...Object.keys(this.$store.state.event.big), ...this.$store.state.event.small];
@@ -364,7 +316,7 @@ export default {
       return obj;
     },
     cardObj() {
-      return {feature: 'mining', color: this.cardColor, amount: 70, icons: this.cardIcons};
+      return {feature: 'mining', color: this.cardColor, amount: 421, power: 69, icons: this.cardIcons};
     },
     generatedCardIcons() {
       let text = '';
@@ -378,22 +330,6 @@ export default {
     },
     colorList() {
       return Object.keys(colors);
-    },
-    testingDateGrid() {
-      let arr = [];
-      const c = new Date().getTime();
-      for (let i = 0; i < 24; i++) {
-        const d = new Date(parseInt(this.testingDate) + i * 3600000);
-        const cd = new Date(c + i * 3600000);
-        arr.push({
-          current: cd.toLocaleDateString() + ' ' + cd.toLocaleTimeString(),
-          day: getDay(d),
-          week: getWeek(d),
-          offset: d.getTimezoneOffset(),
-          full: d.toISOString()
-        });
-      }
-      return arr;
     }
   },
   mounted() {
@@ -401,13 +337,6 @@ export default {
     this.timeMult = this.$store.state.system.timeMult;
   },
   methods: {
-    advance(seconds) {
-      tick(seconds, 0);
-    },
-    deleteSave() {
-      localStorage.removeItem(LOCAL_STORAGE_NAME);
-      location.reload();
-    },
     cleanSave() {
       // Creates a clean savefile with autoplay-friendly settings
       localStorage.setItem(LOCAL_STORAGE_NAME, encodeFile({
@@ -454,7 +383,7 @@ export default {
     },
     triggerUnlock() {
       if (this.selectedUnlock) {
-        this.$store.commit('unlock/unlock', this.selectedUnlock);
+        this.$store.dispatch('unlock/unlock', this.selectedUnlock);
       }
     },
     triggerLock() {
@@ -497,8 +426,15 @@ export default {
         });
       }
     },
-    triggerAutoplay() {
-      autoplay(this.autoplayDays);
+    triggerCard() {
+      if (this.selectedCard && !isNaN(this.selectedCardValue)) {
+        this.$store.commit('card/updateKey', {
+          type: 'card',
+          name: this.selectedCard,
+          key: 'amount',
+          value: this.$store.state.card.card[this.selectedCard].amount + this.selectedCardValue
+        });
+      }
     },
     triggerGlobalLevel() {
       this.$store.dispatch('meta/globalLevelPart', {key: 'debug', amount: Number(this.globalLevelValue)});
@@ -573,16 +509,10 @@ export default {
         this.cardIconImport = true;
       }
     },
-    deleteAutoplayData() {
-      this.$store.commit('system/updateKey', {key: 'autoplayData', value: []});
-    },
-    setToCurrentDate() {
-      this.testingDate = this.$store.state.system.timestamp * 1000;
-    },
     maxSchool() {
-      for (const [key, elem] of Object.entries(this.$store.state.school)) {
+      for (const [key, elem] of Object.entries(this.$store.state.school.subject)) {
         if (elem.unlock === null || this.$store.state.unlock[elem.unlock].see) {
-          this.$store.commit('school/updateKey', {name: key, key: 'grade', value: 100});
+          this.$store.commit('school/updateSubjectKey', {name: key, key: 'grade', value: 100});
         }
       }
     },
@@ -592,14 +522,6 @@ export default {
           this.$store.dispatch('farm/getCropExp', {crop: key, value: buildNum(1, 'M')});
         }
       }
-    },
-    seedRngData() {
-      let myrng = seedrandom(this.rngSeed, {state: true});
-      this.rngOutput = [];
-      for (let i = 0; i < 20; i++) {
-        this.rngOutput.push(myrng());
-      }
-      console.log(JSON.stringify(myrng.state()));
     }
   },
   watch: {

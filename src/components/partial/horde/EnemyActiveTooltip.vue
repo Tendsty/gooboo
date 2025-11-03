@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import ActiveTooltip from './ActiveTooltip.vue';
 
 export default {
@@ -34,23 +35,40 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    small: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
+    ...mapGetters({
+      currentElement: 'horde/currentElement',
+    }),
+    hasElement() {
+      return this.$store.state.horde.currentTower === null && !this.$store.state.horde.raidboss && this.currentElement !== null && !this.small;
+    },
     active() {
-      return this.$store.state.horde.enemy ? this.$store.state.horde.enemy.active[this.name] : {cooldown: 0, uses: 0};
+      return this.$store.state.horde.enemy ? this.$store.state.horde.enemy.active[this.name] : {power: 0, cooldown: 0, uses: 0};
     },
     sigil() {
-      return this.$store.state.horde.sigil[this.name];
+      return this.hasElement ? null : this.$store.state.horde.sigil[this.name];
+    },
+    element() {
+      return this.hasElement ? this.$store.state.horde.element[this.currentElement] : null;
+    },
+    elementActive() {
+      return this.hasElement ? this.element.enemyActives(this.active.power, this.$store.state.horde.bossFight)[this.name] : null;
     },
     cooldown() {
-      return Math.ceil(this.sigil.active.cooldown(this.level, this.$store.state.horde.bossFight));
+      return this.hasElement ? this.elementActive.cooldown : Math.ceil(this.sigil.active.cooldown(this.level, this.$store.state.horde.bossFight));
     },
     startCooldown() {
-      return Math.ceil(this.sigil.active.startCooldown(this.level, this.$store.state.horde.bossFight));
+      return this.hasElement ? this.elementActive.startCooldown : Math.ceil(this.sigil.active.startCooldown(this.level, this.$store.state.horde.bossFight));
     },
     effect() {
-      return this.sigil.active.effect(this.level, this.$store.state.horde.bossFight);
+      return this.hasElement ? this.elementActive.effect : this.sigil.active.effect(this.level, this.$store.state.horde.bossFight);
     },
     enemyMaxHealth() {
       return this.$store.state.horde.enemy?.maxHealth;
@@ -59,7 +77,7 @@ export default {
       return this.$store.state.horde.enemy?.attack;
     },
     maxUses() {
-      return this.sigil.active.uses(this.level, this.$store.state.horde.bossFight);
+      return this.hasElement ? this.elementActive.uses : this.sigil.active.uses(this.level, this.$store.state.horde.bossFight);
     },
     hasUsesLeft() {
       return this.active.uses === null || this.active.uses > 0;

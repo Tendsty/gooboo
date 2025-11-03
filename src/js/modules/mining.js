@@ -1,8 +1,8 @@
 import store from "../../store"
-import { MINING_COAL_DEPTH, MINING_DEEPROCK_DEPTH, MINING_DWELLER_OVERCAP_MULT, MINING_DWELLER_OVERFLOW, MINING_GRANITE_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_ORE_BREAK, MINING_RARE_DROP_BREAK, MINING_SALT_DEPTH, MINING_SCRAP_BREAK, MINING_SMOKE_BREAK, MINING_SULFUR_DEPTH } from "../constants";
+import { MINING_COAL_DEPTH, MINING_DEEPROCK_DEPTH, MINING_DWELLER_OVERCAP_MULT, MINING_DWELLER_OVERFLOW, MINING_GRANITE_DEPTH, MINING_MOONSHARD_DEPTH, MINING_NITER_DEPTH, MINING_OBSIDIAN_DEPTH, MINING_ORE_BREAK, MINING_PHOSPHORUS_DEPTH, MINING_RARE_DROP_BREAK, MINING_SALT_DEPTH, MINING_SCRAP_BREAK, MINING_SMELTERY_TIME_INCREMENT, MINING_SMOKE_BREAK, MINING_SULFUR_DEPTH } from "../constants";
 import { buildArray } from "../utils/array";
 import { buildNum } from "../utils/format";
-import { digitSum } from "../utils/math";
+import { digitSum, isPrime } from "../utils/math";
 import achievement from "./mining/achievement";
 import beacon from "./mining/beacon";
 import enhancement from "./mining/enhancement";
@@ -13,7 +13,6 @@ import upgrade from "./mining/upgrade";
 import upgrade2 from "./mining/upgrade2";
 import upgradePremium from "./mining/upgradePremium";
 import upgradePrestige from "./mining/upgradePrestige";
-import bookMining from "./school/bookMining";
 
 const notes = {
     1: 'mining_0',
@@ -63,8 +62,8 @@ function awardLoot(breaks, loots, hits) {
             store.dispatch('currency/gain', {feature: 'mining', name: 'smoke', amount: smokeGain});
         }
     }
+    const depth = store.state.mining.depth;
     if (store.state.system.features.mining.currentSubfeature === 0) {
-        const depth = store.state.mining.depth;
         const existingBreaks = store.getters['mining/currentBreaks'];
         const totalBreaks = existingBreaks + breaks;
         if (gotLoot && depth >= MINING_GRANITE_DEPTH && totalBreaks >= 1000) {
@@ -81,7 +80,7 @@ function awardLoot(breaks, loots, hits) {
             breaksMult = breaks > 0 ? (breaksMult / breaks) : Math.pow(2, Math.floor(Math.log10(existingBreaks)) - 3);
             store.dispatch('currency/gain', {feature: 'mining', name: 'granite', amount: store.getters['mining/rareDropFinal']('granite') * (MINING_RARE_DROP_BREAK * breaks + loots) * breaksMult});
         }
-        if (gotLoot && depth >= MINING_SALT_DEPTH && Object.keys(store.getters['mining/currentOre']).length === 1) {
+        if (gotLoot && depth >= MINING_SALT_DEPTH && (store.state.mining.torchDepths.includes(depth) || Object.keys(store.getters['mining/currentOre']).length === 1)) {
             store.dispatch('currency/gain', {feature: 'mining', name: 'salt', amount: store.getters['mining/rareDropFinal']('salt') * (MINING_RARE_DROP_BREAK * breaks + loots)});
         }
         if (depth >= MINING_COAL_DEPTH && existingBreaks === 0 && breaks > 0) {
@@ -103,11 +102,22 @@ function awardLoot(breaks, loots, hits) {
             }
             store.dispatch('currency/gain', {feature: 'mining', name: 'niter', amount: store.getters['mining/rareDropFinal']('niter') * breaksMult});
         }
-        if (gotLoot && depth >= MINING_OBSIDIAN_DEPTH && store.getters['mining/enhancementLevel'] <= 0) {
+        if (gotLoot && depth >= MINING_OBSIDIAN_DEPTH && (store.getters['mining/enhancementLevel'] <= 0 || !store.state.mining.enhancementsActive)) {
             store.dispatch('currency/gain', {feature: 'mining', name: 'obsidian', amount: store.getters['mining/rareDropFinal']('obsidian') * (MINING_RARE_DROP_BREAK * breaks + loots)});
         }
         if (gotLoot && depth >= MINING_DEEPROCK_DEPTH && digitSum(depth) >= 14) {
             store.dispatch('currency/gain', {feature: 'mining', name: 'deeprock', amount: store.getters['mining/rareDropFinal']('deeprock') * (MINING_RARE_DROP_BREAK * breaks + loots)});
+        }
+    }
+    if (store.state.system.features.mining.currentSubfeature === 1) {
+        if (gotLoot && isPrime(depth)) {
+            store.dispatch('currency/gain', {feature: 'mining', name: 'limestone', amount: store.getters['mining/rareDropFinal']('limestone') * (MINING_RARE_DROP_BREAK * breaks + loots)});
+        }
+        if (gotLoot && depth >= MINING_MOONSHARD_DEPTH && store.state.stat.mining_depthDwellerCap1.value >= depth) {
+            store.dispatch('currency/gain', {feature: 'mining', name: 'moonshard', amount: store.getters['mining/rareDropFinal']('moonshard') * (MINING_RARE_DROP_BREAK * breaks + loots)});
+        }
+        if (gotLoot && depth >= MINING_PHOSPHORUS_DEPTH && (depth % 25 === 0)) {
+            store.dispatch('currency/gain', {feature: 'mining', name: 'phosphorus', amount: store.getters['mining/rareDropFinal']('phosphorus') * (MINING_RARE_DROP_BREAK * breaks + loots)});
         }
     }
     if (breaks > 0) {
@@ -131,17 +141,25 @@ export default {
         // Smeltery
         for (const [key, elem] of Object.entries(store.state.mining.smeltery)) {
             if (elem.stored > 0) {
-                let newProgress = elem.progress + seconds / store.getters['mining/smelteryTimeNeeded'](key);
-                const bars = Math.min(elem.stored, Math.floor(newProgress));
+                let secondsLeft = seconds;
+                let bars = 0;
+                let newProgress = elem.progress;
+                let timeNeeded = store.getters['mining/smelteryTimeNeeded'](key);
+                while (secondsLeft > 0 && bars < elem.stored) {
+                    if (secondsLeft >= (timeNeeded * (1 - newProgress))) {
+                        bars++;
+                        secondsLeft -= timeNeeded * (1 - newProgress);
+                        newProgress = 0;
+                    } else {
+                        newProgress += secondsLeft / timeNeeded;
+                        secondsLeft = 0;
+                    }
+                    timeNeeded *= MINING_SMELTERY_TIME_INCREMENT;
+                }
                 if (bars > 0) {
                     store.commit('mining/updateSmelteryKey', {name: key, key: 'stored', value: elem.stored - bars});
                     const barSplit = elem.output.split('_');
                     store.dispatch('currency/gain', {feature: barSplit[0], name: barSplit[1], amount: bars});
-                    if ((elem.stored - bars) <= 0) {
-                        newProgress = 0;
-                    } else {
-                        newProgress -= bars;
-                    }
                 }
                 store.commit('mining/updateSmelteryKey', {name: key, key: 'progress', value: newProgress});
             }
@@ -185,6 +203,14 @@ export default {
                         loots++;
                         store.commit('stat/increaseTo', {feature: 'mining', name: 'maxDepth' + subfeature, value: store.state.mining.depth + 1});
                         store.dispatch('meta/globalLevelPart', {key: 'mining_' + subfeature, amount: store.state.stat[`mining_maxDepth${subfeature}`].total - 1});
+                        if (subfeature === 0) {
+                            if (maxDepth >= 260 && !store.state.unlock.miningAdvancedCardPack.use) {
+                                store.dispatch('unlock/unlock', 'miningAdvancedCardPack');
+                            }
+                            if (maxDepth >= 350 && !store.state.unlock.miningLuxuryCardPack.use) {
+                                store.dispatch('unlock/unlock', 'miningLuxuryCardPack');
+                            }
+                        }
 
                         // Find notes based on depth
                         if (subfeature === 0) {
@@ -267,7 +293,7 @@ export default {
             }
         }
     },
-    unlock: ['miningPickaxeCrafting', 'miningDepthDweller', 'miningSmeltery', 'miningEnhancement', 'miningResin', 'miningGasSubfeature', 'miningSmoke'],
+    unlock: ['miningPickaxeCrafting', 'miningDepthDweller', 'miningSmeltery', 'miningEnhancement', 'miningResin', 'miningGasSubfeature', 'miningSmoke', 'miningAdvancedCardPack', 'miningLuxuryCardPack'],
     stat: {
         maxDepth0: {value: 1, showInStatistics: true},
         maxDepth1: {value: 1, showInStatistics: true},
@@ -281,6 +307,7 @@ export default {
         craftingLuck: {value: 1},
         craftingWasted: {},
         dwellerCapHit: {},
+        enhancementHighest: {},
         timeSpent: {display: 'time'},
         bestPrestige0: {showInStatistics: true},
         bestPrestige1: {showInStatistics: true},
@@ -289,34 +316,47 @@ export default {
     },
     mult: {
         miningDamage: {},
-        miningToughness: {},
+        miningToughness: {isPositive: false},
         miningOreGain: {},
         miningOreCap: {},
         miningRareEarthGain: {},
+        miningGasGain: {display: 'percent'},
         miningPickaxeCraftingSlots: {round: true, baseValue: 1},
         miningPickaxePremiumCraftingSlots: {round: true},
         miningPickaxeCraftingPower: {},
         miningPickaxeCraftingQuality: {},
         miningOreQuality: {baseValue: 1},
         miningDepthDwellerSpeed: {baseValue: 0.000065},
-        miningDepthDwellerMax: {display: 'percent', baseValue: 0.1},
+        miningDepthDwellerMax: {display: 'percent', baseValue: 0.1, max: 0.5},
         miningResinMax: {round: true, baseValue: 1},
+
+        miningPremiumOreCap: {},
+
+        // Gas mults
+        currencyMiningHeliumLimit: {baseValue: 100},
         currencyMiningHeliumIncrement: {display: 'percent'},
+        currencyMiningNeonLimit: {baseValue: 100},
         currencyMiningNeonIncrement: {display: 'percent'},
+        currencyMiningArgonLimit: {baseValue: 100},
         currencyMiningArgonIncrement: {display: 'percent'},
+        currencyMiningKryptonLimit: {baseValue: 100},
         currencyMiningKryptonIncrement: {display: 'percent'},
+        currencyMiningXenonLimit: {baseValue: 100},
         currencyMiningXenonIncrement: {display: 'percent'},
+        currencyMiningRadonLimit: {baseValue: 100},
         currencyMiningRadonIncrement: {display: 'percent'},
-        miningSmelterySpeed: {baseValue: 1},
+
+        miningSmelteryTime: {display: 'timeMs', isPositive: false},
         miningSmelteryTemperature: {display: 'temperature', baseValue: 100},
-        miningEnhancementBarsIncrement: {display: 'percent', baseValue: 0.75, min: 0},
-        miningEnhancementFinalIncrement: {display: 'percent', baseValue: 3, min: 0},
+        miningEnhancementMax: {display: 'int', round: true, baseValue: 3},
         miningPrestigeIncome: {group: ['currencyMiningCrystalGreenGain', 'currencyMiningCrystalYellowGain']}
     },
     multGroup: [
         {mult: 'miningOreGain', name: 'currencyGain', subtype: 'ore'},
         {mult: 'miningOreCap', name: 'currencyCap', subtype: 'ore'},
-        {mult: 'miningRareEarthGain', name: 'currencyGain', subtype: 'rareEarth'}
+        {mult: 'miningRareEarthGain', name: 'currencyGain', subtype: 'rareEarth'},
+        {mult: 'miningGasGain', name: 'currencyGain', subtype: 'gas'},
+        {mult: 'miningPremiumOreCap', name: 'upgradeCap', subtype: 'premiumOre'},
     ],
     currency: {
         scrap: {color: 'brown', icon: 'mdi-dots-triangle', gainMult: {}, capMult: {baseValue: buildNum(10, 'K')}, gainTimerFunction() {
@@ -368,14 +408,14 @@ export default {
             const oreGain = store.getters['mining/currentOre'];
             return (hitsNeeded === Infinity || !oreGain.oreLead) ? null : (((hitsNeeded + MINING_ORE_BREAK) * oreGain.oreLead.amount) / hitsNeeded);
         }, timerIsEstimate: true},
-        barAluminium: {subtype: 'bar', color: 'blue-grey', icon: 'mdi-gold'},
-        barBronze: {subtype: 'bar', color: 'pale-orange', icon: 'mdi-gold'},
-        barSteel: {subtype: 'bar', color: 'grey', icon: 'mdi-gold'},
-        barTitanium: {subtype: 'bar', color: 'pale-green', icon: 'mdi-gold'},
-        barShiny: {subtype: 'bar', color: 'pale-blue', icon: 'mdi-gold'},
-        barIridium: {subtype: 'bar', color: 'pale-pink', icon: 'mdi-gold'},
-        barDarkIron: {subtype: 'bar', color: 'darker-grey', icon: 'mdi-gold'},
-        granite: {subtype: 'rareEarth', color: 'skyblue', icon: 'mdi-cube', gainMult: {}, gainTimerFunction() {
+        barAluminium: {subtype: 'bar', color: 'blue-grey', icon: 'mdi-gold', display: 'int'},
+        barBronze: {subtype: 'bar', color: 'pale-orange', icon: 'mdi-gold', display: 'int'},
+        barSteel: {subtype: 'bar', color: 'grey', icon: 'mdi-gold', display: 'int'},
+        barTitanium: {subtype: 'bar', color: 'pale-green', icon: 'mdi-gold', display: 'int'},
+        barShiny: {subtype: 'bar', color: 'pale-blue', icon: 'mdi-gold', display: 'int'},
+        barIridium: {subtype: 'bar', color: 'pale-pink', icon: 'mdi-gold', display: 'int'},
+        barDarkIron: {subtype: 'bar', color: 'darker-grey', icon: 'mdi-gold', display: 'int'},
+        granite: {subtype: 'rareEarth', color: 'skyblue', icon: 'mdi-cube', showHint: true, gainMult: {}, gainTimerFunction() {
             const hitsNeeded = store.getters['mining/hitsNeeded'];
             const rareDropGain = store.getters['mining/rareDrops'];
             return (hitsNeeded === Infinity || !rareDropGain.granite) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.granite) / hitsNeeded);
@@ -385,12 +425,12 @@ export default {
             const rareDropGain = store.getters['mining/rareDrops'];
             return (hitsNeeded === Infinity || !rareDropGain.salt) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.salt) / hitsNeeded);
         }, timerIsEstimate: true},
-        coal: {color: 'dark-grey', icon: 'mdi-chart-bubble', gainMult: {round: true}},
+        coal: {color: 'dark-grey', icon: 'mdi-chart-bubble', gainMult: {round: true}, display: 'int'},
         sulfur: {subtype: 'rareEarth', color: 'pale-yellow', icon: 'mdi-fire-circle', gainMult: {}, gainTimerFunction() {
             return store.getters['mining/rareDrops'].sulfur ?? null;
         }, timerIsEstimate: true},
         niter: {color: 'pale-light-green', icon: 'mdi-water-circle', gainMult: {}},
-        obsidian: {subtype: 'rareEarth', color: 'deep-purple', icon: 'mdi-cone', gainMult: {}, gainTimerFunction() {
+        obsidian: {subtype: 'rareEarth', color: 'deep-purple', icon: 'mdi-cone', showHint: true, gainMult: {}, gainTimerFunction() {
             const hitsNeeded = store.getters['mining/hitsNeeded'];
             const rareDropGain = store.getters['mining/rareDrops'];
             return (hitsNeeded === Infinity || !rareDropGain.obsidian) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.obsidian) / hitsNeeded);
@@ -400,32 +440,45 @@ export default {
             const rareDropGain = store.getters['mining/rareDrops'];
             return (hitsNeeded === Infinity || !rareDropGain.deeprock) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.deeprock) / hitsNeeded);
         }, timerIsEstimate: true},
-        glowshard: {color: 'cyan', icon: 'mdi-lightbulb-fluorescent-tube', gainMult: {}, gainTimerFunction() {
-            const hitsNeeded = store.getters['mining/hitsNeeded'];
-            const rareDropGain = store.getters['mining/rareDrops'];
-            return (hitsNeeded === Infinity || !rareDropGain.glowshard) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.glowshard) / hitsNeeded);
-        }, timerIsEstimate: true},
-        smoke: {color: 'grey', icon: 'mdi-smoke', gainMult: {}, capMult: {baseValue: 10}, overcapScaling: 0.25, gainTimerFunction() {
+        glowshard: {color: 'cyan', icon: 'mdi-lightbulb-fluorescent-tube', gainMult: {}},
+        smoke: {subtype: 'ore', color: 'grey', icon: 'mdi-smoke', gainMult: {}, capMult: {baseValue: 10}, overcapScaling: 0.25, gainTimerFunction() {
             const hitsNeeded = store.getters['mining/hitsNeeded'];
             return hitsNeeded === Infinity ? null : (((hitsNeeded + MINING_SMOKE_BREAK) * store.getters['mining/currentSmoke']) / hitsNeeded);
         }, timerIsEstimate: true},
-        ember: {type: 'prestige', color: 'orange-red', icon: 'mdi-fire', overcapMult: 0, gainMult: {display: 'percent'}, capMult: {baseValue: 100}, currencyMult: {
-            miningSmelterySpeed: {type: 'mult', value: val => val * 0.02 + 1}
+        ember: {type: 'prestige', color: 'orange-red', icon: 'mdi-fire', display: 'int', overcapMult: 1, overcapScaling: 0, gainMult: {display: 'percent'}, capMult: {baseValue: 100}, currencyMult: {
+            miningSmelteryTime: {type: 'mult', value: val => 1 / (val * 0.02 + 1)}
         }},
         resin: {type: 'prestige', color: 'orange', icon: 'mdi-water', gainMult: {baseValue: 0.0001, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 5}},
         crystalGreen: {type: 'prestige', alwaysVisible: true, color: 'light-green', icon: 'mdi-star-three-points', gainMult: {}},
-        helium: {type: 'prestige', color: 'pale-blue', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}, currencyMult: {
+        helium: {type: 'prestige', subtype: 'gas', color: 'pale-blue', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}, currencyMult: {
             currencyMiningScrapCap: {type: 'mult', value: val => val * 0.01 + 1}
         }},
-        neon: {type: 'prestige', color: 'orange-red', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}, currencyMult: {
-            miningPickaxeCraftingPower: {type: 'mult', value: val => val * 0.01 + 1}
+        neon: {type: 'prestige', subtype: 'gas', color: 'orange-red', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}, currencyMult: {
+            miningPickaxeCraftingPower: {type: 'mult', value: val => Math.pow(val * 0.01 + 1, 0.9)}
         }},
-        argon: {type: 'prestige', color: 'pink-purple', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}, currencyMult: {
-            currencyMiningScrapGain: {type: 'mult', value: val => val * 0.01 + 1}
+        argon: {type: 'prestige', subtype: 'gas', color: 'pink-purple', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}, currencyMult: {
+            currencyMiningScrapGain: {type: 'mult', value: val => Math.pow(val * 0.01 + 1, 0.8)}
         }},
-        krypton: {type: 'prestige', color: 'light-blue', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}},
-        xenon: {type: 'prestige', color: 'blue', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}},
-        radon: {type: 'prestige', color: 'light-green', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}},
+        krypton: {type: 'prestige', subtype: 'gas', color: 'light-blue', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}, currencyMult: {
+            miningRareEarthGain: {type: 'mult', value: val => Math.pow(val * 0.01 + 1, 0.7)}
+        }},
+        xenon: {type: 'prestige', subtype: 'gas', color: 'blue', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}},
+        radon: {type: 'prestige', subtype: 'gas', color: 'light-green', icon: 'mdi-gas-cylinder', gainMult: {display: 'percent', baseValue: 0.01}},
+        limestone: {subtype: 'rareEarth', color: 'pale-yellow', icon: 'mdi-zip-box', gainMult: {}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const rareDropGain = store.getters['mining/rareDrops'];
+            return (hitsNeeded === Infinity || !rareDropGain.limestone) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.limestone) / hitsNeeded);
+        }, timerIsEstimate: true},
+        moonshard: {subtype: 'rareEarth', color: 'light-blue', icon: 'mdi-moon-waning-crescent', showHint: true, gainMult: {}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const rareDropGain = store.getters['mining/rareDrops'];
+            return (hitsNeeded === Infinity || !rareDropGain.moonshard) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.moonshard) / hitsNeeded);
+        }, timerIsEstimate: true},
+        phosphorus: {subtype: 'rareEarth', color: 'red', icon: 'mdi-pyramid', gainMult: {}, gainTimerFunction() {
+            const hitsNeeded = store.getters['mining/hitsNeeded'];
+            const rareDropGain = store.getters['mining/rareDrops'];
+            return (hitsNeeded === Infinity || !rareDropGain.phosphorus) ? null : (((hitsNeeded + MINING_RARE_DROP_BREAK) * rareDropGain.phosphorus) / hitsNeeded);
+        }, timerIsEstimate: true},
         crystalYellow: {type: 'prestige', alwaysVisible: true, color: 'yellow', icon: 'mdi-star-four-points', gainMult: {}}
     },
     upgrade: {
@@ -433,7 +486,6 @@ export default {
         ...upgrade2,
         ...upgradePrestige,
         ...upgradePremium,
-        ...bookMining
     },
     relic,
     achievement,
@@ -476,9 +528,6 @@ export default {
         if (store.state.unlock.miningPickaxeCrafting.see) {
             obj.ingredientList = store.state.mining.ingredientList;
         }
-        if (store.state.mining.enhancementBars > 0) {
-            obj.enhancementBars = store.state.mining.enhancementBars;
-        }
         if (store.state.mining.enhancementIngredient !== null) {
             obj.enhancementIngredient = store.state.mining.enhancementIngredient;
         }
@@ -505,6 +554,9 @@ export default {
         if (Object.keys(enhancementData).length > 0) {
             obj.enhancement = enhancementData;
         }
+        if (!store.state.mining.enhancementsActive) {
+            obj.enhancementsActive = false;
+        }
 
         if (Object.keys(store.state.mining.beaconPlaced).length > 0) {
             obj.beaconPlaced = store.state.mining.beaconPlaced;
@@ -512,11 +564,18 @@ export default {
         if (store.state.mining.beaconCooldown > 0) {
             obj.beaconCooldown = store.state.mining.beaconCooldown;
         }
+        if (store.state.mining.torchDepths.length > 0) {
+            obj.torchDepths = store.state.mining.torchDepths;
+        }
 
         return obj;
     },
     loadGame(data) {
-        ['depth', 'durability', 'pickaxePower', 'breaks', 'ingredientList', 'enhancementBars', 'enhancementIngredient', 'resin', 'beaconPlaced', 'beaconCooldown'].forEach(elem => {
+        [
+            'depth', 'durability', 'pickaxePower', 'breaks', 'ingredientList',
+            'enhancementIngredient', 'enhancementsActive', 'resin', 'beaconPlaced',
+            'beaconCooldown', 'torchDepths'
+        ].forEach(elem => {
             if (data[elem] !== undefined) {
                 store.commit('mining/updateKey', {key: elem, value: data[elem]});
             }
@@ -534,9 +593,12 @@ export default {
             for (const [key, elem] of Object.entries(data.enhancement)) {
                 if (store.state.mining.enhancement[key] !== undefined) {
                     store.commit('mining/updateEnhancementKey', {name: key, key: 'level', value: elem});
-                    store.dispatch('mining/applyEnhancement', {trigger: false, name: key});
+                    if (store.state.mining.enhancementsActive) {
+                        store.dispatch('mining/applyEnhancement', {trigger: false, name: key});
+                    }
                 }
             }
+            store.dispatch('mining/updateObsidianPenalty');
         }
         store.dispatch('mining/applyBeaconEffects');
     }

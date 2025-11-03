@@ -34,16 +34,5 @@ export default {
         pool: {
             bloom: {price: {event_bloomToken: 30}}
         }
-    },
-    farm_superFlower: {
-        type: 'consumable',
-        item: 'farm_superFlower',
-        amount: 20,
-        requirement() {
-            return store.state.unlock.farmFertilizer.see;
-        },
-        pool: {
-            bloom: {price: {event_bloomToken: 1}}
-        }
     }
 }

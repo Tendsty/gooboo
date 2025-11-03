@@ -12,7 +12,7 @@
       </div>
       <div v-for="relic in relics" :key="relic.name">
         <span>{{ $vuetify.lang.t(`$vuetify.message.achievement.relicGained`) }}: </span>
-        <span class="balloon-text-inverted" :class="`${relic.color}--text`">{{ $vuetify.lang.t(`$vuetify.relic.${ relic.name }`) }}</span>
+        <span class="balloon-text-inverted" :class="`${relic.color}--text`">{{ $vuetify.lang.t(`$vuetify.relic.${ relic.name }.name`) }}</span>
         <v-icon class="balloon-text-inverted ml-1" :color="relic.color">{{ relic.icon }}</v-icon>
       </div>
     </v-card-text>

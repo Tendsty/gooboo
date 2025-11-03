@@ -1,60 +1,124 @@
 import store from "../../store";
-import { MINUTES_PER_HOUR, SECONDS_PER_DAY } from "../constants";
+import { SECONDS_PER_DAY } from "../constants";
 import { buildArray } from "../utils/array";
-import { buildNum } from "../utils/format";
+import bookFarm from "./school/bookFarm";
+import bookGallery from "./school/bookGallery";
+import bookHorde from "./school/bookHorde";
+import bookMining from "./school/bookMining";
+import bookVillage from "./school/bookVillage";
+import relic from "./school/relic";
 import upgradePremium from "./school/upgradePremium";
 
 export default {
     name: 'school',
-    tickspeed: 60,
+    tickspeed: 1,
     unlockNeeded: 'schoolFeature',
-    tick(minutes, oldTime, newTime) {
-        store.dispatch('currency/gain', {feature: 'school', name: 'book', amount: store.getters['mult/get']('currencySchoolBookGain', store.getters['school/subjectsBookGain']) * minutes / MINUTES_PER_HOUR});
-        store.dispatch('note/find', 'school_2');
+    tick(seconds, oldTime, newTime) {
         const dayDiff = Math.floor(newTime / SECONDS_PER_DAY) - Math.floor(oldTime / SECONDS_PER_DAY);
         if (dayDiff > 0) {
-            store.dispatch('currency/gain', {feature: 'school', name: 'examPass', amount: dayDiff}, {root: true});
+            store.dispatch('currency/gain', {feature: 'school', name: 'examPass', amount: dayDiff});
+        }
+        if (store.state.school.bonusDust > 0 && store.state.currency.school_goldenDust.value < store.state.currency.school_goldenDust.cap) {
+            const amount = Math.min(seconds, store.state.school.bonusDust, store.state.currency.school_goldenDust.cap - store.state.currency.school_goldenDust.value);
+            store.commit('school/updateKey', {key: 'bonusDust', value: store.state.school.bonusDust - amount});
+            store.dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount});
         }
     },
-    unlock: ['schoolFeature', 'schoolLiteratureSubfeature', 'schoolHistorySubfeature', 'schoolArtSubfeature'],
+    unlock: ['schoolFeature', 'schoolLiteratureSubfeature', 'schoolHistorySubfeature', 'schoolArtSubfeature', 'schoolChemistrySubfeature', 'schoolLibrarySubfeature'],
     stat: {
-        highestGrade: {display: 'grade'}
+        highestGrade: {display: 'grade'},
+        totalPoints: {display: 'int'},
+    },
+    mult: {
+        schoolBook: {round: true},
+        schoolMultipass: {round: true, baseValue: 1},
     },
     currency: {
-        book: {color: 'brown', icon: 'mdi-book', gainMult: {display: 'perHour'}, showGainMult: true, gainTimerFunction() {
-            return store.getters['mult/get']('currencySchoolBookGain', store.getters['school/subjectsBookGain']);
-        }},
-        goldenDust: {color: 'amber', icon: 'mdi-timer-sand', overcapMult: 0, capMult: {baseValue: buildNum(10, 'K')}},
-        examPass: {color: 'pale-blue', icon: 'mdi-ticket-account'}
+        goldenDust: {color: 'amber', icon: 'mdi-timer-sand', display: 'int', overcapMult: 0, overcapFunction(amount) {
+            store.commit('school/updateKey', {key: 'bonusDust', value: store.state.school.bonusDust + amount});
+        }, capMult: {baseValue: 8000}},
+        examPass: {color: 'pale-blue', icon: 'mdi-ticket-account', display: 'int'}
     },
     upgrade: upgradePremium,
+    relic,
     note: buildArray(5).map(() => 'g'),
     init() {
         for (const [key, elem] of Object.entries({
-            math: {scoreGoal: 12},
+            math: {scoreGoal: 14},
             literature: {unlock: 'schoolLiteratureSubfeature', scoreGoal: 8},
-            history: {unlock: 'schoolHistorySubfeature', scoreGoal: 5},
-            art: {unlock: 'schoolArtSubfeature', scoreGoal: 10}
+            history: {unlock: 'schoolHistorySubfeature', scoreGoal: 8},
+            art: {unlock: 'schoolArtSubfeature', scoreGoal: 10},
+            chemistry: {unlock: 'schoolChemistrySubfeature', scoreGoal: 100}
         })) {
-            store.commit('school/init', {name: key, ...elem});
+            store.commit('school/initSubject', {name: key, ...elem});
+        }
+        for (const [feature, items] of Object.entries({
+            mining: bookMining,
+            village: bookVillage,
+            horde: bookHorde,
+            farm: bookFarm,
+            gallery: bookGallery,
+        })) {
+            for (const [key, elem] of Object.entries(items)) {
+                store.commit('school/initBook', {name: key, feature, ...elem});
+            }
         }
     },
     saveGame() {
-        let obj = {};
-        for (const [key, elem] of Object.entries(store.state.school)) {
-            if (elem.grade > 0 || elem.progress > 0) {
-                obj[key] = [elem.grade, elem.currentGrade, elem.progress];
+        let obj = {
+            subject: {}
+        };
+        for (const [key, elem] of Object.entries(store.state.school.subject)) {
+            if (elem.grade > 0 || elem.progress > 0 || elem.pointsTotal > 0) {
+                obj.subject[key] = [elem.grade, elem.currentGrade, elem.progress, elem.pointsTotal];
+                if (elem.booksSkipped > 0) {
+                    obj.subject[key].push(elem.booksSkipped);
+                }
             }
+        }
+        for (const [key, elem] of Object.entries(store.state.school.book)) {
+            if (elem.owned) {
+                if (obj.books === undefined) {
+                    obj.books = [];
+                }
+                obj.books.push(key);
+            }
+        }
+        if (store.state.school.bonusDust > 0) {
+            obj.bonusDust = store.state.school.bonusDust;
+        }
+        if (store.state.school.multipass > 1) {
+            obj.multipass = store.state.school.multipass;
         }
         return obj;
     },
     loadGame(data) {
-        for (const [key, elem] of Object.entries(data)) {
-            if (store.state.school[key] !== undefined) {
-                store.commit('school/updateKey', {name: key, key: 'grade', value: elem[0]});
-                store.commit('school/updateKey', {name: key, key: 'currentGrade', value: elem[1]});
-                store.commit('school/updateKey', {name: key, key: 'progress', value: elem[2]});
+        if (data.subject) {
+            for (const [key, elem] of Object.entries(data.subject)) {
+                if (store.state.school.subject[key] !== undefined) {
+                    store.commit('school/updateSubjectKey', {name: key, key: 'grade', value: elem[0]});
+                    store.commit('school/updateSubjectKey', {name: key, key: 'currentGrade', value: elem[1]});
+                    store.commit('school/updateSubjectKey', {name: key, key: 'progress', value: elem[2]});
+                    store.commit('school/updateSubjectKey', {name: key, key: 'pointsTotal', value: elem[3]});
+
+                    if (elem.length > 4) {
+                        store.commit('school/updateSubjectKey', {name: key, key: 'booksSkipped', value: elem[4]});
+                    }
+
+                    store.dispatch('school/applySubjectBooks', key);
+                }
             }
+        }
+        if (data.books) {
+            data.books.forEach(elem => {
+                store.commit('school/updateBookKey', {name: elem, key: 'owned', value: true});
+            });
+        }
+        if (data.bonusDust) {
+            store.commit('school/updateKey', {key: 'bonusDust', value: data.bonusDust});
+        }
+        if (data.multipass) {
+            store.commit('school/updateKey', {key: 'multipass', value: data.multipass});
         }
     }
 }

@@ -18,7 +18,7 @@ export default {
                 text: '173'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'bugfix',
                 text: '174'
             },

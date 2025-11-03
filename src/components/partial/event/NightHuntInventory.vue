@@ -146,7 +146,8 @@
         </template>
         <div v-if="ritualIngredients.length <= 0" class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.empty`) }}</div>
         <template v-else-if="!ritualPerformed">
-          <div class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.isNew`) }}</div>
+          <div v-if="ritualIngredients.length <= 2" class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.isNew`) }}</div>
+          <div v-else class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.isNewNoToken`) }}</div>
           <div v-if="undiscoveredRituals > 0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.isNewPotion`) }}</div>
         </template>
         <div v-else-if="ritualRecipe" class="mt-0">{{ $vuetify.lang.t(`$vuetify.event.nightHunt.newDescription.discoveredPotion`) }}</div>

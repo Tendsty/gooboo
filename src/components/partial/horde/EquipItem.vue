@@ -11,7 +11,7 @@
 
 <template>
   <v-card class="d-flex align-center pa-1" v-if="item.collapse">
-    <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.horde.items.${name}`)">
+    <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.horde.equipment.${name}`)">
       <template v-slot:activator="{ on, attrs }">
         <v-icon class="ma-1" v-bind="attrs" v-on="on">{{ item.icon }}</v-icon>
       </template>
@@ -23,7 +23,7 @@
         </template>
       </div>
     </gb-tooltip>
-    <active class="ma-1" :pretend="isPretend" :name="name"></active>
+    <active v-if="item.activeType !== null" class="ma-1" :pretend="isPretend" :name="name"></active>
     <gb-tooltip key="item-upgrade-collapse" v-if="found && canUpgrade">
       <template v-slot:activator="{ on, attrs }">
         <div class="ma-1 rounded" v-bind="attrs" v-on="on">
@@ -39,7 +39,7 @@
     <v-chip key="item-max-collapse" disabled label small class="ma-1 px-2" style="text-transform: uppercase;" v-else-if="isMaxed">{{ $vuetify.lang.t('$vuetify.gooboo.maxed') }}</v-chip>
     <v-spacer></v-spacer>
     <template v-if="found">
-      <v-btn class="ma-1 px-2" v-if="item.masteryLevel >= 2" color="primary" min-width="36" :disabled="disabled" @click="togglePassive"><v-icon>{{ item.passive ? 'mdi-sleep-off' : 'mdi-sleep' }}</v-icon></v-btn>
+      <v-btn class="ma-1 px-2" v-if="item.masteryLevel >= 2 && item.activeType !== null" color="primary" min-width="36" :disabled="disabled" @click="togglePassive"><v-icon>{{ item.passive ? 'mdi-sleep-off' : 'mdi-sleep' }}</v-icon></v-btn>
       <v-btn class="ma-1 px-2" v-if="!item.equipped" color="primary" @click="equipItem(name)" :disabled="itemsFull || disabled">{{ $vuetify.lang.t('$vuetify.gooboo.equip') }}</v-btn>
       <v-btn class="ma-1 px-2" v-else color="error" :disabled="disabled" @click="unequipItem(name)">{{ $vuetify.lang.t('$vuetify.gooboo.unequip') }}</v-btn>
     </template>
@@ -49,12 +49,12 @@
         <div v-bind="attrs" v-on="on">{{ $formatNum(findChance * 100, true) }}%</div>
       </template>
       <div class="mt-0">{{ $vuetify.lang.t('$vuetify.horde.itemFindDescription') }}</div>
-      <stat-breakdown name="hordeItemChance" :base="item.findChance" :multArray="findChanceArray"></stat-breakdown>
+      <stat-breakdown name="hordeEquipmentChance" :base="item.findChance" :multArray="findChanceArray"></stat-breakdown>
     </gb-tooltip>
     <v-btn class="ma-1" icon @click="toggleCollapse"><v-icon>mdi-arrow-expand</v-icon></v-btn>
   </v-card>
   <v-card v-else>
-    <v-card-title class="pa-2 justify-center"><v-icon class="mr-2">{{ item.icon }}</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.items.${name}`) }}</v-card-title>
+    <v-card-title class="pa-2 justify-center"><v-icon class="mr-2">{{ item.icon }}</v-icon>{{ $vuetify.lang.t(`$vuetify.horde.equipment.${name}`) }}</v-card-title>
     <v-card-subtitle v-if="canSeeMastery" class="pa-2 d-flex justify-center align-center">
       <gb-tooltip>
         <template v-slot:activator="{ on, attrs }">
@@ -80,23 +80,23 @@
         </template>
         <div>{{ $vuetify.lang.t(`$vuetify.horde.itemMastery.description`, masteryZoneNeeded) }}</div>
         <div>{{ $vuetify.lang.t(`$vuetify.horde.itemMastery.current`, $formatNum(item.masteryPoint), $formatNum(masteryNeeded)) }}</div>
-        <h3 class="text-center">{{ $vuetify.lang.t(`$vuetify.gooboo.gain`) }}</h3>
         <template v-if="masteryGainBase > 0">
-          <div>{{ $vuetify.lang.t(`$vuetify.horde.itemMastery.gain`, $formatNum(masteryGainBoss, true), $formatNum(masteryMinibossMult * 100), $formatNum(masteryGainMiniboss, true)) }}</div>
-          <stat-breakdown name="hordeItemMasteryGain" :base="masteryGainBase"></stat-breakdown>
+          <h3 class="text-center">{{ $vuetify.lang.t(`$vuetify.gooboo.gain`) }}</h3>
+          <stat-breakdown name="hordeEquipmentMasteryGain" :base="masteryGainBase"></stat-breakdown>
         </template>
       </gb-tooltip>
     </v-card-subtitle>
     <v-card-text class="px-4 py-0">
       <div v-for="(elem, key) in stats" :key="key">
         <span v-if="elem.type === 'tag'">{{ $vuetify.lang.t(`$vuetify.tag.${ elem.name }`, ...elem.value) }}</span>
+        <span v-else-if="elem.type === 'text'">{{ $vuetify.lang.t(`$vuetify.text.${ elem.name }`) }}</span>
         <template v-else>
           <mult-stat :mult="elem.name" :type="elem.type" :value="elem.value"></mult-stat>&nbsp;<mult-name :name="elem.name"></mult-name>
         </template>
       </div>
     </v-card-text>
     <v-card-actions>
-      <active :pretend="isPretend" :name="name"></active>
+      <active v-if="item.activeType !== null" :pretend="isPretend" :name="name"></active>
       <gb-tooltip key="item-upgrade-full" v-if="found && canUpgrade">
         <template v-slot:activator="{ on, attrs }">
           <div class="ml-2 rounded" v-bind="attrs" v-on="on">
@@ -112,7 +112,7 @@
       <v-chip key="item-max-full" disabled label small class="ml-2 px-2" style="text-transform: uppercase;" v-else-if="isMaxed">{{ $vuetify.lang.t('$vuetify.gooboo.maxed') }}</v-chip>
       <v-spacer></v-spacer>
       <template v-if="found">
-        <v-btn v-if="item.masteryLevel >= 2" color="primary" min-width="36" :disabled="disabled" @click="togglePassive"><v-icon>{{ item.passive ? 'mdi-sleep-off' : 'mdi-sleep' }}</v-icon></v-btn>
+        <v-btn v-if="item.masteryLevel >= 2 && item.activeType !== null" color="primary" min-width="36" :disabled="disabled" @click="togglePassive"><v-icon>{{ item.passive ? 'mdi-sleep-off' : 'mdi-sleep' }}</v-icon></v-btn>
         <v-btn v-if="!item.equipped" color="primary" @click="equipItem(name)" :disabled="itemsFull || disabled">{{ $vuetify.lang.t('$vuetify.gooboo.equip') }}</v-btn>
         <v-btn v-else color="error" :disabled="disabled" @click="unequipItem(name)">{{ $vuetify.lang.t('$vuetify.gooboo.unequip') }}</v-btn>
       </template>
@@ -122,7 +122,7 @@
           <div v-bind="attrs" v-on="on">{{ $formatNum(findChance * 100, true) }}%</div>
         </template>
         <div class="mt-0">{{ $vuetify.lang.t('$vuetify.horde.itemFindDescription') }}</div>
-        <stat-breakdown name="hordeItemChance" :base="item.findChance" :multArray="findChanceArray"></stat-breakdown>
+        <stat-breakdown name="hordeEquipmentChance" :base="item.findChance" :multArray="findChanceArray"></stat-breakdown>
       </gb-tooltip>
     </v-card-actions>
     <v-btn class="item-collapse" icon @click="toggleCollapse"><v-icon>mdi-arrow-collapse</v-icon></v-btn>
@@ -131,7 +131,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import { HORDE_MASTERY_MINIBOSS_MULT, HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from '../../../js/constants';
+import { HORDE_SHARD_INCREMENT, HORDE_SHARD_PER_EQUIP } from '../../../js/constants';
 import MultName from '../../render/MultName.vue';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
@@ -167,17 +167,17 @@ export default {
       return this.item.found;
     },
     findChance() {
-      return this.$store.getters['mult/get']('hordeItemChance', this.item.findChance * (1 + this.zone - this.item.findZone));
+      return this.$store.getters['mult/get']('hordeEquipmentChance', this.item.findChance * (1 + this.zone - this.item.findZone));
     },
     findChanceArray() {
       return this.zone > this.item.findZone ? [{name: 'zone', value: 1 + this.zone - this.item.findZone}] : [];
     },
     stats() {
-      let obj = this.item.stats(this.item.level);
+      let obj = this.item.stats(this.item.level, this.item.stacks);
       if (this.item.passive) {
         obj = obj.map(elem => {
           let value = elem.value;
-          if (elem.isPositive) {
+          if (elem.isPositive && value !== true) {
             const masteryMult = (this.item.masteryLevel >= 4 ? 2 : 1) * this.item.masteryBoost + 1;
             if (elem.type === 'base' || elem.type === 'bonus') {
               value *= masteryMult;
@@ -219,13 +219,13 @@ export default {
       return obj;
     },
     itemsFull() {
-      return this.$store.getters['horde/itemsEquipped'] >= this.$store.getters['mult/get']('hordeMaxItems');
+      return this.$store.getters['horde/itemsEquipped'] >= this.$store.getters['mult/get']('hordeMaxEquipment');
     },
     canUpgrade() {
       return this.$store.state.stat.horde_monsterPart.total > 0 && (this.item.cap === null || this.item.level < this.item.cap);
     },
     isMaxed() {
-      return this.item.cap !== null && this.item.level >= this.item.cap;
+      return this.item.cap !== null && this.item.cap > 1 && this.item.level >= this.item.cap;
     },
     canBuy() {
       return this.$store.getters['currency/value']('horde_monsterPart') >= this.upgradePrice;
@@ -234,9 +234,9 @@ export default {
       return this.item.price(this.item.level);
     },
     statDiff() {
-      let after = [...this.item.stats(this.item.level + 1), ...this.item.active(this.item.level + 1), {value: this.item.cooldown(this.item.level + 1)}];
+      let after = [...this.item.stats(this.item.level + 1, this.item.stacks), ...this.item.active(this.item.level + 1), {value: this.item.cooldown(this.item.level + 1)}];
       let buffs = [];
-      const stats = [...this.item.stats(this.item.level), ...this.item.active(this.item.level).map(elem => {
+      const stats = [...this.item.stats(this.item.level, this.item.stacks), ...this.item.active(this.item.level).map(elem => {
         return {...elem, type: elem.type === 'buff' ? 'hordeBuff' : 'hordeActive', name: elem.type};
       }), {type: 'hordeCooldown', name: 'cooldown', value: this.item.cooldown(this.item.level)}].map((elem, key) => {
         if (elem.type === 'hordeBuff') {
@@ -248,7 +248,7 @@ export default {
         }
         return {type: elem.type, name: elem.name, before: elem.value, after: after[key].value, isBuff: false};
       });
-      return [...stats, ...buffs].filter(elem => elem.before !== elem.after);
+      return [...stats, ...buffs].filter(elem => Array.isArray(elem.after) ? (JSON.stringify(elem.before) !== JSON.stringify(elem.after)) : (elem.before !== elem.after));
     },
     masteryZoneNeeded() {
       return Math.max(75, this.item.findZone + 25);
@@ -258,13 +258,13 @@ export default {
     },
     masteryPercent() {
       const before = this.item.masteryLevel > 0 ? this.$store.getters['horde/masteryRequired'](this.name, this.item.masteryLevel - 1) : 0;
-      return 100 * (this.item.masteryPoint - before) / (this.masteryNeeded - before);
+      return Math.max(100 * (this.item.masteryPoint - before) / (this.masteryNeeded - before), 0);
     },
     canUseActive() {
       return this.item.equipped && !this.item.passive;
     },
     canSeeMastery() {
-      return this.$store.state.unlock.hordeItemMastery.see;
+      return this.$store.state.unlock.hordeEquipmentMastery.see;
     },
     isPretend() {
       return (!this.canUseActive && this.item.cooldownLeft <= 0) || this.activeDisabled;
@@ -278,15 +278,6 @@ export default {
     masteryGainBase() {
       return this.$store.getters['horde/masteryBaseGain'](this.name);
     },
-    masteryGainBoss() {
-      return this.$store.getters['mult/get']('hordeItemMasteryGain', this.masteryGainBase);
-    },
-    masteryGainMiniboss() {
-      return this.masteryGainBoss * HORDE_MASTERY_MINIBOSS_MULT;
-    },
-    masteryMinibossMult() {
-      return HORDE_MASTERY_MINIBOSS_MULT;
-    }
   },
   methods: {
     ...mapActions({

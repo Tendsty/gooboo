@@ -9,7 +9,7 @@
   <div class="d-flex justify-space-between align-center w-100">
     <v-icon class="mr-1">{{ item.icon }}</v-icon>
     <div class="d-flex align-center flex-grow-1" :class="{'flex-column': $vuetify.breakpoint.xsOnly, 'justify-space-between': $vuetify.breakpoint.smAndUp}">
-      <div>{{ $vuetify.lang.t(`$vuetify.horde.items.${ name }`) }}</div>
+      <div>{{ $vuetify.lang.t(`$vuetify.horde.equipment.${ name }`) }}</div>
       <v-chip class="mx-1 px-2" :class="{'error--text': item.cooldownLeft > 0}" small label>
         <v-icon small class="mr-1">mdi-timer</v-icon>
         <span>{{ $formatTime(cooldown) }}</span>
@@ -35,7 +35,7 @@ export default {
       return this.$store.state.horde.items[this.name];
     },
     cooldown() {
-      return Math.ceil(this.item.cooldown(this.item.level) / (this.item.masteryLevel >= 4 ? 2 : 1));
+      return Math.ceil(this.item.cooldown(this.item.level));
     }
   }
 }

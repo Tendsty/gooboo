@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { capitalize } from "../js/utils/format";
 import { weightSelect } from "../js/utils/random";
-import { SECONDS_PER_HOUR, VILLAGE_JOY_HAPPINESS_REDUCTION, VILLAGE_JOY_MIN_HAPPINESS, VILLAGE_JOY_PER_HAPPINESS, VILLAGE_OFFERING_PASSIVE_GAIN } from "../js/constants";
-import { deltaLinear } from "../js/utils/math";
+import { SECONDS_PER_HOUR, VILLAGE_JOY_HAPPINESS_REDUCTION, VILLAGE_JOY_MIN_HAPPINESS, VILLAGE_JOY_PER_HAPPINESS, VILLAGE_OFFERING_MULT_EFFECT, VILLAGE_OFFERING_PASSIVE_GAIN, VILLAGE_OFFERING_PRICE_INCREMENT } from "../js/constants";
+import { getSequence } from "../js/utils/math";
 
 export default {
     namespaced: true,
@@ -84,6 +84,10 @@ export default {
         offeringPerSecond: (state, getters) => {
             return getters.offeringScore * VILLAGE_OFFERING_PASSIVE_GAIN / SECONDS_PER_HOUR;
         },
+        offeringBaseEffect: (state, getters, rootState, rootGetters) => (name, level) => {
+            const offering = state.offering[name];
+            return offering.hasMultiplier ? (level * offering.effect) : rootGetters['mult/get']('villageOfferingPower', getSequence(10, level) * offering.effect);
+        },
         sharesGain: (state, getters, rootState, rootGetters) => {
             const val = rootState.currency.village_copperCoin.value / 1000;
             return val >= 10 ? rootGetters['mult/get']('currencyVillageSharesGain', val) : 0;
@@ -94,6 +98,7 @@ export default {
             Vue.set(state.job, o.name, {
                 amount: 0,
                 max: o.max ?? null,
+                maxDefault: o.max ?? null,
                 needed: o.needed ?? 1,
                 rewards: o.rewards ?? []
             });
@@ -105,8 +110,8 @@ export default {
                 upgradeBought: 0,
                 cost: o.cost ?? (() => 1),
                 amount: o.amount ?? 1,
-                increment: o.increment ?? 0,
-                effect: o.effect ?? 1
+                effect: o.effect ?? 1,
+                hasMultiplier: o.hasMultiplier ?? true
             });
         },
         initPolicy(state, o) {
@@ -158,8 +163,9 @@ export default {
     },
     actions: {
         cleanState({ state, commit }) {
-            for (const [key] of Object.entries(state.job)) {
+            for (const [key, elem] of Object.entries(state.job)) {
                 commit('updateJobKey', {name: key, key: 'amount', value: 0});
+                commit('updateJobKey', {name: key, key: 'max', value: elem.maxDefault});
             }
             for (const [key] of Object.entries(state.offering)) {
                 commit('updateOfferingKey', {name: key, key: 'offeringBought', value: 0});
@@ -251,6 +257,7 @@ export default {
             dispatch('currency/reset', {feature: 'village', type: 'regular'}, {root: true});
             dispatch('stat/reset', {feature: 'village', type: 'regular'}, {root: true});
             commit('updateKey', {key: 'explorerProgress', value: 0});
+            dispatch('school/updateBookEffects', 'village', {root: true});
             dispatch('card/activateCards', 'village', {root: true});
 
             dispatch('applyOfferingEffect');
@@ -265,38 +272,18 @@ export default {
                 commit('updateOfferingKey', {name: name, key: 'offeringBought', value: offering.offeringBought + 1});
             }
         },
-        upgradeOffering({ state, rootState, rootGetters, commit, dispatch }, o) {
-            const offering = state.offering[o.name];
-            const buyMax = o.buyMax ?? false;
-            const baseCost = offering.amount + offering.increment * offering.upgradeBought;
+        upgradeOffering({ state, rootState, rootGetters, commit, dispatch }, name) {
+            const offering = state.offering[name];
+            const price = Math.round(Math.pow(offering.amount, 2) * Math.pow(VILLAGE_OFFERING_PRICE_INCREMENT, offering.upgradeBought));
             const offeringOwned = rootGetters['currency/value']('village_offering');
 
-            if (offeringOwned >= baseCost) {
-                // Buy one or all if buyMax is enabled
-                let amount = buyMax ? Math.floor(offeringOwned / offering.amount) : 1;
-                if (buyMax && offering.increment > 0) {
-                    let step = 1;
-                    while (offeringOwned >= deltaLinear(offering.amount, offering.increment, step, offering.upgradeBought)) {
-                        step *= 2;
-                    }
-                    amount = step / 2;
-                    while (step > 1) {
-                        step /= 2;
-                        if (offeringOwned >= deltaLinear(offering.amount, offering.increment, amount + step, offering.upgradeBought)) {
-                            amount += step;
-                        }
-                    }
-                }
-                dispatch('currency/spend', {feature: 'village', name: 'offering', amount: deltaLinear(offering.amount, offering.increment, amount, offering.upgradeBought)}, {root: true});
-                commit('updateOfferingKey', {name: o.name, key: 'upgradeBought', value: offering.upgradeBought + amount});
+            if (offeringOwned >= price) {
+                dispatch('currency/spend', {feature: 'village', name: 'offering', amount: price}, {root: true});
+                commit('updateOfferingKey', {name, key: 'upgradeBought', value: offering.upgradeBought + 1});
 
                 // Update effect for this currency only
                 if (offering.unlock === null || rootState.unlock[offering.unlock].use) {
-                    dispatch('mult/setBase', {
-                        name: `currencyVillage${ capitalize(o.name) }Cap`,
-                        key: 'villageOffering',
-                        value: state.offering[o.name].upgradeBought * rootGetters['mult/get']('villageOfferingPower', offering.effect)
-                    }, {root: true});
+                    dispatch('applyOfferingEffect', name);
                 }
             }
         },
@@ -317,15 +304,21 @@ export default {
                 }
             }
         },
-        applyOfferingEffect({ state, rootState, rootGetters, dispatch }) {
+        applyOfferingEffect({ state, getters, rootState, rootGetters, dispatch }, name = null) {
             for (const [key, elem] of Object.entries(state.offering)) {
-                const value = elem.upgradeBought * rootGetters['mult/get']('villageOfferingPower', elem.effect);
-
-                const multKey = `currencyVillage${ capitalize(key) }Cap`;
-                if ((elem.unlock === null || rootState.unlock[elem.unlock].use) && value > 0) {
-                    dispatch('mult/setBase', {name: multKey, key: 'villageOffering', value}, {root: true});
-                } else {
-                    dispatch('mult/removeKey', {name: multKey, key: 'villageOffering', type: 'base'}, {root: true});
+                if (name === null || key === name) {
+                    const multKey = `currencyVillage${ capitalize(key) }Cap`;
+                    if ((elem.unlock === null || rootState.unlock[elem.unlock].use) && elem.upgradeBought > 0) {
+                        dispatch('mult/setBase', {name: multKey, key: 'villageOffering', value: getters.offeringBaseEffect(key, elem.upgradeBought)}, {root: true});
+                        if (elem.hasMultiplier) {
+                            dispatch('mult/setMult', {name: multKey, key: 'villageOffering', value: rootGetters['mult/get']('villageOfferingPower', Math.pow(VILLAGE_OFFERING_MULT_EFFECT, elem.upgradeBought) - 1) + 1}, {root: true});
+                        }
+                    } else {
+                        dispatch('mult/removeKey', {name: multKey, key: 'villageOffering', type: 'base'}, {root: true});
+                        if (elem.hasMultiplier) {
+                            dispatch('mult/removeKey', {name: multKey, key: 'villageOffering', type: 'mult'}, {root: true});
+                        }
+                    }
                 }
             }
         },

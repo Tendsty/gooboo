@@ -34,16 +34,5 @@ export default {
         pool: {
             snowdown: {price: {event_snowdownToken: 30}}
         }
-    },
-    farm_cinnamonBag: {
-        type: 'consumable',
-        item: 'farm_cinnamonBag',
-        amount: 20,
-        requirement() {
-            return store.state.unlock.farmFertilizer.see;
-        },
-        pool: {
-            snowdown: {price: {event_snowdownToken: 1}}
-        }
     }
 }

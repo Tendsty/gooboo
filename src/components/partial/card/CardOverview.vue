@@ -73,10 +73,10 @@ export default {
       return this.$store.getters['mult/get'](this.feature + 'CardCap');
     },
     cardPowerEquipped() {
-      return this.cardsEquipped.reduce((a, b) => a + this.cards[b].power, 0);
+      return this.cardsEquipped.reduce((a, b) => a + (this.cards[b].power === 'adaptive' ? this.adaptivePower : this.cards[b].power) + (this.cards[b].foundShiny ? 1 : 0), 0);
     },
     cardPowerSelected() {
-      return this.cardsSelected.reduce((a, b) => a + this.cards[b].power, 0);
+      return this.cardsSelected.reduce((a, b) => a + (this.cards[b].power === 'adaptive' ? this.adaptivePower : this.cards[b].power) + (this.cards[b].foundShiny ? 1 : 0), 0);
     },
     cardPowerEquippedEffect() {
       return this.cardPowerEquipped <= 0 ? [] : this.$store.state.card.feature[this.feature].powerReward.map(elem => {
@@ -87,6 +87,9 @@ export default {
       return this.cardPowerSelected <= 0 ? [] : this.$store.state.card.feature[this.feature].powerReward.map(elem => {
         return {...elem, value: elem.value(this.cardPowerSelected)};
       });
+    },
+    adaptivePower() {
+      return this.$store.getters['card/adaptivePower'](this.feature);
     }
   }
 }

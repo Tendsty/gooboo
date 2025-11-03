@@ -7,7 +7,7 @@
     <template v-if="cost.health !== undefined">
       <v-icon small class="mx-1">mdi-circle-small</v-icon>
       <v-icon small class="mr-1">mdi-heart</v-icon>
-      <span>{{ $formatNum(cost.health, true) }}%</span>
+      <span>{{ $formatNum(cost.health * 100, true) }}%</span>
     </template>
     <template v-if="cost.energy !== undefined">
       <v-icon small class="mx-1">mdi-circle-small</v-icon>

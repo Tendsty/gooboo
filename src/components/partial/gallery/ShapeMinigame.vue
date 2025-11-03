@@ -112,19 +112,7 @@
         </div>
       </gb-tooltip>
       <currency class="ma-1" name="gallery_motivation" large></currency>
-      <gb-tooltip :min-width="0">
-        <template v-slot:activator="{ on, attrs }">
-          <div v-bind="attrs" v-on="on">
-            <v-btn class="ma-1" width="36" min-width="36" color="success" :disabled="!canBuyMotivation" @click="buyMotivation"><v-icon>mdi-plus-thick</v-icon></v-btn>
-          </div>
-        </template>
-        <div class="mt-0">
-          <span>{{ $vuetify.lang.t('$vuetify.gallery.shapes.buyFor.0') }}&nbsp;</span>
-          <price-tag currency="gallery_motivation" :amount="motivationBuyAmount" add></price-tag>
-          <span>&nbsp;{{ $vuetify.lang.t('$vuetify.gallery.shapes.buyFor.1') }}&nbsp;</span>
-          <price-tag currency="gem_sapphire" :amount="motivationBuyCost"></price-tag>
-        </div>
-      </gb-tooltip>
+      <consumable class="ma-1" name="gallery_surpriseParty" :disabled="!canBuyMotivation" @click="buyMotivation"></consumable>
       <currency v-for="item in currencies.slice(1)" :key="item" class="ma-1" :name="item" :gainBase="1"></currency>
     </div>
   </div>
@@ -132,13 +120,14 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { GALLERY_MOTIVATION_BUY_AMOUNT, GALLERY_MOTIVATION_BUY_COST, GALLERY_REROLL_COST } from '../../../js/constants';
+import { GALLERY_MOTIVATION_BUY_AMOUNT, GALLERY_REROLL_COST } from '../../../js/constants';
+import Consumable from '../../render/Consumable.vue';
 import Currency from '../../render/Currency.vue';
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 
 export default {
-  components: { Currency, PriceTag, StatBreakdown },
+  components: { Currency, PriceTag, StatBreakdown, Consumable },
   data: () => ({
     dragX: null,
     dragY: null
@@ -169,12 +158,6 @@ export default {
       }
       return arr;
     },
-    motivationBuyCost() {
-      return GALLERY_MOTIVATION_BUY_COST;
-    },
-    motivationBuyAmount() {
-      return GALLERY_MOTIVATION_BUY_AMOUNT;
-    },
     rerollCost() {
       return GALLERY_REROLL_COST;
     },
@@ -182,7 +165,7 @@ export default {
       return this.$store.getters['currency/value']('gallery_motivation') >= GALLERY_REROLL_COST;
     },
     canBuyMotivation() {
-      return this.$store.state.unlock.galleryShape.use && this.$store.getters['currency/value']('gem_sapphire') >= GALLERY_MOTIVATION_BUY_COST && this.$store.getters['currency/value']('gallery_motivation') < 10;
+      return this.$store.state.unlock.galleryShape.use && this.$store.getters['currency/value']('gallery_motivation') < GALLERY_MOTIVATION_BUY_AMOUNT;
     }
   },
   methods: {
@@ -229,14 +212,17 @@ export default {
       this.$store.dispatch('gallery/buyShapeReroll');
     },
     buyMotivation() {
-      if (this.$store.state.system.settings.confirm.items.gem.value) {
+      const consumables = {gallery_surpriseParty: 1};
+      const price = this.$store.getters['consumable/priceMultiple'](consumables).price;
+      if (this.$store.state.system.settings.confirm.items.gem.value && this.$store.getters['currency/contains'](price, 'gem')) {
         this.$store.commit('system/updateKey', {key: 'confirm', value: {
-          type: 'galleryMotivation',
-          price: {gem_sapphire: GALLERY_MOTIVATION_BUY_COST},
-          gain: {gallery_motivation: GALLERY_MOTIVATION_BUY_AMOUNT},
+          type: 'consumable',
+          subtype: 'surpriseParty',
+          consumable: consumables,
+          price: this.$store.getters['currency/filterPrice'](price, 'gem'),
         }});
       } else {
-        this.$store.dispatch('gallery/buyMotivation');
+        this.$store.dispatch('gallery/surpriseParty');
       }
     }
   }

@@ -1,53 +1,63 @@
-import store from "../../../store";
-
 export default {
-    bookAluminiumHardening: {type: 'book', raiseOtherCap: 'mining_aluminiumHardening', requirement() {
-        return store.state.upgrade.item.mining_aluminiumHardening.highestLevel >= 6;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 7)};
-    }, effect: [
-        {name: 'upgradeMiningAluminiumHardeningCap', type: 'base', value: lvl => lvl}
+    damage: {subfeature: 0, scalesWithGL: true, minGL: 25, effect: [
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
     ]},
-    bookAluminiumTanks: {type: 'book', raiseOtherCap: 'mining_aluminiumTanks', requirement() {
-        return store.state.upgrade.item.mining_aluminiumTanks.highestLevel >= 8;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 5)};
-    }, effect: [
-        {name: 'upgradeMiningAluminiumTanksCap', type: 'base', value: lvl => lvl}
+    oreAluminiumCap: {subfeature: 0, scalesWithGL: true, minGL: 40, maxGL: 139, effect: [
+        {name: 'currencyMiningOreAluminiumCap', type: 'base', value: lvl => lvl * 8}
     ]},
-    bookRefinery: {type: 'book', raiseOtherCap: 'mining_refinery', requirement() {
-        return store.state.upgrade.item.mining_refinery.highestLevel >= 5;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 40)};
-    }, effect: [
-        {name: 'upgradeMiningRefineryCap', type: 'base', value: lvl => lvl}
+    oreGain: {subfeature: 0, scalesWithGL: true, minGL: 50, maxGL: 249, effect: [
+        {name: 'miningOreGain', type: 'mult', value: lvl => lvl * 0.01 + 1}
     ]},
-    bookFurnace: {type: 'book', raiseOtherCap: 'mining_furnace', requirement() {
-        return store.state.upgrade.item.mining_furnace.highestLevel >= 25;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 60)};
-    }, effect: [
-        {name: 'upgradeMiningFurnaceCap', type: 'base', value: lvl => lvl}
+    oreCopperCap: {subfeature: 0, scalesWithGL: true, minGL: 55, maxGL: 154, effect: [
+        {name: 'currencyMiningOreCopperCap', type: 'base', value: lvl => lvl * 4}
     ]},
-    bookIronExpansion: {type: 'book', raiseOtherCap: 'mining_ironExpansion', requirement() {
-        return store.state.upgrade.item.mining_ironExpansion.highestLevel >= 3;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 120)};
-    }, effect: [
-        {name: 'upgradeMiningIronExpansionCap', type: 'base', value: lvl => lvl}
+    scrapGain: {subfeature: 0, scalesWithGL: true, minGL: 75, effect: [
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
     ]},
-    bookMagnet: {type: 'book', raiseOtherCap: 'mining_magnet', requirement() {
-        return store.state.upgrade.item.mining_magnet.highestLevel >= 10;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 160)};
-    }, effect: [
-        {name: 'upgradeMiningMagnetCap', type: 'base', value: lvl => lvl}
+    oreTinCap: {subfeature: 0, scalesWithGL: true, minGL: 75, maxGL: 174, effect: [
+        {name: 'currencyMiningOreTinCap', type: 'base', value: lvl => lvl * 3}
     ]},
-    bookMetalDetector: {type: 'book', raiseOtherCap: 'mining_metalDetector', requirement() {
-        return store.state.upgrade.item.mining_metalDetector.highestLevel >= 12;
-    }, price(lvl) {
-        return {school_book: Math.round(Math.pow(1.15, lvl) * (lvl + 5) * 250)};
-    }, effect: [
-        {name: 'upgradeMiningMetalDetectorCap', type: 'base', value: lvl => lvl}
+    scrapCap: {subfeature: 0, scalesWithGL: true, minGL: 100, effect: [
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
+    ]},
+    oreIronCap: {subfeature: 0, scalesWithGL: true, minGL: 105, maxGL: 204, effect: [
+        {name: 'currencyMiningOreIronCap', type: 'base', value: lvl => lvl * 2}
+    ]},
+    oreTitaniumCap: {subfeature: 0, scalesWithGL: true, minGL: 145, maxGL: 244, effect: [
+        {name: 'currencyMiningOreTitaniumCap', type: 'base', value: lvl => lvl}
+    ]},
+    emberCap: {subfeature: 0, alwaysActive: true, scalesWithGL: true, minGL: 160, effect: [
+        {name: 'currencyMiningEmberCap', type: 'base', value: lvl => lvl * 2}
+    ]},
+    corrosiveFumesUncap: {subfeature: 0, minGL: 175, raiseOtherCap: 'mining_corrosiveFumes', effect: [
+        {name: 'mining_corrosiveFumes', type: 'uncapUpgrade', value: lvl => lvl >= 1}
+    ]},
+    orePlatinumCap: {subfeature: 0, scalesWithGL: true, minGL: 200, maxGL: 299, effect: [
+        {name: 'currencyMiningOrePlatinumCap', type: 'base', value: lvl => lvl}
+    ]},
+    oreIridiumCap: {subfeature: 0, scalesWithGL: true, minGL: 285, maxGL: 384, effect: [
+        {name: 'currencyMiningOreIridiumCap', type: 'base', value: lvl => lvl}
+    ]},
+    oreOsmiumCap: {subfeature: 0, scalesWithGL: true, minGL: 375, maxGL: 474, effect: [
+        {name: 'currencyMiningOreOsmiumCap', type: 'base', value: lvl => lvl}
+    ]},
+    oreLeadCap: {subfeature: 0, scalesWithGL: true, minGL: 475, maxGL: 574, effect: [
+        {name: 'currencyMiningOreLeadCap', type: 'base', value: lvl => lvl}
+    ]},
+
+    damage2: {subfeature: 1, scalesWithGL: true, minGL: 25, effect: [
+        {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
+    ]},
+    scrapCap2: {subfeature: 1, scalesWithGL: true, minGL: 50, effect: [
+        {name: 'currencyMiningScrapCap', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
+    ]},
+    smokeCap: {subfeature: 1, scalesWithGL: true, minGL: 75, maxGL: 174, effect: [
+        {name: 'currencyMiningSmokeCap', type: 'mult', value: lvl => lvl * 0.01 + 1}
+    ]},
+    scrapGain2: {subfeature: 1, scalesWithGL: true, minGL: 100, effect: [
+        {name: 'currencyMiningScrapGain', type: 'mult', value: lvl => Math.pow(1.01, lvl)}
+    ]},
+    smokeGain: {subfeature: 1, scalesWithGL: true, minGL: 125, maxGL: 224, effect: [
+        {name: 'currencyMiningSmokeGain', type: 'mult', value: lvl => lvl * 0.01 + 1}
     ]},
 }

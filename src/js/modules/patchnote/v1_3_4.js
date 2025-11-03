@@ -127,14 +127,14 @@ export default {
                 text: '182'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'new',
                 text: '189'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'new',
-                text: 'addedHordeItem',
+                text: 'addedHordeEquipment',
                 params: [2]
             },
             {
@@ -193,7 +193,7 @@ export default {
                 text: '209'
             },
             {
-                unlock: 'hordeItems',
+                unlock: 'hordeEquipment',
                 type: 'bugfix',
                 text: '214'
             }

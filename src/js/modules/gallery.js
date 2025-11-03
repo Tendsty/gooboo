@@ -1,7 +1,7 @@
 import store from "../../store"
 import { buildArray } from "../utils/array";
 import { capitalize } from "../utils/format";
-import { getSequence, logBase } from "../utils/math";
+import { logBase } from "../utils/math";
 import achievement from "./gallery/achievement";
 import idea from "./gallery/idea";
 import relic from "./gallery/relic";
@@ -10,7 +10,6 @@ import upgrade from "./gallery/upgrade";
 import upgradeShape from "./gallery/upgradeShape";
 import upgradePremium from "./gallery/upgradePremium";
 import upgradePrestige from "./gallery/upgradePrestige";
-import bookGallery from "./school/bookGallery";
 
 export default {
     name: 'gallery',
@@ -65,7 +64,7 @@ export default {
             let totalLevel = 0;
             for (const [key, elem] of Object.entries(store.state.gallery.colorData)) {
                 if (elem.cacheSpace > 0) {
-                    const speed = store.getters['mult/get']('galleryCanvasSpeed', getSequence(10, elem.cacheSpace) * 0.1, 1 + store.getters['currency/value'](`gallery_${ key }Drum`) * 0.1);
+                    const speed = store.getters['mult/get']('galleryCanvasSpeed', elem.cacheSpace, 1 + store.getters['currency/value'](`gallery_${ key }Drum`) * 0.1);
                     const oldProgress = elem.progress;
                     let progress = elem.progress;
                     let secondsLeft = seconds;
@@ -80,12 +79,12 @@ export default {
                         store.dispatch('gallery/applyCanvasLevel', {name: key, onLevel: true});
                     }
                 }
-                totalLevel += elem.progress;
+                totalLevel += Math.floor(elem.progress);
             }
             store.commit('stat/increaseTo', {feature: 'gallery', name: 'canvasLevelTotal', value: totalLevel});
         }
     },
-    unlock: ['galleryFeature', 'galleryConversion', 'galleryInspiration', 'galleryAuction', 'galleryDrums', 'galleryShape', 'galleryCanvas'],
+    unlock: ['galleryFeature', 'galleryConversion', 'galleryInspiration', 'galleryAuction', 'galleryDrums', 'galleryShape', 'galleryCanvas', 'galleryAdvancedCardPack'],
     stat: {
         timeSpent: {display: 'time'},
         bestPrestige: {showInStatistics: true},
@@ -94,25 +93,27 @@ export default {
         shapeComboTotal: {showInStatistics: true},
         canvasLevelTotal: {showInStatistics: true},
         hourglassHighest: {},
-        prestigeCount: {showInStatistics: true}
+        prestigeCount: {showInStatistics: true},
     },
     mult: {
-        galleryInspirationBase: {unlock: 'galleryInspiration', baseValue: 300, display: 'timeMs'},
-        galleryInspirationIncrement: {unlock: 'galleryInspiration', baseValue: 1, min: 0, display: 'percent'},
+        galleryInspirationBase: {unlock: 'galleryInspiration', baseValue: 300, display: 'timeMs', isPositive: false},
+        galleryInspirationIncrement: {unlock: 'galleryInspiration', baseValue: 1, min: 0, display: 'percent', isPositive: false},
         galleryInspirationStart: {unlock: 'galleryInspiration'},
         galleryShapeGain: {unlock: 'galleryShape'},
         gallerySpecialShapeChance: {unlock: 'galleryShape', baseValue: 0.005, display: 'percent'},
         gallerySpecialShapeMult: {unlock: 'galleryShape', baseValue: 15, display: 'mult'},
         galleryCanvasSize: {unlock: 'galleryCanvas', baseValue: 1, round: true},
-        galleryCanvasSpeed: {unlock: 'galleryCanvas', display: 'perSecond'}
+        galleryCanvasSpeed: {unlock: 'galleryCanvas', display: 'perSecond'},
+
+        galleryPremiumColorCap: {},
     },
     currency: {
         beauty: {color: 'deep-purple', icon: 'mdi-image-filter-vintage', gainMult: {baseValue: 1, display: 'perSecond'}, showGainMult: true, showGainTimer: true, timerIsEstimate: true},
         converter: {multUnlock: 'galleryConversion', color: 'pale-green', icon: 'mdi-recycle', overcapMult: 0.75, overcapScaling: 0.95, gainMult: {baseValue: 0.2, display: 'perSecond'}, showGainMult: true, capMult: {baseValue: 1000}},
-        inspiration: {multUnlock: 'galleryInspiration', color: 'yellow', icon: 'mdi-lightbulb-on'},
+        inspiration: {multUnlock: 'galleryInspiration', color: 'yellow', icon: 'mdi-lightbulb-on', display: 'int'},
         package: {multUnlock: 'galleryDrums', color: 'beige', icon: 'mdi-package-variant', overcapMult: 0.8, overcapScaling: 0.8, gainMult: {baseValue: 0.0125, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 10}},
-        motivation: {multUnlock: 'galleryShape', type: 'shape', color: 'pink-purple', icon: 'mdi-emoticon-excited', overcapMult: 0.5, gainMult: {baseValue: 0.2, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 100}},
-        mysteryShape: {multUnlock: 'galleryShape', type: 'shape', color: 'pale-purple', icon: 'mdi-octahedron', overcapMult: 0, gainMult: {baseValue: 1}, capMult: {baseValue: 1337}},
+        motivation: {multUnlock: 'galleryShape', type: 'shape', color: 'pink-purple', icon: 'mdi-emoticon-excited', overcapMult: 0.5, gainMult: {baseValue: 0.01, display: 'perSecond'}, showGainMult: true, showGainTimer: true, capMult: {baseValue: 100}},
+        mysteryShape: {multUnlock: 'galleryShape', type: 'shape', color: 'pale-purple', icon: 'mdi-octahedron', display: 'int', overcapMult: 0, gainMult: {baseValue: 1}, capMult: {baseValue: 1337}},
         cash: {multUnlock: 'galleryAuction', type: 'prestige', alwaysVisible: true, color: 'green', icon: 'mdi-cash', gainMult: {}}
     },
     note: buildArray(10).map(() => 'g'),
@@ -121,13 +122,23 @@ export default {
         ...upgradeShape,
         ...upgradePrestige,
         ...upgradePremium,
-        ...bookGallery
     },
     multGroup: [
-        {mult: 'galleryShapeGain', name: 'currencyGain', type: 'shape', blacklist: ['gallery_motivation', 'gallery_mysteryShape']}
+        {mult: 'galleryPremiumColorCap', name: 'upgradeCap', subtype: 'premiumColor'},
+        {mult: 'galleryShapeGain', name: 'currencyGain', type: 'shape', blacklist: ['gallery_motivation', 'gallery_mysteryShape']},
     ],
+    tag: {
+        galleryBonusTier1Idea: {params: ['number'], stacking: 'add'},
+    },
     relic,
     achievement,
+    consumable: {
+        surpriseParty: {
+            icon: 'mdi-party-popper',
+            color: 'babypink',
+            price: {gem_sapphire: 45}
+        }
+    },
     init() {
         // Add each color as a mult and currency
         store.state.gallery.color.forEach((elem, index) => {
@@ -150,7 +161,7 @@ export default {
         });
 
         store.commit('mult/init', {feature: 'gallery', name: 'galleryColorGain', unlock: 'galleryFeature', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }Gain`)}, {root: true});
-        store.commit('mult/init', {feature: 'gallery', name: 'galleryColorDrumChance', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `gallery${ capitalize(elem) }DrumChance`)}, {root: true});
+        store.commit('mult/init', {feature: 'gallery', name: 'galleryColorDrumChance', display: 'percent', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `gallery${ capitalize(elem) }DrumChance`)}, {root: true});
         store.commit('mult/init', {feature: 'gallery', name: 'galleryColorDrumCap', unlock: 'galleryDrums', group: store.state.gallery.color.map(elem => `currencyGallery${ capitalize(elem) }DrumCap`)}, {root: true});
 
         for (const [key, elem] of Object.entries(idea)) {
@@ -237,10 +248,13 @@ export default {
                     store.commit('gallery/updateIdeaKey', {name: key, key: 'owned', value: true});
                     if (elem > 0) {
                         store.commit('gallery/updateIdeaKey', {name: key, key: 'level', value: elem});
-                        store.dispatch('gallery/applyIdea', {name: key});
                     }
                 }
             }
+            const applyFirst = ['thinkHarder'];
+            [...applyFirst, ...Object.keys(store.state.gallery.idea).filter(el => !applyFirst.includes(el))].forEach(name => {
+                store.dispatch('gallery/applyIdea', {name});
+            });
         }
         if (data.colorData !== undefined) {
             for (const [key, elem] of Object.entries(data.colorData)) {

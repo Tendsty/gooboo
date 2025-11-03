@@ -25,32 +25,32 @@ const data = {
 
 const effect = {
     mining: [
-        [{name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => lvl * 0.1 + 1}],
-        [{name: 'currencyMiningCrystalYellowGain', type: 'mult', value: lvl => lvl * 0.1 + 1}],
+        [{name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}],
+        [{name: 'currencyMiningCrystalYellowGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}],
     ],
     village: [
         [
-            {name: 'currencyVillageFaithGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
-            {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
+            {name: 'currencyVillageFaithGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+            {name: 'currencyVillageFaithCap', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
         ],
         [
-            {name: 'currencyVillageSharesGain', type: 'mult', value: lvl => lvl * 0.1 + 1}
+            {name: 'currencyVillageSharesGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
         ],
     ],
     horde: [
         [
-            {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
-            {name: 'currencyHordeSoulCorruptedCap', type: 'mult', value: lvl => lvl * 0.1 + 1}
+            {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
+            {name: 'currencyHordeSoulCorruptedCap', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
         ],
         [
-            {name: 'currencyHordeCourageGain', type: 'mult', value: lvl => lvl * 0.1 + 1},
+            {name: 'currencyHordeCourageGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
         ],
     ],
     farm: [
-        [{name: 'farmExperience', type: 'mult', value: lvl => lvl * 0.1 + 1}],
+        [{name: 'farmExperience', type: 'mult', value: lvl => Math.pow(1.15, lvl)}],
     ],
     gallery: [
-        [{name: 'currencyGalleryCashGain', type: 'mult', value: lvl => lvl * 0.1 + 1}],
+        [{name: 'currencyGalleryCashGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)}],
     ]
 };
 
@@ -61,7 +61,7 @@ export default {
     tick(seconds) {
         for (const [key, elem] of Object.entries(store.state.cryolab)) {
             if (elem.active) {
-                const expGain = store.getters['cryolab/expGain'](key);
+                const expGain = store.getters['cryolab/expGain'](key, store.state.system.features[key].currentSubfeature);
                 if (expGain > 0) {
                     store.dispatch('cryolab/gainExp', {feature: key, amount: expGain * seconds / SECONDS_PER_DAY});
                 }
@@ -72,7 +72,7 @@ export default {
                     // Special handler for farm experience
                     for (const [key, elem] of Object.entries(store.state.farm.crop)) {
                         if (elem.found) {
-                            let amountLeft = amount * elem.baseExpMult * seconds / SECONDS_PER_DAY;
+                            let amountLeft = amount * elem.baseExp * seconds / SECONDS_PER_DAY;
                             while (amountLeft > 0) {
                                 const levelDiff = elem.levelMax - elem.level;
                                 if (levelDiff <= 0) {

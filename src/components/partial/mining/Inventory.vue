@@ -19,7 +19,7 @@
       <currency v-for="name in subfeatureCurrencies[subfeature]" :key="`currency-${ name }`" class="ma-1" :name="name"></currency>
     </div>
     <div v-if="subfeature === 0" class="d-flex justify-center flex-wrap ma-1 mt-4 mt-lg-8">
-      <currency v-for="(item, key) in ingredients" :key="key" :name="'mining_' + key" class="ma-1" :class="{'premium-glow': upgrade[`mining_more${ key.slice(3) }`].level >= 1, 'currency-clickable': unlock.miningPickaxeCrafting.use}" @click="addIngredient(key)"></currency>
+      <currency v-for="(item, key) in ingredients" :key="key" :name="'mining_' + key" class="ma-1" :class="{[premiumGlowName + upgrade[`mining_more${ key.slice(3) }`].level]: upgrade[`mining_more${ key.slice(3) }`].level >= 1, 'currency-clickable': unlock.miningPickaxeCrafting.use}" @click="addIngredient(key)"></currency>
       <currency v-for="(item, key) in enhancement" :key="key" :name="`mining_${ key }`" class="ma-1" :class="{'currency-clickable': unlock.miningEnhancement.use}" @click="setEnhancementIngredient(key)"></currency>
     </div>
     <div v-if="unlock.miningPickaxeCrafting.use && subfeature === 0" class="mt-4 mt-lg-8">
@@ -29,7 +29,7 @@
           v-for="i in pickaxeEmptySlots"
           :key="'empty-' + i"
           class="ingredient-empty bg-tile-default rounded ma-1"
-          :class="{'premium-glow': (ingredientList.length + i - 1) < pickaxePremiumSlots, 'elevation-2': (ingredientList.length + i - 1) >= pickaxePremiumSlots}"
+          :class="{[premiumGlowName + '1']: (ingredientList.length + i - 1) < pickaxePremiumSlots, 'elevation-2': (ingredientList.length + i - 1) >= pickaxePremiumSlots}"
         ></div>
       </div>
       <div v-if="ingredientList.length > 0" class="d-flex align-center flex-wrap mx-1 my-2 justify-center">
@@ -116,30 +116,20 @@
           <v-icon class="mr-2" large v-bind="attrs" v-on="on">mdi-package-up</v-icon>
         </template>
         <div>{{ $vuetify.lang.t('$vuetify.mining.enhancement.description') }}</div>
+        <h3 class="text-center mt-4">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementMax') }}</h3>
+        <div>{{ $vuetify.lang.t('$vuetify.mining.enhancement.maximumDescription') }}</div>
+        <stat-breakdown name="miningEnhancementMax"></stat-breakdown>
       </gb-tooltip>
-      <div class="ingredient-empty balloon-text-dynamic rounded d-flex justify-center align-center ma-1" :class="enhancementIngredient ? (currency['mining_' + enhancementIngredient].color + ' ' + ($vuetify.theme.dark ? 'darken-2' : 'lighten-2')) : 'bg-tile-default'">
-        <template v-if="enhancementIngredient">
-          <v-icon :class="{'mb-3': enhancementBars >= enhancementBarsNeeded}" large>{{ currency['mining_' + enhancementIngredient].icon }}</v-icon>
-          <div v-if="enhancementBars >= enhancementBarsNeeded" class="ingredient-amount">{{ $formatNum(enhancementFinalNeeded) }}</div>
-        </template>
-      </div>
+      <price-tag class="ma-1" v-if="enhancementIngredient" :currency="`mining_${ enhancementIngredient }`" :amount="enhancementBarsNeeded"></price-tag>
       <gb-tooltip>
         <template v-slot:activator="{ on, attrs }">
-          <div class="ma-1" style="width: 225px;" v-bind="attrs" v-on="on">
-            <v-progress-linear class="balloon-text-dynamic rounded" height="32" :value="100 * enhancementBars / enhancementBarsNeeded">
-              {{ $formatNum(enhancementBars) }} / {{ $formatNum(enhancementBarsNeeded) }}
-            </v-progress-linear>
-          </div>
+          <v-btn class="ma-1" color="primary" :disabled="!canEnhance" @click="performEnhancement" v-bind="attrs" v-on="on">{{ $vuetify.lang.t('$vuetify.mining.enhance') }}</v-btn>
         </template>
-        <h3 class="text-center mt-0">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementBarsIncrement') }}</h3>
-        <div>{{ $vuetify.lang.t('$vuetify.mining.enhancement.barsDescription') }}</div>
-        <stat-breakdown name="miningEnhancementBarsIncrement"></stat-breakdown>
-        <h3 class="text-center mt-4">{{ $vuetify.lang.t('$vuetify.mult.miningEnhancementFinalIncrement') }}</h3>
-        <div>{{ $vuetify.lang.t('$vuetify.mining.enhancement.enhancementDescription') }}</div>
-        <stat-breakdown name="miningEnhancementFinalIncrement"></stat-breakdown>
+        <template v-if="enhancementIngredient !== null">
+          <h3 class="text-center mt-0 mb-2" :class="[`${ currency['mining_' + enhancementIngredient].color }--text`, {'text--lighten-2': $vuetify.theme.dark, 'text--darken-2': !$vuetify.theme.dark}]">{{ $vuetify.lang.t(`$vuetify.mining.enhancement.${ enhancementIngredient }`) }}</h3>
+          <display-row class="mt-0" v-for="(effect, key) in enhancementEffect" :key="`effect-${ enhancementIngredient }-${ key }`" :type="effect.type" :name="effect.name" :before="effect.before" :after="effect.value"></display-row>
+        </template>
       </gb-tooltip>
-      <v-btn class="ma-1" color="primary" :disabled="enhancementBars >= enhancementBarsNeeded || !canEnhanceBars" @click="performEnhancementBars">{{ $vuetify.lang.t('$vuetify.gooboo.add') }}</v-btn>
-      <v-btn class="ma-1" color="primary" :disabled="enhancementBars < enhancementBarsNeeded || !canEnhanceFinal" @click="performEnhancementFinal">{{ $vuetify.lang.t('$vuetify.mining.enhance') }}</v-btn>
     </div>
     <smeltery v-if="unlock.miningSmeltery.see && subfeature === 0" class="mt-4 mt-lg-8"></smeltery>
   </div>
@@ -147,20 +137,22 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import { MINING_ENHANCEMENT_MAX } from '../../../js/constants';
 import Consumable from '../../render/Consumable.vue';
 import Currency from '../../render/Currency.vue'
 import PriceTag from '../../render/PriceTag.vue';
 import StatBreakdown from '../../render/StatBreakdown.vue';
 import AlertText from '../render/AlertText.vue';
+import DisplayRow from '../upgrade/DisplayRow.vue';
 import Ingredient from './Ingredient.vue';
 import Smeltery from './Smeltery.vue';
 
 export default {
-  components: { Currency, Ingredient, Consumable, StatBreakdown, PriceTag, Smeltery, AlertText },
+  components: { Currency, Ingredient, Consumable, StatBreakdown, PriceTag, Smeltery, AlertText, DisplayRow },
   data: () => ({
     subfeatureCurrencies: [
       ['mining_resin', 'mining_granite', 'mining_salt', 'mining_coal', 'mining_sulfur', 'mining_niter', 'mining_obsidian', 'mining_deeprock', 'mining_glowshard'],
-      ['mining_smoke']
+      ['mining_smoke', 'mining_limestone', 'mining_moonshard', 'mining_phosphorus']
     ]
   }),
   computed: {
@@ -176,15 +168,13 @@ export default {
       isFrozen: state => state.cryolab.mining.active,
       enhancement: state => state.mining.enhancement,
       enhancementIngredient: state => state.mining.enhancementIngredient,
-      enhancementBars: state => state.mining.enhancementBars,
       currency: state => state.currency
     }),
     ...mapGetters({
       pickaxeStats: 'mining/pickaxeStats',
       pickaxeCost: 'mining/pickaxeCost',
-      enhancementChance: 'mining/enhancementChance',
       enhancementBarsNeeded: 'mining/enhancementBarsNeeded',
-      enhancementFinalNeeded: 'mining/enhancementFinalNeeded'
+      enhancementLevel: 'mining/enhancementLevel'
     }),
     canCraftPickaxe() {
       return this.ingredientList.length > 0 && this.$store.getters['mining/pickaxeCanAfford'] && this.pickaxeStats.purity >= 0.001;
@@ -224,6 +214,9 @@ export default {
     resinMax() {
       return this.$store.getters['mult/get']('miningResinMax');
     },
+    enhancementMax() {
+      return this.$store.getters['mult/get']('miningEnhancementMax');
+    },
     resinAmount() {
       return this.$store.getters['currency/value']('mining_resin');
     },
@@ -233,17 +226,26 @@ export default {
     currentSmokePower() {
       return this.$store.getters['mult/get']('miningPickaxeCraftingPower', this.currentSmoke);
     },
-    canEnhanceBars() {
-      return this.enhancementIngredient !== null && this.currency['mining_' + this.enhancementIngredient].value >= 1;
+    canEnhance() {
+      return this.enhancementIngredient !== null && this.enhancement[this.enhancementIngredient].level < MINING_ENHANCEMENT_MAX && this.enhancementLevel < this.enhancementMax && this.currency['mining_' + this.enhancementIngredient].value >= this.enhancementBarsNeeded;
     },
-    canEnhanceFinal() {
-      return this.enhancementIngredient !== null && this.currency['mining_' + this.enhancementIngredient].value >= this.enhancementFinalNeeded;
-    }
+    premiumGlowName() {
+      return `premium-${ this.$store.state.system.settings.performance.items.cssAnimations.value ? 'glow' : 'frame' }-`;
+    },
+    enhancementEffect() {
+      if (!this.canEnhance) {
+        return [];
+      }
+      const level = this.enhancement[this.enhancementIngredient].level;
+      return this.enhancement[this.enhancementIngredient].effect.map(eff => {
+        return {...eff, before: level > 0 ? eff.value(level) : null, value: eff.value(level + 1)};
+      });
+    },
   },
   methods: {
     addIngredient(name) {
       if (this.unlock.miningPickaxeCrafting.use && this.ingredientList.length < this.$store.getters['mult/get']('miningPickaxeCraftingSlots')) {
-        this.$store.commit('mining/addIngredient', name);
+        this.$store.dispatch('mining/addIngredient', name);
       }
     },
     craftPickaxe(consumables = {}) {
@@ -270,11 +272,8 @@ export default {
         this.$store.commit('mining/updateKey', {key: 'enhancementIngredient', value: this.enhancementIngredient === name ? null : name});
       }
     },
-    performEnhancementBars() {
-      this.$store.dispatch('mining/enhanceBars');
-    },
-    performEnhancementFinal() {
-      this.$store.dispatch('mining/enhanceFinal');
+    performEnhancement() {
+      this.$store.dispatch('mining/enhance');
     }
   }
 }
