@@ -20,6 +20,7 @@ export default {
         {name: 'buyBrush', type: 'galleryIdea', value: true}
     ];}, glyph() {return {leaf: 4};}, active: {
         cost: {relic_power: 2},
+        feature: 'gallery',
         params() {
             return [];
         },

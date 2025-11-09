@@ -193,7 +193,7 @@ export default {
       setTimeout(this.newDates, 5000);
     },
     revealCell(id) {
-      if (id !== null) {
+      if (id !== null && this.gameState === 1) {
         if (this.revealNext === null) {
           this.revealNext = id;
         } else if (this.revealNext !== id) {

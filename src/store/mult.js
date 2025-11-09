@@ -287,7 +287,7 @@ export default {
                 dispatch('removeKey', {...o, name});
             });
         },
-        updateExternalCaches({ getters, commit, dispatch }, name) {
+        updateExternalCaches({ rootState, getters, commit, dispatch }, name) {
             if (getters.isUpgradeCap(name)) {
                 dispatch('upgrade/updateCap', getters.getUpgradeName(name), {root: true});
             } else if (getters.isCurrencyCap(name)) {
@@ -313,7 +313,7 @@ export default {
             } else if (name === 'villagePower') {
                 const power = getters.get('villagePower');
                 const value = power * 0.2 + 1;
-                if (value > 1) {
+                if (rootState.system.features.village.currentSubfeature === 0 && value > 1) {
                     dispatch('setMult', {name: 'villageMaterialGain', key: 'villagePower', value});
                     dispatch('setMult', {name: 'villageFoodGain', key: 'villagePower', value});
                 } else {

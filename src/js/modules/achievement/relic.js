@@ -48,6 +48,7 @@ export default {
         {name: 'gallerySpecialShapeChance', type: 'base', value: 0.005}
     ];}, glyph() {return {leaf: 5, paper: 1};}, active: {
         cost: {relic_power: 1},
+        feature: 'gallery',
         params() {
             return [Math.floor(Math.min(store.state.currency.gallery_motivation.value, GALLERY_SHAPES_AUTOCOLLECT_MAX) / 10)];
         },

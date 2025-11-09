@@ -76,7 +76,7 @@ export default {
     name: 'Notizbuch',
     active: 'Hausaufgaben abschreiben',
     description: 'Erhalte {0} Gesamtpunkte',
-    formula: 'Erhöhe deine Gesamtpunkte um {0}, oder benutze einen Prüfungspass, um stattdessen {1} Gesamtpunkte zu erhalten'
+    formula: 'Erhöhe deine Gesamtpunkte um {0}, oder benutze einen Prüfungspass, um stattdessen {1} Gesamtpunkte zu erhalten (nur für Generalaufgaben)'
   },
 
   friendlyBat: {

@@ -133,8 +133,8 @@ export default {
     targetDummy: {cap: 100, capMult: true, requirementBase, requirementStat, requirementValue: 92, price(lvl) {
         return {horde_bone: Math.pow(lvl * 0.005 + 1.7 + (lvl >= 100 ? 0.5 : 0), lvl) * buildNum(250, 'TD')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.15, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.16, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.16, lvl)}
     ]},
     grossBag: {cap: 1, requirementBase, requirementStat, requirementValue: 98, price() {
         return {horde_bone: buildNum(155, 'QaD')};
@@ -153,8 +153,8 @@ export default {
     combatLesson: {cap: 15, requirementBase, requirementStat, requirementValue: 120, price(lvl) {
         return {horde_bone: Math.pow(lvl * 0.4 + 3.4, lvl) * buildNum(650, 'SpD')};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.25, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.22, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.25, lvl)}
     ]},
     carving: {cap: 5, requirementBase, requirementStat, requirementValue: 125, price(lvl) {
         return {horde_bone: Math.pow(12, lvl) * buildNum(2, 'ND')};

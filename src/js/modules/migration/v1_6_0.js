@@ -484,7 +484,7 @@ export default function(save) {
     }
     if (save.event?.casino_wheel_segments) {
         save.event.casino_wheel_segments.forEach(elem => {
-            if (isOutdatedPrize(elem.prize)) {
+            if (isOutdatedPrize(elem.prize.prize)) {
                 elem.prize = {prize: elem.rarity > 1 ? 'cardPack_feelingLucky' : 'school_goldenDust', taken: 0, data: null};
             }
         });
@@ -492,7 +492,7 @@ export default function(save) {
     if (save.event?.casino_bingo_card) {
         save.event.casino_bingo_card.forEach(row => {
             row.forEach(cell => {
-                if (cell.prize !== null && isOutdatedPrize(cell.prize)) {
+                if (cell.prize !== null && isOutdatedPrize(cell.prize.prize)) {
                     cell.prize = {prize: 'school_goldenDust', taken: 0, data: null};
                 }
             });

@@ -932,6 +932,7 @@ export default {
         totalDamage: {showInStatistics: true},
         maxDamage: {showInStatistics: true},
         timeSpent: {display: 'time'},
+        relicActivesUsed: {},
         bestPrestige0: {showInStatistics: true},
         bestPrestige1: {showInStatistics: true},
         prestigeCount: {showInStatistics: true},

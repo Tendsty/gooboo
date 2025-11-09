@@ -443,6 +443,9 @@ export default {
         deleteItem({ state, getters, commit, dispatch }, id) {
             const item = id === -1 ? state.newItem : state.items[id];
             if (item) {
+                item.effect.forEach(effect => {
+                    dispatch('mult/removeKey', {name: effect, type: 'mult', key: 'treasure'}, {root: true});
+                });
                 dispatch('currency/gain', {feature: 'treasure', name: 'fragment', amount: item.fragmentsSpent + getters.destroyFragments(item.tier, item.type)}, {root: true});
                 commit('deleteItem', id);
                 dispatch('updateEffectCache');
@@ -503,13 +506,13 @@ export default {
                 if (elem.value !== 1) {
                     dispatch('mult/setMult', {name: key, key: 'treasure', value: elem.value}, {root: true});
                 } else {
-                    commit('mult/removeKey', {name: key, type: 'mult', key: 'treasure'}, {root: true});
+                    dispatch('mult/removeKey', {name: key, type: 'mult', key: 'treasure'}, {root: true});
                 }
             }
             if (eventPower > 0) {
                 dispatch('mult/setMult', {name: 'allPrestigeIncome', key: 'eventPower', value: getters.eventPowerPrestigeMult}, {root: true});
             } else {
-                commit('mult/removeKey', {name: 'allPrestigeIncome', type: 'mult', key: 'eventPower'}, {root: true});
+                dispatch('mult/removeKey', {name: 'allPrestigeIncome', type: 'mult', key: 'eventPower'}, {root: true});
             }
         },
         changeEffect({ state, commit, dispatch }, o) {

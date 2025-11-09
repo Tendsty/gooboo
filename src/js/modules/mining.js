@@ -309,6 +309,7 @@ export default {
         dwellerCapHit: {},
         enhancementHighest: {},
         timeSpent: {display: 'time'},
+        relicActivesUsed: {},
         bestPrestige0: {showInStatistics: true},
         bestPrestige1: {showInStatistics: true},
         prestigeCount: {showInStatistics: true},

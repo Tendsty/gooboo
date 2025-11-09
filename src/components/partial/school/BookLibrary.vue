@@ -130,6 +130,7 @@ export default {
   },
   mounted() {
     this.$store.commit('system/removeBookHint', 'mining_0');
+    this.$store.dispatch('note/find', 'school_2');
   },
   watch: {
     selectedFeature(newVal) {

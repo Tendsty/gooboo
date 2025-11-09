@@ -45,6 +45,7 @@
         </div>
         <div v-if="task.type === 'subfeature' && status === 'error'" class="quest-hint">{{ $vuetify.lang.t('$vuetify.general.questFailedSubfeature') }}</div>
         <div v-if="task.type === 'stat' && task.name.split('_')[1] === 'timeSpent' && status === 'error'" class="quest-hint">{{ $vuetify.lang.t('$vuetify.general.questFailedTime') }}</div>
+        <div v-if="task.type === 'stat' && task.name.split('_')[1] === 'relicActivesUsed' && status === 'error'" class="quest-hint">{{ $vuetify.lang.t('$vuetify.general.questFailedRelicActive') }}</div>
         <div v-if="task.type === 'cardEquipped' && status === 'error'" class="quest-hint">{{ $vuetify.lang.t(`$vuetify.general.questFailedCard${ isUnownedCard ? 'Unowned' : '' }`) }}</div>
       </div>
     </v-progress-linear>

@@ -551,7 +551,6 @@ export default {
     440: 'Opfergaben durch Opfer werden nun korrekt erhöht',
 
     // v1.5.8
-    441: 'Ein Fehler wurde behoben, bei dem das Spiel bei manchen Spielern nicht gestartet ist',
     442: 'Ein Fehler wurde behoben, bei dem ein Dünger nicht in der Liste aufgetaucht ist',
 
     // v1.6.0
@@ -753,6 +752,16 @@ export default {
     638: 'Der Bauernhof hatte einen großen Effizienzunterschied zwischen Spielern, welche optimale Pflanzen und Gene gewählt haben, und denen, die es nicht getan haben. Diese Änderungen haben das Ziel, diese Spielergruppen in Sachen Fortschritt näher aneinander zu bringen.',
     639: 'Eventbelohnungen waren bis jetzt entweder zu schwach oder so stark, dass sie andere Spielmechaniken verdrängt haben. Um dieses Problem zu lösen, werden problematische Belohnungen entfernt und durch neue ersetzt, welche einfacher zu balancen sind.',
     640: 'Der Heilungseffekt hat viele Spieler denken lassen, dass diese Verbesserung einen negativen Effekt hat, obwohl stets alle Aspekte positiv waren. Die Heilungsreduktion existiert weiterhin auf einer neuen Ausrüstung und einem neuen Schmuckstück.',
+
+    // v1.6.1
+    441: 'Einige Notizen, die auf nicht mehr vorhandene Spielmechaniken verwiesen haben, wurden geändert',
+    641: 'Aufgaben mit einem Zeitlimit oder einer Herausforderung erlauben keine Reliktfähigkeiten mehr',
+    642: 'In Geschichte können nach Ablauf des Zeitlimits keine Antworten mehr gegeben werden',
+    643: 'Bonusstaub aus Prüfungen wird nun in der Nachricht erwähnt',
+    644: 'Ein Fehler wurde behoben, bei dem mit Smaragden gekaufte Bücher für manche Spieler nicht im Spielstand hinterlegt wurden',
+    645: 'Ein Fehler wurde behoben, bei dem der Ertragsbonus aus Pflege nicht korrekt angewendet wurde',
+    646: 'Energie zählt nicht mehr für diese Unterfunktion',
+    647: 'Schatzeffekte werden nun entfernt, wenn ein Schatz gelöscht wird',
   },
   v: {
     1: {

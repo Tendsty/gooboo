@@ -27,7 +27,7 @@
         <treasure-icon :item-obj="item" v-bind="attrs" v-on="on"></treasure-icon>
       </template>
       <div class="d-flex align-center mt-0" v-for="(effect, index) in item.effect" :key="effect">
-        <div v-if="effect === null">&lt;{{ $vuetify.lang.t('$vuetify.treasure.emptySlot') }}&gt;</div>
+        <div v-if="effect === null" class="d-flex align-center"><v-icon small class="mr-2">mdi-cursor-default-click</v-icon>{{ $vuetify.lang.t('$vuetify.treasure.emptySlot') }}</div>
         <template v-else>
           <v-icon small class="mr-2">{{ featureIcon[effectObj[effect].feature].icon }}</v-icon>
           <display-row class="flex-grow-1" :name="effect" type="mult" :after="itemValue[index]"></display-row>

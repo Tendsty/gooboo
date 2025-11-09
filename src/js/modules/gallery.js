@@ -87,6 +87,7 @@ export default {
     unlock: ['galleryFeature', 'galleryConversion', 'galleryInspiration', 'galleryAuction', 'galleryDrums', 'galleryShape', 'galleryCanvas', 'galleryAdvancedCardPack'],
     stat: {
         timeSpent: {display: 'time'},
+        relicActivesUsed: {},
         bestPrestige: {showInStatistics: true},
         highestTierIdea: {},
         shapeComboHighest: {},

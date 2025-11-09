@@ -124,9 +124,12 @@ export default {
                 dispatch('apply', {name, onFind: true});
             }
         },
-        useActive({ state, rootGetters, dispatch }, o) {
+        useActive({ state, rootGetters, commit, dispatch }, o) {
             const relic = state.item[o.name];
             if (relic.active && !relic.active.disabled(relic.active.params(), o.option) && rootGetters['currency/canAfford'](relic.active.cost)) {
+                if (relic.active.feature) {
+                    commit('stat/add', {feature: relic.active.feature, name: 'relicActivesUsed', value: 1}, {root: true});
+                }
                 for (const [key, elem] of Object.entries(relic.active.cost)) {
                     dispatch('currency/spend', {feature: key.split('_')[0], name: key.split('_')[1], amount: elem}, {root: true});
                 }

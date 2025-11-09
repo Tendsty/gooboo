@@ -80,6 +80,9 @@ export default {
   mining_timeSpent: {
     description: 'Zeit verbracht'
   },
+  mining_relicActivesUsed: {
+    description: 'Reliktfähigkeiten benutzt'
+  },
   mining_bestPrestige0: {
     description: 'Meiste grüne Kristalle in einem Prestige'
   },
@@ -145,6 +148,9 @@ export default {
   },
   village_timeSpent: {
     description: 'Zeit verbracht'
+  },
+  village_relicActivesUsed: {
+    description: 'Reliktfähigkeiten benutzt'
   },
   village_bestPrestige0: {
     description: 'Meiste Segen in einem Prestige'
@@ -233,6 +239,9 @@ export default {
   },
   horde_timeSpent: {
     description: 'Zeit verbracht'
+  },
+  horde_relicActivesUsed: {
+    description: 'Reliktfähigkeiten benutzt'
   },
   horde_bestPrestige0: {
     description: 'Meiste korrupte Seelen in einem Prestige'
@@ -335,6 +344,9 @@ export default {
   },
   gallery_timeSpent: {
     description: 'Zeit verbracht'
+  },
+  gallery_relicActivesUsed: {
+    description: 'Reliktfähigkeiten benutzt'
   },
   gallery_prestigeCount: {
     description: 'Prestigeanzahl'

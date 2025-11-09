@@ -42,8 +42,8 @@ export default {
     balance: {type: 'prestige', requirementBase, requirementStat, requirementValue: 31, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.375, lvl) * 1100};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.12, lvl)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.12, lvl)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.13, lvl)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.13, lvl)}
     ]},
     advancedLuck: {type: 'prestige', cap: 40, requirementBase, requirementStat, requirementValue: 36, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.65, lvl) * 3250};
@@ -92,7 +92,7 @@ export default {
     candleCircle: {type: 'prestige', requirementBase, requirementStat, requirementValue: 71, price(lvl) {
         return {horde_soulEmpowered: Math.pow(lvl * 0.0015 + 1.225, lvl) * 6e8};
     }, effect: [
-        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.02, lvl)},
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.03, lvl)},
         {name: 'hordeRespawn', type: 'base', value: lvl => lvl * -5}
     ]},
     spoilsOfWar: {type: 'prestige', cap: 5, requirementBase, requirementStat, requirementValue: 76, price(lvl) {
@@ -111,7 +111,7 @@ export default {
     }, effect: [
         {name: 'currencyHordeBoneGain', type: 'mult', value: lvl => Math.pow(1.3, lvl)},
         {name: 'currencyHordeMonsterPartGain', type: 'mult', value: lvl => Math.pow(1.15, lvl)},
-        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.05, lvl)}
+        {name: 'currencyHordeSoulCorruptedGain', type: 'mult', value: lvl => Math.pow(1.06, lvl)}
     ]},
     combatStudies: {type: 'prestige', requirementBase, requirementStat, requirementValue: 111, price(lvl) {
         return {horde_soulEmpowered: Math.pow(1.35 + lvl * 0.02, lvl) * 3.5e15};
@@ -126,8 +126,8 @@ export default {
     deepHatred: {type: 'prestige', cap: 30, requirementBase, requirementStat, requirementValue: 151, price(lvl) {
         return {horde_soulEmpowered: Math.pow(lvl * 0.015 + 1.45, lvl) * 9e19};
     }, effect: [
-        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.06, lvl) * (lvl * 0.1 + 1)},
-        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.03, lvl) * (lvl * 0.05 + 1)}
+        {name: 'hordeAttack', type: 'mult', value: lvl => Math.pow(1.08, lvl) * (lvl * 0.1 + 1)},
+        {name: 'hordeHealth', type: 'mult', value: lvl => Math.pow(1.04, lvl) * (lvl * 0.05 + 1)}
     ]},
     moreDummies: {type: 'prestige', cap: 20, raiseOtherCap: 'horde_targetDummy', requirementBase, requirementStat, requirementValue: 171, price(lvl) {
         return {horde_soulEmpowered: Math.pow(lvl * 0.3 + 6, lvl) * 9e21};
