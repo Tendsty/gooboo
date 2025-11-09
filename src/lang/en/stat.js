@@ -80,6 +80,9 @@ export default {
   mining_timeSpent: {
     description: 'Time spent'
   },
+  mining_relicActivesUsed: {
+    description: 'Relic actives used'
+  },
   mining_bestPrestige0: {
     description: 'Best prestige (ore mine)'
   },
@@ -145,6 +148,9 @@ export default {
   },
   village_timeSpent: {
     description: 'Time spent'
+  },
+  village_relicActivesUsed: {
+    description: 'Relic actives used'
   },
   village_bestPrestige0: {
     description: 'Best prestige (workers)'
@@ -233,6 +239,9 @@ export default {
   },
   horde_timeSpent: {
     description: 'Time spent'
+  },
+  horde_relicActivesUsed: {
+    description: 'Relic actives used'
   },
   horde_bestPrestige0: {
     description: 'Best prestige (equipment)'
@@ -335,6 +344,9 @@ export default {
   },
   gallery_timeSpent: {
     description: 'Time spent'
+  },
+  gallery_relicActivesUsed: {
+    description: 'Relic actives used'
   },
   gallery_prestigeCount: {
     description: 'Prestiges'

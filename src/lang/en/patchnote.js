@@ -551,7 +551,6 @@ export default {
     440: 'Fixed offerings gained on sacrifice not increasing',
 
     // v1.5.8
-    441: 'Fixed a bug where the game would not load for some players',
     442: 'Fixed one fertilizer not showing up in the list',
 
     // v1.6.0
@@ -629,7 +628,7 @@ export default {
     514: 'Added event power',
     515: 'Negative effects are now shown in red',
     516: 'Offerings now become more expensive as you buy them',
-    517: 'Offerings now also increase resource capacity multiplicitavely',
+    517: 'Offerings now also increase resource capacity multiplicatively',
     518: 'Currencies that are hard to find now show how to get them by hovering over the price tag',
     519: 'Some upgrade lists now show the next upgrade',
     520: 'You can now sort treasures',
@@ -753,6 +752,16 @@ export default {
     638: 'Farm had a huge gap in efficiency between players who chose the most optimal crops and genes, and those who didn\'t. These changes aim to bring these groups of players closer together in terms of progress.',
     639: 'Event rewards have a history of being either too weak or so strong that they make other game mechanics obsolete. To help with this issue, problematic rewards are being removed and replaced with new ones that are easier to balance.',
     640: 'The healing interaction confused a lot of players into thinking this upgrade had a negative side-effect, even though it was always positive in every single aspect. The healing reduction mechanic is still present on a new equipment piece and a new trinket.',
+
+    // v1.6.1
+    441: 'Changed some notes that mentioned outdated game mechanics',
+    641: 'Quests with a time limit or challenge no longer allow the use of relic actives',
+    642: 'Answers can no longer be given after the timer has expired in the history minigame',
+    643: 'Bonus dust gained from exams is now shown in the message',
+    644: 'Fixed a bug where books bought with emeralds were not stored in the savefile for some players',
+    645: 'Fixed a bug where the yield bonus from care did not apply to crops',
+    646: 'Power no longer applies to this subfeature',
+    647: 'Treasure effects are now removed after deleting a treasure',
   },
   v: {
     1: {

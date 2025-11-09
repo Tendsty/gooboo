@@ -144,7 +144,8 @@ export default {
       perfectScore: '(PERFEKT!)',
       grade: '{0}% Note',
       gradePlus: 'Deine Note hat sich verbessert!',
-      dust: '+{0} Goldstaub'
+      dust: '+{0} Goldstaub',
+      bonusDust: '+{0} Bonusstaub',
     },
     unlock: {
       card: 'Neues Kartenpaket!',
@@ -578,6 +579,7 @@ export default {
     questEquipCard: 'Karte aktiv',
     questFailedSubfeature: 'Du bist in der falschen Unterfunktion! Versuche es nach einem Prestige erneut',
     questFailedTime: 'Zeitlimit überschritten! Versuche es nach einem Prestige erneut',
+    questFailedRelicActive: 'Reliktfähigkeit benutzt! Versuche es nach einem Prestige erneut',
     questFailedCard: 'Karte nicht aktiv! Versuche es nach einem Prestige erneut',
     questFailedCardUnowned: 'Keine Kopien dieser Karte vorhanden! Besuche den Händler, um mehr zu erhalten',
     grobodal: {
@@ -2056,8 +2058,8 @@ export default {
         description: 'Die Booststufe für dieses Erbstück ist {0}, was den Effekt verstärkt (^{1}):',
       },
       min: 'Kann ab Zone {0} gefunden werden',
-      special: 'Taucht nicht bei gewöhnlichen Minibossen auf',
-      description: 'Erbstücke sind mächtige Artefakte, welche bei Minibossen auftauchen und für immer bleiben. Erreiche höhere Zonen, um mehr Arten zu finden',
+      special: 'Taucht nicht bei seltener Beute auf',
+      description: 'Erbstücke sind mächtige Artefakte, welche bei seltener Beute auftauchen und für immer bleiben. Erreiche höhere Zonen, um mehr Arten zu finden',
       descriptionTower: 'Erbstücke sind mächtige Artefakte, welche alle {0} Etagen auftauchen und für immer bleiben. Erreiche höhere Zonen oder andere Türme, um mehr Arten zu finden',
       descriptionDouble: 'Das Erbstück mit der niedrigsten Menge hat die doppelte Chance, zu erscheinen. Wenn mehrere Erbstücke sich die niedrigste Menge teilen, wird diese Regel nicht angewendet.',
       descriptionNostalgia: 'Nostalgie erhöht die Chance auf Erbstücke. Wird ein Erbstück mit der Hilfe von Nostalgie gefunden, wird 1 Nostalgie bis zum nächsten Prestige entfernt.',
@@ -2081,7 +2083,7 @@ export default {
     },
     itemMastery: {
       name: 'Meistern',
-      description: 'Besiege Bosse oder Minibosse ab Zone {0} mit dieser Ausrüstung, um Meisterungspunkte zu erhalten. Je höher die Zone, desto mehr Punkte.',
+      description: 'Besiege Bosse oder erhalte seltene Beute ab Zone {0} mit dieser Ausrüstung, um Meisterungspunkte zu erhalten. Je höher die Zone, desto mehr Punkte.',
       bonuses: 'Erhöhe die Meisterungsstufe, um neue Boni für diese Ausrüstung freizuschalten',
       current: 'Diese Ausrüstung hat {0} / {1} Meisterungspunkte',
       1: 'Behalte die Ausrüstung nach dem Prestige',
@@ -2733,7 +2735,7 @@ export default {
     level: 'Stufe',
     tier: 'Ebene',
     tierItem: 'Ebene-{0}-Schatz',
-    emptySlot: 'leerer Platz',
+    emptySlot: 'Leerer Platz (klicke zum Auswählen)',
     modifiers: 'Modifikatoren',
     specialGroup: 'Speziell',
     tierEffect: {

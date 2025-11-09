@@ -69,7 +69,7 @@ export default {
             subject: {}
         };
         for (const [key, elem] of Object.entries(store.state.school.subject)) {
-            if (elem.grade > 0 || elem.progress > 0 || elem.pointsTotal > 0) {
+            if (elem.grade > 0 || elem.progress > 0 || elem.pointsTotal > 0 || elem.booksSkipped > 0) {
                 obj.subject[key] = [elem.grade, elem.currentGrade, elem.progress, elem.pointsTotal];
                 if (elem.booksSkipped > 0) {
                     obj.subject[key].push(elem.booksSkipped);

@@ -9,6 +9,7 @@ export default {
         {name: 'villageCardCap', type: 'base', value: 1},
     ];}, glyph() {return {heat: 2, wood: 2};}, active: {
         cost: {relic_power: 40},
+        feature: 'mining',
         params: () => [],
         description: () => [],
         formula: () => [],
@@ -37,6 +38,7 @@ export default {
         {name: 'miningDamage', type: 'mult', value: 2.25},
     ];}, glyph() {return {dust: 4, clay: 1};}, active: {
         cost: {relic_power: 35},
+        feature: 'mining',
         params() {
             let increases = 0;
             let niter = 0;

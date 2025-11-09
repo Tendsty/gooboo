@@ -148,7 +148,7 @@ export default {
                 }
             }
         },
-        finishSchool({ state, getters, commit, dispatch }, o) {
+        finishSchool({ state, rootState, getters, commit, dispatch }, o) {
             const subject = state.subject[o.subject];
             const reachedBefore = Math.max(subject.grade, state.totalPointRequirement.filter(el => subject.pointsTotal >= el).length);
             const score = (o.mode === 'exam' ? 1 : 2) * o.score / subject.scoreGoal;
@@ -161,6 +161,7 @@ export default {
             let gradeGain = 0;
             let gradePlus = false;
             let dustGain = 0;
+            let bonusDustGain = 0;
 
             if (o.mode === 'study' && subject.currentGrade >= subject.grade) {
                 const newProgress = Math.max((score - (subject.currentGrade <= 0 ? 0 : 1)) * 0.2 + subject.progress, 0);
@@ -177,11 +178,18 @@ export default {
                 }
             }
             if (o.mode === 'exam') {
-                dustGain = getters.examReward(score, subject.currentGrade);
+                const baseDustGain = getters.examReward(score, subject.currentGrade);
+                dustGain += baseDustGain;
                 if (state.multipass > 1) {
                     commit('updateKey', {key: 'bonusDust', value: state.bonusDust + dustGain * (state.multipass - 1)});
+                    bonusDustGain += dustGain * (state.multipass - 1);
                 }
-                dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: dustGain}, {root: true});
+                const overcap = dustGain + rootState.currency.school_goldenDust.value - rootState.currency.school_goldenDust.cap;
+                if (overcap > 0) {
+                    bonusDustGain += overcap;
+                    dustGain -= overcap;
+                }
+                dispatch('currency/gain', {feature: 'school', name: 'goldenDust', amount: baseDustGain}, {root: true});
                 dispatch('note/find', 'school_1', {root: true});
 
                 if (o.score >= subject.scoreGoal && subject.currentGrade >= subject.grade) {
@@ -203,6 +211,7 @@ export default {
                 grade: gradeGain,
                 gradePlus,
                 dust: dustGain,
+                bonusDust: bonusDustGain,
             }}, {root: true});
 
             const reachedAfter = Math.max(subject.grade, state.totalPointRequirement.filter(el => subject.pointsTotal >= el).length);

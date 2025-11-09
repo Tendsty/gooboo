@@ -12,7 +12,8 @@
         <span v-if="message.grade > 0">+</span>
         <span>{{ $vuetify.lang.t(`$vuetify.message.school.grade`, $formatNum(message.grade * 100)) }}</span>
       </div>
-      <div v-if="message.dust > 0">{{ $vuetify.lang.t(`$vuetify.message.school.dust`, $formatNum(message.dust)) }}</div>
+      <div v-if="message.dust > 0">{{ $vuetify.lang.t(`$vuetify.message.school.dust`, $formatInt(message.dust)) }}</div>
+      <div v-if="message.bonusDust > 0">{{ $vuetify.lang.t(`$vuetify.message.school.bonusDust`, $formatInt(message.bonusDust)) }}</div>
     </v-card-text>
   </v-card>
 </template>

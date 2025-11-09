@@ -7,6 +7,7 @@ export default {
         {name: 'horde_monsterSoup', type: 'keepUpgrade', value: true}
     ];}, glyph() {return {dream: 3, clover: 1};}, active: {
         cost: {relic_power: 3},
+        feature: 'horde',
         params() {
             let actives = 0;
             for (const [, elem] of Object.entries(store.state.horde.items)) {

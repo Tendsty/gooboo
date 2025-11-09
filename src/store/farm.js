@@ -645,7 +645,7 @@ export default {
                     // Gain currency based on crop type
                     const gainAmount = rootGetters['mult/get'](
                         'currencyFarm' + capitalize(crop.type) + 'Gain',
-                        crop.yield + geneStats.mult.farmCropGain.baseValue,
+                        crop.yield + (field.care.yield ?? 0) + geneStats.mult.farmCropGain.baseValue,
                         (((field.buildingEffect.flag ?? 0) / field.time) * 0.5 + 1) * geneStats.mult.farmCropGain.multValue
                     ) * allGainBoost * field.grow;
                     dispatch('currency/gain', {feature: 'farm', name: crop.type, amount: gainAmount}, {root: true});

@@ -6,6 +6,7 @@ export default {
             stages: [
                 {note: 'general_1', isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_oreAluminium', operator: '>=', value: 4}
                 ]},
                 {note: 'general_2', tasks: [
@@ -19,11 +20,13 @@ export default {
                 ]},
                 {note: 'general_5', isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 42}
                 ]},
 
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_oreTin', operator: '>=', value: 4}
                 ]},
                 {tasks: [
@@ -37,11 +40,13 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 75}
                 ]},
 
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_oreIron', operator: '>=', value: 4}
                 ]},
                 {tasks: [
@@ -55,11 +60,13 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 110}
                 ]},
 
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_oreTitanium', operator: '>=', value: 4}
                 ]},
                 {tasks: [
@@ -73,11 +80,13 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 160}
                 ]},
 
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_orePlatinum', operator: '>=', value: 4}
                 ]},
                 {tasks: [
@@ -91,11 +100,13 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 240}
                 ]},
 
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_oreIridium', operator: '>=', value: 4}
                 ]},
                 {tasks: [
@@ -109,6 +120,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 325}
                 ]},
             ]
@@ -123,10 +135,12 @@ export default {
                 {note: 'general_7', isChallenge: true, tasks: [
                     {type: 'subfeature', name: 'horde', operator: '==', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_totalDamage', operator: '>=', value: 5e9},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '<=', value: 1}
                 ]},
                 {note: 'general_8', isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 40},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_craftingCount', operator: '<=', value: 0}
                 ]},
                 {note: 'general_9', tasks: [
@@ -145,10 +159,12 @@ export default {
                 {isChallenge: true, tasks: [
                     {type: 'subfeature', name: 'horde', operator: '==', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_totalDamage', operator: '>=', value: 5e21},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '<=', value: 1}
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 65},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_craftingCount', operator: '<=', value: 0}
                 ]},
                 {tasks: [
@@ -167,10 +183,12 @@ export default {
                 {isChallenge: true, tasks: [
                     {type: 'subfeature', name: 'horde', operator: '==', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_totalDamage', operator: '>=', value: 5e33},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '<=', value: 1}
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 100},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_craftingCount', operator: '<=', value: 0}
                 ]},
                 {tasks: [
@@ -189,10 +207,12 @@ export default {
                 {isChallenge: true, tasks: [
                     {type: 'subfeature', name: 'horde', operator: '==', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_totalDamage', operator: '>=', value: 5e45},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '<=', value: 1}
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 145},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_craftingCount', operator: '<=', value: 0}
                 ]},
                 {tasks: [
@@ -330,11 +350,13 @@ export default {
                 ]},
                 {note: 'general_18', isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 85},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_craftingCount', operator: '<=', value: 5}
                 ]},
                 {note: 'general_19', isChallenge: true, tasks: [
                     {type: 'subfeature', name: 'village', operator: '==', value: 0},
                     {type: 'stat', subtype: 'current', name: 'village_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'village_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'village_stone', operator: '>=', value: 5e5}
                 ]},
                 {note: 'general_20', tasks: [
@@ -346,11 +368,13 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 125},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_craftingCount', operator: '<=', value: 5}
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'subfeature', name: 'village', operator: '==', value: 0},
                     {type: 'stat', subtype: 'current', name: 'village_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'village_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'village_stone', operator: '>=', value: 5e6}
                 ]},
                 {tasks: [
@@ -362,11 +386,13 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 175},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_craftingCount', operator: '<=', value: 5}
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'subfeature', name: 'village', operator: '==', value: 0},
                     {type: 'stat', subtype: 'current', name: 'village_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'village_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'village_stone', operator: '>=', value: 5e8}
                 ]},
                 {tasks: [
@@ -378,11 +404,13 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 280},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_craftingCount', operator: '<=', value: 5}
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'subfeature', name: 'village', operator: '==', value: 0},
                     {type: 'stat', subtype: 'current', name: 'village_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'village_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'village_stone', operator: '>=', value: 5e10}
                 ]},
                 {tasks: [
@@ -415,6 +443,7 @@ export default {
                 ]},
                 {note: 'general_26', isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 110},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_maxItems', operator: '<=', value: 1}
                 ]},
 
@@ -438,6 +467,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 150},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_maxItems', operator: '<=', value: 1}
                 ]},
 
@@ -461,6 +491,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 210},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_maxItems', operator: '<=', value: 1}
                 ]},
 
@@ -484,6 +515,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 300},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'horde_maxItems', operator: '<=', value: 1}
                 ]},
             ]
@@ -580,6 +612,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 110},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'HO-0042', feature: 'horde', giveCard: true}
                 ]},
                 {tasks: [
@@ -603,6 +636,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 175},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'HO-0042', feature: 'horde'}
                 ]},
                 {tasks: [
@@ -626,6 +660,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 260},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'HO-0042', feature: 'horde'}
                 ]},
                 {tasks: [
@@ -646,6 +681,7 @@ export default {
                 ]},
                 {tasks: [
                     {type: 'stat', subtype: 'current', name: 'gallery_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'gallery_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'gallery_red', operator: '>=', value: 1e25}
                 ]},
                 {tasks: [
@@ -663,6 +699,7 @@ export default {
                 ]},
                 {tasks: [
                     {type: 'stat', subtype: 'current', name: 'gallery_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'gallery_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'gallery_green', operator: '>=', value: 1e25}
                 ]},
                 {tasks: [
@@ -680,6 +717,7 @@ export default {
                 ]},
                 {tasks: [
                     {type: 'stat', subtype: 'current', name: 'gallery_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'gallery_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'gallery_deep-orange', operator: '>=', value: 1e25}
                 ]},
                 {tasks: [
@@ -704,6 +742,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'village_joyMax', operator: '>=', value: 1000},
+                    {type: 'stat', subtype: 'current', name: 'village_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'VI-0063', feature: 'village', giveCard: true}
                 ]},
                 {tasks: [
@@ -712,6 +751,7 @@ export default {
                 ]},
                 {tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth1', operator: '>=', value: 22}
                 ]},
                 {tasks: [
@@ -727,6 +767,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'village_joyMax', operator: '>=', value: 1e5},
+                    {type: 'stat', subtype: 'current', name: 'village_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'VI-0063', feature: 'village'}
                 ]},
                 {tasks: [
@@ -735,6 +776,7 @@ export default {
                 ]},
                 {tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth1', operator: '>=', value: 82}
                 ]},
                 {tasks: [
@@ -750,6 +792,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'village_joyMax', operator: '>=', value: 1e7},
+                    {type: 'stat', subtype: 'current', name: 'village_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'VI-0063', feature: 'village'}
                 ]},
                 {tasks: [
@@ -758,6 +801,7 @@ export default {
                 ]},
                 {tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_timeSpent', operator: '<=', value: 900},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth1', operator: '>=', value: 142}
                 ]},
                 {tasks: [
@@ -778,6 +822,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 150},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'HO-0043', feature: 'horde', giveCard: true}
                 ]},
                 {tasks: [
@@ -785,10 +830,12 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'gallery_beauty', operator: '>=', value: 1e65},
+                    {type: 'stat', subtype: 'current', name: 'gallery_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'GA-0039', feature: 'gallery', giveCard: true}
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 240},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'MI-0059', feature: 'mining', giveCard: true}
                 ]},
 
@@ -800,6 +847,7 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'horde_maxZone', operator: '>=', value: 240},
+                    {type: 'stat', subtype: 'current', name: 'horde_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'HO-0043', feature: 'horde'}
                 ]},
                 {tasks: [
@@ -807,10 +855,12 @@ export default {
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'gallery_beauty', operator: '>=', value: 1e100},
+                    {type: 'stat', subtype: 'current', name: 'gallery_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'GA-0039', feature: 'gallery'}
                 ]},
                 {isChallenge: true, tasks: [
                     {type: 'stat', subtype: 'current', name: 'mining_maxDepth0', operator: '>=', value: 325},
+                    {type: 'stat', subtype: 'current', name: 'mining_relicActivesUsed', operator: '<=', value: 0},
                     {type: 'cardEquipped', name: 'MI-0059', feature: 'mining'}
                 ]},
             ]

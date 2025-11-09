@@ -76,7 +76,7 @@ export default {
     name: 'Notebook',
     active: 'Copy homework',
     description: 'Gain {0} total points',
-    formula: 'Increase your total points by {0}, or use an exam pass to gain {1} total points instead'
+    formula: 'Increase your total points by {0}, or use an exam pass to gain {1} total points instead (General quests only)'
   },
 
   friendlyBat: {

@@ -6,6 +6,7 @@ export default {
         {name: 'currencyMiningScrapGain', type: 'mult', value: 1.25}
     ];}, glyph() {return {dust: 1, clay: 3};}, active: {
         cost: {relic_power: 8},
+        feature: 'mining',
         params() {
             const maxPart = Math.pow(store.state.stat.mining_scrapMax.total, 0.5);
             const timePart = store.getters['mining/depthScrap'](store.state.stat[`mining_maxDepth${store.state.system.features.mining.currentSubfeature}`].value) * 1200;
@@ -28,6 +29,7 @@ export default {
         {name: 'miningResinMax', type: 'base', value: 1}
     ];}, glyph() {return {clay: 2, heat: 4};}, active: {
         cost: {relic_power: 10},
+        feature: 'mining',
         params() {
             return [store.state.currency.mining_resin.cap];
         },

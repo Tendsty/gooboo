@@ -16,6 +16,7 @@ export default {
         {name: 'currencyVillageWoodGain', type: 'mult', value: 1.5}
     ];}, glyph() {return {wood: 2, stone: 3};}, active: {
         cost: {relic_power: 6},
+        feature: 'village',
         params() {
             const maxPart = Math.pow(store.state.stat.village_coinMax.total, 0.5);
             const happinessMult = store.getters['mult/get']('villageHappiness', 0.03 * store.state.village.job.entertainer.max, 1, 0, ['villageJob', 'villagePolicy']) / store.getters['mult/get']('villageHappiness');

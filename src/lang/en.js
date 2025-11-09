@@ -144,7 +144,8 @@ export default {
       perfectScore: '(PERFECT!)',
       grade: '{0}% grade',
       gradePlus: 'Your grade improved!',
-      dust: '+{0} Golden dust'
+      dust: '+{0} Golden dust',
+      bonusDust: '+{0} Bonus dust',
     },
     unlock: {
       card: 'New card pack!',
@@ -578,6 +579,7 @@ export default {
     questEquipCard: 'Card active',
     questFailedSubfeature: 'You are in the wrong subfeature! Prestige to try again',
     questFailedTime: 'Time limit reached! Prestige to try again',
+    questFailedRelicActive: 'Relic active used! Prestige to try again',
     questFailedCard: 'Card not active! Prestige to try again',
     questFailedCardUnowned: 'No more copies of this card! Visit the merchant to obtain more',
     grobodal: {
@@ -2733,7 +2735,7 @@ export default {
     level: 'Level',
     tier: 'Tier',
     tierItem: 'Tier {0} treasure',
-    emptySlot: 'empty slot',
+    emptySlot: 'Empty slot (click to choose)',
     modifiers: 'modifiers',
     specialGroup: 'Special',
     tierEffect: {
