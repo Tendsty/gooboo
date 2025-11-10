@@ -762,6 +762,11 @@ export default {
     645: 'Ein Fehler wurde behoben, bei dem der Ertragsbonus aus Pflege nicht korrekt angewendet wurde',
     646: 'Energie zählt nicht mehr für diese Unterfunktion',
     647: 'Schatzeffekte werden nun entfernt, wenn ein Schatz gelöscht wird',
+
+    // v1.6.2
+    648: 'Die Symbole einiger Schatzeffekte wurden verändert',
+    649: 'Schätze mit leeren Plätzen können wieder zerstört werden',
+    650: 'Ein Fehler in Chemie wurde behoben, bei dem Formen die falsche Bewegung gezeigt haben',
   },
   v: {
     1: {

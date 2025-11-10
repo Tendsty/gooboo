@@ -95,8 +95,7 @@ export default {
         const subfeature = keySplit.length > 1 ? parseInt(keySplit[1]) : 0;
         const unlock = this.features[feature] ? (subfeature > 0 ? this.features[feature].subfeatures[subfeature - 1] : this.features[feature].unlock) : null;
         if (unlock === null || this.unlock[unlock].see) {
-          const settingsList = elem.filter(el => !el.subtype || this.showDetailedPatchnotes);
-          const itemList = settingsList.filter(el =>
+          const settingsList = elem.filter(el =>
             (el.unlock === undefined || this.unlock[el.unlock].see) &&
             (el.subtype !== 'card' || this.card[el.name] === undefined || this.card[el.name].amount > 0) &&
             (el.subtype !== 'equipment' || this.equipment[el.name] === undefined || this.equipment[el.name].known) &&
@@ -106,11 +105,14 @@ export default {
             (el.subtype !== 'idea' || this.idea[el.name] === undefined || this.idea[el.name].owned) &&
             (el.subtype !== 'upgrade' || this.upgrade[el.name] === undefined || this.upgrade[el.name].highestLevel > 0)
           );
-          hiddenDueToSetting += elem.length - settingsList.length;
-          hiddenDueToUnlock += settingsList.length - itemList.length;
+          const itemList = settingsList.filter(el => !el.subtype || this.showDetailedPatchnotes);
+          hiddenDueToSetting += settingsList.length - itemList.length;
+          hiddenDueToUnlock += elem.length - settingsList.length;
           if (itemList.length > 0) {
             obj[key] = itemList;
           }
+        } else {
+          hiddenDueToUnlock += elem.length;
         }
       }
       return {items: obj, hiddenDueToUnlock, hiddenDueToSetting};

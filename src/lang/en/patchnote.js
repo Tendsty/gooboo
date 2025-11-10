@@ -762,6 +762,11 @@ export default {
     645: 'Fixed a bug where the yield bonus from care did not apply to crops',
     646: 'Power no longer applies to this subfeature',
     647: 'Treasure effects are now removed after deleting a treasure',
+
+    // v1.6.2
+    648: 'Changed the icons of some treasure effects',
+    649: 'Treasures with empty slots can now be destroyed',
+    650: 'Fixed a bug where shapes in chemistry were not showing the correct movement',
   },
   v: {
     1: {
