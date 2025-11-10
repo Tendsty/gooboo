@@ -25,8 +25,10 @@ import v1_5_7 from "./v1_5_7";
 import v1_5_8 from "./v1_5_8";
 import v1_6_0 from "./v1_6_0";
 import v1_6_1 from "./v1_6_1";
+import v1_6_2 from "./v1_6_2";
 
 export default {
+    '1.6.2': v1_6_2,
     '1.6.1': v1_6_1,
     '1.6.0': v1_6_0,
     '1.5.8': v1_5_8,

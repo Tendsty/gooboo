@@ -23,7 +23,7 @@ export default {
     miningSmelteryTime: {
         feature: 'mining',
         unlock: 'miningSmeltery',
-        icon: 'mdi-fire',
+        icon: 'mdi-thermometer',
         minTier: 1,
         value: 0.35,
         scaling: 'divisive',
@@ -217,7 +217,7 @@ export default {
     galleryCanvasSpeed: {
         feature: 'gallery',
         unlock: 'galleryCanvas',
-        icon: 'mdi-package-variant',
+        icon: 'mdi-artboard',
         minTier: 2,
         value: 0.15,
     },

@@ -444,7 +444,9 @@ export default {
             const item = id === -1 ? state.newItem : state.items[id];
             if (item) {
                 item.effect.forEach(effect => {
-                    dispatch('mult/removeKey', {name: effect, type: 'mult', key: 'treasure'}, {root: true});
+                    if (effect) {
+                        dispatch('mult/removeKey', {name: effect, type: 'mult', key: 'treasure'}, {root: true});
+                    }
                 });
                 dispatch('currency/gain', {feature: 'treasure', name: 'fragment', amount: item.fragmentsSpent + getters.destroyFragments(item.tier, item.type)}, {root: true});
                 commit('deleteItem', id);

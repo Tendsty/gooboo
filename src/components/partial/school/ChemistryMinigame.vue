@@ -18,9 +18,9 @@
   100% {margin-top: -20px;}
 }
 @keyframes particle-move-dl {
-  0%   {margin-left: -20px; margin-top: 20px;}
-  50%  {margin-left: 20px; margin-top: -20px;}
-  100% {margin-left: -20px; margin-top: 20px;}
+  0%   {margin-left: 20px; margin-top: 20px;}
+  50%  {margin-left: -20px; margin-top: -20px;}
+  100% {margin-left: 20px; margin-top: 20px;}
 }
 @keyframes particle-move-dr {
   0%   {margin-left: 20px; margin-top: -20px;}
@@ -342,7 +342,7 @@ export default {
             currentSplit++;
           }
           moveDistribution[currentSplit >= 2 ? (currentSplit - 1) : 0]++;
-          return {...el, move: currentSplit >= 2 ? ['h', 'v', chance(0.5) ? 'dl' : 'dr'][currentSplit - 1] : 'n'};
+          return {...el, move: currentSplit >= 2 ? ['h', 'v', chance(0.5) ? 'dl' : 'dr'][currentSplit - 2] : 'n'};
         });
       }
 
