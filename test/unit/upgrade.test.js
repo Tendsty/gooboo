@@ -294,3 +294,57 @@ test('upgrades can be made persistent to avoid reset', () => {
     expect(store.state.upgrade.item.meta_ccc.level).toBe(1);
     expect(store.getters['mult/get']('test')).toBeCloseTo(110, 5);
 });
+
+test('queued upgrades should be cleared when they become persistent', () =>{
+    store.commit('mult/init', {name: 'test'});
+    store.dispatch('currency/gain', {name: 'test', amount: 500000000000000000000});
+    store.dispatch('upgrade/init', {name: 'test', cap:10, mode: 'queue', price(lvl) {
+            return {meta_test: Math.pow(2, lvl) * 10};
+        }, effect: [
+            {name: 'test', type: 'base', value: lvl => lvl}
+        ]});
+
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+
+    expect(store.state.upgrade.queue.meta_regular).toEqual([
+        'meta_test', 'meta_test', 'meta_test', 'meta_test', 'meta_test',
+        'meta_test', 'meta_test', 'meta_test', 'meta_test', 'meta_test'
+    ]);
+
+    store.dispatch('upgrade/tickQueue', {key: 'meta_regular', seconds: 100});
+
+    expect(store.state.upgrade.queue.meta_regular).toEqual([]);
+
+    store.dispatch('upgrade/reset', {type: 'regular', feature: 'meta'});
+
+    expect(store.state.upgrade.item.meta_test.level).toBe(0);
+    expect(store.state.upgrade.item.meta_test.bought).toBe(0);
+    expect(store.state.upgrade.item.meta_test.highestLevel).toBe(10);
+
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+    store.dispatch('upgrade/buy', {name: 'test', feature: 'meta'});
+
+    expect(store.state.upgrade.item.meta_test.level).toBe(0);
+    expect(store.state.upgrade.item.meta_test.bought).toBe(3);
+    expect(store.state.upgrade.item.meta_test.highestLevel).toBe(10);
+
+    expect(store.state.upgrade.queue.meta_regular).toEqual(['meta_test', 'meta_test', 'meta_test']);
+
+    store.dispatch('upgrade/makePersistent', 'meta_test');
+
+    expect(store.state.upgrade.queue.meta_regular).toEqual([]);
+
+    expect(store.state.upgrade.item.meta_test.level).toBe(10);
+    expect(store.state.upgrade.item.meta_test.bought).toBe(10);
+    expect(store.state.upgrade.item.meta_test.highestLevel).toBe(10);
+})
