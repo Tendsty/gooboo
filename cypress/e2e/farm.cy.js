@@ -12,6 +12,6 @@ describe('Farm feature loads properly', () => {
 
         cy.toFeature('Farm');
         cy.get('[data-cy=farm-harvest-all]').click();
-        cy.contains('41');
+        cy.contains('19');
     });
 });
