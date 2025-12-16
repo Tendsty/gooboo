@@ -470,7 +470,7 @@ export default {
     gradeDescription: 'Grades determine the difficulty of this subject. You can switch between grades at any time and unlock better grades by studying enough or getting a perfect exam score.',
     totalPoints: 'Total points',
     multipass: {
-      description: 'You can use multipe passes on one exam to increase the rewards. For each additional pass used, you gain:',
+      description: 'You can use multiple passes on one exam to increase the rewards. For each additional pass used, you gain:',
       dust: '100% of golden dust gained as bonus dust',
       points: '+75% total points'
     },
