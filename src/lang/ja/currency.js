@@ -1,10 +1,22 @@
 export default {
+  overcapFullGain: '上限を超えていますが、それでもフル収入を得ます',
   overcapGain: '過剰生産のため、収入は{0}%に減少',
   overcapNoGain: '過剰生産のため、収入なし',
   benefitLoss: 'これを買うとボーナスが失われる',
   gainTimerNeeded: '{0}で購入可能',
   capTimerNeeded: '{0}で容量に到達',
   overcapTimerNeeded: '{0}で次の容量レベルに到達',
+  isNotSpent: 'この通貨は必要ですが、消費されません',
+  unknown: '不明な通貨',
+  
+  subtype: {
+    village: {
+      foundationMaterial: '基礎材料',
+      industrialMaterial: '工業材料',
+      luxuryMaterial: '高級材料',
+      modernMaterial: '現代材料',
+    },
+  },
 
   // Premium currencies
   gem_ruby: {
@@ -337,6 +349,7 @@ export default {
   },
   mining_granite: {
     name: 'グラナイト',
+    hint: '50m以下で岩を少なくとも1000回破壊すると発見されます',
     description: '地下から切り出された巨大なグラナイトの塊。意外なことに、スクラップは入っていない'
   },
   mining_salt: {
@@ -357,6 +370,7 @@ export default {
   },
   mining_obsidian: {
     name: '黒曜石',
+    hint: '強化されていないツルハシで150m以下の岩を破壊すると発見されます',
     description: '美しい紫色の欠片、壊れやすいようです'
   },
   mining_deeprock: {
@@ -435,6 +449,19 @@ export default {
     name: 'ラドン',
     description: ''
   },
+  mining_limestone: {
+    name: '石灰岩',
+    description: ''
+  },
+  mining_moonshard: {
+    name: 'ムーンシャード',
+    hint: '20m以下で、ディープダウェラーが到達した深さの岩を破壊すると発見されます',
+    description: ''
+  },
+  mining_phosphorus: {
+    name: 'リン',
+    description: ''
+  },
   mining_crystalYellow: {
     name: '黄色水晶',
     description: 'この結晶も素晴らしく見える！深層生物をすでに持っているのはいいことだ'
@@ -497,7 +524,8 @@ export default {
   },
   village_joy: {
     name: '喜び',
-    description: '幸福度が125％以上になることで喜びを得る。その値以上の幸福は、さらなる喜びを生み出す'
+    hint: '幸福度が125%を超えると獲得できます',
+    description: '幸福度が125%以上になることで喜びを得る。その値以上の幸福は、さらなる喜びを生み出す'
   },
   village_glass: {
     name: 'ガラス',
@@ -581,6 +609,7 @@ export default {
   },
   horde_monsterPart: {
     name: 'モンスターの部位',
+    hint: '敵が出現しなくなるゾーン10以上で発見されます',
     description: 'ゾーン10以上で敵が出現しなくなった時に見つかる嫌な臓器'
   },
   horde_corruptedFlesh: {
@@ -589,6 +618,7 @@ export default {
   },
   horde_mysticalShard: {
     name: '神秘的な欠片',
+    hint: 'マスタリー5以上の装備を使用すると発見されます',
     description: '手付かずのパワーで満たされている。'
   },
   horde_soulCorrupted: {
@@ -607,9 +637,49 @@ export default {
     name: '王冠',
     description: '以前は塔を支配していたが、今は退位させられた'
   },
+  horde_raidKey: {
+    name: 'レイドキー',
+    description: 'レイドボスに挑戦できる鍵です'
+  },
   horde_towerKey: {
     name: '塔の鍵',
     description: '塔にアクセスできるレアな鍵'
+  },
+  horde_fireEssence: {
+    name: '火のエッセンス',
+    description: ''
+  },
+  horde_thunderEssence: {
+    name: '雷のエッセンス',
+    description: ''
+  },
+  horde_windEssence: {
+    name: '風のエッセンス',
+    description: ''
+  },
+  horde_waterEssence: {
+    name: '水のエッセンス',
+    description: ''
+  },
+  horde_iceEssence: {
+    name: '氷のエッセンス',
+    description: ''
+  },
+  horde_earthEssence: {
+    name: '地のエッセンス',
+    description: ''
+  },
+  horde_natureEssence: {
+    name: '自然のエッセンス',
+    description: ''
+  },
+  horde_lightEssence: {
+    name: '光のエッセンス',
+    description: ''
+  },
+  horde_shadowEssence: {
+    name: '闇のエッセンス',
+    description: ''
   },
   horde_blood: {
     name: '血',
@@ -618,6 +688,18 @@ export default {
   horde_lockpick: {
     name: 'ロックピック',
     description: 'すでに倒したボスから装飾品を受け取ることができる。海賊専用。'
+  },
+  horde_monsterToothWarzone: {
+    name: '鋭いモンスタートゥース',
+    description: ''
+  },
+  horde_monsterToothMonkeyJungle: {
+    name: '苔むしたモンスタートゥース',
+    description: ''
+  },
+  horde_monsterToothLoveIsland: {
+    name: 'かわいいモンスタートゥース',
+    description: ''
   },
   farm_vegetable: {
     name: '野菜',
@@ -639,12 +721,27 @@ export default {
     name: 'ゴールド',
     description: '土に埋まっていた小さな金塊'
   },
+  farm_rainwater: {
+    name: '雨水',
+    description: ''
+  },
+  farm_mixedSeeds: {
+    name: 'ミックスシード',
+    hint: 'イベントで獲得',
+    description: '野生の花を育てるために使用できるさまざまな種です。イベント中に入手できます'
+  },
+  farm_cactusSeed: {
+    name: 'サボテンの種',
+    hint: '大規模イベントで獲得',
+    description: 'サボテンを育てるための種です。大規模イベントでのみ入手可能です'
+  },
   farm_seedHull: {
     name: '種子の殻',
     description: '植物の種が抜けたような空っぽの殻'
   },
   farm_grass: {
     name: '草',
+    hint: '作物レベル5に到達後、遺伝子から入手可能',
     description: 'これは不自然、草は作物に生えてはいけない'
   },
   farm_petal: {
@@ -675,12 +772,21 @@ export default {
     name: '謎の石',
     description: 'これは何であるか？どのような用途があるのか？'
   },
-  farm_goldenPetal: {
-    name: '黄金の花びら',
-    description: '極めて希少な花びらであり、バラにのみ見られる。これを持つバラは他のものよりも色が濃いと言われている'
-  },
   farm_smallSeed: {
     name: '小さな種',
+    description: ''
+  },
+  farm_ancientSeed: {
+    name: '古代の種',
+    hint: '商人が時々販売',
+    description: '非常に古く希少な種で、神秘的な植物を育てることができます'
+  },
+  farm_snail: {
+    name: 'カタツムリ',
+    description: ''
+  },
+  farm_oldRoot: {
+    name: '古い根',
     description: ''
   },
   gallery_beauty: {
@@ -748,11 +854,11 @@ export default {
     description: ''
   },
   "gallery_deep-orange": {
-    name: '赤橙の塗料',
+    name: '赤橙色の塗料',
     description: '新しさを感じさせるが、どこか懐かしさもある色'
   },
   "gallery_deep-orangeDrum": {
-    name: '赤橙のドラム缶',
+    name: '赤橙色のドラム缶',
     description: ''
   },
   gallery_amber: {
@@ -859,9 +965,13 @@ export default {
     name: '試験パス',
     description: '不思議なことに、前の学校では必要なかったが、ここでは試験を受けるのに必要'
   },
+  relic_power: {
+    name: '遺物の力',
+    description: ''
+  },
   card_shinyDust: {
     name: '光る粉',
-    description: ''
+    description: 'この粉は重複したレアカードから作られます。未所持のレアカード入りのカードパックを作るために使用できます'
   },
   treasure_fragment: {
     name: '断片',

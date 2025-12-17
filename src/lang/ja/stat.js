@@ -41,18 +41,29 @@ export default {
   },
   mining_oreVariety: {
     achievement: '多様性',
-    description: '見つかった鉱石の種類'
+    description0: '見つけた鉱石の種類',
+    description1: '見つけた鉱石と希少鉱石の種類',
+    description2: '見つけた鉱石、希少鉱石、ガスの種類',
   },
   mining_coal: {
     achievement: '暗黒',
     description: '獲得した石炭',
   },
-  mining_coalMax: {
-    description: '最高石炭量'
-  },
   mining_resin: {
     achievement: '厄介な状況',
     description: '得られた樹脂'
+  },
+  mining_gasTotal: {
+    achievement: '短気者',
+    description: '最大ガス量の桁の合計'
+  },
+  mining_smoke: {
+    achievement: '見えにくい',
+    description: '最大スモーク量'
+  },
+  mining_enhancementHighest: {
+    achievement: '準備万端',
+    description: '最大強化レベル'
   },
   mining_craftingWasted: {
     achievement: '無駄になった',
@@ -144,9 +155,6 @@ export default {
   village_prestigeCount: {
     description: 'プレステージ'
   },
-  village_offeringMax: {
-    description: '最高供物量'
-  },
 
   // Horde stats
   horde_maxZone: {
@@ -161,12 +169,11 @@ export default {
     description: '30分以内に到達した最大ゾーン'
   },
   horde_totalDamage: {
-    achievement: 'スレイヤー',
-    description: '与えた基本攻撃ダメージの合計'
+    description: '通常攻撃での最大ダメージ'
   },
   horde_maxDamage: {
     achievement: 'マイティ',
-    description: '一度の基本攻撃で与えた最大のダメージ'
+    description: '一度の通常攻撃で与えた最大のダメージ'
   },
   horde_bone: {
     achievement: '犬のお気に入り',
@@ -192,12 +199,37 @@ export default {
     achievement: '多様性',
     description: '合計マスタリーレベル'
   },
+  horde_blood: {
+    achievement: 'ヴァンパイア',
+    description: '獲得した血量'
+  },
+  horde_courage: {
+    achievement: '勇敢',
+    description: '獲得した勇気'
+  },
+  horde_trinket: {
+    achievement: '何でも準備万端',
+    description: 'すべての装飾品のレア度の合計'
+  },
   horde_unlucky: {
     achievement: 'アンラッキー',
     description: '99％の家宝確率で失敗する'
   },
   horde_maxItems: {
     description: '最も多くの装備を使用した'
+  },
+  horde_infiniteScore: {
+    achievement: '剣闘士',
+    description: '無限ゾーンで倒した敵の最大数の合計'
+  },
+  horde_warzoneInfiniteScore: {
+    description: '無限ゾーン（戦争地帯）で倒した最大敵数'
+  },
+  horde_monkeyJungleInfiniteScore: {
+    description: '無限ゾーン（モンキージャングル）で倒した最大敵数'
+  },
+  horde_loveIslandInfiniteScore: {
+    description: '無限ゾーン（ラブアイランド）で倒した最大敵数'
   },
   horde_timeSpent: {
     description: '費やした時間'
@@ -245,14 +277,9 @@ export default {
     achievement: 'モノクル',
     description: '獲得したゴールド'
   },
-  farm_bugMax: {
-    description: '最大の虫の数'
-  },
-  farm_ladybugMax: {
-    description: '最大のテントウムシ数'
-  },
-  farm_butterflyMax: {
-    description: '最大の蝶の数'
+  farm_care: {
+    achievement: '大切な植物',
+    description: '適用された手入れ'
   },
   farm_totalMystery: {
     description: '謎'
@@ -275,18 +302,12 @@ export default {
     achievement: '金持ち',
     description: '獲得した現金'
   },
-  gallery_greenMax: {
-    description: '1回のプレステージで獲得した最大の緑の塗料'
-  },
   gallery_bestPrestige: {
     description: '1回のプレステージで獲得した最大の現金'
   },
   gallery_highestTierIdea: {
     achievement: '大脳',
     description: '適用した最高ティアのアイデア'
-  },
-  gallery_inspirationMax: {
-    description: '最大のインスピレーション量'
   },
   gallery_packageMax: {
     achievement: '段ボールの要塞',
@@ -319,6 +340,11 @@ export default {
     description: 'プレステージ回数'
   },
 
+  // Other stats
+  school_totalPoints: {
+    description: '獲得した合計ポイント'
+  },
+
   // Meta stats
   meta_totalLevel: {
     achievement: '頑張り屋さん',
@@ -331,5 +357,10 @@ export default {
   meta_longestOfflineTime: {
     achievement: 'カムバック',
     description: '最長オフライン時間'
-  }
+  },
+
+  // Custom stats
+  custom_hordeBattlepass: {
+    description: 'バトルパスのレベル'
+  },
 };
