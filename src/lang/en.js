@@ -2667,7 +2667,7 @@ export default {
     shapes: {
       name: 'Shapes',
       upgrades: 'Shape upgrades',
-      description: 'Drag a shape to an adjacent one to switch postitons, or click one to collect it. Collecting requires 5 shapes of the same type to be connected and the amount of shapes gained per shape is equal to the collection combo.',
+      description: 'Drag a shape to an adjacent one to switch positions, or click one to collect it. Collecting requires 5 shapes of the same type to be connected and the amount of shapes gained per shape is equal to the collection combo.',
       cost: 'Each action costs',
       special: {
         name: 'Special shapes',
