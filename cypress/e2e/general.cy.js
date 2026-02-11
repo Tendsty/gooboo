@@ -9,6 +9,6 @@ describe('Generals load properly', () => {
 
         cy.contains('Digging deeper').click();
         cy.contains('Completion reward');
-        cy.contains('Time spent at most 30m 00s');
+        cy.contains('Time spent at most 15m 00s');
     });
 });

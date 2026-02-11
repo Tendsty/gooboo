@@ -26,7 +26,8 @@ export default {
             {
                 unlock: 'schoolLibrarySubfeature',
                 type: 'bugfix',
-                text: '644'
+                text: '644',
+                issue: '99'
             },
         ],
         horde: [

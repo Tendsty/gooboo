@@ -112,7 +112,7 @@ export default {
     crystalReplicator: {type: 'prestige', cap: 100, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 12, price(lvl) {
         return {mining_crystalGreen: Math.pow(1.7 + lvl * 0.008, lvl) * 90};
     }, effect: [
-        {name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => Math.pow(1.12, lvl)}
+        {name: 'currencyMiningCrystalGreenGain', type: 'mult', value: lvl => Math.pow(1.1, lvl)}
     ]},
     crystalPreservarium: {type: 'prestige', cap: 3, requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 15, price(lvl) {
         return {mining_crystalGreen: Math.pow(4, lvl) * 250};
@@ -128,7 +128,7 @@ export default {
         {name: 'miningDamage', type: 'mult', value: lvl => Math.pow(1.08, lvl)}
     ]},
     crystalExplosives: {type: 'prestige', requirementBase: requirementBase0, requirementStat: requirementStat0, requirementValue: 20, price(lvl) {
-        return {mining_crystalGreen: Math.pow(Math.max((lvl - 100) * 0.001, 0) + 1.15, lvl) * 200};
+        return {mining_crystalGreen: Math.pow(Math.max((lvl - 100) * 0.0005, 0) + 1.15, lvl) * 200};
     }, effect: [
         {name: 'miningToughness', type: 'mult', value: lvl => Math.pow(1 / 1.2, lvl)}
     ]},

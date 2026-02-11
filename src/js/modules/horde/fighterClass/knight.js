@@ -236,7 +236,7 @@ export default {
             {name: 'hordeDefense', type: 'base', value: lvl => lvl * 0.001}
         ]},
         courage: {type: 'stat', max: 10, cost: 15, effect: [
-            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.05 + 1}
+            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.02 + 1}
         ]},
         damage: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeAttack', type: 'base', value: lvl => lvl * 0.08}

@@ -28,7 +28,7 @@ export default {
             return [];
         },
         disabled() {
-            return store.state.cryolab.gallery.active || store.state.gallery.shapeGrid.reduce((a, b) => a + b.reduce((c, d) => c + (store.state.gallery.shape[d].isSpecial ? 1 : 0), 0), 0) > 0;
+            return store.state.cryolab.gallery.active || store.getters['gallery/shapeSpecialWeights'].length <= 0 || store.state.gallery.shapeGrid.reduce((a, b) => a + b.reduce((c, d) => c + (store.state.gallery.shape[d].isSpecial ? 1 : 0), 0), 0) > 0;
         },
         trigger() {
             let rngGen = store.getters['system/getRng']('gallery_randomShape');

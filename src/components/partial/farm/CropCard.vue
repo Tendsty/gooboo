@@ -185,7 +185,7 @@
             :baseArray="this.cropGeneStats.mult.farmExperience.baseArray"
             :multArray="this.cropGeneStats.mult.farmExperience.multArray"
           ></stat-breakdown>
-          <div v-if="cropExp > 0">{{ $vuetify.lang.t(`$vuetify.farm.expToLevelUp`, $formatNum(harvestsNeeded)) }}</div>
+          <div v-if="cropExp > 0">{{ $vuetify.lang.t('$vuetify.farm.expToLevelUp', $formatNum(harvestsNeeded)) }}</div>
           <template v-if="crop.type === 'special'">
             <div class="text-center">{{ $vuetify.lang.t('$vuetify.farm.specialCropEffect') }}</div>
             <display-row class="mt-0" v-for="(item, key) in specialEffect" :key="`${item.name}-${item.type}-${key}`" :name="item.name" :type="item.type" :before="item.before" :after="item.after"></display-row>
@@ -236,7 +236,7 @@
           <gene-upgrade v-if="gene[geneName].maxLevel > 0" class="ma-1 flex-grow-1" :crop="name" :name="geneName"></gene-upgrade>
         </div>
         <div v-if="unlock.cardFeature.use && unlock.farmCropExp.use">
-          <card-overview feature="farm" :crop="name" :group="crop.type"></card-overview>
+          <card-overview :key="`card-select-${ name }`" feature="farm" :crop="name" :group="crop.type"></card-overview>
         </div>
       </template>
     </v-card-text>
@@ -352,7 +352,7 @@ export default {
         'farmExperience',
         this.cropGeneStats.mult.farmExperience.baseValue,
         this.cropGeneStats.mult.farmExperience.multValue
-      ) : 1;
+      ) : (this.plantGiant ? this.crop.giantMult : 1);
     },
     cropFertilizerCostBase() {
       return this.$store.getters['farm/cropFertilizerCost'](this.name, false);

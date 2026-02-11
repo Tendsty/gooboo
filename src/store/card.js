@@ -388,7 +388,7 @@ export default {
             let cardPower = 0;
             for (const [card, amount] of Object.entries(active)) {
                 let cardItem = state.card[card];
-                cardPower += ((cardItem.power === 'adaptive' ? getters.adaptivePower : cardItem.power) + (cardItem.foundShiny ? 1 : 0)) * amount;
+                cardPower += ((cardItem.power === 'adaptive' ? getters.adaptivePower(feature) : cardItem.power) + (cardItem.foundShiny ? 1 : 0)) * amount;
                 cardItem.reward.forEach(elem => {
                     let value = elem.value;
                     if (['base', 'bonus'].includes(elem.type)) {

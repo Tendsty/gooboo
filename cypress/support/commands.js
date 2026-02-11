@@ -4,8 +4,12 @@ Cypress.Commands.add('vselect', { prevSubject: 'element' }, (subject, option) =>
 });
 
 Cypress.Commands.add('toFeature', name => {
-    cy.contains('Features').click();
-    cy.get('[data-cy=feature-list]').contains(name).click();
+    if (name === 'Debug') {
+        cy.get('[data-cy=debug-feature]').click();
+    } else {
+        cy.contains('Features').click();
+        cy.get('[data-cy=feature-list]').contains(name).click();
+    }
 });
 
 Cypress.Commands.add('giveUnlock', name => {

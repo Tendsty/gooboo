@@ -38,7 +38,7 @@ export default {
                     for (const [currency, stat] of Object.entries(data)) {
                         const statValue = rootState.stat[stat].total;
                         if (statValue > 0) {
-                            obj[currency] = statValue * gainMult * (stat === 'farm_bestPrestige' ? 500 : 1);
+                            obj[currency] = statValue * gainMult * (stat === 'farm_bestPrestige' ? 200 : 1);
                         }
                     }
                 }

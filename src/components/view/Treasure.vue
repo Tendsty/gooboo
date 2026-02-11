@@ -138,7 +138,7 @@
             <v-btn data-cy="treasure-delete-button" class="ma-1" color="error" @click="deleteTreasure"><v-icon>mdi-delete</v-icon></v-btn>
           </div>
         </v-card-text>
-        <v-btn class="treasure-dialog-close" @click="dialog = false" icon><v-icon>mdi-close</v-icon></v-btn>
+        <v-btn class="treasure-dialog-close" data-cy="treasure-dialog-close" @click="dialog = false" icon><v-icon>mdi-close</v-icon></v-btn>
       </v-card>
     </v-dialog>
   </v-row>
