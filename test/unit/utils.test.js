@@ -1,5 +1,5 @@
 import { randomInt, randomElem, weightSelect, chance, simpleHash, randomRound, randomFloat } from '../../src/js/utils/random';
-import { formatNum, formatTime, buildNum, capitalize, decapitalize } from '../../src/js/utils/format';
+import { formatNum, formatTime, capitalize, decapitalize } from '../../src/js/utils/format';
 import { getSequence, logBase } from '../../src/js/utils/math';
 import { buildArray, fallbackArray, shuffleArray } from '../../src/js/utils/array';
 
@@ -88,14 +88,6 @@ test('formatTime shows time in a readable format', () => {
     expect(formatTime(1234567)).toBe("14d 06h");
     expect(formatTime(12345678)).toBe("142d");
     expect(formatTime(1234567890)).toBe("14.29Kd");
-});
-
-test('buildNum creates numbers correctly', () => {
-    expect(buildNum(10, "K")).toBeCloseTo(10000, 5);
-    expect(buildNum(23.456, "K")).toBeCloseTo(23456, 5);
-    expect(buildNum(33, "M")).toBeCloseTo(33000000, 5);
-    expect(buildNum(0.5, "B")).toBeCloseTo(500000000, 5);
-    expect(buildNum(1.357, "Qi")).toBeCloseTo(1357000000000000000, 5);
 });
 
 test('logBase gives correct values', () => {

@@ -31,6 +31,7 @@ import v1_5_3 from "./modules/migration/v1_5_3";
 import v1_5_4 from "./modules/migration/v1_5_4";
 import v1_5_6 from "./modules/migration/v1_5_6";
 import v1_6_0 from "./modules/migration/v1_6_0";
+import v1_6_3 from "./modules/migration/v1_6_3";
 
 const migrations = {
     '1.1.0': v1_1_0,
@@ -46,6 +47,7 @@ const migrations = {
     '1.5.4': v1_5_4,
     '1.5.6': v1_5_6,
     '1.6.0': v1_6_0,
+    '1.6.3': v1_6_3,
 };
 
 export { checkLocal, saveLocal, loadFile, exportFile, cleanStore, getSavefile, getSavefileName, encodeFile, decodeFile }

@@ -42,6 +42,7 @@
   left: 0;
   top: 0;
   opacity: 0.25;
+  pointer-events: none;
 }
 </style>
 

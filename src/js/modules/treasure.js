@@ -35,8 +35,8 @@ const treasureTypes = {
         upgradeScaling: 1.25,
         destroyPrice: 12,
         slots: [
-            {type: 'regular', power: 0.6},
-            {type: 'regular', power: 0.6}
+            {type: 'regular', power: 0.55},
+            {type: 'regular', power: 0.55}
         ],
         icon: 'mdi-call-split',
         maxModifiers: 2

@@ -328,7 +328,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-chip label small class="balloon-text-dynamic ma-1 px-2" :color="`${ currency.horde_courage.color } ${ themeModifier }`" v-bind="attrs" v-on="on">
               <v-icon class="mr-2">mdi-ghost</v-icon>
-              {{ $formatNum(courageScoreBaseGain) }}
+              {{ $formatNum(hordeCourageScore, true) }}
             </v-chip>
           </template>
           <stat-breakdown name="hordeCourageScore" :base="courageScoreBaseGain"></stat-breakdown>
@@ -430,6 +430,9 @@ export default {
     },
     hordeNostalgia() {
       return this.$store.getters['mult/get']('hordeNostalgia');
+    },
+    hordeCourageScore() {
+      return this.$store.getters['mult/get']('hordeCourageScore', this.courageScoreBaseGain);
     },
     hasSigils() {
       return Object.keys(this.sigilList).length > 0;

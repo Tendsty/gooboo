@@ -21,7 +21,7 @@
       </div>
     </template>
     <div v-else class="ma-1">
-      <v-select class="w-100" outlined hide-details clearable item-value="name" v-model="selectedPlaceable" :items="placeableList" @change="selectPlaceable">
+      <v-select class="w-100" data-cy="farm-crop-select" outlined hide-details clearable item-value="name" v-model="selectedPlaceable" :items="placeableList" @change="selectPlaceable">
         <template v-slot:selection="{ item }"><placeable-select-display :item="item" is-simple></placeable-select-display></template>
         <template v-slot:item="{ item }">
           <div v-if="item.type === 'divider'" class="w-100 mt-2">

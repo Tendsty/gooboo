@@ -91,7 +91,7 @@ export default {
             {name: 'currencyHordeBloodCap', type: 'mult', value: lvl => Math.pow(1.04, lvl)},
         ]},
         courage: {type: 'stat', max: 10, cost: 10, effect: [
-            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.05 + 1}
+            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.02 + 1}
         ]},
         bombToss: {
             type: 'active',
@@ -129,7 +129,7 @@ export default {
             {name: 'currencyHordeBloodCap', type: 'mult', value: lvl => Math.pow(1.05, lvl)},
         ]},
         courage_2: {type: 'stat', max: 20, cost: 10, effect: [
-            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.075 + 1}
+            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.03 + 1}
         ]},
         trinket: {type: 'stat', max: 20, cost: 10, effect: [
             {name: 'hordeTrinketGain', type: 'mult', value: lvl => lvl * 0.08 + 1}
@@ -173,7 +173,7 @@ export default {
             {name: 'currencyHordeBloodCap', type: 'mult', value: lvl => Math.pow(1.04, lvl)},
         ]},
         courage_3: {type: 'stat', max: 10, cost: 10, effect: [
-            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.05 + 1}
+            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.02 + 1}
         ]},
         lockpick_2: {type: 'stat', max: 4, cost: 15, effect: [
             {name: 'currencyHordeLockpickGain', type: 'base', value: lvl => lvl / buildNum(2, 'M')}
@@ -278,7 +278,7 @@ export default {
             {name: 'currencyHordeBloodCap', type: 'mult', value: lvl => Math.pow(1.04, lvl)},
         ]},
         courage_4: {type: 'stat', max: 10, cost: 10, effect: [
-            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.05 + 1}
+            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.02 + 1}
         ]},
         intelligence_2: {type: 'stat', max: 10, cost: 10, effect: [
             {name: 'hordeIntelligence', type: 'base', value: lvl => lvl * 1.3}

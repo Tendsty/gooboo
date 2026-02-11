@@ -80,8 +80,9 @@ function awardLoot(breaks, loots, hits) {
             breaksMult = breaks > 0 ? (breaksMult / breaks) : Math.pow(2, Math.floor(Math.log10(existingBreaks)) - 3);
             store.dispatch('currency/gain', {feature: 'mining', name: 'granite', amount: store.getters['mining/rareDropFinal']('granite') * (MINING_RARE_DROP_BREAK * breaks + loots) * breaksMult});
         }
-        if (gotLoot && depth >= MINING_SALT_DEPTH && (store.state.mining.torchDepths.includes(depth) || Object.keys(store.getters['mining/currentOre']).length === 1)) {
-            store.dispatch('currency/gain', {feature: 'mining', name: 'salt', amount: store.getters['mining/rareDropFinal']('salt') * (MINING_RARE_DROP_BREAK * breaks + loots)});
+        const depthOres = Object.keys(store.getters['mining/depthOre'](depth, false, true)).length;
+        if (gotLoot && depth >= MINING_SALT_DEPTH && (depthOres === 1 || store.state.mining.torchDepths.includes(depth))) {
+            store.dispatch('currency/gain', {feature: 'mining', name: 'salt', amount: store.getters['mining/rareDropFinal']('salt') * (depthOres === 1 ? 1 : 0.5) * (MINING_RARE_DROP_BREAK * breaks + loots)});
         }
         if (depth >= MINING_COAL_DEPTH && existingBreaks === 0 && breaks > 0) {
             store.dispatch('currency/gain', {feature: 'mining', name: 'coal', amount: store.getters['mining/rareDropFinal']('coal')});

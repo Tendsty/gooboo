@@ -76,12 +76,7 @@ function playerDie() {
 }
 
 function tickEnemyRespawn(seconds = 1) {
-    // Assassin doubles respawn speed
-    if (store.state.horde.skillLevel.sneak >= 1) {
-        seconds *= 2;
-    }
-
-    store.commit('horde/updateKey', {key: 'enemyTimer', value: Math.min(seconds + store.state.horde.enemyTimer, HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX)});
+    store.commit('horde/updateKey', {key: 'enemyTimer', value: Math.min(seconds * (store.state.horde.skillLevel.sneak >= 1 ? 2 : 1) + store.state.horde.enemyTimer, HORDE_ENEMY_RESPAWN_TIME * HORDE_ENEMY_RESPAWN_MAX)});
     if (store.getters['horde/canCollectRareLoot']) {
         store.commit('horde/updateKey', {key: 'rareLootTimer', value: Math.min(seconds / store.getters['mult/get']('hordeRareLootTime') + store.state.horde.rareLootTimer, HORDE_RARE_LOOT_HOLD)});
     }
@@ -110,7 +105,7 @@ function applyCritEffects(amount) {
     if (bloodOnCrit > 0) {
         store.dispatch('currency/gain', {feature: 'horde', name: 'blood', gainMult: true, amount: bloodOnCrit * amount * store.getters['horde/enemyBlood'](store.state.stat.horde_maxDifficulty.value, 0)});
     }
-    if (stunOnCrit > 0) {
+    if (stunOnCrit > 0 && chance(0.05 * amount)) {
         store.commit('horde/updateEnemyKey', {key: 'stun', value: store.state.horde.enemy.stun + Math.round(stunOnCrit)});
     }
 }
@@ -287,8 +282,7 @@ export default {
                     store.commit('horde/updateKey', {key: 'rareLootTimer', value: Math.min(rareLootTimer - rareLootGained, HORDE_RARE_LOOT_HOLD)});
                     store.dispatch('horde/getRareLootReward', rareLootGained);
 
-                    secondsLeft -= cycles * simTime;
-                    tickPlayerCooldowns(cycles * simTime);
+                    secondsLeft -= secondsSpent;
                 }
 
                 simulation.complete = true;
@@ -559,7 +553,7 @@ export default {
                                 const split = name.split('_');
                                 if (split[0] === 'skill') {
                                     const skill = store.state.horde.fighterClass[store.state.horde.selectedClass].skills[split[1]];
-                                    return {ready: store.state.horde.skillActive[name] <= 0, type: skill.activeType, effect: skill.active(skill.level), activeMult: 1, cost: skill.activeCost(skill.level), name};
+                                    return {ready: store.state.horde.skillActive[name] <= 0, type: skill.activeType, effect: skill.active(store.state.horde.skillLevel[split[1]]), activeMult: 1, cost: skill.activeCost(store.state.horde.skillLevel[split[1]]), name};
                                 } else if (split[0] === 'trinket') {
                                     const trinket = store.state.horde.trinket[split[1]];
                                     return {ready: store.state.horde.skillActive[name] <= 0, type: trinket.activeType, effect: trinket.active(trinket.level), activeMult: 1, cost: trinket.activeCost(trinket.level), name};
@@ -840,6 +834,7 @@ export default {
                     store.commit('horde/updateKey', {key: 'fightRampage', value: newRampage});
                 }
             } else if (subfeature === 1 && store.state.horde.selectedArea === null) {
+                secondsSpent = secondsLeft;
                 secondsLeft = 0;
             } else if (subfeature === 0 && store.state.horde.taunt && !store.state.horde.bossAvailable && store.state.horde.zone === store.state.stat.horde_maxZone.value) {
                 store.dispatch('horde/updateEnemyStats');
@@ -1069,8 +1064,15 @@ export default {
             hordeHealth: {type: 'mult', value: val => Math.pow(1.08, val)},
             currencyHordeMonsterToothWarzoneGain: {type: 'mult', value: val => Math.pow(1 / HORDE_TOOTH_CHANCE_REDUCTION, val)}
         }},
-        monsterToothMonkeyJungle: {subtype: 'tooth', color: 'pale-green', icon: 'mdi-tooth', display: 'int', overcapMult: 0, gainMult: {baseValue: 0.05, display: 'percent'}, capMult: {baseValue: 0}},
-        monsterToothLoveIsland: {subtype: 'tooth', color: 'babypink', icon: 'mdi-tooth', display: 'int', overcapMult: 0, gainMult: {baseValue: 0.05, display: 'percent'}, capMult: {baseValue: 0}},
+        monsterToothMonkeyJungle: {subtype: 'tooth', color: 'pale-green', icon: 'mdi-tooth', display: 'int', overcapMult: 0, gainMult: {baseValue: 0.05, display: 'percent'}, capMult: {baseValue: 0}, currencyMult: {
+            currencyHordeBloodGain: {type: 'mult', value: val => Math.pow(1.11, val)},
+            hordeCourageScore: {type: 'mult', value: val => Math.pow(1.014, val)},
+            currencyHordeMonsterToothMonkeyJungleGain: {type: 'mult', value: val => Math.pow(1 / HORDE_TOOTH_CHANCE_REDUCTION, val)}
+        }},
+        monsterToothLoveIsland: {subtype: 'tooth', color: 'babypink', icon: 'mdi-tooth', display: 'int', overcapMult: 0, gainMult: {baseValue: 0.05, display: 'percent'}, capMult: {baseValue: 0}, currencyMult: {
+            hordeExpBase: {type: 'mult', value: val => Math.pow(1 / 1.04, val)},
+            currencyHordeMonsterToothLoveIslandGain: {type: 'mult', value: val => Math.pow(1 / HORDE_TOOTH_CHANCE_REDUCTION, val)}
+        }},
     },
     upgrade: {
         ...upgrade,

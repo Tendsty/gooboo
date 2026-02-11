@@ -15,7 +15,8 @@ export default {
             },
             {
                 type: 'bugfix',
-                text: '649'
+                text: '649',
+                issue: '96'
             },
         ],
     }

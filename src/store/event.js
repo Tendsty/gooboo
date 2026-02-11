@@ -572,9 +572,6 @@ export default {
 
                 // Reset all event stats
                 dispatch('stat/reset', {feature: 'event', type: name}, {root: true});
-
-                // Reset tokens
-                commit('currency/updateKey', {name: `event_${ name }Token`, key: 'value', value: 0}, {root: true});
             }
         },
         dayChange({ getters, dispatch }, o) {

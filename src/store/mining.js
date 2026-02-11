@@ -55,12 +55,12 @@ export default {
         depthScrap: (state, getters, rootState, rootGetters) => (depth) => {
             return rootGetters['mult/get']('currencyMiningScrapGain', getters.depthBaseScrap(depth));
         },
-        depthOre: (state, getters, rootState, rootGetters) => (depth, showAll = false) => {
+        depthOre: (state, getters, rootState, rootGetters) => (depth, showAll = false, ignoreTorch = false) => {
             if (rootState.system.features.mining.currentSubfeature !== 0) {
                 return {};
             }
             let ore = {};
-            const hasTorch = state.torchDepths.includes(depth);
+            const hasTorch = state.torchDepths.includes(depth) && !ignoreTorch;
             for (const [key, elem] of Object.entries(state.ingredient)) {
                 const depthCondition = depth <= elem.maxDepth || depth % elem.modulo === 0;
                 if (depth >= elem.minDepth && (showAll || depthCondition || hasTorch)) {
@@ -118,8 +118,9 @@ export default {
                 if (state.depth >= MINING_GRANITE_DEPTH && getters.currentBreaks >= 1000) {
                     obj.granite = getters.rareDropFinal('granite') * getters.graniteBreaksMult;
                 }
-                if (state.depth >= MINING_SALT_DEPTH && (Object.keys(getters.currentOre).length === 1 || state.torchDepths.includes(state.depth))) {
-                    obj.salt = getters.rareDropFinal('salt') * (Object.keys(getters.currentOre).length === 1 ? 1 : 0.5);
+                const depthOres = Object.keys(getters.depthOre(state.depth, false, true)).length;
+                if (state.depth >= MINING_SALT_DEPTH && (depthOres === 1 || state.torchDepths.includes(state.depth))) {
+                    obj.salt = getters.rareDropFinal('salt') * (depthOres === 1 ? 1 : 0.5);
                 }
                 if (state.depth >= MINING_COAL_DEPTH && getters.currentBreaks === 0) {
                     obj.coal = getters.rareDropFinal('coal');
@@ -596,6 +597,7 @@ export default {
             if (state.resin > rootGetters['mult/get']('miningResinMax')) {
                 commit('updateKey', {key: 'resin', value: rootGetters['mult/get']('miningResinMax')});
             }
+            dispatch('updateObsidianPenalty');
             dispatch('applyBeaconEffects');
         },
         addToSmeltery({ state, rootGetters, commit, dispatch }, o) {

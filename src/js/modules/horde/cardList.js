@@ -370,7 +370,7 @@ export default [
     ]},
     {id: 41, collection: 'againstTheCorruption', power: 5, reward: [
         {name: 'hordeFirstStrike', type: 'base', value: 3},
-        {name: 'hordeSpellblade', type: 'base', value: 1.25},
+        {name: 'hordeSpellblade', type: 'base', value: 0.75},
         {name: 'hordeCorruption', type: 'mult', value: 1.1},
     ], color: 'teal', icons: [
         {"x": -0.5, "y": 0.1, "rotate": 90, "size": 1.5, "icon": "mdi-sword"},

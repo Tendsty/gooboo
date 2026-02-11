@@ -213,6 +213,7 @@ function formatRoman(num) {
 
 /**
  * build a number from a decimal part and a suffix
+ * @deprecated use javascript's e-notation: 1.5e6 instead of buildNum(1.5, 'M')
  * @param {Number} number decimal part of the number
  * @param {String} suffix shorthand value of the desired magnitude
  * @returns {Number}

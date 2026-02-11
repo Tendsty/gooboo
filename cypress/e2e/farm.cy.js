@@ -4,7 +4,8 @@ describe('Farm feature loads properly', () => {
         cy.giveUnlock('farmFeature');
 
         cy.toFeature('Farm');
-        cy.get('[data-cy=farm-crop-carrot]').click();
+        cy.get('[data-cy=farm-crop-select]').click();
+        cy.contains('Carrot').click();
         cy.get('[data-cy=farm-plant-all]').click();
 
         cy.toFeature('Debug');
@@ -12,6 +13,6 @@ describe('Farm feature loads properly', () => {
 
         cy.toFeature('Farm');
         cy.get('[data-cy=farm-harvest-all]').click();
-        cy.contains('41');
+        cy.contains('52');
     });
 });

@@ -50,10 +50,6 @@ export default {
 
             const happiness = store.getters['mult/get']('villageHappiness');
 
-            if (store.state.stat.village_faith.total >= 50) {
-                store.dispatch('unlock/unlock', 'villagePrestige');
-            }
-
             // Auto-gain 1% of offerings gained this run
             const offeringGain = store.getters['village/offeringPerSecond'];
             if (offeringGain > 0) {
@@ -200,6 +196,10 @@ export default {
                     }
                 });
             }
+        }
+
+        if (!store.state.unlock.villagePrestige.use && store.state.stat.village_faith.total >= 50) {
+            store.dispatch('unlock/unlock', 'villagePrestige');
         }
     },
     unlock: [

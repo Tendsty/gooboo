@@ -225,7 +225,7 @@ export default {
             {name: 'currencyHordeBloodCap', type: 'mult', value: lvl => getSequence(3, lvl) * 0.05 + 1}
         ]},
         courage: {type: 'stat', max: 20, cost: 15, effect: [
-            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.05 + 1}
+            {name: 'hordeCourageScore', type: 'mult', value: lvl => lvl * 0.02 + 1}
         ]},
         supercharge: {
             type: 'active',

@@ -46,7 +46,7 @@
 <template>
   <gb-tooltip :title-text="$vuetify.lang.t(`$vuetify.farm.crop.${ item.crop }`)">
     <template v-slot:activator="{ on, attrs }">
-      <div class="d-flex flex-column justify-space-between" style="height: 100%" v-bind="attrs" v-on="on" @mouseenter="applyCare">
+      <div class="d-flex flex-column justify-space-between" style="height: 100%" v-bind="attrs" v-on="on" @pointerenter="applyCare">
         <div class="d-flex justify-center align-center" :class="{'crop-headline-small mt-1': $vuetify.breakpoint.smAndDown, 'ma-1': $vuetify.breakpoint.mdAndUp}" v-if="isGrown">
           <v-icon :size="$vuetify.breakpoint.smAndDown ? 10 : 16">mdi-basket</v-icon>
           <v-icon v-if="item.cache.overgrow === null && item.grow === 1" class="ml-1" :size="$vuetify.breakpoint.smAndDown ? 8 : 12">mdi-check</v-icon>

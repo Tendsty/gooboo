@@ -452,6 +452,9 @@
         <div class="text-center">{{ $vuetify.lang.t('$vuetify.endOfContent.description') }}</div>
       </gb-tooltip>
       <v-spacer></v-spacer>
+      <v-btn v-if="canSeeDebug" data-cy="debug-feature" icon @click="changeScreen('debug')">
+        <v-icon>mdi-console</v-icon>
+      </v-btn>
       <v-btn icon @click="changeScreen('info')">
         <v-icon>mdi-information</v-icon>
       </v-btn>
@@ -587,7 +590,7 @@ import SchoolMessage from './components/partial/snackbar/SchoolMessage.vue';
 import GoldenDustMenu from './components/render/GoldenDustMenu.vue';
 import Currency from './components/render/Currency.vue';
 import UpdateMessage from './components/partial/snackbar/UpdateMessage.vue';
-import { APP_ENV } from './js/constants';
+import { APP_ENV, APP_TESTING } from './js/constants';
 import ImportMessage from './components/partial/snackbar/ImportMessage.vue';
 import UnlockMessage from './components/partial/snackbar/UnlockMessage.vue';
 const semverCompare = require('semver/functions/compare');
@@ -654,7 +657,7 @@ export default {
       snackbarPosition: state => state.system.settings.notification.items.position.value,
       cssShadows: state => state.system.settings.performance.items.cssShadows.value,
       goldenDust: state => state.currency.school_goldenDust,
-      updateCheckValue: state => state.system.settings.notification.items.updateCheck.value
+      updateCheckValue: state => state.system.settings.notification.items.updateCheck.value,
     }),
     ...mapGetters({
       mainFeatures: 'system/mainFeatures',
@@ -700,6 +703,9 @@ export default {
     },
     canSeeUpdates() {
       return APP_ENV === 'WEB';
+    },
+    canSeeDebug() {
+      return APP_TESTING && this.$store.state.unlock.debugFeature.see;
     },
     activeTutorialCss() {
       const activeTutorial = this.$store.getters['system/activeTutorial'];

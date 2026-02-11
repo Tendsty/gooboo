@@ -359,7 +359,7 @@ export default {
       return this.$store.state.stat.mining_obsidian.total > 0;
     },
     canSeeBeacons() {
-      return this.$store.getters['mult/get']('miningBeaconPiercing') >= 1;
+      return this.$store.getters['mult/get']('miningBeaconPiercing') >= 1 && this.subfeature === 0;
     },
     beaconEffect() {
       if (this.currentDepthBeacon) {

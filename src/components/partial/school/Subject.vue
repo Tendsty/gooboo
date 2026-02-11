@@ -81,7 +81,7 @@
               <div class="book-segment-overlay book-segment-clickable" :class="{'rounded-l-lg': key === 0, 'rounded-r-lg': key === 11}" @click="skipBook" v-bind="attrs" v-on="on"></div>
             </template>
             <div class="mt-0">{{ $vuetify.lang.t('$vuetify.school.book.get', $formatGrade(key + 1), $formatInt(totalPointRequirement[key])) }}</div>
-            <div class="d-flex align-center">{{ $vuetify.lang.t('$vuetify.school.book.buy.0') }}<price-tag currency="gem_emerald" :amount="emeraldRequirement[key]"></price-tag>{{ $vuetify.lang.t('$vuetify.school.book.buy.1') }}</div>
+            <div>{{ $vuetify.lang.t('$vuetify.school.book.buy.0') }}<price-tag currency="gem_emerald" :amount="emeraldRequirement[key]"></price-tag>{{ $vuetify.lang.t('$vuetify.school.book.buy.1') }}</div>
           </gb-tooltip>
           <gb-tooltip key="school-book-skip" v-if="item.wasSkipped">
             <template v-slot:activator="{ on, attrs }">

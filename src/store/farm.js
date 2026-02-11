@@ -56,7 +56,7 @@ export default {
     getters: {
         expNeeded: (state) => (name) => {
             const crop = state.crop[name];
-            return crop.type !== 'special' ? Math.ceil(crop.baseExp * Math.pow(1.75, crop.level)) : Math.ceil(crop.baseExp * (crop.level * 0.25 + 1) * Math.pow(1.15, crop.level));
+            return crop.type !== 'special' ? Math.ceil(crop.baseExp * Math.pow(1.785, crop.level)) : Math.ceil(crop.baseExp * (crop.level * 0.25 + 1) * Math.pow(1.15, crop.level));
         },
         baseGoldChance: (state) => (name) => {
             const crop = state.crop[name];
@@ -429,7 +429,7 @@ export default {
                 cardEquipped: [],
                 upgrades: {},
                 exp: 0,
-                baseExp: o.baseExp ?? (Math.pow(1.5, tier) * 60 / Math.pow(o.grow / 10, 0.7)),
+                baseExp: o.baseExp ?? (Math.pow(1.53, tier) * 60 / Math.pow(o.grow / 10, 0.7)),
                 type: o.type,
                 giantGrow,
                 giantMult,
@@ -565,7 +565,7 @@ export default {
         plantCrop({ state, rootState, getters, rootGetters, commit, dispatch }, o) {
             const field = state.field[o.y][o.x];
             const crop = state.crop[o.crop];
-            const geneStats = getters.cropGeneStats(o.crop);
+            const geneStats = getters.cropGeneStats(o.crop, o.fertilizer, o.giant);
             let price = {};
             for (const [key, elem] of Object.entries(crop.cost)) {
                 price[key] = elem * (o.giant ? crop.giantMult : 1);
@@ -629,7 +629,7 @@ export default {
                 const crop = state.crop[field.crop];
                 const rngName = `farmCrop${ field.giant ? 'Giant' : '' }_${ field.crop }`;
                 const rngGen = rootGetters['system/getRngById'](rngName, field.rng);
-                const geneStats = getters.cropGeneStats(field.crop, field.fertilizer);
+                const geneStats = getters.cropGeneStats(field.crop, field.fertilizer, field.giant);
 
                 // Refund rainwater if care is active
                 if (field.care.active) {
@@ -638,25 +638,24 @@ export default {
 
                 const allGainBoost =
                     (0.04 * (field.buildingEffect.gnomeBoost ?? 0) / field.time + 1) *
-                    ((geneStats.tag.includes('farmLuckyHarvest') && chance(0.01, rngGen())) ? rootGetters['mult/get']('farmLuckyHarvestMult', geneStats.mult.farmLuckyHarvestMult.baseValue) : 1) *
-                    (field.giant ? crop.giantMult : 1);
+                    ((geneStats.tag.includes('farmLuckyHarvest') && chance(0.01, rngGen())) ? rootGetters['mult/get']('farmLuckyHarvestMult', geneStats.mult.farmLuckyHarvestMult.baseValue) : 1);
 
                 if (crop.type !== 'special') {
                     // Gain currency based on crop type
                     const gainAmount = rootGetters['mult/get'](
                         'currencyFarm' + capitalize(crop.type) + 'Gain',
-                        crop.yield + (field.care.yield ?? 0) + geneStats.mult.farmCropGain.baseValue,
+                        crop.yield + geneStats.mult.farmCropGain.baseValue,
                         (((field.buildingEffect.flag ?? 0) / field.time) * 0.5 + 1) * geneStats.mult.farmCropGain.multValue
-                    ) * allGainBoost * field.grow;
+                    ) * allGainBoost * ((field.care.yield ?? 0) + 1) * field.grow;
                     dispatch('currency/gain', {feature: 'farm', name: crop.type, amount: gainAmount}, {root: true});
                     if (geneStats.tag.includes('farmYieldConversion')) {
                         ['vegetable', 'berry', 'grain', 'flower'].forEach(croptype => {
                             if (crop.type !== croptype) {
                                 const conversionAmount = rootGetters['mult/get'](
                                     'currencyFarm' + capitalize(croptype) + 'Gain',
-                                    crop.yield + (field.care.yield ?? 0) + geneStats.mult.farmCropGain.baseValue,
+                                    crop.yield + geneStats.mult.farmCropGain.baseValue,
                                     (((field.buildingEffect.flag ?? 0) / field.time) * 0.5 + 1) * geneStats.mult.farmCropGain.multValue
-                                ) * allGainBoost * field.grow;
+                                ) * allGainBoost * ((field.care.yield ?? 0) + 1) * field.grow;
                                 dispatch('currency/gain', {feature: 'farm', name: croptype, amount: conversionAmount * 0.05}, {root: true});
                             }
                         });
@@ -1088,7 +1087,7 @@ export default {
                 row.forEach((cell, x) => {
                     if (cell !== null && cell.type === 'crop') {
                         const crop = state.crop[cell.crop];
-                        const geneStats = getters.cropGeneStats(cell.crop, cell.fertilizer);
+                        const geneStats = getters.cropGeneStats(cell.crop, cell.fertilizer, cell.giant);
                         const sprinklers = (sprinklerRows.find(e => e.premium && e.y === y) ? (FARM_BUILDING_PREMIUM_BONUS + 1) : (sprinklerRows.find(e => e.y === y) ? 1 : 0));
                         let growSpeed = crop.type !== 'special' ? (sprinklers * FARM_SPRINKLER_GROW + 1) : 1;
                         let isLonely = false;
@@ -1185,7 +1184,7 @@ export default {
             if (field !== null && field.type === 'crop' && field.care.active) {
                 commit('updateFieldCare', {x: o.x, y: o.y, key: 'active', value: false});
                 const crop = state.crop[field.crop];
-                const geneStats = getters.cropGeneStats(field.crop, field.fertilizer);
+                const geneStats = getters.cropGeneStats(field.crop, field.fertilizer, field.giant);
                 const careWasMaxed = state.careCanMax.findIndex(elem => geneStats.care[elem] && field.care[elem] < geneStats.care[elem].max) === -1;
                 let care = [];
                 let weights = [];

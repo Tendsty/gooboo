@@ -644,7 +644,7 @@ export default {
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.05 + 0.55},
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.03 + 0.47},
                 {isPositive: false, type: 'base', name: 'hordeMagicConversion', value: 0.5}
             ];
         },
@@ -1374,7 +1374,7 @@ export default {
         stats(lvl) {
             return [
                 {isPositive: true, type: 'base', name: 'hordeFirstStrike', value: lvl * 0.04 + 1.76},
-                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.01 + 0.49},
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.01 + 0.29},
                 {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 5}
             ];
         },
@@ -1511,7 +1511,7 @@ export default {
             return [
                 {type: 'buff', value: 45, effect: [
                     {type: 'base', name: 'hordeHaste', value: 50},
-                    {type: 'base', name: 'hordeSpellblade', value: lvl * 0.05 + 1.45}
+                    {type: 'base', name: 'hordeSpellblade', value: lvl * 0.05 + 0.95}
                 ]}
             ];
         },
@@ -2002,7 +2002,7 @@ export default {
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.05 + 0.7},
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.04 + 0.76},
                 {isPositive: true, type: 'tag', name: 'hordeSpellbladeOnActive', value: [1]}
             ];
         },
@@ -2114,7 +2114,7 @@ export default {
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.05 + 0.45},
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.03 + 0.57},
                 {isPositive: true, type: 'base', name: 'hordeIntelligence', value: 4}
             ];
         },
@@ -2401,7 +2401,7 @@ export default {
         },
         stats(lvl) {
             return [
-                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.1 + 0.4},
+                {isPositive: true, type: 'base', name: 'hordeSpellblade', value: lvl * 0.02 + 0.38},
                 {isPositive: true, type: 'base', name: 'hordeDivisionShield', value: 15}
             ];
         },

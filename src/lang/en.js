@@ -470,7 +470,7 @@ export default {
     gradeDescription: 'Grades determine the difficulty of this subject. You can switch between grades at any time and unlock better grades by studying enough or getting a perfect exam score.',
     totalPoints: 'Total points',
     multipass: {
-      description: 'You can use multipe passes on one exam to increase the rewards. For each additional pass used, you gain:',
+      description: 'You can use multiple passes on one exam to increase the rewards. For each additional pass used, you gain:',
       dust: '100% of golden dust gained as bonus dust',
       points: '+75% total points'
     },
@@ -2667,7 +2667,7 @@ export default {
     shapes: {
       name: 'Shapes',
       upgrades: 'Shape upgrades',
-      description: 'Drag a shape to an adjacent one to switch postitons, or click one to collect it. Collecting requires 5 shapes of the same type to be connected and the amount of shapes gained per shape is equal to the collection combo.',
+      description: 'Drag a shape to an adjacent one to switch positions, or click one to collect it. Collecting requires 5 shapes of the same type to be connected and the amount of shapes gained per shape is equal to the collection combo.',
       cost: 'Each action costs',
       special: {
         name: 'Special shapes',

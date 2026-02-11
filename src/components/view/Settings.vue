@@ -39,7 +39,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { APP_ENV } from '../../js/constants';
+import { APP_ENV, APP_TESTING } from '../../js/constants';
 import AlertText from '../partial/render/AlertText.vue';
 import SettingItem from '../partial/settings/Item.vue'
 import Keybind from '../partial/settings/Keybind.vue'
@@ -77,7 +77,7 @@ export default {
       return this.unlock.gemFeature.see;
     },
     canSeeDebug() {
-      return this.unlock.debugFeature.see;
+      return APP_TESTING && this.unlock.debugFeature.see;
     },
     canSeeUpdates() {
       return APP_ENV === 'WEB';

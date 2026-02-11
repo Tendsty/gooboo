@@ -23,6 +23,18 @@
     </v-tabs>
     <div class="scroll-container-tab" v-if="tab === 0">
       <div class="d-flex flex-wrap align-center ma-1">
+        <v-btn class="ma-1" @click="advance(60)">
+          <v-icon>mdi-clock</v-icon>1m
+        </v-btn>
+        <v-btn class="ma-1" @click="advance(600)">
+          <v-icon>mdi-clock</v-icon>10m
+        </v-btn>
+        <v-btn class="ma-1" @click="advance(3600)">
+          <v-icon>mdi-clock</v-icon>1h
+        </v-btn>
+        <v-btn class="ma-1" @click="advance(86400)">
+          <v-icon>mdi-clock</v-icon>1d
+        </v-btn>
         <v-btn class="ma-1" color="warning" @click="cleanSave">
           <v-icon class="mr-1">mdi-broom</v-icon>
           clean save
@@ -34,10 +46,6 @@
         <v-btn class="ma-1" color="primary" @click="maxSchool">
           <v-icon class="mr-1">mdi-school</v-icon>
           max school
-        </v-btn>
-        <v-btn class="ma-1" color="primary" @click="maxCrop">
-          <v-icon class="mr-1">mdi-sprout</v-icon>
-          max crops
         </v-btn>
         <div class="ma-1">Total time spent: {{ $formatTime(totalTime) }}</div>
         <div>Today is {{ currentDay }}</div>
@@ -178,10 +186,11 @@
 </template>
 
 <script>
+import { tick } from '../../js/tick';
 import { randomFloat, randomInt } from '../../js/utils/random';
 import colors from '../../js/theme/colors';
 import CardItem from '../partial/card/CardItem.vue';
-import { buildNum, capitalize } from '../../js/utils/format';
+import { capitalize } from '../../js/utils/format';
 import { mapState } from 'vuex';
 import { encodeFile } from '../../js/savefile';
 import { LOCAL_STORAGE_NAME } from '../../js/constants';
@@ -337,6 +346,9 @@ export default {
     this.timeMult = this.$store.state.system.timeMult;
   },
   methods: {
+    advance(seconds) {
+      tick(seconds, 0);
+    },
     cleanSave() {
       // Creates a clean savefile with autoplay-friendly settings
       localStorage.setItem(LOCAL_STORAGE_NAME, encodeFile({
@@ -516,13 +528,6 @@ export default {
         }
       }
     },
-    maxCrop() {
-      for (const [key, elem] of Object.entries(this.$store.state.farm.crop)) {
-        if (elem.found) {
-          this.$store.dispatch('farm/getCropExp', {crop: key, value: buildNum(1, 'M')});
-        }
-      }
-    }
   },
   watch: {
     timeMult(newVal, oldVal) {

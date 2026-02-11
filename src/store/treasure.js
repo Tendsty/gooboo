@@ -484,7 +484,7 @@ export default {
 
                     const eventStars = item.modifier.filter(el => el === 'eventStar').length;
                     if (eventStars > 0) {
-                        eventPower += (item.tier + 1) * TREASURE_EVENT_POWER_PER_TIER + item.level * TREASURE_EVENT_POWER_PER_LEVEL;
+                        eventPower += (item.tier + 1) * eventStars * TREASURE_EVENT_POWER_PER_TIER + item.level * TREASURE_EVENT_POWER_PER_LEVEL;
                     }
                 }
             });

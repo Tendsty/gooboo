@@ -1,4 +1,4 @@
-# gooboo
+# Gooboo
 
 ## Project setup
 Install dependencies
@@ -17,8 +17,11 @@ yarn lint
 ```
 
 ### Debug mode
+Debug mode is a set of tools to make testing and development easier.
+It can be used in testing versions of the game (and locally if you enable APP_TESTING in constants.js).
 To enable debug mode, import the debug.json file as savefile or edit your savefile to include the feature debugFeature.
-Then you can access tools for debugging and developing by navigating to the debug feature.
+You should see a new icon in the navigation bar, which takes you to the debug feature.
+Additional debug tools can now also be found in the settings (such as keybinds to skip time).
 Please note that the debug feature does not support translations and may break on small screens.
 
 ## Testing
@@ -35,7 +38,7 @@ yarn test:unit-custom
 ```
 
 ### E2E tests
-Open cypress
+Open cypress (Project needs to be running locally on port 8080 and APP_TESTING needs to be set to true in constants.js)
 ```
 yarn test:e2e
 ```

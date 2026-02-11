@@ -4,7 +4,7 @@
       <v-icon class="mr-2">{{ labelIcon }}</v-icon>
       {{ $vuetify.lang.t(`$vuetify.patchnote.type.${ item.type }`) }}
     </v-chip>
-    <a class="mr-1" v-if="item.issue" :href="`${ issueUrl }/${ item.issue }`">#{{ item.issue }}</a>
+    <a class="mr-1" v-if="item.issue" target="_blank" :href="`${ issueUrl }/${ item.issue }`">#{{ item.issue }}</a>
     <span class="d-flex align-center" :class="{'flex-wrap': $vuetify.breakpoint.xsOnly, 'bg-tile-default rounded px-2 py-1': item.subtype}" v-if="item.subtype || item.before !== undefined || item.after !== undefined">
       <span v-if="item.subtype" class="d-flex align-center" :style="item.type !== 'remove' ? 'min-width: 160px;' : ''">
         <v-icon v-if="subtypeIcon" small class="mr-1">{{ subtypeIcon }}</v-icon>
@@ -30,7 +30,7 @@
         ></patchnote-rare-drop-change>
         <template v-if="item.content">
           <div v-for="(elem, key) in item.content" :key="`content-${ key }`" class="d-flex align-center">
-            <a class="mr-1" v-if="elem.issue" :href="`${ issueUrl }/${ elem.issue }`">#{{ elem.issue }}</a>
+            <a class="mr-1" v-if="elem.issue" target="_blank" :href="`${ issueUrl }/${ elem.issue }`">#{{ elem.issue }}</a>
             <patchnote-text :type="elem.textType" :text="elem.text" :per="elem.textPer" :params="elem.params"></patchnote-text>
             <template v-if="elem.before !== undefined || elem.after !== undefined">
               <span>: {{ elem.before ? elem.before : '-' }}</span>
