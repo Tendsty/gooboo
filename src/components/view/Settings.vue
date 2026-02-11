@@ -14,6 +14,7 @@
     <div v-if="tab === 'keybinds'" :class="$vuetify.breakpoint.mdAndUp ? 'scroll-container-tab' : ''">
       <keybind class="ma-2" name="prevMainFeature"></keybind>
       <keybind class="ma-2" name="nextMainFeature"></keybind>
+      <keybind class="ma-2" name="togglePause"></keybind>
       <template v-if="canSeeDebug">
         <keybind class="ma-2" name="debugSkip1m"></keybind>
         <keybind class="ma-2" name="debugSkip10m"></keybind>
