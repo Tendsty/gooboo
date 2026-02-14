@@ -1252,7 +1252,8 @@ export default {
       lang: {
         name: 'Language',
         en: 'English',
-        de: 'Deutsch'
+        de: 'Deutsch',
+        ja: '日本語'
       },
       tabDisplayDesktop: {
         name: 'Tab display',
