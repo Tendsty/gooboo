@@ -42,10 +42,10 @@ function breedFlower(breeder, amount = 1) {
                 store.dispatch('note/find', 'event_12');
             } else {
                 // Try to find a worse flower and sell it
-                let slotTier = -1;
+                let slotTier = tier;
                 let slotToSell = null;
                 store.state.bloom.inventory.forEach((invFlower, slot) => {
-                    if (flower === invFlower.type && tier > invFlower.tier && (invFlower.tier > slotTier)) {
+                    if (flower === invFlower.type && invFlower.tier < slotTier) {
                         slotTier = invFlower.tier;
                         slotToSell = slot;
                     }
