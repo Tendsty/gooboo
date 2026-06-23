@@ -101,6 +101,9 @@ function formatInt(num) {
         case 'de':
             locale = 'de-DE';
             break;
+        case 'zhHans':
+            locale = 'zh-Hans';
+            break;
     }
     return num.toLocaleString(locale);
 }
