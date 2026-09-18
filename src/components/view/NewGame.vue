@@ -34,18 +34,29 @@
         <span :class="$vuetify.breakpoint.smAndDown ? 'text-200p' : 'text-300p'">{{ $vuetify.lang.t('$vuetify.gooboo.newGame') }}</span>
       </v-btn>
     </div>
+    <div class="text-center">
+      <v-btn text color="primary" @click="dialogRemoteSave = true">
+        <v-icon left>mdi-cloud-download</v-icon>
+        {{ $vuetify.lang.t('$vuetify.remoteSave.restore') }}
+      </v-btn>
+    </div>
     <div class="text-center" :class="$vuetify.breakpoint.smAndDown ? '' : 'text-150p'">
       <span>{{ $vuetify.lang.t('$vuetify.gooboo.playedBefore.0') }}</span>
       <label for="gooboo-savefile-input"><a>{{ $vuetify.lang.t('$vuetify.gooboo.playedBefore.1') }}</a></label>
     </div>
+    <remote-save-dialog v-model="dialogRemoteSave" mode="restore"></remote-save-dialog>
   </div>
 </template>
 
 <script>
 import SettingItem from '../partial/settings/Item.vue';
+import RemoteSaveDialog from '../render/RemoteSaveDialog.vue';
 
 export default {
-  components: { SettingItem },
+  components: { SettingItem, RemoteSaveDialog },
+  data: () => ({
+    dialogRemoteSave: false
+  }),
   methods: {
     startNewGame() {
       this.$store.dispatch('system/updateSetting', {category: 'general', name: 'pause', value: false});

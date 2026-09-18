@@ -99,6 +99,27 @@ export default {
       '==': 'genau'
     }
   },
+  remoteSave: {
+    title: 'Remote-Spielstand',
+    configure: 'Remote-Spielstand einrichten',
+    syncNow: 'Remote-Spielstand synchronisieren',
+    restore: 'Remote-Spielstand laden',
+    description: 'Synchronisiert deinen Spielstand über einen entfernten HTTP-Endpunkt. Endpunkt und Zugriffstoken werden nur in diesem Browser gespeichert und niemals in exportierte Spielstände übernommen.',
+    url: 'Endpunkt-URL',
+    token: 'Zugriffstoken (optional)',
+    endpointHint: 'Der Endpunkt muss die Gooboo-Remote-Save-API über GET/PUT unterstützen und für Web-Versionen CORS erlauben.',
+    save: 'Einstellungen speichern',
+    disable: 'Deaktivieren',
+    invalidUrl: 'Bitte gib eine gültige HTTP- oder HTTPS-URL ein.',
+    empty: 'Es wurde kein Remote-Spielstand gefunden.',
+    differentSave: 'Der Remote-Spielstand gehört zu einem anderen Spiel. Soll der lokale Spielstand dieses Browsers ersetzt werden?',
+    versionMismatch: 'Der Remote-Spielstand stammt aus einer neueren Gooboo-Version (v{0}). Aktualisiere das Spiel vor der Synchronisierung.',
+    conflict: 'Der Remote-Spielstand wurde auf einem anderen Gerät geändert. Es wurde nichts überschrieben; synchronisiere erneut, um den neueren Stand zu laden.',
+    created: 'Remote-Spielstand erstellt',
+    synced: 'Remote-Spielstand synchronisiert',
+    upToDate: 'Lokaler und Remote-Spielstand sind bereits synchron',
+    error: 'Remote-Synchronisierung fehlgeschlagen: {0}'
+  },
   endOfContent: {
     name: 'Ende des Inhalts',
     description: 'Du hast das Ende dieser Funktion erreicht, der Fortschritt wird sich ab diesem Punkt verlangsamen. Warte auf ein zukünftiges Update oder konzentriere dich auf andere Funktionen, um weiter Fortschritt zu erzielen'

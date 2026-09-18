@@ -69,3 +69,17 @@ Supports desktop, tablet, and mobile with a screen width of 375px or higher
 
 ### Browsers
 Supports firefox, electron and chromium-based browsers
+
+
+## Remote save API
+
+The optional remote-save client can synchronize one savefile between multiple devices without tying Gooboo to a specific storage provider. Configuration is stored only in the browser and is not part of the game savefile.
+
+The configured endpoint must allow CORS when used from the web build and implement:
+
+- `GET`: return `{"exists": false, "revision": 0}` when empty, or `{"exists": true, "revision": 1, "timestamp": 123, "saveData": "..."}`.
+- `PUT`: accept `{"saveData": "...", "timestamp": 123, "baseRevision": 1, "deviceId": "..."}` and return the new `revision`.
+- Return HTTP `409` if `baseRevision` is stale, so an older device cannot overwrite a newer save.
+- If an access token is configured, Gooboo sends it as `Authorization: Bearer <token>`.
+
+A remote endpoint may be implemented with any backend or storage provider; no provider-specific URL, account, or credential is included in Gooboo.

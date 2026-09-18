@@ -82,6 +82,7 @@ export default {
       0: 'Already played before? Load your savefile ',
       1: 'here'
     },
+    
     offlineSummary: {
       title: 'Welcome back! You have been offline for {0}',
       newVersion: 'New version! ',
@@ -98,6 +99,27 @@ export default {
       '<': 'under',
       '==': 'exactly'
     }
+  },
+  remoteSave: {
+    title: 'Remote save',
+    configure: 'Remote save settings',
+    syncNow: 'Sync remote save',
+    restore: 'Restore from remote save',
+    description: 'Synchronize your savefile through a remote HTTP endpoint. The endpoint and access token are stored only in this browser and are never included in exported savefiles.',
+    url: 'Endpoint URL',
+    token: 'Access token (optional)',
+    endpointHint: 'The endpoint must support the Gooboo remote-save GET/PUT API and allow CORS for web builds.',
+    save: 'Save settings',
+    disable: 'Disable',
+    invalidUrl: 'Please enter a valid HTTP or HTTPS URL.',
+    empty: 'No remote savefile was found.',
+    differentSave: 'The remote save belongs to a different game. Replace this browser\'s local save with the remote one?',
+    versionMismatch: 'The remote save is from a newer Gooboo version (v{0}). Update the game before synchronizing.',
+    conflict: 'The remote save changed on another device. Nothing was overwritten; synchronize again to load the newer state.',
+    created: 'Remote save created',
+    synced: 'Remote save synchronized',
+    upToDate: 'Local and remote saves are already synchronized',
+    error: 'Remote save failed: {0}'
   },
   endOfContent: {
     name: 'End of content',

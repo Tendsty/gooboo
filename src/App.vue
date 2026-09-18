@@ -482,6 +482,14 @@
               <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.saveImport') }}</v-list-item-title>
             </v-list-item>
           </label>
+          <v-divider></v-divider>
+          <v-list-item @click="dialogRemoteSave = true">
+            <v-list-item-title>{{ $vuetify.lang.t('$vuetify.remoteSave.configure') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="remoteConfigured" @click="remoteSyncNow">
+            <v-list-item-title>{{ $vuetify.lang.t('$vuetify.remoteSave.syncNow') }}</v-list-item-title>
+          </v-list-item>
+          <v-divider></v-divider>
           <v-list-item @click="changeScreen('resetProgress')">
             <v-list-item-title>{{ $vuetify.lang.t('$vuetify.gooboo.resetProgress') }}</v-list-item-title>
           </v-list-item>
@@ -539,6 +547,8 @@
     <v-dialog v-model="dialogDust" max-width="400">
       <golden-dust-menu @cancel="dialogDust = false"></golden-dust-menu>
     </v-dialog>
+    <remote-save-dialog v-model="dialogRemoteSave" @changed="remoteSaveChanged"></remote-save-dialog>
+    <v-snackbar v-model="remoteSaveSnackbar" :timeout="5000">{{ remoteSaveMessage }}</v-snackbar>
     <input @change="importSave" type="file" accept="text/plain, application/json" id="gooboo-savefile-input" style="display: none;"/>
     <v-icon v-if="activeTutorialCss !== null" class="tutorial-arrow" :style="activeTutorialCss">mdi-arrow-up-bold</v-icon>
   </v-app>
@@ -593,6 +603,8 @@ import UpdateMessage from './components/partial/snackbar/UpdateMessage.vue';
 import { APP_ENV, APP_TESTING } from './js/constants';
 import ImportMessage from './components/partial/snackbar/ImportMessage.vue';
 import UnlockMessage from './components/partial/snackbar/UnlockMessage.vue';
+import RemoteSaveDialog from './components/render/RemoteSaveDialog.vue';
+import { isRemoteConfigured, restoreRemoteSave, startRemoteSync, stopRemoteSync, syncRemoteSave } from './js/remoteSave';
 const semverCompare = require('semver/functions/compare');
 
 export default {
@@ -640,11 +652,16 @@ export default {
     Currency,
     UpdateMessage,
     ImportMessage,
-    UnlockMessage
+    UnlockMessage,
+    RemoteSaveDialog
   },
   data: () => ({
     dialogDust: false,
-    intervalId: null
+    dialogRemoteSave: false,
+    intervalId: null,
+    remoteConfigured: isRemoteConfigured(),
+    remoteSaveSnackbar: false,
+    remoteSaveMessage: ''
   }),
   computed: {
     ...mapState({
@@ -756,11 +773,49 @@ export default {
     if (this.updateCheckValue && this.canSeeUpdates) {
       this.intervalStart();
     }
+    startRemoteSync();
+  },
+  beforeDestroy() {
+    stopRemoteSync();
   },
   methods: {
     localSave() {
       saveLocal();
       this.$store.commit('system/resetAutosaveTimer');
+    },
+    remoteSaveChanged() {
+      this.remoteConfigured = isRemoteConfigured();
+      stopRemoteSync();
+      if (this.remoteConfigured) {
+        startRemoteSync();
+      }
+    },
+    showRemoteSaveMessage(key, ...params) {
+      this.remoteSaveMessage = this.$vuetify.lang.t(`$vuetify.remoteSave.${key}`, ...params);
+      this.remoteSaveSnackbar = true;
+    },
+    async remoteSyncNow() {
+      try {
+        const result = await syncRemoteSave();
+        if (result.status === 'different-save') {
+          if (window.confirm(this.$vuetify.lang.t('$vuetify.remoteSave.differentSave'))) {
+            await restoreRemoteSave();
+          }
+        } else if (result.status === 'version-mismatch') {
+          this.showRemoteSaveMessage('versionMismatch', result.version);
+        } else if (result.status === 'conflict') {
+          this.showRemoteSaveMessage('conflict');
+        } else if (result.status === 'created') {
+          this.showRemoteSaveMessage('created');
+        } else if (result.status === 'uploaded') {
+          this.showRemoteSaveMessage('synced');
+        } else if (result.status === 'up-to-date') {
+          this.showRemoteSaveMessage('upToDate');
+        }
+      } catch (error) {
+        this.remoteSaveMessage = this.$vuetify.lang.t('$vuetify.remoteSave.error', error.message);
+        this.remoteSaveSnackbar = true;
+      }
     },
     exportSave() {
       this.$store.commit('system/updateKey', {key: 'backupTimer', value: 0});
